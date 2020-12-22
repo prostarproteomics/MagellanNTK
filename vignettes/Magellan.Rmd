@@ -1,19 +1,51 @@
 ---
 title: "Magellan"
-output: rmarkdown::html_vignette
+subtitle: "A developer's guidelines"
+author: "Samuel Wieczorek"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  BiocStyle::html_document:
+    toc: true
+    theme: united
+    keep_md: true
+    papersize: a4
 vignette: >
-  %\VignetteIndexEntry{Magellan}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>")
 ```
 
-```{r setup}
-library(Magellan)
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
 ```
+
+
+Magellan is a Shiny application which contains only few R6 classes. It is not used alone but it is the core engine for data processing workflows.
+Thus, this article is not for end-users but for developers who are interesting in writing new data processing tools and/or to combine them in pipelines
+
+# Introduction
+
+
+# Global architecture
+
+
+A process (or pipeline) consists in screens and it is a R6 class which inherits from classes in Magellan
+
+
+# Writing new process
+
+A process such as usable with Magellan is a R6 classes which contains:
+* the configuration of the process,
+* the list of screens with their severs (shiny)
+
+This class inherits from classes in Magellan: this is how the core engine is integrated in xxx.
+
+
+# Writing a new pipeline
+
