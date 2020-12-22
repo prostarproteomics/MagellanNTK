@@ -1,17 +1,20 @@
 Package: Magellan
-Title: An Amazing Shiny App
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
-           role = c("aut", "cre"),
-           email = "your@email.com")
-Description: What the package does (one paragraph).
-License: What license is it under?
+Title: Magellan: a workflow manager
+Version: 0.1
+Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', role = c('cre', 'aut'))
+Description: A shiny app to navigate through data processing tools.
+License: Artistic-2.0
 Imports: 
     config,
     golem,
-    shiny
+    shiny,
+    R6
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
+URL: https://github.com/samWieczorek/Magellan
+BugReports: https://github.com/samWieczorek/Magellan/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
