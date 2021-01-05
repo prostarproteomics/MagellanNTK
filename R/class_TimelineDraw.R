@@ -1,4 +1,4 @@
-TimelineDraw <- R6Class(
+TimelineDraw <- R6::R6Class(
   "TimelineDraw",
   private=list(
     ns = NULL,
@@ -50,6 +50,7 @@ TimelineDraw <- R6Class(
 
     
     ui = function() {
+     # browser()
       fpath <- system.file("app/www/sass", "h_timeline.sass", package="Magellan")
       tagList(
         shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),

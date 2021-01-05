@@ -2,19 +2,22 @@
 % Please edit documentation in R/class_Process.R
 \name{Process}
 \alias{Process}
-\title{xxx}
+\title{Add together two numbers}
 \description{
-xxxx
+Add together two numbers
+
+Add together two numbers
+}
+\examples{
+
+## ------------------------------------------------
+## Method `Process$ToggleState_Screens`
+## ------------------------------------------------
+
+add(1, 1)
 }
 \section{Super class}{
 \code{\link[Magellan:ScreenManager]{Magellan::ScreenManager}} -> \code{Process}
-}
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{modal_txt}}{xxx}
-}
-\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -37,6 +40,7 @@ xxxx
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Additional_Server_Funcs">}\href{../../Magellan/html/ScreenManager.html#method-Additional_Server_Funcs}{\code{Magellan::ScreenManager$Additional_Server_Funcs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Change_Current_Pos">}\href{../../Magellan/html/ScreenManager.html#method-Change_Current_Pos}{\code{Magellan::ScreenManager$Change_Current_Pos()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Get_Result">}\href{../../Magellan/html/ScreenManager.html#method-Get_Result}{\code{Magellan::ScreenManager$Get_Result()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Global_server">}\href{../../Magellan/html/ScreenManager.html#method-Global_server}{\code{Magellan::ScreenManager$Global_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Set_Reseted">}\href{../../Magellan/html/ScreenManager.html#method-Set_Reseted}{\code{Magellan::ScreenManager$Set_Reseted()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Set_Skipped">}\href{../../Magellan/html/ScreenManager.html#method-Set_Skipped}{\code{Magellan::ScreenManager$Set_Skipped()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="initialize">}\href{../../Magellan/html/ScreenManager.html#method-initialize}{\code{Magellan::ScreenManager$initialize()}}\out{</span>}
@@ -49,10 +53,6 @@ xxxx
 \if{html}{\out{<a id="method-ToggleState_Screens"></a>}}
 \if{latex}{\out{\hypertarget{method-ToggleState_Screens}{}}}
 \subsection{Method \code{ToggleState_Screens()}}{
-xxx
-
-
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$ToggleState_Screens(cond, range)}\if{html}{\out{</div>}}
 }
@@ -60,94 +60,77 @@ xxx
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{cond}}{A number}
+\item{\code{x}}{A number}
 
-\item{\code{range}}{A number}
-
-\item{\code{input}}{A number}
-
-\item{\code{output}}{A number}
+\item{\code{y}}{A number}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+The sum of \code{x} and \code{y}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{add(1, 1)
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Set_All_Skipped"></a>}}
 \if{latex}{\out{\hypertarget{method-Set_All_Skipped}{}}}
 \subsection{Method \code{Set_All_Skipped()}}{
-Set to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Set_All_Skipped()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Discover_Skipped_Steps"></a>}}
 \if{latex}{\out{\hypertarget{method-Discover_Skipped_Steps}{}}}
 \subsection{Method \code{Discover_Skipped_Steps()}}{
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Discover_Skipped_Steps()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Set_All_Reset"></a>}}
 \if{latex}{\out{\hypertarget{method-Set_All_Reset}{}}}
 \subsection{Method \code{Set_All_Reset()}}{
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Set_All_Reset()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ValidateCurrentPos"></a>}}
 \if{latex}{\out{\hypertarget{method-ValidateCurrentPos}{}}}
 \subsection{Method \code{ValidateCurrentPos()}}{
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$ValidateCurrentPos()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EncapsulateScreens"></a>}}
 \if{latex}{\out{\hypertarget{method-EncapsulateScreens}{}}}
 \subsection{Method \code{EncapsulateScreens()}}{
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$EncapsulateScreens()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GetScreens_ui"></a>}}
 \if{latex}{\out{\hypertarget{method-GetScreens_ui}{}}}
 \subsection{Method \code{GetScreens_ui()}}{
-xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$GetScreens_ui()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-Nothing
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

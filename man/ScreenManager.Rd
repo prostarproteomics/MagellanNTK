@@ -51,6 +51,7 @@ xxxx
 \item \href{#method-EncapsulateScreens}{\code{ScreenManager$EncapsulateScreens()}}
 \item \href{#method-ActionOn_NewPosition}{\code{ScreenManager$ActionOn_NewPosition()}}
 \item \href{#method-Get_Result}{\code{ScreenManager$Get_Result()}}
+\item \href{#method-Global_server}{\code{ScreenManager$Global_server()}}
 \item \href{#method-Change_Current_Pos}{\code{ScreenManager$Change_Current_Pos()}}
 \item \href{#method-ToggleState_Screens}{\code{ScreenManager$ToggleState_Screens()}}
 \item \href{#method-ui}{\code{ScreenManager$ui()}}
@@ -113,7 +114,7 @@ xxx
 
 xxx
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$new(id, verbose)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$new(id, verbose = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -121,7 +122,15 @@ xxx
 \describe{
 \item{\code{id}}{xxx}
 
-\item{\code{verbose}}{xxx}
+\item{\code{verbose}}{xxx
+
+#' @description 
+#' xxx
+#' @param input xxx
+#' 
+#' @param output xxx
+#'
+Global_server = function(input, output){},}
 
 \item{\code{direction}}{xxx}
 
@@ -226,6 +235,19 @@ xxx
 \if{html}{\out{<div class="r">}}\preformatted{ScreenManager$Get_Result()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Global_server"></a>}}
+\if{latex}{\out{\hypertarget{method-Global_server}{}}}
+\subsection{Method \code{Global_server()}}{
+xxxxx
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$Global_server(input, output)}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Nothing
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Change_Current_Pos"></a>}}

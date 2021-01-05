@@ -8,7 +8,7 @@
 #' 
 #' @importFrom R6 R6Class
 #' 
-Pipeline = R6Class(
+Pipeline = R6::R6Class(
   "Pipeline",
   inherit = ScreenManager,
   private = list(
@@ -25,7 +25,7 @@ Pipeline = R6Class(
       self$tmp.return <- reactiveValues()
       self$child.process <- setNames(lapply(self$config$steps,
                                             function(x){
-                                              assign(x, get(x))$new(self$ns(x))
+                                              assign(x, base::get(x))$new(self$ns(x))
                                             }),
                                      self$config$steps
       )
@@ -173,6 +173,7 @@ Pipeline = R6Class(
             )
       }
       )
+
     },
 
     #' @description
@@ -222,6 +223,12 @@ Pipeline = R6Class(
       })
 
     },
+    
+    #' @description
+    #' xxxxx
+    #'
+    #' @return Nothing
+    Global_server = function(input, output){},
     
 
     #' @description

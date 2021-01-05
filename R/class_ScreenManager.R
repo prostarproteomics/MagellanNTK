@@ -21,7 +21,7 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 #' 
 #' @importFrom R6 R6Class
 #' 
-ScreenManager <- R6Class(
+ScreenManager <- R6::R6Class(
   "ScreenManager",
   private = list(
     
@@ -249,19 +249,22 @@ ScreenManager <- R6Class(
     #' @param output xxx
     #' 
     GetScreens_global = function(input, output){
-      if(self$verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
+      if(self$verbose) cat(paste0(class(self)[1], '::GetScreens_global() from - ', self$id, '\n\n'))
+  
       eval(parse(text = "self$Global_server(input, output)"))
     }
     
   ),
   public = list(
+    
+    
     # Declaration of variables
     #' @field id xxx
     id = NULL,
     #' @field ns xxx
     ns = NULL,
     #' @field verbose xxx
-    verbose = FALSE,
+    verbose = TRUE,
     #' @field currentStepName xxx
     currentStepName = NULL,
     #' @field child.process xxx
@@ -296,7 +299,8 @@ ScreenManager <- R6Class(
     #' 
     #' @param verbose xxx
     #' 
-    initialize = function(id, verbose) {
+    initialize = function(id, verbose=FALSE) {
+      self$verbose <- verbose
       if(self$verbose) cat(paste0(class(self)[1], '::initialize() from - ', self$id, '\n\n'))
       self$id <- id
       self$ns <- NS(id)
@@ -305,7 +309,6 @@ ScreenManager <- R6Class(
         value = NULL
       )
       
-      self$verbose <- verbose
       self$default_pos$VALIDATED <- self$length
       self$default_pos$SKIPPED <- 1
       self$default_pos$UNDONE <- 1
@@ -350,7 +353,14 @@ ScreenManager <- R6Class(
     
    
     
-    
+    #' #' @description 
+    #' #' xxx
+    #' #' @param input xxx
+    #' #' 
+    #' #' @param output xxx
+    #' #'
+    #' Global_server = function(input, output){},
+    #' 
     #' @description 
     #' xxx
     #' 
@@ -391,7 +401,14 @@ ScreenManager <- R6Class(
     #' 
     Get_Result = function(){self$dataOut$value},
     
-     
+    #' @description
+    #' xxxxx
+    #'
+    #' @return Nothing
+    Global_server = function(input, output){},
+    
+    
+    
     #' @description 
     #' xxx
     #' 

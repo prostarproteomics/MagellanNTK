@@ -31,6 +31,7 @@ xxxx
 \item \href{#method-GetScreens_ui}{\code{Pipeline$GetScreens_ui()}}
 \item \href{#method-ActionOn_New_DataIn}{\code{Pipeline$ActionOn_New_DataIn()}}
 \item \href{#method-Launch_Module_Server}{\code{Pipeline$Launch_Module_Server()}}
+\item \href{#method-Global_server}{\code{Pipeline$Global_server()}}
 \item \href{#method-ActionOn_Data_Trigger}{\code{Pipeline$ActionOn_Data_Trigger()}}
 \item \href{#method-GetMaxValidated_BeforeCurrentPos}{\code{Pipeline$GetMaxValidated_BeforeCurrentPos()}}
 \item \href{#method-GetMaxValidated_BeforePos}{\code{Pipeline$GetMaxValidated_BeforePos()}}
@@ -187,6 +188,19 @@ Nothing
 This function calls the server part of each module composing the pipeline
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Pipeline$Launch_Module_Server()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Global_server"></a>}}
+\if{latex}{\out{\hypertarget{method-Global_server}{}}}
+\subsection{Method \code{Global_server()}}{
+xxxxx
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Pipeline$Global_server(input, output)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

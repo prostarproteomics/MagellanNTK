@@ -2,9 +2,7 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  Build-a-pipeline-module: Build-a-pipeline-module.html
-  Create-a-new-pipeline-tutorial: Create-a-new-pipeline-tutorial.html
+  CreatePipeline: CreatePipeline.html
   Magellan: Magellan.html
-  Prostar_workflow_userguide: Prostar_workflow_userguide.html
-last_built: 2020-12-23T15:29Z
+last_built: 2020-12-24T21:38Z
 
