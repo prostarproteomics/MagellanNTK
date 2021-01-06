@@ -1,39 +1,49 @@
 verbose <- TRUE
-
-Process = R6Class(
+#' @title
+#' xxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @export
+#' 
+#' @importFrom R6 R6Class
+#' 
+Process = R6::R6Class(
   "Process",
   inherit = ScreenManager,
   private = list(
-    #' Add together two numbers
+    #' @description
+    #' xxx
     #'
-    #' @param x A number
-    #' @param y A number
-    #' @return The sum of \code{x} and \code{y}
-    #' @examples
-    #' add(1, 1)
+    #' @param input A number
+    #' @param output A number
+    #' 
+    #' @return Nothing.
+    #' 
     GetScreens_server = function(input, output){
       if(verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
       setNames(lapply(self$config$steps, function(x){
         eval(parse(text = paste0("self$", x, '_server(input, output)')))
       }),
       self$config$steps)
-    },
-    
-    GetScreens2_server = function(input, output){
-      if(verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
-      browser()
-      setNames(lapply(self$config$steps, function(x){
-        eval(parse(text = paste0("self$", x, '_server(input, output)')))
-      }),
-      self$config$steps)
     }
-  ),
-  
+    ),
+
   public = list(
+    #' @field modal_txt xxx
     modal_txt = "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed",
     
     
+    #' @description
+    #' xxx
+    #'
+    #' @param cond A number
+    #' @param range A number
+    #' 
+    #' @return Nothing.
+    #' 
     ToggleState_Screens = function(cond, range){
       if(verbose) cat(paste0(class(self)[1], '::ToggleState_Steps() from - ', self$id, '\n\n'))
       #browser()
@@ -45,13 +55,22 @@ Process = R6Class(
       })
     },
     
-    #Set to skipped all steps of the current object
+
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     Set_All_Skipped = function(){
       if(verbose) cat(paste0(class(self)[1], '::', 'Set_All_Skipped() from - ', self$id, '\n\n'))
       self$rv$status <- setNames(rep(global$SKIPPED, self$length), self$config$steps)
     },
     
-    
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     Discover_Skipped_Steps = function(){
       if(verbose) cat(paste0(class(self)[1], '::Discover_Skipped_Status() from - ', self$id, '\n\n'))
       for (i in 1:self$length){
@@ -61,6 +80,11 @@ Process = R6Class(
       }
     },
     
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     Set_All_Reset = function(){
       if(verbose) cat(paste0(class(self)[1], '::', 'Set_All_Reset() from - ', self$id, '\n\n'))
       
@@ -68,7 +92,11 @@ Process = R6Class(
     },
     
     
-    
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     ValidateCurrentPos = function(){
       if(verbose) cat(paste0(class(self)[1], '::', 'ValidateCurrentPos() from - ', self$id, '\n\n'))
       #browser()
@@ -80,6 +108,11 @@ Process = R6Class(
         private$Send_Result_to_Caller()
     },
     
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     EncapsulateScreens = function(){
       if(verbose) cat(paste0(class(self)[1], '::EncapsulateScreens() from - ', self$id, '\n\n'))
       lapply(1:self$length, function(i) {
@@ -101,14 +134,18 @@ Process = R6Class(
       )
     },
     
+    #' @description
+    #' et to skipped all steps of the current object
+    #' 
+    #' @return Nothing.
+    #' 
     GetScreens_ui = function(){
       if(verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
-      #wellPanel(
+
       setNames(lapply(self$config$steps, function(x){
         eval(parse(text = paste0("self$", x, '_ui()')))
       }),
       self$config$steps)
-      # )
     }
   )
 )

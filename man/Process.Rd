@@ -2,22 +2,19 @@
 % Please edit documentation in R/class_Process.R
 \name{Process}
 \alias{Process}
-\title{Add together two numbers}
+\title{xxx}
 \description{
-Add together two numbers
-
-Add together two numbers
-}
-\examples{
-
-## ------------------------------------------------
-## Method `Process$ToggleState_Screens`
-## ------------------------------------------------
-
-add(1, 1)
+xxxx
 }
 \section{Super class}{
 \code{\link[Magellan:ScreenManager]{Magellan::ScreenManager}} -> \code{Process}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{modal_txt}}{xxx}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -53,6 +50,10 @@ add(1, 1)
 \if{html}{\out{<a id="method-ToggleState_Screens"></a>}}
 \if{latex}{\out{\hypertarget{method-ToggleState_Screens}{}}}
 \subsection{Method \code{ToggleState_Screens()}}{
+xxx
+
+
+xxx
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$ToggleState_Screens(cond, range)}\if{html}{\out{</div>}}
 }
@@ -60,77 +61,97 @@ add(1, 1)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{A number}
+\item{\code{cond}}{A number}
 
-\item{\code{y}}{A number}
+\item{\code{range}}{A number}
+
+\item{\code{input}}{A number}
+
+\item{\code{output}}{A number}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The sum of \code{x} and \code{y}
+Nothing.
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{add(1, 1)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Set_All_Skipped"></a>}}
 \if{latex}{\out{\hypertarget{method-Set_All_Skipped}{}}}
 \subsection{Method \code{Set_All_Skipped()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Set_All_Skipped()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Discover_Skipped_Steps"></a>}}
 \if{latex}{\out{\hypertarget{method-Discover_Skipped_Steps}{}}}
 \subsection{Method \code{Discover_Skipped_Steps()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Discover_Skipped_Steps()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Set_All_Reset"></a>}}
 \if{latex}{\out{\hypertarget{method-Set_All_Reset}{}}}
 \subsection{Method \code{Set_All_Reset()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$Set_All_Reset()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ValidateCurrentPos"></a>}}
 \if{latex}{\out{\hypertarget{method-ValidateCurrentPos}{}}}
 \subsection{Method \code{ValidateCurrentPos()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$ValidateCurrentPos()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EncapsulateScreens"></a>}}
 \if{latex}{\out{\hypertarget{method-EncapsulateScreens}{}}}
 \subsection{Method \code{EncapsulateScreens()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$EncapsulateScreens()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GetScreens_ui"></a>}}
 \if{latex}{\out{\hypertarget{method-GetScreens_ui}{}}}
 \subsection{Method \code{GetScreens_ui()}}{
+et to skipped all steps of the current object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Process$GetScreens_ui()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
