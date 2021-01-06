@@ -7,11 +7,6 @@ enableJIT(3)
 
 verbose <- F
 
-AddItemToDataset <- function(dataset, name){
-  addAssay(dataset, 
-           dataset[[length(dataset)]], 
-           name=name)
-}
 
 
 #' The application server-side
@@ -38,7 +33,6 @@ app_server <- function( input, output, session ) {
   output$choosePipeline_ui <- renderUI({
     .choices <- c('None'='')
     if (!is.null(rv$package)){
-      library(rv$package, character.only = TRUE)
       .choices <- c('None'='',  Pipelines())
     }
     
@@ -46,7 +40,11 @@ app_server <- function( input, output, session ) {
                 choices = .choices)
   })
 
-  observeEvent(input$validPackage, {rv$package <- input$choosePackage  })
+  observeEvent(input$validPackage, {
+    rv$package <- input$choosePackage
+    library(rv$package, character.only = TRUE)
+   # browser()
+    })
   
   observeEvent(req(input$choosePipeline),{
     rv$pipeline <- base::get(input$choosePipeline)$new('App')

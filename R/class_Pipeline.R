@@ -67,10 +67,6 @@ Pipeline = R6::R6Class(
         #Send to TL the enabled/disabled tags
         self$rv$tl.tags.enabled[x] <- cond
         })
-        
-      # shinyjs::toggleState(paste0(self$ns(self$config$steps[1]), '-TL_LeftSide'), T)
-      # shinyjs::toggleState(paste0(self$ns(self$config$steps[1]), '-TL_RightSide'), T)
-      # shinyjs::toggleState(paste0(self$ns(self$config$steps[1]), '-Screens'), T)
     },
     
     
@@ -99,16 +95,13 @@ Pipeline = R6::R6Class(
     #'
     Set_All_Reset = function(){
       if(self$verbose) cat(paste0(class(self)[1], '::', 'ActionsOnReset() from - ', self$id, '\n\n'))
-      #browser()
-      
+
       private$BasicReset()
       
       # Say to all child processes to reset themselves
       lapply(self$config$steps, function(x){
           self$child.process[[x]]$Set_All_Reset()
         })
-      
-      
     },
     
     
@@ -145,7 +138,6 @@ Pipeline = R6::R6Class(
       # Send dataset to child process only if the current position is enabled
       if(self$rv$tl.tags.enabled[self$rv$current.pos])
         self$PrepareData2Send()
-      #browser()
       # If the current step is validated, set the child current position to the last step
       if (self$rv$status[self$rv$current.pos] == global$VALIDATED)
         self$child.process[[self$rv$current.pos]]$Change_Current_Pos(self$child.process[[self$rv$current.pos]]$length)
@@ -229,7 +221,7 @@ Pipeline = R6::R6Class(
     #'
     #' @return Nothing
     Global_server = function(input, output){},
-    
+     
 
     #' @description
     #' Catch the return value of a module and update the list of isDone modules
@@ -279,7 +271,10 @@ Pipeline = R6::R6Class(
         else{
           name.last.validated <- self$config$steps[ind.last.validated]
           dataIn.ind.last.validated <- which(names(self$rv$dataIn) == name.last.validated)
-          self$rv$dataIn <- self$rv$dataIn[ , , 1:dataIn.ind.last.validated]
+          #self$rv$dataIn <- self$rv$dataIn[ , , 1:dataIn.ind.last.validated]
+          self$rv$dataIn <- Keep_Items_from_Dataset(dataset = self$rv$dataIn, 
+                                                    range = 1:dataIn.ind.last.validated)
+
         }
         
         # In this case, one force the update of the input dataset
@@ -358,7 +353,9 @@ Pipeline = R6::R6Class(
           if (is.null(ind.last.validated)){
             data <- self$rv$temp.dataIn
           } else {
-            data <- self$rv$dataIn[ , , 1:ind.last.validated]
+            data <- Keep_Items_from_Dataset(dataset = self$rv$dataIn, 
+                                            range = 1:ind.last.validated)
+            #data <- self$rv$dataIn[ , , 1:ind.last.validated]
           }
         }
         return(data)
