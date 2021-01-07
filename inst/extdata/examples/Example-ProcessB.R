@@ -1,15 +1,16 @@
 #Timeline_R6.R
-ProcessA = R6Class(
-  "ProcessA",
+example-ProcessB = R6Class(
+  "example-ProcessB",
   inherit = Process,
   private = list(
-    .config = list(name = 'ProcessA',
+    .config = list(name = 'ProcessB',
                    steps = c('Description', 'Step1', 'Step2', 'Step3'),
                    mandatory = c(T,F,T,F)
     )
   ),
   
   public = list(
+    
     Global_server = function(input, output){},
     
     Description_server = function(input, output){
@@ -28,6 +29,7 @@ ProcessA = R6Class(
     
     
     Description_ui = function(){
+      
       wellPanel(
         tagList(
           includeMarkdown( system.file("app/md", paste0(self$config$name, ".md"), package="Magellan")),

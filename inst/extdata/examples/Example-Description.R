@@ -1,9 +1,9 @@
 #Timeline_R6.R
-ProcessDescription = R6::R6Class(
-  "ProcessDescription",
+example-Description = R6::R6Class(
+  "example-Description",
   inherit = Process,
   private = list(
-    .config = list(name = 'ProcessDescription',
+    .config = list(name = 'Description',
                    steps = c('Description'),
                    mandatory = c(T)
     )

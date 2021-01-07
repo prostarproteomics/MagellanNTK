@@ -13,9 +13,6 @@ app_ui <- function(request) {
     fluidPage(
       h1("Magellan"),
       tagList(
-        textInput('choosePackage', 'Select a package'),
-        actionButton('validPackage', 'Validate package'),
-        uiOutput('choosePipeline_ui'),
         actionButton('send', 'Send dataset'),
         uiOutput('showUI')
       )

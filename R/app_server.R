@@ -19,35 +19,24 @@ verbose <- F
 #' @noRd
 app_server <- function( input, output, session ) {
   # Get a QFeatures dataset for example
-  data(hlpsms, package='QFeatures')
-  hl <- QFeatures::readQFeatures(hlpsms, ecol = 1:10, name = "psms")
-  require(MSPipelines)
   
   verbose <- F 
   rv <- reactiveValues(
     dataIn = NULL,
     pipeline = NULL,
-    package = NULL
+    package = 'MSPipelines'
   )
   
-  output$choosePipeline_ui <- renderUI({
-    .choices <- c('None'='')
-    if (!is.null(rv$package)){
-      .choices <- c('None'='',  Pipelines())
-    }
-    
-    selectInput('choosePipeline', 'Select a pipeline', 
-                choices = .choices)
-  })
-
-  observeEvent(input$validPackage, {
-    rv$package <- input$choosePackage
-    library(rv$package, character.only = TRUE)
-   # browser()
-    })
+  data(hlpsms, package='QFeatures')
+  hl <- QFeatures::readQFeatures(hlpsms, ecol = 1:10, name = "psms")
   
+  observe({
+    library(rv$package, character.only=TRUE)
+  })
+  
+
   observeEvent(req(input$choosePipeline),{
-    rv$pipeline <- base::get(input$choosePipeline)$new('App')
+    rv$pipeline <- Protein$new('App')
     rv$pipeline$server(dataIn = reactive({rv$dataIn}))
   })
   
