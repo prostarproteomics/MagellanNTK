@@ -264,7 +264,7 @@ ScreenManager <- R6::R6Class(
     #' @field ns xxx
     ns = NULL,
     #' @field verbose xxx
-    verbose = TRUE,
+    verbose = FALSE,
     #' @field currentStepName xxx
     currentStepName = NULL,
     #' @field child.process xxx

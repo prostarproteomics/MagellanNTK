@@ -34,6 +34,19 @@ Thus, this article is not for end-users but for developers who are interesting i
 
 Magellan is a series of R6 class which build several levels of navigation timeline.
 
+
+# How to integrate your Pipeline into your shiny app ?
+
+library(MSPipelines)
+
+
+
+
+
+
+
+
+
 # Installation
 
 Magellan is deploied as a Docker file.

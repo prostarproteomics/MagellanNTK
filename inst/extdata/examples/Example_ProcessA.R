@@ -1,6 +1,6 @@
 #Timeline_R6.R
-example-ProcessA = R6Class(
-  "example-ProcessA",
+Example_ProcessA = R6Class(
+  "Example_ProcessA",
   inherit = Process,
   private = list(
     .config = list(name = 'ProcessA',

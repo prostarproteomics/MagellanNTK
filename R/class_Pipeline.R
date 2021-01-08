@@ -14,7 +14,8 @@ Pipeline = R6::R6Class(
   private = list(
     
     #' @description
-    #' xxx
+    #' Additional functions that are to be inserted in the initialize function of
+    #' the parent class.
     #'
     #' @return Nothing
     #'
@@ -25,20 +26,18 @@ Pipeline = R6::R6Class(
       self$tmp.return <- reactiveValues()
       self$child.process <- setNames(lapply(self$config$steps,
                                             function(x){
-                                              assign(x, base::get(x))$new(self$ns(x))
+                                              assign(x, base::get(paste0(self$config$name, '_', x)))$new(self$ns(x))
                                             }),
                                      self$config$steps
       )
     }
-    
-    
   ),
   
   public = list(
     #' @field tmp.return xxx
     tmp.return = "<reactiveValues>",
     
-    #' @field modal_txt xxx
+    #' @field modal_txt Text to be showed in the popup window when the user clicks on the `Reset pipeline` button.
     modal_txt = "This action will reset this pipeline (and all the subsequent processes). The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed.",
     
@@ -46,8 +45,10 @@ Pipeline = R6::R6Class(
     #' @description
     #' xxx
     #'
-    #' @param cond xxx
-    #' @param range xxx
+    #' @param cond A boolean that indicates whether the corresponding ui must be
+    #' enabled (TRUE) or disabled (FALSE).
+    #' @param range A range of integers to indicate which steps are concerned by the 
+    #' condition `cond`
     #'
     ToggleState_Screens = function(cond, range){
       if(self$verbose) cat(paste0(class(self)[1], '::ToggleState_Steps() from - ', self$id, '\n\n'))
@@ -73,9 +74,10 @@ Pipeline = R6::R6Class(
     
 
     #' @description
-    #' xxx
+    #' On the basis of the vector `status`, this function searches for skipped steps
+    #' (ie unvalidated step for which there exists a validated steps forward)
     #'
-    #' @return Nothing
+    #' @return The vector `status` is updated.
     #'
     Discover_Skipped_Steps = function(){
       if(self$verbose) cat(paste0(class(self)[1], '::Discover_Skipped_Steps() from - ', self$id, '\n\n'))

@@ -1,9 +1,9 @@
 #Timeline_R6.R
-example-ProcessC = R6Class(
-  "example-ProcessC",
+Example_ProcessB = R6Class(
+  "Example_ProcessB",
   inherit = Process,
   private = list(
-    .config = list(name = 'ProcessC',
+    .config = list(name = 'ProcessB',
                    steps = c('Description', 'Step1', 'Step2', 'Step3'),
                    mandatory = c(T,F,T,F)
     )

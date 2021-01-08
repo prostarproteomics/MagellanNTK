@@ -1,6 +1,6 @@
 #Timeline_R6.R
-example-Description = R6::R6Class(
-  "example-Description",
+Example_Description = R6::R6Class(
+  "Example_Description",
   inherit = Process,
   private = list(
     .config = list(name = 'Description',

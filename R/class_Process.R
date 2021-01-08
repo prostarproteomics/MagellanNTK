@@ -1,4 +1,4 @@
-verbose <- TRUE
+verbose <- FALSE
 #' @title
 #' xxx
 #' 

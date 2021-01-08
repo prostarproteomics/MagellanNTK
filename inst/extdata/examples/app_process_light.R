@@ -5,17 +5,17 @@ library(highcharter)
 
 
 source(file.path('../../../R', 'class_TimelineDraw.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_global.R'), local=TRUE)$value
+source(file.path('../../../R', 'global.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
 
 
-source(file.path('.', 'class_ProcessA.R'), local=TRUE)$value
+source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
 
 
 actionBtnClass <- "btn-primary"
 
-proc <- ProcessA$new('processA', verbose = TRUE)
+proc <- Example_ProcessA$new('processA', verbose = TRUE)
 
 ui = fluidPage(
   tagList(

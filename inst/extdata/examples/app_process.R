@@ -6,15 +6,13 @@ options(shiny.fullstacktrace = T)
 
 #------------------------ Class TimelineDraw --------------------------------------
 source(file.path('../../../R', 'class_TimelineDraw.R'), local=TRUE)$value
-
-source(file.path('../../../R', 'class_global.R'), local=TRUE)$value
-
-#----------------------- Class ScreenManager ----------------------------------
+source(file.path('../../../R', 'global.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
-source(file.path('.', 'class_ProcessA.R'), local=TRUE)$value
-source(file.path('.', 'class_ProcessB.R'), local=TRUE)$value
-source(file.path('.', 'class_ProcessDescription.R'), local=TRUE)$value
+
+source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
+source(file.path('.', 'Example_ProcessB.R'), local=TRUE)$value
+source(file.path('.', 'Example_Description.R'), local=TRUE)$value
 
 
 #----------------------------------------------------------------------------
@@ -31,9 +29,9 @@ Pipeline <- R6Class(
     tmp.return = reactiveValues(),
     rv = reactiveValues(dataIn = NULL),
     child.process = list(
-      ProcessDescription = NULL,
-      ProcessA = NULL,
-      ProcessB = NULL
+      Example_Description = NULL,
+      Example_ProcessA = NULL,
+      Example_ProcessB = NULL
     ),
     initialize = function(id){
       self$id <- id
