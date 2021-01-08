@@ -10,10 +10,9 @@
 mod_data_explorer_ui <- function(id){
   ns <- NS(id)
   tagList(
-    div( style="display:inline-block; vertical-align: middle; padding: 7px",
-         uiOutput(ns('chooseDataset_UI'))
-    ),
-    mod_all_plots_ui('plots')
+    
+    
+    mod_bsmodal_ui('exemple')
   )
 }
     
