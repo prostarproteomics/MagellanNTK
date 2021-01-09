@@ -5,69 +5,46 @@
 mod_bsmodal_ui <- function(id){
   ns <- NS(id)
   tagList(
-    
     uiOutput(ns("bsmodal_ui"))
   )
 }
 
 
-#' @description
-#' xxxx
-#' 
-#' @importFrom shinyjqui jqui_resizable jqui_draggable
-#' @importFrom shinyBS bsModal
-#' 
-#' 
 mod_bsmodal_server <- function(id,
-                               dataIn = NULL,
-                               title=NULL,
-                               width=NULL){ #height auto
+                               title = NULL,
+                               width = NULL,
+                               uiContent = NULL){ #height auto
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    shinyjqui::jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
-                   ,options = list(minHeight = 500, minWidth=500  ))
-    
-    shinyjqui::jqui_draggable(paste0("#",ns("fenetre")," .modal-content")
+    # jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
+    #                ,options = list(minHeight = 500, minWidth=500  ))
+    # 
+    jqui_draggable(paste0("#", ns("window")," .modal-content")
                    , options = list(revert=TRUE) 
     )
     
-    
-    
-    #datasets <- utils::data(package="DAPARdata2")$results[,"Item"]
-    
-    
-    mod_all_plots_server('exemple_plot',
-                         dataIn = reactive({dataIn()})
-                         ) 
-    title <- "Plots"
     
     
     output$bsmodal_ui <- renderUI({
       
       tagList(
         tags$head(tags$style(paste0(".modal-dialog { width:",width," }"))),
-        actionButton(ns("button"), "Open Modal"),
-        
-        shinyBS::bsModal(ns("fenetre"),
-                         title,
-                         trigger = ns("button"),
-                         uiOutput(ns("mod_content"))
-                         )
+        tags$head(tags$style("#test .modal-dialog {width: fit-content !important;}")),
+        actionButton(ns("openModalBtn"), "",
+                     icon('chart-bar', lib = "font-awesome"),
+                     class=btn_success_color),
+        #div(id = 'test',
+            shinyBS::bsModal(ns("window"),
+                             title = title,
+                             trigger = ns("openModalBtn"),
+                             uiContent
+                             )
+          #  )
       )
       
     })
-    
-    mod_UI <- mod_all_plots_ui(ns('exemple_plot'))
-    
-    output$mod_content <- renderUI({
-      tagList(
-       mod_UI  
-      )
-    })
-    
-    
     
     
   })
