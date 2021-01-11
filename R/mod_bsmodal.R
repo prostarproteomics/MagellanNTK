@@ -1,7 +1,13 @@
 # ouvre une fenetre, parametre renseigne quoi afficher dans la fenetre
 
 
-#### module fenetre modal ####
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' 
+#' @export
+#' 
 mod_bsmodal_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -9,7 +15,18 @@ mod_bsmodal_ui <- function(id){
   )
 }
 
-
+#' @title xxxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @param id xxxx
+#' @param title xxx
+#' @param width xxx
+#' @param uiContent xxx
+#' 
+#' @export
+#' 
 mod_bsmodal_server <- function(id,
                                title = NULL,
                                width = NULL,
@@ -18,10 +35,10 @@ mod_bsmodal_server <- function(id,
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    # jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
+    # shinyjqui::jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
     #                ,options = list(minHeight = 500, minWidth=500  ))
     # 
-    jqui_draggable(paste0("#", ns("window")," .modal-content")
+    shinyjqui::jqui_draggable(paste0("#", ns("window")," .modal-content")
                    , options = list(revert=TRUE) 
     )
     
@@ -34,7 +51,7 @@ mod_bsmodal_server <- function(id,
         tags$head(tags$style("#test .modal-dialog {width: fit-content !important;}")),
         actionButton(ns("openModalBtn"), "",
                      icon('chart-bar', lib = "font-awesome"),
-                     class=btn_success_color),
+                     class="btn-success"),
         #div(id = 'test',
             shinyBS::bsModal(ns("window"),
                              title = title,

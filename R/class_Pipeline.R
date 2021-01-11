@@ -21,7 +21,7 @@ Pipeline = R6::R6Class(
     #'
     Additional_Initialize_Class = function(){
       if(self$verbose) cat(paste0(class(self)[1], '::Additional_Initialize_Class() from - ', self$id, '\n\n'))
-      
+
       self$rv$data2send <- NULL
       self$tmp.return <- reactiveValues()
       self$child.process <- setNames(lapply(self$config$steps,
@@ -222,7 +222,7 @@ Pipeline = R6::R6Class(
     #' xxxxx
     #'
     #' @return Nothing
-    Global_server = function(input, output){},
+    Global_server = function(session, input, output){},
      
 
     #' @description

@@ -11,6 +11,9 @@ Example_ProcessB = R6Class(
   
   public = list(
     
+    rv.process = reactiveValues(
+      select1 = NULL
+    ),
     Global_server = function(input, output){},
     
     Description_server = function(input, output){
@@ -29,7 +32,6 @@ Example_ProcessB = R6Class(
     
     
     Description_ui = function(){
-      
       wellPanel(
         tagList(
           includeMarkdown( system.file("app/md", paste0(self$config$name, ".md"), package="Magellan")),
@@ -44,11 +46,19 @@ Example_ProcessB = R6Class(
     ############### SCREEN 2 ######################################
     
     Step1_server = function(input, output){
+      
+      observeEvent(input$select1, {
+        self$rv.process$select1 <- input$select1
+        print(paste0('Process ', self$id, ', Catch new value on select1 : ', input$select1))
+        
+      })
+      
+      observe({
+        print(self$rv.process$select1)
+      })
+      
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-        
         # Add your stuff code here
-        
-        
         self$ValidateCurrentPos()
       })
     },

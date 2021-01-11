@@ -32,7 +32,7 @@ Pipeline <- R6Class(
     tmp.return = reactiveValues(),
     rv = reactiveValues(dataIn = NULL),
     child.process = list(
-      Example_Description = NULL,
+      #Example_Description = NULL,
       Example_ProcessA = NULL,
       Example_ProcessB = NULL
     ),
@@ -107,15 +107,14 @@ server = function(input, output){
   
   
   mod_all_plots_server('exemple_plot',
-                       dataIn = reactive({Exp1_R25_prot}),
-                       indice = reactive({length(Exp1_R25_prot)})
+                       dataIn = reactive({Exp1_R25_prot})
                        ) 
   title <- "Plots"
   mod_UI <- mod_all_plots_ui('exemple_plot')
   # module d'affichage modal contenant ci-dessus
   mod_bsmodal_server('exemple',
-                     title = title,
-                     mod_UI = mod_UI,
+                     title = 'Plots',
+                     uiContent = MSPipelines::mod_all_plots_ui('plots'),
                      width="75%" # en px ou % de largeur
   )
   

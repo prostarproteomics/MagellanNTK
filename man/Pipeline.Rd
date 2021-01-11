@@ -14,7 +14,7 @@ xxxx
 \describe{
 \item{\code{tmp.return}}{xxx}
 
-\item{\code{modal_txt}}{xxx}
+\item{\code{modal_txt}}{Text to be showed in the popup window when the user clicks on the `Reset pipeline` button.}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,7 +56,8 @@ xxxx
 \if{html}{\out{<a id="method-ToggleState_Screens"></a>}}
 \if{latex}{\out{\hypertarget{method-ToggleState_Screens}{}}}
 \subsection{Method \code{ToggleState_Screens()}}{
-xxx
+Additional functions that are to be inserted in the initialize function of
+the parent class.
 
 
 xxx
@@ -67,9 +68,11 @@ xxx
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{cond}}{xxx}
+\item{\code{cond}}{A boolean that indicates whether the corresponding ui must be
+enabled (TRUE) or disabled (FALSE).}
 
-\item{\code{range}}{xxx}
+\item{\code{range}}{A range of integers to indicate which steps are concerned by the 
+condition `cond`}
 }
 \if{html}{\out{</div>}}
 }
@@ -81,13 +84,14 @@ Nothing
 \if{html}{\out{<a id="method-Discover_Skipped_Steps"></a>}}
 \if{latex}{\out{\hypertarget{method-Discover_Skipped_Steps}{}}}
 \subsection{Method \code{Discover_Skipped_Steps()}}{
-xxx
+On the basis of the vector `status`, this function searches for skipped steps
+(ie unvalidated step for which there exists a validated steps forward)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Pipeline$Discover_Skipped_Steps()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Nothing
+The vector `status` is updated.
 }
 }
 \if{html}{\out{<hr>}}

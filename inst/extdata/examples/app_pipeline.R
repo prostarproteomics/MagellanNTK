@@ -9,6 +9,7 @@ options(shiny.fullstacktrace = T)
 options(shiny.reactlog=TRUE) 
 
 #------------------------ Class TimelineDraw -----------------------------------
+source(file.path('../../../R', 'mod_bsmodal.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_TimelineDraw.R'), local=TRUE)$value
 source(file.path('../../../R', 'global.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
@@ -28,9 +29,16 @@ pipeline <- Example$new('App')
 
 ui = fluidPage(
   tagList(
-  actionButton('send', 'Send dataset'),
-  actionButton('showPlotModal', 'Show plots'),
-  mod_bsmodal_ui('plotModal'),
+    div( style="display:inline-block; vertical-align: middle; padding: 7px",
+         actionButton('send', 'Send dataset')
+    ),
+    div( style="display:inline-block; vertical-align: middle; padding: 7px",
+         actionButton('showPlotModal', 'Show plots')
+    ),
+    div( style="display:inline-block; vertical-align: middle; padding: 7px",
+         mod_bsmodal_ui('plotModal')
+    ),
+
   pipeline$ui()
   )
 )
@@ -38,29 +46,43 @@ ui = fluidPage(
 server = function(input, output, session){
   
   # Get a QFeatures dataset for example
-  basename(f <- msdata::quant(pattern = "cptac", full.names = TRUE))
-  i <- grep("Intensity\\.", names(read.delim(f)))
-  cptac <- QFeatures::readQFeatures(f, ecol = i, sep = "\t", name = "peptides", fnames = "Sequence")
+  utils::data(Exp1_R25_prot, package='DAPARdata2')
   
   rv <- reactiveValues(
-    res = NULL
+    res = NULL,
+    dataIn = NULL
   )
   rv$res <- pipeline$server(dataIn = reactive({rv$dataIn}))
   
-  observeEvent(rv$res()$trigger, {
-    print(rv$res()$trigger)
+  GetResult <- reactive({
+    triggerValues <- unlist(rv$res()$trigger)
+    if (sum(triggerValues)>0){ # Init of core engine
+      processHasChanged <- pipeline$config$steps[which(max(triggerValues)==triggerValues)]
+      ind.processHasChanged <- which(pipeline$config$steps==processHasChanged)
+      newValue <- rv$res()$value
+      print(names(newValue))
+    }
   })
+  
+  
+  observe({ GetResult() })
+  
   
   observeEvent(input$send,{
     if (input$send%%2 != 0)
-      rv$dataIn <- cptac
+      rv$dataIn <- Exp1_R25_prot
     else
       rv$dataIn <- NULL
   })
   
-  observeEvent(input$showPlotModal, {
-    
-  })
+  MSPipelines::mod_all_plots_server('plots',
+                                    dataIn = reactive({rv$dataIn})
+  )
+  mod_bsmodal_server('plotModal',
+                     title = 'Plots',
+                     width="75%", # en px ou % de largeur
+                     uiContent = MSPipelines::mod_all_plots_ui('plots')
+  )
 }
 
 shiny::shinyApp(ui, server)

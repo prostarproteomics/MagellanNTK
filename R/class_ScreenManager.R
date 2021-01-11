@@ -251,7 +251,7 @@ ScreenManager <- R6::R6Class(
     GetScreens_global = function(input, output){
       if(self$verbose) cat(paste0(class(self)[1], '::GetScreens_global() from - ', self$id, '\n\n'))
   
-      eval(parse(text = "self$Global_server(input, output)"))
+      eval(parse(text = "self$Global_server(session, input, output)"))
     }
     
   ),
@@ -359,7 +359,7 @@ ScreenManager <- R6::R6Class(
     #' #' 
     #' #' @param output xxx
     #' #'
-    #' Global_server = function(input, output){},
+    #' Global_server = function(session, input, output){},
     #' 
     #' @description 
     #' xxx
@@ -405,7 +405,7 @@ ScreenManager <- R6::R6Class(
     #' xxxxx
     #'
     #' @return Nothing
-    Global_server = function(input, output){},
+    Global_server = function(session, input, output){},
     
     
     

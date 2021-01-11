@@ -10,6 +10,12 @@ Example_ProcessA = R6Class(
   ),
   
   public = list(
+    
+    rv.process = reactiveValues(
+      widgets = list(
+        select1 = NULL,
+        select2 = NULL)
+    ),
     Global_server = function(input, output){},
     
     Description_server = function(input, output){
@@ -42,11 +48,18 @@ Example_ProcessA = R6Class(
     ############### SCREEN 2 ######################################
     
     Step1_server = function(input, output){
+      
+      observeEvent(input$select1, {
+        self$rv.process$widgets$select1 <- input$select1
+        print(paste0('Process ', self$id, ', Catch new value on select1 : ', input$select1))
+        })
+      
+      observeEvent(self$rv.process$widgets$select1, {
+        print(self$rv.process$widgets$select1)
+      })
+      
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-        
         # Add your stuff code here
-        
-        
         self$ValidateCurrentPos()
       })
     },
