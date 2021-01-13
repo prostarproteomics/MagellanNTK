@@ -33,8 +33,8 @@ Pipeline <- R6Class(
     rv = reactiveValues(dataIn = NULL),
     child.process = list(
       #Example_Description = NULL,
-      Example_ProcessA = NULL,
-      Example_ProcessB = NULL
+      Example_ProcessA = NULL
+      #Example_ProcessB = NULL
     ),
     initialize = function(id){
       self$id <- id
@@ -87,6 +87,7 @@ Pipeline <- Pipeline$new('App')
 ui = fluidPage(
   tagList(
     actionButton('send', 'Send dataset'),
+    actionButton('updateStatus', 'Update status'),
     mod_bsmodal_ui('exemple'),
     Pipeline$ui()
   )
@@ -118,7 +119,9 @@ server = function(input, output){
                      width="75%" # en px ou % de largeur
   )
   
-  
+  observeEvent(input$updateStatus, {
+    print(Pipeline$rv$status)
+  })
   
   observeEvent(input$send,{
     if (input$send%%2 != 0)

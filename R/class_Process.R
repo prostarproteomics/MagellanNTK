@@ -21,7 +21,7 @@ Process = R6::R6Class(
     #' 
     #' @return Nothing.
     #' 
-    GetScreens_server = function(input, output){
+    GetScreens_server = function(session, input, output){
       if(verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
       setNames(lapply(self$config$steps, function(x){
         eval(parse(text = paste0("self$", x, '_server(input, output)')))
@@ -90,6 +90,8 @@ Process = R6::R6Class(
       
       private$BasicReset()
     },
+    
+    
     
     
     #' @description

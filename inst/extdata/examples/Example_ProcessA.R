@@ -11,12 +11,12 @@ Example_ProcessA = R6Class(
   
   public = list(
     
-    rv.process = reactiveValues(
-      widgets = list(
-        select1 = NULL,
-        select2 = NULL)
-    ),
-    Global_server = function(input, output){},
+    
+    
+    Global_server = function(session, input, output){
+      self$rv$value.test <- 3
+      self$rv$choices <- 1:6
+    },
     
     Description_server = function(input, output){
       observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
@@ -49,19 +49,22 @@ Example_ProcessA = R6Class(
     
     Step1_server = function(input, output){
       
-      observeEvent(input$select1, {
-        self$rv.process$widgets$select1 <- input$select1
-        print(paste0('Process ', self$id, ', Catch new value on select1 : ', input$select1))
-        })
-      
-      observeEvent(self$rv.process$widgets$select1, {
-        print(self$rv.process$widgets$select1)
-      })
-      
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
         # Add your stuff code here
         self$ValidateCurrentPos()
       })
+      
+      
+      output$test <-renderUI({
+        shinyjs::disabled(selectInput(self$ns('select1'), 'Select step 1', 
+                    choices = GetChoices(), 
+                    selected = GetTestValue(),
+                    width = '150px')
+        )
+      })
+      
+      GetTestValue <- reactive({self$rv$value.test})
+      GetChoices <- reactive({self$rv$choices})
     },
     
     Step1_ui = function(){
@@ -71,8 +74,12 @@ Example_ProcessA = R6Class(
           div(id=self$ns(name),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   tags$h2(name)),
+              div(id = 'test_id',
+                  style="display:inline-block; vertical-align: middle; padding-right: 40px;",
+                  uiOutput(self$ns('test'))
+              ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  selectInput(self$ns('select1'), 'Select step 1', 
+                  selectInput(self$ns('select2'), 'Select step 2', 
                               choices = 1:5, 
                               selected = 1,
                               width = '150px')

@@ -221,7 +221,7 @@ ScreenManager <- R6::R6Class(
     #' 
     Initialize_Status_Process = function(){
       if(self$verbose) cat(paste0(class(self)[1], '::', 'Initialize_Status_Process() from - ', self$id, '\n\n'))
-      self$rv$status <- setNames(rep(global$UNDONE, self$length),self$config$steps)
+      self$rv$status <- setNames(rep(global$UNDONE, self$length), self$config$steps)
     },
     
     
@@ -239,7 +239,7 @@ ScreenManager <- R6::R6Class(
     #' 
     #' @param output xxx
     #' 
-    GetScreens_server = function(input, output){},
+    GetScreens_server = function(session, input, output){},
     
     #' @description 
     #' xxx
@@ -248,7 +248,7 @@ ScreenManager <- R6::R6Class(
     #' 
     #' @param output xxx
     #' 
-    GetScreens_global = function(input, output){
+    GetScreens_global = function(session, input, output){
       if(self$verbose) cat(paste0(class(self)[1], '::GetScreens_global() from - ', self$id, '\n\n'))
   
       eval(parse(text = "self$Global_server(session, input, output)"))
@@ -264,7 +264,7 @@ ScreenManager <- R6::R6Class(
     #' @field ns xxx
     ns = NULL,
     #' @field verbose xxx
-    verbose = FALSE,
+    verbose = TRUE,
     #' @field currentStepName xxx
     currentStepName = NULL,
     #' @field child.process xxx
@@ -349,17 +349,10 @@ ScreenManager <- R6::R6Class(
       
       private$Additional_Initialize_Class()
       self$screens <- self$GetScreens_ui()
+
     },
     
-   
-    
-    #' #' @description 
-    #' #' xxx
-    #' #' @param input xxx
-    #' #' 
-    #' #' @param output xxx
-    #' #'
-    #' Global_server = function(session, input, output){},
+
     #' 
     #' @description 
     #' xxx
@@ -385,6 +378,18 @@ ScreenManager <- R6::R6Class(
     #' xxx
     #' 
     ValidateCurrentPos = function(){},
+    
+    #' @description
+    #' Validate a given position. To be used by xxx
+    #' 
+    #' @return Nothing.
+    #' 
+    ValidatePosition= function(position){
+      if(verbose) cat(paste0(class(self)[1], '::', 'ValidateCurrentPos() from - ', self$id, '\n\n'))
+      #browser()
+      self$rv$status[position] <- global$VALIDATED
+    },
+    
     
     #' @description 
     #' xxx
@@ -517,12 +522,14 @@ ScreenManager <- R6::R6Class(
       observeEvent(dataIn(), ignoreNULL = F, ignoreInit = T,{
         if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(dataIn()) from --- ', self$id, '\n\n'))
        # browser()
+        print('tutu')
         self$Change_Current_Pos(1)
         self$rv$temp.dataIn <- dataIn()
         self$ActionOn_New_DataIn() # Used by class pipeline
         
         
         if(is.null(dataIn())){
+          print('toto')
           self$ToggleState_Screens(FALSE, 1:self$length)
          # self$ToggleState_ResetBtn(FALSE)
           self$original.length <- 0
@@ -538,9 +545,11 @@ ScreenManager <- R6::R6Class(
       
       observeEvent(self$rv$status, ignoreInit = T, {
         if (self$verbose) cat(paste0(class(self)[1], '::observe((self$rv$status) from - ', self$id, '\n\n'))
+        #browser()
         self$Discover_Skipped_Steps()
+        # https://github.com/daattali/shinyjs/issues/166
+        # https://github.com/daattali/shinyjs/issues/25
         private$Update_State_Screens()
-
       })
       
       
@@ -564,8 +573,8 @@ ScreenManager <- R6::R6Class(
       moduleServer(self$id, function(input, output, session) {
         if (self$verbose) cat(paste0(class(self)[1], '::moduleServer(input, output, session) from - ', self$id, '\n\n'))
         
-        private$GetScreens_global(input, output)
-        private$GetScreens_server(input, output)
+        private$GetScreens_global(session, input, output)
+        private$GetScreens_server(session, input, output)
         
         observeEvent(input$rstBtn, {
           if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(input$rstBtn) from - ', self$id, '\n\n'))
