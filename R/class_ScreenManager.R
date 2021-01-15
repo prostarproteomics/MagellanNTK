@@ -519,26 +519,32 @@ ScreenManager <- R6::R6Class(
       #
       # Catch a new dataset sent by the caller
       #
-      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
+      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = T,{
         if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(dataIn()) from --- ', self$id, '\n\n'))
         #browser()
-        print('tutu')
+        print('tutu2')
+        #self$ToggleState_Screens(TRUE, 1:self$length)
         self$Change_Current_Pos(1)
         self$rv$temp.dataIn <- dataIn()
         self$ActionOn_New_DataIn() # Used by class pipeline
-        
+       # shinyjs::toggleState('Screens', TRUE)
         
         if(is.null(dataIn())){
-          print('toto')
+          print('dataIn() NULL')
+          
           self$ToggleState_Screens(FALSE, 1:self$length)
          # self$ToggleState_ResetBtn(FALSE)
           self$original.length <- 0
         } else { # A new dataset has been loaded
+          print('dataIn() not NULL')
+          
           shinyjs::toggleState('Screens', TRUE)
           private$ToggleState_ResetBtn(TRUE) #Enable the reset button
           self$original.length <- length(dataIn())
           
           private$Update_State_Screens()
+          #self$ToggleState_Screens(TRUE, 1:self$length)
+          
         }
       })
       
