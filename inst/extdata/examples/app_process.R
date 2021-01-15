@@ -83,7 +83,8 @@ server = function(dataIn ) {
 )
 
 rv <- reactiveValues()
-Pipeline <- Pipeline$new('App')
+#Pipeline <- Pipeline$new('App')
+Pipeline <- Example_ProcessA$new('App')
 ui = fluidPage(
   tagList(
     actionButton('send', 'Send dataset'),

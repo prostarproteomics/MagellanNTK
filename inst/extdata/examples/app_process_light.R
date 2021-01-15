@@ -102,7 +102,7 @@ server = function(input, output){
   i <- grep("Intensity\\.", names(read.delim(f)))
   cptac <- QFeatures::readQFeatures(f, ecol = i, sep = "\t", name = "peptides", fnames = "Sequence")
   
-  proc$server(dataIn = reactive({rv$dataIn}))
+  proc$server(dataIn = reactive({Exp1_R25_prot}))
   
   utils::data(Exp1_R25_prot, package='DAPARdata2')
   

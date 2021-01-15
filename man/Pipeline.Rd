@@ -46,6 +46,7 @@ xxxx
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Get_Result">}\href{../../Magellan/html/ScreenManager.html#method-Get_Result}{\code{Magellan::ScreenManager$Get_Result()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Set_Reseted">}\href{../../Magellan/html/ScreenManager.html#method-Set_Reseted}{\code{Magellan::ScreenManager$Set_Reseted()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="Set_Skipped">}\href{../../Magellan/html/ScreenManager.html#method-Set_Skipped}{\code{Magellan::ScreenManager$Set_Skipped()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="ValidatePosition">}\href{../../Magellan/html/ScreenManager.html#method-ValidatePosition}{\code{Magellan::ScreenManager$ValidatePosition()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="initialize">}\href{../../Magellan/html/ScreenManager.html#method-initialize}{\code{Magellan::ScreenManager$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="server">}\href{../../Magellan/html/ScreenManager.html#method-server}{\code{Magellan::ScreenManager$server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="Magellan" data-topic="ScreenManager" data-id="ui">}\href{../../Magellan/html/ScreenManager.html#method-ui}{\code{Magellan::ScreenManager$ui()}}\out{</span>}
@@ -204,7 +205,7 @@ Nothing
 \subsection{Method \code{Global_server()}}{
 xxxxx
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Pipeline$Global_server(input, output)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Pipeline$Global_server(session, input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

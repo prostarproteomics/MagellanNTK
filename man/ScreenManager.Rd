@@ -48,6 +48,7 @@ xxxx
 \item \href{#method-Set_Skipped}{\code{ScreenManager$Set_Skipped()}}
 \item \href{#method-Set_Reseted}{\code{ScreenManager$Set_Reseted()}}
 \item \href{#method-ValidateCurrentPos}{\code{ScreenManager$ValidateCurrentPos()}}
+\item \href{#method-ValidatePosition}{\code{ScreenManager$ValidatePosition()}}
 \item \href{#method-EncapsulateScreens}{\code{ScreenManager$EncapsulateScreens()}}
 \item \href{#method-ActionOn_NewPosition}{\code{ScreenManager$ActionOn_NewPosition()}}
 \item \href{#method-Get_Result}{\code{ScreenManager$Get_Result()}}
@@ -122,15 +123,7 @@ xxx
 \describe{
 \item{\code{id}}{xxx}
 
-\item{\code{verbose}}{xxx
-
-#' @description 
-#' xxx
-#' @param input xxx
-#' 
-#' @param output xxx
-#'
-Global_server = function(input, output){},}
+\item{\code{verbose}}{xxx}
 
 \item{\code{direction}}{xxx}
 
@@ -207,6 +200,19 @@ xxx
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ValidatePosition"></a>}}
+\if{latex}{\out{\hypertarget{method-ValidatePosition}{}}}
+\subsection{Method \code{ValidatePosition()}}{
+Validate a given position. To be used by xxx
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$ValidatePosition(position)}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Nothing.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EncapsulateScreens"></a>}}
 \if{latex}{\out{\hypertarget{method-EncapsulateScreens}{}}}
 \subsection{Method \code{EncapsulateScreens()}}{
@@ -242,7 +248,7 @@ xxx
 \subsection{Method \code{Global_server()}}{
 xxxxx
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$Global_server(input, output)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ScreenManager$Global_server(session, input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

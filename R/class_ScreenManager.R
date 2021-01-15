@@ -251,7 +251,7 @@ ScreenManager <- R6::R6Class(
     GetScreens_global = function(session, input, output){
       if(self$verbose) cat(paste0(class(self)[1], '::GetScreens_global() from - ', self$id, '\n\n'))
   
-      eval(parse(text = "self$Global_server(session, input, output)"))
+      eval(parse(text = "self$Global_server(session, input)"))
     }
     
   ),
@@ -410,7 +410,7 @@ ScreenManager <- R6::R6Class(
     #' xxxxx
     #'
     #' @return Nothing
-    Global_server = function(session, input, output){},
+    Global_server = function(session, input){},
     
     
     
@@ -519,9 +519,9 @@ ScreenManager <- R6::R6Class(
       #
       # Catch a new dataset sent by the caller
       #
-      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = T,{
+      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
         if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(dataIn()) from --- ', self$id, '\n\n'))
-       # browser()
+        #browser()
         print('tutu')
         self$Change_Current_Pos(1)
         self$rv$temp.dataIn <- dataIn()
@@ -534,6 +534,7 @@ ScreenManager <- R6::R6Class(
          # self$ToggleState_ResetBtn(FALSE)
           self$original.length <- 0
         } else { # A new dataset has been loaded
+          shinyjs::toggleState('Screens', TRUE)
           private$ToggleState_ResetBtn(TRUE) #Enable the reset button
           self$original.length <- length(dataIn())
           

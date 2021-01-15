@@ -222,7 +222,7 @@ Pipeline = R6::R6Class(
     #' xxxxx
     #'
     #' @return Nothing
-    Global_server = function(session, input, output){},
+    Global_server = function(session, input){},
      
 
     #' @description
