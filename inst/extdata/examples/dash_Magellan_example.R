@@ -21,6 +21,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     
     sidebarMenu(
+      id = "tabs",
       menuItem("Screen1", tabName = "screen1", icon = icon("th")),
       menuItem("Screen2", tabName = "screen2", icon = icon("th"))
     )
@@ -48,7 +49,7 @@ ui <- dashboardPage(
   )
 )
 
-server <- function(input, output) {
+server <- function(session, input, output) {
   
   
   observeEvent(input$send, {
@@ -59,14 +60,7 @@ server <- function(input, output) {
   
   output$magellan <- renderUI({
     req(rv$pipe)
-    if(input$send){
-      selectInput('select2', 'Select 2', choices = 1:3)
-      rv$pipe$ui()
-    }
-    else{
-      shinyjs::disabled(selectInput('select2', 'Select 2', choices = 1:3))
-      shinyjs::disabled(rv$pipe$ui())
-    }
+    shinyjs::disabled(rv$pipe$ui())
   })
   
   #------------------------------------------------
@@ -83,7 +77,9 @@ server <- function(input, output) {
   
   
   observeEvent(input$send, {
-    rv$dataIn <-Exp1_R25_prot 
+    updateTabItems(session, 'tabs', 'screen2')
+    shinyjs::delay(100, rv$dataIn <-Exp1_R25_prot)
+    
   })
   
   output$show_pipe <- renderUI({
