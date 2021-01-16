@@ -26,15 +26,9 @@ Magellan <- R6::R6Class(
         dataIn = NULL
       )
       
-      # obj <- base::get(name)
+       obj <- base::get(name)
       # self$Pipeline <- do.call(obj$new, list(self$ns('App')))
-     # self$Pipeline <- Example_ProcessA$new(self$ns('App'))
-    },
-    
-    Launch_Pipeline = function(name){
-      obj <- base::get(name)
-      self$Pipeline <- do.call(obj$new, list(self$ns('App')))
-      #self$Pipeline <- Example_ProcessA$new(self$ns('App'))
+      self$Pipeline <- Example_ProcessA$new(self$ns('App'))
     },
     
     ui = function(){

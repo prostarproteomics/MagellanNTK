@@ -10,15 +10,9 @@ options(shiny.fullstacktrace = T)
  source(file.path('../../../R', 'global.R'), local=TRUE)$value
  source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
  source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
-# source(file.path("../../../R", "mod_popover_for_help.R"), local = TRUE)$value
-# source(file.path("../../../R", "mod_format_DT.R"), local = TRUE)$value
-# source(file.path("../../../R", "mod_bsmodal.R"), local=TRUE)$value
-# 
- source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
+source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_Launch_Magellan.R'), local=TRUE)$value
-# source(file.path('.', 'Example_ProcessB.R'), local=TRUE)$value
-# source(file.path('.', 'Example_Description.R'), local=TRUE)$value
-# 
+
 utils::data(Exp1_R25_prot, package='DAPARdata2')
 
 pipe <- Magellan$new('App', name = "Example_ProcessA")
@@ -36,9 +30,9 @@ server = function(input, output){
     dataIn = NULL,
     res = NULL
   )
-  pipe$Launch_Pipeline('Example_ProcessA')
-  rv$res <- pipe$server(dataIn = reactive({Exp1_R25_prot}))
-  
+  #pipe$Launch_Pipeline('Example_ProcessA')
+  rv$res <- pipe$server(dataIn = reactive({rv$dataIn}))
+  rv$dataIn <- Exp1_R25_prot
   # observeEvent(req(rv$res()), {
   #   print(rv$res()$trigger)
   # })

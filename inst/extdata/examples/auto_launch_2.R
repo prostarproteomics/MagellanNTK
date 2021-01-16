@@ -14,7 +14,6 @@ source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
 
 utils::data(Exp1_R25_prot, package='DAPARdata2')
 
-pipe <- Example_ProcessA$new('App')
 
 ui = fluidPage(
   tagList(
@@ -30,22 +29,23 @@ server = function(input, output){
   # Get a QFeatures dataset for example
   rv <- reactiveValues(
     dataIn = NULL,
-    res = NULL
+    res = NULL,
+    pipe = NULL
   )
+  rv$pipe <- Example_ProcessA$new('App')
   
-  rv$res <- pipe$server(dataIn = reactive({rv$dataIn}))
+  observe({
+    rv$res <- rv$pipe$server(dataIn = reactive({rv$dataIn}))
+  })
   
-  # observeEvent(req(rv$res()), {
-  #   print(rv$res()$trigger)
-  # })
-  
+
   observeEvent(input$send, {
     rv$dataIn <-Exp1_R25_prot 
   })
   
   output$show_pipe <- renderUI({
-    req(pipe)
-    pipe$ui()
+    req(rv$pipe)
+    rv$pipe$ui()
   })
 }
 shiny::shinyApp(ui, server)
