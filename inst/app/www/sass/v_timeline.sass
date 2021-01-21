@@ -1,0 +1,81 @@
+$colCompletedDisabled: #ABDBAC
+$colCompleted: #07910A
+
+$colSkippedDisabled: #B3AFAB80
+$colSkipped: #B3AFAB
+
+$colMandatory: #D30505
+$colMandatoryDisabled: #D3050580
+
+$colUndone: #B3AFAB
+$colUndoneDisabled: #B3AFAB80
+
+$colLine: #C6C8C6
+
+
+ul 
+  list-style-type: none
+  margin: 0
+  padding: 0
+  width: auto
+  background-color: white
+  position: fixed
+  height: 100%
+  overflow: auto
+  font-weight: 100
+
+
+li a 
+  display: block
+  color: #000
+  padding: 8px 10px
+  margin: 30px
+  text-decoration: none
+  border: 3px solid lightgrey
+  border-radius: 0%
+  text-align: center
+  font-weight: 600
+
+
+li a.active 
+  background-color: #4CAF50
+  color: white
+  box-shadow: 0 0 0 3px black
+
+
+li .undone 
+  background-color: white
+  color: black
+  border: 3px solid $colUndone
+  
+li .undoneDisabled 
+  background-color: white
+  color: black
+  border: 3px solid $colUndoneDisabled
+
+
+li .mandatory 
+  background-color: white
+  border: 3px solid $colMandatory
+  
+li .mandatoryDisabled 
+  background-color: white
+  border: 3px solid $colMandatoryDisabled
+
+li .completed 
+  background-color: $colCompleted
+  border: 3px solid $colCompleted
+  
+li .completedDisabled
+  background-color: $colCompletedDisabled
+  border: 3px solid $colCompletedDisabled
+  
+li .skipped 
+  background-color: white
+  border: 3px dashed $colSkipped
+  
+li .skippedDisabled
+  background-color: white
+  border: 3px dashed $colSkippedDisabled
+
+

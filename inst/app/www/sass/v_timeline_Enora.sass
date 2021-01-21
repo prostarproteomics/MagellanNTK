@@ -1,0 +1,122 @@
+
+$colCompletedDisabled: green
+$colCompleted: green
+
+$colSkippedDisabled: lightblue
+$colSkipped: lightblue
+
+$colMandatory: yellow
+$colMandatoryDisabled: yellow
+
+$colUndone: orange
+$colUndoneDisabled: orange
+
+$colLine: red
+
+$radius: 20px
+$lineWidth: 3px
+
+
+.box
+   width: 75%
+   height: 400px
+   position: absolute
+   top: 20px
+   left: 50px
+   text-align: center
+   display: flex
+   flex-direction: column
+   justify-content: center
+   align-items: center
+   font-size: 1.2em 
+   /*color: yellow*/
+
+/*ronds*/
+.sub_box
+   margin: -3px auto
+   padding-top: 35px
+   border: 6px solid black
+   border-radius: 50%
+   height: 110px
+   width: 110px
+
+
+
+/*demi ronds*/
+.sub_box:nth-child(odd)
+   border-bottom-color: transparent
+   border-left-color: transparent
+   transform: rotate(45deg)
+
+
+
+.sub_box:nth-child(even) 
+   border-bottom-color: transparent
+   border-left-color: transparent
+   transform: rotate(225deg)
+
+
+
+/*remet le text a l'horizontal*/
+.sub_box:nth-child(odd) p 
+   transform: rotate(-45deg)
+
+
+.sub_box:nth-child(even) p 
+   transform: rotate(-225deg)
+   position: relative
+   top: 4px
+
+
+.active 
+   color: red
+   background-color: transparent
+   border: 10px solid red
+   border-top: $lineWidth solid $colLine
+   
+.sub_box.undone.active
+   background-color: red
+  .status
+    h4
+      border-bottom: 3px solid currentColor
+      
+.sub_box.undone
+   background-color: red
+  .status
+    h4
+      border-bottom: 3px solid currentColor
+
+.undone
+   color: black
+   background-color: $colUndone
+   border: 10px solid red
+   border-top: $lineWidth solid $colLine
+   
+.undoneDisabled
+   color: black
+   background-color: $colUndoneDisabled
+   
+.completed
+   color: red
+   background-color: $colCompleted
+   
+.completedDisabled
+   color: red
+   background-color: $colCompletedDisabled
+   
+.skipped
+   color: black
+   background-color: $colSkipped
+   
+.skippedDisabled
+   color: black
+   background-color: $colSkippedDisabled
+   
+.mandatory
+   color: black
+   background-color: $colMandatory
+   
+.mandatoryDisabled
+   color: black
+   background-color: $colMandatoryDisabled
+
