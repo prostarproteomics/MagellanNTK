@@ -13,8 +13,8 @@ source(file.path('../../R', 'global.R'), local=TRUE)$value
 
 config <- list(
   name = "test_TL_verticale",
-  steps = c('step1', 'step2', 'step3', 'step4'),
-  mandatory = c(step1=T, step2=F, step3=F, step4=T)
+  steps = c('step 1', 'step 2', 'step 3', 'step 4'),
+  mandatory = c(step1=T, step2=T, step3=F, step4=T)
 )
 
 tl.h <- TimelineDraw$new('TL',
@@ -27,15 +27,17 @@ tl.v <- TimelineDraw$new('TL',
 
 ui <- fluidPage(
   actionButton('pos', 'Change pos'),
-  tl.h$ui(),
-  tl.v$ui()
+  fluidRow(
+    column(width=2, tl.v$ui()),
+    column(width=10, tl.h$ui())
+  )
 )
 
 
 server <- function(input, output){
   
   rv <- reactiveValues(
-    status = c(1, 1, 0, 0),
+    status = c(0, 0, 0, 0),
     current.pos = 1,
     tl.tags.enabled = c(1, 1, 1, 1)
   )

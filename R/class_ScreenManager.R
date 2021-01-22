@@ -2,7 +2,7 @@
 # of the same class
 # https://community.rstudio.com/t/r6-class-reactivevalues-property-and-instantiation/31025/2
 
-
+# TODO Idea  Delete the next and previous button and replace them by actionButtons for steps
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
@@ -281,6 +281,8 @@ ScreenManager <- R6::R6Class(
     modal_txt = NULL,
     #' @field timeline xxx
     timeline  = NULL,
+    #' @field orientation orientation of the timeline: horizontal ('h') (default) or vertical ('v)
+    orientation = 'h',
     #' @field default_pos xxx
     default_pos = list(VALIDATED = 1,
                        SKIPPED = 1,
@@ -299,7 +301,7 @@ ScreenManager <- R6::R6Class(
     #' 
     #' @param verbose xxx
     #' 
-    initialize = function(id, verbose=FALSE) {
+    initialize = function(id, verbose=FALSE, orientation='h') {
       self$verbose <- verbose
       if(self$verbose) cat(paste0(class(self)[1], '::initialize() from - ', self$id, '\n\n'))
       self$id <- id
@@ -309,6 +311,7 @@ ScreenManager <- R6::R6Class(
         value = NULL
       )
       
+      self$orientation = orientation
       self$default_pos$VALIDATED <- self$length
       self$default_pos$SKIPPED <- 1
       self$default_pos$UNDONE <- 1
@@ -345,7 +348,10 @@ ScreenManager <- R6::R6Class(
    
       self$rv$status <- setNames(rep(global$UNDONE, self$length), self$config$steps)
       
-      self$timeline <- TimelineDraw$new(self$ns('TL_draw'), mandatory = self$config$mandatory)
+      
+      self$timeline <- TimelineDraw$new(self$ns('TL'), 
+                                        mandatory = self$config$mandatory,
+                                        orientation = self$orientation )
       
       private$Additional_Initialize_Class()
       self$screens <- self$GetScreens_ui()
@@ -431,16 +437,9 @@ ScreenManager <- R6::R6Class(
     ToggleState_Screens = function(cond, range){},
     
    
-    
-    
-
-    #' @description 
-    #' xxx
-    #' 
-   ui = function(){
-      if (self$verbose) cat(paste0(class(self)[1], '::', 'Main_UI() from - ', self$id, '\n\n'))
-      #browser()
-      tagList(
+    Horizontal_TL = function(){
+     # wellPanel(
+        tagList(
         shinyjs::useShinyjs(),
         # tags$head(tags$style("#modal1 .modal-body {padding: 10px}
         #                #modal1 .modal-content  {-webkit-border-radius: 6px !important;-moz-border-radius: 6px !important;border-radius: 6px !important;}
@@ -477,24 +476,85 @@ ScreenManager <- R6::R6Class(
         div(id = self$ns('Screens'),
             uiOutput(self$ns('SkippedInfoPanel')),
             self$EncapsulateScreens()
-        ),
-        fluidRow(
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Global input of ", self$config$type))),
-                 uiOutput(self$ns('show_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Temp input of ", self$config$type))),
-                 uiOutput(self$ns('show_rv_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Output of ", self$config$type))),
-                 uiOutput(self$ns('show_rv_dataOut'))),
-          column(width=4,
-                 tags$b(h4(style = 'color: blue;', "status")),
-                 uiOutput(self$ns('show_status')))
         )
-        
       )
       #)
+    },
+ # TODO ddsqdsqd  
+    Vertical_TL = function(){
+      tagList(
+        shinyjs::useShinyjs(),
+        # tags$head(tags$style("#modal1 .modal-body {padding: 10px}
+        #                #modal1 .modal-content  {-webkit-border-radius: 6px !important;-moz-border-radius: 6px !important;border-radius: 6px !important;}
+        #                #modal1 .modal-dialog { width: 50%; display: inline-block; text-align: left; vertical-align: top;}
+        #                #modal1 .modal-header {background-color: #339FFF; border-top-left-radius: 6px; border-top-right-radius: 6px}
+        #                #modal1 .modal { text-align: right; padding-right:10px; padding-top: 24px;}
+        #                #moda1 .close { font-size: 16px}")),
+        #div(id = self$ns('GlobalTL'),
+        fluidRow(
+          column(width=3, div(id = self$ns('TL_Center'),
+                            style = self$btn_style,
+                            div(id = self$ns('TL_LeftSide'),
+                                style = self$btn_style,
+                                shinyjs::disabled(actionButton(self$ns("prevBtn"), "<<",
+                                                               class = PrevNextBtnClass,
+                                                               style='padding:4px; font-size:80%')),
+                                br(),
+                                shinyjs::disabled(actionButton(self$ns("rstBtn"), paste0("Reset ", self$config$type),
+                                                               class = redBtnClass,
+                                                               style='padding:4px; font-size:80%'))
+                              ),
+                              br(),
+                            div(id = self$ns('TL_RightSide'),
+                                style = self$btn_style,
+                                actionButton(self$ns("nextBtn"),  ">>",
+                                             class = PrevNextBtnClass,
+                                             style='padding:4px; font-size:80%')
+                            ),
+                            div(id = self$ns('TL_Center'),
+                                style = self$btn_style,
+                                self$timeline$ui())
+          )
+                 ),
+        column(width=9, div(id = self$ns('Screens'),
+                            uiOutput(self$ns('SkippedInfoPanel')),
+                            self$EncapsulateScreens()
+                            )
+               )
+        )
+        )
+    },
+    
+
+    #' @description 
+    #' xxx
+    #' 
+   ui = function(){
+      if (self$verbose) cat(paste0(class(self)[1], '::', 'Main_UI() from - ', self$id, '\n\n'))
+      #browser()
+    tagList(
+       if (self$timeline$GetOrientation() == 'h')
+         self$Horizontal_TL()
+       else if (self$timeline$GetOrientation() == 'v')
+        self$Vertical_TL()
+
+# 
+#        br(),
+#      fluidRow(
+#        column(width=2,
+#               tags$b(h4(style = 'color: blue;', paste0("Global input of ", self$config$type))),
+#               uiOutput(self$ns('show_dataIn'))),
+#        column(width=2,
+#               tags$b(h4(style = 'color: blue;', paste0("Temp input of ", self$config$type))),
+#               uiOutput(self$ns('show_rv_dataIn'))),
+#        column(width=2,
+#               tags$b(h4(style = 'color: blue;', paste0("Output of ", self$config$type))),
+#               uiOutput(self$ns('show_rv_dataOut'))),
+#        column(width=4,
+#               tags$b(h4(style = 'color: blue;', "status")),
+#               uiOutput(self$ns('show_status')))
+#      )
+      )
     },
     
     

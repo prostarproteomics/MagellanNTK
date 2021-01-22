@@ -13,6 +13,9 @@ Process = R6::R6Class(
   "Process",
   inherit = ScreenManager,
   private = list(
+    
+   
+    
     #' @description
     #' xxx
     #'

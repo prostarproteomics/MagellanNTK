@@ -28,15 +28,18 @@ TimelineDraw <- R6::R6Class(
       private$orientation = orientation
       },
 
+    GetOrientation = function(){private$orientation},
     
     ui = function() {
-      # fpath <- system.file("app/www/sass", 
-      #                      paste0(private$orientation, "_timeline.sass"), 
-      #                      package="Magellan")
-      fpath <- paste0("../../inst/app/www/sass/",private$orientation, "_timeline.sass")
+       fpath <- system.file("app/www/sass", 
+                            paste0(private$orientation, "_timeline.sass"), 
+                            package="Magellan")
+      #fpath <- paste0("../../inst/app/www/sass/",private$orientation, "_timeline.sass")
       tagList(
         shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
-        htmlOutput(private$ns(paste0('show_', private$orientation, '_TL')))
+        div(id = 'toto',
+            uiOutput(private$ns(paste0('show_', private$orientation, '_TL')))
+        )
         )
       },
     
@@ -60,20 +63,20 @@ TimelineDraw <- R6::R6Class(
           tl_status
         })
         
-        output$show_h_TL <- renderText  ({
-          
-          txt <- "<ul><div class='timeline' id='timeline'>"
-          for (i in 1:private$length){
-            txt <- paste0(txt,
-                          "<li class='li ",
-                          UpdateClassesForTL()[i],
-                          "'><div class='timestamp'></div><div class='status'><h4>", 
-                          names(private$mandatory)[i],
-                          "</h4></div></li>")
-          }
-          
-          txt <- paste0(txt,"</div></ul>")
-          txt
+        
+        output$show_h_TL <- renderUI  ({
+           
+          tags$ul(
+            tags$div(class='timeline', id='timeline',
+                     lapply(1:private$length, function(x){
+                       tags$li(class = paste0('li ', UpdateClassesForTL()[x]),
+                               tags$div(class='timestamp'),
+                               tags$div(class='status',
+                                        tags$h4(names(private$mandatory)[x])))
+                       
+                       })
+          )
+          )
         })
         
         
@@ -104,10 +107,9 @@ TimelineDraw <- R6::R6Class(
           # )
           
           tags$ul(
-            tags$li(tags$a( class=UpdateClassesForTL()[1], "Step 1")),
-            tags$li(tags$a( class=UpdateClassesForTL()[2], "Step 2")),
-            tags$li(tags$a( class=UpdateClassesForTL()[3], "Step 3")),
-            tags$li(tags$a( class=UpdateClassesForTL()[4], "Step 4"))
+            lapply(1:private$length, function(x){
+              tags$li(tags$a( class=UpdateClassesForTL()[x], names(private$mandatory)[x]))
+            })
           )
           
 

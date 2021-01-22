@@ -25,7 +25,7 @@ source(file.path('.', 'Example.R'), local=TRUE)$value
 
 
 ## Main app
-pipeline <- Example$new('App', orientation = 'h')
+pipeline <- Example$new('App', orientation = 'v')
 
 ui = fluidPage(
   tagList(
