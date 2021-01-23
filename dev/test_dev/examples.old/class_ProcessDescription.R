@@ -1,9 +1,9 @@
 #Timeline_R6.R
-Example_Description = R6::R6Class(
-  "Example_Description",
+ProcessDescription = R6Class(
+  "ProcessDescription",
   inherit = Process,
   private = list(
-    .config = list(name = 'Description',
+    .config = list(name = 'ProcessDescription',
                    steps = c('Description'),
                    mandatory = c(T)
     )
@@ -11,7 +11,13 @@ Example_Description = R6::R6Class(
   
   public = list(
     
-    Global_server = function(input, output){},
+    test = reactiveValues(toto = 4),
+    
+    Global_server = function(input, output){
+      cat(paste0(class(self)[1], "::Global_server() from - ", self$id, '\n'))
+      
+      
+    },
     
     
     Description_server = function(input, output){
@@ -19,10 +25,12 @@ Example_Description = R6::R6Class(
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
         self$ValidateCurrentPos()
+        self$test$toto <- input$btn_validate_Description
       })
       
       output$datasetDescription <- renderUI({
         tagList(
+          p(self$test$toto),
           p(paste0('Dataset description: ', paste0(names(self$rv$temp.dataIn), collapse=", ")))
         )
       })
@@ -30,13 +38,14 @@ Example_Description = R6::R6Class(
     
     
     Description_ui = function(){
+
       wellPanel(
         tagList(
-        includeMarkdown( system.file("app/md", paste0(self$config$name, ".md"), package="Magellan")),
-        uiOutput(self$ns('datasetDescription')),
         actionButton(self$ns('btn_validate_Description'), 
                      paste0('Start ', self$config$name),
-                     class = btn_success_color)
+                     class = btn_success_color),
+        includeMarkdown(paste0('./md/',self$config$name, ".md")),
+        uiOutput(self$ns('datasetDescription'))
       )
       )
     }

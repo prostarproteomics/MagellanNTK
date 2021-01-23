@@ -1,6 +1,6 @@
 #Timeline_R6.R
-Example_ProcessB = R6Class(
-  "Example_ProcessB",
+ProcessB = R6Class(
+  "ProcessB",
   inherit = Process,
   private = list(
     .config = list(name = 'ProcessB',
@@ -10,13 +10,17 @@ Example_ProcessB = R6Class(
   ),
   
   public = list(
+    test = reactiveValues(toto = 4),
     
-    rv.process = reactiveValues(
-      select1 = NULL
-    ),
-    Global_server = function(input, output){},
+    Global_server = function(input, output){
+      cat(paste0(class(self)[1], "::Global_server() from - ", self$id, '\n'))
+      
+      
+    },
+    
     
     Description_server = function(input, output){
+      
       observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
@@ -25,6 +29,7 @@ Example_ProcessB = R6Class(
       
       output$datasetDescription <- renderUI({
         tagList(
+          p(self$test$toto),
           p(paste0('Dataset description: ', paste0(names(self$rv$temp.dataIn), collapse=", ")))
         )
       })
@@ -32,13 +37,16 @@ Example_ProcessB = R6Class(
     
     
     Description_ui = function(){
+      
+      
       wellPanel(
         tagList(
-          includeMarkdown( system.file("app/md", paste0(self$config$name, ".md"), package="Magellan")),
-          uiOutput(self$ns('datasetDescription')),
+          
           actionButton(self$ns('btn_validate_Description'), 
                        paste0('Start ', self$config$name),
-                       class = btn_success_color)
+                       class = btn_success_color),
+          includeMarkdown(paste0('./md/',self$config$name, ".md")),
+          uiOutput(self$ns('datasetDescription'))
         )
       )
     },
@@ -46,19 +54,8 @@ Example_ProcessB = R6Class(
     ############### SCREEN 2 ######################################
     
     Step1_server = function(input, output){
-      
-      observeEvent(input$select1, {
-        self$rv.process$select1 <- input$select1
-        print(paste0('Process ', self$id, ', Catch new value on select1 : ', input$select1))
-        
-      })
-      
-      observe({
-        print(self$rv.process$select1)
-      })
-      
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-        # Add your stuff code here
+        print("Action on btn_validate_Step1")
         self$ValidateCurrentPos()
       })
     },
@@ -77,9 +74,7 @@ Example_ProcessB = R6Class(
                               width = '150px')
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Perform',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Perform'))
           )
         )
       )
@@ -107,9 +102,7 @@ Example_ProcessB = R6Class(
                               selected = 1,
                               width = '150px')),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Perform',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Perform'))
           )
         )
       )
@@ -131,9 +124,7 @@ Example_ProcessB = R6Class(
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Validate',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Validate'))
           )
         )
       )

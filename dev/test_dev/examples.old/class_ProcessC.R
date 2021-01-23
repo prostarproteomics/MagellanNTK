@@ -1,6 +1,6 @@
 #Timeline_R6.R
-Example_ProcessC = R6Class(
-  "Example_ProcessC",
+ProcessC = R6Class(
+  "ProcessC",
   inherit = Process,
   private = list(
     .config = list(name = 'ProcessC',
@@ -10,8 +10,6 @@ Example_ProcessC = R6Class(
   ),
   
   public = list(
-    
-    Global_server = function(input, output){},
     
     Description_server = function(input, output){
       observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
@@ -30,13 +28,14 @@ Example_ProcessC = R6Class(
     
     Description_ui = function(){
       
+      
       wellPanel(
         tagList(
-          includeMarkdown( system.file("app/md", paste0(self$config$name, ".md"), package="Magellan")),
-          uiOutput(self$ns('datasetDescription')),
           actionButton(self$ns('btn_validate_Description'), 
                        paste0('Start ', self$config$name),
-                       class = btn_success_color)
+                       class = btn_success_color),
+          includeMarkdown(paste0('./md/',self$config$name, ".md")),
+          uiOutput(self$ns('datasetDescription'))
         )
       )
     },
@@ -45,10 +44,7 @@ Example_ProcessC = R6Class(
     
     Step1_server = function(input, output){
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-        
-        # Add your stuff code here
-        
-        
+        print("Action on btn_validate_Step1")
         self$ValidateCurrentPos()
       })
     },
@@ -67,9 +63,7 @@ Example_ProcessC = R6Class(
                               width = '150px')
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Perform',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Perform'))
           )
         )
       )
@@ -97,9 +91,7 @@ Example_ProcessC = R6Class(
                               selected = 1,
                               width = '150px')),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Perform',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Perform'))
           )
         )
       )
@@ -121,9 +113,7 @@ Example_ProcessC = R6Class(
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
-                               'Validate',
-                               class = btn_success_color))
+                  actionButton(self$ns(paste0('btn_validate_', name)), 'Validate'))
           )
         )
       )

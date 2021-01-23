@@ -5,13 +5,13 @@ library(MSPipelines)
 options(shiny.fullstacktrace = T)
 
 #------------------------ Class TimelineDraw --------------------------------------
-source(file.path('../../../R', 'class_TimelineDraw.R'), local=TRUE)$value
-source(file.path('../../../R', 'global.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
-source(file.path("../../../R", "mod_popover_for_help.R"), local = TRUE)$value
-source(file.path("../../../R", "mod_format_DT.R"), local = TRUE)$value
-source(file.path("../../../R", "mod_bsmodal.R"), local=TRUE)$value
+source(file.path('../../R', 'class_TimelineDraw.R'), local=TRUE)$value
+source(file.path('../../R', 'global.R'), local=TRUE)$value
+source(file.path('../../R', 'class_ScreenManager.R'), local=TRUE)$value
+source(file.path('../../R', 'class_Process.R'), local=TRUE)$value
+source(file.path("../../R", "mod_popover_for_help.R"), local = TRUE)$value
+source(file.path("../../R", "mod_format_DT.R"), local = TRUE)$value
+source(file.path("../../R", "mod_bsmodal.R"), local=TRUE)$value
 
 source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
 source(file.path('.', 'Example_ProcessB.R'), local=TRUE)$value
