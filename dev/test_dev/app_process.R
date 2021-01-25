@@ -27,7 +27,7 @@ ui = fluidPage(
     actionButton('send', 'Send dataset'),
     actionButton('updateStatus', 'Update status'),
     mod_bsmodal_ui('exemple'),
-    shinyjs::disabled(Pipeline$ui()),
+    #shinyjs::disabled(Pipeline$ui())
     uiOutput('show_pipe')
   )
 )
@@ -52,21 +52,23 @@ server = function(input, output){
   
   
   
-  mod_all_plots_server('exemple_plot',
-                       dataIn = reactive({Exp1_R25_prot})
-                       ) 
-  title <- "Plots"
-  mod_UI <- mod_all_plots_ui('exemple_plot')
-  # module d'affichage modal contenant ci-dessus
-  mod_bsmodal_server('exemple',
-                     title = 'Plots',
-                     uiContent = MSPipelines::mod_all_plots_ui('plots'),
-                     width="75%" # en px ou % de largeur
-  )
+  # mod_all_plots_server('exemple_plot',
+  #                      dataIn = reactive({Exp1_R25_prot})
+  #                      ) 
+  # title <- "Plots"
+  # mod_UI <- mod_all_plots_ui('exemple_plot')
+  # # module d'affichage modal contenant ci-dessus
+  # mod_bsmodal_server('exemple',
+  #                    title = 'Plots',
+  #                    uiContent = MSPipelines::mod_all_plots_ui('plots'),
+  #                    width="75%" # en px ou % de largeur
+  # )
   
   output$show_pipe <- renderUI({
     req(rv$pipe)
-    shinyjs::disabled(rv$pipe$ui())
+    #shinyjs::disabled(
+      rv$pipe$ui()
+    #  )
   })
   
   
@@ -76,7 +78,7 @@ server = function(input, output){
   
   observeEvent(input$send,{
     if (input$send%%2 != 0)
-      rv$dataIn <- Exp1_R25_prot
+      rv$dataIn <- NA
     else
       rv$dataIn <- NULL
   })

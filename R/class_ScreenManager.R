@@ -533,10 +533,13 @@ ScreenManager <- R6::R6Class(
       if (self$verbose) cat(paste0(class(self)[1], '::', 'Main_UI() from - ', self$id, '\n\n'))
       #browser()
     tagList(
-       if (self$timeline$GetOrientation() == 'h')
-         self$Horizontal_TL()
-       else if (self$timeline$GetOrientation() == 'v')
-        self$Vertical_TL()
+       shinyjs::disabled(
+         if (self$timeline$GetOrientation() == 'h')
+          self$Horizontal_TL()
+        else if (self$timeline$GetOrientation() == 'v')
+          self$Vertical_TL()
+       )
+    )
 
 # 
 #        br(),
@@ -554,7 +557,6 @@ ScreenManager <- R6::R6Class(
 #               tags$b(h4(style = 'color: blue;', "status")),
 #               uiOutput(self$ns('show_status')))
 #      )
-      )
     },
     
     
