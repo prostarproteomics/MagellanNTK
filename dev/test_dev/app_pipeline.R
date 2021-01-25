@@ -9,12 +9,12 @@ options(shiny.fullstacktrace = T)
 options(shiny.reactlog=TRUE) 
 
 #------------------------ Class TimelineDraw -----------------------------------
-source(file.path('../../../R', 'mod_bsmodal.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_TimelineDraw.R'), local=TRUE)$value
-source(file.path('../../../R', 'global.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
-source(file.path('../../../R', 'class_Pipeline.R'), local=TRUE)$value
+source(file.path('../../R', 'mod_bsmodal.R'), local=TRUE)$value
+source(file.path('../../R', 'class_TimelineDraw.R'), local=TRUE)$value
+source(file.path('../../R', 'global.R'), local=TRUE)$value
+source(file.path('../../R', 'class_ScreenManager.R'), local=TRUE)$value
+source(file.path('../../R', 'class_Process.R'), local=TRUE)$value
+source(file.path('../../R', 'class_Pipeline.R'), local=TRUE)$value
 
 source(file.path('.', 'Example_Description.R'), local=TRUE)$value
 source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
@@ -25,7 +25,7 @@ source(file.path('.', 'Example.R'), local=TRUE)$value
 
 
 ## Main app
-pipeline <- Example$new('App', orientation = 'v')
+pipeline <- Example$new('App', orientation = 'h')
 
 ui = fluidPage(
   tagList(

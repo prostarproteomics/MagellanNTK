@@ -54,12 +54,21 @@ Example_ProcessA = R6Class(
         self$ValidateCurrentPos()
       })
       
+
+      observeEvent(input$select1, {self$process.var$select1 <- input$select1})
       
-      output$test <-renderUI({
+      output$test1 <-renderUI({
         shinyjs::disabled(selectInput(self$ns('select1'), 'Select step 1', 
                     choices = GetChoices(), 
                     selected = GetTestValue(),
                     width = '150px')
+        )
+      })
+      
+      output$test2 <-renderUI({
+        shinyjs::disabled(selectInput(self$ns('select2'), 'Select step 2', 
+                                      choices = 1:input$btn1, 
+                                      width = '150px')
         )
       })
       
@@ -70,24 +79,28 @@ Example_ProcessA = R6Class(
     Step1_ui = function(){
       name <- 'Step1'
       wellPanel(
+        actionButton(self$ns('btn1'), 'Btn 1'),
         tagList(
           div(id=self$ns(name),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  tags$h2(name)),
-              div(id = 'test_id',
-                  style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  uiOutput(self$ns('test'))
+                  uiOutput(self$ns('test1'))
+                  ),
+              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+                  uiOutput(self$ns('test2'))
               ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  selectInput(self$ns('select2'), 'Select step 2', 
+                  shinyjs::disabled(selectInput(self$ns('select2'), 'Select step 2', 
                               choices = 1:5, 
                               selected = 1,
                               width = '150px')
+                  )
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
+                  shinyjs::disabled(
+                    actionButton(self$ns(paste0('btn_validate_', name)), 
                                'Perform',
                                class = btn_success_color))
+          )
           )
         )
       )
@@ -110,14 +123,14 @@ Example_ProcessA = R6Class(
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 40px;",
-                  selectInput(self$ns('select2'), 'Select step 2',
+                  shinyjs::disabled(selectInput(self$ns('select2'), 'Select step 2',
                               choices = 1:5,
                               selected = 1,
-                              width = '150px')),
+                              width = '150px'))),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
+                  shinyjs::disabled(actionButton(self$ns(paste0('btn_validate_', name)), 
                                'Perform',
-                               class = btn_success_color))
+                               class = btn_success_color)))
           )
         )
       )
@@ -139,9 +152,9 @@ Example_ProcessA = R6Class(
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  actionButton(self$ns(paste0('btn_validate_', name)), 
+                  shinyjs::disabled(actionButton(self$ns(paste0('btn_validate_', name)), 
                                'Validate',
-                               class = btn_success_color))
+                               class = btn_success_color)))
           )
         )
       )

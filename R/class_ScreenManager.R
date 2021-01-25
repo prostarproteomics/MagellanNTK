@@ -48,6 +48,10 @@ ScreenManager <- R6::R6Class(
       if(self$verbose) cat(paste0(class(self)[1], '::', 'BasicReset() from - ', self$id, '\n\n'))
       private$ResetScreens()
       self$rv$dataIn <- NULL
+      self$process.var <- setNames(lapply(names(self$process.var), 
+                                 function(x){self$process.var[[x]] <- NULL}),
+                                 names(self$process.var))
+      #self$process.var <- NULL
       self$rv$current.pos <- 1
       private$Initialize_Status_Process()
       private$Send_Result_to_Caller()
@@ -294,6 +298,9 @@ ScreenManager <- R6::R6Class(
     rv = "<reactiveValues>",
     
     
+    process.var = "<reactiveValues>",
+    
+    
     #' @description 
     #' xxx
     #' 
@@ -338,10 +345,9 @@ ScreenManager <- R6::R6Class(
         isAllSkipped = FALSE,
         isAllUndone = TRUE,
         isReseted = NULL,
-        isSkipped = NULL
-        )
+        isSkipped = NULL)
       
-      
+      self$process.var = reactiveValues()
       # Tip seen in: 
       # https://community.rstudio.com/t/reactive-within-r6class-throws-dependents-not-found-error/4973/2
       self$currentStepName <- reactive({self$config$steps[self$rv$current.pos]})
@@ -533,13 +539,12 @@ ScreenManager <- R6::R6Class(
       if (self$verbose) cat(paste0(class(self)[1], '::', 'Main_UI() from - ', self$id, '\n\n'))
       #browser()
     tagList(
-       shinyjs::disabled(
          if (self$timeline$GetOrientation() == 'h')
           self$Horizontal_TL()
         else if (self$timeline$GetOrientation() == 'v')
           self$Vertical_TL()
-       )
-    )
+        )
+    
 
 # 
 #        br(),

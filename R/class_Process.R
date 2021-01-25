@@ -13,9 +13,7 @@ Process = R6::R6Class(
   "Process",
   inherit = ScreenManager,
   private = list(
-    
-   
-    
+
     #' @description
     #' xxx
     #'
@@ -27,7 +25,7 @@ Process = R6::R6Class(
     GetScreens_server = function(session, input, output){
       if(verbose) cat(paste0(class(self)[1], '::GetScreens() from - ', self$id, '\n\n'))
       setNames(lapply(self$config$steps, function(x){
-        eval(parse(text = paste0("self$", x, '_server(input, output)')))
+        eval(parse(text = paste0("self$", x, '_server(session, input, output)')))
       }),
       self$config$steps)
     }

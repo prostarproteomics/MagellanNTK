@@ -50,7 +50,12 @@ server = function(input, output){
     rv$pipe$server(dataIn = reactive({rv$dataIn}))
   })
   
-  
+  observeEvent(input$load_dataset_btn, {
+    #browser()
+    print(names(rv.core$tmp_dataManager$openDemo()))
+    updateTabItems(session, "sb", "pipeline")
+    shinyjs::delay(100, rv.core$dataIn <- rv.core$tmp_dataManager$openDemo())
+  })
   
   # mod_all_plots_server('exemple_plot',
   #                      dataIn = reactive({Exp1_R25_prot})
@@ -77,10 +82,11 @@ server = function(input, output){
   })
   
   observeEvent(input$send,{
-    if (input$send%%2 != 0)
+    shinyjs::delay(100, if (input$send%%2 != 0)
       rv$dataIn <- NA
     else
       rv$dataIn <- NULL
+    )
   })
   
   }
