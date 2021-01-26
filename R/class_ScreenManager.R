@@ -589,7 +589,6 @@ ScreenManager <- R6::R6Class(
       observeEvent(dataIn(), ignoreNULL = F, ignoreInit = T,{
         if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(dataIn()) from --- ', self$id, '\n\n'))
         #browser()
-        print('tutu2')
         #self$ToggleState_Screens(TRUE, 1:self$length)
         self$Change_Current_Pos(1)
         self$rv$temp.dataIn <- dataIn()
@@ -624,6 +623,8 @@ ScreenManager <- R6::R6Class(
         # https://github.com/daattali/shinyjs/issues/166
         # https://github.com/daattali/shinyjs/issues/25
         private$Update_State_Screens()
+        
+        #shinyjs::delay(1000, private$Update_State_Screens())
       })
       
       
