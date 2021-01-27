@@ -573,7 +573,7 @@ ScreenManager <- R6::R6Class(
    #' 
    #' @param dataIn xxx
    #' 
-   server = function(dataIn = reactive({NULL})) {
+   server = function(dataIn) {
       if (self$verbose) cat(paste0(class(self)[1], '::server(dataIn) from - ', self$id, '\n\n'))
 
       self$timeline$server(status = reactive({self$rv$status}),
@@ -586,32 +586,36 @@ ScreenManager <- R6::R6Class(
       #
       # Catch a new dataset sent by the caller
       #
-      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = T,{
+      observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
         if (self$verbose) cat(paste0(class(self)[1], '::observeEvent(dataIn()) from --- ', self$id, '\n\n'))
         #browser()
-        #self$ToggleState_Screens(TRUE, 1:self$length)
-        self$Change_Current_Pos(1)
-        self$rv$temp.dataIn <- dataIn()
-        self$ActionOn_New_DataIn() # Used by class pipeline
-       # shinyjs::toggleState('Screens', TRUE)
         
-        if(is.null(dataIn())){
-          print('dataIn() NULL')
-          
-          self$ToggleState_Screens(FALSE, 1:self$length)
-         # self$ToggleState_ResetBtn(FALSE)
-          self$original.length <- 0
-        } else { # A new dataset has been loaded
-          print('dataIn() not NULL')
-          
-          shinyjs::toggleState('Screens', TRUE)
-          private$ToggleState_ResetBtn(TRUE) #Enable the reset button
-          self$original.length <- length(dataIn())
-          
-          private$Update_State_Screens()
-          #self$ToggleState_Screens(TRUE, 1:self$length)
-          
-        }
+        action <- function()
+          {
+            self$Change_Current_Pos(1)
+            self$rv$temp.dataIn <- dataIn()
+            self$ActionOn_New_DataIn() # Used by class pipeline
+            # shinyjs::toggleState('Screens', TRUE)
+            
+            if(is.null(dataIn())){
+              print('dataIn() NULL')
+              
+              self$ToggleState_Screens(FALSE, 1:self$length)
+              # self$ToggleState_ResetBtn(FALSE)
+              self$original.length <- 0
+            } else { # A new dataset has been loaded
+              print('dataIn() not NULL')
+              shinyjs::toggleState('Screens', TRUE)
+              private$ToggleState_ResetBtn(TRUE) #Enable the reset button
+              self$original.length <- length(dataIn())
+              
+              private$Update_State_Screens()
+              #self$ToggleState_Screens(TRUE, 1:self$length)
+              
+            }
+          }
+
+        shinyjs::delay(100, action())
       })
       
       # Catch new status event

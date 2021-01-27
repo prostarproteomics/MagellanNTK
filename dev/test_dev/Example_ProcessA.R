@@ -13,7 +13,7 @@ Example_ProcessA = R6Class(
     
     
     
-    Global_server = function(session, input, output){
+    Global_server = function(session, input){
       self$rv$value.test <- 3
       self$rv$choices <- 1:6
     },

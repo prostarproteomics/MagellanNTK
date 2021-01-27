@@ -11,9 +11,9 @@ Example_ProcessC = R6Class(
   
   public = list(
     
-    Global_server = function(input, output){},
+    Global_server = function(session, input){},
     
-    Description_server = function(input, output){
+    Description_server = function(session, input, output){
       observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
@@ -43,7 +43,7 @@ Example_ProcessC = R6Class(
     
     ############### SCREEN 2 ######################################
     
-    Step1_server = function(input, output){
+    Step1_server = function(session, input, output){
       observeEvent(input$btn_validate_Step1, ignoreInit = T, {
         
         # Add your stuff code here
@@ -75,7 +75,7 @@ Example_ProcessC = R6Class(
       )
     },
     
-    Step2_server = function(input, output){
+    Step2_server = function(session, input, output){
       ## Logics to implement: here, we must take the last data not null
       # in previous datas. The objective is to take account
       # of skipped steps
@@ -105,7 +105,7 @@ Example_ProcessC = R6Class(
       )
     },
     
-    Step3_server = function(input, output){
+    Step3_server = function(session, input, output){
       
       observeEvent(input$btn_validate_Step3, ignoreInit = T, {
         self$rv$dataIn <- AddItemToDataset(self$rv$dataIn, self$config$name)
