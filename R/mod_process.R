@@ -122,7 +122,14 @@ mod_process_server <- function(id,
     
     
     observeEvent(id, {
-       source(file.path('.', paste0('def_', id, '.R')), local=TRUE)$value
+       source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
+      #browser()
+      
+      #setNames(lapply(self$config$steps, function(x){
+        eval(parse(text = paste0('def_', id, '()')))
+      #}),
+     # self$config$steps)
+      
       rv.process$parent <- unlist(strsplit(id, split='_'))[1]
       rv.process$config <- config
       check <- CheckConfig(rv.process$config)

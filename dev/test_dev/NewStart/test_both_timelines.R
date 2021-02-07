@@ -8,8 +8,8 @@ options(shiny.fullstacktrace = T)
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 #------------------------ Class TimelineDraw --------------------------------------
-source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+source(file.path('../../../R', 'mod_timeline_v.R'), local=TRUE)$value
+source(file.path('../../../R', 'mod_timeline_h.R'), local=TRUE)$value
 
 ui <- fluidPage(
   actionButton('changePos', 'Change position'),

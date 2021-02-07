@@ -4,6 +4,13 @@ config <- list(name = 'Protein_Normalization',
 )
 
 
+def_Protein_Normalization <- function(){
+#   config <- list(name = 'Protein_Normalization',
+#                steps = c('Description', 'Step1', 'Step2', 'Step3'),
+#                mandatory = c(T, F, T, T)
+# )
+
+
 
 # Define default selected values for widgets
 widgets.default.values <- list(
@@ -239,3 +246,4 @@ observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   rv.process$dataIn <- AddItemToDataset(rv.process$dataIn, rv.process$config$name)
   ValidateCurrentPos()
 })
+}
