@@ -20,50 +20,45 @@ mod_navigation_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
-    div(style = "padding: 0px",
-      div(style = btn_style,
-                 shinyjs::disabled(
-                   actionButton(ns("prevBtn"), "<<",
-                                class = PrevNextBtnClass,
-                                style='padding:4px; font-size:80%')
-                   ),
-                 actionButton(ns("rstBtn"), "Reset",
-                              class = redBtnClass,
-                              style='padding:4px; font-size:80%')
-             ),
-      div(style = btn_style,
-                 mod_timeline_h_ui(ns('timeline'))
-             ),
-      div(style = btn_style,
-                 actionButton(ns("nextBtn"),">>",
-                              class = PrevNextBtnClass,
-                              style='padding:4px; font-size:80%')
-      )
-    ),
-  # fluidRow(
-  #   column(width=1, shinyjs::disabled(
-  #     actionButton(ns("prevBtn"), "<<",
-  #                  class = PrevNextBtnClass,
-  #                  style='padding:4px; font-size:80%')
-  #   )),
-  #   column(width=1, actionButton(ns("rstBtn"), "Reset",
-  #                                class = redBtnClass,
-  #                                style='padding:4px; font-size:80%')),
-  #   column(width=9, mod_timeline_h_ui(ns('timeline'))),
-  #   column(width=1, actionButton(ns("nextBtn"),">>",
-  #                                class = PrevNextBtnClass,
-  #                                style='padding:4px; font-size:80%'))
-  # ),
+    # div(style = "padding: 0px",
+    #   div(style = btn_style,
+    #              shinyjs::disabled(
+    #                actionButton(ns("prevBtn"), "<<",
+    #                             class = PrevNextBtnClass,
+    #                             style='padding:4px; font-size:80%')
+    #                ),
+    #              actionButton(ns("rstBtn"), "Reset",
+    #                           class = redBtnClass,
+    #                           style='padding:4px; font-size:80%')
+    #          ),
+    #   div(style = btn_style,
+    #              mod_timeline_h_ui(ns('timeline'))
+    #          ),
+    #   div(style = btn_style,
+    #              actionButton(ns("nextBtn"),">>",
+    #                           class = PrevNextBtnClass,
+    #                           style='padding:4px; font-size:80%')
+    #   )
+    # ),
+  fluidRow(
+    column(width=1, shinyjs::disabled(
+      actionButton(ns("prevBtn"), "<<",
+                   class = PrevNextBtnClass,
+                   style='padding:4px; font-size:80%')
+    )),
+    column(width=1, actionButton(ns("rstBtn"), "Reset",
+                                 class = redBtnClass,
+                                 style='padding:4px; font-size:80%')),
+    column(width=9, mod_timeline_h_ui(ns('timeline'))),
+    column(width=1, actionButton(ns("nextBtn"),">>",
+                                 class = PrevNextBtnClass,
+                                 style='padding:4px; font-size:80%'))
+  ),
     div(id = ns('Screens'),
         uiOutput(ns('SkippedInfoPanel')),
         uiOutput(ns('EncapsulateScreens'))
     )
-  # wellPanel(title = 'foo',
-  #   tagList(
-  #     h3('module process'),
-  #     uiOutput(ns('show_Debug_Infos'))
-  #   )
-  # )
+
   )
 }
     
@@ -72,7 +67,7 @@ mod_navigation_process_ui <- function(id){
 #' @noRd 
 mod_navigation_process_server <- function(id,
                                config = NULL,
-                               dataIn = NULL,
+                               status = NULL,
                                tag.enabled = reactive({TRUE}),
                                reset = reactive({FALSE}),
                                position = reactive({NULL}),
@@ -102,7 +97,7 @@ mod_navigation_process_server <- function(id,
     rv.widgets <- "<reactiveValues>"
     widgets.default.values <- list()
     
-    rv.process <- reactiveValues(
+    rv.nav <- reactiveValues(
       parent = NULL,
       
       status = NULL,
@@ -118,99 +113,90 @@ mod_navigation_process_server <- function(id,
     
     ## Initialization of the timeline
     #observeEvent(req(config),{
-    #  rv.process$length <- length(config$stepsNames)
-    #  rv.process$current.pos  <- 1
+    #  rv.nav$length <- length(config$stepsNames)
+    #  rv.nav$current.pos  <- 1
       
     #  config$ll.UI[[1]] <- div(id = ns(paste0("screen", 1)),  config$ll.UI[[1]])
-    #  for (i in 2:rv.process$length){
+    #  for (i in 2:rv.nav$length){
     #    config$ll.UI[[i]] <- shinyjs::hidden(
-    #      div(id = ns(rv.process$config$steps[i]),  
+    #      div(id = ns(config$steps[i]),  
     #          config$ll.UI[[i]]))
     #  }
       
     #})
     
-     output$EncapsulateScreens <- renderUI({
-    #   #browser()
-       tagList(config$ll.UI)
-    #   lapply(1:length(rv.process$config$steps), function(i) {
-    #     if (i==1)
-    #       div(id = ns(rv.process$config$steps[i]),
-    #           class = paste0("page_", id),
-    #           do.call(uiOutput, list(ns(rv.process$config$steps[i])))
-    #       )
-    #     else
-    #       shinyjs::hidden(
-    #         div(id =  ns(rv.process$config$steps[i]),
-    #             class = paste0("page_", id),
-    #             do.call(uiOutput, list(ns(rv.process$config$steps[i])))
-    #         )
-    #       )
-    #   }
-    #   )
-     })
     
     observeEvent(id, {
-      rv.widgets <- reactiveValues()
-       #source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
-      browser()
+     # browser()
+      rv.nav$config <- config
+      rv.nav$length <- length(config$steps)
+      rv.nav$current.pos  <- 1
       
-      #setNames(lapply(self$config$steps, function(x){
-       # eval(parse(text = paste0('def_', id, '(session, input, output)')))
-      #}),
-     # self$config$steps)
+      rv.nav$parent <- unlist(strsplit(id, split='_'))[1]
       
-      
-      
-      rv.process$length <- length(config$steps)
-      rv.process$current.pos  <- 1
-      
-      config$ll.UI[[1]] <- div(id = ns(rv.process$config$steps[1]),  
-                              config$ll.UI[[1]])
-      for (i in 2:rv.process$length){
-        config$ll.UI[[i]] <- shinyjs::hidden(
-          div(id = ns(rv.process$config$steps[i]),  
-              config$ll.UI[[i]]))
+      rv.nav$status = status()
+      rv.nav$currentStepName <- reactive({rv.nav$config$steps[rv.nav$current.pos]})
+      rv.nav$tl.tags.enabled <- setNames(rep(FALSE, length(rv.nav$config$steps)), rv.nav$config$steps)
+    }, priority=1000) 
+    
+    
+    
+    
+     output$EncapsulateScreens <- renderUI({
+   # browser()
+
+       tagList(
+      lapply(1:length(config$ll.UI), function(i) {
+        if (i==1)
+          div(id = ns(config$steps[i]),
+              class = paste0("page_", id),
+              config$ll.UI[[i]]
+          )
+        else
+          shinyjs::hidden(
+            div(id =  ns(config$steps[i]),
+                class = paste0("page_", id),
+                config$ll.UI[[i]]
+            )
+          )
       }
-      
-      
-      
-      rv.process$parent <- unlist(strsplit(id, split='_'))[1]
-      rv.process$config <- config
-      check <- CheckConfig(rv.process$config)
-      if (!check$passed)
-        stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
-      #else
-      # rv.process$config <- rv.process$config
-      #browser()
-      rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-      rv.process$status = setNames(rep(global$UNDONE, length(rv.process$config$steps)), rv.process$config$steps)
-      rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
-      rv.process$tl.tags.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
-      #browser()
-    }, priority=1000)  
+      )
+       )
+
+      # config$ll.UI[[1]] <- div(id = ns(config$steps[1]),
+      #                                                 config$ll.UI[[1]])
+      #                           for (i in 2:rv.nav$length){
+      #                             config$ll.UI[[i]] <- shinyjs::hidden(
+      #                               div(id = ns(config$steps[i]),
+      #                                   config$ll.UI[[i]]))
+      #                           }
+      # config$ll.UI                  
+                               
+     })
+    
+     
     
     
     observeEvent(tag.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
      # browser()
       if (!isTRUE(tag.enabled()))
-        rv.process$tl.tags.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
+        rv.nav$tl.tags.enabled <- setNames(rep(FALSE, length(config$steps)), config$steps)
     })
     
     mod_timeline_h_server(id = 'timeline',
-                        config =  rv.process$config,
-                        status = reactive({rv.process$status}),
-                        position = reactive({rv.process$current.pos}),
-                        enabled = reactive({rv.process$tl.tags.enabled})
+                        config =  config,
+                        status = reactive({status()}),
+                        position = reactive({rv.nav$current.pos}),
+                        enabled = reactive({rv.nav$tl.tags.enabled})
                         )
     
     
     observeEvent(req(!is.null(position())), ignoreInit = T, {
       pos <- strsplit(position(), '_')[[1]][1]
       if (pos == 'last')
-        rv.process$current.pos <- length(rv.process$config$steps)
+        rv.nav$current.pos <- length(config$steps)
       else if (is.numeric(pos))
-        rv.process$current.pos <- position()
+        rv.nav$current.pos <- position()
     })
     
     #' @description
@@ -219,92 +205,13 @@ mod_navigation_process_server <- function(id,
     BasicReset = function(){
       if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
       ResetScreens()
-      rv.process$dataIn <- NULL
-      rv.process$current.pos <- 1
+      rv.nav$dataIn <- NULL
+      rv.nav$current.pos <- 1
       Initialize_Status_Process()
       Send_Result_to_Caller()
     }
     
     
-    
-   
-    
-    # Check if the rv.process$config is correct
-    #'
-    #' @param conf A list containing the rv.process$configuration of the current object.
-    #' See xxx
-    #' 
-    CheckConfig = function(conf){
-      if(verbose) cat(paste0('::Checkrv.process$config() from - ', id, '\n\n'))
-      passed <- T
-      msg <- ""
-      if (!is.list(conf)){
-        passed <- F
-        msg <- c(msg, "'rv.process$config' is not a list")
-      }
-      if (length(conf)!=3){
-        passed <- F
-        msg <- c(msg, "The length of 'rv.process$config' is not equal to 4")
-      }
-      names.conf <- c("name", "steps", "mandatory")
-      if (!all(sapply(names.conf, function(x){x %in% names(conf)}))){
-        passed <- F
-        msg <- c(msg, "The names of elements in 'rv.process$config' must be the following: 'name', 'steps', 'mandatory'")
-      }
-      if (length(conf$steps) != length(conf$mandatory)){
-        passed <- F
-        msg <- c(msg, "The length of 'steps' and 'mandatory' must be equal.")
-      }
-      
-      passed <- T
-      list(passed=passed,
-           msg = msg)
-    }
-    
-    
-    #' @description
-    #' xxxx
-    #'
-    Send_Result_to_Caller = function(){
-      if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, '\n\n'))
-      dataOut$trigger <- Timestamp()
-      dataOut$value <- rv.process$dataIn
-    }
-    
-    #' @description 
-    #' xxx
-    #' 
-    InitializeDataIn = function(){ 
-      if(verbose) cat(paste0('InitializeDataIn() from - ', id, '\n\n'))
-      rv.process$dataIn <- rv.process$temp.dataIn
-    }
-    
-    
-    #' @description
-    #' Validate a given position. To be used by xxx
-    #' 
-    #' @return Nothing.
-    #' 
-    ValidateCurrentPos <- function(){
-      #browser()
-      rv.process$status[rv.process$current.pos] <- global$VALIDATED
-      # Either the process has been validated, one can prepare data to be sent to caller
-      # Or the module has been reseted
-      if (rv.process$current.pos == length(rv.process$config$steps))
-        Send_Result_to_Caller()
-    }
-    
-    
-    #' @description
-    #' Gives the name of the status corresponding to the code (integer).
-    #'
-    #' @param name A number
-    #' 
-    GetStringStatus = function(name){
-      if (name==global$VALIDATED) "Validated"
-      else if (name==global$UNDONE) "Undone"
-      else if (name==global$SKIPPED) 'Skipped'
-    }
     
     #' @description 
     #' Returns the date and time in timestamp UNIX format.
@@ -316,35 +223,7 @@ mod_navigation_process_server <- function(id,
     
     
     
-    #' @description 
-    #' xxx
-    #' 
-    GetMaxValidated_AllSteps = function(){
-      if(verbose) cat(paste0( '::', 'GetMaxValidated_AllSteps() from - ', id, '\n\n'))
-      val <- 0
-      ind <- grep(global$VALIDATED, rv.process$status)
-      if (length(ind) > 0) 
-        val <-max(ind)
-      val
-    }
     
-    
-    
-    #' @description 
-    #' xxx
-    #'
-    #' @param range xxx
-    #' 
-    GetFirstMandatoryNotValidated = function(range){
-      if(verbose) cat(paste0('::', 'GetFirstMandatoryNotValidated() from - ', id, '\n\n'))
-      first <- NULL
-      first <- unlist((lapply(range, 
-                              function(x){rv.process$config$mandatory[x] && !rv.process$status[x]})))
-      if (sum(first) > 0)
-        min(which(first == TRUE))
-      else
-        NULL
-    }
     
     
     #' @description 
@@ -364,54 +243,7 @@ mod_navigation_process_server <- function(id,
       )
     }
     
-    #' @description 
-    #' xxx
-    #' 
-    Initialize_Status_Process = function(){
-      if(verbose) cat(paste0('::', 'Initialize_Status_Process() from - ', id, '\n\n'))
-      rv.process$status <- setNames(rep(global$UNDONE, length(rv.process$config$steps)), rv.process$config$steps)
-    }
-    
-    #' @description
-    #' et to skipped all steps of the current object
-    #' 
-    #' @return Nothing.
-    #' 
-    Set_All_Skipped = function(){
-      if(verbose) cat(paste0('::', 'Set_All_Skipped() from - ', id, '\n\n'))
-      rv.process$status <- setNames(rep(global$SKIPPED, length(rv.process$config$steps)), rv.process$config$steps)
-    }
-    
-    #' @description
-    #' et to skipped all steps of the current object
-    #' 
-    #' @return Nothing.
-    #' 
-    Discover_Skipped_Steps = function(){
-      if(verbose) cat(paste0('::Discover_Skipped_Status() from - ', id, '\n\n'))
-      for (i in 1:length(rv.process$config$steps)){
-        max.val <- GetMaxValidated_AllSteps()
-        if (rv.process$status[i] != global$VALIDATED && max.val > i)
-          rv.process$status[i] <- global$SKIPPED
-      }
-    }
-    
-    #' @description
-    #' et to skipped all steps of the current object
-    #' 
-    #' @return Nothing.
-    #' 
-    Set_All_Reset = function(){
-      if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, '\n\n'))
-      
-      BasicReset()
-    }
-
-  #' @field dataOut xxx
-  dataOut <- reactiveValues(
-    trigger = 0,
-    value = NULL
-  )
+   
 
   
 
@@ -419,54 +251,7 @@ mod_navigation_process_server <- function(id,
   ## Common functions
   ##
   
-  #' @description 
-  #' xxx
-  #' 
-  Update_State_Screens = function(){
-    if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
  
-    ind.max <- GetMaxValidated_AllSteps()
-    #browser()
-    if (ind.max > 0) 
-      ToggleState_Screens(cond = FALSE, range = 1:ind.max)
-    
-    
-    if (ind.max < length(rv.process$config$steps)){
-      # Enable all steps after the current one but the ones
-      # after the first mandatory not validated
-      firstM <- GetFirstMandatoryNotValidated((ind.max+1):length(rv.process$config$steps))
-      if (is.null(firstM)){
-        ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(length(rv.process$config$steps)))
-      } else {
-        ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
-        if (ind.max + firstM < length(rv.process$config$steps))
-          ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):length(rv.process$config$steps))
-      }
-    }
-   # browser()
-  }
-  
-  
-  #' @description
-  #' xxx
-  #'
-  #' @param cond A number
-  #' @param range A number
-  #' 
-  #' @return Nothing.
-  #' 
-  ToggleState_Screens = function(cond, range){
-    if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
-    #browser()
-    if (tag.enabled())
-      lapply(range, function(x){
-        cond <- cond && !(rv.process$status[x] == global$SKIPPED)
-        #shinyjs::toggleState(rv.process$config$steps[x], condition = cond  )
-        
-        #Send to TL the enabled/disabled tags
-        rv.process$tl.tags.enabled[x] <- cond
-      })
-  }
   
   
   #' @description 
@@ -483,8 +268,8 @@ mod_navigation_process_server <- function(id,
   output$SkippedInfoPanel <- renderUI({
     #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, '\n\n'))
     
-    current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-    entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
+    current_step_skipped <- rv.nav$status[rv.nav$current.pos] == global$SKIPPED
+    entire_process_skipped <- isTRUE(sum(rv.nav$status) == global$SKIPPED * rv.nav$length)
     req(current_step_skipped)
     
     
@@ -493,7 +278,7 @@ mod_navigation_process_server <- function(id,
       # pipleine. Thus, it is not necessary to show the info box because
       # it is shown below the timeline of the pipeline
     } else {
-      txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
+      txt <- paste0("This ", config$type, " is skipped so it has been disabled.")
       wellPanel(
         style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
         height = 100,
@@ -523,21 +308,16 @@ mod_navigation_process_server <- function(id,
 
 
  
- #' @description 
- #' xxx
- #' 
- #' @param i xxx
- #' 
- Change_Current_Pos = function(i){ rv.process$current.pos <- i}
+ 
  
  #-------------------------------------------------------
- observeEvent(rv.process$current.pos, ignoreInit = F,{
+ observeEvent(rv.nav$current.pos, ignoreInit = F,{
     if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))
    
-   shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
-   shinyjs::toggleState(id = "nextBtn", condition = rv.process$current.pos < length(rv.process$config$steps))
+   shinyjs::toggleState(id = "prevBtn", condition = rv.nav$current.pos > 1)
+   shinyjs::toggleState(id = "nextBtn", condition = rv.nav$current.pos < length(config$steps))
    shinyjs::hide(selector = paste0(".page_", id))
-   shinyjs::show(rv.process$config$steps[rv.process$current.pos])
+   shinyjs::show(config$steps[rv.nav$current.pos])
    
    #ActionOn_NewPosition()
    
@@ -549,10 +329,10 @@ mod_navigation_process_server <- function(id,
  #' @param direction xxx
  #'
  NavPage = function(direction) {
-   newval <- rv.process$current.pos + direction 
+   newval <- rv.nav$current.pos + direction 
    newval <- max(1, newval)
-   newval <- min(newval, length(rv.process$config$steps))
-   rv.process$current.pos <- newval
+   newval <- min(newval, length(config$steps))
+   rv.nav$current.pos <- newval
  }
  
  observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
@@ -560,44 +340,11 @@ mod_navigation_process_server <- function(id,
  
  
  
- #
- # Catch a new dataset sent by the caller
- #
- observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
-   if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
-   #browser()
-   
-  # action <- function()
-   #{
-     Change_Current_Pos(1)
-     rv.process$temp.dataIn <- dataIn()
-     #ActionOn_New_DataIn() # Used by class pipeline
-     # shinyjs::toggleState('Screens', TRUE)
-     
-     if(is.null(dataIn())){
-       print('Process : dataIn() NULL')
-       
-       ToggleState_Screens(FALSE, 1:length(rv.process$config$steps))
-       # ToggleState_ResetBtn(FALSE)
-       rv.process$original.length <- 0
-     } else { # A new dataset has been loaded
-       print('Process : dataIn() not NULL')
-       #shinyjs::toggleState('Screens', TRUE)
-       #ToggleState_ResetBtn(TRUE) #Enable the reset button
-       rv.process$original.length <- length(dataIn())
-       
-       Update_State_Screens()
-       ToggleState_Screens(TRUE, 1)
-       
-     }
-  # }
-   
-   #shinyjs::delay(100, action())
- })
+
  
  # Catch new status event
  
- observeEvent(rv.process$status, ignoreInit = T, {
+ observeEvent(rv.nav$status, ignoreInit = T, {
    if (verbose) cat(paste0('::observe((rv$status) from - ', id, '\n\n'))
    
    Discover_Skipped_Steps()
@@ -618,7 +365,7 @@ mod_navigation_process_server <- function(id,
  
  observeEvent(req(input$modal_ok > 0), ignoreInit=F, {
    if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, '\n\n'))
-   rv.process$local.reset <- input$rstBtn
+   rv.nav$local.reset <- input$rstBtn
    Set_All_Reset()
    removeModal()
  })
@@ -632,8 +379,8 @@ mod_navigation_process_server <- function(id,
    if (verbose) cat(paste0('::output$SkippedInfoPanel from - ', id, '\n\n'))
    #browser()
    
-   current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-   entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * length(rv.process$config$steps))
+   current_step_skipped <- rv.nav$status[rv.nav$current.pos] == global$SKIPPED
+   entire_process_skipped <- isTRUE(sum(rv.nav$status) == global$SKIPPED * length(config$steps))
    req(current_step_skipped)
    
    
@@ -642,7 +389,7 @@ mod_navigation_process_server <- function(id,
      # pipleine. Thus, it is not necessary to show the info box because
      # it is shown below the timeline of the pipeline
    } else {
-     txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
+     txt <- paste0("This ", config$type, " is skipped so it has been disabled.")
      wellPanel(
        style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
        height = 100,
@@ -653,76 +400,6 @@ mod_navigation_process_server <- function(id,
    }
  })
 
- output$show_Debug_Infos <- renderUI({
-      tagList(
-        uiOutput(ns('show_tag_enabled')),
-        fluidRow(
-        column(width=2,
-               tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
-               uiOutput(ns('show_dataIn'))),
-        column(width=2,
-               tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
-               uiOutput(ns('show_rv_dataIn'))),
-        column(width=2,
-               tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
-               uiOutput(ns('show_rv_dataOut'))),
-        column(width=4,
-               tags$b(h4(style = 'color: blue;', "status")),
-               uiOutput(ns('show_status')))
-      )
-      )
- })
- 
- ###########---------------------------#################
- output$show_dataIn <- renderUI({
-   if (verbose) cat(paste0('::output$show_dataIn from - ', id, '\n\n'))
-   req(dataIn())
-   tagList(
-     # h4('show dataIn()'),
-     lapply(names(dataIn()), function(x){tags$p(x)})
-   )
- })
- 
- output$show_rv_dataIn <- renderUI({
-   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
-   req(rv.process$dataIn)
-   tagList(
-     # h4('show dataIn()'),
-     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
-   )
- })
- 
- output$show_rv_dataOut <- renderUI({
-   if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, '\n\n'))
-   tagList(
-     #h4('show dataOut$value'),
-     lapply(names(dataOut$value), function(x){tags$p(x)})
-   )
- })
- 
- 
- output$show_status <- renderUI({
-   tagList(lapply(1:length(rv.process$config$steps), 
-                  function(x){
-                    color <- if(rv.process$tl.tags.enabled[x]) 'black' else 'lightgrey'
-                    if (x == rv.process$current.pos)
-                      tags$p(style = paste0('color: ', color, ';'),
-                             tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
-                    else 
-                      tags$p(style = paste0('color: ', color, ';'),
-                             paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
-                  }))
- })
- 
- output$show_tag_enabled <- renderUI({
-   tagList(
-     p(paste0('tl.tags.enabled = ', paste0(as.numeric(rv.process$tl.tags.enabled), collapse=' '))),
-     p(paste0('enabled() = ', as.numeric(tag.enabled())))
-   )
- })
- 
- reactive({dataOut})
- 
          
   }
 

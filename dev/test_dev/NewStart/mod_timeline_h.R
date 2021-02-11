@@ -46,6 +46,7 @@ mod_timeline_h_server = function(id,
       })
       
       UpdateTags <- reactive({
+        #browser()
         tl_status <- rep('undone', rv.tl$length)
         tl_status[which(config$mandatory)] <- 'mandatory'
         tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
@@ -61,6 +62,7 @@ mod_timeline_h_server = function(id,
       
 
       output$show_h_TL <- renderUI  ({
+       # browser()
           tags$ul(
             tags$div(class='timeline',
                      id='timeline',
