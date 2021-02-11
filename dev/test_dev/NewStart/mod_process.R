@@ -39,7 +39,7 @@ mod_process_ui <- function(id){
                               class = PrevNextBtnClass,
                               style='padding:4px; font-size:80%')
       )
-    ),
+    )
   # fluidRow(
   #   column(width=1, shinyjs::disabled(
   #     actionButton(ns("prevBtn"), "<<",
@@ -54,16 +54,16 @@ mod_process_ui <- function(id){
   #                                class = PrevNextBtnClass,
   #                                style='padding:4px; font-size:80%'))
   # ),
-   div(id = ns('Screens'),
-       uiOutput(ns('SkippedInfoPanel')),
-       uiOutput(ns('EncapsulateScreens'))
-   ),
-  wellPanel(title = 'foo',
-    tagList(
-      h3('module process'),
-      uiOutput(ns('show_Debug_Infos'))
-    )
-  )
+  #  div(id = ns('Screens'),
+  #      uiOutput(ns('SkippedInfoPanel')),
+  #      uiOutput(ns('EncapsulateScreens'))
+  #  ),
+  # wellPanel(title = 'foo',
+  #   tagList(
+  #     h3('module process'),
+  #     uiOutput(ns('show_Debug_Infos'))
+  #   )
+  # )
   )
 }
     
@@ -98,7 +98,7 @@ mod_process_server <- function(id,
       SKIPPED = -1
     )
     
-    rv.widgets <- reactiveValues()
+    rv.widgets <- "<reactiveValues>"
     widgets.default.values <- list()
     
     rv.process <- reactiveValues(
@@ -111,22 +111,18 @@ mod_process_server <- function(id,
       tl.tags.enabled = NULL,
       test = NULL,
       length = NULL,
-      config = NULL,
-      local.reset = NULL,
-      isAllSkipped = FALSE,
-      isAllUndone = TRUE,
-      isReseted = NULL,
-      isSkipped = NULL
+      config = NULL
     )
     
     
     
     observeEvent(id, {
-       source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
+      rv.widgets <- reactiveValues()
+       #source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
       #browser()
       
       #setNames(lapply(self$config$steps, function(x){
-        eval(parse(text = paste0('def_', id, '()')))
+        eval(parse(text = paste0('def_', id, '(session, input, output)')))
       #}),
      # self$config$steps)
       

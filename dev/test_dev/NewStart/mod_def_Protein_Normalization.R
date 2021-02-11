@@ -4,13 +4,54 @@ config <- list(name = 'Protein_Normalization',
 )
 
 
-def_Protein_Normalization <- function(){
-#   config <- list(name = 'Protein_Normalization',
-#                steps = c('Description', 'Step1', 'Step2', 'Step3'),
-#                mandatory = c(T, F, T, T)
-# )
+mod_def_Protein_Normalization_ui <- function(id){
+  ns <- NS(id)
+  tagList(
+    mod_navigation_process_ui(ns('nav_pipe_prot_norm'))
+  )
+}
 
 
+
+mod_def_Protein_Normalization_server <- function(id,
+                               pages = NULL,
+                               dataIn = NULL,
+                               tag.enabled = reactive({TRUE}),
+                               reset = reactive({FALSE}),
+                               position = reactive({NULL}),
+                               skipped = reactive({NULL})
+                               ){
+  
+  
+  ###-------------------------------------------------------------###
+  ###                                                             ###
+  ### ------------------- MODULE SERVER --------------------------###
+  ###                                                             ###
+  ###-------------------------------------------------------------###
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    
+   config <- reactiveValues(
+    name = 'Protein_Normalization',
+    steps = c('Description', 'Step1', 'Step2', 'Step3'),
+    mandatory = c(T, F, T, T),
+    ll.UI = list( screenStep1 = uiOutput(ns("Description")),
+                  screenStep2 = uiOutput(ns("Step1")),
+                  screenStep3 = uiOutput(ns("Step2")),
+                  screenStep4 = uiOutput(ns("Step3"))
+    )
+ )
+
+   mod_navigation_process_server(id = 'nav_pipe_prot_norm', 
+                                 config = config,
+                                 dataIn = reactive({NULL}),
+                                 tag.enabled = reactive({TRUE}),
+                                 reset = reactive({FALSE}),
+                                 position = reactive({NULL}),
+                                 skipped = reactive({NULL})
+   )
+   
 
 # Define default selected values for widgets
 widgets.default.values <- list(
@@ -21,6 +62,7 @@ widgets.default.values <- list(
   select2_2 = 1
 )
 
+rv.widgets <- reactiveValues()
 # Set widgets selected values to their default
 rv.widgets$select1 <- widgets.default.values$select1
 rv.widgets$select2 <- widgets.default.values$select2
@@ -28,6 +70,19 @@ rv.widgets$select3 <- widgets.default.values$select3
 rv.widgets$select2_1 <- widgets.default.values$select2_1
 rv.widgets$select2_2 <- widgets.default.values$select2_2
 
+
+rv.process <- reactiveValues(
+  parent = NULL,
+  
+  status = NULL,
+  dataIn = NULL,
+  temp.dataIn = NULL,
+  current.pos = 1,
+  tl.tags.enabled = NULL,
+  test = NULL,
+  length = NULL,
+  config = NULL
+)
 
 
 ###### ------------------- Code for Description (step 0) -------------------------    #####
@@ -246,4 +301,6 @@ observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   rv.process$dataIn <- AddItemToDataset(rv.process$dataIn, rv.process$config$name)
   ValidateCurrentPos()
 })
+  }
+)
 }

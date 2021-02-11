@@ -10,6 +10,24 @@ Imports:
     golem,
     shiny,
     R6
+Collate: 
+    app_config.R
+    app_server.R
+    app_ui.R
+    run_app.R
+    global.R
+    mod_timeline_v.R
+    mod_timeline_h.R
+    mod_process.R
+    mod_pipeline.R
+    mod_bsmodal.R
+    mod_popover_for_help.R
+    mod_Description.R
+    mod_format_DT.R
+    def_Protein.R
+    def_Protein_Normalization.R
+    def_Protein_Filtering.R
+    def_Protein_Description.R
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
