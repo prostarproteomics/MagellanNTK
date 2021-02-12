@@ -96,9 +96,7 @@ mod_def_Protein_server <- function(id,
       name = 'Protein',
       steps = c('Description', 'Normalization'),
       mandatory = c(T, F)
-      # ll.UI = list( uiOutput(ns("Description")),
-      #               uiOutput(ns("Normalization"))
-      # )
+
     )
     
     
@@ -125,7 +123,12 @@ mod_def_Protein_server <- function(id,
     })
     
     
-    
+    mod_timeline_h_server(id = 'timeline',
+                          config =  config,
+                          status = reactive({rv.process$status}),
+                          position = reactive({rv.process$current.pos}),
+                          enabled = reactive({rv.process$tl.tags.enabled})
+    )
     
     
     # mod_navigation_process_server(id = 'nav_pipe_prot_norm', 
@@ -190,7 +193,7 @@ mod_def_Protein_server <- function(id,
            msg = msg)
     }
     
-    
+
     observeEvent(id, {
       #source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
       # browser()
@@ -219,14 +222,54 @@ mod_def_Protein_server <- function(id,
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
       rv.child$enabled <- setNames(rep(TRUE, length(rv.process$config$steps)), rv.process$config$steps)
       
+      
+      
+      # Get code for processes UI
+      # lapply(rv.process$config$steps,
+      #        function(x){
+      #          #if (paste0(id, '_', x) != paste0(id, '_','Description'))
+      #          source(file.path('.', paste0('mod_def_', paste0(id, '_', x), '.R')), local=globalenv())
+      #          #eval(parse(text = paste0("mod_def_", id, "_", x, "_server('toto')")))
+      #        }
+      # )
+      
+      #browser()
+      
+      for (x in rv.process$config$steps)
+        source(file.path('.', paste0('mod_def_', paste0(id, '_', x), '.R')), local=TRUE)
+      
+      browser()
+      
       config$ll.UI <- lapply(rv.process$config$steps,
                              function(x){
-                               do.call(paste0('mod_def_', id, '_', x, '_ui'), 
+                               do.call(paste0('mod_def_', id, '_', x, '_ui'),
                                        list(ns(paste0(id, '_', x))))
                              })
       
       
-      Launch_Module_Server()
+      # config$ll.UI = list( screen1 = mod_def_Protein_Description_ui(ns("Protein_Description")),
+      #                      screen2 = mod_def_Protein_Normalization_ui(ns("Protein_Normalization"))
+      # )
+      
+      #setNames(lapply(self$config$steps, function(x){
+      # eval(parse(text = paste0('def_', id, '(session, input, output)')))
+      #}),
+      # self$config$steps)
+      
+      
+      lapply(rv.process$config$steps, function(x){
+        tmp.return[[x]] <- do.call(paste0('mod_def_', id, '_', x, '_server'),
+                                   list(id = paste0(id, '_', x) ,
+                                        dataIn = reactive({ rv.child$data2send[[x]] }),
+                                        tag.enabled = reactive({isTRUE(rv.child$enabled[x])}),
+                                        reset = reactive({isTRUE(rv.child$reset[x])}),
+                                        position = reactive({rv.child$position[x]}),
+                                        skipped = reactive({rv.process$status[x] == global$SKIPPED})
+                                   )
+        )
+      })
+      
+     # Launch_Module_Server()
       
     }, priority=1000) 
     
@@ -248,15 +291,10 @@ mod_def_Protein_server <- function(id,
       if(verbose) cat(paste0('Launch_Module_Server() from - ', id, '\n\n'))
       
       browser()
-      
-      # Get code for processes UI
-      lapply(rv.process$config$steps,
-             function(x){
-               #if (paste0(id, '_', x) != paste0(id, '_','Description'))
-               source(file.path('.', paste0('mod_def_', paste0(id, '_', x), '.R')), local=TRUE)$value
-               #eval(parse(text = paste0("mod_def_", id, "_", x, "_server('toto')")))
-             }
+      config$ll.UI = list( screen1 = mod_def_Protein_Description_ui(ns("Description")),
+                           screen2 = mod_def_Protein_Normalization_ui(ns("Normalization"))
       )
+      
       #setNames(lapply(self$config$steps, function(x){
       # eval(parse(text = paste0('def_', id, '(session, input, output)')))
       #}),
@@ -275,17 +313,55 @@ mod_def_Protein_server <- function(id,
         )
       })
       
-      # Catch the returned values of the process                                                           
-      observeEvent(lapply(rv.process$config$steps, 
-                          function(x){
-                            tmp.return[[x]]()$trigger}), ignoreInit=T,{
-                              if(verbose) cat(paste0('observeEvent(trigger) from - ', id, '\n\n'))
-                              #browser()
-                              ActionOn_Data_Trigger()
-                            })
+     
       
     }
     
+    
+    #' @title xxx
+    #'
+    #' @description
+    #' Adds one or more items to the dataset. This function is specific of the
+    #' type of dataset.
+    #'
+    #' @importFrom QFeatures addAssay
+    #'
+    #' @return
+    #' The dataset minus some items
+    #'
+    #' @export
+    #'
+    Add_Item_to_Dataset <- function(dataset, name){
+      QFeatures::addAssay(dataset,
+                          dataset[[length(dataset)]],
+                          name=name)
+    }
+    
+    #' @title xxx
+    #'
+    #' @description
+    #' Removes one or more items from the dataset. This function is specific of the
+    #' type of dataset.
+    #'
+    #' @return
+    #' The dataset minus some items
+    #'
+    #' @export
+    #'
+    Keep_Items_from_Dataset <- function(dataset, range){
+      dataset[ , , range]
+    }
+    
+    
+    
+    # Catch the returned values of the process                                                           
+    observeEvent(lapply(rv.process$config$steps, 
+                        function(x){
+                          tmp.return[[x]]()$trigger}), ignoreInit=T,{
+                            if(verbose) cat(paste0('observeEvent(trigger) from - ', id, '\n\n'))
+                            #browser()
+                            ActionOn_Data_Trigger()
+                          })
     
     #' @description
     #' This function calls the server part of each module composing the pipeline
