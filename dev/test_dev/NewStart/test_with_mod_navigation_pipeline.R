@@ -7,12 +7,7 @@ library(tibble)
 
 options(shiny.fullstacktrace = T)
 
-#------------------------ Class TimelineDraw -----------------------------------
-source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-source(file.path('.', 'mod_def_Protein.R'), local=TRUE)$value
-source(file.path('.', 'mod_def_Protein_Normalization.R'), local=TRUE)$value
-source(file.path('.', 'mod_def_Protein_Description.R'), local=TRUE)$value
+source(file.path('.', 'mod_Protein.R'), local=TRUE)$value
 
 verbose <- F
 
@@ -31,7 +26,7 @@ AddItemToDataset <- function(dataset, name){
 
 
 ui <- fluidPage(
-  mod_def_Protein_ui('Protein')
+  mod_Protein_ui('Protein')
 )
 
 
@@ -46,7 +41,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$res <- mod_def_Protein_server('Protein', 
+    rv$res <- mod_Protein_server('Protein', 
                                      dataIn = reactive({obj}),
                                      tag.enabled = reactive({TRUE}) )
   })

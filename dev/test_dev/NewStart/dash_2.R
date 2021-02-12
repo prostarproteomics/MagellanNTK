@@ -4,16 +4,16 @@ library(shinyWidgets)
 library(shinyjs)
 library(QFeatures)
 library(tibble)
-library(MSPipelines)
 
 options(shiny.fullstacktrace = T)
 
+verbose <- T
 #------------------------ Class TimelineDraw -----------------------------------
-source(file.path('../../../R', 'mod_timeline_h.R'), local=TRUE)$value
-source(file.path('../../../R', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('../../../R', 'mod_process.R'), local=TRUE)$value
-source(file.path('../../../R', 'mod_pipeline.R'), local=TRUE)$value
-
+source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
+source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+source(file.path('.', 'mod_Protein.R'), local=TRUE)$value
+source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
+source(file.path('.', 'mod_Protein_Description.R'), local=TRUE)$value
 
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
@@ -41,7 +41,7 @@ AddItemToDataset <- function(dataset, name){
         title = "Status summary",
         background = "green",
         width = 8,
-        mod_pipeline_ui('Protein')
+        mod_Protein_ui('Protein')
       ),
       
       # Box with HTML output, when finer control over appearance is needed
@@ -64,7 +64,7 @@ AddItemToDataset <- function(dataset, name){
     )
     
     observe({
-      rv$res <- mod_pipeline_server(id = 'Protein', 
+      rv$res <- mod_Protein_server(id = 'Protein', 
                                     dataIn = reactive({obj}),
                                     tag.enabled = reactive({TRUE})
       )
