@@ -88,12 +88,12 @@ mod_def_Protein_Normalization_server <- function(id,
     config <- reactiveValues(
       name = 'Protein_Normalization',
       steps = c('Description', 'Step1', 'Step2', 'Step3'),
-      mandatory = c(T, F, T, T),
-      ll.UI = list( uiOutput(ns("Description")),
-                    uiOutput(ns("Step1")),
-                    uiOutput(ns("Step2")),
-                    uiOutput(ns("Step3"))
-      )
+      mandatory = c(T, F, T, T)
+      # ll.UI = list( uiOutput(ns("Description")),
+      #               uiOutput(ns("Step1")),
+      #               uiOutput(ns("Step2")),
+      #               uiOutput(ns("Step3"))
+      # )
     )
     
     
@@ -219,16 +219,11 @@ observeEvent(id, {
   rv.process$length <- length(config$steps)
   rv.process$current.pos  <- 1
   
-  # config$ll.UI[[1]] <- div(id = ns(rv.process$config$steps[1]),  
-  #                         config$ll.UI[[1]])
-  # for (i in 2:rv.process$length){
-  #   config$ll.UI[[i]] <- shinyjs::hidden(
-  #     div(id = ns(rv.process$config$steps[i]),  
-  #         config$ll.UI[[i]]))
-  # }
-  
-  
-  
+  config$ll.UI <- lapply(rv.process$config$steps,
+                         function(x){
+                           do.call('uiOutput', list(ns(x)))
+                           })
+ 
   rv.process$parent <- unlist(strsplit(id, split='_'))[1]
   rv.process$config <- config
   check <- CheckConfig(rv.process$config)

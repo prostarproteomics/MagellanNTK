@@ -12,6 +12,7 @@ source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 source(file.path('.', 'mod_def_Protein.R'), local=TRUE)$value
 source(file.path('.', 'mod_def_Protein_Normalization.R'), local=TRUE)$value
+source(file.path('.', 'mod_def_Protein_Description.R'), local=TRUE)$value
 
 verbose <- F
 

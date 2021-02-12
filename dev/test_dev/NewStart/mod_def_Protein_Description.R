@@ -1,6 +1,6 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
-mod_def_Protein_ui <- function(id){
+mod_def_Protein_Description_ui <- function(id){
   ns <- NS(id)
   # mod_navigation_process_ui(ns('nav_pipe_prot_norm')),
   tagList(
@@ -46,7 +46,7 @@ mod_def_Protein_ui <- function(id){
     ),
     wellPanel(title = 'foo',
               tagList(
-                h3('module pipeline'),
+                h3('module process'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -55,9 +55,13 @@ mod_def_Protein_ui <- function(id){
 
 
 
-mod_def_Protein_server <- function(id,
-                                   dataIn = NULL,
-                                   tag.enabled = reactive({TRUE})){
+mod_def_Protein_Description_server <- function(id,
+                                                 dataIn = NULL,
+                                                 tag.enabled = reactive({TRUE}),
+                                                 reset = reactive({FALSE}),
+                                                 position = reactive({NULL}),
+                                                 skipped = reactive({NULL})
+){
   
   
   ###-------------------------------------------------------------###
@@ -72,17 +76,6 @@ mod_def_Protein_server <- function(id,
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    # Specific to pipeline module
-    tmp.return <- reactiveValues()
-    dataOut <- reactiveValues()
-    
-    rv.child <- reactiveValues(
-      enabled = NULL,
-      reset = NULL,
-      position = NULL
-    )
-    
-    
     #' @field global xxxx
     global <- list(
       VALIDATED = 1,
@@ -92,14 +85,12 @@ mod_def_Protein_server <- function(id,
     
     
     
-    config <- reactiveValues(
-      name = 'Protein',
-      steps = c('Description', 'Normalization'),
-      mandatory = c(T, F)
-      # ll.UI = list( uiOutput(ns("Description")),
-      #               uiOutput(ns("Normalization"))
-      # )
-    )
+    config <- list(name = 'Protein_Description',
+                   steps = c('Description'),
+                   mandatory = c(T),
+                   ll.UI = list( uiOutput(ns("Description"))
+                                 )
+                   )
     
     
     output$EncapsulateScreens <- renderUI({
@@ -136,6 +127,24 @@ mod_def_Protein_server <- function(id,
     #                               position = reactive({NULL}),
     #                               skipped = reactive({NULL})
     # )
+    
+    
+    # Define default selected values for widgets
+    widgets.default.values <- list(
+      select1 =1,
+      select2 = NULL,
+      select3 = 1,
+      select2_1 = 1,
+      select2_2 = 1
+    )
+    
+    rv.widgets <- reactiveValues()
+    # Set widgets selected values to their default
+    rv.widgets$select1 <- widgets.default.values$select1
+    rv.widgets$select2 <- widgets.default.values$select2
+    rv.widgets$select3 <- widgets.default.values$select3
+    rv.widgets$select2_1 <- widgets.default.values$select2_1
+    rv.widgets$select2_2 <- widgets.default.values$select2_2
     
     
     rv.process <- reactiveValues(
@@ -192,6 +201,7 @@ mod_def_Protein_server <- function(id,
     
     
     observeEvent(id, {
+      rv.widgets <- reactiveValues()
       #source(file.path('../../../R', paste0('def_', id, '.R')), local=TRUE)$value
       # browser()
       
@@ -205,6 +215,16 @@ mod_def_Protein_server <- function(id,
       rv.process$length <- length(config$steps)
       rv.process$current.pos  <- 1
       
+      # config$ll.UI[[1]] <- div(id = ns(rv.process$config$steps[1]),  
+      #                         config$ll.UI[[1]])
+      # for (i in 2:rv.process$length){
+      #   config$ll.UI[[i]] <- shinyjs::hidden(
+      #     div(id = ns(rv.process$config$steps[i]),  
+      #         config$ll.UI[[i]]))
+      # }
+      
+      
+      
       rv.process$parent <- unlist(strsplit(id, split='_'))[1]
       rv.process$config <- config
       check <- CheckConfig(rv.process$config)
@@ -213,128 +233,12 @@ mod_def_Protein_server <- function(id,
       #else
       # rv.process$config <- rv.process$config
       #browser()
-      rv.child$position <- setNames(rep('first', length(rv.process$config$steps)), rv.process$config$steps)
       rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-      rv.process$status <- setNames(rep(global$UNDONE, length(rv.process$config$steps)), rv.process$config$steps)
+      rv.process$status = setNames(rep(global$UNDONE, length(rv.process$config$steps)), rv.process$config$steps)
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
-      rv.child$enabled <- setNames(rep(TRUE, length(rv.process$config$steps)), rv.process$config$steps)
-      
-      config$ll.UI <- lapply(rv.process$config$steps,
-                             function(x){
-                               do.call(paste0('mod_def_', id, '_', x, '_ui'), 
-                                       list(ns(paste0(id, '_', x))))
-                             })
-      
-      
-      Launch_Module_Server()
-      
+      rv.process$tl.tags.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
+      #browser()
     }, priority=1000) 
-    
-    
-    
-    CurrentStepName <- reactive({
-      cat(paste0('::GetCurrentStepName() from - ', id, '\n'))
-      #browser()
-      rv.process$config$steps[rv.process$current.pos]
-    })
-    
-    
-    #' @description
-    #' This function calls the server part of each module composing the pipeline
-    #'
-    #' @return Nothing
-    #'
-    Launch_Module_Server <- function(){
-      if(verbose) cat(paste0('Launch_Module_Server() from - ', id, '\n\n'))
-      
-      browser()
-      
-      # Get code for processes UI
-      lapply(rv.process$config$steps,
-             function(x){
-               #if (paste0(id, '_', x) != paste0(id, '_','Description'))
-               source(file.path('.', paste0('mod_def_', paste0(id, '_', x), '.R')), local=TRUE)$value
-               #eval(parse(text = paste0("mod_def_", id, "_", x, "_server('toto')")))
-             }
-      )
-      #setNames(lapply(self$config$steps, function(x){
-      # eval(parse(text = paste0('def_', id, '(session, input, output)')))
-      #}),
-      # self$config$steps)
-      
-      
-      lapply(rv.process$config$steps, function(x){
-        tmp.return[[x]] <- do.call(paste0('mod_def_', id, '_', x, '_server'),
-                                   list(id = paste0(id, '_', x) ,
-                                        dataIn = reactive({ rv.child$data2send[[x]] }),
-                                        tag.enabled = reactive({isTRUE(rv.child$enabled[x])}),
-                                        reset = reactive({isTRUE(rv.child$reset[x])}),
-                                        position = reactive({rv.child$position[x]}),
-                                        skipped = reactive({rv.process$status[x] == global$SKIPPED})
-                                   )
-        )
-      })
-      
-      # Catch the returned values of the process                                                           
-      observeEvent(lapply(rv.process$config$steps, 
-                          function(x){
-                            tmp.return[[x]]()$trigger}), ignoreInit=T,{
-                              if(verbose) cat(paste0('observeEvent(trigger) from - ', id, '\n\n'))
-                              #browser()
-                              ActionOn_Data_Trigger()
-                            })
-      
-    }
-    
-    
-    #' @description
-    #' This function calls the server part of each module composing the pipeline
-    #'
-    #' @return Nothing
-    #'
-    PrepareData2Send = function(){
-      if(verbose) cat(paste0('PrepareData2Send() from - ', id, '\n\n'))
-      # browser()
-      # Returns NULL to all modules except the one pointed by the current position
-      # Initialization of the pipeline : one send dataIn() to the
-      # first module
-      #browser()
-      
-      update <- function(name){
-        data <- NULL
-        if (name == CurrentStepName()){
-          # One treat the dataset for the current position
-          #ind.last.validated <- self$GetMaxValidated_BeforeCurrentPos()
-          name.last.validated <- names(rv.process$dataIn)[length(rv.process$dataIn)]
-          ind.last.validated <- which(names(rv.process$dataIn)== name.last.validated)
-          
-          if (is.null(ind.last.validated)){
-            data <- rv.process$temp.dataIn
-          } else {
-            data <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                            range = 1:ind.last.validated)
-            #data <- self$rv$dataIn[ , , 1:ind.last.validated]
-          }
-        }
-        return(data)
-      }
-      
-      #browser() 
-      rv.child$data2send <- setNames(
-        lapply(rv.process$config$steps, function(x){NULL}),
-        rv.process$config$steps)
-      
-      if (is.null(rv.process$dataIn)) # Init of core engine
-        rv.child$data2send[[1]] <- rv.process$temp.dataIn
-      else
-        rv.child$data2send <- setNames(
-          lapply(rv.process$config$steps, function(x){update(x)}),
-          rv.process$config$steps)
-      
-      print("<----------------- data2 send ------------------> ")
-      print(rv.child$data2send)
-      print("<------------------------------------------------> ")
-    }
     
     
     
@@ -494,7 +398,7 @@ mod_def_Protein_server <- function(id,
       #{
       Change_Current_Pos(1)
       rv.process$temp.dataIn <- dataIn()
-      ActionOn_New_DataIn() # Used by class pipeline
+      #ActionOn_New_DataIn() # Used by class pipeline
       # shinyjs::toggleState('Screens', TRUE)
       
       if(is.null(dataIn())){
@@ -517,104 +421,6 @@ mod_def_Protein_server <- function(id,
       
       #shinyjs::delay(100, action())
     })
-    
-    
-    #' @description
-    #' xxx
-    #'
-    #' @return Nothing
-    #'
-    ActionOn_New_DataIn = function(){
-      if(verbose) cat(paste0('ActionOn_New_DataIn() from - ', id, '\n\n'))
-      PrepareData2Send()
-    }
-    
-    
-    
-    #' @description
-    #' Catch the return value of a module and update the list of isDone modules
-    #' This list is updated with the names of datasets present in the rv$tmp
-    #' variable. One set to TRUE all the elements in isDone which have a corresponding
-    #' element in names(rv$tmp).
-    #' One cannot simply set to TRUE the last element of rv$tmp because it will does
-    #' not work in case of a reseted module (it is not in the names(rv$tmp) list
-    #' anymore)
-    #' If a value (not NULL) is received, then it corresponds to the module
-    #' pointed by the current position
-    #' This function also updates the list isDone
-    #' This function updates the current dataset (self$rv$dataIn)
-    #'
-    #' @return Nothing
-    #'
-    ActionOn_Data_Trigger <- function(){
-      if(verbose) cat(paste0('::', 'ActionOn_Data_Trigger from - ', id, '\n\n'))
-      #browser()
-      processHasChanged <- newValue <- NULL
-      return.trigger.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]()$trigger}),
-                                        rv.process$config$steps)
-      return.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]()$value}),
-                                rv.process$config$steps)
-      triggerValues <- unlist(return.trigger.values)
-      
-      #browser()
-      if (sum(triggerValues)==0){ # Init of core engine
-        
-      } else if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
-        print('The entire pipeline has been reseted')
-        PrepareData2Send()
-        
-      } else {
-        processHasChanged <- rv.process$config$steps[which(max(triggerValues)==triggerValues)]
-        ind.processHasChanged <- which(rv.process$config$steps==processHasChanged)
-        newValue <- tmp.return[[processHasChanged]]()$value
-        
-        
-        # process has been reseted
-        if (is.null(newValue)){
-          rv.process$status[ind.processHasChanged:length(rv.process$config$steps)] <- global$UNDONE
-          
-          # Reset all further steps also
-          rv.child$reset[ind.processHasChanged:length(rv.process$config$steps)] <- TRUE
-          rv.child$reset[1:(ind.processHasChanged-1)] <- FALSE
-          
-          
-          
-          # browser()
-          # One take the last validated step (before the one corresponding to processHasChanges
-          # but it is straightforward because we just updates self$rv$status
-          ind.last.validated <- NULL
-          validated.steps <- which(rv.process$status == global$VALIDATED)
-          if (length(validated.steps) !=0)
-            ind.last.validated <- max(validated.steps)
-          
-          #There is no validated step (the first step has been reseted)
-          if(is.null(ind.last.validated) || ind.last.validated == 1)
-            rv.process$dataIn <- rv.process$temp.dataIn
-          else{
-            name.last.validated <- rv.process$config$steps[ind.last.validated]
-            dataIn.ind.last.validated <- which(names(rv.process$dataIn) == name.last.validated)
-            #self$rv$dataIn <- self$rv$dataIn[ , , 1:dataIn.ind.last.validated]
-            rv.process$dataIn <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                                         range = 1:dataIn.ind.last.validated)
-            
-          }
-          
-          # In this case, one force the update of the input dataset
-          PrepareData2Send()
-        } else {
-          # browser()
-          # process has been validated
-          rv.process$status[processHasChanged] <- global$VALIDATED
-          if (ind.processHasChanged < length(rv.process$config$steps))
-            rv.process$status[(ind.processHasChanged+1):length(rv.process$config$steps)] <- global$UNDONE
-          
-          Discover_Skipped_Steps()
-          rv.process$dataIn <- newValue
-        }
-        Send_Result_to_Caller()
-      }
-      
-    }
     
     
     #' @description 
@@ -661,41 +467,6 @@ mod_def_Protein_server <- function(id,
     }
     
     
-    #' @description
-    #' This function calls the server part of each module composing the pipeline
-    #'
-    #' @return Nothing
-    #'
-    GetMaxValidated_BeforeCurrentPos = function(){
-      if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
-      ind.max <- NULL
-      indices.validated <- which(rv.process$status == global$VALIDATED)
-      if (length(indices.validated) > 0){
-        ind <- which(indices.validated < rv.process$current.pos)
-        if(length(ind) > 0)
-          ind.max <- max(ind)
-      }
-      ind.max
-    }
-    
-    #' @description
-    #' This function calls the server part of each module composing the pipeline
-    #'
-    #' @param pos xxx
-    #' 
-    #' @return Nothing
-    #'
-    GetMaxValidated_BeforePos = function(pos){
-      if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
-      ind.max <- NULL
-      indices.validated <- which(rv.process$status == global$VALIDATED)
-      if (length(indices.validated) > 0){
-        ind <- which(indices.validated < pos)
-        if(length(ind) > 0)
-          ind.max <- max(ind)
-      }
-      ind.max
-    }
     
     
     observeEvent(tag.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
@@ -704,14 +475,21 @@ mod_def_Protein_server <- function(id,
         rv.process$tl.tags.enabled <- setNames(rep(FALSE, length(config$steps)), config$steps)
     })
     
-    mod_timeline_v_server(id = 'timeline',
-                          config =   rv.process$config,
+    mod_timeline_h_server(id = 'timeline',
+                          config =  config,
                           status = reactive({rv.process$status}),
                           position = reactive({rv.process$current.pos}),
                           enabled = reactive({rv.process$tl.tags.enabled})
     )
     
- 
+    
+    observeEvent(req(!is.null(position())), ignoreInit = T, {
+      pos <- strsplit(position(), '_')[[1]][1]
+      if (pos == 'last')
+        rv.process$current.pos <- length(config$steps)
+      else if (is.numeric(pos))
+        rv.process$current.pos <- position()
+    })
     
     #' @description
     #' Default actions on reset pipeline or process.
@@ -822,25 +600,6 @@ mod_def_Protein_server <- function(id,
     
     
     
-    #' @description
-    #' xxx
-    #'
-    #' @return Nothing
-    #'
-    ActionOn_NewPosition = function(){
-      if(verbose) cat(paste0('::ActionOn_NewPosition() from - ', id, '\n\n'))
-      
-      print("--- action on New position ---")
-      # Send dataset to child process only if the current position is enabled
-      if(rv.child$enabled[rv.process$current.pos])
-        PrepareData2Send()
-      #browser()
-      # If the current step is validated, set the child current position to the last step
-      if (rv.process$status[rv.process$current.pos] == global$VALIDATED)
-        rv.child$position[rv.process$current.pos] <- paste0('last_', Timestamp())
-    }
-    
-    
     
     
     #-------------------------------------------------------
@@ -852,7 +611,7 @@ mod_def_Protein_server <- function(id,
       shinyjs::hide(selector = paste0(".page_", id))
       shinyjs::show(config$steps[rv.process$current.pos])
       
-      ActionOn_NewPosition()
+      #ActionOn_NewPosition()
       
     })
     
@@ -903,7 +662,11 @@ mod_def_Protein_server <- function(id,
       removeModal()
     })
     
-
+    observeEvent(req(reset()), ignoreInit=F, ignoreNULL=T, {
+      if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, '\n\n'))
+      Set_All_Reset()
+    })
+    
     output$SkippedInfoPanel <- renderUI({
       if (verbose) cat(paste0('::output$SkippedInfoPanel from - ', id, '\n\n'))
       #browser()
@@ -940,12 +703,11 @@ mod_def_Protein_server <- function(id,
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       rv.process$tl.tags.enabled
-      #browser()
       wellPanel(
         tagList(
           includeMarkdown( system.file("app/md", paste0(config$name, ".md"), package="Magellan")),
           uiOutput(ns('datasetDescription')),
-          if (isTRUE(rv.process$tl.tags.enabled['Description']))
+          if (rv.process$tl.tags.enabled['Description'])
             actionButton(ns('btn_validate_Description'), 
                          paste0('Start ', config$name),
                          class = btn_success_color)
@@ -965,107 +727,55 @@ mod_def_Protein_server <- function(id,
       ValidateCurrentPos()
     })
     
-    
-    ###### ------------------- Code for step 1 -------------------------    #####
-    
-    observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-      # Add your stuff code here
-      ValidateCurrentPos()
-    })
-    
-    
-    observeEvent(input$select1,{rv.widgets$select1 <- input$select1})
-    observeEvent(input$select2,{rv.widgets$select2 <- input$select2})
-    observeEvent(input$select3,{rv.widgets$select3 <- input$select3})
-    observeEvent(input$select2,{rv.widgets$select2_1 <- input$select2_1})
-    observeEvent(input$select3,{rv.widgets$select2_2 <- input$select2_2})
-    
-    
-    
-    
-    output$test1 <-renderUI({
-      #rv.process$tl.tags.enabled
-      rv.widgets$select1
-      if (rv.process$tl.tags.enabled['Step1'])
-        selectInput(ns('select1'), 'Select 1 in renderUI',
-                    choices = 1:4,
-                    selected = rv.widgets$select1,
-                    width = '150px')
-      else
-        shinyjs::disabled(
-          selectInput(ns('select1'), 'Select 1 in renderUI',
-                      choices = 1:4,
-                      selected = rv.widgets$select1,
-                      width = '150px')
-        )
-    })
-    
-    
-    
-    output$test2 <-renderUI({
-      
-      rv.process$tl.tags.enabled
-      if (rv.process$tl.tags.enabled['Step1'])
-        selectInput(ns('select2'), 'Select 2 in renderUI', 
-                    choices = 1:3,
-                    selected = rv.widgets$select2,
-                    width = '150px')
-      else
-        shinyjs::disabled(
-          selectInput(ns('select2'), 'Select 2 in renderUI', 
-                      choices = 1:4,
-                      selected = rv.widgets$select2,
-                      width = '150px')
-        )
-    })
-    
-    
-    
-    
-    # ------------------------ STEP 1 : UI ------------------------------------
-    output$Step1 <- renderUI({
-      #rv.process$tl.tags.enabled
-      name <- 'Step1'
-      wellPanel(id = ns('toto'),
-                actionButton(ns('btn1'), 'Btn 1'),
-                tagList(
-                  div(id=ns('Step1a'),
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          uiOutput(ns('test1'))
-                      ),
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          uiOutput(ns('test2'))
-                      ),
-                      div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                          if (rv.process$tl.tags.enabled['Step1'])
-                            selectInput(ns('select3'), 'Select step 3', 
-                                        choices = 1:3, 
-                                        selected = rv.widgets$select3,
-                                        width = '150px')
-                          else
-                            shinyjs::disabled(
-                              selectInput(ns('select3'), 'Select step 3', 
-                                          choices = 1:5, 
-                                          selected = rv.widgets$select3,
-                                          width = '150px')
-                            )
-                      ),
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          if (rv.process$tl.tags.enabled['Step1'])
-                            actionButton(ns(paste0('btn_validate_', name)), 
-                                         'Perform',
-                                         class = btn_success_color)
-                          else
-                            shinyjs::disabled(
-                              actionButton(ns(paste0('btn_validate_', name)),
-                                           'Perform',
-                                           class = btn_success_color)
-                            )
-                      )
-                  )
-                )
+    ###########---------------------------#################
+    output$show_dataIn <- renderUI({
+      if (verbose) cat(paste0('::output$show_dataIn from - ', id, '\n\n'))
+      req(dataIn())
+      tagList(
+        # h4('show dataIn()'),
+        lapply(names(dataIn()), function(x){tags$p(x)})
       )
     })
+    
+    output$show_rv_dataIn <- renderUI({
+      if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
+      req(rv.process$dataIn)
+      tagList(
+        # h4('show dataIn()'),
+        lapply(names(rv.process$dataIn), function(x){tags$p(x)})
+      )
+    })
+    
+    output$show_rv_dataOut <- renderUI({
+      if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, '\n\n'))
+      tagList(
+        #h4('show dataOut$value'),
+        lapply(names(dataOut$value), function(x){tags$p(x)})
+      )
+    })
+    
+    
+    output$show_status <- renderUI({
+      tagList(lapply(1:length(config$steps), 
+                     function(x){
+                       color <- if(rv.process$tl.tags.enabled[x]) 'black' else 'lightgrey'
+                       if (x == rv.process$current.pos)
+                         tags$p(style = paste0('color: ', color, ';'),
+                                tags$b(paste0('---> ', config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
+                       else 
+                         tags$p(style = paste0('color: ', color, ';'),
+                                paste0(config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
+                     }))
+    })
+    
+    output$show_tag_enabled <- renderUI({
+      tagList(
+        p(paste0('tl.tags.enabled = ', paste0(as.numeric(rv.process$tl.tags.enabled), collapse=' '))),
+        p(paste0('enabled() = ', as.numeric(tag.enabled())))
+      )
+    })
+    
+    
     
     
     reactive({dataOut})
