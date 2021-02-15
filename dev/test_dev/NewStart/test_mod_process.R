@@ -7,11 +7,8 @@ library(tibble)
 
 options(shiny.fullstacktrace = T)
 
-#------------------------ Class TimelineDraw -----------------------------------
-source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-source(file.path('.', 'mod_process.R'), local=TRUE)$value
 
+verbose <- F
 
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
@@ -28,7 +25,27 @@ AddItemToDataset <- function(dataset, name){
 
 
 ui <- fluidPage(
-  mod_process_ui('Protein_Normalization')
+  tagList(
+    fluidRow(
+      column(width=3,
+             selectInput('choosePipeline', 'Choose pipeline',
+                         choices = setNames(nm=c('', 'Protein')),
+                         width = '200')
+             ),
+      column(width=5,
+             selectInput('chooseProcess', 'Choose process', 
+                         choices = setNames(nm=c('', 'Normalization', 'Description')),
+                         width = '200')
+             )
+      ),
+    uiOutput('UI'),
+    wellPanel(title = 'foo',
+              tagList(
+                h3('Valler'),
+                uiOutput('show_Debug_Infos')
+              )
+    )
+  )
 )
 
 
@@ -39,15 +56,63 @@ server <- function(input, output){
   obj <- Exp1_R25_prot
   
   rv <- reactiveValues(
-    res = NULL
+    dataIn = Exp1_R25_prot,
+    dataOut = NULL
   )
-
+  
+  
+  
   observe({
-  rv$res <- mod_process_server('Protein_Normalization', 
-                               dataIn = reactive({obj}),
-                               tag.enabled = reactive({TRUE}) )
+    req(input$choosePipeline != '' && input$chooseProcess != '')
+    basename <- paste0('mod_', input$choosePipeline, '_', input$chooseProcess)
+    source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+    
+    rv$dataOut <- do.call(paste0(basename, '_server'),
+                      list('process',
+                           dataIn = reactive({obj}),
+                           tag.enabled = reactive({TRUE})
+                           )
+                      )
+
+  }, priority=1000)
+  
+  
+  output$UI <- renderUI({
+    req(input$choosePipeline != '' && input$chooseProcess != '')
+    do.call(paste0('mod_', input$choosePipeline, '_', input$chooseProcess, '_ui'),
+            list('process'))
   })
   
+  
+  
+  #--------------------------------------------------------------------
+  
+  output$show_Debug_Infos <- renderUI({
+    fluidRow(
+        column(width=2,
+               tags$b(h4(style = 'color: blue;', "Data In")),
+               uiOutput('show_rv_dataIn')),
+        column(width=2,
+               tags$b(h4(style = 'color: blue;', "Data Out")),
+               uiOutput('show_rv_dataOut'))
+      )
+  })
+  
+  ###########---------------------------#################
+  output$show_rv_dataIn <- renderUI({
+    req(rv$dataIn)
+    tagList(
+      lapply(names(rv$dataIn), function(x){tags$p(x)})
+    )
+  })
+
+  output$show_rv_dataOut <- renderUI({
+    req(rv$dataOut)
+    tagList(
+      lapply(names(rv$dataOut()$value), function(x){tags$p(x)})
+    )
+  })
+ 
 }
 
 

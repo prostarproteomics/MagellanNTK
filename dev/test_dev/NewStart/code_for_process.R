@@ -6,7 +6,11 @@ source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 
 
 
-
+AddItemToDataset <- function(dataset, name){
+  addAssay(dataset, 
+           dataset[[length(dataset)]], 
+           name=name)
+}
 
 
 

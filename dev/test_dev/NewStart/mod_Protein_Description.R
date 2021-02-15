@@ -34,7 +34,7 @@ mod_Protein_Description_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    source(file.path('.', 'process.R'), local=TRUE)$value
+    source(file.path('.', 'code_for_process.R'), local=TRUE)$value
     
     rv.widgets <- reactiveValues()
     

@@ -1,3 +1,11 @@
+verbose <- F
+redBtnClass <- "btn-danger"
+PrevNextBtnClass <- "btn-info"
+btn_success_color <- "btn-success"
+optionsBtnClass <- "info"
+
+btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
+
 #' @field global xxxx
 global <- list(
   VALIDATED = 1,
