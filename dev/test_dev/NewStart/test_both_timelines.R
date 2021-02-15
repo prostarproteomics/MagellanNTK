@@ -11,11 +11,20 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 
-ui <- fluidPage(
+ui <- fillPage(
   actionButton('changePos', 'Change position'),
   fluidRow(
     column(width=2, mod_timeline_v_ui('TLv')),
-    column(width=10,mod_timeline_h_ui('TLh'))
+    column(width=10,
+           style=" padding-left: 20px;",
+           tagList(
+             tags$div(style="padding-bottom: 60px;",
+                      mod_timeline_h_ui('TLh')
+                      ),
+             h3('toto'),
+             h3('titi')
+             )
+    )
 
   )
 )
@@ -26,7 +35,7 @@ server <- function(input, output){
   rv <- reactiveValues(
     status = c(0, 1, 0, 0),
     current.pos = 1,
-    tl.tags.enabled = c(1, 1, 1, 1),
+    tl.tags.enabled = c(1, 1, 0, 1),
     position = NULL
   )
   

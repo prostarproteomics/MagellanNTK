@@ -14,56 +14,7 @@ global <- list(
 )
 
 
-output$ui <- renderUI({
-  tagList(
-    shinyjs::useShinyjs(),
-    div(style = "padding: 10px",
-        div(style = btn_style,
-            shinyjs::disabled(
-              actionButton(ns("prevBtn"), "<<",
-                           class = PrevNextBtnClass,
-                           style='padding:4px; font-size:80%')
-            ),
-            actionButton(ns("rstBtn"), "Reset",
-                         class = redBtnClass,
-                         style='padding:4px; font-size:80%')
-        ),
-        div(style = btn_style,
-            mod_timeline_h_ui(ns('timeline'))
-        ),
-        div(style = btn_style,
-            actionButton(ns("nextBtn"),">>",
-                         class = PrevNextBtnClass,
-                         style='padding:4px; font-size:80%')
-        )
-    ),
-    # fluidRow(
-    #   column(width=1, shinyjs::disabled(
-    #     actionButton(ns("prevBtn"), "<<",
-    #                  class = PrevNextBtnClass,
-    #                  style='padding:4px; font-size:80%')
-    #   )),
-    #   column(width=1, actionButton(ns("rstBtn"), "Reset",
-    #                                class = redBtnClass,
-    #                                style='padding:4px; font-size:80%')),
-    #   column(width=9, mod_timeline_h_ui(ns('timeline'))),
-    #   column(width=1, actionButton(ns("nextBtn"),">>",
-    #                                class = PrevNextBtnClass,
-    #                                style='padding:4px; font-size:80%'))
-    # ),
-    div(id = ns('Screens'),
-        uiOutput(ns('SkippedInfoPanel')),
-        uiOutput(ns('EncapsulateScreens'))
-        
-    ),
-    wellPanel(title = 'foo',
-              tagList(
-                h3('module process'),
-                uiOutput(ns('show_Debug_Infos'))
-              )
-    )
-  )
-})
+
 
 
 

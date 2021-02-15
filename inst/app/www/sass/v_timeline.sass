@@ -13,67 +13,43 @@ $colUndoneDisabled: #B3AFAB80
 $colLine: #C6C8C6
 
 
-ul 
-  list-style-type: none
-  margin: 0
-  padding: 0
-  width: auto
-  background-color: white
-  position: fixed
-  height: auto
-  overflow: auto
-  font-weight: 100
-
-
-li a 
-  display: block
-  color: #000
-  padding: 8px 10px
-  margin: 30px
-  text-decoration: none
-  border: 3px solid lightgrey
-  border-radius: 0%
-  text-align: center
-  font-weight: 600
-
-
-li a.active 
-  background-color: white
+.active 
+  background-color: red
   box-shadow: 0 0 0 3px black
 
 
-li .undone 
+.undone 
   background-color: white
   color: black
   border: 3px solid $colUndone
   
-li .undoneDisabled 
+.undoneDisabled 
   background-color: white
   color: black
   border: 3px solid $colUndoneDisabled
 
 
-li .mandatory 
+.mandatory 
   background-color: white
   border: 3px solid $colMandatory
   
-li .mandatoryDisabled 
+.mandatoryDisabled 
   background-color: white
   border: 3px solid $colMandatoryDisabled
 
-li .completed 
+.completed 
   background-color: $colCompleted
   border: 3px solid $colCompleted
   
-li .completedDisabled
+.completedDisabled
   background-color: $colCompletedDisabled
   border: 3px solid $colCompletedDisabled
   
-li .skipped 
+.skipped 
   background-color: white
   border: 3px dashed $colSkipped
   
-li .skippedDisabled
+.skippedDisabled
   background-color: white
   border: 3px dashed $colSkippedDisabled
 

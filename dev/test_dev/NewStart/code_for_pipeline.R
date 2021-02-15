@@ -1,6 +1,6 @@
 
 #source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 
 source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
 
@@ -73,7 +73,54 @@ observeEvent(id, {
 
 
 
-mod_timeline_h_server(id = 'timeline',
+
+output$ui <- renderUI({
+  tagList(
+    shinyjs::useShinyjs(),
+    fluidRow(
+      column(width=2, 
+             div(style = "padding: 10px",
+                 div(style = btn_style,
+                     shinyjs::disabled(
+                       actionButton(ns("prevBtn"), "<<",
+                                    class = PrevNextBtnClass,
+                                    style='padding:4px; font-size:80%')
+                     ),
+                     actionButton(ns("rstBtn"), "Reset",
+                                  class = redBtnClass,
+                                  style='padding:4px; font-size:80%')
+                 ),
+                 div(style = btn_style,
+                     mod_timeline_v_ui(ns('timeline'))
+                 ),
+                 div(style = btn_style,
+                     actionButton(ns("nextBtn"),">>",
+                                  class = PrevNextBtnClass,
+                                  style='padding:4px; font-size:80%')
+                 )
+             )),
+      column(width=10,
+             style=" padding-left: 20px;",
+             tagList(
+               div(id = ns('Screens'),
+                   uiOutput(ns('SkippedInfoPanel')),
+                   uiOutput(ns('EncapsulateScreens'))
+                   
+               ),
+               wellPanel(title = 'foo',
+                         tagList(
+                           h3('module process'),
+                           uiOutput(ns('show_Debug_Infos'))
+                         )
+               )
+             ))
+      
+    )
+  )
+})
+
+
+mod_timeline_v_server(id = 'timeline',
                       config =  config,
                       status = reactive({rv.process$status}),
                       position = reactive({rv.process$current.pos}),

@@ -25,12 +25,9 @@ AddItemToDataset <- function(dataset, name){
 
 ui <- fluidPage(
   tagList(
-    fluidRow(
-      column(width=3,
-             selectInput('choosePipeline', 'Choose pipeline',
-                         choices = setNames(nm=c('', 'Protein')),
-                         width = '200')
-      ),
+    selectInput('choosePipeline', 'Choose pipeline',
+                choices = setNames(nm=c('', 'Protein')),
+                width = '200'),
     uiOutput('UI'),
     wellPanel(title = 'foo',
               tagList(
@@ -39,8 +36,7 @@ ui <- fluidPage(
               )
     )
   )
-  
-  )
+
 )
 
 

@@ -13,7 +13,7 @@ mod_timeline_v_ui <- function(id){
   fpath <- system.file("app/www/sass", 
                        "v_timeline.sass", 
                        package="Magellan")
-  tagList(
+  wellPanel(
     shinyjs::useShinyjs(),
     shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
     uiOutput(ns('show_v_TL'))
@@ -33,6 +33,16 @@ mod_timeline_v_server = function(id,
     length = NULL
   )
 
+  colCompletedDisabled <- "#ABDBAC"
+  colCompleted <- "#07910A"
+  colSkippedDisabled <- "#B3AFAB80"
+  colSkipped <- "#B3AFAB"
+  colMandatory <- "#D30505"
+  colMandatoryDisabled <- "#D3050580"
+  colUndone <- "#B3AFAB"
+  colUndoneDisabled <- "#B3AFAB80"
+  colLine <- "#C6C8C6"
+    
   global <- list(
     VALIDATED = 1,
     UNDONE = 0,
@@ -60,25 +70,91 @@ mod_timeline_v_server = function(id,
         tl_status
       })
       
+      active <- reactive({
+        "background-color: white;box-shadow: 0 0 0 3px black;"
+      })
+      
+      undone <- reactive({
+        paste0("background-color: white;color: black;border: 3px solid ", colUndone, ";")
+      })
+      
+      undoneDisabled <- reactive({
+        paste0("background-color: white;color: black;border: 3px solid ", colUndoneDisabled, ";")
+      })
+      
+      mandatory <- reactive({
+        paste0("background-color: white; color: black;border: 3px solid ", colMandatory, ";")
+      })
+      
+      mandatoryDisabled <- reactive({
+        paste0("background-color: white;color: black;border: 3px solid ", colMandatoryDisabled, ";")
+      })
+      
+      completed <- reactive({
+        paste0("background-color: ", colCompleted, ";border: 3px solid ", colCompleted, ";")
+      })
+      
+      completedDisabled <- reactive({
+        paste0("background-color: ", colCompletedDisabled, ";border: 3px solid ", colCompletedDisabled, ";")
+      })
+      
+      skipped <- reactive({
+      paste0("background-color: white; border: 3px dashed ", colSkipped, ";")
+      })
+      
+      skippedDisabled <- reactive({
+        paste0("background-color: white; border: 3px dashed ", colSkippedDisabled, ";")
+      })
+      
+      
+      
+      
+      
+      
+      GetStyle <- reactive({
+        #browser()
+        tl_status <- rep(undone(), rv.tl$length)
+        tl_status[which(enabled()==1)] <- undoneDisabled()
+        
+        tl_status[intersect(which(config$mandatory), which(enabled()==1))] <- mandatory()
+        tl_status[intersect(which(config$mandatory), which(enabled()==0))] <- mandatoryDisabled()
+        
+        tl_status[intersect(which(unlist(status()) == global$VALIDATED), which(enabled()==1))] <- completed()
+        tl_status[intersect(which(unlist(status()) == global$VALIDATED), which(enabled()==0))] <- completedDisabled()
+        
+        tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==1))] <- skipped()
+        tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==0))] <- skippedDisabled()
+        
+        # for (i in 1:length(enabled()))
+        #   if (!enabled()[i])
+        #     tl_status[i] <- paste0(tl_status[i], Disabled')
+        # 
+        tl_status[position()] <- paste0(tl_status[position()],  active())
+        tl_status
+      })
       
       output$show_v_TL <- renderUI  ({
-        tl_status <- rep('undone', rv.tl$length)
-        tl_status[which(config$mandatory)] <- 'mandatory'
-        tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
-        tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
-        
-        for (i in 1:length(enabled()))
-          if (!enabled()[i])
-            tl_status[i] <- paste0(tl_status[i], 'Disabled')
-        
-        active  <- rep('', rv.tl$length)
-        active[position()] <- 'active'
-
-        tags$ul(
+        # tl_status <- rep('undone', rv.tl$length)
+        # tl_status[which(config$mandatory)] <- 'mandatory'
+        # tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
+        # tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
+        # 
+        # for (i in 1:length(enabled()))
+        #   if (!enabled()[i])
+        #     tl_status[i] <- paste0(tl_status[i], 'Disabled')
+        # 
+        # active  <- rep('', rv.tl$length)
+        # active[position()] <- 'active'
+#browser()
+        tags$div(
+          #tags$ul(
             lapply(1:rv.tl$length, function(x){
-              tags$li(tags$a( class=UpdateTags()[x], config$steps[x]))
+             # tags$li(tags$p( class=UpdateTags()[x], config$steps[x]))
+              tags$p(style=paste0("font-weight: 20px;order: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x]),
+                     config$steps[x])
               })
-          )
+          #)
+        )
           })
 })
 }

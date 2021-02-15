@@ -12,7 +12,8 @@ mod_timeline_h_ui <- function(id){
   fpath <- system.file("app/www/sass", 
                        "h_timeline.sass", 
                        package="Magellan")
-  tagList(
+  tags$div(
+    style="margin-bottom: 20px",
     shinyjs::useShinyjs(),
     shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
     uiOutput(ns('show_h_TL'))
