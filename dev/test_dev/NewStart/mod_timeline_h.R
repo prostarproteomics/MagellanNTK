@@ -12,12 +12,14 @@ mod_timeline_h_ui <- function(id){
   fpath <- system.file("app/www/sass", 
                        "h_timeline.sass", 
                        package="Magellan")
-  tags$div(
-    style="margin-bottom: 20px",
-    shinyjs::useShinyjs(),
+    tagList(
+      shinyjs::useShinyjs(),
+      
+      tags$div(
     shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
     uiOutput(ns('show_h_TL'))
   )
+    )
 }
     
 #' timeline Server Function
@@ -64,20 +66,24 @@ mod_timeline_h_server = function(id,
 
       output$show_h_TL <- renderUI  ({
        # browser()
-          tags$ul(
+          
+        #tags$div(style="border: 1px solid black;", 
+         # tags$ul(style="border: 1px solid black;",
             tags$div(class='timeline',
                      id='timeline',
                      lapply(1:rv.tl$length, function(x){
                        tags$li(class = paste0('li ', UpdateTags()[x]),
-                               tags$div(class='timestamp'),
-                               tags$div(class='status',
+                              # tags$div(class='timestamp'),
+                               tags$div(class='timestamp status',
                                         tags$h4(config$steps[x])
                                         )
                        )
                        })
                      )
-            )
+          #  )
+       # )
         })
+
       
 })
 }

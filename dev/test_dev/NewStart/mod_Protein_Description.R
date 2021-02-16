@@ -49,7 +49,7 @@ mod_Protein_Description_server <- function(id,
     output$Description <- renderUI({
       rv.process$tl.tags.enabled
       
-      wellPanel(
+      
         tagList(
           includeMarkdown( system.file("app/md", paste0(rv.process$config$name, ".md"), package="Magellan")),
           uiOutput(ns('datasetDescription')),
@@ -64,7 +64,6 @@ mod_Protein_Description_server <- function(id,
                            class = btn_success_color)
             )
         )
-      )
     })
     
     observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {

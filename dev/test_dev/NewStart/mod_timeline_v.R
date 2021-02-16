@@ -10,13 +10,15 @@
 mod_timeline_v_ui <- function(id){
   ns <- NS(id)
   
-  fpath <- system.file("app/www/sass", 
-                       "v_timeline.sass", 
-                       package="Magellan")
-  wellPanel(
+  #fpath <- system.file("app/www/sass", 
+  #                     "v_timeline.sass", 
+  #                     package="Magellan")
+  div(
+    
     shinyjs::useShinyjs(),
-    shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
+    #shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
     uiOutput(ns('show_v_TL'))
+
   )
 }
     
@@ -146,12 +148,22 @@ mod_timeline_v_server = function(id,
         # active  <- rep('', rv.tl$length)
         # active[position()] <- 'active'
 #browser()
-        tags$div(
+        tags$div(style='width: 150px;',
           #tags$ul(
             lapply(1:rv.tl$length, function(x){
              # tags$li(tags$p( class=UpdateTags()[x], config$steps[x]))
-              tags$p(style=paste0("font-weight: 20px;order: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x]),
-                     config$steps[x])
+               tags$p(style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x]),
+                      config$steps[x])
+              # actionButton(inputId = ns(paste0('toto',x)),
+              #              label = config$steps[x],
+              #              style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x])
+              #        )
+              
+              # actionLink(inputId = ns(paste0('toto',x)),
+              #              label = config$steps[x],
+              #              style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x])
+              # )
+              
               })
           #)
         )

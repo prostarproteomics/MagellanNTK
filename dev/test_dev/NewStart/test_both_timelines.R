@@ -16,11 +16,9 @@ ui <- fillPage(
   fluidRow(
     column(width=2, mod_timeline_v_ui('TLv')),
     column(width=10,
-           style=" padding-left: 20px;",
+           style=" padding-left: 60px;",
            tagList(
-             tags$div(style="padding-bottom: 60px;",
-                      mod_timeline_h_ui('TLh')
-                      ),
+             mod_timeline_h_ui('TLh'),
              h3('toto'),
              h3('titi')
              )

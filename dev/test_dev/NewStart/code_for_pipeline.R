@@ -79,7 +79,8 @@ output$ui <- renderUI({
     shinyjs::useShinyjs(),
     fluidRow(
       column(width=2, 
-             div(style = "padding: 10px",
+             wellPanel(
+               div(style = "padding: 10px",
                  div(style = btn_style,
                      shinyjs::disabled(
                        actionButton(ns("prevBtn"), "<<",
@@ -91,17 +92,16 @@ output$ui <- renderUI({
                                   style='padding:4px; font-size:80%')
                  ),
                  div(style = btn_style,
-                     mod_timeline_v_ui(ns('timeline'))
-                 ),
-                 div(style = btn_style,
                      actionButton(ns("nextBtn"),">>",
                                   class = PrevNextBtnClass,
                                   style='padding:4px; font-size:80%')
-                 )
+                 ),
+                 mod_timeline_v_ui(ns('timeline'))
+               )
              )),
       column(width=10,
              style=" padding-left: 20px;",
-             tagList(
+             wellPanel(
                div(id = ns('Screens'),
                    uiOutput(ns('SkippedInfoPanel')),
                    uiOutput(ns('EncapsulateScreens'))
