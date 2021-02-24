@@ -134,8 +134,7 @@ mod_nav_process_server <- function(id,
       )
     }, priority=1000) 
     
-    
-    
+
     
     #
     # Catch a new dataset sent by the caller
@@ -188,7 +187,7 @@ mod_nav_process_server <- function(id,
     #' 
     BasicReset = function(){
       if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
-      ResetScreens()
+      #ResetScreens()
       rv.process$dataIn <- NULL
       rv.process$current.pos <- 1
       rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
@@ -204,15 +203,7 @@ mod_nav_process_server <- function(id,
     ##
     
     
-    #' @description
-    #' Set widgets of all screens to their default values.
-    #' 
-    ResetScreens = function(){
-      if(verbose) cat(paste0('::ResetScreens() from - ', id, '\n\n'))
-      lapply(names(rv.widgets), function(x){
-        rv.widgets[[x]] <- widgets.default.values[[x]]
-      })
-    }
+    
     
     
     
@@ -358,7 +349,8 @@ mod_nav_process_server <- function(id,
     
     list(dataOut = reactive({dataOut}),
          steps.enabled = reactive({rv.process$steps.enabled}),
-         status = reactive({rv.process$status})
+         status = reactive({rv.process$status}),
+         reset = reactive({rv.process$local.reset})
     )
     
     

@@ -108,6 +108,13 @@ mod_Protein_Normalization_server <- function(id,
     
     observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
     observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
+    observeEvent(rv.nav$return$reset(), {
+      
+      lapply(names(rv.widgets), function(x){
+          rv.widgets[[x]] <- widgets.default.values[[x]]
+        })
+      })
+    
     observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
 ###-----------------------------------------------------------------------------------------------------
 
@@ -262,7 +269,6 @@ output$Step1 <- renderUI({
 
 observeEvent(input$btn_validate_Step2, ignoreInit = T, {
   # Add your stuff code here
-  #ValidateCurrentPos()
   rv.nav$status['Step2'] <- global$VALIDATED
 })
 
@@ -343,7 +349,6 @@ output$Step3 <- renderUI({
 observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
   rv.nav$dataIn <- AddItemToDataset(rv.nav$dataIn, config$name)
-  #ValidateCurrentPos()
   rv.nav$status['Step3'] <- global$VALIDATED
 })
 

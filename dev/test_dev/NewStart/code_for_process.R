@@ -164,17 +164,7 @@ observeEvent(req(!is.null(position())), ignoreInit = T, {
     rv.process$current.pos <- position()
 })
 
-#' @description
-#' Default actions on reset pipeline or process.
-#' 
-BasicReset = function(){
-  if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
-  ResetScreens()
-  rv.process$dataIn <- NULL
-  rv.process$current.pos <- 1
-  rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-  Send_Result_to_Caller()
-}
+
 
 
 
