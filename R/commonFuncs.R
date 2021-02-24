@@ -18,27 +18,7 @@ global <- list(
 
 
 
-output$EncapsulateScreens <- renderUI({
-  tagList(
-    lapply(1:length(rv.process$config$ll.UI), function(i) {
-      if (i==1)
-        div(id = ns(rv.process$config$steps[i]),
-            class = paste0("page_", id),
-            rv.process$config$ll.UI[[i]]
-        )
-      else
-        shinyjs::hidden(
-          div(id =  ns(rv.process$config$steps[i]),
-              class = paste0("page_", id),
-              rv.process$config$ll.UI[[i]]
-          )
-        )
-    }
-    )
-  )
-  
-  
-})
+
 
 
 
@@ -123,7 +103,7 @@ ValidateCurrentPos <- function(){
   rv.process$status[rv.process$current.pos] <- global$VALIDATED
   # Either the process has been validated, one can prepare data to be sent to caller
   # Or the module has been reseted
-  if (rv.process$current.pos == rv.process$length)
+  if (rv.process$current.pos == length(config$steps))
     Send_Result_to_Caller()
 }
 
@@ -198,10 +178,9 @@ GetMaxValidated_AllSteps = function(){
 #' 
 GetFirstMandatoryNotValidated = function(range){
   if(verbose) cat(paste0('::', 'GetFirstMandatoryNotValidated() from - ', id, '\n\n'))
-  #browser()
   first <- NULL
   first <- unlist((lapply(range, 
-                          function(x){rv.process$config$mandatory[x] && !rv.process$status[x]})))
+                          function(x){config$mandatory[x] && !rv.process$status[x]})))
   if (sum(first) > 0)
     min(which(first == TRUE))
   else
@@ -306,29 +285,7 @@ ToggleState_ResetBtn = function(cond){
 
 
 
-output$SkippedInfoPanel <- renderUI({
-  #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, '\n\n'))
-  
-  current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-  entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
-  req(current_step_skipped)
-  
-  
-  if (entire_process_skipped){
-    # This case appears when the process has been skipped from the
-    # pipleine. Thus, it is not necessary to show the info box because
-    # it is shown below the timeline of the pipeline
-  } else {
-    txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
-    wellPanel(
-      style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
-      height = 100,
-      width=300,
-      align="center",
-      p(style = "color: black;", paste0('Info: ',txt))
-    )
-  }
-})
+
 
 
 
@@ -340,7 +297,7 @@ output$SkippedInfoPanel <- renderUI({
 NavPage = function(direction) {
   newval <- rv.process$current.pos + direction 
   newval <- max(1, newval)
-  newval <- min(newval, rv.process$length)
+  newval <- min(newval, length(config$steps))
   rv.process$current.pos <- newval
 }
 
@@ -379,71 +336,4 @@ observeEvent(req(input$modal_ok > 0), ignoreInit=F, {
 
 
 
-output$show_Debug_Infos <- renderUI({
-  tagList(
-    uiOutput(ns('show_tag_enabled')),
-    fluidRow(
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
-             uiOutput(ns('show_dataIn'))),
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
-             uiOutput(ns('show_rv_dataIn'))),
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
-             uiOutput(ns('show_rv_dataOut'))),
-      column(width=4,
-             tags$b(h4(style = 'color: blue;', "status")),
-             uiOutput(ns('show_status')))
-    )
-  )
-})
-
-###########---------------------------#################
-output$show_dataIn <- renderUI({
-  if (verbose) cat(paste0('::output$show_dataIn from - ', id, '\n\n'))
-  req(dataIn())
-  tagList(
-    # h4('show dataIn()'),
-    lapply(names(dataIn()), function(x){tags$p(x)})
-  )
-})
-
-output$show_rv_dataIn <- renderUI({
-  if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
-  req(rv.process$dataIn)
-  tagList(
-    # h4('show dataIn()'),
-    lapply(names(rv.process$dataIn), function(x){tags$p(x)})
-  )
-})
-
-output$show_rv_dataOut <- renderUI({
-  if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, '\n\n'))
-  tagList(
-    #h4('show dataOut$value'),
-    lapply(names(dataOut$value), function(x){tags$p(x)})
-  )
-})
-
-
-output$show_status <- renderUI({
-  tagList(lapply(1:rv.process$length, 
-                 function(x){
-                   color <- if(rv.process$tl.tags.enabled[x]) 'black' else 'lightgrey'
-                   if (x == rv.process$current.pos)
-                     tags$p(style = paste0('color: ', color, ';'),
-                            tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
-                   else 
-                     tags$p(style = paste0('color: ', color, ';'),
-                            paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
-                 }))
-})
-
-output$show_tag_enabled <- renderUI({
-  tagList(
-    p(paste0('tl.tags.enabled = ', paste0(as.numeric(rv.process$tl.tags.enabled), collapse=' '))),
-    p(paste0('enabled() = ', as.numeric(tag.enabled())))
-  )
-})
 

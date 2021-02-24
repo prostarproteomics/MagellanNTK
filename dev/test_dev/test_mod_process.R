@@ -1,21 +1,13 @@
 library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
 library(shinyjs)
 library(QFeatures)
-library(tibble)
+library(DAPAR2)
+library(Magellan)
 
 options(shiny.fullstacktrace = T)
-source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
+
 
 verbose <- F
-
-redBtnClass <- "btn-danger"
-PrevNextBtnClass <- "btn-info"
-btn_success_color <- "btn-success"
-optionsBtnClass <- "info"
-
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 AddItemToDataset <- function(dataset, name){
   addAssay(dataset, 
@@ -65,7 +57,7 @@ server <- function(input, output){
   observe({
     req(input$choosePipeline != '' && input$chooseProcess != '')
     basename <- paste0('mod_', input$choosePipeline, '_', input$chooseProcess)
-    source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+    #source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
     
     rv$dataOut <- do.call(paste0(basename, '_server'),
                       list('process',
