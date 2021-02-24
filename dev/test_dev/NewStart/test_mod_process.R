@@ -70,7 +70,7 @@ server <- function(input, output){
     rv$dataOut <- do.call(paste0(basename, '_server'),
                       list('process',
                            dataIn = reactive({obj}),
-                           tag.enabled = reactive({TRUE})
+                           is.enabled = reactive({TRUE})
                            )
                       )
 

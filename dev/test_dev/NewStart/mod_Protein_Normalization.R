@@ -1,5 +1,5 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 #source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 
 mod_Protein_Normalization_ui <- function(id){
@@ -12,12 +12,20 @@ mod_Protein_Normalization_ui <- function(id){
 
 mod_Protein_Normalization_server <- function(id,
                                dataIn = NULL,
-                               tag.enabled = reactive({TRUE}),
+                               is.enabled = reactive({TRUE}),
                                reset = reactive({FALSE}),
                                position = reactive({NULL}),
                                skipped = reactive({NULL})
                                ){
   
+  #' @field global xxxx
+  global <- list(
+    VALIDATED = 1,
+    UNDONE = 0,
+    SKIPPED = -1
+  )
+  
+  #' @field config xxxx
   config <- reactiveValues(
     name = 'Protein_Normalization',
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
@@ -36,7 +44,9 @@ mod_Protein_Normalization_server <- function(id,
   
   rv.nav <- reactiveValues(
     return = TRUE,
-    status = NULL
+    status = NULL,
+    dataIn = NULL,
+    temp.dataIn = NULL
   )
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -45,8 +55,16 @@ mod_Protein_Normalization_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    source(file.path('.', 'code_for_process.R'), local=TRUE)$value
+    #source(file.path('.', 'code_for_process.R'), local=TRUE)$value
    
+    
+    AddItemToDataset <- function(dataset, name){
+      addAssay(dataset, 
+               dataset[[length(dataset)]], 
+               name=name)
+    }
+    
+    
     rv.widgets <- reactiveValues(
       select1 = widgets.default.values$select1,
       select2 = widgets.default.values$select2,
@@ -55,16 +73,45 @@ mod_Protein_Normalization_server <- function(id,
       select2_2 = widgets.default.values$select2_2
     )
 
+    
+    
+    observeEvent(id, {
+      # rv.widgets <- reactiveValues()
+      # 
+      # rv.process$config <- config
+      # rv.process$length <- length(rv.process$config$steps)
+      # rv.process$current.pos  <- 1
+      # 
+      config$ll.UI <- lapply(config$steps,
+                                        function(x){
+                                          do.call('uiOutput', list(ns(x)))
+                                        })
+      
+      # check <- CheckConfig(rv.process$config)
+      # if (!check$passed)
+      #   stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
+      # rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
+      # rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+      # rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
+      # rv.process$tl.tags.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+      # 
+      
+      
+      rv.nav$return <- mod_nav_process_server('tutu',
+                                              config = reactive({config}),
+                                              status = reactive({rv.nav$status}),
+                                              dataIn = reactive({rv.nav$dataIn}),
+                                              is.enabled = reactive({is.enabled()})
+      )
+    }, priority=1000) 
+    
+    
     observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
     observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
-    observeEvent(dataIn(), {rv.nav$dataIn <- dataIn()})
+    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
 ###-----------------------------------------------------------------------------------------------------
 
-    rv.nav$return <- mod_nav_process_server('tutu',
-                           config = reactive({config}),
-                           status = reactive({rv.nav$status}),
-                           dataIn = reactive({rv.nav$dataIn})
-    )
+    
 
 
 ### ----------------------------------------------------------------------------------------------------
@@ -72,7 +119,7 @@ mod_Protein_Normalization_server <- function(id,
 ###### ------------------- Code for Description (step 0) -------------------------    #####
 output$Description <- renderUI({
   rv.nav$return$steps.enabled()
-
+#browser()
   wellPanel(
     tagList(
       includeMarkdown( system.file("app/md", paste0(config$name, ".md"), package="Magellan")),
@@ -94,9 +141,12 @@ output$Description <- renderUI({
     
     
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-  browser()
-  InitializeDataIn()
-  ValidateCurrentPos()
+  #browser()
+  #InitializeDataIn()
+  rv.nav$dataIn <- rv.nav$temp.dataIn
+  rv.nav$status['Description'] <- global$VALIDATED
+  #ValidateCurrentPos()
+  
 })
 
 
@@ -104,7 +154,9 @@ observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
 
 observeEvent(input$btn_validate_Step1, ignoreInit = T, {
   # Add your stuff code here
-  ValidateCurrentPos()
+  #ValidateCurrentPos()
+  rv.nav$status['Step1'] <- global$VALIDATED
+  
 })
 
 
@@ -210,7 +262,8 @@ output$Step1 <- renderUI({
 
 observeEvent(input$btn_validate_Step2, ignoreInit = T, {
   # Add your stuff code here
-  ValidateCurrentPos()
+  #ValidateCurrentPos()
+  rv.nav$status['Step2'] <- global$VALIDATED
 })
 
 output$select2_1_UI <-renderUI({
@@ -290,13 +343,14 @@ output$Step3 <- renderUI({
 observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
   rv.nav$dataIn <- AddItemToDataset(rv.nav$dataIn, config$name)
-  ValidateCurrentPos()
+  #ValidateCurrentPos()
+  rv.nav$status['Step3'] <- global$VALIDATED
 })
 
 
 
 
-reactive({dataOut})
+reactive({rv.nav$return$dataOut()})
 
 
   }

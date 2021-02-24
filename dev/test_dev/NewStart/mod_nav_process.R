@@ -72,7 +72,7 @@ mod_nav_process_server <- function(id,
                                status = reactive({NULL}),
                                rv.widgets = reactive({NULL}),
                                dataIn = reactive({NULL}),
-                               tag.enabled = reactive({TRUE}),
+                               is.enabled = reactive({TRUE}),
                                reset = reactive({FALSE})
 ){
   
@@ -99,7 +99,11 @@ mod_nav_process_server <- function(id,
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(status(), {rv.process$status <- status() })
+    observeEvent(status(), {
+      rv.process$status <- status() 
+      if (rv.process$status[rv.process$length])
+        Send_Result_to_Caller()
+      })
     
     observeEvent(id, {
       
@@ -140,31 +144,22 @@ mod_nav_process_server <- function(id,
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
       #browser()
       
-      # action <- function()
-      #{
       Change_Current_Pos(1)
-      rv.process$temp.dataIn <- dataIn()
+      rv.process$dataIn <- dataIn()
       #ActionOn_New_DataIn() # Used by class pipeline
       
       if(is.null(dataIn())){
         print('Process : dataIn() NULL')
-        
         ToggleState_Screens(FALSE, 1:rv.process$length)
-        # ToggleState_ResetBtn(FALSE)
+        ToggleState_Screens(TRUE, 1)
         rv.process$original.length <- 0
       } else { # A new dataset has been loaded
         print('Process : dataIn() not NULL')
-        #shinyjs::toggleState('Screens', TRUE)
-        #ToggleState_ResetBtn(TRUE) #Enable the reset button
         rv.process$original.length <- length(dataIn())
-        
+        #browser()
         Update_State_Screens()
         ToggleState_Screens(TRUE, 1)
-        
       }
-      # }
-      
-      #shinyjs::delay(100, action())
     })
     
     
@@ -356,7 +351,7 @@ mod_nav_process_server <- function(id,
     output$show_tag_enabled <- renderUI({
       tagList(
         p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
-        p(paste0('enabled() = ', as.numeric(tag.enabled())))
+        p(paste0('enabled() = ', as.numeric(is.enabled())))
       )
     })
     

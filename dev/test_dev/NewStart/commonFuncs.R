@@ -46,9 +46,9 @@ output$EncapsulateScreens <- renderUI({
 rv.process <- reactiveValues(
   status = NULL,
   dataIn = NULL,
-  temp.dataIn = NULL,
+  #temp.dataIn = NULL,
   current.pos = 1,
-  tl.tags.enabled = NULL,
+  steps.enabled = NULL,
   test = NULL,
   length = NULL,
   config = NULL
@@ -104,28 +104,30 @@ Send_Result_to_Caller = function(){
   dataOut$value <- rv.process$dataIn
 }
 
-#' @description 
-#' xxx
-#' 
-InitializeDataIn = function(){ 
-  if(verbose) cat(paste0('InitializeDataIn() from - ', id, '\n\n'))
-  rv.process$dataIn <- rv.process$temp.dataIn
-}
+#' #' @description 
+#' #' xxx
+#' #' 
+#' InitializeDataIn = function(){ 
+#'   if(verbose) cat(paste0('InitializeDataIn() from - ', id, '\n\n'))
+#'   rv.process$dataIn <- rv.process$temp.dataIn
+#' }
 
 
-#' @description
-#' Validate a given position. To be used by xxx
-#' 
-#' @return Nothing.
-#' 
-ValidateCurrentPos <- function(){
-  #browser()
-  rv.process$status[rv.process$current.pos] <- global$VALIDATED
-  # Either the process has been validated, one can prepare data to be sent to caller
-  # Or the module has been reseted
-  if (rv.process$current.pos == rv.process$length)
-    Send_Result_to_Caller()
-}
+#' #' @description
+#' #' Validate a given position. To be used by xxx
+#' #' 
+#' #' @return Nothing.
+#' #' 
+#' ValidateCurrentPos <- function(){
+#'   browser()
+#'   #rv.process$status[rv.process$current.pos] <- global$VALIDATED
+#'   
+#'   
+#'   # Either the process has been validated, one can prepare data to be sent to caller
+#'   # Or the module has been reseted
+#'   if (rv.process$current.pos == rv.process$length)
+#'     Send_Result_to_Caller()
+#' }
 
 
 
@@ -221,13 +223,13 @@ GetFirstMandatoryNotValidated = function(range){
 ToggleState_Screens = function(cond, range){
   if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
   #browser()
-  if (tag.enabled())
+  if (is.enabled())
     lapply(range, function(x){
       cond <- cond && !(rv.process$status[x] == global$SKIPPED)
       #shinyjs::toggleState(config$steps[x], condition = cond  )
       
       #Send to TL the enabled/disabled tags
-      rv.process$tl.tags.enabled[x] <- cond
+      rv.process$steps.enabled[x] <- cond
     })
 }
 
@@ -264,10 +266,10 @@ Discover_Skipped_Steps = function(){
 }
 
 
-observeEvent(tag.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
+observeEvent(is.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
   # browser()
-  if (!isTRUE(tag.enabled()))
-    rv.process$tl.tags.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+  if (!isTRUE(is.enabled()))
+    rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
 })
 
 
@@ -386,9 +388,9 @@ output$show_Debug_Infos <- renderUI({
       column(width=2,
              tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
              uiOutput(ns('show_dataIn'))),
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
-             uiOutput(ns('show_rv_dataIn'))),
+      # column(width=2,
+      #        tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
+      #        uiOutput(ns('show_rv_dataIn'))),
       column(width=2,
              tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
              uiOutput(ns('show_rv_dataOut'))),
@@ -409,14 +411,14 @@ output$show_dataIn <- renderUI({
   )
 })
 
-output$show_rv_dataIn <- renderUI({
-  if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
-  req(rv.process$dataIn)
-  tagList(
-    # h4('show dataIn()'),
-    lapply(names(rv.process$dataIn), function(x){tags$p(x)})
-  )
-})
+# output$show_rv_dataIn <- renderUI({
+#   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
+#   req(rv.process$dataIn)
+#   tagList(
+#     # h4('show dataIn()'),
+#     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
+#   )
+# })
 
 output$show_rv_dataOut <- renderUI({
   if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, '\n\n'))
@@ -430,7 +432,7 @@ output$show_rv_dataOut <- renderUI({
 output$show_status <- renderUI({
   tagList(lapply(1:rv.process$length, 
                  function(x){
-                   color <- if(rv.process$tl.tags.enabled[x]) 'black' else 'lightgrey'
+                   color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
                    if (x == rv.process$current.pos)
                      tags$p(style = paste0('color: ', color, ';'),
                             tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
@@ -442,8 +444,8 @@ output$show_status <- renderUI({
 
 output$show_tag_enabled <- renderUI({
   tagList(
-    p(paste0('tl.tags.enabled = ', paste0(as.numeric(rv.process$tl.tags.enabled), collapse=' '))),
-    p(paste0('enabled() = ', as.numeric(tag.enabled())))
+    p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
+    p(paste0('enabled() = ', as.numeric(is.enabled())))
   )
 })
 
