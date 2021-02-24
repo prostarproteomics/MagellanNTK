@@ -108,8 +108,8 @@ mod_Protein_Normalization_server <- function(id,
     
     observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
     observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
+    
     observeEvent(rv.nav$return$reset(), {
-      
       lapply(names(rv.widgets), function(x){
           rv.widgets[[x]] <- widgets.default.values[[x]]
         })
@@ -148,30 +148,22 @@ output$Description <- renderUI({
     
     
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-  #browser()
-  #InitializeDataIn()
   rv.nav$dataIn <- rv.nav$temp.dataIn
   rv.nav$status['Description'] <- global$VALIDATED
-  #ValidateCurrentPos()
   
 })
 
 
 ###### ------------------- Code for step 1 -------------------------    #####
 
-observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-  # Add your stuff code here
-  #ValidateCurrentPos()
-  rv.nav$status['Step1'] <- global$VALIDATED
-  
-})
+
 
 
 observeEvent(input$select1,{rv.widgets$select1 <- input$select1})
 observeEvent(input$select2,{rv.widgets$select2 <- input$select2})
 observeEvent(input$select3,{rv.widgets$select3 <- input$select3})
-observeEvent(input$select2,{rv.widgets$select2_1 <- input$select2_1})
-observeEvent(input$select3,{rv.widgets$select2_2 <- input$select2_2})
+observeEvent(input$select2_1,{rv.widgets$select2_1 <- input$select2_1})
+observeEvent(input$select2_2,{rv.widgets$select2_2 <- input$select2_2})
 
 # observeEvent(lapply(names(reactiveValuesToList(rv.widgets)), function(x){ input[[x]]}), ignoreInit = TRUE, {
 #   #browser()
@@ -265,23 +257,28 @@ output$Step1 <- renderUI({
   )
 })
 
-#------------- Code for step 2 ---------------
 
-observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+observeEvent(input$btn_validate_Step1, ignoreInit = T, {
   # Add your stuff code here
-  rv.nav$status['Step2'] <- global$VALIDATED
+  rv.nav$status['Step1'] <- global$VALIDATED
 })
+
+#-------------------------- Code for step 2 ------------------------------
+
+
 
 output$select2_1_UI <-renderUI({
   rv.nav$return$steps.enabled()
   if (rv.nav$return$steps.enabled()['Step2'])
       selectInput(ns('select2_1'), 'Select 2_1 in renderUI', 
               choices = 1:3, 
+              selected = rv.widgets$select2_1,
               width = '150px')
   else
     shinyjs::disabled(
       selectInput(ns('select2_1'), 'Select 2_1 in renderUI', 
                   choices = 1:3, 
+                  selected = rv.widgets$select2_1,
                   width = '150px')
     )
 })
@@ -298,13 +295,15 @@ output$Step2 <- renderUI({
           div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
               if (rv.nav$return$steps.enabled()['Step2'])
                 selectInput(ns('select2_2'), 'Select 2_2', 
-                          choices = 1, 
+                          choices = 1:5, 
+                          selected = rv.widgets$select2_2,
                           width = '150px')
               else
                 shinyjs::disabled(
                   selectInput(ns('select2_2'),
                               'Select 2_2', 
-                              choices = 1, 
+                              choices = 1:5, 
+                              selected = rv.widgets$select2_2,
                               width = '150px')
                   )
           ),
@@ -323,6 +322,11 @@ output$Step2 <- renderUI({
       )
     )
   )
+})
+
+observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+  # Add your stuff code here
+  rv.nav$status['Step2'] <- global$VALIDATED
 })
 
 

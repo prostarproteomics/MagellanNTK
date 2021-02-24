@@ -101,8 +101,8 @@ mod_nav_process_server <- function(id,
     
     observeEvent(status(), {
       rv.process$status <- status() 
-      if (rv.process$status[rv.process$length])
-        Send_Result_to_Caller()
+      # if (rv.process$status[rv.process$length])
+      #   Send_Result_to_Caller()
       })
     
     observeEvent(id, {

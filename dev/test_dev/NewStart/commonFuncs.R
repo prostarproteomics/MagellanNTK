@@ -358,6 +358,14 @@ observeEvent(rv.process$status, ignoreInit = T, {
   
   Discover_Skipped_Steps()
   Update_State_Screens()
+  #browser()
+  # if (rv.process$status[rv.process$length])
+  #   Send_Result_to_Caller()
+  # 
+  if (rv.process$status[rv.process$length] == global$VALIDATED){
+    rv.process$current.pos <- rv.process$length
+    Send_Result_to_Caller()
+  }
 })
 
 observeEvent(input$rstBtn, {
