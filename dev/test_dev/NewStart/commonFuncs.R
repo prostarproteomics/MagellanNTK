@@ -193,6 +193,44 @@ GetMaxValidated_AllSteps = function(){
 
 
 
+#' @description
+#' This function calls the server part of each module composing the pipeline
+#'
+#' @return Nothing
+#'
+GetMaxValidated_BeforeCurrentPos = function(){
+  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
+  ind.max <- NULL
+  indices.validated <- which(rv.process$status == global$VALIDATED)
+  if (length(indices.validated) > 0){
+    ind <- which(indices.validated < rv.process$current.pos)
+    if(length(ind) > 0)
+      ind.max <- max(ind)
+  }
+  ind.max
+}
+
+
+#' @description
+#' This function calls the server part of each module composing the pipeline
+#'
+#' @param pos xxx
+#' 
+#' @return Nothing
+#'
+GetMaxValidated_BeforePos = function(pos){
+  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
+  ind.max <- NULL
+  indices.validated <- which(rv.process$status == global$VALIDATED)
+  if (length(indices.validated) > 0){
+    ind <- which(indices.validated < pos)
+    if(length(ind) > 0)
+      ind.max <- max(ind)
+  }
+  ind.max
+}
+
+
 #' @description 
 #' xxx
 #'
@@ -385,7 +423,17 @@ observeEvent(req(input$modal_ok > 0), ignoreInit=F, {
   removeModal()
 })
 
-
+#' @description
+#' Default actions on reset pipeline or process.
+#' 
+BasicReset = function(){
+  if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
+  #ResetScreens()
+  rv.process$dataIn <- NULL
+  rv.process$current.pos <- 1
+  rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+  Send_Result_to_Caller()
+}
 
 
 

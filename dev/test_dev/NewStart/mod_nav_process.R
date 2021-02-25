@@ -1,6 +1,7 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+
 verbose <- F
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
@@ -101,8 +102,6 @@ mod_nav_process_server <- function(id,
     
     observeEvent(status(), {
       rv.process$status <- status() 
-      # if (rv.process$status[rv.process$length])
-      #   Send_Result_to_Caller()
       })
     
     observeEvent(id, {
@@ -110,11 +109,6 @@ mod_nav_process_server <- function(id,
       rv.process$config <- config()
       rv.process$length <- length(rv.process$config$steps)
       rv.process$current.pos  <- 1
-      #browser()
-      # rv.process$config$ll.UI <- lapply(rv.process$config$steps,
-      #                                   function(x){
-      #                                     do.call('uiOutput', list(ns(x)))
-      #                                   })
       
       rv.process$parent <- unlist(strsplit(id, split='_'))[1]
       
@@ -161,19 +155,7 @@ mod_nav_process_server <- function(id,
       }
     })
     
-    
-    #' #' @description 
-    #' #' xxx
-    #' #' 
-    #' Initialize_Status_Process = function(){
-    #'   if(verbose) cat(paste0('::', 'Initialize_Status_Process() from - ', id, '\n\n'))
-    #'   rv.process$status <- setNames(rep(global$UNDONE, length(config$steps)), config$steps)
-    #' }
-    
-    
-    
-    
-    
+
     observeEvent(req(!is.null(rv.process$position)), ignoreInit = T, {
       pos <- strsplit(rv.process$position, '_')[[1]][1]
       if (pos == 'last')
@@ -182,17 +164,17 @@ mod_nav_process_server <- function(id,
         rv.process$current.pos <- rv.process$position
     })
     
-    #' @description
-    #' Default actions on reset pipeline or process.
-    #' 
-    BasicReset = function(){
-      if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
-      #ResetScreens()
-      rv.process$dataIn <- NULL
-      rv.process$current.pos <- 1
-      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-      Send_Result_to_Caller()
-    }
+    #' #' @description
+    #' #' Default actions on reset pipeline or process.
+    #' #' 
+    #' BasicReset = function(){
+    #'   if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
+    #'   #ResetScreens()
+    #'   rv.process$dataIn <- NULL
+    #'   rv.process$current.pos <- 1
+    #'   rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+    #'   Send_Result_to_Caller()
+    #' }
     
     
     

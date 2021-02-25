@@ -1,22 +1,22 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-#source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 
+#' @export
+#' 
 mod_Protein_Normalization_ui <- function(id){
   ns <- NS(id)
-  #uiOutput(ns('ui'))
-  mod_nav_process_ui(ns('tutu'))
+  mod_nav_process_ui(ns('Protein_Normalization'))
 }
 
 
-
+#' @export
+#' 
 mod_Protein_Normalization_server <- function(id,
-                               dataIn = NULL,
-                               is.enabled = reactive({TRUE}),
-                               reset = reactive({FALSE}),
-                               position = reactive({NULL}),
-                               skipped = reactive({NULL})
-                               ){
+                                             dataIn = NULL,
+                                             is.enabled = reactive({TRUE}),
+                                             reset = reactive({FALSE}),
+                                             position = reactive({NULL}),
+                                             skipped = reactive({NULL})
+                                             ){
   
   #' @field global xxxx
   global <- list(
@@ -55,9 +55,7 @@ mod_Protein_Normalization_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    #source(file.path('.', 'code_for_process.R'), local=TRUE)$value
-   
-    
+     
     AddItemToDataset <- function(dataset, name){
       addAssay(dataset, 
                dataset[[length(dataset)]], 
@@ -76,28 +74,13 @@ mod_Protein_Normalization_server <- function(id,
     
     
     observeEvent(id, {
-      # rv.widgets <- reactiveValues()
-      # 
-      # rv.process$config <- config
-      # rv.process$length <- length(rv.process$config$steps)
-      # rv.process$current.pos  <- 1
-      # 
+      # Build list of screens
       config$ll.UI <- lapply(config$steps,
                                         function(x){
                                           do.call('uiOutput', list(ns(x)))
                                         })
-      
-      # check <- CheckConfig(rv.process$config)
-      # if (!check$passed)
-      #   stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
-      # rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-      # rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-      # rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
-      # rv.process$tl.tags.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
-      # 
-      
-      
-      rv.nav$return <- mod_nav_process_server('tutu',
+
+      rv.nav$return <- mod_nav_process_server('Protein_Normalization',
                                               config = reactive({config}),
                                               status = reactive({rv.nav$status}),
                                               dataIn = reactive({rv.nav$dataIn}),
@@ -108,14 +91,13 @@ mod_Protein_Normalization_server <- function(id,
     
     observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
     observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
+    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
     
     observeEvent(rv.nav$return$reset(), {
       lapply(names(rv.widgets), function(x){
-          rv.widgets[[x]] <- widgets.default.values[[x]]
-        })
+        rv.widgets[[x]] <- widgets.default.values[[x]]
       })
-    
-    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
+    })
 ###-----------------------------------------------------------------------------------------------------
 
     
@@ -358,7 +340,8 @@ observeEvent(input$btn_validate_Step3, ignoreInit = T, {
 
 
 
-
+# Return value of module
+# DO NOT MODIFY THIS PART
 reactive({rv.nav$return$dataOut()})
 
 

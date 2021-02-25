@@ -1,28 +1,19 @@
 library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
 library(shinyjs)
 library(QFeatures)
-library(tibble)
 
 options(shiny.fullstacktrace = T)
+source(file.path('.', 'mod_nav_pipeline.R'), local=FALSE)$value
 
 verbose <- F
-
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
 optionsBtnClass <- "info"
-
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
-AddItemToDataset <- function(dataset, name){
-  addAssay(dataset, 
-           dataset[[length(dataset)]], 
-           name=name)
-}
 
-
+#----------------------------------------------------------------------
 ui <- fluidPage(
   tagList(
     selectInput('choosePipeline', 'Choose pipeline',
@@ -39,7 +30,7 @@ ui <- fluidPage(
 
 )
 
-
+#----------------------------------------------------------------------
 server <- function(input, output){
   utils::data(Exp1_R25_prot, package='DAPARdata2')
   
@@ -60,7 +51,7 @@ server <- function(input, output){
     rv$dataOut <- do.call(paste0(basename, '_server'),
                           list(id = input$choosePipeline,
                                dataIn = reactive({obj}),
-                               tag.enabled = reactive({TRUE})
+                               is.enabled = reactive({TRUE})
                           )
     )
   }, priority=1000)
