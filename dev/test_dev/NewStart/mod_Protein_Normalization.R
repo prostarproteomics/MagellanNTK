@@ -25,12 +25,7 @@ mod_Protein_Normalization_server <- function(id,
     SKIPPED = -1
   )
   
-  #' @field config xxxx
-  config <- reactiveValues(
-    name = 'Protein_Normalization',
-    steps = c('Description', 'Step1', 'Step2', 'Step3'),
-    mandatory = c(T, F, T, T)
-  )
+  
   
   # Define default selected values for widgets
   widgets.default.values <- list(
@@ -62,6 +57,12 @@ mod_Protein_Normalization_server <- function(id,
                name=name)
     }
     
+    #' @field config xxxx
+    config <- reactiveValues(
+      name = 'Protein_Normalization',
+      steps = c('Description', 'Step1', 'Step2', 'Step3'),
+      mandatory = c(T, F, T, T)
+    )
     
     rv.widgets <- reactiveValues(
       select1 = widgets.default.values$select1,
@@ -74,13 +75,14 @@ mod_Protein_Normalization_server <- function(id,
     
     
     observeEvent(id, {
-      # Build list of screens
-      config$ll.UI <- lapply(config$steps,
-                                        function(x){
-                                          do.call('uiOutput', list(ns(x)))
-                                        })
-
-      rv.nav$return <- mod_nav_process_server('Protein_Normalization',
+      config$ll.UI <- setNames(lapply(config$steps,
+                                      function(x){
+                                        do.call('uiOutput', list(ns(x)))
+                                      }),
+                               paste0('screen_', config$steps)
+      )
+      
+        rv.nav$return <- mod_nav_process_server('Protein_Normalization',
                                               config = reactive({config}),
                                               status = reactive({rv.nav$status}),
                                               dataIn = reactive({rv.nav$dataIn}),

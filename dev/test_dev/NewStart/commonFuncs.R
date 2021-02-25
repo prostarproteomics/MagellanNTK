@@ -14,7 +14,11 @@ global <- list(
 )
 
 
-
+AddItemToDataset <- function(dataset, name){
+  addAssay(dataset, 
+           dataset[[length(dataset)]], 
+           name=name)
+}
 
 
 
@@ -151,32 +155,7 @@ Timestamp = function(){
 }
 
 
-#' @description 
-#' xxx
-#' 
-Update_State_Screens = function(){
-  if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
-  
-  ind.max <- GetMaxValidated_AllSteps()
-  #browser()
-  if (ind.max > 0) 
-    ToggleState_Screens(cond = FALSE, range = 1:ind.max)
-  
-  
-  if (ind.max < rv.process$length){
-    # Enable all steps after the current one but the ones
-    # after the first mandatory not validated
-    firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
-    if (is.null(firstM)){
-      ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
-    } else {
-      ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
-      if (ind.max + firstM < rv.process$length)
-        ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
-    }
-  }
-  # browser()
-}
+
 
 
 #' @description 
@@ -250,26 +229,7 @@ GetFirstMandatoryNotValidated = function(range){
 
 
 
-#' @description
-#' xxx
-#'
-#' @param cond A number
-#' @param range A number
-#' 
-#' @return Nothing.
-#' 
-ToggleState_Screens = function(cond, range){
-  if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
-  #browser()
-  if (is.enabled())
-    lapply(range, function(x){
-      cond <- cond && !(rv.process$status[x] == global$SKIPPED)
-      #shinyjs::toggleState(config$steps[x], condition = cond  )
-      
-      #Send to TL the enabled/disabled tags
-      rv.process$steps.enabled[x] <- cond
-    })
-}
+
 
 #' @description 
 #' xxx

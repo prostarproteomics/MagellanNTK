@@ -14,27 +14,6 @@ mod_nav_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
-    # div(style = "vertical-align: middle; padding: 10px; display: flex;",
-    #     div(style = "vertical-align: middle; ",
-    #         shinyjs::disabled(
-    #           actionButton(ns("prevBtn"), "<<",
-    #                        class = PrevNextBtnClass,
-    #                        style='padding:4px; font-size:80%')
-    #         )),
-    #     div(style = "vertical-align: middle; ",
-    #         actionButton(ns("rstBtn"), "Reset",
-    #                      class = redBtnClass,
-    #                      style='padding:4px; font-size:80%')
-    #     ),
-    #     div(style = "vertical-align: middle; ",
-    #         mod_timeline_h_ui(ns('timeline'))
-    #     ),
-    #     div(style = "vertical-align: middle; ",
-    #         actionButton(ns("nextBtn"),">>",
-    #                      class = PrevNextBtnClass,
-    #                      style='padding:4px; font-size:80%')
-    # 
-    # )),
     fluidRow(style="display: flex;
  align-items: center;
  justify-content: center;",
@@ -46,7 +25,7 @@ mod_nav_process_ui <- function(id){
              column(width=1, actionButton(ns("rstBtn"), "Reset",
                                           class = redBtnClass,
                                           style='font-size:80%')),
-             column(width=9, mod_timeline_h_ui(ns('timeline'))),
+             column(width=9, mod_timeline_h_ui(ns('h_timeline'))),
              column(width=1, actionButton(ns("nextBtn"),">>",
                                           class = PrevNextBtnClass,
                                           style='font-size:80%'))
@@ -88,21 +67,12 @@ mod_nav_process_server <- function(id,
     
     source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
     
-    AddItemToDataset <- function(dataset, name){
-      addAssay(dataset, 
-               dataset[[length(dataset)]], 
-               name=name)
-    }
-    
-    
     
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(status(), {
-      rv.process$status <- status() 
-      })
+    observeEvent(status(), {rv.process$status <- status() })
     
     observeEvent(id, {
       
@@ -120,16 +90,67 @@ mod_nav_process_server <- function(id,
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
       rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
       
-      mod_timeline_h_server(id = 'timeline',
+      mod_timeline_h_server(id = 'h_timeline',
                             config =  rv.process$config,
                             status = reactive({rv.process$status}),
                             position = reactive({rv.process$current.pos}),
                             enabled = reactive({rv.process$steps.enabled})
       )
+      
+
+
     }, priority=1000) 
-    
 
     
+    #' @description 
+    #' xxx
+    #' 
+    Update_State_Screens = function(){
+      if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
+      
+      ind.max <- GetMaxValidated_AllSteps()
+      #browser()
+      if (ind.max > 0) 
+        ToggleState_Screens(cond = FALSE, range = 1:ind.max)
+      
+      
+      if (ind.max < rv.process$length){
+        # Enable all steps after the current one but the ones
+        # after the first mandatory not validated
+        firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
+        if (is.null(firstM)){
+          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
+        } else {
+          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
+          if (ind.max + firstM < rv.process$length)
+            ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
+        }
+      }
+      # browser()
+    }
+    
+    
+    
+    #' @description
+    #' xxx
+    #'
+    #' @param cond A number
+    #' @param range A number
+    #' 
+    #' @return Nothing.
+    #' 
+    ToggleState_Screens = function(cond, range){
+      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
+      #browser()
+      if (is.enabled())
+        lapply(range, function(x){
+          cond <- cond && !(rv.process$status[x] == global$SKIPPED)
+          #shinyjs::toggleState(config$steps[x], condition = cond  )
+          
+          #Send to TL the enabled/disabled tags
+          rv.process$steps.enabled[x] <- cond
+        })
+    }
     #
     # Catch a new dataset sent by the caller
     #
@@ -163,32 +184,7 @@ mod_nav_process_server <- function(id,
       else if (is.numeric(pos))
         rv.process$current.pos <- rv.process$position
     })
-    
-    #' #' @description
-    #' #' Default actions on reset pipeline or process.
-    #' #' 
-    #' BasicReset = function(){
-    #'   if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
-    #'   #ResetScreens()
-    #'   rv.process$dataIn <- NULL
-    #'   rv.process$current.pos <- 1
-    #'   rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-    #'   Send_Result_to_Caller()
-    #' }
-    
-    
-    
-    
-    
-    ##
-    ## Common functions
-    ##
-    
-    
-    
-    
-    
-    
+ 
     #-------------------------------------------------------
     observeEvent(rv.process$current.pos, ignoreInit = F,{
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))

@@ -1,27 +1,31 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-#source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 
+#' @export
+#' 
 mod_Protein_Filtering_ui <- function(id){
   ns <- NS(id)
-  uiOutput(ns('ui'))
+  mod_nav_process_ui(ns('Protein_Filtering'))
 }
 
 
-
+#' @export
+#' 
 mod_Protein_Filtering_server <- function(id,
                                              dataIn = NULL,
-                                             tag.enabled = reactive({TRUE}),
+                                             is.enabled = reactive({TRUE}),
                                              reset = reactive({FALSE}),
                                              position = reactive({NULL}),
                                              skipped = reactive({NULL})
 ){
   
-  config <- reactiveValues(
-    name = 'Protein_Normalization',
-    steps = c('Description', 'Step1', 'Step2', 'Step3'),
-    mandatory = c(T, F, T, T)
+  #' @field global xxxx
+  global <- list(
+    VALIDATED = 1,
+    UNDONE = 0,
+    SKIPPED = -1
   )
+  
+  
   
   # Define default selected values for widgets
   widgets.default.values <- list(
@@ -32,6 +36,13 @@ mod_Protein_Filtering_server <- function(id,
     select2_2 = 1
   )
   
+  
+  rv.nav <- reactiveValues(
+    return = TRUE,
+    status = NULL,
+    dataIn = NULL,
+    temp.dataIn = NULL
+  )
   ###-------------------------------------------------------------###
   ###                                                             ###
   ### ------------------- MODULE SERVER --------------------------###
@@ -39,7 +50,19 @@ mod_Protein_Filtering_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    source(file.path('.', 'code_for_process.R'), local=TRUE)$value
+    
+    AddItemToDataset <- function(dataset, name){
+      addAssay(dataset, 
+               dataset[[length(dataset)]], 
+               name=name)
+    }
+    
+    #' @field config xxxx
+    config <- reactiveValues(
+      name = 'Protein_Filtering',
+      steps = c('Description', 'Step1', 'Step2', 'Step3'),
+      mandatory = c(T, F, T, T)
+    )
     
     rv.widgets <- reactiveValues(
       select1 = widgets.default.values$select1,
@@ -49,6 +72,34 @@ mod_Protein_Filtering_server <- function(id,
       select2_2 = widgets.default.values$select2_2
     )
     
+    
+    
+    observeEvent(id, {
+      config$ll.UI <- setNames(lapply(config$steps,
+                                      function(x){
+                                        do.call('uiOutput', list(ns(x)))
+                                      }),
+                               paste0('screen_', config$steps)
+      )
+      
+      rv.nav$return <- mod_nav_process_server('Protein_Filtering',
+                                              config = reactive({config}),
+                                              status = reactive({rv.nav$status}),
+                                              dataIn = reactive({rv.nav$dataIn}),
+                                              is.enabled = reactive({is.enabled()})
+      )
+    }, priority=1000) 
+    
+    
+    observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
+    observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
+    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
+    
+    observeEvent(rv.nav$return$reset(), {
+      lapply(names(rv.widgets), function(x){
+        rv.widgets[[x]] <- widgets.default.values[[x]]
+      })
+    })
     ###-----------------------------------------------------------------------------------------------------
     
     
@@ -58,45 +109,45 @@ mod_Protein_Filtering_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      rv.process$tl.tags.enabled
-      
+      rv.nav$return$steps.enabled()
+      #browser()
       wellPanel(
         tagList(
-          includeMarkdown( system.file("app/md", paste0(rv.process$config$name, ".md"), package="Magellan")),
+          includeMarkdown( system.file("app/md", paste0(config$name, ".md"), package="Magellan")),
           uiOutput(ns('datasetDescription')),
-          if (isTRUE(rv.process$tl.tags.enabled['Description']))
+          if (isTRUE(rv.nav$return$steps.enabled()['Description'])  )
             actionButton(ns('btn_validate_Description'), 
-                         paste0('Start ', rv.process$config$name),
+                         paste0('Start ', config$name),
                          class = btn_success_color)
           else
             shinyjs::disabled(
               actionButton(ns('btn_validate_Description'), 
-                           paste0('Start ', rv.process$config$name),
+                           paste0('Start ', config$name),
                            class = btn_success_color)
             )
         )
       )
     })
     
+    
+    
     observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-      InitializeDataIn()
-      ValidateCurrentPos()
+      rv.nav$dataIn <- rv.nav$temp.dataIn
+      rv.nav$status['Description'] <- global$VALIDATED
+      
     })
     
     
     ###### ------------------- Code for step 1 -------------------------    #####
     
-    observeEvent(input$btn_validate_Step1, ignoreInit = T, {
-      # Add your stuff code here
-      ValidateCurrentPos()
-    })
+    
     
     
     observeEvent(input$select1,{rv.widgets$select1 <- input$select1})
     observeEvent(input$select2,{rv.widgets$select2 <- input$select2})
     observeEvent(input$select3,{rv.widgets$select3 <- input$select3})
-    observeEvent(input$select2,{rv.widgets$select2_1 <- input$select2_1})
-    observeEvent(input$select3,{rv.widgets$select2_2 <- input$select2_2})
+    observeEvent(input$select2_1,{rv.widgets$select2_1 <- input$select2_1})
+    observeEvent(input$select2_2,{rv.widgets$select2_2 <- input$select2_2})
     
     # observeEvent(lapply(names(reactiveValuesToList(rv.widgets)), function(x){ input[[x]]}), ignoreInit = TRUE, {
     #   #browser()
@@ -107,9 +158,9 @@ mod_Protein_Filtering_server <- function(id,
     
     
     output$test1 <-renderUI({
-      #rv.process$tl.tags.enabled
+      #rv.nav$return$steps.enabled()
       rv.widgets$select1
-      if (rv.process$tl.tags.enabled['Step1'])
+      if (rv.nav$return$steps.enabled()['Step1'])
         selectInput(ns('select1'), 'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$select1,
@@ -127,8 +178,8 @@ mod_Protein_Filtering_server <- function(id,
     
     output$test2 <-renderUI({
       
-      rv.process$tl.tags.enabled
-      if (rv.process$tl.tags.enabled['Step1'])
+      rv.nav$return$steps.enabled()
+      if (rv.nav$return$steps.enabled()['Step1'])
         selectInput(ns('select2'), 'Select 2 in renderUI', 
                     choices = 1:3,
                     selected = rv.widgets$select2,
@@ -147,7 +198,7 @@ mod_Protein_Filtering_server <- function(id,
     
     # ------------------------ STEP 1 : UI ------------------------------------
     output$Step1 <- renderUI({
-      #rv.process$tl.tags.enabled
+      #rv.nav$return$steps.enabled()
       name <- 'Step1'
       wellPanel(id = ns('toto'),
                 actionButton(ns('btn1'), 'Btn 1'),
@@ -160,7 +211,7 @@ mod_Protein_Filtering_server <- function(id,
                           uiOutput(ns('test2'))
                       ),
                       div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                          if (rv.process$tl.tags.enabled['Step1'])
+                          if (rv.nav$return$steps.enabled()['Step1'])
                             selectInput(ns('select3'), 'Select step 3', 
                                         choices = 1:3, 
                                         selected = rv.widgets$select3,
@@ -174,7 +225,7 @@ mod_Protein_Filtering_server <- function(id,
                             )
                       ),
                       div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          if (rv.process$tl.tags.enabled['Step1'])
+                          if (rv.nav$return$steps.enabled()['Step1'])
                             actionButton(ns(paste0('btn_validate_', name)), 
                                          'Perform',
                                          class = btn_success_color)
@@ -190,29 +241,34 @@ mod_Protein_Filtering_server <- function(id,
       )
     })
     
-    #------------- Code for step 2 ---------------
     
-    observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+    observeEvent(input$btn_validate_Step1, ignoreInit = T, {
       # Add your stuff code here
-      ValidateCurrentPos()
+      rv.nav$status['Step1'] <- global$VALIDATED
     })
     
+    #-------------------------- Code for step 2 ------------------------------
+    
+    
+    
     output$select2_1_UI <-renderUI({
-      rv.process$tl.tags.enabled
-      if (rv.process$tl.tags.enabled['Step2'])
+      rv.nav$return$steps.enabled()
+      if (rv.nav$return$steps.enabled()['Step2'])
         selectInput(ns('select2_1'), 'Select 2_1 in renderUI', 
                     choices = 1:3, 
+                    selected = rv.widgets$select2_1,
                     width = '150px')
       else
         shinyjs::disabled(
           selectInput(ns('select2_1'), 'Select 2_1 in renderUI', 
                       choices = 1:3, 
+                      selected = rv.widgets$select2_1,
                       width = '150px')
         )
     })
     
     output$Step2 <- renderUI({
-      rv.process$tl.tags.enabled
+      rv.nav$return$steps.enabled()
       name <- 'Step2'
       wellPanel(
         tagList(
@@ -221,20 +277,22 @@ mod_Protein_Filtering_server <- function(id,
                   uiOutput(ns('select2_1_UI'))
               ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  if (rv.process$tl.tags.enabled['Step2'])
+                  if (rv.nav$return$steps.enabled()['Step2'])
                     selectInput(ns('select2_2'), 'Select 2_2', 
-                                choices = 1, 
+                                choices = 1:5, 
+                                selected = rv.widgets$select2_2,
                                 width = '150px')
                   else
                     shinyjs::disabled(
                       selectInput(ns('select2_2'),
                                   'Select 2_2', 
-                                  choices = 1, 
+                                  choices = 1:5, 
+                                  selected = rv.widgets$select2_2,
                                   width = '150px')
                     )
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  if (rv.process$tl.tags.enabled['Step2'])
+                  if (rv.nav$return$steps.enabled()['Step2'])
                     actionButton(ns(paste0('btn_validate_', name)), 
                                  'Perform',
                                  class = btn_success_color)
@@ -250,14 +308,19 @@ mod_Protein_Filtering_server <- function(id,
       )
     })
     
+    observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+      # Add your stuff code here
+      rv.nav$status['Step2'] <- global$VALIDATED
+    })
+    
     
     #------------- Code for step 3 ---------------
     
     output$Step3 <- renderUI({
-      rv.process$tl.tags.enabled
+      rv.nav$return$steps.enabled()
       tagList(
         h3('Step 3'),
-        if (rv.process$tl.tags.enabled['Step3'])
+        if (rv.nav$return$steps.enabled()['Step3'])
           actionButton(ns('btn_validate_Step3'), 
                        'Perform',
                        class = btn_success_color)
@@ -273,14 +336,15 @@ mod_Protein_Filtering_server <- function(id,
     
     observeEvent(input$btn_validate_Step3, ignoreInit = T, {
       # Add your stuff code here
-      rv.process$dataIn <- AddItemToDataset(rv.process$dataIn, rv.process$config$name)
-      ValidateCurrentPos()
+      rv.nav$dataIn <- AddItemToDataset(rv.nav$dataIn, config$name)
+      rv.nav$status['Step3'] <- global$VALIDATED
     })
     
     
     
-    
-    reactive({dataOut})
+    # Return value of module
+    # DO NOT MODIFY THIS PART
+    reactive({rv.nav$return$dataOut()})
     
     
   }

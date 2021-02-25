@@ -50,30 +50,17 @@ mod_Protein_Description_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    #source(file.path('.', 'code_for_process.R'), local=TRUE)$value
     
     rv.widgets <- reactiveValues()
     
-    ###-----------------------------------------------------------------------------------------------------
-    AddItemToDataset <- function(dataset, name){
-      addAssay(dataset, 
-               dataset[[length(dataset)]], 
-               name=name)
-    }
-    
-    
     
     observeEvent(id, {
-      # rv.widgets <- reactiveValues()
-      # 
-      # config <- config
-      # rv.process$length <- length(config$steps)
-      # rv.process$current.pos  <- 1
-      # 
-      config$ll.UI <- lapply(config$steps,
-                             function(x){
-                               do.call('uiOutput', list(ns(x)))
-                             })
+      config$ll.UI <- setNames(lapply(config$steps,
+                                      function(x){
+                                        do.call('uiOutput', list(ns(x)))
+                                      }),
+                               paste0('screen_', config$steps)
+      )
       
       rv.nav$return <- mod_nav_process_server('tutu',
                                               config = reactive({config}),

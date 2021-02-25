@@ -4,6 +4,7 @@ library(QFeatures)
 
 options(shiny.fullstacktrace = T)
 source(file.path('.', 'mod_nav_pipeline.R'), local=FALSE)$value
+source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
 
 verbose <- F
 redBtnClass <- "btn-danger"
@@ -47,21 +48,24 @@ server <- function(input, output){
     req(input$choosePipeline != '')
     basename <- paste0('mod_', input$choosePipeline)
     source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
-    
+   # browser()
     rv$dataOut <- do.call(paste0(basename, '_server'),
                           list(id = input$choosePipeline,
-                               dataIn = reactive({obj}),
+                               dataIn = reactive({rv$dataIn}),
                                is.enabled = reactive({TRUE})
                           )
     )
+    
+    output$UI <- renderUI({
+      req(input$choosePipeline != '')
+      do.call(paste0('mod_', input$choosePipeline, '_ui'),
+              list(id = input$choosePipeline))
+    })
+    
   }, priority=1000)
   
   
-  output$UI <- renderUI({
-    req(input$choosePipeline != '')
-    do.call(paste0('mod_', input$choosePipeline, '_ui'),
-            list(id = input$choosePipeline))
-  })
+  
   
   #--------------------------------------------
   #--------------------------------------------------------------------

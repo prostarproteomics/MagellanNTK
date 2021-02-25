@@ -1,6 +1,8 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
+source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
+
 
 verbose <- F
 redBtnClass <- "btn-danger"
@@ -85,7 +87,7 @@ mod_nav_pipeline_ui <- function(id){
                ),
                wellPanel(title = 'foo',
                          tagList(
-                           h3('module process'),
+                           h3('module pipeline'),
                            uiOutput(ns('show_Debug_Infos'))
                          )
                )
@@ -117,12 +119,7 @@ mod_nav_pipeline_server <- function(id,
     ns <- session$ns
     
     source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
-    
-    AddItemToDataset <- function(dataset, name){
-      addAssay(dataset, 
-               dataset[[length(dataset)]], 
-               name=name)
-    }
+
     
     # Specific to pipeline module
     tmp.return <- reactiveValues()
@@ -137,9 +134,7 @@ mod_nav_pipeline_server <- function(id,
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(status(), {
-      rv.process$status <- status() 
-      })
+    observeEvent(status(), {rv.process$status <- status() })
     
     observeEvent(id, {
       
@@ -155,15 +150,22 @@ mod_nav_pipeline_server <- function(id,
       rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
       rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
-      #rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
       
-      rv.child$enabled <- setNames(rep(TRUE, length(rv.process$config$steps)), rv.process$config$steps)
+      rv.child$enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
       rv.child$reset <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
       
       # Load code for pipeline if it is in a subdirectory of R directory
       for (x in rv.process$config$steps)
         source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
       
+      
+      rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
+                                             function(x){
+                                               do.call(paste0('mod_', id, '_', x, '_ui'), list(ns(paste0(id, '_', x))))
+                                             }),
+                                      paste0('screen_', rv.process$config$steps)
+      )
+
       lapply(rv.process$config$steps, function(x){
         tmp.return[[x]] <- do.call(paste0('mod_', id, '_', x, '_server'),
                                    list(id = paste0(id, '_', x) ,
@@ -186,12 +188,10 @@ mod_nav_pipeline_server <- function(id,
       )
     }, priority=1000) 
     
-    
-    
+
     
     CurrentStepName <- reactive({
       cat(paste0('::GetCurrentStepName() from - ', id, '\n'))
-      #browser()
       rv.process$config$steps[rv.process$current.pos]
     })
     
@@ -207,12 +207,61 @@ mod_nav_pipeline_server <- function(id,
                           })
     
     
+    
+    
+    #' @description 
+    #' xxx
+    #' 
+    Update_State_Screens = function(){
+      if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
+      
+      ind.max <- GetMaxValidated_AllSteps()
+      #browser()
+      if (ind.max > 0) 
+        ToggleState_Screens(cond = FALSE, range = 1:ind.max)
+      
+      
+      if (ind.max < rv.process$length){
+        # Enable all steps after the current one but the ones
+        # after the first mandatory not validated
+        firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
+        if (is.null(firstM)){
+          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
+        } else {
+          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
+          if (ind.max + firstM < rv.process$length)
+            ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
+        }
+      }
+      # browser()
+    }
+    
+    
+    #' @description
+    #' xxx
+    #'
+    #' @param cond A number
+    #' @param range A number
+    #' 
+    #' @return Nothing.
+    #' 
+    ToggleState_Screens = function(cond, range){
+      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
+      #browser()
+      if (is.enabled())
+        lapply(range, function(x){
+          cond <- cond && !(rv.process$status[x] == global$SKIPPED)
+           rv.child$enabled[x] <- cond
+        })
+    }
+    
+    
     #
     # Catch a new dataset sent by the caller
     #
     observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
-      #browser()
+      browser()
       
       Change_Current_Pos(1)
       rv.process$dataIn <- dataIn()

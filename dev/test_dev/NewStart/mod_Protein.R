@@ -1,5 +1,10 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
+source(file.path('.', 'mod_Protein_Description.R'), local=TRUE)$value
+source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
+
+
+
 mod_Protein_ui <- function(id){
   ns <- NS(id)
   mod_nav_pipeline_ui(ns('Protein'))
@@ -8,7 +13,7 @@ mod_Protein_ui <- function(id){
 
 
 mod_Protein_server <- function(id,
-                               dataIn = NULL,
+                               dataIn = reactive({NULL}),
                                is.enabled = reactive({TRUE}),
                                reset = reactive({FALSE}),
                                position = reactive({NULL}),
@@ -25,8 +30,8 @@ mod_Protein_server <- function(id,
   
   config <- reactiveValues(
     name = 'Protein',
-    steps = c('Description', 'Normalization'),
-    mandatory = c(T, F)
+    steps = c('Description', 'Normalization', 'Filtering'),
+    mandatory = c(T, T, F)
     
   )
   
@@ -51,14 +56,7 @@ mod_Protein_server <- function(id,
     observeEvent(id, {
       for (x in config$steps)
       source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-      
-      # Build list of screens
-      config$ll.UI <- lapply(config$steps,
-                             function(x){
-                               do.call(paste0('mod_', id, '_', x, '_ui'),
-                                       list(ns(paste0(id, '_', x))))
-                             })
-      
+
       #browser()
       rv.nav$return <- mod_nav_pipeline_server('Protein',
                                                config = reactive({config}),
@@ -72,7 +70,7 @@ mod_Protein_server <- function(id,
     
     observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
     observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
-    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
+    observeEvent(dataIn(), {rv.nav$dataIn <- dataIn()})
     
     
    # Return value of module

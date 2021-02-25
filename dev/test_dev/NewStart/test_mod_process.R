@@ -13,73 +13,76 @@ optionsBtnClass <- "info"
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 
-#----------------------------------------------------------------------
-ui <- fluidPage(
+
+mod_test_process_ui <- function(id){
+  ns <- NS(id)
   tagList(
     fluidRow(
       column(width=3,
-             selectInput('choosePipeline', 'Choose pipeline',
+             selectInput(ns('choosePipeline'), 'Choose pipeline',
                          choices = setNames(nm=c('', 'Protein')),
                          width = '200')
-             ),
+      ),
       column(width=5,
-             selectInput('chooseProcess', 'Choose process', 
+             selectInput(ns('chooseProcess'), 'Choose process', 
                          choices = setNames(nm=c('', 'Normalization', 'Description')),
                          width = '200')
-             )
-      ),
-    uiOutput('UI'),
+      )
+    ),
+    uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
                 h3('Valler'),
-                uiOutput('show_Debug_Infos')
+                uiOutput(ns('show_Debug_Infos'))
               )
     )
   )
-)
+}
 
 
-#----------------------------------------------------------------------
-server <- function(input, output){
-  utils::data(Exp1_R25_prot, package='DAPARdata2')
-  
-  obj <- NULL
-  obj <- Exp1_R25_prot
-  
-  rv <- reactiveValues(
-    dataIn = Exp1_R25_prot,
-    dataOut = NULL
-  )
-  
-  
-  
-  observe({
-    req(input$choosePipeline != '' && input$chooseProcess != '')
-    basename <- paste0('mod_', input$choosePipeline, '_', input$chooseProcess)
-    source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+mod_test_process_server <- function(id){
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
     
-    rv$dataOut <- do.call(paste0(basename, '_server'),
-                      list('process',
-                           dataIn = reactive({obj}),
-                           is.enabled = reactive({TRUE})
-                           )
-                      )
-
-  }, priority=1000)
-  
-  
-  output$UI <- renderUI({
-    req(input$choosePipeline != '' && input$chooseProcess != '')
-    do.call(paste0('mod_', input$choosePipeline, '_', input$chooseProcess, '_ui'),
-            list('process'))
-  })
-  
-  
-  
-  #--------------------------------------------------------------------
-  
-  output$show_Debug_Infos <- renderUI({
-    fluidRow(
+    utils::data(Exp1_R25_prot, package='DAPARdata2')
+    
+    obj <- NULL
+    obj <- Exp1_R25_prot
+    
+    rv <- reactiveValues(
+      dataIn = Exp1_R25_prot,
+      dataOut = NULL
+    )
+    
+    
+    
+    observe({
+      req(input$choosePipeline != '' && input$chooseProcess != '')
+      basename <- paste0('mod_', input$choosePipeline, '_', input$chooseProcess)
+      source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+      
+      rv$dataOut <- do.call(paste0(basename, '_server'),
+                            list('process',
+                                 dataIn = reactive({obj}),
+                                 is.enabled = reactive({TRUE})
+                            )
+      )
+      
+    }, priority=1000)
+    
+    
+    output$UI <- renderUI({
+      req(input$choosePipeline != '' && input$chooseProcess != '')
+      do.call(paste0('mod_', input$choosePipeline, '_', input$chooseProcess, '_ui'),
+              list(ns('process')))
+    })
+    
+    
+    
+    #--------------------------------------------------------------------
+    
+    output$show_Debug_Infos <- renderUI({
+      fluidRow(
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data In")),
                uiOutput('show_rv_dataIn')),
@@ -87,23 +90,37 @@ server <- function(input, output){
                tags$b(h4(style = 'color: blue;', "Data Out")),
                uiOutput('show_rv_dataOut'))
       )
+    })
+    
+    ###########---------------------------#################
+    output$show_rv_dataIn <- renderUI({
+      req(rv$dataIn)
+      tagList(
+        lapply(names(rv$dataIn), function(x){tags$p(x)})
+      )
+    })
+    
+    output$show_rv_dataOut <- renderUI({
+      req(rv$dataOut)
+      tagList(
+        lapply(names(rv$dataOut()$value), function(x){tags$p(x)})
+      )
+    })
+    
   })
-  
-  ###########---------------------------#################
-  output$show_rv_dataIn <- renderUI({
-    req(rv$dataIn)
-    tagList(
-      lapply(names(rv$dataIn), function(x){tags$p(x)})
-    )
-  })
+}
 
-  output$show_rv_dataOut <- renderUI({
-    req(rv$dataOut)
-    tagList(
-      lapply(names(rv$dataOut()$value), function(x){tags$p(x)})
-    )
-  })
- 
+
+
+#----------------------------------------------------------------------
+ui <- fluidPage(
+  mod_test_process_ui('toto')
+)
+
+
+#----------------------------------------------------------------------
+server <- function(input, output){
+  mod_test_process_server('toto')
 }
 
 
