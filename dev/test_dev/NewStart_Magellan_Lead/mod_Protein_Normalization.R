@@ -4,7 +4,6 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 #' 
 mod_Protein_Normalization_ui <- function(id){
   ns <- NS(id)
-  mod_nav_process_ui(ns('Protein_Normalization'))
 }
 
 
@@ -12,10 +11,9 @@ mod_Protein_Normalization_ui <- function(id){
 #' 
 mod_Protein_Normalization_server <- function(id,
                                              dataIn = NULL,
-                                             is.enabled = reactive({TRUE}),
+                                             steps.enabled = reactive({NULL}),
                                              reset = reactive({FALSE}),
-                                             position = reactive({NULL}),
-                                             skipped = reactive({NULL})
+                                             status = reactive({NULL})
                                              ){
   
   #' @field global xxxx
@@ -36,13 +34,7 @@ mod_Protein_Normalization_server <- function(id,
     select2_2 = 1
   )
   
-  
-  rv.nav <- reactiveValues(
-    return = TRUE,
-    status = NULL,
-    dataIn = NULL,
-    temp.dataIn = NULL
-  )
+
   ###-------------------------------------------------------------###
   ###                                                             ###
   ### ------------------- MODULE SERVER --------------------------###
@@ -51,6 +43,17 @@ mod_Protein_Normalization_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
      
+    rv.widgets <- reactiveValues()
+    
+    rv <- reactiveValues(
+      dataIn = NULL,
+      dataOut = NULL,
+      status = NULL,
+      reset = NULL,
+      steps.enabled = NULL
+    )
+    
+    
     AddItemToDataset <- function(dataset, name){
       addAssay(dataset, 
                dataset[[length(dataset)]], 
@@ -73,29 +76,19 @@ mod_Protein_Normalization_server <- function(id,
     )
 
     
-    
-    observeEvent(id, {
-      config$ll.UI <- setNames(lapply(config$steps,
-                                      function(x){
-                                        do.call('uiOutput', list(ns(x)))
-                                      }),
-                               paste0('screen_', config$steps)
-      )
-      
-        rv.nav$return <- mod_nav_process_server('Protein_Normalization',
-                                              config = reactive({config}),
-                                              status = reactive({rv.nav$status}),
-                                              dataIn = reactive({rv.nav$dataIn}),
-                                              is.enabled = reactive({is.enabled()})
-      )
-    }, priority=1000) 
+    observeEvent(status(), { rv$status <- status()})
     
     
-    observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
-    observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
-    observeEvent(dataIn(), {rv.nav$temp.dataIn <- dataIn()})
+    # Initialization of the module
+    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+      if (is.null(steps.enabled()))
+        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+      else
+        rv$steps.enabled <- steps.enabled()
+    })
+
     
-    observeEvent(rv.nav$return$reset(), {
+    observeEvent(reset(), {
       lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })
@@ -109,13 +102,13 @@ mod_Protein_Normalization_server <- function(id,
 
 ###### ------------------- Code for Description (step 0) -------------------------    #####
 output$Description <- renderUI({
-  rv.nav$return$steps.enabled()
+  rv$steps.enabled
 #browser()
   wellPanel(
     tagList(
       includeMarkdown( system.file("app/md", paste0(config$name, ".md"), package="Magellan")),
       uiOutput(ns('datasetDescription')),
-      if (isTRUE(rv.nav$return$steps.enabled()['Description'])  )
+      if (isTRUE(rv$steps.enabled['Description'])  )
         actionButton(ns('btn_validate_Description'), 
                      paste0('Start ', config$name),
                      class = btn_success_color)
@@ -132,8 +125,8 @@ output$Description <- renderUI({
     
     
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-  rv.nav$dataIn <- rv.nav$temp.dataIn
-  rv.nav$status['Description'] <- global$VALIDATED
+  rv$dataIn <- dataIn()
+  rv$status['Description'] <- global$VALIDATED
   
 })
 
@@ -149,18 +142,11 @@ observeEvent(input$select3,{rv.widgets$select3 <- input$select3})
 observeEvent(input$select2_1,{rv.widgets$select2_1 <- input$select2_1})
 observeEvent(input$select2_2,{rv.widgets$select2_2 <- input$select2_2})
 
-# observeEvent(lapply(names(reactiveValuesToList(rv.widgets)), function(x){ input[[x]]}), ignoreInit = TRUE, {
-#   #browser()
-#   lapply(names(reactiveValuesToList(rv.widgets)), function(x){ 
-#     rv.widgets[[x]] <- input[[x]]
-#   })
-# })
-
 
 output$test1 <-renderUI({
-  #rv.nav$return$steps.enabled()
+  #rv$steps.enabled
   rv.widgets$select1
-    if (rv.nav$return$steps.enabled()['Step1'])
+    if (rv$steps.enabled['Step1'])
     selectInput(ns('select1'), 'Select 1 in renderUI',
                 choices = 1:4,
                 selected = rv.widgets$select1,
@@ -178,8 +164,8 @@ output$test1 <-renderUI({
 
 output$test2 <-renderUI({
 
-  rv.nav$return$steps.enabled()
-  if (rv.nav$return$steps.enabled()['Step1'])
+  rv$steps.enabled
+  if (rv$steps.enabled['Step1'])
     selectInput(ns('select2'), 'Select 2 in renderUI', 
                 choices = 1:3,
                 selected = rv.widgets$select2,
@@ -198,7 +184,7 @@ output$test2 <-renderUI({
 
 # ------------------------ STEP 1 : UI ------------------------------------
 output$Step1 <- renderUI({
-  #rv.nav$return$steps.enabled()
+  #rv$steps.enabled
   name <- 'Step1'
   wellPanel(id = ns('toto'),
     actionButton(ns('btn1'), 'Btn 1'),
@@ -211,7 +197,7 @@ output$Step1 <- renderUI({
               uiOutput(ns('test2'))
           ),
           div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-              if (rv.nav$return$steps.enabled()['Step1'])
+              if (rv$steps.enabled['Step1'])
                 selectInput(ns('select3'), 'Select step 3', 
                           choices = 1:3, 
                           selected = rv.widgets$select3,
@@ -225,7 +211,7 @@ output$Step1 <- renderUI({
                 )
           ),
           div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-              if (rv.nav$return$steps.enabled()['Step1'])
+              if (rv$steps.enabled['Step1'])
                 actionButton(ns(paste0('btn_validate_', name)), 
                              'Perform',
                              class = btn_success_color)
@@ -244,7 +230,7 @@ output$Step1 <- renderUI({
 
 observeEvent(input$btn_validate_Step1, ignoreInit = T, {
   # Add your stuff code here
-  rv.nav$status['Step1'] <- global$VALIDATED
+  rv$status['Step1'] <- global$VALIDATED
 })
 
 #-------------------------- Code for step 2 ------------------------------
@@ -252,8 +238,8 @@ observeEvent(input$btn_validate_Step1, ignoreInit = T, {
 
 
 output$select2_1_UI <-renderUI({
-  rv.nav$return$steps.enabled()
-  if (rv.nav$return$steps.enabled()['Step2'])
+  rv$steps.enabled
+  if (rv$steps.enabled['Step2'])
       selectInput(ns('select2_1'), 'Select 2_1 in renderUI', 
               choices = 1:3, 
               selected = rv.widgets$select2_1,
@@ -268,7 +254,7 @@ output$select2_1_UI <-renderUI({
 })
 
 output$Step2 <- renderUI({
-  rv.nav$return$steps.enabled()
+  rv$steps.enabled
   name <- 'Step2'
   wellPanel(
     tagList(
@@ -277,7 +263,7 @@ output$Step2 <- renderUI({
               uiOutput(ns('select2_1_UI'))
           ),
           div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-              if (rv.nav$return$steps.enabled()['Step2'])
+              if (rv$steps.enabled['Step2'])
                 selectInput(ns('select2_2'), 'Select 2_2', 
                           choices = 1:5, 
                           selected = rv.widgets$select2_2,
@@ -292,7 +278,7 @@ output$Step2 <- renderUI({
                   )
           ),
           div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-              if (rv.nav$return$steps.enabled()['Step2'])
+              if (rv$steps.enabled['Step2'])
                 actionButton(ns(paste0('btn_validate_', name)), 
                              'Perform',
                              class = btn_success_color)
@@ -310,17 +296,17 @@ output$Step2 <- renderUI({
 
 observeEvent(input$btn_validate_Step2, ignoreInit = T, {
   # Add your stuff code here
-  rv.nav$status['Step2'] <- global$VALIDATED
+  rv$status['Step2'] <- global$VALIDATED
 })
 
 
 #------------- Code for step 3 ---------------
 
 output$Step3 <- renderUI({
-  rv.nav$return$steps.enabled()
+  rv$steps.enabled
   tagList(
     h3('Step 3'),
-    if (rv.nav$return$steps.enabled()['Step3'])
+    if (rv$steps.enabled['Step3'])
       actionButton(ns('btn_validate_Step3'), 
                    'Perform',
                    class = btn_success_color)
@@ -336,15 +322,27 @@ output$Step3 <- renderUI({
 
 observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
-  rv.nav$dataIn <- AddItemToDataset(rv.nav$dataIn, config$name)
-  rv.nav$status['Step3'] <- global$VALIDATED
+  rv$dataIn <- AddItemToDataset(rv$dataIn, config$name)
+  rv$dataOut <- rv$dataIn
+  rv$status['Step3'] <- global$VALIDATED
 })
 
 
 
 # Return value of module
 # DO NOT MODIFY THIS PART
-reactive({rv.nav$return$dataOut()})
+list(config = reactive({
+  config$ll.UI <- setNames(lapply(config$steps,
+                                  function(x){
+                                    do.call('uiOutput', list(ns(x)))
+                                  }),
+                           paste0('screen_', config$steps)
+  )
+  config
+}),
+dataOut = reactive({rv$dataOut}),
+status = reactive({rv$status})
+)
 
 
   }

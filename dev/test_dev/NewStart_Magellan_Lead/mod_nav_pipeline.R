@@ -264,7 +264,7 @@ mod_nav_pipeline_server <- function(id,
       browser()
       
       Change_Current_Pos(1)
-      rv.process$dataIn <- dataIn()
+      #rv.process$dataIn <- dataIn()
       PrepareData2Send() # Used by class pipeline
       
       if(is.null(dataIn())){

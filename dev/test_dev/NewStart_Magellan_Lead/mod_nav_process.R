@@ -2,18 +2,19 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 
+btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 verbose <- F
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
 optionsBtnClass <- "info"
 
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 mod_nav_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
+    
     fluidRow(style="display: flex;
  align-items: center;
  justify-content: center;",
@@ -25,7 +26,7 @@ mod_nav_process_ui <- function(id){
              column(width=1, actionButton(ns("rstBtn"), "Reset",
                                           class = redBtnClass,
                                           style='font-size:80%')),
-             column(width=9, mod_timeline_h_ui(ns('h_timeline'))),
+             column(width=9, mod_timeline_h_ui(ns('timeline'))),
              column(width=1, actionButton(ns("nextBtn"),">>",
                                           class = PrevNextBtnClass,
                                           style='font-size:80%'))
@@ -48,13 +49,10 @@ mod_nav_process_ui <- function(id){
 
 
 mod_nav_process_server <- function(id,
-                               config = NULL,
-                               status = reactive({NULL}),
-                               rv.widgets = reactive({NULL}),
-                               dataIn = reactive({NULL}),
-                               is.enabled = reactive({TRUE}),
-                               reset = reactive({FALSE})
-){
+                                   dataIn = reactive({NULL}),
+                                   is.enabled = reactive({TRUE}),
+                                   reset = reactive({FALSE})
+                                   ){
   
   
   ###-------------------------------------------------------------###
@@ -67,16 +65,54 @@ mod_nav_process_server <- function(id,
     
     source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
     
+    AddItemToDataset <- function(dataset, name){
+      addAssay(dataset, 
+               dataset[[length(dataset)]], 
+               name=name)
+    }
+    
+    rv.process <- reactiveValues(
+      proc = NULL,
+      status = NULL,
+      dataIn = NULL,
+      temp.dataIn = NULL,
+      steps.enabled = NULL
+    )
     
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(status(), {rv.process$status <- status() })
-    
-    observeEvent(id, {
+    observeEvent(rv.process$proc$status(), {
+      #browser()
+      # If step 1 has been validated, then initialize dataIn
+      if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
+        rv.process$dataIn <- rv.process$temp.dataIn
       
-      rv.process$config <- config()
+      rv.process$status <- rv.process$proc$status() 
+      })
+    
+    
+    
+    observeEvent(rv.process$proc$dataOut(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+      rv.process$dataIn <- rv.process$proc$dataOut()
+    })
+    
+    
+    #--------------------------------------------------
+    observeEvent(id, {
+      #browser()
+      rv.process$proc <- do.call(paste0('mod_', id, '_server'),
+                                 list(id = 'test',
+                                      dataIn = reactive({rv.process$temp.dataIn}),
+                                      steps.enabled = reactive({rv.process$steps.enabled}),
+                                      reset = reactive({FALSE}),
+                                      status = reactive({rv.process$status})
+                                      )
+      )
+      
+      rv.process$config <- rv.process$proc$config()
+     
       rv.process$length <- length(rv.process$config$steps)
       rv.process$current.pos  <- 1
       
@@ -89,18 +125,37 @@ mod_nav_process_server <- function(id,
       rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
       rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
-      
-      mod_timeline_h_server(id = 'h_timeline',
+      mod_timeline_h_server(id = 'timeline',
                             config =  rv.process$config,
                             status = reactive({rv.process$status}),
                             position = reactive({rv.process$current.pos}),
                             enabled = reactive({rv.process$steps.enabled})
       )
-      
-
-
     }, priority=1000) 
+    
 
+    
+    #' @description
+    #' xxx
+    #'
+    #' @param cond A number
+    #' @param range A number
+    #' 
+    #' @return Nothing.
+    #' 
+    ToggleState_Screens = function(cond, range){
+      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
+      #browser()
+      if (is.enabled())
+        lapply(range, function(x){
+          cond <- cond && !(rv.process$status[x] == global$SKIPPED)
+          #shinyjs::toggleState(config$steps[x], condition = cond  )
+          
+          #Send to TL the enabled/disabled tags
+          rv.process$steps.enabled[x] <- cond
+        })
+    }
+    
     
     #' @description 
     #' xxx
@@ -130,27 +185,6 @@ mod_nav_process_server <- function(id,
     }
     
     
-    
-    #' @description
-    #' xxx
-    #'
-    #' @param cond A number
-    #' @param range A number
-    #' 
-    #' @return Nothing.
-    #' 
-    ToggleState_Screens = function(cond, range){
-      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
-      #browser()
-      if (is.enabled())
-        lapply(range, function(x){
-          cond <- cond && !(rv.process$status[x] == global$SKIPPED)
-          #shinyjs::toggleState(config$steps[x], condition = cond  )
-          
-          #Send to TL the enabled/disabled tags
-          rv.process$steps.enabled[x] <- cond
-        })
-    }
     #
     # Catch a new dataset sent by the caller
     #
@@ -159,7 +193,7 @@ mod_nav_process_server <- function(id,
       #browser()
       
       Change_Current_Pos(1)
-      rv.process$dataIn <- dataIn()
+      rv.process$temp.dataIn <- dataIn()
       #ActionOn_New_DataIn() # Used by class pipeline
       
       if(is.null(dataIn())){
@@ -184,7 +218,32 @@ mod_nav_process_server <- function(id,
       else if (is.numeric(pos))
         rv.process$current.pos <- rv.process$position
     })
- 
+    
+    #' #' @description
+    #' #' Default actions on reset pipeline or process.
+    #' #' 
+    #' BasicReset = function(){
+    #'   if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
+    #'   #ResetScreens()
+    #'   rv.process$dataIn <- NULL
+    #'   rv.process$current.pos <- 1
+    #'   rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+    #'   Send_Result_to_Caller()
+    #' }
+    
+    
+    
+    
+    
+    ##
+    ## Common functions
+    ##
+    
+    
+    
+    
+    
+    
     #-------------------------------------------------------
     observeEvent(rv.process$current.pos, ignoreInit = F,{
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))
@@ -261,13 +320,13 @@ mod_nav_process_server <- function(id,
         uiOutput(ns('show_tag_enabled')),
         fluidRow(
           column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
+                 tags$b(h4(style = 'color: blue;', paste0("dataIn() ", rv.process$config$type))),
                  uiOutput(ns('show_dataIn'))),
           column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
+                 tags$b(h4(style = 'color: blue;', paste0("rv.process$dataIn ", rv.process$config$type))),
                  uiOutput(ns('show_rv_dataIn'))),
           column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
+                 tags$b(h4(style = 'color: blue;', paste0("dataOut$value ", rv.process$config$type))),
                  uiOutput(ns('show_rv_dataOut'))),
           column(width=4,
                  tags$b(h4(style = 'color: blue;', "status")),
