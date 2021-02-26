@@ -51,7 +51,8 @@ mod_nav_process_ui <- function(id){
 mod_nav_process_server <- function(id,
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
-                                   reset = reactive({FALSE})
+                                   reset = reactive({FALSE}),
+                                   status = reactive({NULL})
                                    ){
   
   
@@ -70,6 +71,11 @@ mod_nav_process_server <- function(id,
                dataset[[length(dataset)]], 
                name=name)
     }
+    
+    dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL
+    )
     
     rv.process <- reactiveValues(
       proc = NULL,
@@ -95,7 +101,10 @@ mod_nav_process_server <- function(id,
     
     
     observeEvent(rv.process$proc$dataOut(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+      print('end')
       rv.process$dataIn <- rv.process$proc$dataOut()
+      Send_Result_to_Caller()
+     # browser()
     })
     
     
@@ -103,7 +112,7 @@ mod_nav_process_server <- function(id,
     observeEvent(id, {
       #browser()
       rv.process$proc <- do.call(paste0('mod_', id, '_server'),
-                                 list(id = 'test',
+                                 list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
                                       steps.enabled = reactive({rv.process$steps.enabled}),
                                       reset = reactive({FALSE}),
@@ -383,7 +392,7 @@ mod_nav_process_server <- function(id,
       )
     })
     
-    
+  #  observeEvent(dataOut$trigger, { browser()})
     list(dataOut = reactive({dataOut}),
          steps.enabled = reactive({rv.process$steps.enabled}),
          status = reactive({rv.process$status}),

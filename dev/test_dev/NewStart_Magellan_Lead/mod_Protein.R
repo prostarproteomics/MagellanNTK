@@ -7,18 +7,18 @@ source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
 
 mod_Protein_ui <- function(id){
   ns <- NS(id)
-  mod_nav_pipeline_ui(ns('Protein'))
+  tagList(
+    uiOutput(ns('show_processes_screens'))
+  )
 }
 
 
 
 mod_Protein_server <- function(id,
                                dataIn = reactive({NULL}),
-                               is.enabled = reactive({TRUE}),
+                               steps.enabled = reactive({NULL}),
                                reset = reactive({FALSE}),
-                               position = reactive({NULL}),
-                               skipped = reactive({NULL})
-                               ){
+                               status = reactive({NULL})){
   
   #' @field global xxxx
   global <- list(
@@ -30,19 +30,11 @@ mod_Protein_server <- function(id,
   
   config <- reactiveValues(
     name = 'Protein',
-    steps = c('Description', 'Normalization', 'Filtering'),
+    steps = c('Description', 'Normalization'),
     mandatory = c(T, T, F)
     
   )
-  
-  
-  rv.nav <- reactiveValues(
-    return = TRUE,
-    status = NULL,
-    dataIn = NULL,
-    temp.dataIn = NULL
-  )
-  
+
   ###-------------------------------------------------------------###
   ###                                                             ###
   ### ------------------- MODULE SERVER --------------------------###
@@ -51,32 +43,42 @@ mod_Protein_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    rv.widgets <- reactiveValues()
+    rv <- reactiveValues(
+      dataIn = NULL,
+      dataOut = NULL,
+      status = NULL,
+      reset = NULL,
+      steps.enabled = NULL
+    )
     
-    observeEvent(id, {
-      for (x in config$steps)
-      source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-
-      #browser()
-      rv.nav$return <- mod_nav_pipeline_server('Protein',
-                                               config = reactive({config}),
-                                               status = reactive({rv.nav$status}),
-                                               dataIn = reactive({rv.nav$dataIn}),
-                                               is.enabled = reactive({is.enabled()})
-                                               )
+    
+    output$show_processes_screens <- renderUI({
       
-    }, priority=1000)
+    })
     
     
-    observeEvent(rv.nav$return$status(), {rv.nav$status <- rv.nav$return$status()})
-    observeEvent(rv.nav$return$dataOut()$trigger, {rv.nav$dataIn <- rv.nav$return$dataOut()$value})
-    observeEvent(dataIn(), {rv.nav$dataIn <- dataIn()})
+    observeEvent(status(), { rv$status <- status()})
+    # Initialization of the module
+    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+      if (is.null(steps.enabled()))
+        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+      else
+        rv$steps.enabled <- steps.enabled()
+    })
+    
+    
+   
     
     
    # Return value of module
    # DO NOT MODIFY THIS PART
-    reactive({rv.nav$return$dataOut()})
-    
+    list(config = reactive({
+      
+      config
+    }),
+    dataOut = reactive({rv$dataOut}),
+    status = reactive({rv$status})
+    )
     
   }
   )

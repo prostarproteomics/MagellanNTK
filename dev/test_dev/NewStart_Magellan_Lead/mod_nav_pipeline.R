@@ -2,6 +2,7 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
+source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
 
 
 verbose <- F
@@ -74,7 +75,7 @@ mod_nav_pipeline_ui <- function(id){
                                     class = PrevNextBtnClass,
                                     style='padding:4px; font-size:80%')
                    ),
-                   mod_timeline_v_ui(ns('timeline'))
+                   mod_timeline_v_ui(ns('timelinev'))
                )
              )),
       column(width=10,
@@ -102,8 +103,6 @@ mod_nav_pipeline_ui <- function(id){
 #' 
 mod_nav_pipeline_server <- function(id,
                                    config = NULL,
-                                   status = reactive({NULL}),
-                                   rv.widgets = reactive({NULL}),
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
                                    reset = reactive({FALSE})
@@ -120,7 +119,7 @@ mod_nav_pipeline_server <- function(id,
     
     source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
 
-    
+    verbose <- T
     # Specific to pipeline module
     tmp.return <- reactiveValues()
     
@@ -130,15 +129,72 @@ mod_nav_pipeline_server <- function(id,
       position = NULL
     )
     
+    rv.process <- reactiveValues(
+      proc = NULL,
+      status = NULL,
+      dataIn = NULL,
+      temp.dataIn = NULL,
+      steps.enabled = NULL
+    )
+    
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(status(), {rv.process$status <- status() })
+    observeEvent(rv.process$proc$status(), {
+      #browser()
+      # If step 1 has been validated, then initialize dataIn
+      if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
+        rv.process$dataIn <- rv.process$temp.dataIn
+      
+      rv.process$status <- rv.process$proc$status() 
+    })
+    
+    # 
+    # BuildScreens <- reactive({
+    #   #browser()
+    #   #for (x in rv.process$config$steps)
+    #   #  source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+    # 
+    # 
+    #   setNames(lapply(rv.process$config$steps,
+    #                   function(x){
+    #                     source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+    #                     #mod_nav_process_ui(ns(paste0(id, '_', x)))
+    #                     h3(paste0(id, '_', x))
+    #                   }),
+    #            paste0('screen_', rv.process$config$steps)
+    #   )
+    # })
+    # 
+    
     
     observeEvent(id, {
       
-      rv.process$config <- config()
+      # Load code for pipeline if it is in a subdirectory of R directory
+      #for (x in rv.process$config$steps)
+      #  source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+      rv.process$proc <- do.call(paste0('mod_', id, '_server'),
+                                 list(id = id,
+                                      dataIn = reactive({rv.process$temp.dataIn}),
+                                      steps.enabled = reactive({rv.process$steps.enabled}),
+                                      reset = reactive({FALSE}),
+                                      status = reactive({rv.process$status})
+                                 )
+      )
+      
+      
+      
+      
+      
+      rv.process$config <- rv.process$proc$config()
+      rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
+                         function(x){
+                           source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+                           mod_nav_process_ui(ns(paste0(id, '_', x)))
+                         }),
+                  paste0('screen_', rv.process$config$steps)
+         )
       rv.process$length <- length(rv.process$config$steps)
       rv.process$current.pos  <- 1
       
@@ -154,41 +210,61 @@ mod_nav_pipeline_server <- function(id,
       rv.child$enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
       rv.child$reset <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
       
-      # Load code for pipeline if it is in a subdirectory of R directory
-      for (x in rv.process$config$steps)
-        source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
       
       
-      rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
-                                             function(x){
-                                               do.call(paste0('mod_', id, '_', x, '_ui'), list(ns(paste0(id, '_', x))))
-                                             }),
-                                      paste0('screen_', rv.process$config$steps)
-      )
+      # rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
+      #                                        function(x){
+      #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+      #                                          mod_nav_process_ui(ns(paste0(id, '_', x)))
+      #                                          }),
+      #                                 paste0('screen_', rv.process$config$steps)
+      # )
 
       lapply(rv.process$config$steps, function(x){
-        tmp.return[[x]] <- do.call(paste0('mod_', id, '_', x, '_server'),
-                                   list(id = paste0(id, '_', x) ,
-                                        dataIn = reactive({ rv.child$data2send[[x]] }),
-                                        is.enabled = reactive({isTRUE(rv.child$enabled[x])}),
-                                        reset = reactive({isTRUE(rv.child$reset[x])}),
-                                        position = reactive({rv.child$position[x]}),
-                                        skipped = reactive({rv.process$status[x] == global$SKIPPED})
-                                   )
+        tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
+                                                  dataIn = reactive({ rv.child$data2send[[x]] }),
+                                                  is.enabled = reactive({isTRUE(rv.child$enabled[x])}),
+                                                  reset = reactive({isTRUE(rv.child$reset[x])}),
+                                                  status = reactive({NULL})
         )
       })
       
       
-      
-      mod_timeline_v_server(id = 'timeline',
+      #browser()
+      mod_timeline_v_server(id = 'timelinev',
                             config =  rv.process$config,
                             status = reactive({rv.process$status}),
                             position = reactive({rv.process$current.pos}),
                             enabled = reactive({rv.process$steps.enabled})
       )
+      
     }, priority=1000) 
     
 
+    
+    
+    output$EncapsulateScreens <- renderUI({
+     # browser()
+      tagList(
+        lapply(1:length(rv.process$config$ll.UI), function(i) {
+          if (i==1)
+            div(id = ns(rv.process$config$steps[i]),
+                class = paste0("page_", id),
+                rv.process$config$ll.UI[[i]]
+            )
+          else
+            shinyjs::hidden(
+              div(id =  ns(rv.process$config$steps[i]),
+                  class = paste0("page_", id),
+                  rv.process$config$ll.UI[[i]]
+              )
+            )
+        }
+        )
+      )
+
+    })
+    
     
     CurrentStepName <- reactive({
       cat(paste0('::GetCurrentStepName() from - ', id, '\n'))
@@ -200,7 +276,7 @@ mod_nav_pipeline_server <- function(id,
     # Catch the returned values of the process                                                           
     observeEvent(lapply(rv.process$config$steps, 
                         function(x){
-                          tmp.return[[x]]()$trigger}), ignoreInit=T,{
+                          tmp.return[[x]]$dataOut()$trigger}), ignoreInit=T,{
                             if(verbose) cat(paste0('observeEvent(trigger) from - ', id, '\n\n'))
                             #browser()
                             ActionOn_Data_Trigger()
@@ -261,7 +337,7 @@ mod_nav_pipeline_server <- function(id,
     #
     observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
-      browser()
+      #browser()
       
       Change_Current_Pos(1)
       #rv.process$dataIn <- dataIn()
@@ -350,9 +426,9 @@ mod_nav_pipeline_server <- function(id,
       if(verbose) cat(paste0('::', 'ActionOn_Data_Trigger from - ', id, '\n\n'))
       #browser()
       processHasChanged <- newValue <- NULL
-      return.trigger.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]()$trigger}),
+      return.trigger.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
                                         rv.process$config$steps)
-      return.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]()$value}),
+      return.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
                                 rv.process$config$steps)
       triggerValues <- unlist(return.trigger.values)
       
@@ -366,7 +442,7 @@ mod_nav_pipeline_server <- function(id,
       } else {
         processHasChanged <- rv.process$config$steps[which(max(triggerValues)==triggerValues)]
         ind.processHasChanged <- which(rv.process$config$steps==processHasChanged)
-        newValue <- tmp.return[[processHasChanged]]()$value
+        newValue <- tmp.return[[processHasChanged]]$dataOut()$value
         
         
         # process has been reseted
@@ -500,28 +576,6 @@ mod_nav_pipeline_server <- function(id,
     })
     
     
-    output$EncapsulateScreens <- renderUI({
-      #browser()
-      tagList(
-        lapply(1:length(rv.process$config$ll.UI), function(i) {
-          if (i==1)
-            div(id = ns(rv.process$config$steps[i]),
-                class = paste0("page_", id),
-                rv.process$config$ll.UI[[i]]
-            )
-          else
-            shinyjs::hidden(
-              div(id =  ns(rv.process$config$steps[i]),
-                  class = paste0("page_", id),
-                  rv.process$config$ll.UI[[i]]
-              )
-            )
-        }
-        )
-      )
-      
-      
-    })
     
     
     

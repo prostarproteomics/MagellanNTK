@@ -1,5 +1,13 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
+
+AddItemToDataset <- function(dataset, name){
+  addAssay(dataset, 
+           dataset[[length(dataset)]], 
+           name=name)
+}
+
+
 #' @export
 #' 
 mod_Protein_Normalization_ui <- function(id){
@@ -44,7 +52,7 @@ mod_Protein_Normalization_server <- function(id,
     ns <- session$ns
      
     rv.widgets <- reactiveValues()
-    
+
     rv <- reactiveValues(
       dataIn = NULL,
       dataOut = NULL,
@@ -53,13 +61,7 @@ mod_Protein_Normalization_server <- function(id,
       steps.enabled = NULL
     )
     
-    
-    AddItemToDataset <- function(dataset, name){
-      addAssay(dataset, 
-               dataset[[length(dataset)]], 
-               name=name)
-    }
-    
+
     #' @field config xxxx
     config <- reactiveValues(
       name = 'Protein_Normalization',
@@ -125,6 +127,7 @@ output$Description <- renderUI({
     
     
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+  print('youhou')
   rv$dataIn <- dataIn()
   rv$status['Description'] <- global$VALIDATED
   
@@ -324,6 +327,7 @@ observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
   rv$dataIn <- AddItemToDataset(rv$dataIn, config$name)
   rv$dataOut <- rv$dataIn
+  print(names(rv$dataOut))
   rv$status['Step3'] <- global$VALIDATED
 })
 

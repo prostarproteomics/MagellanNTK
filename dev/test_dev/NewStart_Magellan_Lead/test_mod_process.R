@@ -13,6 +13,12 @@ optionsBtnClass <- "info"
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 
+AddItemToDataset <- function(dataset, name){
+  addAssay(dataset, 
+           dataset[[length(dataset)]], 
+           name=name)
+}
+
 
 mod_test_process_ui <- function(id){
   ns <- NS(id)
@@ -32,7 +38,7 @@ mod_test_process_ui <- function(id){
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
+                h3('Valeur'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -54,7 +60,7 @@ mod_test_process_server <- function(id){
       dataOut = NULL
     )
     
-    
+
     
     observe({
       req(input$choosePipeline != '' && input$chooseProcess != '')
@@ -64,10 +70,19 @@ mod_test_process_server <- function(id){
       rv$dataOut <- mod_nav_process_server(id = basename,
                                            dataIn = reactive({rv$dataIn}),
                                            is.enabled = reactive({TRUE}),
-                                           reset = reactive({FALSE})
+                                           reset = reactive({FALSE}),
+                                           status = reactive({NULL})
                                            )
+      observeEvent(rv$dataOut$dataOut()$trigger, {
+        print('totototo')
+        print(names(rv$dataOut$dataOut()$value))
+       browser()
+      })
       
     }, priority=1000)
+    
+    
+    
     
     
     output$UI <- renderUI({
@@ -83,10 +98,10 @@ mod_test_process_server <- function(id){
       fluidRow(
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data In")),
-               uiOutput('show_rv_dataIn')),
+               uiOutput(ns('show_rv_dataIn'))),
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data Out")),
-               uiOutput('show_rv_dataOut'))
+               uiOutput(ns('show_rv_dataOut')))
       )
     })
     
@@ -101,7 +116,7 @@ mod_test_process_server <- function(id){
     output$show_rv_dataOut <- renderUI({
       req(rv$dataOut)
       tagList(
-        lapply(names(rv$dataOut()$value), function(x){tags$p(x)})
+        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
       )
     })
     
