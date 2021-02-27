@@ -24,16 +24,19 @@ mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      column(width=3,
+      column(width=2,
              selectInput(ns('choosePipeline'), 'Choose pipeline',
                          choices = setNames(nm=c('', 'Protein')),
                          width = '200')
       ),
-      column(width=5,
+      column(width=2,
              selectInput(ns('chooseProcess'), 'Choose process', 
                          choices = setNames(nm=c('', 'Normalization', 'Description')),
                          width = '200')
-      )
+      ),
+      column(width=2, actionButton(ns('simReset'), 'Remote reset')),
+      column(width=2, actionButton(ns('simEnabled'), 'Remote enable/disable')),
+      column(width=2, actionButton(ns('simStatus'), 'Remote change status'))
     ),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
@@ -57,10 +60,16 @@ mod_test_process_server <- function(id){
     
     rv <- reactiveValues(
       dataIn = Exp1_R25_prot,
-      dataOut = NULL
+      dataOut = NULL,
+      remoteReset = FALSE,
+      remoteStatus = NULL,
+      remoteEnabled = FALSE
     )
     
 
+    observeEvent(input$simReset, {rv$remoteReset <- input$simReset})
+    observeEvent(input$simEnabled, {rv$remoteEnabled <- input$simEnabled%%2 != 0})
+    
     
     observe({
       req(input$choosePipeline != '' && input$chooseProcess != '')
@@ -69,8 +78,8 @@ mod_test_process_server <- function(id){
       
       rv$dataOut <- mod_nav_process_server(id = basename,
                                            dataIn = reactive({rv$dataIn}),
-                                           is.enabled = reactive({TRUE}),
-                                           reset = reactive({FALSE}),
+                                           is.enabled = reactive({rv$remoteEnabled}),
+                                           reset = reactive({rv$remoteReset}),
                                            status = reactive({NULL})
                                            )
       observeEvent(rv$dataOut$dataOut()$trigger, {

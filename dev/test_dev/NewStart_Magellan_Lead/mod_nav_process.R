@@ -169,7 +169,7 @@ mod_nav_process_server <- function(id,
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
                                       steps.enabled = reactive({rv.process$steps.enabled}),
-                                      reset = reactive({FALSE}),
+                                      reset = reactive({rv.process$reset}),
                                       status = reactive({rv.process$status})
                                       )
       )
@@ -327,15 +327,7 @@ mod_nav_process_server <- function(id,
       shinyjs::show(rv.process$config$steps[rv.process$current.pos])
     })
     
-    
-    #' @description 
-    #' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-    #' that the caller program wants this module to reset itself. 
-    observeEvent(req(reset()), ignoreInit=F, ignoreNULL=T, {
-      #browser()
-      if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, '\n\n'))
-      BasicReset()
-    })
+
     
     #' @description
     #' Show/hide an information panel if the process is entirely skipped

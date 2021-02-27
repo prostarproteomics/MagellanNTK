@@ -366,15 +366,20 @@ observeEvent(rv.process$status, ignoreInit = T, {
   }
 })
 
-observeEvent(input$rstBtn, {
+#' @description 
+#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+#' that the caller program wants this module to reset itself. 
+observeEvent(req(c(input$rstBtn,  reset())), ignoreInit=T,{
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, '\n\n'))
   showModal(dataModal())
 })
 
+
+
 observeEvent(input$closeModal, {removeModal() })
 
 
-observeEvent(req(input$modal_ok > 0), ignoreInit=F, {
+observeEvent(req(input$modal_ok > 0), ignoreInit=F, ignoreNULL = T, {
   if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, '\n\n'))
   rv.process$local.reset <- input$rstBtn
   #Set_All_Reset()
