@@ -7,6 +7,30 @@ mod_Protein_Description_ui <- function(id){
 
 
 
+#' @title xxx
+#' 
+#' @description 
+#' This module contains the configuration informations for the corresponding pipeline.
+#' It is called by the nav_pipeline module of the package Magellan
+#' 
+#' @param id xxx
+#' 
+#' @param dataIn The dataset
+#' 
+#' @param steps.enabled A vector of boolen which has the same length of the steps
+#' of the pipeline. This information is used to enable/disable the widgets. It is not
+#' a communication variable between the caller and this module, thus there is no
+#' corresponding output variable
+#' 
+#' @param reset It is a remote command to reset the module. A boolen that 
+#' indicates is the pipeline has been reseted by a program of higher level
+#' Basically, it is the program which has called this module
+#' 
+#' @param status xxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
 mod_Protein_Description_server <- function(id,
                                            dataIn = NULL,
                                            steps.enabled = reactive({NULL}),

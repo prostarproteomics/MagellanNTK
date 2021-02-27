@@ -7,13 +7,32 @@ source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
 
 mod_Protein_ui <- function(id){
   ns <- NS(id)
-  tagList(
-    uiOutput(ns('show_processes_screens'))
-  )
 }
 
 
-
+#' @title xxx
+#' 
+#' @description 
+#' This module contains the configuration informations for the corresponding pipeline.
+#' It is called by the nav_pipeline module of the package Magellan
+#' 
+#' @param id xxx
+#' 
+#' @param dataIn The dataset
+#' 
+#' @param steps.enabled A vector of boolen which has the same length of the steps
+#' of the pipeline. xxx
+#' 
+#' @param reset It is a remote command to reset the module. A boolen that 
+#' indicates is the pipeline has been reseted by a program of higher level
+#' Basically, it is the program which has called this module
+#' 
+#' @param status xxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#' 
 mod_Protein_server <- function(id,
                                dataIn = reactive({NULL}),
                                steps.enabled = reactive({NULL}),
@@ -50,13 +69,7 @@ mod_Protein_server <- function(id,
       reset = NULL,
       steps.enabled = NULL
     )
-    
-    
-    output$show_processes_screens <- renderUI({
-      
-    })
-    
-    
+ 
     observeEvent(status(), { rv$status <- status()})
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
@@ -72,13 +85,10 @@ mod_Protein_server <- function(id,
     
    # Return value of module
    # DO NOT MODIFY THIS PART
-    list(config = reactive({
-      
-      config
-    }),
-    dataOut = reactive({rv$dataOut}),
-    status = reactive({rv$status})
-    )
+    list(config = reactive({config}),
+         dataOut = reactive({rv$dataOut}),
+         status = reactive({rv$status})
+         )
     
   }
   )
