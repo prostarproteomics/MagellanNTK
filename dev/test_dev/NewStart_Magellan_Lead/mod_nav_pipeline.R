@@ -411,7 +411,7 @@ mod_nav_pipeline_server <- function(id,
         return(data)
       }
       
-      browser() 
+      #browser() 
       rv.child$data2send <- setNames(
         lapply(rv.process$config$steps, function(x){NULL}),
         rv.process$config$steps)
@@ -533,7 +533,7 @@ mod_nav_pipeline_server <- function(id,
     #' 
     ResetChildren = function(){
       if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, '\n\n'))
-      browser()
+      #browser()
       lapply(rv.process$config$steps, function(x){
         rv.process$reset[x] <- 1 + rv.process$reset[x]
       })

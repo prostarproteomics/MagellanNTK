@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(QFeatures)
+library(crayon)
 
 options(shiny.fullstacktrace = T)
 source(file.path('.', 'mod_nav_pipeline.R'), local=FALSE)$value
