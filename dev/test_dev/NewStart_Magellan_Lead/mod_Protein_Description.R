@@ -34,7 +34,7 @@ mod_Protein_Description_ui <- function(id){
 mod_Protein_Description_server <- function(id,
                                            dataIn = NULL,
                                            steps.enabled = reactive({NULL}),
-                                           reset = reactive({FALSE}),
+                                           remoteReset = reactive({FALSE}),
                                            status = reactive({NULL})
                                            ){
   
@@ -68,7 +68,7 @@ mod_Protein_Description_server <- function(id,
       dataIn = NULL,
       dataOut = NULL,
       status = NULL,
-      reset = NULL,
+      remoteReset = NULL,
       steps.enabled = NULL
     )
     
@@ -82,7 +82,7 @@ mod_Protein_Description_server <- function(id,
     })
     
     
-    observeEvent(reset(), {
+    observeEvent(remoteReset(), {
       lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })

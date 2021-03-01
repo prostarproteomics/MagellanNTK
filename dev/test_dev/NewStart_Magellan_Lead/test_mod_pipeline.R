@@ -5,7 +5,7 @@ library(QFeatures)
 options(shiny.fullstacktrace = T)
 source(file.path('.', 'mod_nav_pipeline.R'), local=FALSE)$value
 
-verbose <- T
+verbose <- F
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
@@ -52,7 +52,7 @@ mod_test_pipeline_server <- function(id){
       rv$dataOut <- mod_nav_pipeline_server(id = input$choosePipeline,
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
-                                            reset = reactive({FALSE})
+                                            remoteReset = reactive({FALSE})
       )
       
       output$UI <- renderUI({

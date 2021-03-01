@@ -310,15 +310,15 @@ output$SkippedInfoPanel <- renderUI({
   #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, '\n\n'))
   
   current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-  entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
+  #entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
   req(current_step_skipped)
   
   
-  if (entire_process_skipped){
+  #if (entire_process_skipped){
     # This case appears when the process has been skipped from the
     # pipleine. Thus, it is not necessary to show the info box because
     # it is shown below the timeline of the pipeline
-  } else {
+  #} else {
     txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
     wellPanel(
       style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
@@ -327,7 +327,7 @@ output$SkippedInfoPanel <- renderUI({
       align="center",
       p(style = "color: black;", paste0('Info: ',txt))
     )
-  }
+  #}
 })
 
 
@@ -366,39 +366,56 @@ observeEvent(rv.process$status, ignoreInit = T, {
   }
 })
 
+
+
+
 #' @description 
 #' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
 #' that the caller program wants this module to reset itself. 
-observeEvent(req(c(input$rstBtn,  reset())), ignoreInit=T,{
+observeEvent(req(is.skipped()), ignoreInit=T,{
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, '\n\n'))
-  showModal(dataModal())
+ print('is.skipped')
+ Update_State_Screens()
+ #rv.process$status <- rep(global$SKIPPED, rv.process$length)
 })
-
 
 
 observeEvent(input$closeModal, {removeModal() })
 
 
-observeEvent(req(input$modal_ok > 0), ignoreInit=F, ignoreNULL = T, {
+#' @description 
+#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+#' that the caller program wants this module to reset itself. 
+observeEvent(remoteReset(), ignoreInit = T, {
+  if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, '\n\n'))
+  #browser()
+  LocalReset()
+})
+
+
+#' @description 
+#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+#' that the caller program wants this module to reset itself. 
+observeEvent(input$rstBtn, ignoreInit = T, {
+  if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, '\n\n'))
+  #browser()
+  showModal(dataModal())
+})
+
+
+#' @description 
+#' Catches a clic on the `Ok` button of the modal for resetting a module
+observeEvent(input$modal_ok, ignoreInit=F, ignoreNULL = T, {
   if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, '\n\n'))
-  rv.process$local.reset <- input$rstBtn
+  #browser()
+  #rv.process$reset <- input$rstBtn + reset()
   #Set_All_Reset()
-  BasicReset()
+  LocalReset()
   
   removeModal()
 })
 
-#' @description
-#' Default actions on reset pipeline or process.
-#' 
-BasicReset = function(){
-  if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
-  #ResetScreens()
-  rv.process$dataIn <- NULL
-  rv.process$current.pos <- 1
-  rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-  Send_Result_to_Caller()
-}
+
 
 
 

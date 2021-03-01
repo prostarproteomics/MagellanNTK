@@ -36,7 +36,7 @@ mod_Protein_ui <- function(id){
 mod_Protein_server <- function(id,
                                dataIn = reactive({NULL}),
                                steps.enabled = reactive({NULL}),
-                               reset = reactive({FALSE}),
+                               remoteReset = reactive({FALSE}),
                                status = reactive({NULL})){
   
   #' @field global xxxx

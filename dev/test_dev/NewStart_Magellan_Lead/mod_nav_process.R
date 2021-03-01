@@ -83,8 +83,8 @@ mod_nav_process_ui <- function(id){
 mod_nav_process_server <- function(id,
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
-                                   reset = reactive({FALSE}),
-                                   status = reactive({NULL})
+                                   remoteReset = reactive({FALSE}),
+                                   is.skipped = reactive({FALSE})
                                    ){
   
   
@@ -126,6 +126,7 @@ mod_nav_process_server <- function(id,
       current.pos = 1
     )
     
+    verbose <- T
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
@@ -169,7 +170,7 @@ mod_nav_process_server <- function(id,
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
                                       steps.enabled = reactive({rv.process$steps.enabled}),
-                                      reset = reactive({rv.process$reset}),
+                                      remoteReset = reactive({input$rstBtn + remoteReset()}),
                                       status = reactive({rv.process$status})
                                       )
       )
@@ -239,22 +240,24 @@ mod_nav_process_server <- function(id,
     Update_State_Screens = function(){
       if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
       
-      ind.max <- GetMaxValidated_AllSteps()
-      #browser()
-      if (ind.max > 0) 
-        ToggleState_Screens(cond = FALSE, range = 1:ind.max)
-      
-      
-      if (ind.max < rv.process$length){
-        # Enable all steps after the current one but the ones
-        # after the first mandatory not validated
-        firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
-        if (is.null(firstM)){
-          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
-        } else {
-          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
-          if (ind.max + firstM < rv.process$length)
-            ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
+      if (isTRUE(is.skipped())){
+        ToggleState_Screens(cond = FALSE, range = 1:rv.process$length)
+      } else {
+        ind.max <- GetMaxValidated_AllSteps()
+        if (ind.max > 0)
+          ToggleState_Screens(cond = FALSE, range = 1:ind.max)
+        
+        if (ind.max < rv.process$length){
+          # Enable all steps after the current one but the ones
+          # after the first mandatory not validated
+          firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
+          if (is.null(firstM)){
+            ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
+          } else {
+            ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
+            if (ind.max + firstM < rv.process$length)
+              ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
+          }
         }
       }
       # browser()
@@ -288,6 +291,7 @@ mod_nav_process_server <- function(id,
         Update_State_Screens()
         ToggleState_Screens(TRUE, 1)
       }
+      #browser()
     })
     
 
@@ -304,8 +308,8 @@ mod_nav_process_server <- function(id,
     #' #' @description
     #' #' Default actions on reset pipeline or process.
     #' #' 
-    #' BasicReset = function(){
-    #'   if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
+    #' LocalReset = function(){
+    #'   if(verbose) cat(paste0('LocalReset() from - ', id, '\n\n'))
     #'   #ResetScreens()
     #'   rv.process$dataIn <- NULL
     #'   rv.process$current.pos <- 1
@@ -327,7 +331,18 @@ mod_nav_process_server <- function(id,
       shinyjs::show(rv.process$config$steps[rv.process$current.pos])
     })
     
-
+    #' @description
+    #' Default actions on reset pipeline or process.
+    #' 
+    LocalReset = function(){
+      if(verbose) cat(paste0('LocalReset() from - ', id, '\n\n'))
+      #browser()
+      rv.process$dataIn <- NULL
+      #rv.process$temp.dataIn <- NULL
+      rv.process$current.pos <- 1
+      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+      Send_Result_to_Caller()
+    }
     
     #' @description
     #' Show/hide an information panel if the process is entirely skipped
@@ -457,8 +472,7 @@ mod_nav_process_server <- function(id,
   #  observeEvent(dataOut$trigger, { browser()})
     list(dataOut = reactive({dataOut}),
          steps.enabled = reactive({rv.process$steps.enabled}),
-         status = reactive({rv.process$status}),
-         reset = reactive({rv.process$local.reset})
+         status = reactive({rv.process$status})
     )
     
     

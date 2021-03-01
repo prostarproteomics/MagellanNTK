@@ -20,7 +20,7 @@ mod_Protein_Normalization_ui <- function(id){
 mod_Protein_Normalization_server <- function(id,
                                              dataIn = NULL,
                                              steps.enabled = reactive({NULL}),
-                                             reset = reactive({FALSE}),
+                                             remoteReset = reactive({FALSE}),
                                              status = reactive({NULL})
                                              ){
   
@@ -90,7 +90,7 @@ mod_Protein_Normalization_server <- function(id,
     })
 
     
-    observeEvent(reset(), {
+    observeEvent(remoteReset(), {
       lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })

@@ -36,7 +36,7 @@ mod_test_process_ui <- function(id){
       ),
       column(width=2, actionButton(ns('simReset'), 'Remote reset')),
       column(width=2, actionButton(ns('simEnabled'), 'Remote enable/disable')),
-      column(width=2, actionButton(ns('simStatus'), 'Remote change status'))
+      column(width=2, actionButton(ns('simSkipped'), 'Remote is.skipped'))
     ),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
@@ -62,13 +62,14 @@ mod_test_process_server <- function(id){
       dataIn = Exp1_R25_prot,
       dataOut = NULL,
       remoteReset = FALSE,
-      remoteStatus = NULL,
-      remoteEnabled = FALSE
+      remoteSkipped = FALSE,
+      remoteEnabled = TRUE
     )
     
 
     observeEvent(input$simReset, {rv$remoteReset <- input$simReset})
     observeEvent(input$simEnabled, {rv$remoteEnabled <- input$simEnabled%%2 != 0})
+    observeEvent(input$simSkipped, {rv$remoteSkipped <- input$simSkipped%%2 != 0})
     
     
     observe({
@@ -79,8 +80,8 @@ mod_test_process_server <- function(id){
       rv$dataOut <- mod_nav_process_server(id = basename,
                                            dataIn = reactive({rv$dataIn}),
                                            is.enabled = reactive({rv$remoteEnabled}),
-                                           reset = reactive({rv$remoteReset}),
-                                           status = reactive({NULL})
+                                           remoteReset = reactive({rv$remoteReset}),
+                                           is.skipped = reactive({rv$remoteSkipped})
                                            )
       observeEvent(rv$dataOut$dataOut()$trigger, {
         print('totototo')
