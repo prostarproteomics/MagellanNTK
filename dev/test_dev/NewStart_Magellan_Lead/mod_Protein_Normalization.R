@@ -129,7 +129,8 @@ output$Description <- renderUI({
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
   print('youhou')
   rv$dataIn <- dataIn()
-  rv$status['Description'] <- global$VALIDATED
+  rv$dataOut <- NA
+  #rv$status['Description'] <- global$VALIDATED
   
 })
 
@@ -233,7 +234,8 @@ output$Step1 <- renderUI({
 
 observeEvent(input$btn_validate_Step1, ignoreInit = T, {
   # Add your stuff code here
-  rv$status['Step1'] <- global$VALIDATED
+  rv$dataOut <- NA
+  #rv$status['Step1'] <- global$VALIDATED
 })
 
 #-------------------------- Code for step 2 ------------------------------
@@ -299,7 +301,8 @@ output$Step2 <- renderUI({
 
 observeEvent(input$btn_validate_Step2, ignoreInit = T, {
   # Add your stuff code here
-  rv$status['Step2'] <- global$VALIDATED
+  rv$dataOut <- NA
+  #rv$status['Step2'] <- global$VALIDATED
 })
 
 

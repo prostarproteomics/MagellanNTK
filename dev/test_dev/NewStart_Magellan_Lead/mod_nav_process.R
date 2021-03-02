@@ -151,8 +151,12 @@ mod_nav_process_server <- function(id,
     #' This function is only used to communicate between the process module and and the caller
     observeEvent(rv.process$proc$dataOut(), ignoreNULL = TRUE, ignoreInit = TRUE, {
       print('end')
-      rv.process$dataIn <- rv.process$proc$dataOut()
-      Send_Result_to_Caller()
+      if (is.na(rv.process$proc$dataOut())){
+        rv.process$status[rv.process$current.pos] <- global$VALIDATED
+      } else {
+        rv.process$dataIn <- rv.process$proc$dataOut()
+        Send_Result_to_Caller()
+      }
      # browser()
     })
     
