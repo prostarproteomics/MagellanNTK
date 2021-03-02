@@ -116,15 +116,9 @@ mod_Protein_Description_server <- function(id,
     }
     
     observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-      print('tutu')
       rv$dataIn <- dataIn()
       rv$dataOut <- rv$dataIn
-      #Send_Result_to_Caller = function(){
-      #  if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, '\n\n'))
-      #  dataOut$trigger <- Timestamp()
-      #  dataOut$value <- rv$dataIn
-     # }
-      rv$status['Description'] <- global$VALIDATED
+      #rv$status['Description'] <- global$VALIDATED
     })
     
     list(config = reactive({
@@ -136,8 +130,8 @@ mod_Protein_Description_server <- function(id,
                               )
                   config
                   }),
-        dataOut = reactive({rv$dataOut}),
-        status = reactive({rv$status})
+        dataOut = reactive({rv$dataOut})
+        #status = reactive({rv$status})
     )
     
     

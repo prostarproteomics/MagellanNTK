@@ -363,7 +363,8 @@ mod_nav_pipeline_server <- function(id,
       
       Change_Current_Pos(1)
       rv.process$temp.dataIn <- dataIn()
-      PrepareData2Send() # Used by class pipeline
+      if (is.null(rv.process$dataIn))
+          PrepareData2Send() # Used by class pipeline
       
       if(is.null(dataIn())){
         print('Process : dataIn() NULL')
@@ -397,21 +398,23 @@ mod_nav_pipeline_server <- function(id,
         if (name == CurrentStepName()){
           # One treat the dataset for the current position
           #ind.last.validated <- self$GetMaxValidated_BeforeCurrentPos()
-          name.last.validated <- names(rv.process$dataIn)[length(rv.process$dataIn)]
-          ind.last.validated <- which(names(rv.process$dataIn)== name.last.validated)
+          #name.last.validated <- names(rv.process$dataIn)[length(rv.process$dataIn)]
+          #ind.last.validated <- which(names(rv.process$dataIn)== name.last.validated)
+          ind.last.validated <- GetMaxValidated_BeforeCurrentPos()
           
           if (is.null(ind.last.validated)){
             data <- rv.process$temp.dataIn
           } else {
             data <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                            range = 1:ind.last.validated)
+                                            range = 1:(ind.last.validated + rv.process$original.length -1)
+            )
             #data <- self$rv$dataIn[ , , 1:ind.last.validated]
           }
         }
         return(data)
       }
       
-      #browser() 
+      browser() 
       rv.child$data2send <- setNames(
         lapply(rv.process$config$steps, function(x){NULL}),
         rv.process$config$steps)
@@ -461,7 +464,7 @@ mod_nav_pipeline_server <- function(id,
                                 rv.process$config$steps)
       triggerValues <- unlist(return.trigger.values)
       
-      #browser()
+      browser()
       # if (sum(triggerValues)==0){ # Init of core engine
       #   rv.process$dataIn <- rv.process$temp.dataIn
       # } else
@@ -469,20 +472,25 @@ mod_nav_pipeline_server <- function(id,
         print('The entire pipeline has been reseted')
           rv.process$dataIn <- NULL
           rv.process$status[1:rv.process$length] <- global$UNDONE
-        PrepareData2Send()
+          
+        #PrepareData2Send()
       } else {
         processHasChanged <- rv.process$config$steps[which(max(triggerValues)==triggerValues)]
         ind.processHasChanged <- which(rv.process$config$steps==processHasChanged)
         newValue <- tmp.return[[processHasChanged]]$dataOut()$value
         
         
-        # process has been reseted
+        # A process has been reseted
         if (is.null(newValue)){
           rv.process$status[ind.processHasChanged:rv.process$length] <- global$UNDONE
+          rv.process$steps.enabled[ind.processHasChanged:rv.process$length] <- FALSE
+          rv.process$steps.skipped[ind.processHasChanged:rv.process$length] <- FALSE
+          
           #browser()
           # Reset all further steps also
-          rv.process$reset[ind.processHasChanged:rv.process$length] <- TRUE
-          rv.process$reset[1:(ind.processHasChanged-1)] <- FALSE
+          if (ind.processHasChanged < rv.process$length)
+            rv.process$reset[(1+ind.processHasChanged):rv.process$length] <- TRUE
+          #rv.process$reset[1:(ind.processHasChanged-1)] <- FALSE
 
           # Reset all further steps also
           #rv.child$reset[ind.processHasChanged:length(rv.process$config$steps)] <- TRUE
@@ -507,21 +515,23 @@ mod_nav_pipeline_server <- function(id,
                                                          range = 1:dataIn.ind.last.validated)
             
           }
-          
+          Update_State_Screens()
           # In this case, one force the update of the input dataset
-          PrepareData2Send()
+          #PrepareData2Send()
         } else {
           # browser()
-          # process has been validated
+          # A process has been validated
           rv.process$status[processHasChanged] <- global$VALIDATED
-          if (ind.processHasChanged < length(rv.process$config$steps))
-            rv.process$status[(ind.processHasChanged+1):length(rv.process$config$steps)] <- global$UNDONE
+          if (ind.processHasChanged < rv.process$length)
+            rv.process$status[(1 + ind.processHasChanged):rv.process$length] <- global$UNDONE
           
           Discover_Skipped_Steps()
           rv.process$dataIn <- newValue
         }
         
       }
+      #PrepareData2Send()
+       
       Send_Result_to_Caller()
     }
     
@@ -564,7 +574,7 @@ mod_nav_pipeline_server <- function(id,
    
     
     #-------------------------------------------------------
-    observeEvent(rv.process$current.pos, ignoreInit = F,{
+    observeEvent(rv.process$current.pos, ignoreInit = T,{
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))
       
       shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)

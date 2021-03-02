@@ -73,7 +73,7 @@ mod_timeline_v_server = function(id,
       })
       
       active <- reactive({
-        "background-color: white;box-shadow: 0 0 0 3px black;"
+        "box-shadow: 0 0 0 3px black;"
       })
       
       undone <- reactive({

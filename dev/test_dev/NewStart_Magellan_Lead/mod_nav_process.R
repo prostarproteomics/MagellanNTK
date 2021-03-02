@@ -471,8 +471,8 @@ mod_nav_process_server <- function(id,
     
   #  observeEvent(dataOut$trigger, { browser()})
     list(dataOut = reactive({dataOut}),
-         steps.enabled = reactive({rv.process$steps.enabled}),
-         status = reactive({rv.process$status})
+         steps.enabled = reactive({rv.process$steps.enabled})
+         #status = reactive({rv.process$status})
     )
     
     

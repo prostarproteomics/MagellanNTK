@@ -327,8 +327,8 @@ observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
   rv$dataIn <- AddItemToDataset(rv$dataIn, config$name)
   rv$dataOut <- rv$dataIn
-  print(names(rv$dataOut))
-  rv$status['Step3'] <- global$VALIDATED
+  #print(names(rv$dataOut))
+ # rv$status['Step3'] <- global$VALIDATED
 })
 
 
@@ -344,8 +344,8 @@ list(config = reactive({
   )
   config
 }),
-dataOut = reactive({rv$dataOut}),
-status = reactive({rv$status})
+dataOut = reactive({rv$dataOut})
+#status = reactive({rv$status})
 )
 
 
