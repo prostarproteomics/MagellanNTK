@@ -34,8 +34,7 @@ mod_Protein_Description_ui <- function(id){
 mod_Protein_Description_server <- function(id,
                                            dataIn = NULL,
                                            steps.enabled = reactive({NULL}),
-                                           remoteReset = reactive({FALSE}),
-                                           status = reactive({NULL})
+                                           remoteReset = reactive({FALSE})
                                            ){
   
   #' @field global xxxx
@@ -72,7 +71,14 @@ mod_Protein_Description_server <- function(id,
       steps.enabled = NULL
     )
     
-    observeEvent(status(), { rv$status <- status()})
+    dataOut <- reactiveValues(
+    trigger = NULL,
+    value = NULL)
+    
+    
+    
+    
+    
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
       if (is.null(steps.enabled()))
@@ -115,9 +121,11 @@ mod_Protein_Description_server <- function(id,
       as.numeric(Sys.time())
     }
     
-    observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+    observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL = T, {
       rv$dataIn <- dataIn()
-      rv$dataOut <- rv$dataIn
+      browser()
+      dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
+      dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
       #rv$status['Description'] <- global$VALIDATED
     })
     
@@ -130,7 +138,7 @@ mod_Protein_Description_server <- function(id,
                               )
                   config
                   }),
-        dataOut = reactive({rv$dataOut})
+        dataOut = reactive({dataOut})
         #status = reactive({rv$status})
     )
     

@@ -20,8 +20,7 @@ mod_Protein_Normalization_ui <- function(id){
 mod_Protein_Normalization_server <- function(id,
                                              dataIn = NULL,
                                              steps.enabled = reactive({NULL}),
-                                             remoteReset = reactive({FALSE}),
-                                             status = reactive({NULL})
+                                             remoteReset = reactive({FALSE})
                                              ){
   
   #' @field global xxxx
@@ -61,6 +60,11 @@ mod_Protein_Normalization_server <- function(id,
       steps.enabled = NULL
     )
     
+    
+    dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL
+    )
 
     #' @field config xxxx
     config <- reactiveValues(
@@ -78,8 +82,6 @@ mod_Protein_Normalization_server <- function(id,
     )
 
     
-    observeEvent(status(), { rv$status <- status()})
-    
     
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
@@ -95,6 +97,7 @@ mod_Protein_Normalization_server <- function(id,
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })
     })
+    
 ###-----------------------------------------------------------------------------------------------------
 
     
@@ -127,9 +130,9 @@ output$Description <- renderUI({
     
     
 observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
-  print('youhou')
   rv$dataIn <- dataIn()
-  rv$dataOut <- NA
+  dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
+  dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
   #rv$status['Description'] <- global$VALIDATED
   
 })
@@ -234,7 +237,8 @@ output$Step1 <- renderUI({
 
 observeEvent(input$btn_validate_Step1, ignoreInit = T, {
   # Add your stuff code here
-  rv$dataOut <- NA
+  dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
+  dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
   #rv$status['Step1'] <- global$VALIDATED
 })
 
@@ -301,7 +305,8 @@ output$Step2 <- renderUI({
 
 observeEvent(input$btn_validate_Step2, ignoreInit = T, {
   # Add your stuff code here
-  rv$dataOut <- NA
+  dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
+  dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
   #rv$status['Step2'] <- global$VALIDATED
 })
 
@@ -329,8 +334,9 @@ output$Step3 <- renderUI({
 observeEvent(input$btn_validate_Step3, ignoreInit = T, {
   # Add your stuff code here
   rv$dataIn <- AddItemToDataset(rv$dataIn, config$name)
-  rv$dataOut <- rv$dataIn
-  #print(names(rv$dataOut))
+  dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
+  dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
+  #print(names(dataOut))
  # rv$status['Step3'] <- global$VALIDATED
 })
 
@@ -347,7 +353,7 @@ list(config = reactive({
   )
   config
 }),
-dataOut = reactive({rv$dataOut})
+dataOut = reactive({dataOut})
 #status = reactive({rv$status})
 )
 
