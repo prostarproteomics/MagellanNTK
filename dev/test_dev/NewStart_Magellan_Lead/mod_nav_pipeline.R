@@ -479,9 +479,7 @@ mod_nav_pipeline_server <- function(id,
         ind.processHasChanged <- which(rv.process$config$steps==processHasChanged)
         newValue <- tmp.return[[processHasChanged]]$dataOut()$value
         
-        if (is.na(new.value)){
-          
-        } else if (is.null(newValue)){
+        if (is.null(newValue)){
           # A process has been reseted
           rv.process$status[ind.processHasChanged:rv.process$length] <- global$UNDONE
           rv.process$steps.enabled[ind.processHasChanged:rv.process$length] <- FALSE

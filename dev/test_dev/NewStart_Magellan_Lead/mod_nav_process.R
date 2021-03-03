@@ -163,7 +163,9 @@ mod_nav_process_server <- function(id,
       Discover_Skipped_Steps()
       if (rv.process$current.pos == rv.process$length){
         rv.process$dataIn <- rv.process$proc$dataOut()$value
-        Send_Result_to_Caller()
+        #Send_Result_to_Caller()
+        dataOut$trigger <- rv.process$proc$dataOut()$trigger
+        dataOut$value <- rv.process$proc$dataOut()$value
       }
       
       
