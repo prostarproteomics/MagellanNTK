@@ -122,7 +122,14 @@ mod_nav_pipeline_server <- function(id,
 
     verbose <- F
     # Specific to pipeline module
+    
     tmp.return <- reactiveValues()
+    
+    pipe.dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL,
+      name = NULL
+    )
     
     rv.child <- reactiveValues(
       enabled = NULL,
@@ -180,6 +187,7 @@ mod_nav_pipeline_server <- function(id,
       rv.process$proc <- do.call(paste0('mod_', id, '_server'),
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
+                                      nav.dataOut = tmp.return,
                                       steps.enabled = reactive({rv.process$steps.enabled}),
                                       remoteReset = reactive({FALSE}),
                                       status = reactive({rv.process$status})
@@ -227,6 +235,7 @@ mod_nav_pipeline_server <- function(id,
       lapply(rv.process$config$steps, function(x){
         tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
                                                   dataIn = reactive({ rv.child$data2send[[x]] }),
+                                                  nav.dataOut = pipe.dataOut,
                                                   is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
                                                   remoteReset = reactive({rv.process$reset[x]}),
                                                   is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
