@@ -11,9 +11,9 @@ verbose <- T
 #------------------------ Class TimelineDraw -----------------------------------
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-source(file.path('.', 'mod_Protein.R'), local=TRUE)$value
-source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
-source(file.path('.', 'mod_Protein_Description.R'), local=TRUE)$value
+#source(file.path('.', 'mod_Protein.R'), local=TRUE)$value
+#source(file.path('.', 'mod_Protein_Normalization.R'), local=TRUE)$value
+#source(file.path('.', 'mod_Protein_Description.R'), local=TRUE)$value
 
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"

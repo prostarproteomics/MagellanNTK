@@ -2,7 +2,7 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
-source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
+#source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
 
 
 verbose <- F
@@ -102,7 +102,6 @@ mod_nav_pipeline_ui <- function(id){
 #' @export
 #' 
 mod_nav_pipeline_server <- function(id,
-                                   #config = NULL,
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
                                    remoteReset = reactive({FALSE}),
@@ -122,14 +121,17 @@ mod_nav_pipeline_server <- function(id,
 
     verbose <- F
     # Specific to pipeline module
+    # Used to xxxx
     tmp.return <- reactiveValues()
     
+    # Used to xxx
     rv.child <- reactiveValues(
       enabled = NULL,
       reset = NULL,
       position = NULL
     )
     
+    # Used to xxx
     rv.process <- reactiveValues(
       proc = NULL,
       status = NULL,
@@ -144,14 +146,7 @@ mod_nav_pipeline_server <- function(id,
     modal_txt <- "This action will reset this pipeline. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
-    observeEvent(rv.process$proc$status(), {
-      #browser()
-      # If step 1 has been validated, then initialize dataIn
-      if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
-        rv.process$dataIn <- rv.process$temp.dataIn
-      
-      rv.process$status <- rv.process$proc$status() 
-    })
+    
     
     # 
     # BuildScreens <- reactive({
@@ -171,33 +166,41 @@ mod_nav_pipeline_server <- function(id,
     # })
     # 
     
-    
+    # Catch any event on the 'id' parameter. As this parameter change only
+    # when the server is created, this function can be view as the initialization
+    # of the server
     observeEvent(id, {
+      # The package containing the code for processes is supposed to be
+      # already launched. Just check if the server module is ok
+      if (!exists('mod_Protein_server', where='package:MSPipelines', mode='function')){
+        warning("This pipeline is not available in MSPipelines")
+        return(NULL)
+      }
       
-      # Load code for pipeline if it is in a subdirectory of R directory
-      #for (x in rv.process$config$steps)
-      #  source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+      
       rv.process$proc <- do.call(paste0('mod_', id, '_server'),
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
                                       steps.enabled = reactive({rv.process$steps.enabled}),
                                       remoteReset = reactive({FALSE}),
                                       status = reactive({rv.process$status})
+                                      )
                                  )
-      )
       
       
       
       
-      
+     # browser()
       rv.process$config <- rv.process$proc$config()
+      
+      # Launch the ui for each step of the pipeline
       rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
                          function(x){
-                           source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-                           mod_nav_process_ui(ns(paste0(id, '_', x)))
+                            mod_nav_process_ui(ns(paste0(id, '_', x)))
                          }),
                   paste0('screen_', rv.process$config$steps)
          )
+      
       rv.process$length <- length(rv.process$config$steps)
       rv.process$current.pos  <- 1
       
@@ -245,7 +248,15 @@ mod_nav_pipeline_server <- function(id,
     }, priority=1000) 
     
 
-    
+    # Catch any event in the status of xxx
+    observeEvent(req(rv.process$proc$status()), {
+      #browser()
+      # If step 1 has been validated, then initialize rv.process$dataIn
+      if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
+        rv.process$dataIn <- rv.process$temp.dataIn
+      
+      rv.process$status <- rv.process$proc$status() 
+    })
     
     output$EncapsulateScreens <- renderUI({
      # browser()
@@ -414,7 +425,7 @@ mod_nav_pipeline_server <- function(id,
         return(data)
       }
       
-      browser() 
+      #browser() 
       rv.child$data2send <- setNames(
         lapply(rv.process$config$steps, function(x){NULL}),
         rv.process$config$steps)
@@ -467,7 +478,7 @@ mod_nav_pipeline_server <- function(id,
       cat(blue('--------------- return.values --------------------\n'))
       print(return.values)
       cat(blue('--------------- return.values --------------------\n'))
-      browser()
+      #browser()
       # if (sum(triggerValues)==0){ # Init of core engine
       #   rv.process$dataIn <- rv.process$temp.dataIn
       # } else

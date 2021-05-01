@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(QFeatures)
+library(MSPipelines)
 
 options(shiny.fullstacktrace = T)
 source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
@@ -31,7 +32,7 @@ mod_test_process_ui <- function(id){
       ),
       column(width=2,
              selectInput(ns('chooseProcess'), 'Choose process', 
-                         choices = setNames(nm=c('', 'Normalization', 'Description')),
+                         choices = setNames(nm=c('', 'Description', 'Normalization', 'Filtering')),
                          width = '200')
       ),
       column(width=2, actionButton(ns('simReset'), 'Remote reset')),
@@ -75,7 +76,8 @@ mod_test_process_server <- function(id){
     observe({
       req(input$choosePipeline != '' && input$chooseProcess != '')
       basename <- paste0(input$choosePipeline, '_', input$chooseProcess)
-      source(file.path('.', paste0('mod_', basename,'.R')), local=FALSE)$value
+      
+     # source(file.path('.', paste0('mod_', basename,'.R')), local=FALSE)$value
       
       rv$dataOut <- mod_nav_process_server(id = basename,
                                            dataIn = reactive({rv$dataIn}),

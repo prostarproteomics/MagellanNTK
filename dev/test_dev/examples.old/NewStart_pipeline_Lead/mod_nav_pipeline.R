@@ -261,7 +261,7 @@ mod_nav_pipeline_server <- function(id,
     #
     observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
-      browser()
+      #browser()
       
       Change_Current_Pos(1)
       #rv.process$dataIn <- dataIn()

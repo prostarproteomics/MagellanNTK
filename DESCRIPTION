@@ -22,9 +22,6 @@ Collate:
     code_for_process.R
     code_for_pipeline.R
     commonFuncs.R
-    mod_Protein.R
-    mod_Protein_Description.R
-    mod_Protein_Normalization.R
     mod_nav_process.R
     mod_timeline_h.R
     mod_timeline_v.R

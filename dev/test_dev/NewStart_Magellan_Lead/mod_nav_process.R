@@ -153,29 +153,7 @@ mod_nav_process_server <- function(id,
     
     
     
-    #' @description
-    #' Catch the dataset sent by the process module and instantiate the rv$dataOut variable
-    #' which is the return value of the module.
-    #' This function is only used to communicate between the process module and and the caller
-    observeEvent(rv.process$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
-      print('end')
-      rv.process$status[rv.process$current.pos] <- global$VALIDATED
-      Discover_Skipped_Steps()
-      if (rv.process$current.pos == rv.process$length){
-        rv.process$dataIn <- rv.process$proc$dataOut()$value
-        #Send_Result_to_Caller()
-        dataOut$trigger <- rv.process$proc$dataOut()$trigger
-        dataOut$value <- rv.process$proc$dataOut()$value
-      }
-      
-      
-      if (rv.process$current.pos==1)
-        rv.process$dataIn <- rv.process$temp.dataIn
-      
-      
-      
-     # browser()
-    })
+   
     
     
     #' @description 
@@ -187,6 +165,7 @@ mod_nav_process_server <- function(id,
     observeEvent(id, {
       #browser()
       # Launch of the module process server
+      print(paste0("Launch ", paste0('mod_', id, '_server')))
       rv.process$proc <- do.call(paste0('mod_', id, '_server'),
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
@@ -224,6 +203,29 @@ mod_nav_process_server <- function(id,
     }, priority=1000) 
     
 
+    #' @description
+    #' Catch the dataset sent by the process module and instantiate the rv$dataOut variable
+    #' which is the return value of the module.
+    #' This function is only used to communicate between the process module and and the caller
+    observeEvent(rv.process$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
+      print('end')
+      rv.process$status[rv.process$current.pos] <- global$VALIDATED
+      Discover_Skipped_Steps()
+      if (rv.process$current.pos == rv.process$length){
+        rv.process$dataIn <- rv.process$proc$dataOut()$value
+        #Send_Result_to_Caller()
+        dataOut$trigger <- rv.process$proc$dataOut()$trigger
+        dataOut$value <- rv.process$proc$dataOut()$value
+      }
+      
+      
+      if (rv.process$current.pos==1)
+        rv.process$dataIn <- rv.process$temp.dataIn
+      
+      
+      
+      # browser()
+    })
     
     #' @description
     #' xxx

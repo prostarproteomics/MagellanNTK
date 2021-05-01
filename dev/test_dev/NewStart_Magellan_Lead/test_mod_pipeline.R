@@ -2,6 +2,8 @@ library(shiny)
 library(shinyjs)
 library(QFeatures)
 library(crayon)
+library(MSPipelines)
+
 
 options(shiny.fullstacktrace = T)
 source(file.path('.', 'mod_nav_pipeline.R'), local=FALSE)$value
@@ -18,7 +20,7 @@ mod_test_pipeline_ui <- function(id){
   ns <- NS(id)
   tagList(
     selectInput(ns('choosePipeline'), 'Choose pipeline',
-                choices = setNames(nm=c('', 'Protein')),
+                choices = setNames(nm=c('', names(MSPipelines::Pipelines()))),
                 width = '200'),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
@@ -47,14 +49,15 @@ mod_test_pipeline_server <- function(id){
     observe({
       
       req(input$choosePipeline != '')
-      basename <- paste0('mod_', input$choosePipeline)
-      source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
-      # browser()
+      #basename <- paste0('mod_', input$choosePipeline)
+      #source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+      # Get the return value of the pipeline server
       rv$dataOut <- mod_nav_pipeline_server(id = input$choosePipeline,
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
                                             remoteReset = reactive({FALSE})
-      )
+                                            )
+      #browser()
       
       output$UI <- renderUI({
         req(input$choosePipeline != '')
@@ -67,7 +70,7 @@ mod_test_pipeline_server <- function(id){
     
     
     #--------------------------------------------
-    #--------------------------------------------------------------------
+    #--------------------------------------------
     
     output$show_Debug_Infos <- renderUI({
       fluidRow(
