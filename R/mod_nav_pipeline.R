@@ -1,7 +1,7 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
-source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
+#source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
+#source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
 #source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
 
 
@@ -39,6 +39,11 @@ Add_Item_to_Dataset <- function(dataset, name){
 #' @description
 #' Removes one or more items from the dataset. This function is specific of the
 #' type of dataset.
+#' 
+#' 
+#' @param dataset xxx
+#' 
+#' @param range xxx
 #'
 #' @return
 #' The dataset minus some items
@@ -50,8 +55,15 @@ Keep_Items_from_Dataset <- function(dataset, range){
 }
 
 
-
-
+#' @title xxx
+#' 
+#' @description 
+#' xxxxxx
+#' 
+#' @param id xxx
+#' 
+#' @export
+#'
 mod_nav_pipeline_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -99,6 +111,19 @@ mod_nav_pipeline_ui <- function(id){
 }
 
 
+
+#' @title xxx
+#' 
+#' @description 
+#' xxxxxx
+#' 
+#' @param id xxx
+#' 
+#' @param dataIn xxx
+#' @param is.enabled xxx
+#' @param remoteReset xxx
+#' @param is.skipped xxx
+#' 
 #' @export
 #' 
 mod_nav_pipeline_server <- function(id,
@@ -117,8 +142,140 @@ mod_nav_pipeline_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
-
+    #source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
+    source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
+    
+    ################################################################
+    #
+    #
+    ############################################################"
+    
+    output$EncapsulateScreens <- renderUI({
+      tagList(
+        lapply(1:length(rv.process$config$ll.UI), function(i) {
+          if (i==1)
+            div(id = ns(rv.process$config$steps[i]),
+                class = paste0("page_", id),
+                rv.process$config$ll.UI[[i]]
+            )
+          else
+            shinyjs::hidden(
+              div(id =  ns(rv.process$config$steps[i]),
+                  class = paste0("page_", id),
+                  rv.process$config$ll.UI[[i]]
+              )
+            )
+        }
+        )
+      )
+      
+      
+    })
+    
+    
+    
+    
+    output$SkippedInfoPanel <- renderUI({
+      #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
+      
+      current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
+      #entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
+      req(current_step_skipped)
+      
+      
+      #if (entire_process_skipped){
+      # This case appears when the process has been skipped from the
+      # pipleine. Thus, it is not necessary to show the info box because
+      # it is shown below the timeline of the pipeline
+      #} else {
+      txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
+      wellPanel(
+        style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
+        height = 100,
+        width=300,
+        align="center",
+        p(style = "color: black;", paste0('Info: ',txt))
+      )
+      #}
+    })
+    
+    
+    
+    
+    output$show_Debug_Infos <- renderUI({
+      tagList(
+        uiOutput(ns('show_tag_enabled')),
+        fluidRow(
+          column(width=2,
+                 tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
+                 uiOutput(ns('show_dataIn'))),
+          # column(width=2,
+          #        tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
+          #        uiOutput(ns('show_rv_dataIn'))),
+          column(width=2,
+                 tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
+                 uiOutput(ns('show_rv_dataOut'))),
+          column(width=4,
+                 tags$b(h4(style = 'color: blue;', "status")),
+                 uiOutput(ns('show_status')))
+        )
+      )
+    })
+    
+    ###########---------------------------#################
+    output$show_dataIn <- renderUI({
+      if (verbose) cat(paste0('::output$show_dataIn from - ', id, "\n\n"))
+      req(dataIn())
+      tagList(
+        # h4('show dataIn()'),
+        lapply(names(dataIn()), function(x){tags$p(x)})
+      )
+    })
+    
+    # output$show_rv_dataIn <- renderUI({
+    #   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
+    #   req(rv.process$dataIn)
+    #   tagList(
+    #     # h4('show dataIn()'),
+    #     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
+    #   )
+    # })
+    
+    output$show_rv_dataOut <- renderUI({
+      if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, "\n\n"))
+      tagList(
+        #h4('show dataOut$value'),
+        lapply(names(dataOut$value), function(x){tags$p(x)})
+      )
+    })
+    
+    
+    output$show_status <- renderUI({
+      tagList(lapply(1:rv.process$length, 
+                     function(x){
+                       color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
+                       if (x == rv.process$current.pos)
+                         tags$p(style = paste0('color: ', color, ';'),
+                                tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
+                       else 
+                         tags$p(style = paste0('color: ', color, ';'),
+                                paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
+                     }))
+    })
+    
+    output$show_tag_enabled <- renderUI({
+      tagList(
+        p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
+        p(paste0('enabled() = ', as.numeric(is.enabled())))
+      )
+    })
+    
+    
+    
+    #
+    #
+    ##############################################################
+    
     verbose <- F
     # Specific to pipeline module
     # Used to xxxx
@@ -282,6 +439,8 @@ mod_nav_pipeline_server <- function(id,
     
     
     
+    # Default actions on reset pipeline or process.
+    # 
     LocalReset = function(){
       if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
       #browser()
@@ -341,7 +500,8 @@ mod_nav_pipeline_server <- function(id,
       }
       # browser()
     }
-
+    
+ 
     ToggleState_Screens = function(cond, range){
       if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, "\n\n"))
       #browser()

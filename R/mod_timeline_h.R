@@ -2,11 +2,12 @@
 #'
 #' @description A shiny Module.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
-#'
-#' @noRd 
+#' @param id xxx
 #'
 #' @importFrom shiny NS tagList 
+#' 
+#' @export
+#' 
 mod_timeline_h_ui <- function(id){
   ns <- NS(id)
   fpath <- system.file("app/www/sass", 
@@ -22,9 +23,18 @@ mod_timeline_h_ui <- function(id){
     )
 }
     
-#' timeline Server Function
-#'
-#' @noRd 
+#' @title timeline Server Function
+#' 
+#' @description xxx
+#' 
+#' @param id xxx
+#' @param config xxx
+#' @param status xxx
+#' @param position xxx
+#' @param enabled xxx
+#' 
+#' @export
+#' 
 mod_timeline_h_server = function(id, 
                                config, 
                                status, 

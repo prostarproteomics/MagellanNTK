@@ -99,6 +99,10 @@ CurrentStepName <- reactive({
 #' @description
 #' Adds one or more items to the dataset. This function is specific of the
 #' type of dataset.
+#' 
+#' @param dataset xxx
+#' 
+#' @param name xxx
 #'
 #' @importFrom QFeatures addAssay
 #'
@@ -118,6 +122,10 @@ Add_Item_to_Dataset <- function(dataset, name){
 #' @description
 #' Removes one or more items from the dataset. This function is specific of the
 #' type of dataset.
+#' 
+#' @param dataset xxx
+#' 
+#' @param range xxx
 #'
 #' @return
 #' The dataset minus some items
@@ -134,18 +142,20 @@ Keep_Items_from_Dataset <- function(dataset, range){
 observeEvent(lapply(rv.process$config$steps, 
                     function(x){
                       tmp.return[[x]]()$trigger}), ignoreInit=T,{
-                        if(verbose) cat(paste0('observeEvent(trigger) from - ', id, '\n\n'))
+                        if(verbose) cat(paste0('observeEvent(trigger) from - ', id, "\n\n"))
                         #browser()
                         ActionOn_Data_Trigger()
                       })
 
+#' @title xxx
+#' 
 #' @description
 #' This function calls the server part of each module composing the pipeline
 #'
 #' @return Nothing
 #'
 PrepareData2Send = function(){
-  if(verbose) cat(paste0('PrepareData2Send() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('PrepareData2Send() from - ', id, "\n\n"))
   # browser()
   # Returns NULL to all modules except the one pointed by the current position
   # Initialization of the pipeline : one send dataIn() to the
@@ -202,7 +212,7 @@ PrepareData2Send = function(){
 # Catch a new dataset sent by the caller
 #
 observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
-  if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
+  if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, "\n\n"))
   #browser()
   
   # action <- function()
@@ -233,18 +243,22 @@ observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
 })
 
 
+
+#' @title xxx
+#' 
 #' @description
 #' xxx
 #'
 #' @return Nothing
 #'
 ActionOn_New_DataIn = function(){
-  if(verbose) cat(paste0('ActionOn_New_DataIn() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('ActionOn_New_DataIn() from - ', id, "\n\n"))
   PrepareData2Send()
 }
 
 
-
+#' @title xxx
+#' 
 #' @description
 #' Catch the return value of a module and update the list of isDone modules
 #' This list is updated with the names of datasets present in the rv$tmp
@@ -261,7 +275,7 @@ ActionOn_New_DataIn = function(){
 #' @return Nothing
 #'
 ActionOn_Data_Trigger <- function(){
-  if(verbose) cat(paste0('::', 'ActionOn_Data_Trigger from - ', id, '\n\n'))
+  if(verbose) cat(paste0('::', 'ActionOn_Data_Trigger from - ', id, "\n\n"))
   #browser()
   processHasChanged <- newValue <- NULL
   return.trigger.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]()$trigger}),
@@ -331,22 +345,28 @@ ActionOn_Data_Trigger <- function(){
 }
 
 
+
+#' @title xxx
+#' 
 #' @description 
 #' xxx
 #' 
 Initialize_Status_Process = function(){
-  if(verbose) cat(paste0('::', 'Initialize_Status_Process() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('::', 'Initialize_Status_Process() from - ', id, "\n\n"))
   rv.process$status <- setNames(rep(global$UNDONE, length(config$steps)), config$steps)
 }
 
 
+
+#' @title xxx
+#' 
 #' @description
 #' et to skipped all steps of the current object
 #' 
 #' @return Nothing.
 #' 
 ResetChildren = function(){
-  if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, "\n\n"))
   #browser()
   lapply(rv.process$config$steps, function(x){
     rv.child$reset[x] <- TRUE
@@ -354,13 +374,16 @@ ResetChildren = function(){
 }
 
 
+
+#' @title xxx
+#' 
 #' @description
 #' This function calls the server part of each module composing the pipeline
 #'
 #' @return Nothing
 #'
 GetMaxValidated_BeforeCurrentPos = function(){
-  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, "\n\n"))
   ind.max <- NULL
   indices.validated <- which(rv.process$status == global$VALIDATED)
   if (length(indices.validated) > 0){
@@ -371,6 +394,9 @@ GetMaxValidated_BeforeCurrentPos = function(){
   ind.max
 }
 
+
+#' @title xxx
+#' 
 #' @description
 #' This function calls the server part of each module composing the pipeline
 #'
@@ -379,7 +405,7 @@ GetMaxValidated_BeforeCurrentPos = function(){
 #' @return Nothing
 #'
 GetMaxValidated_BeforePos = function(pos){
-  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('GetMaxValidated_BeforeCurrentPos() from - ', id, "\n\n"))
   ind.max <- NULL
   indices.validated <- which(rv.process$status == global$VALIDATED)
   if (length(indices.validated) > 0){
@@ -391,11 +417,14 @@ GetMaxValidated_BeforePos = function(pos){
 }
 
 
+
+#' @title xxx
+#' 
 #' @description
 #' Default actions on reset pipeline or process.
 #' 
 BasicReset = function(){
-  if(verbose) cat(paste0('BasicReset() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('BasicReset() from - ', id, "\n\n"))
   ResetChildren()
   rv.process$dataIn <- NULL
   rv.process$current.pos <- 1
@@ -404,24 +433,15 @@ BasicReset = function(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
+#' @title xxx
+#' 
 #' @description
 #' xxx
 #'
 #' @return Nothing
 #'
 ActionOn_NewPosition = function(){
-  if(verbose) cat(paste0('::ActionOn_NewPosition() from - ', id, '\n\n'))
+  if(verbose) cat(paste0('::ActionOn_NewPosition() from - ', id, "\n\n"))
   
   print("--- action on New position ---")
   # Send dataset to child process only if the current position is enabled
@@ -438,7 +458,7 @@ ActionOn_NewPosition = function(){
 
 #-------------------------------------------------------
 observeEvent(rv.process$current.pos, ignoreInit = F,{
-  if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))
+  if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, "\n\n"))
   
   shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
   shinyjs::toggleState(id = "nextBtn", condition = rv.process$current.pos < length(config$steps))

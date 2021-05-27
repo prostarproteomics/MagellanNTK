@@ -138,30 +138,12 @@ mod_nav_process_server <- function(id,
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
-    
-    #' #' @description
-    #' #' Catch a change in the output variable `status` of the module that has been
-    #' #' called. It is used to know when a step has been validated in the corresponding module
-    #' observeEvent(rv.process$proc$status(), {
-    #'   #browser()
-    #'   # If step 1 has been validated, then initialize dataIn
-    #'   if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
-    #'     rv.process$dataIn <- rv.process$temp.dataIn
-    #'   
-    #'   rv.process$status <- rv.process$proc$status() 
-    #'   })
-    
-    
-    
-   
-    
-    
-    #' @description 
-    #' Initialization of the module.
-    #' The first action is to instantiate the module process which contains the 
-    #' configuration and UI of the process. Then, it instantiates the local 
-    #' (reactive) variables of the nav_process module. Finally, launches the 
-    #' timeline module server.
+
+    # Initialization of the module.
+    # The first action is to instantiate the module process which contains the 
+    # configuration and UI of the process. Then, it instantiates the local 
+    # (reactive) variables of the nav_process module. Finally, launches the 
+    # timeline module server.
     observeEvent(id, {
       #browser()
       # Launch of the module process server
@@ -203,10 +185,10 @@ mod_nav_process_server <- function(id,
     }, priority=1000) 
     
 
-    #' @description
-    #' Catch the dataset sent by the process module and instantiate the rv$dataOut variable
-    #' which is the return value of the module.
-    #' This function is only used to communicate between the process module and and the caller
+
+    #Catch the dataset sent by the process module and instantiate the rv$dataOut variable
+    # which is the return value of the module.
+    # This function is only used to communicate between the process module and and the caller
     observeEvent(rv.process$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
       print('end')
       rv.process$status[rv.process$current.pos] <- global$VALIDATED
@@ -227,16 +209,9 @@ mod_nav_process_server <- function(id,
       # browser()
     })
     
-    #' @description
-    #' xxx
-    #'
-    #' @param cond A number
-    #' @param range A number
-    #' 
-    #' @return Nothing.
-    #' 
+
     ToggleState_Screens = function(cond, range){
-      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, '\n\n'))
+      if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, "\n\n"))
       #browser()
       if (is.enabled())
         lapply(range, function(x){
@@ -248,18 +223,18 @@ mod_nav_process_server <- function(id,
     }
     
     
-    #' @description 
-    #' This function is updated each time the status vector is changed. It is 
-    #' used to decide which steps must be enabled or disabled w.r.t the new
+ 
+    # This function is updated each time the status vector is changed. It is 
+    #used to decide which steps must be enabled or disabled w.r.t the new
     #' status vector value. 
-    #' The behaviour is the following:
-    #' * All the steps before the last validated one are disabled
-    #' * all the steps before a undone mandatory step are enable and the ones
-    #' after this mandatory step are disabled
-    #' * xxx 
-    #' 
+    # The behaviour is the following:
+    # * All the steps before the last validated one are disabled
+    # * all the steps before a undone mandatory step are enable and the ones
+    # after this mandatory step are disabled
+    # * xxx 
+    # 
     Update_State_Screens = function(){
-      if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, '\n\n'))
+      if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, "\n\n"))
       
       if (isTRUE(is.skipped())){
         ToggleState_Screens(cond = FALSE, range = 1:rv.process$length)
@@ -285,16 +260,15 @@ mod_nav_process_server <- function(id,
     }
     
     
-    #' @description
-    #' Catch a new value on the dataIn variable, sent by the caller. This value 
-    #' may be NULL or a dataset.
-    #' The first action is to store the dataset in the temporary variable 
-    #' temp.dataIn. Then, two behaviours:
-    #' * the variable is NULL. xxxx
-    #' * the variable contains a dataset. xxx
+    # Catch a new value on the dataIn variable, sent by the caller. This value 
+    # may be NULL or a dataset.
+    # The first action is to store the dataset in the temporary variable 
+    # temp.dataIn. Then, two behaviours:
+    # * the variable is NULL. xxxx
+    # * the variable contains a dataset. xxx
     #
     observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
-      if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, '\n\n'))
+      if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, "\n\n"))
       #browser()
       
       Change_Current_Pos(1)
@@ -316,8 +290,7 @@ mod_nav_process_server <- function(id,
     })
     
 
-    #' @description
-    #' Catches a new value of the cursor position
+    # Catches a new value of the cursor position
     observeEvent(req(!is.null(rv.process$position)), ignoreInit = T, {
       pos <- strsplit(rv.process$position, '_')[[1]][1]
       if (pos == 'last')
@@ -326,25 +299,14 @@ mod_nav_process_server <- function(id,
         rv.process$current.pos <- rv.process$position
     })
     
-    #' #' @description
-    #' #' Default actions on reset pipeline or process.
-    #' #' 
-    #' LocalReset = function(){
-    #'   if(verbose) cat(paste0('LocalReset() from - ', id, '\n\n'))
-    #'   #ResetScreens()
-    #'   rv.process$dataIn <- NULL
-    #'   rv.process$current.pos <- 1
-    #'   rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-    #'   Send_Result_to_Caller()
-    #' }
+
    
-    #' @description
-    #' Catches a new position to show/hide the correct screen. This function
-    #' also manages the enabling/disabling of the `Prev` and `Next` buttons
-    #' w.r.t predefined rules (each of these buttons are disabled if there is
-    #' no more steps in their direction)
+    # Catches a new position to show/hide the correct screen. This function
+    # also manages the enabling/disabling of the `Prev` and `Next` buttons
+    # w.r.t predefined rules (each of these buttons are disabled if there is
+    # no more steps in their direction)
     observeEvent(rv.process$current.pos, ignoreInit = F,{
-      if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, '\n\n'))
+      if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, "\n\n"))
       
       shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
       shinyjs::toggleState(id = "nextBtn", condition = rv.process$current.pos < rv.process$length)
@@ -352,11 +314,10 @@ mod_nav_process_server <- function(id,
       shinyjs::show(rv.process$config$steps[rv.process$current.pos])
     })
     
-    #' @description
-    #' Default actions on reset pipeline or process.
-    #' 
+    # @description
+    # Default actions on reset pipeline or process.
     LocalReset = function(){
-      if(verbose) cat(paste0('LocalReset() from - ', id, '\n\n'))
+      if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
       #browser()
       rv.process$dataIn <- NULL
       #rv.process$temp.dataIn <- NULL
@@ -365,11 +326,11 @@ mod_nav_process_server <- function(id,
       Send_Result_to_Caller()
     }
     
-    #' @description
-    #' Show/hide an information panel if the process is entirely skipped
-    #' This functions can be used for both nav_process and nav_pipeline modules
+
+    # Show/hide an information panel if the process is entirely skipped
+    # This functions can be used for both nav_process and nav_pipeline modules
     output$SkippedInfoPanel <- renderUI({
-      #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, '\n\n'))
+      #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
       
       current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
       req(current_step_skipped)
@@ -392,11 +353,11 @@ mod_nav_process_server <- function(id,
     })
     
     
-    #' @descripion
-    #' This function uses the UI definition to:
-    #' * initialize the UI (only the first screen is shown),
-    #' * encapsulate the UI in a div (used to hide all screens at a time before
-    #' showing the one corresponding to the current position)
+
+    # This function uses the UI definition to:
+    # * initialize the UI (only the first screen is shown),
+    # * encapsulate the UI in a div (used to hide all screens at a time before
+    # showing the one corresponding to the current position)
     output$EncapsulateScreens <- renderUI({
       #browser()
       tagList(
@@ -444,7 +405,7 @@ mod_nav_process_server <- function(id,
     
     ###########---------------------------#################
     output$show_dataIn <- renderUI({
-      if (verbose) cat(paste0('::output$show_dataIn from - ', id, '\n\n'))
+      if (verbose) cat(paste0('::output$show_dataIn from - ', id, "\n\n"))
       req(dataIn())
       tagList(
         # h4('show dataIn()'),
@@ -453,7 +414,7 @@ mod_nav_process_server <- function(id,
     })
     
     output$show_rv_dataIn <- renderUI({
-      if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, '\n\n'))
+      if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
       req(rv.process$dataIn)
       tagList(
         # h4('show dataIn()'),
@@ -462,7 +423,7 @@ mod_nav_process_server <- function(id,
     })
     
     output$show_rv_dataOut <- renderUI({
-      if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, '\n\n'))
+      if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, "\n\n"))
       tagList(
         #h4('show dataOut$value'),
         lapply(names(dataOut$value), function(x){tags$p(x)})

@@ -1,19 +1,8 @@
-verbose <- F
-redBtnClass <- "btn-danger"
-PrevNextBtnClass <- "btn-info"
-btn_success_color <- "btn-success"
-optionsBtnClass <- "info"
-
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
-#' @field global xxxx
-global <- list(
-  VALIDATED = 1,
-  UNDONE = 0,
-  SKIPPED = -1
-)
-
-
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
 AddItemToDataset <- function(dataset, name){
   addAssay(dataset, 
            dataset[[length(dataset)]], 
@@ -21,50 +10,89 @@ AddItemToDataset <- function(dataset, name){
 }
 
 
-
-output$EncapsulateScreens <- renderUI({
-  tagList(
-    lapply(1:length(rv.process$config$ll.UI), function(i) {
-      if (i==1)
-        div(id = ns(rv.process$config$steps[i]),
-            class = paste0("page_", id),
-            rv.process$config$ll.UI[[i]]
-        )
-      else
-        shinyjs::hidden(
-          div(id =  ns(rv.process$config$steps[i]),
-              class = paste0("page_", id),
-              rv.process$config$ll.UI[[i]]
-          )
-        )
-    }
-    )
-  )
-  
-  
-})
-
-
+# 
+# output$EncapsulateScreens <- renderUI({
+#   tagList(
+#     lapply(1:length(rv.process$config$ll.UI), function(i) {
+#       if (i==1)
+#         div(id = ns(rv.process$config$steps[i]),
+#             class = paste0("page_", id),
+#             rv.process$config$ll.UI[[i]]
+#         )
+#       else
+#         shinyjs::hidden(
+#           div(id =  ns(rv.process$config$steps[i]),
+#               class = paste0("page_", id),
+#               rv.process$config$ll.UI[[i]]
+#           )
+#         )
+#     }
+#     )
+#   )
+#   
+#   
+# })
 
 
-rv.process <- reactiveValues(
-  status = NULL,
-  dataIn = NULL,
-  #temp.dataIn = NULL,
-  current.pos = 1,
-  steps.enabled = NULL,
-  test = NULL,
-  length = NULL,
-  config = NULL
-)
 
 
-#' @field dataOut xxx
+#' rv.process <- reactiveValues(
+#'   status = NULL,
+#'   dataIn = NULL,
+#'   #temp.dataIn = NULL,
+#'   current.pos = 1,
+#'   steps.enabled = NULL,
+#'   test = NULL,
+#'   length = NULL,
+#'   config = NULL
+#' )
+#' 
+#' 
+#' #' @field dataOut xxx
+#' dataOut <- reactiveValues(
+#'   trigger = 0,
+#'   value = NULL
+#' )
+
+
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
 dataOut <- reactiveValues(
-  trigger = 0,
+  trigger = NULL,
   value = NULL
 )
 
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+rv.process <- reactiveValues(
+  #' @field proc contains the return value of the called process 
+  proc = NULL,
+  #' @field status A booelan vector which contains the status (validated,
+  #' skipped or undone) of the steps
+  status = NULL,
+  #' @field dataIn A dataset
+  dataIn = NULL,
+  #' @field temp.dataIn This variable is used to serves as a tampon between 
+  #' the input of the module and the functions. 
+  temp.dataIn = NULL,
+  #' @field steps.enabled xxx
+  steps.enabled = NULL,
+  #' @field current.pos Stores the current cursor position in the timeline
+  current.pos = 1
+)
+
+
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
 # Check if the rv.process$config is correct
 #'
 #' @param conf A list containing the rv.process$configuration of the current object.
@@ -99,13 +127,21 @@ CheckConfig = function(conf){
 
 
 
-#' @description
-#' xxxx
-#'
-Send_Result_to_Caller = function(){
-  if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
-  dataOut$trigger <- Timestamp()
-  dataOut$value <- rv.process$dataIn
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+# Send_Result_to_Caller = function(){
+#   if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
+#   dataOut$trigger <- Timestamp()
+#   dataOut$value <- rv.process$dataIn
+# }
+
+Send_Result_to_Caller = function(data){
+  list(trigger = as.numeric(Sys.time()),
+       value = data
+  )
 }
 
 #' #' @description 
@@ -135,6 +171,8 @@ Send_Result_to_Caller = function(){
 
 
 
+#' @title 
+#' xxx
 #' @description
 #' Gives the name of the status corresponding to the code (integer).
 #'
@@ -146,6 +184,9 @@ GetStringStatus = function(name){
   else if (name==global$SKIPPED) 'Skipped'
 }
 
+
+#' @title 
+#' xxx
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
@@ -157,7 +198,8 @@ Timestamp = function(){
 
 
 
-
+#' @title 
+#' xxx
 #' @description 
 #' xxx
 #' 
@@ -171,7 +213,8 @@ GetMaxValidated_AllSteps = function(){
 }
 
 
-
+#' @title 
+#' xxx
 #' @description
 #' This function calls the server part of each module composing the pipeline
 #'
@@ -190,6 +233,9 @@ GetMaxValidated_BeforeCurrentPos = function(){
 }
 
 
+
+#' @title 
+#' xxx
 #' @description
 #' This function calls the server part of each module composing the pipeline
 #'
@@ -210,6 +256,9 @@ GetMaxValidated_BeforePos = function(pos){
 }
 
 
+
+#' @title 
+#' xxx
 #' @description 
 #' xxx
 #'
@@ -230,7 +279,8 @@ GetFirstMandatoryNotValidated = function(range){
 
 
 
-
+#' @title 
+#' xxx
 #' @description 
 #' xxx
 #' 
@@ -239,6 +289,8 @@ GetFirstMandatoryNotValidated = function(range){
 Change_Current_Pos = function(i){ rv.process$current.pos <- i}
 
 
+#' @title 
+#' xxx
 #' @description
 #' et to skipped all steps of the current object
 #' 
@@ -249,6 +301,9 @@ Set_All_Skipped = function(){
   rv.process$status <- setNames(rep(global$SKIPPED, rv.process$length), rv.process$config$steps)
 }
 
+
+#' @title 
+#' xxx
 #' @description
 #' et to skipped all steps of the current object
 #' 
@@ -272,6 +327,9 @@ observeEvent(is.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
 
 
 
+#' @title 
+#' xxx
+#' 
 #' @description 
 #' Return the UI for a modal dialog with data selection input. If 'failed' is
 #' TRUE, then display a message that the previous value was invalid.
@@ -291,7 +349,8 @@ dataModal = function() {
 
 
 
-
+#' @title xxx
+#' 
 #' @description 
 #' xxx
 #' 
@@ -304,34 +363,35 @@ ToggleState_ResetBtn = function(cond){
 }
 
 
+# 
+# 
+# output$SkippedInfoPanel <- renderUI({
+#   #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
+#   
+#   current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
+#   #entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
+#   req(current_step_skipped)
+#   
+#   
+#   #if (entire_process_skipped){
+#     # This case appears when the process has been skipped from the
+#     # pipleine. Thus, it is not necessary to show the info box because
+#     # it is shown below the timeline of the pipeline
+#   #} else {
+#     txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
+#     wellPanel(
+#       style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
+#       height = 100,
+#       width=300,
+#       align="center",
+#       p(style = "color: black;", paste0('Info: ',txt))
+#     )
+#   #}
+# })
 
 
-output$SkippedInfoPanel <- renderUI({
-  #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
-  
-  current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-  #entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
-  req(current_step_skipped)
-  
-  
-  #if (entire_process_skipped){
-    # This case appears when the process has been skipped from the
-    # pipleine. Thus, it is not necessary to show the info box because
-    # it is shown below the timeline of the pipeline
-  #} else {
-    txt <- paste0("This ", rv.process$config$type, " is skipped so it has been disabled.")
-    wellPanel(
-      style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
-      height = 100,
-      width=300,
-      align="center",
-      p(style = "color: black;", paste0('Info: ',txt))
-    )
-  #}
-})
-
-
-
+#' @title xxx
+#' 
 #' @description
 #' Change current position.
 #' 
@@ -368,11 +428,9 @@ observeEvent(rv.process$status, ignoreInit = T, {
 
 
 
-
-#' @description 
-#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-#' that the caller program wants this module to reset itself. 
 observeEvent(req(is.skipped()), ignoreInit=T,{
+  # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+  # that the caller program wants this module to reset itself.
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
  print('is.skipped')
  Update_State_Screens()
@@ -383,29 +441,27 @@ observeEvent(req(is.skipped()), ignoreInit=T,{
 observeEvent(input$closeModal, {removeModal() })
 
 
-#' @description 
-#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-#' that the caller program wants this module to reset itself. 
 observeEvent(remoteReset(), ignoreInit = T, {
+  # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+  # that the caller program wants this module to reset itself. 
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
   #browser()
   LocalReset()
 })
 
 
-#' @description 
-#' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-#' that the caller program wants this module to reset itself. 
+
 observeEvent(input$rstBtn, ignoreInit = T, {
+  # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
+  # that the caller program wants this module to reset itself. 
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
   #browser()
   showModal(dataModal())
 })
 
 
-#' @description 
-#' Catches a clic on the `Ok` button of the modal for resetting a module
 observeEvent(input$modal_ok, ignoreInit=F, ignoreNULL = T, {
+  # Catches a clic on the `Ok` button of the modal for resetting a module
   if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, "\n\n"))
   #browser()
   #rv.process$reset <- input$rstBtn + reset()
@@ -417,73 +473,73 @@ observeEvent(input$modal_ok, ignoreInit=F, ignoreNULL = T, {
 
 
 
-
-
-output$show_Debug_Infos <- renderUI({
-  tagList(
-    uiOutput(ns('show_tag_enabled')),
-    fluidRow(
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
-             uiOutput(ns('show_dataIn'))),
-      # column(width=2,
-      #        tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
-      #        uiOutput(ns('show_rv_dataIn'))),
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
-             uiOutput(ns('show_rv_dataOut'))),
-      column(width=4,
-             tags$b(h4(style = 'color: blue;', "status")),
-             uiOutput(ns('show_status')))
-    )
-  )
-})
-
-###########---------------------------#################
-output$show_dataIn <- renderUI({
-  if (verbose) cat(paste0('::output$show_dataIn from - ', id, "\n\n"))
-  req(dataIn())
-  tagList(
-    # h4('show dataIn()'),
-    lapply(names(dataIn()), function(x){tags$p(x)})
-  )
-})
-
-# output$show_rv_dataIn <- renderUI({
-#   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
-#   req(rv.process$dataIn)
+# 
+# 
+# output$show_Debug_Infos <- renderUI({
 #   tagList(
-#     # h4('show dataIn()'),
-#     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
+#     uiOutput(ns('show_tag_enabled')),
+#     fluidRow(
+#       column(width=2,
+#              tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
+#              uiOutput(ns('show_dataIn'))),
+#       # column(width=2,
+#       #        tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
+#       #        uiOutput(ns('show_rv_dataIn'))),
+#       column(width=2,
+#              tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
+#              uiOutput(ns('show_rv_dataOut'))),
+#       column(width=4,
+#              tags$b(h4(style = 'color: blue;', "status")),
+#              uiOutput(ns('show_status')))
+#     )
 #   )
 # })
-
-output$show_rv_dataOut <- renderUI({
-  if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, "\n\n"))
-  tagList(
-    #h4('show dataOut$value'),
-    lapply(names(dataOut$value), function(x){tags$p(x)})
-  )
-})
-
-
-output$show_status <- renderUI({
-  tagList(lapply(1:rv.process$length, 
-                 function(x){
-                   color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
-                   if (x == rv.process$current.pos)
-                     tags$p(style = paste0('color: ', color, ';'),
-                            tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
-                   else 
-                     tags$p(style = paste0('color: ', color, ';'),
-                            paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
-                 }))
-})
-
-output$show_tag_enabled <- renderUI({
-  tagList(
-    p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
-    p(paste0('enabled() = ', as.numeric(is.enabled())))
-  )
-})
-
+# 
+# ###########---------------------------#################
+# output$show_dataIn <- renderUI({
+#   if (verbose) cat(paste0('::output$show_dataIn from - ', id, "\n\n"))
+#   req(dataIn())
+#   tagList(
+#     # h4('show dataIn()'),
+#     lapply(names(dataIn()), function(x){tags$p(x)})
+#   )
+# })
+# 
+# # output$show_rv_dataIn <- renderUI({
+# #   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
+# #   req(rv.process$dataIn)
+# #   tagList(
+# #     # h4('show dataIn()'),
+# #     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
+# #   )
+# # })
+# 
+# output$show_rv_dataOut <- renderUI({
+#   if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, "\n\n"))
+#   tagList(
+#     #h4('show dataOut$value'),
+#     lapply(names(dataOut$value), function(x){tags$p(x)})
+#   )
+# })
+# 
+# 
+# output$show_status <- renderUI({
+#   tagList(lapply(1:rv.process$length, 
+#                  function(x){
+#                    color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
+#                    if (x == rv.process$current.pos)
+#                      tags$p(style = paste0('color: ', color, ';'),
+#                             tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
+#                    else 
+#                      tags$p(style = paste0('color: ', color, ';'),
+#                             paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
+#                  }))
+# })
+# 
+# output$show_tag_enabled <- renderUI({
+#   tagList(
+#     p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
+#     p(paste0('enabled() = ', as.numeric(is.enabled())))
+#   )
+# })
+# 

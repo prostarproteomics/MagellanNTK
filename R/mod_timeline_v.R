@@ -2,11 +2,12 @@
 #'
 #' @description A shiny Module.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
-#'
-#' @noRd 
+#' @param id xxx
 #'
 #' @importFrom shiny NS tagList 
+#' 
+#' @export
+#' 
 mod_timeline_v_ui <- function(id){
   ns <- NS(id)
   
@@ -23,8 +24,14 @@ mod_timeline_v_ui <- function(id){
 }
     
 #' timeline Server Function
-#'
-#' @noRd 
+#' 
+#' @param id xxx
+#' @param config xxx
+#' @param status xxx
+#' @param position xxx
+#' @param enabled xxx
+#' @export
+#' 
 mod_timeline_v_server = function(id, 
                                config, 
                                status, 
@@ -73,7 +80,7 @@ mod_timeline_v_server = function(id,
       })
       
       active <- reactive({
-        "background-color: white;box-shadow: 0 0 0 3px black;"
+        "box-shadow: 0 0 0 3px black;"
       })
       
       undone <- reactive({

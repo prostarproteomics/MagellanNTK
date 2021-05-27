@@ -3,13 +3,17 @@ Title: A Pipeline Manager
 Version: 0.4
 Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', role = c('cre', 'aut'))
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
-Description: A shiny app to navigate through data processing tools.
+Description: A collection of shiny modules to navigate through data processing tools.
 License: Artistic-2.0
 Imports: 
     config,
     golem,
     shiny,
-    R6
+    DT,
+    QFeatures,
+    htmlwidgets,
+    shinyBS,
+    shinyjs
 Collate: 
     app_config.R
     app_server.R
@@ -21,8 +25,9 @@ Collate:
     mod_format_DT.R
     code_for_process.R
     code_for_pipeline.R
-    commonFuncs.R
+    utils.R
     mod_nav_process.R
+    mod_nav_pipeline.R
     mod_timeline_h.R
     mod_timeline_v.R
 Encoding: UTF-8
@@ -33,5 +38,7 @@ BugReports: https://github.com/samWieczorek/Magellan/issues
 Suggests: 
     knitr,
     rmarkdown,
-    BiocStyle
+    BiocStyle,
+    MSPipelines,
+    Prostar
 VignetteBuilder: knitr

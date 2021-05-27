@@ -2,9 +2,7 @@
 #'
 #' @description A shiny Module.
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
-#'
-#' @noRd 
+#' @param id xxx.
 #'
 #' @importFrom shiny NS tagList 
 mod_timeline_h_ui <- function(id){
@@ -23,8 +21,14 @@ mod_timeline_h_ui <- function(id){
 }
     
 #' timeline Server Function
-#'
-#' @noRd 
+#' 
+#' @param id xxx
+#' @param config xxx
+#' @param status xxx
+#' @param position xxx
+#' @param enabled xxx
+#' @export
+#' 
 mod_timeline_h_server = function(id, 
                                config, 
                                status, 

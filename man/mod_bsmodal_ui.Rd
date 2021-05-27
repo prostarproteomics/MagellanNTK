@@ -6,6 +6,9 @@
 \usage{
 mod_bsmodal_ui(id)
 }
+\arguments{
+\item{id}{xxx}
+}
 \description{
 xxx
 }

@@ -2,9 +2,10 @@ library(shiny)
 library(shinyjs)
 library(QFeatures)
 library(MSPipelines)
+library(Magellan)
 
 options(shiny.fullstacktrace = T)
-source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
+#source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
 
 verbose <- F
 redBtnClass <- "btn-danger"
