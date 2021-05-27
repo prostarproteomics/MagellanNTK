@@ -1,6 +1,6 @@
 Package: Magellan
 Title: A Pipeline Manager
-Version: 0.4
+Version: 0.99.0
 Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', role = c('cre', 'aut'))
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: A collection of shiny modules to navigate through data processing tools.
