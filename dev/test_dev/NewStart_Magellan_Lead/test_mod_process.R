@@ -4,10 +4,10 @@ library(QFeatures)
 library(MSPipelines)
 library(Magellan)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 #source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
 
-verbose <- F
+verbose <- FALSE
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"

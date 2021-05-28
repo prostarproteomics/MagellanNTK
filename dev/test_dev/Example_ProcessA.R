@@ -5,7 +5,7 @@ Example_ProcessA = R6Class(
   private = list(
     .config = list(name = 'ProcessA',
                    steps = c('Description', 'Step1', 'Step2', 'Step3'),
-                   mandatory = c(T,F,T,F)
+                   mandatory = c(TRUE, FALSE, TRUE, FALSE)
     )
   ),
   
@@ -15,14 +15,14 @@ Example_ProcessA = R6Class(
     
     Global_server = function(session, input){
       self$rv$value.test <- 3
-      self$rv$choices <- 1:6
+      self$rv$choices <- seq_len(6)
     },
     
     
     # ------------------------ DESCRIPTION : SERVER ------------------------------------
     
     Description_server = function(session, input, output){
-      observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+      observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL=TRUE, {
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
         self$ValidateCurrentPos()
@@ -53,7 +53,7 @@ Example_ProcessA = R6Class(
     
     Step1_server = function(session, input, output){
       
-      observeEvent(input$btn_validate_Step1, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step1, ignoreInit = TRUE, {
         # Add your stuff code here
         self$ValidateCurrentPos()
       })
@@ -63,7 +63,7 @@ Example_ProcessA = R6Class(
       
       output$test1 <-renderUI({
         shinyjs::disabled(selectInput(self$ns('select1'), 'Select 1 in renderUI', 
-                    choices = 1:input$btn1, 
+                    choices = seq_len(input$btn1), 
                     width = '150px')
         )
       })
@@ -71,8 +71,8 @@ Example_ProcessA = R6Class(
       observe({
         req(input$btn1)
         print('toto')
-        updateSelectInput(session, self$ns('select2'), choices = 1:input$btn1)
-        updateSelectInput(session, 'select3', choices = 1:input$btn1)
+        updateSelectInput(session, self$ns('select2'), choices = seq_len(input$btn1))
+        updateSelectInput(session, 'select3', choices = seq_len(input$btn1))
       })
       
       output$test2 <-renderUI({
@@ -124,7 +124,7 @@ Example_ProcessA = R6Class(
       ## Logics to implement: here, we must take the last data not null
       # in previous datas. The objective is to take account
       # of skipped steps
-      observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step2, ignoreInit = TRUE, {
         self$ValidateCurrentPos()
       })
     },
@@ -138,7 +138,7 @@ Example_ProcessA = R6Class(
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 40px;",
                   shinyjs::disabled(selectInput(self$ns('select2'), 'Select step 2',
-                              choices = 1:5,
+                              choices = seq_len(5),
                               selected = 1,
                               width = '150px'))),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
@@ -154,7 +154,7 @@ Example_ProcessA = R6Class(
     
     Step3_server = function(session, input, output){
       
-      observeEvent(input$btn_validate_Step3, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
         self$rv$dataIn <- AddItemToDataset(self$rv$dataIn, self$config$name)
         self$ValidateCurrentPos()
       })

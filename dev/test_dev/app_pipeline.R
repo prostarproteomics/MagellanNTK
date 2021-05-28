@@ -3,9 +3,9 @@ library(R6)
 library(tibble)
 library(QFeatures)
 
-verbose <- T
+verbose <- TRUE
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 options(shiny.reactlog=TRUE) 
 
 #------------------------ Class TimelineDraw -----------------------------------

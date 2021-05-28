@@ -47,7 +47,7 @@ It is divided in several parts:
 
 This file (R/config.R) contains a list named def.pipeline in which each element is the definition of one pipeline implemented in Prostar. Here is a list with only one element:
 
-```{r config, eval=FALSE}
+```R
 pipeline.defs <- list(
   peptide= c('module_Peptide_Filtering',
              'module_Peptide_Normalization',

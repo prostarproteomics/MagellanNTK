@@ -3,20 +3,12 @@
 #' @title   mod_popover_for_help_ui and mod_popover_for_help_server
 #' @description  A shiny Module.
 #'
-#' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
-#' @param data A list of two items:
-#' * title: xxxx
-#' * content: xxxx
-#'
-#' @rdname mod_popover_for_help
-#'
 #' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyjs inlineCSS useShinyjs
+#' 
+#' @noRd
 mod_popover_for_help_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -38,6 +30,10 @@ mod_popover_for_help_ui <- function(id){
 
 # Module Server
 
+#' @title xxx
+#' 
+#' @description xxx
+#' 
 #' @rdname mod_popover_for_help
 #' 
 #' @export
@@ -45,6 +41,23 @@ mod_popover_for_help_ui <- function(id){
 #' @keywords internal
 #' 
 #' @importFrom shinyBS bsPopover addPopover bsTooltip
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' library(shiny)
+#' library(shinyBS)
+#' ui <- fluidPage(
+#'   mod_popover_for_help_ui('Title')
+#' )
+#' server <- function(input, output){
+#'   mod_popover_for_help_server(id = 'Title',
+#'                               data = list(title = 'Test', 
+#'                                           content = 'Test')
+#'   )
+#' }
+#' shinyApp(ui, server)
+#' 
 #' 
 mod_popover_for_help_server <- function(id, data){
   

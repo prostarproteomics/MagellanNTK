@@ -50,6 +50,22 @@ It is called by the nav_pipeline module of the package Magellan
 w.r.t predefined rules (each of these buttons are disabled if there is}
 }}
 
+\examples{
+library(shiny)
+library(shinyBS)
+library(MSPipelines)
+ui <- fluidPage(
+  mod_nav_process_ui('Protein_Decription')
+)
+server <- function(input, output){
+  utils::data(Exp1_R25_prot, package='DAPARdata2')
+  mod_nav_process_server(id = 'Protein_Description',
+                         dataIn = reactive({Exp1_R25_prot})
+  )
+}
+shinyApp(ui, server)
+
+}
 \author{
 Samuel Wieczorek
 }

@@ -2,7 +2,7 @@ library(shiny)
 library(R6)
 library(tibble)
 library(MSPipelines)
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------
 source(file.path('../../R', 'class_TimelineDraw.R'), local=TRUE)$value

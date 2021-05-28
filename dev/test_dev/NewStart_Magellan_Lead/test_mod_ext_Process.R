@@ -3,10 +3,10 @@ library(shinyjs)
 library(QFeatures)
 library(Magellan)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 
-verbose <- F
+verbose <- FALSE
 
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"

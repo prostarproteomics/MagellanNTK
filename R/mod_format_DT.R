@@ -1,22 +1,8 @@
-# Module UI
-
 #' @title   mod_format_DT_ui and mod_format_DT_server
 #' 
 #' @description  A shiny Module.
 #'
-#' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
-#'
-#' @rdname mod_format_DT
-#'
-#' @keywords internal
-#' 
-#' @export
-#'  
-#' @importFrom shiny NS tagList 
-#' @importFrom DT dataTableOutput
+#' @noRd
 #' 
 mod_format_DT_ui <- function(id){
   ns <- NS(id)
@@ -30,7 +16,10 @@ mod_format_DT_ui <- function(id){
 }
 
 # Module Server
-
+#' @title xxx
+#' 
+#' @description xxx
+#' 
 #' @rdname mod_format_DT
 #' 
 #' @param input internal
@@ -45,14 +34,28 @@ mod_format_DT_ui <- function(id){
 #' @keywords internal
 #' 
 #' @import DT
-#' @importFrom htmlwidgets JS    
+#' @importFrom htmlwidgets JS   
+#' 
+#' @return xxx 
+#' 
+#' @examples 
+#' library(shiny)
+#' library(DT)
+#' 
+#' ui <- fluidPage(
+#'   mod_format_DT_ui('tbl')
+#' )
+#' server <- function(input, output){
+#'   mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
+#' }
+#' shinyApp(ui, server)
 #' 
 mod_format_DT_server <- function(id,
                                  table2show,
                                  withBtns=NULL,
                                  showRownames=FALSE,
                                  dom='Bt',
-                                 style = NULL){
+                                 style = reactive({NULL})){
   
   
   moduleServer(id, function(input, output, session){

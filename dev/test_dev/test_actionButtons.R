@@ -11,7 +11,7 @@ library(shinyjs)
 library(R6)
 library(tibble)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 
 

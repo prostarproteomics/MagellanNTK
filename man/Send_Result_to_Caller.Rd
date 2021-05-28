@@ -9,6 +9,14 @@ Send_Result_to_Caller(data)
 \arguments{
 \item{data}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxx
+
+xxxx
+}
+\examples{
+Send_Result_to_Caller(3)
 }

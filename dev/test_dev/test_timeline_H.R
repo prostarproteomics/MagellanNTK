@@ -4,7 +4,7 @@ library(shinyjs)
 library(R6)
 library(tibble)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 #------------------------ Class TimelineDraw --------------------------------------
@@ -28,7 +28,7 @@ server <- function(input, output){
   
   config <- list(name = 'Protein_Filtering',
                  steps = c('Description', 'Step1', 'Step2', 'Step3'),
-                 mandatory = c(T, F, T, T)
+                 mandatory = c(TRUE, FALSE, TRUE, TRUE)
   )
   
   

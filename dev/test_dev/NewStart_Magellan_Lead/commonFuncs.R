@@ -1,4 +1,4 @@
-verbose <- F
+verbose <- FALSE
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
@@ -24,7 +24,7 @@ AddItemToDataset <- function(dataset, name){
 
 output$EncapsulateScreens <- renderUI({
   tagList(
-    lapply(1:length(rv.process$config$ll.UI), function(i) {
+    lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
       if (i==1)
         div(id = ns(rv.process$config$steps[i]),
             class = paste0("page_", id),
@@ -72,27 +72,27 @@ dataOut <- reactiveValues(
 #' 
 CheckConfig = function(conf){
   if(verbose) cat(paste0('::Checkrv.process$config() from - ', id, "\n\n"))
-  passed <- T
+  passed <- TRUE
   msg <- ""
   if (!is.list(conf)){
-    passed <- F
+    passed <- FALSE
     msg <- c(msg, "'rv.process$config' is not a list")
   }
   if (length(conf)!=3){
-    passed <- F
+    passed <- FALSE
     msg <- c(msg, "The length of 'rv.process$config' is not equal to 4")
   }
   names.conf <- c("name", "steps", "mandatory")
   if (!all(sapply(names.conf, function(x){x %in% names(conf)}))){
-    passed <- F
+    passed <- FALSE
     msg <- c(msg, "The names of elements in 'rv.process$config' must be the following: 'name', 'steps', 'mandatory'")
   }
   if (length(conf$steps) != length(conf$mandatory)){
-    passed <- F
+    passed <- FALSE
     msg <- c(msg, "The length of 'steps' and 'mandatory' must be equal.")
   }
   
-  passed <- T
+  passed <- TRUE
   list(passed=passed,
        msg = msg)
 }
@@ -102,36 +102,39 @@ CheckConfig = function(conf){
 #' @description
 #' xxxx
 #'
-Send_Result_to_Caller = function(){
+#' @return xxx
+#' @noRd
+#' 
+Send_Result_to_Caller <- function(){
   if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
   dataOut$trigger <- Timestamp()
   dataOut$value <- rv.process$dataIn
 }
 
-#' #' @description 
-#' #' xxx
-#' #' 
-#' InitializeDataIn = function(){ 
-#'   if(verbose) cat(paste0('InitializeDataIn() from - ', id, "\n\n"))
-#'   rv.process$dataIn <- rv.process$temp.dataIn
-#' }
+# #' @description 
+# #' xxx
+# #' 
+# InitializeDataIn = function(){ 
+#   if(verbose) cat(paste0('InitializeDataIn() from - ', id, "\n\n"))
+#   rv.process$dataIn <- rv.process$temp.dataIn
+# }
 
 
-#' #' @description
-#' #' Validate a given position. To be used by xxx
-#' #' 
-#' #' @return Nothing.
-#' #' 
-#' ValidateCurrentPos <- function(){
-#'   browser()
-#'   #rv.process$status[rv.process$current.pos] <- global$VALIDATED
-#'   
-#'   
-#'   # Either the process has been validated, one can prepare data to be sent to caller
-#'   # Or the module has been reseted
-#'   if (rv.process$current.pos == rv.process$length)
-#'     Send_Result_to_Caller()
-#' }
+# #' @description
+# #' Validate a given position. To be used by xxx
+# #' 
+# #' @return Nothing.
+# #' 
+# ValidateCurrentPos <- function(){
+#   browser()
+#   #rv.process$status[rv.process$current.pos] <- global$VALIDATED
+#  
+#   
+#   # Either the process has been validated, one can prepare data to be sent to caller
+#   # Or the module has been reseted
+#   if (rv.process$current.pos == rv.process$length)
+#     Send_Result_to_Caller()
+# }
 
 
 
@@ -256,7 +259,7 @@ Set_All_Skipped = function(){
 #' 
 Discover_Skipped_Steps = function(){
   if(verbose) cat(paste0('::Discover_Skipped_Status() from - ', id, "\n\n"))
-  for (i in 1:rv.process$length){
+  for (i in seq_len(rv.process$length)){
     max.val <- GetMaxValidated_AllSteps()
     if (rv.process$status[i] != global$VALIDATED && max.val > i)
       rv.process$status[i] <- global$SKIPPED
@@ -349,7 +352,7 @@ observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
 
 # Catch new status event
 
-observeEvent(rv.process$status, ignoreInit = T, {
+observeEvent(rv.process$status, ignoreInit = TRUE, {
   # https://github.com/daattali/shinyjs/issues/166
   # https://github.com/daattali/shinyjs/issues/25
   if (verbose) cat(paste0('::observe((rv$status) from - ', id, "\n\n"))
@@ -372,7 +375,7 @@ observeEvent(rv.process$status, ignoreInit = T, {
 #' @description 
 #' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
 #' that the caller program wants this module to reset itself. 
-observeEvent(req(is.skipped()), ignoreInit=T,{
+observeEvent(req(is.skipped()), ignoreInit=TRUE, {
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
  print('is.skipped')
  Update_State_Screens()
@@ -386,7 +389,7 @@ observeEvent(input$closeModal, {removeModal() })
 #' @description 
 #' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
 #' that the caller program wants this module to reset itself. 
-observeEvent(remoteReset(), ignoreInit = T, {
+observeEvent(remoteReset(), ignoreInit = TRUE, {
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
   #browser()
   LocalReset()
@@ -396,7 +399,7 @@ observeEvent(remoteReset(), ignoreInit = T, {
 #' @description 
 #' Catches a new value on the remote parameter `Reset`. A TRUE value indicates
 #' that the caller program wants this module to reset itself. 
-observeEvent(input$rstBtn, ignoreInit = T, {
+observeEvent(input$rstBtn, ignoreInit = TRUE, {
   if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
   #browser()
   showModal(dataModal())
@@ -405,7 +408,7 @@ observeEvent(input$rstBtn, ignoreInit = T, {
 
 #' @description 
 #' Catches a clic on the `Ok` button of the modal for resetting a module
-observeEvent(input$modal_ok, ignoreInit=F, ignoreNULL = T, {
+observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
   if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, "\n\n"))
   #browser()
   #rv.process$reset <- input$rstBtn + reset()
@@ -468,7 +471,7 @@ output$show_rv_dataOut <- renderUI({
 
 
 output$show_status <- renderUI({
-  tagList(lapply(1:rv.process$length, 
+  tagList(lapply(seq_len(rv.process$length), 
                  function(x){
                    color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
                    if (x == rv.process$current.pos)

@@ -4,12 +4,12 @@ library(shinyjs)
 library(R6)
 library(tibble)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 config <- list(
   name = "test_TL_verticale",
   steps = c('step1', 'step2', 'step3', 'step4'),
-  mandatory = c(T, F, F, T)
+  mandatory = c(TRUE, FALSE, FALSE, TRUE)
 )
 
 ui <- fluidPage(
@@ -49,19 +49,19 @@ server <- function(input, output){
   })
   
   observeEvent(input$randDone_btn, {
-    ind <- sample(1:4, sample(1:4,1))
+    ind <- sample(seq_len(4), sample(seq_len(4),1))
      rv$status[ind] <- !rv$status[ind]
      print(rv$status)
   })
   
   observeEvent(input$randDisabled_btn, {
-    ind <- sample(1:4, sample(1:4,1))
+    ind <- sample(seq_len(4), sample(seq_len(4),1))
     rv$tl.tags.enabled[ind] <- !rv$tl.tags.enabled[ind]
     print(rv$tl.tags.enabled)
   })
   
   observeEvent(input$randSkipped_btn, {
-    ind <- sample(1:4, sample(1:4,1))
+    ind <- sample(seq_len(4), sample(seq_len(4),1))
     rv$status[ind] == -rv$status[ind]
     print(rv$status)
   })

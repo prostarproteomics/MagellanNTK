@@ -24,34 +24,10 @@ mod_nav_pipeline_server(
 \item{is.skipped}{xxx}
 }
 \value{
-Nothing
-
-Nothing
-
-Nothing.
-
-Nothing
+xxx
 }
 \description{
 xxxxxx
-
-xxx
-
-This function calls the server part of each module composing the pipeline
-
-Catch the return value of a module and update the list of isDone modules
-This list is updated with the names of datasets present in the rv$tmp
-variable. One set to TRUE all the elements in isDone which have a corresponding
-element in names(rv$tmp).
-One cannot simply set to TRUE the last element of rv$tmp because it will does
-not work in case of a reseted module (it is not in the names(rv$tmp) list
-anymore)
-If a value (not NULL) is received, then it corresponds to the module
-pointed by the current position
-This function also updates the list isDone
-This function updates the current dataset (self$rv$dataIn)
-
-et to skipped all steps of the current object
 
 xxx
 }
@@ -61,3 +37,20 @@ xxx
 \item{\code{modal_txt}}{xxx}
 }}
 
+\examples{
+library(shiny)
+library(shinyBS)
+library(crayon)
+library(MSPipelines)
+ui <- fluidPage(
+  mod_nav_pipeline_ui('Protein')
+)
+server <- function(input, output){
+  utils::data(Exp1_R25_prot, package='DAPARdata2')
+mod_nav_pipeline_server(id = 'Protein',
+                          dataIn = reactive({Exp1_R25_prot})
+  )
+}
+shinyApp(ui, server)
+
+}

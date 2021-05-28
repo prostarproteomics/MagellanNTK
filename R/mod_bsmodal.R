@@ -5,9 +5,7 @@
 #' 
 #' @description xxx
 #' 
-#' @param id xxx
-#' 
-#' @export
+#' @noRd
 #' 
 mod_bsmodal_ui <- function(id){
   ns <- NS(id)
@@ -28,6 +26,22 @@ mod_bsmodal_ui <- function(id){
 #' 
 #' @export
 #' 
+#' @return xxx
+#' 
+#' @examples 
+#' library(shiny)
+#' library(shinyBS)
+#' 
+#' ui <- fluidPage(
+#'   mod_bsmodal_ui('tbl')
+#' )
+#' server <- function(input, output){
+#'   mod_bsmodal_server(id = 'tbl',
+#'                      title = 'test',
+#'                      uiContent = p('test'))
+#' }
+#' shinyApp(ui, server)
+#' 
 mod_bsmodal_server <- function(id,
                                title = NULL,
                                width = NULL,
@@ -47,6 +61,8 @@ mod_bsmodal_server <- function(id,
     
     output$bsmodal_ui <- renderUI({
       
+      if(is.null(width))
+        width <- 'small'
       tagList(
         tags$head(tags$style(paste0(".modal-dialog { width:",width," }"))),
         tags$head(tags$style("#test .modal-dialog {width: fit-content !important;}")),

@@ -6,7 +6,7 @@ library(QFeatures)
 library(tibble)
 library(MSPipelines)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw -----------------------------------
 source(file.path('../../../R', 'mod_timeline_h.R'), local=TRUE)$value

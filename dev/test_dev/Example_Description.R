@@ -5,7 +5,7 @@ Example_Description = R6::R6Class(
   private = list(
     .config = list(name = 'Description',
                    steps = c('Description'),
-                   mandatory = c(T)
+                   mandatory = c(TRUE)
     )
   ),
   
@@ -15,7 +15,7 @@ Example_Description = R6::R6Class(
     
     
     Description_server = function(session, input, output){
-      observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+      observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
         self$ValidateCurrentPos()

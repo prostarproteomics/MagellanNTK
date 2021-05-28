@@ -1,11 +1,11 @@
 
 options(shiny.maxRequestSize=300*1024^2) 
 options(encoding = "UTF-8")
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 require(compiler)
 enableJIT(3)
 
-verbose <- F
+verbose <- FALSE
 
 
 
@@ -17,10 +17,11 @@ verbose <- F
 #' @importFrom utils data
 #' 
 #' @noRd
+#'
 app_server <- function( input, output, session ) {
   # Get a QFeatures dataset for example
   
-  verbose <- F 
+  verbose <- FALSE 
   rv <- reactiveValues(
     dataIn = NULL,
     pipeline = NULL,
@@ -28,7 +29,7 @@ app_server <- function( input, output, session ) {
   )
   
   data(hlpsms, package='QFeatures')
-  hl <- QFeatures::readQFeatures(hlpsms, ecol = 1:10, name = "psms")
+  hl <- QFeatures::readQFeatures(hlpsms, ecol = seq_len(10), name = "psms")
   
   observe({
     library(rv$package, character.only=TRUE)

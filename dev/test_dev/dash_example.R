@@ -25,7 +25,7 @@ ui <- dashboardPage(
       tabItem(tabName = "screen2",
               tagList(
                 shinyjs::disabled(
-                selectInput('select1', 'Select 1', choices = 1:3)),
+                selectInput('select1', 'Select 1', choices = seq_len(3))),
                 uiOutput('magellan')
               )
       )
@@ -37,16 +37,16 @@ server <- function(input, output) {
   
   
   observeEvent(input$send, {
-    shinyjs::toggleState('select1', condition = T )
-    shinyjs::toggleState('tutu', condition = T )
+    shinyjs::toggleState('select1', condition = TRUE )
+    shinyjs::toggleState('tutu', condition = TRUE )
     
   })
   
   output$magellan <- renderUI({
     if(input$send)
-      selectInput('select2', 'Select 2', choices = 1:3)
+      selectInput('select2', 'Select 2', choices = seq_len(3))
     else
-      shinyjs::disabled(selectInput('select2', 'Select 2', choices = 1:3))
+      shinyjs::disabled(selectInput('select2', 'Select 2', choices = seq_len(3)))
   })
 }
 

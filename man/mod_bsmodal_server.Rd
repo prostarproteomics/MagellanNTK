@@ -15,6 +15,24 @@ mod_bsmodal_server(id, title = NULL, width = NULL, uiContent = NULL)
 
 \item{uiContent}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxxx
+}
+\examples{
+library(shiny)
+library(shinyBS)
+
+ui <- fluidPage(
+  mod_bsmodal_ui('tbl')
+)
+server <- function(input, output){
+  mod_bsmodal_server(id = 'tbl',
+                     title = 'test',
+                     uiContent = p('test'))
+}
+shinyApp(ui, server)
+
 }

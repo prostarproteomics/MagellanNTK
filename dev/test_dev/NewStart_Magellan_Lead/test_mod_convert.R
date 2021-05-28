@@ -5,7 +5,7 @@ library(Magellan)
 library(MSPipelines)
 #library(DT)
 #library(rhandsontable)
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------
 #source(file.path('../../../R', 'mod_popover_for_help.R'), local=TRUE)$value

@@ -4,10 +4,10 @@ library(QFeatures)
 library(DAPAR2)
 library(Magellan)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 
-verbose <- F
+verbose <- FALSE
 
 AddItemToDataset <- function(dataset, name){
   addAssay(dataset, 

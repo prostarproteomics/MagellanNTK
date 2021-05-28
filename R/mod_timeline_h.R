@@ -2,11 +2,13 @@
 #'
 #' @description A shiny Module.
 #'
-#' @param id xxx
+#' @noRd
 #'
 #' @importFrom shiny NS tagList 
 #' 
 #' @export
+#' 
+#' @return xxx
 #' 
 mod_timeline_h_ui <- function(id){
   ns <- NS(id)
@@ -34,6 +36,34 @@ mod_timeline_h_ui <- function(id){
 #' @param enabled xxx
 #' 
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples
+#' ui <- fluidPage(
+#' actionButton('changePos', 'Change position'),
+#' mod_timeline_h_ui('TLh')
+#' )
+#' 
+#' server <- function(input, output){
+#'  rv <- reactiveValues(
+#'  status = c(0, 1, 0, 0),
+#'  current.pos = 1,
+#'  tl.tags.enabled = c(1, 1, 1, 1),
+#'  position = NULL
+#'  )
+#'  config <- list(name = 'Protein_Filtering',
+#'  steps = c('Description', 'Step1', 'Step2', 'Step3'),
+#'  mandatory = c(TRUE, FALSE, TRUE, TRUE)
+#'  )
+#'  mod_timeline_h_server(id = 'TLh',
+#'   config = config,
+#'    status = reactive({rv$status}),
+#'    position = reactive({rv$current.pos}),
+#'    enabled = reactive({rv$tl.tags.enabled})
+#'    )
+#'    }
+#'    shinyApp(ui, server)
 #' 
 mod_timeline_h_server = function(id, 
                                config, 
@@ -65,7 +95,7 @@ mod_timeline_h_server = function(id,
         tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
         tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
     
-        for (i in 1:length(enabled()))
+        for (i in seq_len(length(enabled())))
           if (!enabled()[i])
             tl_status[i] <- paste0(tl_status[i], 'Disabled')
         
@@ -81,7 +111,7 @@ mod_timeline_h_server = function(id,
          # tags$ul(style="border: 1px solid black;",
             tags$div(class='timeline',
                      id='timeline',
-                     lapply(1:rv.tl$length, function(x){
+                     lapply(seq_len(rv.tl$length), function(x){
                        tags$li(class = paste0('li ', UpdateTags()[x]),
                               # tags$div(class='timestamp'),
                                tags$div(class='timestamp status',

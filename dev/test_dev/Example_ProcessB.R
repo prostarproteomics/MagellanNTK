@@ -5,7 +5,7 @@ Example_ProcessB = R6Class(
   private = list(
     .config = list(name = 'ProcessB',
                    steps = c('Description', 'Step1', 'Step2', 'Step3'),
-                   mandatory = c(T,F,T,F)
+                   mandatory = c(TRUE, FALSE, TRUE, FALSE)
     )
   ),
   
@@ -17,7 +17,7 @@ Example_ProcessB = R6Class(
     Global_server = function(session, input){},
     
     Description_server = function(session, input, output){
-      observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+      observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL=TRUE, {
         cat(paste0(class(self)[1], "::observeEvent(input$btn_validate_Description from - ", self$id, '\n'))
         private$InitializeDataIn()
         self$ValidateCurrentPos()
@@ -57,7 +57,7 @@ Example_ProcessB = R6Class(
         print(self$rv.process$select1)
       })
       
-      observeEvent(input$btn_validate_Step1, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step1, ignoreInit = TRUE, {
         # Add your stuff code here
         self$ValidateCurrentPos()
       })
@@ -72,7 +72,7 @@ Example_ProcessB = R6Class(
                   tags$h2(name)),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
                   selectInput(self$ns('select1'), 'Select step 1', 
-                              choices = 1:5, 
+                              choices = seq_len(5), 
                               selected = 1,
                               width = '150px')
               ),
@@ -89,7 +89,7 @@ Example_ProcessB = R6Class(
       ## Logics to implement: here, we must take the last data not null
       # in previous datas. The objective is to take account
       # of skipped steps
-      observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step2, ignoreInit = TRUE, {
         self$ValidateCurrentPos()
       })
     },
@@ -103,7 +103,7 @@ Example_ProcessB = R6Class(
                   tags$h3(name)),
               div(style="display:inline-block; vertical-align: middle;padding-right: 40px;",
                   selectInput(self$ns('select2'), 'Select step 2',
-                              choices = 1:5,
+                              choices = seq_len(5),
                               selected = 1,
                               width = '150px')),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
@@ -117,7 +117,7 @@ Example_ProcessB = R6Class(
     
     Step3_server = function(session, input, output){
       
-      observeEvent(input$btn_validate_Step3, ignoreInit = T, {
+      observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
         self$rv$dataIn <- AddItemToDataset(self$rv$dataIn, self$config$name)
         self$ValidateCurrentPos()
       })

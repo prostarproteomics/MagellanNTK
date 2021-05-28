@@ -2,9 +2,12 @@
 #'
 #' @description A shiny Module.
 #'
-#' @param id xxx
+#' @noRd
 #'
 #' @importFrom shiny NS tagList 
+#' 
+#' @return xxx
+#' 
 mod_timeline_v_ui <- function(id){
   ns <- NS(id)
   
@@ -29,7 +32,9 @@ mod_timeline_v_ui <- function(id){
 #' @param enabled xxx
 #' @export
 #' 
-mod_timeline_v_server = function(id, 
+#' @return xxx
+#' @noRd
+mod_timeline_v_server <- function(id, 
                                config, 
                                status, 
                                position, 
@@ -68,7 +73,7 @@ mod_timeline_v_server = function(id,
         tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
         tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
         
-        for (i in 1:length(enabled()))
+        for (i in seq_len(length(enabled())))
           if (!enabled()[i])
             tl_status[i] <- paste0(tl_status[i], 'Disabled')
         
@@ -131,7 +136,7 @@ mod_timeline_v_server = function(id,
         tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==1))] <- skipped()
         tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==0))] <- skippedDisabled()
         
-        # for (i in 1:length(enabled()))
+        # for (i in seq_len(length(enabled())))
         #   if (!enabled()[i])
         #     tl_status[i] <- paste0(tl_status[i], Disabled')
         # 
@@ -145,7 +150,7 @@ mod_timeline_v_server = function(id,
         # tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
         # tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
         # 
-        # for (i in 1:length(enabled()))
+        # for (i in seq_len(length(enabled())))
         #   if (!enabled()[i])
         #     tl_status[i] <- paste0(tl_status[i], 'Disabled')
         # 
@@ -154,7 +159,7 @@ mod_timeline_v_server = function(id,
 #browser()
         tags$div(style='width: 150px;',
           #tags$ul(
-            lapply(1:rv.tl$length, function(x){
+            lapply(seq_len(rv.tl$length), function(x){
              # tags$li(tags$p( class=UpdateTags()[x], config$steps[x]))
                tags$p(style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x]),
                       config$steps[x])

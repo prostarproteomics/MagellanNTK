@@ -3,21 +3,26 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
 
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-verbose <- F
+verbose <- FALSE
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
 optionsBtnClass <- "info"
 
 
-
-Send_Result_to_Caller = function(data){
+#' @description xxx
+#' @return xxx
+#' @noRd
+Send_Result_to_Caller <- function(data){
   list(trigger = as.numeric(Sys.time()),
        value = data
   )
 }
 
-
+#' @description xxx
+#' 
+#' @return xxx
+#' @noRd
 mod_nav_process_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -88,6 +93,8 @@ mod_nav_process_ui <- function(id){
 #' 
 #' @export
 #' 
+#' @return xxx
+#' @noRd
 mod_nav_process_server <- function(id,
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
@@ -134,7 +141,7 @@ mod_nav_process_server <- function(id,
       current.pos = 1
     )
     
-    verbose <- T
+    verbose <- TRUE
     #' @field modal_txt xxx
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
@@ -237,11 +244,11 @@ mod_nav_process_server <- function(id,
       if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, "\n\n"))
       
       if (isTRUE(is.skipped())){
-        ToggleState_Screens(cond = FALSE, range = 1:rv.process$length)
+        ToggleState_Screens(cond = FALSE, range = seq_len(rv.process$length))
       } else {
         ind.max <- GetMaxValidated_AllSteps()
         if (ind.max > 0)
-          ToggleState_Screens(cond = FALSE, range = 1:ind.max)
+          ToggleState_Screens(cond = FALSE, range = seq_len(ind.max))
         
         if (ind.max < rv.process$length){
           # Enable all steps after the current one but the ones
@@ -267,7 +274,7 @@ mod_nav_process_server <- function(id,
     # * the variable is NULL. xxxx
     # * the variable contains a dataset. xxx
     #
-    observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
+    observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, "\n\n"))
       #browser()
       
@@ -277,7 +284,7 @@ mod_nav_process_server <- function(id,
       
       if(is.null(dataIn())){
         print('Process : dataIn() NULL')
-        ToggleState_Screens(FALSE, 1:rv.process$length)
+        ToggleState_Screens(FALSE, seq_len(rv.process$length))
         ToggleState_Screens(TRUE, 1)
         rv.process$original.length <- 0
       } else { # A new dataset has been loaded
@@ -291,7 +298,7 @@ mod_nav_process_server <- function(id,
     
 
     # Catches a new value of the cursor position
-    observeEvent(req(!is.null(rv.process$position)), ignoreInit = T, {
+    observeEvent(req(!is.null(rv.process$position)), ignoreInit = TRUE, {
       pos <- strsplit(rv.process$position, '_')[[1]][1]
       if (pos == 'last')
         rv.process$current.pos <- rv.process$length
@@ -305,7 +312,7 @@ mod_nav_process_server <- function(id,
     # also manages the enabling/disabling of the `Prev` and `Next` buttons
     # w.r.t predefined rules (each of these buttons are disabled if there is
     # no more steps in their direction)
-    observeEvent(rv.process$current.pos, ignoreInit = F,{
+    observeEvent(rv.process$current.pos, ignoreInit = FALSE,{
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, "\n\n"))
       
       shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
@@ -361,7 +368,7 @@ mod_nav_process_server <- function(id,
     output$EncapsulateScreens <- renderUI({
       #browser()
       tagList(
-        lapply(1:length(rv.process$config$ll.UI), function(i) {
+        lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
           if (i==1)
             div(id = ns(rv.process$config$steps[i]),
                 class = paste0("page_", id),
@@ -432,7 +439,7 @@ mod_nav_process_server <- function(id,
     
     
     output$show_status <- renderUI({
-      tagList(lapply(1:rv.process$length, 
+      tagList(lapply(seq_len(rv.process$length), 
                      function(x){
                        color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
                        if (x == rv.process$current.pos)

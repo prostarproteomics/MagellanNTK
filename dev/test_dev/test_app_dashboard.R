@@ -2,7 +2,7 @@ library(shinydashboard)
 library(R6)
 library(tibble)
 library(MSPipelines)
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------
 source(file.path('../../R', 'class_TimelineDraw.R'), local=TRUE)$value
@@ -70,7 +70,7 @@ server <- function(input, output) {
   
   observeEvent(input$updateStatus, {
     proc$rv$status <- c(1, 1, 0, 1)
-    #proc$ToggleState_Screens(FALSE, 1:proc$length)
+    #proc$ToggleState_Screens(FALSE, seq_len(proc$length))
   })
   
   observeEvent(input$send,{

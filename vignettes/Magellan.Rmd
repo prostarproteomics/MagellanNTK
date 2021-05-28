@@ -51,25 +51,25 @@ library(MSPipelines)
 
 Magellan is deploied as a Docker file.
 
-```R
-docker build -t magellan-image . 
+<!-- ```R -->
+<!-- docker build -t magellan-image .  -->
 
-```
+<!-- ``` -->
 
 
 Building the image
 We open the terminal, navigate to the folder containing our new Dockerfile, and start the building process:
 
-```R
-docker build -t magellan.image . 
-```
+<!-- ```R -->
+<!-- docker build -t magellan.image .  -->
+<!-- ``` -->
 
 Starting a container
 After the building process has finished, we can now test our newly built image by starting a container:
 
-```R
-docker run -d --rm -p 3838:3838 my-shinyapp-magellan.image
-```
+<!-- ```R -->
+<!-- docker run -d --rm -p 3838:3838 my-shinyapp-magellan.image -->
+<!-- ``` -->
 
 
 

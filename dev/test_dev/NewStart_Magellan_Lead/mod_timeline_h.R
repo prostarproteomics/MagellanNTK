@@ -5,6 +5,11 @@
 #' @param id xxx.
 #'
 #' @importFrom shiny NS tagList 
+#' 
+#' @return xxx
+#' 
+#' @noRd
+#' 
 mod_timeline_h_ui <- function(id){
   ns <- NS(id)
   fpath <- system.file("app/www/sass", 
@@ -29,7 +34,9 @@ mod_timeline_h_ui <- function(id){
 #' @param enabled xxx
 #' @export
 #' 
-mod_timeline_h_server = function(id, 
+#' @return xxx
+#' @noRd
+mod_timeline_h_server <- function(id, 
                                config, 
                                status, 
                                position, 
@@ -59,7 +66,7 @@ mod_timeline_h_server = function(id,
         tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
         tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
     
-        for (i in 1:length(enabled()))
+        for (i in seq_len(length(enabled())))
           if (!enabled()[i])
             tl_status[i] <- paste0(tl_status[i], 'Disabled')
         
@@ -75,7 +82,7 @@ mod_timeline_h_server = function(id,
          # tags$ul(style="border: 1px solid black;",
             tags$div(class='timeline',
                      id='timeline',
-                     lapply(1:rv.tl$length, function(x){
+                     lapply(seq_len(rv.tl$length), function(x){
                        tags$li(class = paste0('li ', UpdateTags()[x]),
                               # tags$div(class='timestamp'),
                                tags$div(class='timestamp status',

@@ -4,7 +4,7 @@ library(shinyjs)
 library(R6)
 library(tibble)
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------
 source(file.path('../../R', 'class_TimelineDraw.R'), local=TRUE)$value
@@ -14,7 +14,7 @@ source(file.path('../../R', 'global.R'), local=TRUE)$value
 config <- list(
   name = "test_TL_verticale",
   steps = c('step 1', 'step 2', 'step 3', 'step 4'),
-  mandatory = c(step1=T, step2=T, step3=F, step4=T)
+  mandatory = c(step1=TRUE, step2=TRUE, step3=FALSE, step4=TRUE)
 )
 
 tl.h <- TimelineDraw$new('TL',

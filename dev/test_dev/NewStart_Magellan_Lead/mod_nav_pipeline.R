@@ -5,7 +5,7 @@ source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
 #source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
 
 
-verbose <- F
+verbose <- FALSE
 redBtnClass <- "btn-danger"
 PrevNextBtnClass <- "btn-info"
 btn_success_color <- "btn-success"
@@ -27,7 +27,8 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 #' The dataset minus some items
 #'
 #' @export
-#'
+#' @noRd
+
 Add_Item_to_Dataset <- function(dataset, name){
   QFeatures::addAssay(dataset,
                       dataset[[length(dataset)]],
@@ -45,6 +46,9 @@ Add_Item_to_Dataset <- function(dataset, name){
 #'
 #' @export
 #'
+#' @return xxx
+#' @noRd
+
 Keep_Items_from_Dataset <- function(dataset, range){
   dataset[ , , range]
 }
@@ -101,6 +105,8 @@ mod_nav_pipeline_ui <- function(id){
 
 #' @export
 #' 
+#' @noRd
+#' 
 mod_nav_pipeline_server <- function(id,
                                    dataIn = reactive({NULL}),
                                    is.enabled = reactive({TRUE}),
@@ -119,7 +125,7 @@ mod_nav_pipeline_server <- function(id,
     
     source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
 
-    verbose <- F
+    verbose <- FALSE
     # Specific to pipeline module
     # Used to xxxx
     tmp.return <- reactiveValues()
@@ -261,7 +267,7 @@ mod_nav_pipeline_server <- function(id,
     output$EncapsulateScreens <- renderUI({
      # browser()
       tagList(
-        lapply(1:length(rv.process$config$ll.UI), function(i) {
+        lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
           if (i==1)
             div(id = ns(rv.process$config$steps[i]),
                 class = paste0("page_", id),
@@ -306,7 +312,7 @@ mod_nav_pipeline_server <- function(id,
     # Catch the returned values of the process                                                           
     observeEvent(lapply(rv.process$config$steps, 
                         function(x){
-                          tmp.return[[x]]$dataOut()$trigger}), ignoreInit=T,{
+                          tmp.return[[x]]$dataOut()$trigger}), ignoreInit=TRUE,{
                             if(verbose) cat(paste0('observeEvent(trigger) from - ', id, "\n\n"))
                             #browser()
                             ActionOn_Data_Trigger()
@@ -315,16 +321,14 @@ mod_nav_pipeline_server <- function(id,
     
     
     
-    #' @description 
-    #' xxx
-    #' 
+
     Update_State_Screens = function(){
       if(verbose) cat(paste0('::', 'Update_State_Screens() from - ', id, "\n\n"))
       
       ind.max <- GetMaxValidated_AllSteps()
       #browser()
       if (ind.max > 0) 
-        ToggleState_Screens(cond = FALSE, range = 1:ind.max)
+        ToggleState_Screens(cond = FALSE, range = seq_len(ind.max))
       
       
       if (ind.max < rv.process$length){
@@ -356,7 +360,7 @@ mod_nav_pipeline_server <- function(id,
     #
     # Catch a new dataset sent by the caller
     #
-    observeEvent(dataIn(), ignoreNULL = F, ignoreInit = F,{
+    observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
       if (verbose) cat(paste0('::observeEvent(dataIn()) from --- ', id, "\n\n"))
       #browser()
       
@@ -367,7 +371,7 @@ mod_nav_pipeline_server <- function(id,
       
       if(is.null(dataIn())){
         print('Process : dataIn() NULL')
-        ToggleState_Screens(FALSE, 1:rv.process$length)
+        ToggleState_Screens(FALSE, seq_len(rv.process$length))
         ToggleState_Screens(TRUE, 1)
         rv.process$original.length <- 0
       } else { # A new dataset has been loaded
@@ -379,11 +383,10 @@ mod_nav_pipeline_server <- function(id,
       }
     })
     
-    #' @description
-    #' This function calls the server part of each module composing the pipeline
-    #'
-    #' @return Nothing
-    #'
+    # This function calls the server part of each module composing the pipeline
+    #
+    # @return Nothing
+    #
     PrepareData2Send = function(){
       if(verbose) cat(paste0('PrepareData2Send() from - ', id, "\n\n"))
       # browser()
@@ -405,9 +408,8 @@ mod_nav_pipeline_server <- function(id,
             data <- rv.process$temp.dataIn
           } else {
             data <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                            range = 1:(ind.last.validated + rv.process$original.length -1)
+                                            range = seq_len(ind.last.validated + rv.process$original.length -1)
             )
-            #data <- self$rv$dataIn[ , , 1:ind.last.validated]
           }
         }
         return(data)
@@ -421,7 +423,7 @@ mod_nav_pipeline_server <- function(id,
       if (is.null(rv.process$dataIn)){ # Init of core engine
         rv.child$data2send[[1]] <- rv.process$temp.dataIn
         # Disable the steps which receive NULL data
-        lapply(1:rv.process$length, function(x){
+        lapply(seq_len(rv.process$length), function(x){
           rv.process$steps.enabled[x] <- x==1
         })
       } else
@@ -438,21 +440,18 @@ mod_nav_pipeline_server <- function(id,
     }
     
     
-    #' @description
-    #' Catch the return value of a module and update the list of isDone modules
-    #' This list is updated with the names of datasets present in the rv$tmp
-    #' variable. One set to TRUE all the elements in isDone which have a corresponding
-    #' element in names(rv$tmp).
-    #' One cannot simply set to TRUE the last element of rv$tmp because it will does
-    #' not work in case of a reseted module (it is not in the names(rv$tmp) list
-    #' anymore)
-    #' If a value (not NULL) is received, then it corresponds to the module
-    #' pointed by the current position
-    #' This function also updates the list isDone
-    #' This function updates the current dataset (self$rv$dataIn)
-    #'
-    #' @return Nothing
-    #'
+    # @description
+    # Catch the return value of a module and update the list of isDone modules
+    # This list is updated with the names of datasets present in the rv$tmp
+    # variable. One set to TRUE all the elements in isDone which have a corresponding
+    # element in names(rv$tmp).
+    # One cannot simply set to TRUE the last element of rv$tmp because it will does
+    # not work in case of a reseted module (it is not in the names(rv$tmp) list
+    # anymore)
+    # If a value (not NULL) is received, then it corresponds to the module
+    # pointed by the current position
+    # This function also updates the list isDone
+    # This function updates the current dataset (self$rv$dataIn)
     ActionOn_Data_Trigger <- function(){
       if(verbose) cat(paste0('::', 'ActionOn_Data_Trigger from - ', id, "\n\n"))
       #browser()
@@ -473,7 +472,7 @@ mod_nav_pipeline_server <- function(id,
         if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
         print('The entire pipeline has been reseted')
           rv.process$dataIn <- NULL
-          rv.process$status[1:rv.process$length] <- global$UNDONE
+          rv.process$status[seq_len(rv.process$length)] <- global$UNDONE
           
         #PrepareData2Send()
       } else {
@@ -491,11 +490,11 @@ mod_nav_pipeline_server <- function(id,
           # Reset all further steps also
           if (ind.processHasChanged < rv.process$length)
             rv.process$reset[(1+ind.processHasChanged):rv.process$length] <- TRUE
-          #rv.process$reset[1:(ind.processHasChanged-1)] <- FALSE
+          #rv.process$reset[seq_len(ind.processHasChanged-1)] <- FALSE
 
           # Reset all further steps also
           #rv.child$reset[ind.processHasChanged:length(rv.process$config$steps)] <- TRUE
-          #rv.child$reset[1:(ind.processHasChanged-1)] <- FALSE
+          #rv.child$reset[seq_len(ind.processHasChanged-1)] <- FALSE
           
           # browser()
           # One take the last validated step (before the one corresponding to processHasChanges
@@ -511,9 +510,8 @@ mod_nav_pipeline_server <- function(id,
           else{
             name.last.validated <- rv.process$config$steps[ind.last.validated]
             dataIn.ind.last.validated <- which(names(rv.process$dataIn) == name.last.validated)
-            #self$rv$dataIn <- self$rv$dataIn[ , , 1:dataIn.ind.last.validated]
             rv.process$dataIn <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                                         range = 1:dataIn.ind.last.validated)
+                                                         range = seq_len(dataIn.ind.last.validated))
             
           }
           Update_State_Screens()
@@ -537,11 +535,9 @@ mod_nav_pipeline_server <- function(id,
     }
     
     
-    #' @description
-    #' et to skipped all steps of the current object
-    #' 
-    #' @return Nothing.
-    #' 
+    # et to skipped all steps of the current object
+    # 
+    # @return Nothing.
     ResetChildren = function(){
       if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, "\n\n"))
       #browser()
@@ -553,11 +549,11 @@ mod_nav_pipeline_server <- function(id,
     
 
     
-    #' @description
-    #' xxx
-    #'
-    #' @return Nothing
-    #'
+    # @description
+    # xxx
+    #
+    # @return Nothing
+    #
     ActionOn_NewPosition = function(){
       if(verbose) cat(paste0('::ActionOn_NewPosition() from - ', id, "\n\n"))
       
@@ -575,7 +571,7 @@ mod_nav_pipeline_server <- function(id,
    
     
     #-------------------------------------------------------
-    observeEvent(rv.process$current.pos, ignoreInit = T,{
+    observeEvent(rv.process$current.pos, ignoreInit = TRUE, {
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, "\n\n"))
       
       shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
@@ -666,7 +662,7 @@ mod_nav_pipeline_server <- function(id,
     
     output$show_status <- renderUI({
       tagList(
-        lapply(1:rv.process$length, 
+        lapply(seq_len(rv.process$length), 
                      function(x){
                        color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
                        if (x == rv.process$current.pos)

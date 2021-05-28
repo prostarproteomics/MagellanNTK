@@ -12,7 +12,7 @@ source(file.path("../../R", "mod_format_DT.R"), local = TRUE)$value
 source(file.path("../../R", "mod_bsmodal.R"), local=TRUE)$value
 
 
-options(shiny.fullstacktrace = T)
+options(shiny.fullstacktrace = TRUE)
 
 #### test modal ####
 ui <- fluidPage(

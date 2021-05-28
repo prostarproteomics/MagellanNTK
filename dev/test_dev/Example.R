@@ -5,7 +5,7 @@ Example = R6Class(
   private = list(
     .config = list(name = 'Example',
                    steps = c('Description', 'ProcessA', 'ProcessB', 'ProcessC'),
-                   mandatory = c(T, F, T, F)
+                   mandatory = c(TRUE, FALSE, TRUE, FALSE)
     )
   ),
   
