@@ -17,8 +17,25 @@
 #' @return xxx
 #' @examples
 #' Send_Result_to_Caller(3)
-Send_Result_to_Caller = function(data){
-  list(trigger = as.numeric(Sys.time()),
-       value = data
-  )
+# Send_Result_to_Caller = function(data){
+#   list(trigger = as.numeric(Sys.time()),
+#        value = data
+#   )
+# }
+
+
+#' @title 
+#' xxx
+#' @description 
+#' Returns the date and time in timestamp UNIX format.
+#' 
+#' @export
+#' 
+Timestamp <- function(){ 
+  if(verbose) cat(paste0('::Timestamp() from - ', id, "\n\n"))
+  as.numeric(Sys.time())
 }
+
+
+
+

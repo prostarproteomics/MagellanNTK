@@ -1,5 +1,19 @@
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
+library(shinyjs)
+library(QFeatures)
+library(tibble)
+library(DaparToolshed)
+
+options(shiny.fullstacktrace = TRUE)
+
+
+source(file.path('../../R', 'mod_timeline_h.R'), local=TRUE)$value
+source(file.path('../../R', 'mod_timeline_v.R'), local=TRUE)$value
+source(file.path('../../R', 'mod_nav_process.R'), local=TRUE)$value
+source(file.path('../../R', 'mod_nav_pipeline.R'), local=TRUE)$value
+
 
 ui <- dashboardPage(
   dashboardHeader(),
@@ -28,12 +42,31 @@ ui <- dashboardPage(
                 selectInput('select1', 'Select 1', choices = seq_len(3))),
                 uiOutput('magellan')
               )
+      ),
+      tabItem(tabName = "screen3",
+              tagList(
+                mod_nav_pipeline_ui('Protein')
+              )
       )
     )
   )
 )
 
 server <- function(input, output) {
+  
+  obj <- NULL
+  obj <- Exp1_R25_prot
+  
+  
+  rv <- reactiveValues(
+    res = NULL
+  )
+  
+  observe({
+    rv$res <- mod_nav_pipeline_server(id = 'Protein', 
+                                      dataIn = reactive({obj})
+    )
+  })
   
   
   observeEvent(input$send, {

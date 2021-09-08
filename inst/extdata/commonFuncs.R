@@ -56,56 +56,51 @@ AddItemToDataset <- function(dataset, name){
 
 
 
-# rv.process <- reactiveValues(
-#   status = NULL,
-#   dataIn = NULL,
-#   #temp.dataIn = NULL,
-#   current.pos = 1,
-#  steps.enabled = NULL,
-#'   test = NULL,
-#   length = NULL,
-#   config = NULL
-# )
-# 
-# 
-# #' @field dataOut xxx
-# dataOut <- reactiveValues(
-#   trigger = 0,
-#   value = NULL
-# )
-
-
-#' @title 
-#' xxx
-#' 
-#' @description xxx
-#' 
-dataOut <- reactiveValues(
-  trigger = NULL,
-  value = NULL
-)
-
-#' @title 
-#' xxx
-#' 
-#' @description xxx
-#' 
-rv.process <- reactiveValues(
-  #' @field proc contains the return value of the called process 
-  proc = NULL,
-  #' @field status A booelan vector which contains the status (validated,
-  #' skipped or undone) of the steps
-  status = NULL,
-  #' @field dataIn A dataset
-  dataIn = NULL,
-  #' @field temp.dataIn This variable is used to serves as a tampon between 
-  #' the input of the module and the functions. 
-  temp.dataIn = NULL,
-  #' @field steps.enabled xxx
+ rv.process <- reactiveValues(
+   status = NULL,
+   dataIn = NULL,
+   #temp.dataIn = NULL,
+   current.pos = 1,
   steps.enabled = NULL,
-  #' @field current.pos Stores the current cursor position in the timeline
-  current.pos = 1
-)
+   test = NULL,
+   length = NULL,
+   config = NULL
+ )
+ 
+
+
+
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+ dataOut <- reactiveValues(
+   trigger = 0,
+   value = NULL
+ )
+
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+#' rv.process <- reactiveValues(
+#'   #' @field proc contains the return value of the called process 
+#'   proc = NULL,
+#'   #' @field status A booelan vector which contains the status (validated,
+#'   #' skipped or undone) of the steps
+#'   status = NULL,
+#'   #' @field dataIn A dataset
+#'   dataIn = NULL,
+#'   #' @field temp.dataIn This variable is used to serves as a tampon between 
+#'   #' the input of the module and the functions. 
+#'   temp.dataIn = NULL,
+#'   #' @field steps.enabled xxx
+#'   steps.enabled = NULL,
+#'   #' @field current.pos Stores the current cursor position in the timeline
+#'   current.pos = 1
+#' )
 
 
 #' @title 
@@ -145,24 +140,28 @@ CheckConfig = function(conf){
        msg = msg)
 }
 
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+#' @export
+#' 
+Send_Result_to_Caller = function(){
+  if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
+  dataOut$trigger <- Timestamp()
+  dataOut$value <- rv.process$dataIn
+}
 
 
-# #' @title 
-# #' xxx
-# #' 
-# #' @description xxx
-# #' 
-# # Send_Result_to_Caller = function(){
-# #   if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
-# #   dataOut$trigger <- Timestamp()
-# #   dataOut$value <- rv.process$dataIn
-# # }
 # 
 # Send_Result_to_Caller = function(data){
 #   list(trigger = as.numeric(Sys.time()),
 #        value = data
 #   )
 # }
+
+
 
 # #' @description 
 # #' xxx
@@ -205,15 +204,6 @@ GetStringStatus = function(name){
 }
 
 
-#' @title 
-#' xxx
-#' @description 
-#' Returns the date and time in timestamp UNIX format.
-#' 
-Timestamp = function(){ 
-  if(verbose) cat(paste0('::Timestamp() from - ', id, "\n\n"))
-  as.numeric(Sys.time())
-}
 
 
 

@@ -25,7 +25,7 @@ app_server <- function( input, output, session ) {
   rv <- reactiveValues(
     dataIn = NULL,
     pipeline = NULL,
-    package = 'MSPipelines'
+    package = 'DaparToolshed'
   )
   
   data(hlpsms, package='QFeatures')

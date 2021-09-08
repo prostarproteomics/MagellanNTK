@@ -2,7 +2,7 @@ library(shiny)
 library(shinyjs)
 # library(tibble)
 library(Magellan)
-library(MSPipelines)
+library(DaparToolshed)
 #library(DT)
 #library(rhandsontable)
 options(shiny.fullstacktrace = TRUE)
@@ -46,10 +46,11 @@ mod_test_process_server <- function(id){
                                            is.skipped = reactive({rv$remoteSkipped})
       )
       
-      observeEvent(rv$dataOut$dataOut()$trigger, {
-        print('totototo')
-        print(names(rv$dataOut$dataOut()$value))
-      })
+      
+      # observeEvent(rv$dataOut$dataOut()$trigger, {
+      #   print('totototo')
+      #   print(names(rv$dataOut$dataOut()$value))
+      # })
       
     }, priority=1000)
     

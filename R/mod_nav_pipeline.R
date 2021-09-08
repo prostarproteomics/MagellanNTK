@@ -1,8 +1,8 @@
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 #source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-#source(file.path('.', 'mod_nav_process.R'), local=FALSE)$value
-#source(file.path('.', 'mod_Protein.R'), local=FALSE)$value
+#source(file.path('../../R', 'mod_nav_process.R'), local=FALSE)$value
+#source(file.path('../../R', 'mod_Protein.R'), local=FALSE)$value
 
 
 verbose <- FALSE
@@ -355,8 +355,8 @@ mod_nav_pipeline_server <- function(id,
     observeEvent(id, {
       # The package containing the code for processes is supposed to be
       # already launched. Just check if the server module is ok
-      if (!exists('mod_Protein_server', where='package:MSPipelines', mode='function')){
-        warning("This pipeline is not available in MSPipelines")
+      if (!exists('mod_Protein_server', where='package:DaparToolshed', mode='function')){
+        warning("This pipeline is not available in DaparToolshed")
         return(NULL)
       }
       
@@ -440,6 +440,8 @@ mod_nav_pipeline_server <- function(id,
       
       rv.process$status <- rv.process$proc$status() 
     })
+    
+    
     
     output$EncapsulateScreens <- renderUI({
      # browser()

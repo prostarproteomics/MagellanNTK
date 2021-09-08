@@ -44,6 +44,20 @@ It is called by the nav_pipeline module of the package Magellan
 \section{Fields}{
 
 \describe{
+\item{\code{proc}}{contains the return value of the called process}
+
+\item{\code{status}}{A booelan vector which contains the status (validated,
+skipped or undone) of the steps}
+
+\item{\code{dataIn}}{A dataset}
+
+\item{\code{temp.dataIn}}{This variable is used to serves as a tampon between 
+the input of the module and the functions.}
+
+\item{\code{steps.enabled}}{xxx}
+
+\item{\code{current.pos}}{Stores the current cursor position in the timeline}
+
 \item{\code{modal_txt}}{xxx
 
   Send_Result_to_Caller()
@@ -55,7 +69,7 @@ library(shiny)
 library(shinyBS)
 library(MSPipelines)
 ui <- fluidPage(
-  mod_nav_process_ui('Protein_Decription')
+  mod_nav_process_ui('Protein_Description')
 )
 server <- function(input, output){
   utils::data(Exp1_R25_prot, package='DAPARdata2')

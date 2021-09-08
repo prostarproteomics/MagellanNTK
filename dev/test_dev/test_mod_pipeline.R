@@ -1,15 +1,15 @@
 library(Magellan)
-# 
-# options(shiny.fullstacktrace = TRUE)
-# 
-# verbose <- FALSE
-# 
-# redBtnClass <- "btn-danger"
-# PrevNextBtnClass <- "btn-info"
-# btn_success_color <- "btn-success"
-# optionsBtnClass <- "info"
-# 
-# btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
+library(shiny)
+library(shinyjs)
+library(QFeatures)
+library(crayon)
+library(DaparToolshed)
+
+
+options(shiny.fullstacktrace = TRUE)
+source(file.path('../../R', 'mod_nav_pipeline.R'), local=FALSE)$value
+
+verbose <- FALSE
 
 AddItemToDataset <- function(dataset, name){
   addAssay(dataset, 
@@ -18,11 +18,15 @@ AddItemToDataset <- function(dataset, name){
 }
 
 
-ui <- fluidPage(
+mod_test_pipeline_ui <- function(id){
+  ns <- NS(id)
   tagList(
     selectInput('choosePipeline', 'Choose pipeline',
                 choices = setNames(nm=c('', 'Protein')),
                 width = '200'),
+    # selectInput(ns('choosePipeline'), 'Choose pipeline',
+    #             choices = setNames(nm=c('', names(DaparToolshed::Pipelines()))),
+    #             width = '200'),
     uiOutput('UI'),
     wellPanel(title = 'foo',
               tagList(
@@ -31,12 +35,13 @@ ui <- fluidPage(
               )
     )
   )
+}
 
-)
 
-
-server <- function(input, output){
-  utils::data(Exp1_R25_prot, package='DAPARdata2')
+mod_test_pipeline_server <- function(id){
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    utils::data(Exp1_R25_prot, package='DAPARdata2')
   
   obj <- NULL
   obj <- Exp1_R25_prot
@@ -58,14 +63,32 @@ server <- function(input, output){
                                tag.enabled = reactive({TRUE})
                           )
     )
+    
+    
+    #basename <- paste0('mod_', input$choosePipeline)
+    #source(file.path('.', paste0(basename,'.R')), local=FALSE)$value
+    # Get the return value of the pipeline server
+    # rv$dataOut <- mod_nav_pipeline_server(id = input$choosePipeline,
+    #                                       dataIn = reactive({rv$dataIn}),
+    #                                       is.enabled = reactive({TRUE}),
+    #                                       remoteReset = reactive({FALSE})
+    # )
+    
+    # output$UI <- renderUI({
+    #   req(input$choosePipeline != '')
+    #   mod_nav_pipeline_ui(ns(input$choosePipeline))
+    # })
+    
+    output$UI <- renderUI({
+      req(input$choosePipeline != '')
+      do.call(paste0('mod_', input$choosePipeline, '_ui'),
+              list(id = input$choosePipeline))
+    })
+    
   }, priority=1000)
   
   
-  output$UI <- renderUI({
-    req(input$choosePipeline != '')
-    do.call(paste0('mod_', input$choosePipeline, '_ui'),
-            list(id = input$choosePipeline))
-  })
+  
   
   #--------------------------------------------
   #--------------------------------------------------------------------
@@ -96,7 +119,20 @@ server <- function(input, output){
     )
   })
   
+})
+}
+
+
+#----------------------------------------------------------------------
+ui <- fluidPage(
+  mod_test_pipeline_ui('test_pipeline')
+)
+
+#----------------------------------------------------------------------
+server <- function(input, output){
+  mod_test_pipeline_server('test_pipeline')
 }
 
 
 shinyApp(ui, server)
+

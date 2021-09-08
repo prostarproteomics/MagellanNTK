@@ -1,13 +1,5 @@
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
 #source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 verbose <- FALSE
-redBtnClass <- "btn-danger"
-PrevNextBtnClass <- "btn-info"
-btn_success_color <- "btn-success"
-optionsBtnClass <- "info"
 
 
 
@@ -21,6 +13,8 @@ optionsBtnClass <- "info"
 #' It is called by the nav_pipeline module of the package Magellan
 #' 
 #' @noRd
+#' 
+#' @export
 #' 
 mod_nav_process_ui <- function(id){
   ns <- NS(id)
@@ -97,7 +91,7 @@ mod_nav_process_ui <- function(id){
 #' library(shinyBS)
 #' library(MSPipelines)
 #' ui <- fluidPage(
-#'   mod_nav_process_ui('Protein_Decription')
+#'   mod_nav_process_ui('Protein_Description')
 #' )
 #' server <- function(input, output){
 #'   utils::data(Exp1_R25_prot, package='DAPARdata2')
@@ -123,10 +117,38 @@ mod_nav_process_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    
+    dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL
+    )
+    
+    
+    rv.process <- reactiveValues(
+      #' @field proc contains the return value of the called process 
+      proc = NULL,
+      #' @field status A booelan vector which contains the status (validated,
+      #' skipped or undone) of the steps
+      status = NULL,
+      #' @field dataIn A dataset
+      dataIn = NULL,
+      #' @field temp.dataIn This variable is used to serves as a tampon between 
+      #' the input of the module and the functions. 
+      temp.dataIn = NULL,
+      #' @field steps.enabled xxx
+      steps.enabled = NULL,
+      #' @field current.pos Stores the current cursor position in the timeline
+      current.pos = 1
+    )
+    
     #source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
     source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
     ############################################################"
     
+    # This function uses the UI definition to:
+    # * initialize the UI (only the first screen is shown),
+    # * encapsulate the UI in a div (used to hide all screens at a time before
+    # showing the one corresponding to the current position)
     output$EncapsulateScreens <- renderUI({
       tagList(
         lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
@@ -294,7 +316,8 @@ mod_nav_process_server <- function(id,
     observeEvent(id, {
       #browser()
       # Launch of the module process server
-      print(paste0("Launch ", paste0('mod_', id, '_server')))
+      print(paste0("Launching ", paste0('mod_', id, '_server')))
+      #browser()
       rv.process$proc <- do.call(paste0('mod_', id, '_server'),
                                  list(id = id,
                                       dataIn = reactive({rv.process$temp.dataIn}),
@@ -317,7 +340,7 @@ mod_nav_process_server <- function(id,
       
       
       rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-      rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
       rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
       rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
       
@@ -512,34 +535,6 @@ mod_nav_process_server <- function(id,
       }
     })
     
-    
-    # This function uses the UI definition to:
-    # * initialize the UI (only the first screen is shown),
-    # * encapsulate the UI in a div (used to hide all screens at a time before
-    # showing the one corresponding to the current position)
-    # 
-    output$EncapsulateScreens <- renderUI({
-      #browser()
-      tagList(
-        lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
-          if (i==1)
-            div(id = ns(rv.process$config$steps[i]),
-                class = paste0("page_", id),
-                rv.process$config$ll.UI[[i]]
-            )
-          else
-            shinyjs::hidden(
-              div(id =  ns(rv.process$config$steps[i]),
-                  class = paste0("page_", id),
-                  rv.process$config$ll.UI[[i]]
-              )
-            )
-        }
-        )
-      )
-      
-      
-    })
     
     
     

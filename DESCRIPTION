@@ -38,6 +38,6 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
-    MSPipelines,
+    DaparToolshed,
     Prostar
 VignetteBuilder: knitr

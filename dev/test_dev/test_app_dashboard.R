@@ -1,7 +1,7 @@
 library(shinydashboard)
 library(R6)
 library(tibble)
-library(MSPipelines)
+library(DaparToolshed)
 options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------
@@ -64,7 +64,7 @@ server <- function(input, output) {
   # module d'affichage modal contenant ci-dessus
   mod_bsmodal_server('exemple',
                      title = 'Plots',
-                     uiContent = MSPipelines::mod_all_plots_ui('plots'),
+                     uiContent = DaparToolshed::mod_all_plots_ui('plots'),
                      width="75%" # en px ou % de largeur
   )
   
