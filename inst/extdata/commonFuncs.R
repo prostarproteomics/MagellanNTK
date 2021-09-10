@@ -397,8 +397,12 @@ observeEvent(rv.process$status, ignoreInit = TRUE, {
 #' The parameter is.enabled() is updated by the caller and tells the process
 #' if it is enabled or disabled (remote action from the caller)
 observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+  if (isTRUE(is.enabled())){
+    Update_State_Screens()
+  } else {
     rv.process$steps.enabled <- setNames(rep(is.enabled(), rv.process$length), 
                                          rv.process$config$steps)
+  }
 })
 
 

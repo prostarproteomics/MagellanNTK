@@ -331,7 +331,6 @@ mod_nav_process_server <- function(id,
     # The parameter 'cond' is the new state
     # The parameter 'range' corresponds to the range of steps to update
     ToggleState_Screens = function(cond, range){
-      is.enabled()
       if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, "\n\n"))
       #browser()
       if (isTRUE(is.enabled()))
