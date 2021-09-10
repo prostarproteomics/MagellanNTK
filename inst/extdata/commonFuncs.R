@@ -396,10 +396,8 @@ observeEvent(rv.process$status, ignoreInit = TRUE, {
 #' @description 
 #' The parameter is.enabled() is updated by the caller and tells the process
 #' if it is enabled or disabled (remote action from the caller)
-observeEvent(is.enabled(), ignoreNULL = FALSE, ignoreInit = TRUE, {
-  # browser()
-  if (!isTRUE(is.enabled()))
-    rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), 
+observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+    rv.process$steps.enabled <- setNames(rep(is.enabled(), rv.process$length), 
                                          rv.process$config$steps)
 })
 

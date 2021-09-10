@@ -19,7 +19,11 @@ source(file.path('example_modules', 'mod_Test_ProcessA.R'), local=TRUE)$value
 mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(
-
+    fluidRow(
+      column(width=2, actionButton(ns('simReset'), 'Remote reset')),
+      column(width=2, actionButton(ns('simEnabled'), 'Remote enable/disable')),
+      column(width=2, actionButton(ns('simSkipped'), 'Remote is.skipped'))
+    ),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
@@ -48,8 +52,9 @@ mod_test_process_server <- function(id){
       
       rv$dataOut <- mod_nav_process_server(id = 'Test_ProcessA',
                                            dataIn = reactive({rv$dataIn}),
-                                           remoteReset = reactive({FALSE}),
-                                           is.skipped = reactive({FALSE})
+                                           remoteReset = reactive({input$simReset}),
+                                           is.skipped = reactive({input$simSkipped%%2 != 0}),
+                                           is.enabled = reactive({input$simEnabled%%2 != 0})
                                            )
       
       

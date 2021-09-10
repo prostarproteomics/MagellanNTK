@@ -533,7 +533,7 @@ mod_nav_pipeline_server <- function(id,
     ToggleState_Screens = function(cond, range){
       if(verbose) cat(paste0('::ToggleState_Steps() from - ', id, "\n\n"))
       #browser()
-      if (is.enabled())
+      if (isTRUE(is.enabled()))
         lapply(range, function(x){
           cond <- cond && !(rv.process$status[x] == global$SKIPPED)
            rv.process$steps.enabled[x] <- cond
