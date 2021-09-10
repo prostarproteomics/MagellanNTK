@@ -13,15 +13,15 @@
 #   dataOut$value <- rv.process$dataIn
 # }
 
-#' @description xxxx
-#' @return xxx
-#' @examples
-#' Send_Result_to_Caller(3)
-# Send_Result_to_Caller = function(data){
-#   list(trigger = as.numeric(Sys.time()),
-#        value = data
-#   )
-# }
+#' #' @description xxxx
+#' #' @return xxx
+#' #' @examples
+#' #' @export
+#' Send_Result_to_Caller = function(data){
+#'   list(trigger = as.numeric(Sys.time()),
+#'        value = data
+#'   )
+#' }
 
 
 #' @title 
@@ -37,5 +37,14 @@ Timestamp <- function(){
 }
 
 
-
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+AddItemToDataset <- function(dataset, name){
+  addAssay(dataset, 
+           dataset[[length(dataset)]], 
+           name=name)
+}
 

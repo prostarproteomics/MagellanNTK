@@ -587,7 +587,7 @@ mod_nav_pipeline_server <- function(id,
           #ind.last.validated <- self$GetMaxValidated_BeforeCurrentPos()
           #name.last.validated <- names(rv.process$dataIn)[length(rv.process$dataIn)]
           #ind.last.validated <- which(names(rv.process$dataIn)== name.last.validated)
-          ind.last.validated <- GetMaxValidated_BeforeCurrentPos()
+          ind.last.validated <- GetMaxValidated_BeforePos()
           
           if (is.null(ind.last.validated)){
             data <- rv.process$temp.dataIn

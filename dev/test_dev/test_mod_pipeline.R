@@ -1,4 +1,4 @@
-library(Magellan)
+
 library(shiny)
 library(shinyjs)
 library(QFeatures)
@@ -7,15 +7,14 @@ library(DaparToolshed)
 
 
 options(shiny.fullstacktrace = TRUE)
-source(file.path('../../R', 'mod_nav_pipeline.R'), local=FALSE)$value
+setwd('~/GitHub/Magellan/dev/test_dev')
+
+dirpath <- '../../R'
+for (l in list.files(path = dirpath, pattern = ".R"))
+  source(file.path(dirpath, l), local=TRUE)$value
+
 
 verbose <- FALSE
-
-AddItemToDataset <- function(dataset, name){
-  addAssay(dataset, 
-           dataset[[length(dataset)]], 
-           name=name)
-}
 
 
 mod_test_pipeline_ui <- function(id){

@@ -44,21 +44,7 @@ It is called by the nav_pipeline module of the package Magellan
 \section{Fields}{
 
 \describe{
-\item{\code{proc}}{contains the return value of the called process}
-
-\item{\code{status}}{A booelan vector which contains the status (validated,
-skipped or undone) of the steps}
-
-\item{\code{dataIn}}{A dataset}
-
-\item{\code{temp.dataIn}}{This variable is used to serves as a tampon between 
-the input of the module and the functions.}
-
-\item{\code{steps.enabled}}{xxx}
-
-\item{\code{current.pos}}{Stores the current cursor position in the timeline}
-
-\item{\code{modal_txt}}{xxx
+\item{\code{modal_txt}}{This text is showed in the modal when the user click on the 'Reset' button.
 
   Send_Result_to_Caller()
 w.r.t predefined rules (each of these buttons are disabled if there is}
@@ -79,6 +65,40 @@ server <- function(input, output){
 }
 shinyApp(ui, server)
 
+# Reactive values that will be used to output the current dataset when 
+# the last step is validated
+dataOut <- reactiveValues(
+  trigger = NULL,
+  value = NULL
+)
+
+
+#These reactive values are specific to this instance of mod_nav_process_server
+rv.process <- reactiveValues(
+  #' @field proc contains the return value of the process module that has been called 
+  proc = NULL,
+  
+  #' @field status A booelan vector which contains the status (validated,
+  #' skipped or undone) of the steps
+  status = NULL,
+  
+  #' @field dataIn Contains the dataset passed by argument to the module server
+  dataIn = NULL,
+  
+  #' @field temp.dataIn This variable is used to serves as a tampon between 
+  #' the input of the module and the functions. 
+  temp.dataIn = NULL,
+  
+  #' @field steps.enabled Contains the value of the parameter 'is.enabled'
+  steps.enabled = NULL,
+  
+  #' @field current.pos Stores the current cursor position in the timeline and 
+  #' indicates which of the process' steps is active
+  current.pos = 1,
+  
+  length = NULL,
+  config = NULL
+)
 }
 \author{
 Samuel Wieczorek

@@ -3,24 +3,23 @@ library(shinyjs)
 library(DT)
 library(tibble)
 library(QFeatures)
-library(DaparToolshed)
 
 
 options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/dev/test_dev')
-#source(file.path("../../inst/extdata", "commonFuncs.R"), local=TRUE)$value
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R"))
   source(file.path(dirpath, l), local=TRUE)$value
 #--------------------------------------------
-
+source(file.path('example_modules', 'mod_Test_ProcessA.R'), local=TRUE)$value
 
 
 mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(
+
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
@@ -35,7 +34,7 @@ mod_test_process_ui <- function(id){
 mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    utils::data(Exp1_R25_prot, package='DAPARdata2')
+    utils::data(Exp1_R25_prot, package = 'DAPARdata2')
     
     obj <- NULL
     obj <- Exp1_R25_prot
@@ -47,21 +46,21 @@ mod_test_process_server <- function(id){
     
     observe({
       
-      rv$dataOut <- mod_nav_process_server(id = 'Protein_Description',
-                                           dataIn = reactive({rv$dataIn})
-      )
-      
+      rv$dataOut <- mod_nav_process_server(id = 'Test_ProcessA',
+                                           dataIn = reactive({rv$dataIn}),
+                                           remoteReset = reactive({FALSE}),
+                                           is.skipped = reactive({FALSE})
+                                           )
       
       
       observeEvent(rv$dataOut$dataOut()$trigger, {
-        print('totototo')
         print(names(rv$dataOut$dataOut()$value))
       })
     }, priority=1000)
     
     
     output$UI <- renderUI({
-      mod_nav_process_ui(ns('Protein_Description'))
+      mod_nav_process_ui(ns('Test_ProcessA'))
     })
     
     
@@ -72,10 +71,10 @@ mod_test_process_server <- function(id){
       fluidRow(
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data In")),
-               uiOutput('show_rv_dataIn')),
+               uiOutput(ns('show_rv_dataIn'))),
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data Out")),
-               uiOutput('show_rv_dataOut'))
+               uiOutput(ns('show_rv_dataOut')))
       )
     })
     
@@ -88,9 +87,8 @@ mod_test_process_server <- function(id){
     })
     
     output$show_rv_dataOut <- renderUI({
-      req(rv$dataOut)
       tagList(
-        lapply(names(rv$dataOut$value), function(x){tags$p(x)})
+        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
       )
     })
     

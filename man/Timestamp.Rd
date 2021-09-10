@@ -9,16 +9,8 @@ Timestamp()
 \arguments{
 \item{data}{xxx}
 }
-\value{
-xxx
-}
 \description{
 xxx
 
-xxxx
-
 Returns the date and time in timestamp UNIX format.
-}
-\examples{
-Send_Result_to_Caller(3)
 }

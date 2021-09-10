@@ -70,8 +70,11 @@ mod_test_process_server <- function(id){
     basename <- paste0(input$choosePipeline, '_', input$chooseProcess)
 
     rv$dataOut <- mod_nav_process_server(id = basename,
-                                         dataIn = reactive({rv$dataIn})
-    )
+                                         dataIn = reactive({rv$dataIn}),
+                                         is.enabled = reactive({rv$remoteEnabled}),
+                                         remoteReset = reactive({rv$remoteReset}),
+                                         is.skipped = reactive({rv$remoteSkipped})
+                                         )
     
     
     
