@@ -273,6 +273,15 @@ Set_All_Skipped = function(){
 }
 
 
+Unskip_All_Steps = function(){
+  if(verbose) cat(paste0('::', 'Set_All_Skipped() from - ', id, "\n\n"))
+    rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+                                                     rv.process$config$steps)
+    Update_State_Screens()
+}
+
+
+
 #' @title 
 #' Discover new skipped steps.
 #' @description
@@ -411,12 +420,16 @@ observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
 #' @description 
 #' The parameter is.skipped() is set by the caller and tells the process
 #' if it is skipped or not (remote action from the caller)
-observeEvent(req(is.skipped()), ignoreInit=TRUE,{
+observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit=TRUE,{
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself.
-  if (verbose) cat(paste0('::observeEvent(req(is.skipped())) from - ', id, "\n\n"))
- print('is.skipped')
- Update_State_Screens()
+  if (verbose) cat(paste0('::observeEvent(req(is.skipped())) from - ', id, ". Value = ", is.skipped(), "\n\n"))
+ if (isTRUE(is.skipped()))
+     Set_All_Skipped()
+  else{
+    Unskip_All_Steps()
+    Update_State_Screens()
+  }
 })
 
 
