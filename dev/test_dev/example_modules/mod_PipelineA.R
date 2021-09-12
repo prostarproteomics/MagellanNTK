@@ -76,15 +76,13 @@ mod_PipelineA_server <- function(id,
     
     # Return value of module
     # DO NOT MODIFY THIS PART
-    list(config = reactive({
-      config$ll.UI <- setNames(lapply(config$steps,
-                                      function(x){
-                                        do.call('uiOutput', list(ns(x)))
-                                      }),
-                               paste0('screen_', config$steps)
-      )
-      config
-    }),
+    list(config = reactive({config$ll.UI <- setNames(lapply(config$steps,
+                                                            function(x){
+                                                              do.call('uiOutput', list(ns(x)))
+                                                            }),
+                                                     paste0('screen_', config$steps)
+    )
+    config}),
          dataOut = reactive({dataOut})
          #status = reactive({rv$status})
     )

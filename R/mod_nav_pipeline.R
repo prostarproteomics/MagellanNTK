@@ -68,10 +68,7 @@ mod_nav_pipeline_ui <- function(id){
                    
                ),
                wellPanel(title = 'foo',
-                         tagList(
-                           h3('module pipeline'),
-                           uiOutput(ns('show_Debug_Infos'))
-                         )
+                         uiOutput(ns('show_Debug_Infos'))
                )
              ))
       
@@ -730,6 +727,7 @@ mod_nav_pipeline_server <- function(id,
     
     output$show_Debug_Infos <- renderUI({
       tagList(
+        h3(paste0('module pipeline "', id, '"')),
         uiOutput(ns('show_tag_enabled')),
         fluidRow(
           column(width=2,

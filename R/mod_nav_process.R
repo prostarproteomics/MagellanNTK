@@ -44,7 +44,6 @@ mod_nav_process_ui <- function(id){
     ),
     wellPanel(title = 'foo',
               tagList(
-                h3('module process'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -511,6 +510,7 @@ mod_nav_process_server <- function(id,
     
     output$show_Debug_Infos <- renderUI({
       tagList(
+        h3(paste0('module process "', id, '"')),
         uiOutput(ns('show_tag_enabled')),
         fluidRow(
           column(width=2,
