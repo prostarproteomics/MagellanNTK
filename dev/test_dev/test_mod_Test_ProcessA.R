@@ -13,17 +13,23 @@ dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R"))
   source(file.path(dirpath, l), local=TRUE)$value
 #--------------------------------------------
-source(file.path('example_modules', 'mod_Test_ProcessA.R'), local=TRUE)$value
 
 
 mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      column(width=2, actionButton(ns('simReset'), 'Remote reset')),
-      column(width=2, actionButton(ns('simEnabled'), 'Remote enable/disable')),
-      column(width=2, actionButton(ns('simSkipped'), 'Remote is.skipped'))
+      column(width=2, actionButton(ns('simReset'), 
+                                   'Remote reset', 
+                                   style='background-color: lightgrey;')),
+      column(width=2, actionButton(ns('simEnabled'), 
+                                   'Remote enable/disable', 
+                                   style='background-color: lightgrey;')),
+      column(width=2, actionButton(ns('simSkipped'), 
+                                   'Remote is.skipped', 
+                                   style='background-color: lightgrey;'))
     ),
+    hr(),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
@@ -41,20 +47,21 @@ mod_test_process_server <- function(id){
     utils::data(Exp1_R25_prot, package = 'DAPARdata2')
     
     obj <- NULL
-    obj <- Exp1_R25_prot
+    #obj <- Exp1_R25_prot
     
     rv <- reactiveValues(
-      dataIn = Exp1_R25_prot,
+      dataIn = obj,
       dataOut = NULL
     )
     
     observe({
+      source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
       
-      rv$dataOut <- mod_nav_process_server(id = 'Test_ProcessA',
+      rv$dataOut <- mod_nav_process_server(id = 'PipelineA_ProcessA',
                                            dataIn = reactive({rv$dataIn}),
                                            remoteReset = reactive({input$simReset}),
                                            is.skipped = reactive({input$simSkipped%%2 != 0}),
-                                           is.enabled = reactive({input$simEnabled%%2 != 0})
+                                           is.enabled = reactive({input$simEnabled%%2 == 0})
                                            )
       
       
@@ -65,7 +72,7 @@ mod_test_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_nav_process_ui(ns('Test_ProcessA'))
+      mod_nav_process_ui(ns('PipelineA_ProcessA'))
     })
     
     

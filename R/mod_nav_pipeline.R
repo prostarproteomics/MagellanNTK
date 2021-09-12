@@ -1,42 +1,3 @@
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
-#source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
-#source(file.path('../../R', 'mod_nav_process.R'), local=FALSE)$value
-#source(file.path('../../R', 'mod_Protein.R'), local=FALSE)$value
-
-
-verbose <- FALSE
-redBtnClass <- "btn-danger"
-PrevNextBtnClass <- "btn-info"
-btn_success_color <- "btn-success"
-optionsBtnClass <- "info"
-
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
-
-
-#' @title xxx
-#'
-#' @description
-#' Adds one or more items to the dataset. This function is specific of the
-#' type of dataset.
-#'
-#' @importFrom QFeatures addAssay
-#'
-#' @return
-#' The dataset minus some items
-#'
-#' @export
-#'
-#' @examples 
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' obj <- Add_Item_to_Dataset(Exp1_R25_pept, name = 'foo')
-#' 
-Add_Item_to_Dataset <- function(dataset, name){
-  QFeatures::addAssay(dataset,
-                      dataset[[length(dataset)]],
-                      name=name)
-}
 
 #' @title xxx
 #'
@@ -171,6 +132,173 @@ mod_nav_pipeline_server <- function(id,
     #source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
     source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
     
+    
+    
+    #
+    #
+    ##############################################################
+    
+    verbose <- FALSE
+    # Specific to pipeline module
+    # Used to store the return values (lists) of child processes
+    tmp.return <- reactiveValues()
+    
+    # Used to xxx
+    rv.child <- reactiveValues(
+      # A vector of boolean where each element indicates if the corresponding
+      # child if enable or disable
+      enabled = NULL,
+      
+      # xxxx
+      reset = NULL,
+      
+      # A vector of integers where each element denotes the current position 
+      # of the corresponding element.
+      position = NULL,
+      
+      # xxxx
+      data2send = NULL
+    )
+    
+    # Used to xxx
+    rv.process <- reactiveValues(
+      proc = NULL,
+      
+      status = NULL,
+      
+      dataIn = NULL,
+      
+      temp.dataIn = NULL,
+      
+      # A vector of boolean where each element indicates whether 
+      # the corresponding process is enabled or disabled
+      steps.enabled = NULL,
+      
+      # A vector of boolean where each element indicates whether 
+      # the corresponding process is skipped or not
+      steps.skipped = NULL,
+      
+      
+      reset = NULL
+    )
+    
+    #' @field modal_txt xxx
+    modal_txt <- "This action will reset this pipeline. The input dataset will be the output of the last previous
+                      validated process and all further datasets will be removed"
+    
+
+    # Catch any event on the 'id' parameter. As this parameter change only
+    # when the server is created, this function can be view as the initialization
+    # of the server
+    observeEvent(id, {
+      # The package containing the code for processes is supposed to be
+      # already launched. Just check if the server module is ok
+      # if (!exists('mod_Protein_server', where='package:DaparToolshed', mode='function')){
+      #   warning("This pipeline is not available in DaparToolshed")
+      #   return(NULL)
+      # }
+      
+     
+      
+      # Call the server module of the pipeline which name is the parameter 'id'
+      # This will give access to its config
+      rv.process$proc <- do.call(paste0('mod_', id, '_server'),
+                                 list(id = id,
+                                      dataIn = reactive({rv.process$temp.dataIn}),
+                                      steps.enabled = reactive({rv.process$steps.enabled}),
+                                      remoteReset = reactive({FALSE}),
+                                      status = reactive({rv.process$status})
+                                      )
+                                 )
+      
+      
+      
+      
+     
+      # Update the reactive value config with the config of the pipeline
+      rv.process$config <- rv.process$proc$config()
+      
+      # TODO Write the CheckPipelineConfig function
+      # Check if the config variable is correct
+      # check <- CheckPipelineConfig(rv.process$config)
+      # if (!check$passed)
+      #   stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
+      # 
+      
+      rv.process$length <- length(rv.process$config$steps)
+      rv.process$current.pos <- 1
+      
+      # Get the name of the parent of the process
+      # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
+      # and the second correspond to the child in the process hierarchy
+      rv.process$parent <- unlist(strsplit(id, split='_'))[1]
+      
+      
+      rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
+      rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+      rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
+      
+      rv.process$steps.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
+      rv.process$steps.skipped <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
+      rv.process$reset <- setNames(rep(0, length(rv.process$config$steps)), rv.process$config$steps)
+      
+      rv.child$data2send <- setNames(lapply(as.list(rv.process$config$steps), function(x) NULL), 
+                                     nm = rv.process$config$steps)
+      
+      #browser()
+      
+      
+      
+      source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
+      source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
+      
+      
+      # Launch the ui for each step of the pipeline
+      # This function could be stored in the source file of the pipeline
+      # but the strategy is to insert minimum extra code in the files for
+      # pipelines and processes. This is useful when other devs will
+      # develop other pipelines and processes. Tus, it will be easier.
+      rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
+                         function(x){
+                            mod_nav_process_ui(ns(paste0(id, '_', x)))
+                         }),
+                  paste0(rv.process$config$steps)
+         )
+      
+      
+      
+      #browser()
+      # rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
+      #                                        function(x){
+      #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+      #                                          mod_nav_process_ui(ns(paste0(id, '_', x)))
+      #                                          }),
+      #                                 paste0('screen_', rv.process$config$steps)
+      # )
+      
+      lapply(rv.process$config$steps, function(x){
+        tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
+                                                  dataIn = reactive({ rv.child$data2send[[x]] }),
+                                                  is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
+                                                  remoteReset = reactive({rv.process$reset[x]}),
+                                                  is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
+                                                  )
+      })
+      
+      print('###############################################################')
+      
+      mod_timeline_v_server(id = 'timelinev',
+                            config =  rv.process$config,
+                            status = reactive({rv.process$status}),
+                            position = reactive({rv.process$current.pos}),
+                            enabled = reactive({rv.process$steps.enabled})
+      )
+      
+    }, priority=1000) 
+    
+
+    
+    
     ################################################################
     #
     #
@@ -178,7 +306,7 @@ mod_nav_pipeline_server <- function(id,
     
     output$EncapsulateScreens <- renderUI({
       tagList(
-        lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
+        lapply(seq_len(rv.process$length), function(i) {
           if (i==1)
             div(id = ns(rv.process$config$steps[i]),
                 class = paste0("page_", id),
@@ -227,219 +355,15 @@ mod_nav_pipeline_server <- function(id,
     
     
     
-    
-    output$show_Debug_Infos <- renderUI({
-      tagList(
-        uiOutput(ns('show_tag_enabled')),
-        fluidRow(
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Global input of ", rv.process$config$type))),
-                 uiOutput(ns('show_dataIn'))),
-          # column(width=2,
-          #        tags$b(h4(style = 'color: blue;', paste0("Temp input of ", rv.process$config$type))),
-          #        uiOutput(ns('show_rv_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("Output of ", rv.process$config$type))),
-                 uiOutput(ns('show_rv_dataOut'))),
-          column(width=4,
-                 tags$b(h4(style = 'color: blue;', "status")),
-                 uiOutput(ns('show_status')))
-        )
-      )
-    })
-    
-    ###########---------------------------#################
-    output$show_dataIn <- renderUI({
-      if (verbose) cat(paste0('::output$show_dataIn from - ', id, "\n\n"))
-      req(dataIn())
-      tagList(
-        # h4('show dataIn()'),
-        lapply(names(dataIn()), function(x){tags$p(x)})
-      )
-    })
-    
-    # output$show_rv_dataIn <- renderUI({
-    #   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
-    #   req(rv.process$dataIn)
-    #   tagList(
-    #     # h4('show dataIn()'),
-    #     lapply(names(rv.process$dataIn), function(x){tags$p(x)})
-    #   )
-    # })
-    
-    output$show_rv_dataOut <- renderUI({
-      if (verbose) cat(paste0('::output$show_rv_dataOut from - ', id, "\n\n"))
-      tagList(
-        #h4('show dataOut$value'),
-        lapply(names(dataOut$value), function(x){tags$p(x)})
-      )
-    })
-    
-    
-    output$show_status <- renderUI({
-      tagList(lapply(seq_len(rv.process$length), 
-                     function(x){
-                       color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
-                       if (x == rv.process$current.pos)
-                         tags$p(style = paste0('color: ', color, ';'),
-                                tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
-                       else 
-                         tags$p(style = paste0('color: ', color, ';'),
-                                paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
-                     }))
-    })
-    
-    output$show_tag_enabled <- renderUI({
-      tagList(
-        p(paste0('steps.enabled = ', paste0(as.numeric(rv.process$steps.enabled), collapse=' '))),
-        p(paste0('enabled() = ', as.numeric(is.enabled())))
-      )
-    })
-    
-    
-    
-    #
-    #
-    ##############################################################
-    
-    verbose <- FALSE
-    # Specific to pipeline module
-    # Used to xxxx
-    tmp.return <- reactiveValues()
-    
-    # Used to xxx
-    rv.child <- reactiveValues(
-      enabled = NULL,
-      reset = NULL,
-      position = NULL
-    )
-    
-    # Used to xxx
-    rv.process <- reactiveValues(
-      proc = NULL,
-      status = NULL,
-      dataIn = NULL,
-      temp.dataIn = NULL,
-      steps.enabled = NULL,
-      steps.skipped = NULL,
-      reset = NULL
-    )
-    
-    #' @field modal_txt xxx
-    modal_txt <- "This action will reset this pipeline. The input dataset will be the output of the last previous
-                      validated process and all further datasets will be removed"
-    
-    
-    
-    # 
-    # BuildScreens <- reactive({
-    #   #browser()
-    #   #for (x in rv.process$config$steps)
-    #   #  source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-    # 
-    # 
-    #   setNames(lapply(rv.process$config$steps,
-    #                   function(x){
-    #                     source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-    #                     #mod_nav_process_ui(ns(paste0(id, '_', x)))
-    #                     h3(paste0(id, '_', x))
-    #                   }),
-    #            paste0('screen_', rv.process$config$steps)
-    #   )
-    # })
-    # 
-    
-    # Catch any event on the 'id' parameter. As this parameter change only
-    # when the server is created, this function can be view as the initialization
-    # of the server
-    observeEvent(id, {
-      # The package containing the code for processes is supposed to be
-      # already launched. Just check if the server module is ok
-      if (!exists('mod_Protein_server', where='package:DaparToolshed', mode='function')){
-        warning("This pipeline is not available in DaparToolshed")
-        return(NULL)
-      }
-      
-      
-      rv.process$proc <- do.call(paste0('mod_', id, '_server'),
-                                 list(id = id,
-                                      dataIn = reactive({rv.process$temp.dataIn}),
-                                      steps.enabled = reactive({rv.process$steps.enabled}),
-                                      remoteReset = reactive({FALSE}),
-                                      status = reactive({rv.process$status})
-                                      )
-                                 )
-      
-      
-      
-      
-     # browser()
-      rv.process$config <- rv.process$proc$config()
-      
-      # Launch the ui for each step of the pipeline
-      rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
-                         function(x){
-                            mod_nav_process_ui(ns(paste0(id, '_', x)))
-                         }),
-                  paste0('screen_', rv.process$config$steps)
-         )
-      
-      rv.process$length <- length(rv.process$config$steps)
-      rv.process$current.pos  <- 1
-      
-      rv.process$parent <- unlist(strsplit(id, split='_'))[1]
-      
-      check <- CheckConfig(rv.process$config)
-      if (!check$passed)
-        stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
-      rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-      rv.process$status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-      rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
-      
-      rv.process$steps.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
-      rv.process$steps.skipped <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
-      rv.process$reset <- setNames(rep(0, length(rv.process$config$steps)), rv.process$config$steps)
-      
-      
-      #browser()
-      # rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
-      #                                        function(x){
-      #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-      #                                          mod_nav_process_ui(ns(paste0(id, '_', x)))
-      #                                          }),
-      #                                 paste0('screen_', rv.process$config$steps)
-      # )
-
-      lapply(rv.process$config$steps, function(x){
-        tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
-                                                  dataIn = reactive({ rv.child$data2send[[x]] }),
-                                                  is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
-                                                  remoteReset = reactive({rv.process$reset[x]}),
-                                                  is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
-                                                  )
-      })
-      
-      
-      #browser()
-      mod_timeline_v_server(id = 'timelinev',
-                            config =  rv.process$config,
-                            status = reactive({rv.process$status}),
-                            position = reactive({rv.process$current.pos}),
-                            enabled = reactive({rv.process$steps.enabled})
-      )
-      
-    }, priority=1000) 
-    
-
     # Catch any event in the status of xxx
-    observeEvent(req(rv.process$proc$status()), {
-      #browser()
-      # If step 1 has been validated, then initialize rv.process$dataIn
-      if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
-        rv.process$dataIn <- rv.process$temp.dataIn
-      
-      rv.process$status <- rv.process$proc$status() 
-    })
+    # observeEvent(req(rv.process$proc$status()), {
+    #   #browser()
+    #   # If step 1 has been validated, then initialize rv.process$dataIn
+    #   if (rv.process$status[1]==0 && rv.process$proc$status()[1]==1)
+    #     rv.process$dataIn <- rv.process$temp.dataIn
+    #   
+    #   rv.process$status <- rv.process$proc$status() 
+    # })
     
     
     

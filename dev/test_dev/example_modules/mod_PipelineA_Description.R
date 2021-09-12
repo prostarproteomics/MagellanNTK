@@ -1,6 +1,6 @@
 
 #' @export
-mod_Test_Description_ui <- function(id){
+mod_PipelineA_Description_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -28,7 +28,7 @@ mod_Test_Description_ui <- function(id){
 #' @author Samuel Wieczorek
 #'
 #' @export
-mod_Test_Description_server <- function(id,
+mod_PipelineA_Description_server <- function(id,
                                         dataIn = reactive({NULL}),
                                         steps.enabled = reactive({NULL}),
                                         remoteReset = reactive({FALSE})
@@ -43,7 +43,7 @@ mod_Test_Description_server <- function(id,
   
   
   config <- list(
-    name = 'Test_Description',
+    name = 'PipelineA_Description',
     steps = c('Description'),
     mandatory = c(T)
   )

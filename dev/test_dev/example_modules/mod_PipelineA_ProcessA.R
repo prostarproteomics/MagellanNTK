@@ -8,7 +8,7 @@
 
 #' @export
 #'
-mod_Test_ProcessA_ui <- function(id){
+mod_PipelineA_ProcessA_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -36,7 +36,7 @@ mod_Test_ProcessA_ui <- function(id){
 #'
 #' @export
 
-mod_Test_ProcessA_server <- function(id,
+mod_PipelineA_ProcessA_server <- function(id,
                                      dataIn = reactive({NULL}),
                                      steps.enabled = reactive({NULL}),
                                      remoteReset = reactive({FALSE})
@@ -44,7 +44,7 @@ mod_Test_ProcessA_server <- function(id,
 
   #' @field config xxxx
   config <- list(
-    name = 'Test_ProcessA',
+    name = 'PipelineA_ProcessA',
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
     mandatory = c(T, F, T, T)
   )
@@ -79,7 +79,6 @@ mod_Test_ProcessA_server <- function(id,
     # Reactive values during the run of the process
     rv <- reactiveValues(
       dataIn = NULL,
-      dataOut = NULL,
       status = NULL,
       reset = NULL,
       steps.enabled = NULL
@@ -113,6 +112,20 @@ mod_Test_ProcessA_server <- function(id,
       })
     })
 
+    
+    output$validationBtn_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['Description'])  )
+        actionButton(ns('btn_validate_Description'),
+                     paste0('Start ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_Description'),
+                       paste0('Start ', config$name),
+                       class = btn_success_color)
+        )
+    })
+
 
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
@@ -120,21 +133,14 @@ mod_Test_ProcessA_server <- function(id,
        tagList(
           includeMarkdown(paste0("md/", paste0(config$name, ".md"))),
           uiOutput(ns('datasetDescription')),
-          if (isTRUE(rv$steps.enabled['Description'])  )
-            actionButton(ns('btn_validate_Description'),
-                         paste0('Start ', config$name),
-                         class = btn_success_color)
-          else
-            shinyjs::disabled(
-              actionButton(ns('btn_validate_Description'),
-                           paste0('Start ', config$name),
-                           class = btn_success_color)
-            )
+          
+          uiOutput(ns('validationBtn_ui'))
+          
         )
     })
     
     
-    observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL=T, {
+    observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
       rv$dataIn <- dataIn()
       #rv$status['Description'] <- global$VALIDATED
       dataOut$trigger <- Magellan::Timestamp()
@@ -146,9 +152,9 @@ mod_Test_ProcessA_server <- function(id,
     ###### ------------------- Code for step 1 -------------------------    #####
     
     
+    # ObserveEvent of the widgets
     observeEvent(input$select1,{rv.widgets$Step1_select1 <- input$select1})
     observeEvent(input$select2,{rv.widgets$Step1_select2 <- input$select2})
-    # ObserveEvent of the widgets
     observeEvent(input$select3,{rv.widgets$Step1_select3 <- input$select3})
     observeEvent(input$select2_1,{rv.widgets$Step1_select2_1 <- input$select2_1})
     observeEvent(input$select2_2,{rv.widgets$Step1_select2_2 <- input$select2_2})
@@ -171,8 +177,6 @@ mod_Test_ProcessA_server <- function(id,
                       selected = rv.widgets$select1,
                       width = '150px')
         )
-      
-      
     })
     
     
@@ -196,15 +200,27 @@ mod_Test_ProcessA_server <- function(id,
       
     })
     
-    
-    
+    # Buttons must be explicitly enabled/disabled with a full code
+    # Otherwise, they do not disable
+    output$btn1_ui <- renderUI({
+      if (rv$steps.enabled['Step1'])
+        actionButton(ns('btn1'),
+                     'btn1',
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn1'),
+                       'btn1',
+                       class = btn_success_color)
+        )
+    })
     
     # ------------------------ STEP 1 : UI ------------------------------------
     output$Step1 <- renderUI({
-      #rv$steps.enabled
       name <- 'Step1'
       wellPanel(id = ns('toto'),
-                actionButton(ns('btn1'), 'Btn 1'),
+                uiOutput(ns('btn1_ui')),
+                
                 tagList(
                   div(id=ns('Step1a'),
                       div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
@@ -278,6 +294,24 @@ mod_Test_ProcessA_server <- function(id,
       
     })
     
+    
+    output$Step2_2_ui <- renderUI({
+      if (rv$steps.enabled['Step2'])
+        selectInput(ns('select2_2'), 'Select 2_2',
+                    choices = 1:5,
+                    selected = rv.widgets$select2_2,
+                    width = '150px')
+      else
+        shinyjs::disabled(
+          selectInput(ns('select2_2'),
+                      'Select 2_2',
+                      choices = 1:5,
+                      selected = rv.widgets$select2_2,
+                      width = '150px')
+        )
+    })
+    
+    
     output$Step2 <- renderUI({
       rv$steps.enabled
       name <- 'Step2'
@@ -288,19 +322,7 @@ mod_Test_ProcessA_server <- function(id,
                   uiOutput(ns('select2_1_UI'))
               ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  if (rv$steps.enabled['Step2'])
-                    selectInput(ns('select2_2'), 'Select 2_2',
-                                choices = 1:5,
-                                selected = rv.widgets$select2_2,
-                                width = '150px')
-                  else
-                    shinyjs::disabled(
-                      selectInput(ns('select2_2'),
-                                  'Select 2_2',
-                                  choices = 1:5,
-                                  selected = rv.widgets$select2_2,
-                                  width = '150px')
-                    )
+                  uiOutput(ns('Step2_2_ui'))
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   if (rv$steps.enabled['Step2'])

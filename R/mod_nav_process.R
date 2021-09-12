@@ -3,7 +3,7 @@ verbose <- FALSE
 
 
 
-
+# TODO check the different function calls with verbose=TRUE
 
 
 #' @title xxx
@@ -196,7 +196,7 @@ mod_nav_process_server <- function(id,
                                  )
       
       # Instantiate the local variables
-      #Get the config variable from the process that has been called
+      # Get the config variable from the process that has been called
       # This config contains all the UI for the each steps (config$ll.UI)
       # and the dataset returned by the process (config$dataOut)
       rv.process$config <- rv.process$proc$config()
@@ -223,7 +223,7 @@ mod_nav_process_server <- function(id,
       rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
       
       
-      # Launch the timeline server
+      # Launch the horizontal timeline server
       # The parameter 'config' is used to xxx
       # The parameter 'status' is used to color the bullets
       # the parameter 'position' is used to put the cursor at the current position
