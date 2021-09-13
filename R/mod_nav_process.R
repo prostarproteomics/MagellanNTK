@@ -33,9 +33,11 @@ mod_nav_process_ui <- function(id){
                                           class = redBtnClass,
                                           style='font-size:80%')),
              column(width=9, mod_timeline_h_ui(ns('timeline'))),
-             column(width=1, actionButton(ns("nextBtn"),">>",
-                                          class = PrevNextBtnClass,
-                                          style='font-size:80%'))
+             column(width=1, shinyjs::disabled(
+               actionButton(ns("nextBtn"),">>",
+                            class = PrevNextBtnClass,
+                            style='font-size:80%'))
+             )
     ),
     div(id = ns('Screens'),
         uiOutput(ns('SkippedInfoPanel')),
@@ -261,6 +263,9 @@ mod_nav_process_server <- function(id,
         }
         )
       )
+      
+      # Update the state enabled/disabled of the navigation buttons
+      ToggleState_NavBtns()
     })
     
     
@@ -434,6 +439,16 @@ mod_nav_process_server <- function(id,
     # }
     
     
+    ToggleState_NavBtns <- function(){
+      # If the cursor is not on the first position, show the 'prevBtn'
+      cond <-  rv.process$current.pos != 1
+      shinyjs::toggleState(id = "prevBtn", condition = cond)
+      
+      # If the cursor is set before the last step, show the 'nextBtn'
+      cond <- rv.process$current.pos < rv.process$length
+      shinyjs::toggleState(id = "nextBtn", condition = cond)
+    }
+    
     # Catches a new position to show/hide the correct screen. This function
     #also manages the enabling/disabling of the `Prev` and `Next` buttons
     #' w.r.t predefined rules (each of these buttons are disabled if there is
@@ -441,11 +456,7 @@ mod_nav_process_server <- function(id,
     observeEvent(rv.process$current.pos, ignoreInit = FALSE, {
       if (verbose) cat(paste0('::observe(rv$current.pos) from - ', id, "\n\n"))
       
-      # If the cursor is not on the first position, show the 'prevBtn'
-      shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
-      # If the cursor is set before the last step, show the 'nextBtn'
-      shinyjs::toggleState(id = "nextBtn", condition = rv.process$current.pos < rv.process$length)
-      
+      ToggleState_NavBtns()
       # Hide all screens 
       shinyjs::hide(selector = paste0(".page_", id))
       
