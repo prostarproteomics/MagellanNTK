@@ -126,6 +126,8 @@ mod_nav_pipeline_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    nav.mode <- "pipeline"
+    
     #source(file.path('.', 'commonFuncs.R'), local=TRUE)$value
     source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
     
@@ -175,8 +177,11 @@ mod_nav_pipeline_server <- function(id,
       # the corresponding process is skipped or not
       steps.skipped = NULL,
       
-      
-      reset = NULL
+      # A vector of integers that indicates if each step must be reseted
+      # This is an information sent to the child processes. Each time a child 
+      # process must be reseted, the corresponding element is incremented
+      # in order to modify its value. Thus, it can be catched by Shiny observers
+      resetChildren = NULL
     )
     
     #' @field modal_txt xxx
@@ -222,6 +227,7 @@ mod_nav_pipeline_server <- function(id,
       #   stop(paste0("Errors in 'rv.process$config'", paste0(check$msg, collapse=' ')))
       # 
       
+      
       rv.process$length <- length(rv.process$config$steps)
       rv.process$current.pos <- 1
       
@@ -237,7 +243,7 @@ mod_nav_pipeline_server <- function(id,
       
       rv.process$steps.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
       rv.process$steps.skipped <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
-      rv.process$reset <- setNames(rep(0, length(rv.process$config$steps)), rv.process$config$steps)
+      rv.process$resetChildren <- setNames(rep(0, length(rv.process$config$steps)), rv.process$config$steps)
       
       rv.child$data2send <- setNames(lapply(as.list(rv.process$config$steps), function(x) NULL), 
                                      nm = rv.process$config$steps)
@@ -277,7 +283,7 @@ mod_nav_pipeline_server <- function(id,
         tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
                                                   dataIn = reactive({ rv.child$data2send[[x]] }),
                                                   is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
-                                                  remoteReset = reactive({rv.process$reset[x]}),
+                                                  remoteReset = reactive({rv.process$resetChildren[x]}),
                                                   is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
                                                   )
       })
@@ -319,12 +325,8 @@ mod_nav_pipeline_server <- function(id,
         }
         )
       )
-      
-      
     })
-    
-    
-    
+  
     
     output$SkippedInfoPanel <- renderUI({
       #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
@@ -364,44 +366,25 @@ mod_nav_pipeline_server <- function(id,
     
     
     
-    output$EncapsulateScreens <- renderUI({
-     # browser()
-      tagList(
-        lapply(seq_len(length(rv.process$config$ll.UI)), function(i) {
-          if (i==1)
-            div(id = ns(rv.process$config$steps[i]),
-                class = paste0("page_", id),
-                rv.process$config$ll.UI[[i]]
-            )
-          else
-            shinyjs::hidden(
-              div(id =  ns(rv.process$config$steps[i]),
-                  class = paste0("page_", id),
-                  rv.process$config$ll.UI[[i]]
-              )
-            )
-        }
-        )
-      )
-
-    })
+   
     
     
     
-    # Default actions on reset pipeline or process.
-    # 
-    LocalReset = function(){
-      if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
-      #browser()
-      rv.process$dataIn <- NULL
-      #rv.process$temp.dataIn <- NULL
-      rv.process$current.pos <- 1
-      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-      
-      ResetChildren()
-      
-      Send_Result_to_Caller()
-    }
+    # # Default actions on reset pipeline or process.
+    # # 
+    # LocalReset = function(){
+    #   if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
+    #   rv.process$dataIn <- NULL
+    #   #rv.process$temp.dataIn <- NULL
+    #   rv.process$current.pos <- 1
+    #   
+    #   rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+    #                                 nm = rv.process$config$steps)
+    #   
+    #   ResetChildren()
+    #   
+    #   Send_Result_to_Caller()
+    # }
     
     
     CurrentStepName <- reactive({
@@ -599,8 +582,8 @@ mod_nav_pipeline_server <- function(id,
           #browser()
           # Reset all further steps also
           if (ind.processHasChanged < rv.process$length)
-            rv.process$reset[(1+ind.processHasChanged):rv.process$length] <- TRUE
-          #rv.process$reset[seq_len(ind.processHasChanged-1)] <- FALSE
+            rv.process$resetChildren[(1+ind.processHasChanged):rv.process$length] <- TRUE
+          #rv.process$resetChildren[seq_len(ind.processHasChanged-1)] <- FALSE
 
           # Reset all further steps also
           #rv.child$reset[ind.processHasChanged:length(rv.process$config$steps)] <- TRUE
@@ -655,7 +638,7 @@ mod_nav_pipeline_server <- function(id,
       if(verbose) cat(paste0('::', 'Set_All_Reset() from - ', id, "\n\n"))
       #browser()
       lapply(rv.process$config$steps, function(x){
-        rv.process$reset[x] <- 1 + rv.process$reset[x]
+        rv.process$resetChildren[x] <- 1 + rv.process$resetChildren[x]
       })
 
     }

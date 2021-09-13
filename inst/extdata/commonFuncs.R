@@ -468,6 +468,34 @@ observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
 
 
 
+
+# Default actions on reset pipeline or process.
+# 
+LocalReset = function(){
+  if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
+  #browser()
+  rv.process$dataIn <- NULL
+  #rv.process$temp.dataIn <- NULL
+  
+  # The cursor is set to the first step
+  rv.process$current.pos <- 1
+  
+  # The status of the steps are reinitialized to the default configuration of the process
+  rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+                                rv.process$config$steps)
+  
+  # If the current module is a pipeline type (node and not leaf),
+  # then sent to its children the information that they must reset themself
+  if (nav.mode == 'pipeline')
+    ResetChildren()
+  
+  # Return the NULL value as dataset
+  Send_Result_to_Caller()
+  #dataOut <- reactive({Send_Result_to_Caller(rv.process$dataIn)})
+}
+
+
+
 # 
 # 
 # output$show_Debug_Infos <- renderUI({

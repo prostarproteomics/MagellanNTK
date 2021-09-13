@@ -12,8 +12,6 @@ for (l in list.files(path = dirpath, pattern = ".R"))
   source(file.path(dirpath, l), local=TRUE)$value
 #--------------------------------------------
 
-source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
-source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
 
 
 mod_test_pipeline_ui <- function(id){
@@ -52,13 +50,12 @@ mod_test_pipeline_server <- function(id){
                                             is.enabled = reactive({TRUE}),
                                             remoteReset = reactive({FALSE})
                                             )
+      output$UI <- renderUI({
+        mod_nav_pipeline_ui(ns('PipelineA'))
+      })
     }, priority=1000)
     
-    
-    output$UI <- renderUI({
-      mod_nav_pipeline_ui(ns('PipelineA'))
-    })
-    
+   
 
     #--------------------------------------------------------------------
     
@@ -66,25 +63,27 @@ mod_test_pipeline_server <- function(id){
       fluidRow(
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data In")),
-               uiOutput('show_rv_dataIn')),
+               uiOutput(ns('show_rv_dataIn'))
+               ),
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data Out")),
-               uiOutput('show_rv_dataOut'))
+               uiOutput(ns('show_rv_dataOut'))
+               )
       )
     })
     
     ###########---------------------------#################
     output$show_rv_dataIn <- renderUI({
-      req(rv$dataIn)
+      rv$dataIn
       tagList(
         lapply(names(rv$dataIn), function(x){tags$p(x)})
       )
     })
     
     output$show_rv_dataOut <- renderUI({
-      req(rv$dataOut)
+     # rv$dataOut$dataOut()$trigger
       tagList(
-        lapply(names(rv$dataOut()$value), function(x){tags$p(x)})
+        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
       )
     })
     

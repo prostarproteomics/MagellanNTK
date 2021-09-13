@@ -37,8 +37,8 @@ mod_PipelineA_server <- function(id,
 
   config <- list(
     name = 'PipelineA',
-    steps = c('Description', 'ProcessA'),
-    mandatory = c(TRUE, FALSE)
+    steps = c('Description', 'ProcessA', 'ProcessB'),
+    mandatory = c(TRUE, TRUE, FALSE)
     
   )
   

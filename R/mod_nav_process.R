@@ -118,6 +118,7 @@ mod_nav_process_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    nav.mode <- "process"
     
     #' # Reactive values that will be used to output the current dataset when 
     #' # the last step is validated
@@ -180,6 +181,11 @@ mod_nav_process_server <- function(id,
       # Launch of the module process server
       print(paste0("Launching ", paste0('mod_', id, '_server')))
       #browser()
+      
+      
+      source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
+      source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
+      source(file.path('example_modules', 'mod_PipelineA_ProcessB.R'), local=TRUE)$value
       
       #Call the module server of the process
       # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
@@ -482,7 +488,8 @@ mod_nav_process_server <- function(id,
       rv.process$current.pos <- 1
       
       # The status of the steps are reinitialized to the default configuration of the process
-      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+      rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+                                    rv.process$config$steps)
       
       # Return the NULL value as dataset
       Send_Result_to_Caller()
