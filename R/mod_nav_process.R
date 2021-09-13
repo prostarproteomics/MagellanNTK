@@ -235,6 +235,8 @@ mod_nav_process_server <- function(id,
                             position = reactive({rv.process$current.pos}),
                             enabled = reactive({rv.process$steps.enabled})
       )
+      
+      
     }, priority=1000) 
     
     
@@ -263,9 +265,7 @@ mod_nav_process_server <- function(id,
         }
         )
       )
-      
-      # Update the state enabled/disabled of the navigation buttons
-      ToggleState_NavBtns()
+
     })
     
     
@@ -344,6 +344,10 @@ mod_nav_process_server <- function(id,
           #Send to TL the enabled/disabled tags
           rv.process$steps.enabled[x] <- cond
         })
+      
+      
+      # Update the state enabled/disabled of the navigation buttons
+      ToggleState_NavBtns()
     }
     
     
