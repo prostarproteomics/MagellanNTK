@@ -45,7 +45,6 @@ It is called by the nav_pipeline module of the package Magellan
 
 \describe{
 \item{\code{modal_txt}}{This text is showed in the modal when the user click on the 'Reset' button.
-
   Send_Result_to_Caller()
 w.r.t predefined rules (each of these buttons are disabled if there is}
 }}
@@ -80,7 +79,7 @@ rv.process <- reactiveValues(
   
   #' @field status A booelan vector which contains the status (validated,
   #' skipped or undone) of the steps
-  status = NULL,
+  steps.status = NULL,
   
   #' @field dataIn Contains the dataset passed by argument to the module server
   dataIn = NULL,

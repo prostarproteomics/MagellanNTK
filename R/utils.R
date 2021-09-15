@@ -29,6 +29,8 @@
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
+#' @return NA
+#' 
 #' @export
 #' 
 Timestamp <- function(){ 
@@ -41,6 +43,8 @@ Timestamp <- function(){
 #' xxx
 #' 
 #' @description xxx
+#' 
+#' @return NA
 #' 
 AddItemToDataset <- function(dataset, name){
   addAssay(dataset, 

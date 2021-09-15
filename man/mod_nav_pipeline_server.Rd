@@ -22,6 +22,8 @@ mod_nav_pipeline_server(
 \item{remoteReset}{xxx}
 
 \item{is.skipped}{xxx}
+
+\item{name}{The name of the process to update}
 }
 \value{
 xxx

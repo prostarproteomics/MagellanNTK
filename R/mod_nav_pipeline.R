@@ -528,7 +528,7 @@ mod_nav_pipeline_server <- function(id,
                                         rv.process$config$steps)
       
       # Replace NULL values by NA
-      return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
+      return.trigger.values[vapply(return.trigger.values, is.null)] <- NA
       triggerValues <- unlist(return.trigger.values)
       
       

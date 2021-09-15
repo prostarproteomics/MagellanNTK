@@ -15,6 +15,7 @@ verbose <- FALSE
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @importFrom utils data
+#' @import QFeatures
 #' 
 #' @noRd
 #'

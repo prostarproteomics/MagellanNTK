@@ -9,6 +9,9 @@ Timestamp()
 \arguments{
 \item{data}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
 

@@ -6,6 +6,9 @@
 \usage{
 AddItemToDataset(dataset, name)
 }
+\value{
+NA
+}
 \description{
 xxx
 }

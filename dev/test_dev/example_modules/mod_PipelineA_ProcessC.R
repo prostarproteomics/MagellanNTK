@@ -47,7 +47,7 @@ mod_PipelineA_ProcessC_server <- function(id,
     name = 'ProcessC',
     parent = 'PipelineA',
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
-    mandatory = c(T, F, T, T)
+    mandatory = c(TRUE, FALSE, TRUE, TRUE)
   )
   
   # Define default selected values for widgets
@@ -257,7 +257,7 @@ mod_PipelineA_ProcessC_server <- function(id,
     })
     
     
-    observeEvent(input$btn_validate_Step1, ignoreInit = T, {
+    observeEvent(input$btn_validate_Step1, ignoreInit = TRUE, {
       # Add your stuff code here
       # dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
       # dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
@@ -338,7 +338,7 @@ mod_PipelineA_ProcessC_server <- function(id,
       
     })
     
-    observeEvent(input$btn_validate_Step2, ignoreInit = T, {
+    observeEvent(input$btn_validate_Step2, ignoreInit = TRUE, {
       # Add your stuff code here
       #dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
       #dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
@@ -371,7 +371,7 @@ mod_PipelineA_ProcessC_server <- function(id,
       
     })
     
-    observeEvent(input$btn_validate_Step3, ignoreInit = T, {
+    observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
       # Add your stuff code here
       rv$dataIn <- AddItemToDataset(rv$dataIn, config$name)
       dataOut$trigger <- Magellan::Timestamp()

@@ -46,7 +46,7 @@ mod_PipelineA_Description_server <- function(id,
     name = 'Description',
     parent = 'PipelineA',
     steps = c('Description'),
-    mandatory = c(T)
+    mandatory = c(TRUE)
   )
   
   # Define default selected values for widgets
@@ -120,7 +120,7 @@ mod_PipelineA_Description_server <- function(id,
     #   as.numeric(Sys.time())
     # }
     
-    observeEvent(input$btn_validate_Description, ignoreInit = T, ignoreNULL = T, {
+    observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
       rv$dataIn <- dataIn()
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn

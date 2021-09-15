@@ -143,7 +143,7 @@ Send_Result_to_Caller = function(){
 # * if the variable is NULL. xxxx
 # * if the variable contains a dataset. xxx
 #
-observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = F,{
+observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
 #observe({
   if (verbose) cat(yellow(paste0(id, "::observe(dataIn())\n\n")))
   #browser()
@@ -532,7 +532,7 @@ observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
 #' @description 
 #' The parameter is.skipped() is set by the caller and tells the process
 #' if it is skipped or not (remote action from the caller)
-observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit=TRUE,{
+observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit = TRUE,{
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself.
   if (verbose) cat(yellow(paste0(id, '::observeEvent(is.skipped()). Value = ', is.skipped(), "\n\n")))
