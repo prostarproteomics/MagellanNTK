@@ -37,7 +37,5 @@ BugReports: https://github.com/samWieczorek/Magellan/issues
 Suggests: 
     knitr,
     rmarkdown,
-    BiocStyle,
-    DaparToolshed,
-    Prostar
+    BiocStyle
 VignetteBuilder: knitr
