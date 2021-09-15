@@ -61,7 +61,7 @@ rv.process <- reactiveValues(
   
   #' @field status A booelan vector which contains the status (validated,
   #' skipped or undone) of the steps
-  status = NULL,
+  steps.status = NULL,
   
   #' @field dataIn Contains the dataset passed by argument to the module server
   dataIn = NULL,
@@ -94,7 +94,7 @@ rv.process <- reactiveValues(
 #' See xxx
 #' 
 CheckConfig = function(conf){
-  if(verbose) cat(paste0('::Checkrv.process$config() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::CheckConfig()\n\n')))
   passed <- TRUE
   msg <- ""
   if (!is.list(conf)){
@@ -128,11 +128,122 @@ CheckConfig = function(conf){
 # #' @export
 # #' 
 Send_Result_to_Caller = function(){
-  if(verbose) cat(paste0('::Send_Result_to_Caller() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::Send_Result_to_Caller()\n\n')))
   dataOut$trigger <- Timestamp()
   dataOut$value <- rv.process$dataIn
 }
 
+
+
+
+# Catch a new value on the parameter 'dataIn()' variable, sent by the caller. This value 
+# may be NULL or contain a dataset.
+# The first action is to store the dataset in the temporary variable 
+# temp.dataIn. Then, two behaviours:
+# * if the variable is NULL. xxxx
+# * if the variable contains a dataset. xxx
+#
+observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = F,{
+#observe({
+  if (verbose) cat(yellow(paste0(id, "::observe(dataIn())\n\n")))
+  #browser()
+  isolate({
+    # A new value on dataIn() means a new dataset sent to the process
+    Change_Current_Pos(1)
+    
+    # Get the new dataset in a temporary variable
+    rv.process$temp.dataIn <- dataIn()
+    #ActionOn_New_DataIn() # Used by class pipeline
+    
+    # The mode pipeline is a node and has to send
+    # datasets to its children
+    if (nav.mode == 'pipeline')
+      if (is.null(rv.process$dataIn))
+        PrepareData2Send() # Used by class pipeline
+    
+    
+    
+    if(is.null(dataIn())){# The process has been reseted or is not concerned
+      cat(blue('In observe(dataIn()) : dataIn() is NULL\n\n'))
+      # Disable all screens of the process
+      ToggleState_Screens(FALSE, seq_len(rv.process$length))
+    } else { # A new dataset has been loaded
+      cat(blue('In observe(dataIn()) : dataIn() is not NULL\n\n'))
+      # Update the different screens in the process
+      Update_State_Screens()
+    }
+    
+    # Update the initial length of the dataset with the length
+    # of the one that has been received
+    rv.process$original.length <- length(dataIn())
+    
+    
+    # Enable the first screen
+    ToggleState_Screens(TRUE, 1)
+  })
+})
+
+
+
+# This function is updated each time the status vector is changed. It is 
+# used to decide which steps must be enabled or disabled w.r.t the new
+# status vector value. 
+# The behaviour is the following:
+# * All the steps before the last validated one are disabled
+# * all the steps before a undone mandatory step are enable and the ones
+# after this mandatory step are disabled
+# * xxx 
+#' 
+Update_State_Screens = function(){
+  if(verbose) cat(yellow(paste0(id, '::Update_State_Screens()\n\n')))
+  
+  if (isTRUE(is.skipped())){
+    ToggleState_Screens(cond = FALSE, range = seq_len(rv.process$length))
+  } else {
+    
+    # Ensure that all steps before the last validated one are disabled
+    ind.max <- GetMaxValidated_AllSteps()
+    if (ind.max > 0)
+      ToggleState_Screens(cond = FALSE, range = seq_len(ind.max))
+    
+    if (ind.max < rv.process$length){
+      # Enable all steps after the current one but the ones
+      # after the first mandatory not validated
+      firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv.process$length)
+      if (is.null(firstM)){
+        ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv.process$length))
+      } else {
+        ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
+        if (ind.max + firstM < rv.process$length)
+          ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv.process$length)
+      }
+    }
+    ToggleState_NavBtns()
+  }
+}
+
+
+
+
+EncapsulateScreens <- function(){
+tagList(
+  lapply(seq_len(rv.process$length), function(i) {
+    if (i==1)
+      div(id = ns(rv.process$config$steps[i]),
+          class = paste0("page_", id),
+          rv.process$config$ll.UI[[i]]
+      )
+    else
+      shinyjs::hidden(
+        div(id =  ns(rv.process$config$steps[i]),
+            class = paste0("page_", id),
+            rv.process$config$ll.UI[[i]]
+        )
+      )
+  }
+  )
+)
+}
 
 # 
 # Send_Result_to_Caller = function(data){
@@ -149,7 +260,7 @@ Send_Result_to_Caller = function(){
 # #' 
 # ValidateCurrentPos <- function(){
 #   browser()
-#   #rv.process$status[rv.process$current.pos] <- global$VALIDATED
+#   #rv.process$steps.status[rv.process$current.pos] <- global$VALIDATED
 #   
 #   
 #   # Either the process has been validated, one can prepare data to be sent to caller
@@ -181,13 +292,13 @@ GetStringStatus = function(name){
 #' @title 
 #' Get the last validated step among all the steps
 #' @description 
-#' This function analyzes the reactive variable rv.process$status
+#' This function analyzes the reactive variable rv.process$steps.status
 #' to find the indice of the last validated step among all steps
 #' 
 GetMaxValidated_AllSteps = function(){
-  if(verbose) cat(paste0( '::', 'GetMaxValidated_AllSteps() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
   val <- 0
-  ind <- grep(global$VALIDATED, rv.process$status)
+  ind <- grep(global$VALIDATED, rv.process$steps.status)
   if (length(ind) > 0) 
     val <-max(ind)
   val
@@ -199,7 +310,7 @@ GetMaxValidated_AllSteps = function(){
 #' @title 
 #' Get the last validated step before a given position
 #' @description
-#' This function analyzes the reactive variable rv.process$status
+#' This function analyzes the reactive variable rv.process$steps.status
 #' to find the indice of the last validated step among all steps before
 #' the current position (parameter pos set to NULL) or a given position (
 #' parameter pos set to an integer).
@@ -209,13 +320,13 @@ GetMaxValidated_AllSteps = function(){
 #' @return Nothing
 #'
 GetMaxValidated_BeforePos = function(pos = NULL){
-  if(verbose) cat(paste0('GetMaxValidated_BeforePos() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, 'GetMaxValidated_BeforePos()\n\n')))
   
   if (is.null(pos))
     pos <- rv.process$current.pos
   
   ind.max <- NULL
-  indices.validated <- which(rv.process$status == global$VALIDATED)
+  indices.validated <- which(rv.process$steps.status == global$VALIDATED)
   if (length(indices.validated) > 0){
     ind <- which(indices.validated < pos)
     if(length(ind) > 0)
@@ -235,11 +346,11 @@ GetMaxValidated_BeforePos = function(pos = NULL){
 #' @param range xxx
 #' 
 GetFirstMandatoryNotValidated = function(range){
-  if(verbose) cat(paste0('::', 'GetFirstMandatoryNotValidated() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::GetFirstMandatoryNotValidated()\n\n')))
 
   first <- NULL
   first <- unlist((lapply(range, 
-                          function(x){rv.process$config$mandatory[x] && !rv.process$status[x]})))
+                          function(x){rv.process$config$mandatory[x] && !rv.process$steps.status[x]})))
   if (sum(first) > 0)
     min(which(first == TRUE))
   else
@@ -267,15 +378,15 @@ Change_Current_Pos = function(i){ rv.process$current.pos <- i}
 #' @return Nothing.
 #' 
 Set_All_Skipped = function(){
-  if(verbose) cat(paste0('::', 'Set_All_Skipped() from - ', id, "\n\n"))
-  rv.process$status <- setNames(rep(global$SKIPPED, rv.process$length), 
+  if(verbose) cat(yellow(paste0(id, '::Set_All_Skipped()\n\n')))
+  rv.process$steps.status <- setNames(rep(global$SKIPPED, rv.process$length), 
                                 rv.process$config$steps)
 }
 
 
 Unskip_All_Steps = function(){
-  if(verbose) cat(paste0('::', 'Set_All_Skipped() from - ', id, "\n\n"))
-    rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+  if(verbose) cat(yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
+    rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), 
                                                      rv.process$config$steps)
     Update_State_Screens()
 }
@@ -290,11 +401,11 @@ Unskip_All_Steps = function(){
 #' @return Nothing.
 #' 
 Discover_Skipped_Steps = function(){
-  if(verbose) cat(paste0('::Discover_Skipped_Status() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
   for (i in seq_len(rv.process$length)){
     max.val <- GetMaxValidated_AllSteps()
-    if (rv.process$status[i] != global$VALIDATED && max.val > i)
-      rv.process$status[i] <- global$SKIPPED
+    if (rv.process$steps.status[i] != global$VALIDATED && max.val > i)
+      rv.process$steps.status[i] <- global$SKIPPED
   }
 }
 
@@ -334,7 +445,7 @@ dataModal = function() {
 #' @param cond xxx
 #' 
 ToggleState_ResetBtn = function(cond){
-  if(verbose) cat(paste0( '::', 'ToggleState_ResetBtn(', cond, ')) from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::ToggleState_ResetBtn(', cond, '))\n\n')))
   
   shinyjs::toggleState('rstBtn', condition = cond)
 }
@@ -345,8 +456,8 @@ ToggleState_ResetBtn = function(cond){
 # output$SkippedInfoPanel <- renderUI({
 #   #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
 #   
-#   current_step_skipped <- rv.process$status[rv.process$current.pos] == global$SKIPPED
-#   #entire_process_skipped <- isTRUE(sum(rv.process$status) == global$SKIPPED * rv.process$length)
+#   current_step_skipped <- rv.process$steps.status[rv.process$current.pos] == global$SKIPPED
+#   #entire_process_skipped <- isTRUE(sum(rv.process$steps.status) == global$SKIPPED * rv.process$length)
 #   req(current_step_skipped)
 #   
 #   
@@ -385,14 +496,14 @@ observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
 observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
 
 # Catch new status event
-observeEvent(rv.process$status, ignoreInit = TRUE, {
+observeEvent(rv.process$steps.status, ignoreInit = TRUE, {
   # https://github.com/daattali/shinyjs/issues/166
   # https://github.com/daattali/shinyjs/issues/25
-  if (verbose) cat(paste0('::observe((rv$status) from - ', id, "\n\n"))
+  if (verbose) cat(yellow(paste0(id, '::observeEvent(rv.process$steps.status)\n\n')))
   
   Discover_Skipped_Steps()
   Update_State_Screens()
-  if (rv.process$status[rv.process$length] == global$VALIDATED){
+  if (rv.process$steps.status[rv.process$length] == global$VALIDATED){
     rv.process$current.pos <- rv.process$length
     Send_Result_to_Caller()
   }
@@ -406,6 +517,7 @@ observeEvent(rv.process$status, ignoreInit = TRUE, {
 #' The parameter is.enabled() is updated by the caller and tells the process
 #' if it is enabled or disabled (remote action from the caller)
 observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+  if (verbose) cat(yellow(paste0(id, '::is.enabled()\n\n')))
   if (isTRUE(is.enabled())){
     Update_State_Screens()
   } else {
@@ -423,7 +535,7 @@ observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
 observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit=TRUE,{
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself.
-  if (verbose) cat(paste0('::observeEvent(req(is.skipped())) from - ', id, ". Value = ", is.skipped(), "\n\n"))
+  if (verbose) cat(yellow(paste0(id, '::observeEvent(is.skipped()). Value = ', is.skipped(), "\n\n")))
  if (isTRUE(is.skipped()))
      Set_All_Skipped()
   else{
@@ -439,7 +551,7 @@ observeEvent(input$closeModal, {removeModal() })
 observeEvent(remoteReset(), ignoreInit = TRUE, {
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself. 
-  if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
+  if (verbose) cat(yellow(paste0(id, '::observeEvent(remoteReset()). Value = ', remoteReset(), "\n\n")))
   #browser()
   LocalReset()
 })
@@ -449,7 +561,7 @@ observeEvent(remoteReset(), ignoreInit = TRUE, {
 observeEvent(input$rstBtn, ignoreInit = TRUE, {
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself. 
-  if (verbose) cat(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n"))
+  if (verbose) cat(yelllow(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n")))
   #browser()
   showModal(dataModal())
 })
@@ -457,9 +569,9 @@ observeEvent(input$rstBtn, ignoreInit = TRUE, {
 
 observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
   # Catches a clic on the `Ok` button of the modal for resetting a module
-  if (verbose) cat(paste0('::observeEvent(req(c(input$modal_ok))) from - ', id, "\n\n"))
+  if (verbose) cat(yellow(paste0(id, '::observeEvent(input$modal_ok)\n\n')))
   #browser()
-  #rv.process$reset <- input$rstBtn + reset()
+  #rv.process$steps.reset <- input$rstBtn + reset()
   #Set_All_Reset()
   LocalReset()
   
@@ -472,7 +584,7 @@ observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
 # Default actions on reset pipeline or process.
 # 
 LocalReset = function(){
-  if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
+  if(verbose) cat(yellow(paste0(id, '::LocalReset()\n\n')))
   #browser()
   rv.process$dataIn <- NULL
   #rv.process$temp.dataIn <- NULL
@@ -481,7 +593,7 @@ LocalReset = function(){
   rv.process$current.pos <- 1
   
   # The status of the steps are reinitialized to the default configuration of the process
-  rv.process$status <- setNames(rep(global$UNDONE, rv.process$length), 
+  rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), 
                                 rv.process$config$steps)
   
   # If the current module is a pipeline type (node and not leaf),
@@ -494,6 +606,36 @@ LocalReset = function(){
   #dataOut <- reactive({Send_Result_to_Caller(rv.process$dataIn)})
 }
 
+# This function changes the state (enabled, disabled) of the steps in the process
+# The parameter 'cond' is the new state
+# The parameter 'range' corresponds to the range of steps to update
+ToggleState_Screens = function(cond, range){
+  if(verbose) cat(yellow(paste0(id, '::ToggleState_Screens(cond = ', cond, ', range = ', paste0(range, collapse = " "), ')\n\n')))
+  #browser()
+  if (isTRUE(is.enabled()))
+    lapply(range, function(x){
+      cond <- cond && !(rv.process$steps.status[x] == global$SKIPPED)
+      
+      #Send to TL the enabled/disabled tags
+      rv.process$steps.enabled[x] <- cond
+    })
+  
+  
+  # Update the state enabled/disabled of the navigation buttons
+  #ToggleState_NavBtns()
+}
+
+ToggleState_NavBtns <- function(){
+  if(verbose) cat(yellow(paste0(id, '::ToggleState_NavBtns()\n\n')))
+  
+  # If the cursor is not on the first position, show the 'prevBtn'
+  cond <-  rv.process$current.pos != 1
+  shinyjs::toggleState(id = "prevBtn", condition = cond)
+  
+  # If the cursor is set before the last step, show the 'nextBtn'
+  cond <- rv.process$current.pos < rv.process$length
+  shinyjs::toggleState(id = "nextBtn", condition = cond)
+}
 
 
 # 
@@ -552,10 +694,10 @@ LocalReset = function(){
 #                    color <- if(rv.process$steps.enabled[x]) 'black' else 'lightgrey'
 #                    if (x == rv.process$current.pos)
 #                      tags$p(style = paste0('color: ', color, ';'),
-#                             tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])), ' <---'))
+#                             tags$b(paste0('---> ', rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$steps.status[[x]])), ' <---'))
 #                    else 
 #                      tags$p(style = paste0('color: ', color, ';'),
-#                             paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$status[[x]])))
+#                             paste0(rv.process$config$steps[x], ' - ', GetStringStatus(rv.process$steps.status[[x]])))
 #                  }))
 # })
 # 

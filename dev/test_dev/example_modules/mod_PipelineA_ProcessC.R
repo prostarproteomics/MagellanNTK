@@ -8,7 +8,7 @@
 
 #' @export
 #'
-mod_PipelineA_ProcessA_ui <- function(id){
+mod_PipelineA_ProcessC_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -36,15 +36,15 @@ mod_PipelineA_ProcessA_ui <- function(id){
 #'
 #' @export
 
-mod_PipelineA_ProcessA_server <- function(id,
+mod_PipelineA_ProcessC_server <- function(id,
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE})
-                                          ){
-
+){
+  
   #' @field config xxxx
   config <- list(
-    name = 'ProcessA',
+    name = 'ProcessC',
     parent = 'PipelineA',
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
     mandatory = c(T, F, T, T)
@@ -107,7 +107,7 @@ mod_PipelineA_ProcessA_server <- function(id,
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })
     })
-
+    
     
     output$validationBtn_ui <- renderUI({
       if (isTRUE(rv$steps.enabled['Description'])  )
@@ -121,15 +121,15 @@ mod_PipelineA_ProcessA_server <- function(id,
                        class = btn_success_color)
         )
     })
-
-
+    
+    
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       tagList(
-          includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
-          uiOutput(ns('datasetDescription')),
-          uiOutput(ns('validationBtn_ui'))
-        )
+        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
+        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('validationBtn_ui'))
+      )
     })
     
     
@@ -377,7 +377,7 @@ mod_PipelineA_ProcessA_server <- function(id,
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       
-       rv$steps.status['Step3'] <- global$VALIDATED
+      rv$steps.status['Step3'] <- global$VALIDATED
     })
     
     

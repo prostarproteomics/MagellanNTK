@@ -44,7 +44,8 @@ mod_PipelineA_ProcessB_server <- function(id,
   
   #' @field config xxxx
   config <- list(
-    name = 'PipelineA_ProcessB',
+    name = 'ProcessB',
+    parent = 'PipelineA',
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
     mandatory = c(T, F, T, T)
   )
@@ -79,7 +80,7 @@ mod_PipelineA_ProcessB_server <- function(id,
     # Reactive values during the run of the process
     rv <- reactiveValues(
       dataIn = NULL,
-      status = NULL,
+      steps.status = NULL,
       reset = NULL,
       steps.enabled = NULL
     )
@@ -89,11 +90,6 @@ mod_PipelineA_ProcessB_server <- function(id,
       trigger = NULL,
       value = NULL
     )
-    
-    
-    
-    
-    
     
     
     # Initialization of the module
@@ -129,20 +125,17 @@ mod_PipelineA_ProcessB_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      rv$steps.enabled
       tagList(
-        includeMarkdown(paste0("md/", paste0(config$name, ".md"))),
+        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
         uiOutput(ns('datasetDescription')),
-        
         uiOutput(ns('validationBtn_ui'))
-        
       )
     })
     
     
     observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
       rv$dataIn <- dataIn()
-      #rv$status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- global$VALIDATED
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
     })
@@ -153,11 +146,11 @@ mod_PipelineA_ProcessB_server <- function(id,
     
     
     # ObserveEvent of the widgets
-    observeEvent(input$select1,{rv.widgets$Step1_select1 <- input$select1})
-    observeEvent(input$select2,{rv.widgets$Step1_select2 <- input$select2})
-    observeEvent(input$select3,{rv.widgets$Step1_select3 <- input$select3})
-    observeEvent(input$select2_1,{rv.widgets$Step1_select2_1 <- input$select2_1})
-    observeEvent(input$select2_2,{rv.widgets$Step1_select2_2 <- input$select2_2})
+    observeEvent(input$select1, {rv.widgets$Step1_select1 <- input$select1})
+    observeEvent(input$select2, {rv.widgets$Step1_select2 <- input$select2})
+    observeEvent(input$select3, {rv.widgets$Step1_select3 <- input$select3})
+    observeEvent(input$select2_1, {rv.widgets$Step2_select1 <- input$select2_1})
+    observeEvent(input$select2_2, {rv.widgets$Step2_select2 <- input$select2_2})
     
     
     
@@ -168,13 +161,13 @@ mod_PipelineA_ProcessB_server <- function(id,
       if (rv$steps.enabled['Step1'])
         selectInput(ns('select1'), 'Select 1 in renderUI',
                     choices = 1:4,
-                    selected = rv.widgets$select1,
+                    selected = rv.widgets$Step1_select1,
                     width = '150px')
       else
         shinyjs::disabled(
           selectInput(ns('select1'), 'Select 1 in renderUI',
                       choices = 1:4,
-                      selected = rv.widgets$select1,
+                      selected = rv.widgets$Step1_select1,
                       width = '150px')
         )
     })
@@ -187,13 +180,13 @@ mod_PipelineA_ProcessB_server <- function(id,
       if (rv$steps.enabled['Step1'])
         selectInput(ns('select2'), 'Select 2 in renderUI',
                     choices = 1:3,
-                    selected = rv.widgets$select2,
+                    selected = rv.widgets$Step1_select2,
                     width = '150px')
       else
         shinyjs::disabled(
           selectInput(ns('select2'), 'Select 2 in renderUI',
                       choices = 1:4,
-                      selected = rv.widgets$select2,
+                      selected = rv.widgets$Step1_select2,
                       width = '150px')
         )
       
@@ -233,13 +226,13 @@ mod_PipelineA_ProcessB_server <- function(id,
                           if (rv$steps.enabled['Step1'])
                             selectInput(ns('select3'), 'Select step 3',
                                         choices = 1:3,
-                                        selected = rv.widgets$select3,
+                                        selected = rv.widgets$Step1_select3,
                                         width = '150px')
                           else
                             shinyjs::disabled(
                               selectInput(ns('select3'), 'Select step 3',
                                           choices = 1:5,
-                                          selected = rv.widgets$select3,
+                                          selected = rv.widgets$Step1_select3,
                                           width = '150px')
                             )
                       ),
@@ -270,7 +263,7 @@ mod_PipelineA_ProcessB_server <- function(id,
       # dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
-      #rv$status['Step1'] <- global$VALIDATED
+      rv$steps.status['Step1'] <- global$VALIDATED
     })
     
     #-------------------------- Code for step 2 ------------------------------
@@ -282,13 +275,13 @@ mod_PipelineA_ProcessB_server <- function(id,
       if (rv$steps.enabled['Step2'])
         selectInput(ns('select2_1'), 'Select 2_1 in renderUI',
                     choices = 1:3,
-                    selected = rv.widgets$select2_1,
+                    selected = rv.widgets$Step2_select1,
                     width = '150px')
       else
         shinyjs::disabled(
           selectInput(ns('select2_1'), 'Select 2_1 in renderUI',
                       choices = 1:3,
-                      selected = rv.widgets$select2_1,
+                      selected = rv.widgets$Step2_select1,
                       width = '150px')
         )
       
@@ -299,14 +292,14 @@ mod_PipelineA_ProcessB_server <- function(id,
       if (rv$steps.enabled['Step2'])
         selectInput(ns('select2_2'), 'Select 2_2',
                     choices = 1:5,
-                    selected = rv.widgets$select2_2,
+                    selected = rv.widgets$Step2_select1,
                     width = '150px')
       else
         shinyjs::disabled(
           selectInput(ns('select2_2'),
                       'Select 2_2',
                       choices = 1:5,
-                      selected = rv.widgets$select2_2,
+                      selected = rv.widgets$Step2_select1,
                       width = '150px')
         )
     })
@@ -353,7 +346,7 @@ mod_PipelineA_ProcessB_server <- function(id,
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       
-      #rv$status['Step2'] <- global$VALIDATED
+      #rv$steps.status['Step2'] <- global$VALIDATED
     })
     
     
@@ -384,7 +377,7 @@ mod_PipelineA_ProcessB_server <- function(id,
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       
-      # rv$status['Step3'] <- global$VALIDATED
+      rv$steps.status['Step3'] <- global$VALIDATED
     })
     
     
@@ -402,7 +395,7 @@ mod_PipelineA_ProcessB_server <- function(id,
       config
     }),
     dataOut = reactive({dataOut})
-    #status = reactive({rv$status})
+    #steps.status = reactive({rv$steps.status})
     )
     
     

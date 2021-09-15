@@ -43,7 +43,8 @@ mod_PipelineA_Description_server <- function(id,
   
   
   config <- list(
-    name = 'PipelineA_Description',
+    name = 'Description',
+    parent = 'PipelineA',
     steps = c('Description'),
     mandatory = c(T)
   )
@@ -64,7 +65,7 @@ mod_PipelineA_Description_server <- function(id,
     rv <- reactiveValues(
       dataIn = NULL,
       dataOut = NULL,
-      status = NULL,
+      steps.status = NULL,
       remoteReset = NULL,
       steps.enabled = NULL
     )
@@ -98,7 +99,7 @@ mod_PipelineA_Description_server <- function(id,
     output$Description <- renderUI({
       rv$steps.enabled
       tagList(
-        includeMarkdown(paste0("md/", paste0(config$name, ".md"))),
+        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
         uiOutput(ns('datasetDescription')),
         if (isTRUE(rv$steps.enabled['Description']))
           actionButton(ns('btn_validate_Description'),

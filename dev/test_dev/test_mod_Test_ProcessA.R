@@ -46,8 +46,8 @@ mod_test_process_server <- function(id){
     ns <- session$ns
     utils::data(Exp1_R25_prot, package = 'DAPARdata2')
     
-    obj <- NULL
-    #obj <- Exp1_R25_prot
+    #obj <- NULL
+    obj <- Exp1_R25_prot
     
     rv <- reactiveValues(
       dataIn = obj,
@@ -92,16 +92,11 @@ mod_test_process_server <- function(id){
     
     ###########---------------------------#################
     output$show_rv_dataIn <- renderUI({
-      req(rv$dataIn)
-      tagList(
-        lapply(names(rv$dataIn), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataIn), function(x){tags$p(x)})
     })
     
     output$show_rv_dataOut <- renderUI({
-      tagList(
-        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
     })
     
   })

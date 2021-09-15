@@ -33,12 +33,12 @@ mod_PipelineA_server <- function(id,
                                  dataIn = reactive({NULL}),
                                  steps.enabled = reactive({NULL}),
                                  remoteReset = reactive({FALSE}),
-                                 status = reactive({NULL})){
+                                 steps.status = reactive({NULL})){
 
   config <- list(
     name = 'PipelineA',
-    steps = c('Description', 'ProcessA', 'ProcessB'),
-    mandatory = c(TRUE, TRUE, FALSE)
+    steps = c('Description', 'ProcessA', 'ProcessB', 'ProcessC'),
+    mandatory = c(TRUE, FALSE, FALSE, TRUE)
     
   )
   
@@ -52,8 +52,8 @@ mod_PipelineA_server <- function(id,
     
     rv <- reactiveValues(
       dataIn = NULL,
-       status = NULL,
-      reset = NULL,
+      steps.status = NULL,
+      steps.reset = NULL,
       steps.enabled = NULL
     )
     
@@ -63,7 +63,7 @@ mod_PipelineA_server <- function(id,
       value = NULL
     )
     
-    observeEvent(status(), { rv$status <- status()})
+    observeEvent(steps.status(), { rv$steps.status <- steps.status()})
     
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {

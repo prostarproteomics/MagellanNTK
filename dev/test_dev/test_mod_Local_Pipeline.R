@@ -42,9 +42,6 @@ mod_test_pipeline_server <- function(id){
     )
     
     observe({
-      source(file.path('example_modules', 'mod_PipelineA.R'), local=TRUE)$value
-      
-      
       rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineA',
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
@@ -74,17 +71,11 @@ mod_test_pipeline_server <- function(id){
     
     ###########---------------------------#################
     output$show_rv_dataIn <- renderUI({
-      rv$dataIn
-      tagList(
-        lapply(names(rv$dataIn), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataIn), function(x){tags$p(x)})
     })
     
     output$show_rv_dataOut <- renderUI({
-     # rv$dataOut$dataOut()$trigger
-      tagList(
-        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
     })
     
   })
