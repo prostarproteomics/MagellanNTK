@@ -39,6 +39,7 @@ mod_popover_for_help_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples 
+#' \donttest{
 #' library(shiny)
 #' library(shinyBS)
 #' ui <- fluidPage(
@@ -51,6 +52,7 @@ mod_popover_for_help_ui <- function(id){
 #'   )
 #' }
 #' shinyApp(ui, server)
+#' }
 #' 
 #' @noRd
 #' 

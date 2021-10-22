@@ -7,6 +7,8 @@
 #' 
 #' @noRd
 #' 
+#' @export
+#' 
 mod_bsmodal_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -24,11 +26,14 @@ mod_bsmodal_ui <- function(id){
 #' @param width xxx
 #' @param uiContent xxx
 #' 
+#' @importFrom shinyjqui jqui_draggable
+#' 
 #' @export
 #' 
 #' @return xxx
 #' 
-#' @examples 
+#' @examples
+#' \donttest{ 
 #' library(shiny)
 #' library(shinyBS)
 #' 
@@ -41,6 +46,7 @@ mod_bsmodal_ui <- function(id){
 #'                      uiContent = p('test'))
 #' }
 #' shinyApp(ui, server)
+#' }
 #' 
 mod_bsmodal_server <- function(id,
                                title = NULL,

@@ -7,17 +7,15 @@ library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)
 
-source_files <- function(dirpath, recursive = TRUE){
-  for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
-    source(file.path(dirpath, l), local=TRUE)$value
-}
-
 setwd('~/GitHub/Magellan/dev/test_dev')
 
-dirpath <- 'example_modules'
+dirpath <- '../../R'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
 
-source_files(dirpath = '../../R')
-source_files(dirpath = 'example_modules')
+dirpath <- 'example_modules'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
 
 #--------------------------------------------
 

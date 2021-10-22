@@ -22,6 +22,7 @@ xxx
 xxxx
 }
 \examples{
+\donttest{ 
 library(shiny)
 library(shinyBS)
 
@@ -34,5 +35,6 @@ server <- function(input, output){
                      uiContent = p('test'))
 }
 shinyApp(ui, server)
+}
 
 }

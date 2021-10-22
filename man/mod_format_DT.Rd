@@ -33,6 +33,7 @@ xxx
 xxx
 }
 \examples{
+\donttest{
 library(shiny)
 library(DT)
 
@@ -43,6 +44,7 @@ server <- function(input, output){
   mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
 }
 shinyApp(ui, server)
+}
 
 }
 \keyword{internal}

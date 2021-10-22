@@ -15,7 +15,8 @@ for (l in list.files(path = dirpath, pattern = ".R"))
 
 
 
-
+#' @importFrom stats setNames
+#' 
 mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(

@@ -28,6 +28,9 @@ mod_PipelineA_Description_ui <- function(id){
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @importFrom stats setNames
+#' 
 mod_PipelineA_Description_server <- function(id,
                                         dataIn = reactive({NULL}),
                                         steps.enabled = reactive({NULL}),

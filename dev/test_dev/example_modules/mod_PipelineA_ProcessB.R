@@ -35,6 +35,8 @@ mod_PipelineA_ProcessB_ui <- function(id){
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @importFrom stats setNames
 
 mod_PipelineA_ProcessB_server <- function(id,
                                           dataIn = reactive({NULL}),

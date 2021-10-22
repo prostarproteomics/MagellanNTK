@@ -39,6 +39,7 @@ mod_format_DT_ui <- function(id){
 #' @return xxx 
 #' 
 #' @examples 
+#' \donttest{
 #' library(shiny)
 #' library(DT)
 #' 
@@ -49,6 +50,7 @@ mod_format_DT_ui <- function(id){
 #'   mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
 #' }
 #' shinyApp(ui, server)
+#' }
 #' 
 mod_format_DT_server <- function(id,
                                  table2show,

@@ -96,10 +96,10 @@ mod_nav_pipeline_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples 
+#' \donttest{
 #' library(shiny)
 #' library(shinyBS)
 #' library(crayon)
-#' library(MSPipelines)
 #' ui <- fluidPage(
 #'   mod_nav_pipeline_ui('Protein')
 #' )
@@ -109,6 +109,7 @@ mod_nav_pipeline_ui <- function(id){
 #'   )
 #' }
 #' shinyApp(ui, server)
+#' }
 #' 
 mod_nav_pipeline_server <- function(id,
                                    dataIn = reactive({NULL}),

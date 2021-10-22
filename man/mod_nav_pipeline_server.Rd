@@ -40,10 +40,10 @@ xxx
 }}
 
 \examples{
+\donttest{
 library(shiny)
 library(shinyBS)
 library(crayon)
-library(MSPipelines)
 ui <- fluidPage(
   mod_nav_pipeline_ui('Protein')
 )
@@ -53,5 +53,6 @@ mod_nav_pipeline_server(id = 'Protein',
   )
 }
 shinyApp(ui, server)
+}
 
 }

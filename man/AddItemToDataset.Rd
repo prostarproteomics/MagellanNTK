@@ -6,6 +6,11 @@
 \usage{
 AddItemToDataset(dataset, name)
 }
+\arguments{
+\item{dataset}{xxx}
+
+\item{name}{xxx}
+}
 \value{
 NA
 }

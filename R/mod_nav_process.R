@@ -78,9 +78,9 @@ mod_nav_process_ui <- function(id){
 #' @noRd
 #' 
 #' @examples
+#' \donttest{
 #' library(shiny)
 #' library(shinyBS)
-#' library(MSPipelines)
 #' ui <- fluidPage(
 #'   mod_nav_process_ui('Protein_Description')
 #' )
@@ -90,6 +90,7 @@ mod_nav_process_ui <- function(id){
 #'   )
 #' }
 #' shinyApp(ui, server)
+#' }
 #' 
 mod_nav_process_server <- function(id,
                                    dataIn = reactive({NULL}),

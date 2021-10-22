@@ -28,6 +28,7 @@ mod_PipelineA_ui <- function(id){
 #' @export
 #'
 #' @import shiny
+#' @importFrom stats setNames
 #'
 mod_PipelineA_server <- function(id,
                                  dataIn = reactive({NULL}),

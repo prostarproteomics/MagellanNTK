@@ -16,7 +16,8 @@ for (l in list.files(path = dirpath, pattern = ".R"))
 
 verbose <- FALSE
 
-
+#' @importFrom stats setNames
+#' 
 mod_test_pipeline_ui <- function(id){
   ns <- NS(id)
   tagList(
