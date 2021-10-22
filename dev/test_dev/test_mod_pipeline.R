@@ -40,13 +40,9 @@ mod_test_pipeline_ui <- function(id){
 mod_test_pipeline_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    utils::data(Exp1_R25_prot, package='DAPARdata2')
-  
-  obj <- NULL
-  obj <- Exp1_R25_prot
-  
+   
   rv <- reactiveValues(
-    dataIn = Exp1_R25_prot,
+    dataIn = QFeatures::feat1,
     dataOut = NULL
   )
   
@@ -58,7 +54,7 @@ mod_test_pipeline_server <- function(id){
     
     rv$dataOut <- do.call(paste0(basename, '_server'),
                           list(id = input$choosePipeline,
-                               dataIn = reactive({obj}),
+                               dataIn = reactive({rv$dataIn}),
                                tag.enabled = reactive({TRUE})
                           )
     )

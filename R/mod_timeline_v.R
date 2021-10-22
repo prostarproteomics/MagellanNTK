@@ -23,16 +23,20 @@ mod_timeline_v_ui <- function(id){
   )
 }
     
-#' timeline Server Function
+#' @title timeline Server Function
+#' 
+#' @description xxx
 #' 
 #' @param id xxx
 #' @param config xxx
 #' @param status xxx
 #' @param position xxx
 #' @param enabled xxx
+#' 
 #' @export
 #' 
 #' @return xxx
+#' 
 #' @examples 
 #' ui <- fluidPage(
 #' actionButton('changePos', 'Change position'),
@@ -40,24 +44,27 @@ mod_timeline_v_ui <- function(id){
 #' )
 #' 
 #' server <- function(input, output){
-#'  rv <- reactiveValues(
-#'  status = c(0, 1, 0, 0),
-#'  current.pos = 1,
-#'  tl.tags.enabled = c(1, 1, 1, 1),
-#'  position = NULL
-#'  )
-#'  config <- list(name = 'Protein_Filtering',
-#'  steps = c('Description', 'Step1', 'Step2', 'Step3'),
-#'  mandatory = c(TRUE, FALSE, TRUE, TRUE)
-#'  )
-#'  mod_timeline_v_server(id = 'TLh',
-#'   config = config,
-#'    status = reactive({rv$status}),
-#'    position = reactive({rv$current.pos}),
-#'    enabled = reactive({rv$tl.tags.enabled})
-#'    )
-#'    }
-#'    shinyApp(ui, server)
+#' rv <- reactiveValues(
+#' status = c(0, 1, 0, 0),
+#' current.pos = 1,
+#' tl.tags.enabled = c(1, 1, 1, 1),
+#' position = NULL
+#' )
+#' config <- list(name = 'Protein_Filtering',
+#' steps = c('Description', 'Step1', 'Step2', 'Step3'),
+#' mandatory = c(TRUE, FALSE, TRUE, TRUE)
+#' )
+#' mod_timeline_v_server(id = 'TLh',
+#' config = config,
+#' status = reactive({rv$status}),
+#' position = reactive({rv$current.pos}),
+#' enabled = reactive({rv$tl.tags.enabled})
+#' )
+#' }
+#' shinyApp(ui, server)
+#'    
+#' @noRd
+#' 
 mod_timeline_v_server <- function(id, 
                                config, 
                                status, 

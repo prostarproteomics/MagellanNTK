@@ -6,14 +6,9 @@
 \usage{
 Timestamp()
 }
-\arguments{
-\item{data}{xxx}
-}
 \value{
 NA
 }
 \description{
-xxx
-
 Returns the date and time in timestamp UNIX format.
 }

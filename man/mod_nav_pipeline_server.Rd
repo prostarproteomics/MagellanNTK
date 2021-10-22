@@ -48,9 +48,8 @@ ui <- fluidPage(
   mod_nav_pipeline_ui('Protein')
 )
 server <- function(input, output){
-  utils::data(Exp1_R25_prot, package='DAPARdata2')
 mod_nav_pipeline_server(id = 'Protein',
-                          dataIn = reactive({Exp1_R25_prot})
+                          dataIn = reactive({QFeatures::feat1})
   )
 }
 shinyApp(ui, server)

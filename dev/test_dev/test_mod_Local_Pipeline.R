@@ -2,16 +2,24 @@ library(shiny)
 library(shinyjs)
 library(QFeatures)
 library(crayon)
+library(Magellan)
 
 
 options(shiny.fullstacktrace = TRUE)
+
+source_files <- function(dirpath, recursive = TRUE){
+  for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+    source(file.path(dirpath, l), local=TRUE)$value
+}
+
 setwd('~/GitHub/Magellan/dev/test_dev')
 
-dirpath <- '../../R'
-for (l in list.files(path = dirpath, pattern = ".R"))
-  source(file.path(dirpath, l), local=TRUE)$value
-#--------------------------------------------
+dirpath <- 'example_modules'
 
+source_files(dirpath = '../../R')
+source_files(dirpath = 'example_modules')
+
+#--------------------------------------------
 
 
 mod_test_pipeline_ui <- function(id){
@@ -31,13 +39,9 @@ mod_test_pipeline_ui <- function(id){
 mod_test_pipeline_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    utils::data(Exp1_R25_prot, package='DAPARdata2')
-    
-    obj <- NULL
-    obj <- Exp1_R25_prot
     
     rv <- reactiveValues(
-      dataIn = Exp1_R25_prot,
+      dataIn = QFeatures::feat1,
       dataOut = NULL
     )
     

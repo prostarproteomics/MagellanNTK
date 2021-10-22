@@ -1,14 +1,12 @@
-# Module UI
-
 #' @title   mod_popover_for_help_ui and mod_popover_for_help_server
 #' @description  A shiny Module.
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyjs inlineCSS useShinyjs
 #' 
 #' @noRd
+#' 
 mod_popover_for_help_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -34,11 +32,7 @@ mod_popover_for_help_ui <- function(id){
 #' 
 #' @description xxx
 #' 
-#' @rdname mod_popover_for_help
-#' 
 #' @export
-#' 
-#' @keywords internal
 #' 
 #' @importFrom shinyBS bsPopover addPopover bsTooltip
 #' 
@@ -58,6 +52,7 @@ mod_popover_for_help_ui <- function(id){
 #' }
 #' shinyApp(ui, server)
 #' 
+#' @noRd
 #' 
 mod_popover_for_help_server <- function(id, data){
   

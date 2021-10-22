@@ -1,6 +1,7 @@
 <!-- badges: start -->
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-  <!-- badges: end -->
+[![R-CMD-check](https://github.com/samWieczorek/Magellan/workflows/R-CMD-check/badge.svg)](https://github.com/samWieczorek/Magellan/actions)
+<!-- badges: end -->
   
 # Magellan
 

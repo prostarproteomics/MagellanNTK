@@ -13,8 +13,6 @@ source(file.path('../../../R', 'class_ScreenManager.R'), local=TRUE)$value
 source(file.path('../../../R', 'class_Process.R'), local=TRUE)$value
 source(file.path('.', 'Example_ProcessA.R'), local=TRUE)$value
 
-utils::data(Exp1_R25_prot, package='DAPARdata2')
-
 
 ui <- dashboardPage(
   dashboardHeader(),
@@ -78,7 +76,7 @@ server <- function(session, input, output) {
   
   observeEvent(input$send, {
     updateTabItems(session, 'tabs', 'screen2')
-    shinyjs::delay(100, rv$dataIn <-Exp1_R25_prot)
+    shinyjs::delay(100, rv$dataIn <- QFeatures::feat1)
     
   })
   

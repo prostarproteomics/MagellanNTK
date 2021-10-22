@@ -1,11 +1,3 @@
-#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-verbose <- FALSE
-
-
-
-# TODO check the different function calls with verbose=TRUE
-
-
 #' @title xxx
 #' 
 #' @description 
@@ -56,9 +48,7 @@ mod_nav_process_ui <- function(id){
 
 #' @title xxx
 #' 
-#' @description 
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan
+#' @description xxx
 #' 
 #' @param id xxx
 #' 
@@ -85,7 +75,7 @@ mod_nav_process_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @author Samuel Wieczorek
+#' @noRd
 #' 
 #' @examples
 #' library(shiny)
@@ -95,9 +85,8 @@ mod_nav_process_ui <- function(id){
 #'   mod_nav_process_ui('Protein_Description')
 #' )
 #' server <- function(input, output){
-#'   utils::data(Exp1_R25_prot, package='DAPARdata2')
 #'   mod_nav_process_server(id = 'Protein_Description',
-#'                          dataIn = reactive({Exp1_R25_prot})
+#'                          dataIn = reactive({QFeatures::feat1})
 #'   )
 #' }
 #' shinyApp(ui, server)
@@ -120,51 +109,12 @@ mod_nav_process_server <- function(id,
     
     nav.mode <- "process"
     
-    #' # Reactive values that will be used to output the current dataset when 
-    #' # the last step is validated
-    #' dataOut <- reactiveValues(
-    #'   trigger = NULL,
-    #'   value = NULL
-    #' )
-    #' 
-    #' 
-    #' #These reactive values are specific to this instance of mod_nav_process_server
-    #' rv.process <- reactiveValues(
-    #'   #' @field proc contains the return value of the process module that has been called 
-    #'   proc = NULL,
-    #'   
-    #'   #' @field status A booelan vector which contains the status (validated,
-    #'   #' skipped or undone) of the steps
-    #'   steps.status = NULL,
-    #'   
-    #'   #' @field dataIn Contains the dataset passed by argument to the module server
-    #'   dataIn = NULL,
-    #'   
-    #'   #' @field temp.dataIn This variable is used to serves as a tampon between 
-    #'   #' the input of the module and the functions. 
-    #'   temp.dataIn = NULL,
-    #'   
-    #'   #' @field steps.enabled Contains the value of the parameter 'is.enabled'
-    #'   steps.enabled = NULL,
-    #'   
-    #'   #' @field current.pos Stores the current cursor position in the timeline and 
-    #'   #' indicates which of the process' steps is active
-    #'   current.pos = 1,
-    #'   
-    #'   length = NULL,
-    #'   config = NULL
-    #' )
-    
-    
-    # Integrate functions that are in common with "mod_nav_pipeline".
-    # This line must be present in the moduleServer() section because the functions
-    # are part the the module server
     source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
     
     
     
     
-    #' @field modal_txt This text is showed in the modal when the user click on the 'Reset' button.
+    # This text is showed in the modal when the user click on the 'Reset' button.
     modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
                       validated process and all further datasets will be removed"
     
@@ -183,11 +133,11 @@ mod_nav_process_server <- function(id,
       #browser()
       
       
-      source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
-      source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
-      source(file.path('example_modules', 'mod_PipelineA_ProcessB.R'), local=TRUE)$value
-      source(file.path('example_modules', 'mod_PipelineA_ProcessC.R'), local=TRUE)$value
-      
+      # source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
+      # source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
+      # source(file.path('example_modules', 'mod_PipelineA_ProcessB.R'), local=TRUE)$value
+      # source(file.path('example_modules', 'mod_PipelineA_ProcessC.R'), local=TRUE)$value
+      # 
       #Call the module server of the process
       # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
       # more specifically, the temporary variable
@@ -354,24 +304,23 @@ mod_nav_process_server <- function(id,
         rv.process$current.pos <- rv.process$position
     })
     
-    # #' @description
-    # #' Default actions on reset pipeline or process.
-    # #' 
+    # # Default actions on reset pipeline or process.
+    # # 
     # LocalReset = function(){
     #   if(verbose) cat(paste0('LocalReset() from - ', id, "\n\n"))
     #   #ResetScreens()
     #   rv.process$dataIn <- NULL
     #   rv.process$current.pos <- 1
     #  rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
-    #'   Send_Result_to_Caller()
+    #   Send_Result_to_Caller()
     # }
     
     
     
     
     # Catches a new position to show/hide the correct screen. This function
-    #also manages the enabling/disabling of the `Prev` and `Next` buttons
-    #' w.r.t predefined rules (each of these buttons are disabled if there is
+    # also manages the enabling/disabling of the `Prev` and `Next` buttons
+    # w.r.t predefined rules (each of these buttons are disabled if there is
     # no more steps in their direction)
     observeEvent(rv.process$current.pos, ignoreInit = TRUE, {
       if (verbose) cat(yellow(paste0(id, '::observeEvent(rv.process$current.pos)\n\n')))
@@ -438,7 +387,7 @@ mod_nav_process_server <- function(id,
     
     
     
-    ## The following functions are only there for dev and debugging reasons
+    # The following functions are only there for dev and debugging reasons
     # They will not be part of the final code
     
     output$show_Debug_Infos <- renderUI({

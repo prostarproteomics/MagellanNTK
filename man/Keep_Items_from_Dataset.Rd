@@ -21,7 +21,6 @@ Removes one or more items from the dataset. This function is specific of the
 type of dataset.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata2')
-obj <- Keep_Items_from_Dataset(Exp1_R25_pept, range = seq_len(2))
+obj <- Keep_Items_from_Dataset(QFeatures::feat1, range = seq_len(1))
 
 }

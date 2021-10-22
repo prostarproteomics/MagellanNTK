@@ -1,7 +1,7 @@
 Package: Magellan
 Title: A Pipeline Manager
 Version: 0.99.2
-Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr',role = c('cre', 'aut'))
+Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', role = c('cre', 'aut'))
 Description: Magellan is a collection of Shiny modules which provide the basis for a generic workflow manager for data processing toolswith several steps. It works in combination with any package which implements data processing pipelines compliant with Magellan such as MSPipelines and Prostar. It can handle lists of objects and manage a hierarchy of levels.
 License: Artistic-2.0
 Imports: 
@@ -31,7 +31,7 @@ Collate:
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 URL: https://github.com/samWieczorek/Magellan
 BugReports: https://github.com/samWieczorek/Magellan/issues
 Suggests: 

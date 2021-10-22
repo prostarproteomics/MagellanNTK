@@ -18,8 +18,7 @@
 #'@return xxx
 #'
 #' @examples 
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' obj <- Keep_Items_from_Dataset(Exp1_R25_pept, range = seq_len(2))
+#' obj <- Keep_Items_from_Dataset(QFeatures::feat1, range = seq_len(1))
 #' 
 Keep_Items_from_Dataset <- function(dataset, range){
   dataset[ , , range]
@@ -32,6 +31,8 @@ Keep_Items_from_Dataset <- function(dataset, range){
 #' xxxxxx
 #' 
 #' @noRd
+#' 
+#' @export
 #'
 mod_nav_pipeline_ui <- function(id){
   ns <- NS(id)
@@ -103,9 +104,8 @@ mod_nav_pipeline_ui <- function(id){
 #'   mod_nav_pipeline_ui('Protein')
 #' )
 #' server <- function(input, output){
-#'   utils::data(Exp1_R25_prot, package='DAPARdata2')
 #' mod_nav_pipeline_server(id = 'Protein',
-#'                           dataIn = reactive({Exp1_R25_prot})
+#'                           dataIn = reactive({QFeatures::feat1})
 #'   )
 #' }
 #' shinyApp(ui, server)
@@ -198,8 +198,6 @@ mod_nav_pipeline_server <- function(id,
       #   warning("This pipeline is not available in DaparToolshed")
       #   return(NULL)
       # }
-      
-      source(file.path("example_modules", 'mod_PipelineA.R'), local=TRUE)$value
       
       
       # Call the server module of the pipeline which name is the parameter 'id'
@@ -372,7 +370,7 @@ mod_nav_pipeline_server <- function(id,
     # Catch the returned values of the process                                                           
     observeEvent(lapply(rv.process$config$steps, 
                         function(x){
-                          tmp.return[[x]]$dataOut()$trigger}), ignoreInit=TRUE, {
+                          tmp.return[[x]]$dataOut()$trigger}), ignoreInit = TRUE, {
                             if(verbose) cat(paste0('observeEvent(trigger) from - ', id, "\n\n"))
                             #browser()
                             ActionOn_Data_Trigger()
@@ -528,7 +526,7 @@ mod_nav_pipeline_server <- function(id,
                                         rv.process$config$steps)
       
       # Replace NULL values by NA
-      return.trigger.values[vapply(return.trigger.values, is.null)] <- NA
+      return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
       triggerValues <- unlist(return.trigger.values)
       
       
@@ -635,9 +633,8 @@ mod_nav_pipeline_server <- function(id,
     # @return Nothing
     #
     ActionOn_NewPosition = function(){
-      if(verbose) cat(paste0(id, '::ActionOn_NewPosition()\n\n'))
+      if(verbose) cat(yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
       
-      print("--- action on New position ---")
       # Send dataset to child process only if the current position is enabled
       #if(rv.process$steps.enabled[rv.process$current.pos])
         PrepareData2Send()

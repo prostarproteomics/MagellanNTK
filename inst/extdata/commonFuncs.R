@@ -1,4 +1,4 @@
-verbose <- TRUE
+verbose <- FALSE
 
 global = list(VALIDATED = 1,
               SKIPPED = -1,
@@ -561,7 +561,7 @@ observeEvent(remoteReset(), ignoreInit = TRUE, {
 observeEvent(input$rstBtn, ignoreInit = TRUE, {
   # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
   # that the caller program wants this module to reset itself. 
-  if (verbose) cat(yelllow(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n")))
+  if (verbose) cat(yellow(paste0('::observeEvent(input$rstBtn) from - ', id, "\n\n")))
   #browser()
   showModal(dataModal())
 })

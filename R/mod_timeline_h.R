@@ -40,6 +40,7 @@ mod_timeline_h_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples
+#' \donttest{
 #' ui <- fluidPage(
 #' actionButton('changePos', 'Change position'),
 #' mod_timeline_h_ui('TLh')
@@ -64,6 +65,9 @@ mod_timeline_h_ui <- function(id){
 #'    )
 #'    }
 #'    shinyApp(ui, server)
+#'    }
+#' 
+#' @noRd
 #' 
 mod_timeline_h_server = function(id, 
                                config, 

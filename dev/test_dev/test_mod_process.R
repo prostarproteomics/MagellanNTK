@@ -49,12 +49,8 @@ mod_test_process_ui <- function(id){
 mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    utils::data(Exp1_R25_prot, package='DAPARdata2')
-    
-    obj <- NULL
-    obj <- Exp1_R25_prot
     rv <- reactiveValues(
-      dataIn = Exp1_R25_prot,
+      dataIn = QFeatures::feat1,
       remoteReset = FALSE,
       remoteSkipped = FALSE,
       remoteEnabled = TRUE
