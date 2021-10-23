@@ -27,7 +27,7 @@ xxx
 xxxx
 }
 \examples{
-\donttest{ 
+\dontrun{ 
 library(shiny)
 library(shinyBS)
 

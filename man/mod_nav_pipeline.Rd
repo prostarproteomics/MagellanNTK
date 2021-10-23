@@ -43,7 +43,7 @@ xxx
 }}
 
 \examples{
-\donttest{
+\dontrun{
 library(shiny)
 library(shinyBS)
 ui <- fluidPage(

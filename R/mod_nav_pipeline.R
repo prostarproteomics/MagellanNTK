@@ -95,7 +95,7 @@ mod_nav_pipeline_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' library(shiny)
 #' library(shinyBS)
 #' ui <- fluidPage(

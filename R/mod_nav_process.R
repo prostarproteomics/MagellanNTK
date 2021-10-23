@@ -78,7 +78,7 @@ mod_nav_process_ui <- function(id){
 #' @rdname mod_nav_process
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(shiny)
 #' library(shinyBS)
 #' ui <- fluidPage(

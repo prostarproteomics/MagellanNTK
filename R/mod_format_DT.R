@@ -37,7 +37,7 @@ mod_format_DT_ui <- function(id){
 #' @return xxx 
 #' 
 #' @examples 
-#' \donttest{
+#' \dontrun{
 #' library(shiny)
 #' library(DT)
 #' 

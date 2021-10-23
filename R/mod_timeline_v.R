@@ -38,7 +38,7 @@ mod_timeline_v_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ui <- fluidPage(
 #' actionButton('changePos', 'Change position'),
 #' mod_timeline_v_ui('TLh')

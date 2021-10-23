@@ -47,7 +47,7 @@ It is called by the nav_pipeline module of the package Magellan
 xxx
 }
 \examples{
-\donttest{
+\dontrun{
 library(shiny)
 library(shinyBS)
 ui <- fluidPage(

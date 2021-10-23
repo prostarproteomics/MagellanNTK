@@ -33,7 +33,7 @@ mod_bsmodal_ui <- function(id){
 #' @return xxx
 #' 
 #' @examples
-#' \donttest{ 
+#' \dontrun{ 
 #' library(shiny)
 #' library(shinyBS)
 #' 
