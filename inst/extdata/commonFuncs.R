@@ -278,7 +278,7 @@ tagList(
 #'
 #' @param name A number
 #' 
-GetStringStatus = function(name){
+GetStringStatus <- function(name){
   if (name==global$VALIDATED) "Validated"
   else if (name==global$UNDONE) "Undone"
   else if (name==global$SKIPPED) 'Skipped'
@@ -295,7 +295,7 @@ GetStringStatus = function(name){
 #' This function analyzes the reactive variable rv.process$steps.status
 #' to find the indice of the last validated step among all steps
 #' 
-GetMaxValidated_AllSteps = function(){
+GetMaxValidated_AllSteps <- function(){
   if(verbose) cat(yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
   val <- 0
   ind <- grep(global$VALIDATED, rv.process$steps.status)
@@ -319,7 +319,7 @@ GetMaxValidated_AllSteps = function(){
 #' 
 #' @return Nothing
 #'
-GetMaxValidated_BeforePos = function(pos = NULL){
+GetMaxValidated_BeforePos <- function(pos = NULL){
   if(verbose) cat(yellow(paste0(id, 'GetMaxValidated_BeforePos()\n\n')))
   
   if (is.null(pos))
@@ -345,7 +345,7 @@ GetMaxValidated_BeforePos = function(pos = NULL){
 #'
 #' @param range xxx
 #' 
-GetFirstMandatoryNotValidated = function(range){
+GetFirstMandatoryNotValidated <- function(range){
   if(verbose) cat(yellow(paste0(id, '::GetFirstMandatoryNotValidated()\n\n')))
 
   first <- NULL
@@ -367,7 +367,7 @@ GetFirstMandatoryNotValidated = function(range){
 #' 
 #' @param i An integer that corresponds to the new position
 #' 
-Change_Current_Pos = function(i){ rv.process$current.pos <- i}
+Change_Current_Pos <- function(i){ rv.process$current.pos <- i}
 
 
 #' @title 
@@ -377,14 +377,14 @@ Change_Current_Pos = function(i){ rv.process$current.pos <- i}
 #' 
 #' @return Nothing.
 #' 
-Set_All_Skipped = function(){
+Set_All_Skipped <- function(){
   if(verbose) cat(yellow(paste0(id, '::Set_All_Skipped()\n\n')))
   rv.process$steps.status <- setNames(rep(global$SKIPPED, rv.process$length), 
                                 rv.process$config$steps)
 }
 
 
-Unskip_All_Steps = function(){
+Unskip_All_Steps <- function(){
   if(verbose) cat(yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
     rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), 
                                                      rv.process$config$steps)
@@ -400,7 +400,7 @@ Unskip_All_Steps = function(){
 #' 
 #' @return Nothing.
 #' 
-Discover_Skipped_Steps = function(){
+Discover_Skipped_Steps <- function(){
   if(verbose) cat(yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
   for (i in seq_len(rv.process$length)){
     max.val <- GetMaxValidated_AllSteps()
@@ -422,7 +422,7 @@ Discover_Skipped_Steps = function(){
 #' Return the UI for a modal dialog with data selection input. If 'failed' is
 #' TRUE, then display a message that the previous value was invalid.
 #' 
-dataModal = function() {
+dataModal <- function() {
   
   tags$div(id="modal1", 
            modalDialog(
@@ -444,7 +444,7 @@ dataModal = function() {
 #' 
 #' @param cond xxx
 #' 
-ToggleState_ResetBtn = function(cond){
+ToggleState_ResetBtn <- function(cond){
   if(verbose) cat(yellow(paste0(id, '::ToggleState_ResetBtn(', cond, '))\n\n')))
   
   shinyjs::toggleState('rstBtn', condition = cond)
@@ -485,7 +485,7 @@ ToggleState_ResetBtn = function(cond){
 #' 
 #' @param direction xxx
 #'
-NavPage = function(direction) {
+NavPage <- function(direction) {
   newval <- rv.process$current.pos + direction 
   newval <- max(1, newval)
   newval <- min(newval, rv.process$length)
