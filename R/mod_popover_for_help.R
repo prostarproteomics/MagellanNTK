@@ -4,8 +4,8 @@
 #' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyjs inlineCSS useShinyjs
-#' 
-#' @noRd
+#' @param id xxx
+#' @rdname mod_popover_for_help
 #' 
 mod_popover_for_help_ui <- function(id){
   ns <- NS(id)
@@ -54,7 +54,10 @@ mod_popover_for_help_ui <- function(id){
 #' shinyApp(ui, server)
 #' }
 #' 
-#' @noRd
+#' @rdname mod_popover_for_help
+#' 
+#' @param id xxx
+#' @param data xxx
 #' 
 mod_popover_for_help_server <- function(id, data){
   

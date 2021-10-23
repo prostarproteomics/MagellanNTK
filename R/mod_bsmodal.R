@@ -5,7 +5,7 @@
 #' 
 #' @description xxx
 #' 
-#' @noRd
+#' @rdname mod_bsmodal
 #' 
 #' @export
 #' 
@@ -47,6 +47,8 @@ mod_bsmodal_ui <- function(id){
 #' }
 #' shinyApp(ui, server)
 #' }
+#' 
+#' @rdname mod_bsmodal
 #' 
 mod_bsmodal_server <- function(id,
                                title = NULL,

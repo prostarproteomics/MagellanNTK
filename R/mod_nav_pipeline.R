@@ -30,8 +30,7 @@ Keep_Items_from_Dataset <- function(dataset, range){
 #' @description 
 #' xxxxxx
 #' 
-#' @noRd
-#' 
+#' @rdname mod_nav_pipeline
 #' @export
 #'
 mod_nav_pipeline_ui <- function(id){
@@ -99,7 +98,6 @@ mod_nav_pipeline_ui <- function(id){
 #' \donttest{
 #' library(shiny)
 #' library(shinyBS)
-#' library(crayon)
 #' ui <- fluidPage(
 #'   mod_nav_pipeline_ui('Protein')
 #' )
@@ -110,6 +108,10 @@ mod_nav_pipeline_ui <- function(id){
 #' }
 #' shinyApp(ui, server)
 #' }
+#' 
+#' @importFrom stats setNames
+#' 
+#' @rdname mod_nav_pipeline
 #' 
 mod_nav_pipeline_server <- function(id,
                                    dataIn = reactive({NULL}),
@@ -466,7 +468,6 @@ mod_nav_pipeline_server <- function(id,
 
       # The dataset to send is contained in the variable 'rv.process$dataIn'
 
-      #' @param name The name of the process to update
       Update_Data2send_Vector <- function(){
         # One only update the current position because the vector has been entirely
         # initialized to NULL so the other processes are already ready to be sent
@@ -515,7 +516,7 @@ mod_nav_pipeline_server <- function(id,
     # If a value (not NULL) is received, then it corresponds to the module
     # pointed by the current position
     # This function also updates the list isDone
-    #This function updates the current dataset (self$rv$dataIn)
+    # This function updates the current dataset (self$rv$dataIn)
     #
     # @return Nothing
     #

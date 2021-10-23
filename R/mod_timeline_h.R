@@ -2,7 +2,7 @@
 #'
 #' @description A shiny Module.
 #'
-#' @noRd
+#' @rdname mod_timeline_h
 #'
 #' @importFrom shiny NS tagList 
 #' @importFrom sass sass sass_file
@@ -68,7 +68,7 @@ mod_timeline_h_ui <- function(id){
 #'    shinyApp(ui, server)
 #'    }
 #' 
-#' @noRd
+#' @rdname mod_timeline_h
 #' 
 mod_timeline_h_server = function(id, 
                                config, 

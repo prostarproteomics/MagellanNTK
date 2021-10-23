@@ -4,7 +4,7 @@
 #' This module contains the configuration informations for the corresponding pipeline.
 #' It is called by the nav_pipeline module of the package Magellan
 #' 
-#' @noRd
+#' @rdname mod_nav_process
 #' 
 #' @export
 #' 
@@ -75,7 +75,7 @@ mod_nav_process_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @noRd
+#' @rdname mod_nav_process
 #' 
 #' @examples
 #' \donttest{
@@ -91,6 +91,8 @@ mod_nav_process_ui <- function(id){
 #' }
 #' shinyApp(ui, server)
 #' }
+#' 
+#' @importFrom stats setNames
 #' 
 mod_nav_process_server <- function(id,
                                    dataIn = reactive({NULL}),

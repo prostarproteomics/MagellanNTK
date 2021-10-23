@@ -1,8 +1,9 @@
 #' @title   mod_format_DT_ui and mod_format_DT_server
 #' 
 #' @description  A shiny Module.
+#' @param id xxx
 #'
-#' @noRd
+#' @rdname mod_format_DT
 #' 
 mod_format_DT_ui <- function(id){
   ns <- NS(id)
@@ -20,18 +21,15 @@ mod_format_DT_ui <- function(id){
 #' 
 #' @description xxx
 #' 
-#' @rdname mod_format_DT
 #' 
-#' @param input internal
-#' @param output internal
-#' @param session internal
+#' @param id xxx
+#' @param table2show xxx
+#' @param style xxx
 #' @param withBtns xxx
 #' @param showRownames xxxx
 #' @param dom xxx
 #' 
 #' @export
-#' 
-#' @keywords internal
 #' 
 #' @import DT
 #' @importFrom htmlwidgets JS   
@@ -51,6 +49,8 @@ mod_format_DT_ui <- function(id){
 #' }
 #' shinyApp(ui, server)
 #' }
+#' 
+#' @rdname mod_format_DT
 #' 
 mod_format_DT_server <- function(id,
                                  table2show,

@@ -6,7 +6,7 @@
 #' 
 #' @export
 #' 
-#' @noRd
+#' @rdname mod_timeline_v
 #' 
 mod_timeline_v_ui <- function(id){
   ns <- NS(id)
@@ -65,7 +65,7 @@ mod_timeline_v_ui <- function(id){
 #' shinyApp(ui, server)
 #' }
 #'    
-#' @noRd
+#' @rdname mod_timeline_v
 #' 
 mod_timeline_v_server <- function(id, 
                                config, 
