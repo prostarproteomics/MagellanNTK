@@ -113,7 +113,7 @@ mod_nav_process_server <- function(id,
     nav.mode <- "process"
     
     source(system.file("extdata", 'commonFuncs.R', package="Magellan"), local=TRUE)$value
-    
+    utils::globalVariables("GetStringStatus")
     
     
     
@@ -132,7 +132,7 @@ mod_nav_process_server <- function(id,
     observeEvent(id, {
       #browser()
       # Launch of the module process server
-      cat(yellow(paste0("Launching ", paste0('mod_', id, '_server\n\n'))))
+      cat(crayon::yellow(paste0("Launching ", paste0('mod_', id, '_server\n\n'))))
       #browser()
       
       
@@ -326,7 +326,7 @@ mod_nav_process_server <- function(id,
     # w.r.t predefined rules (each of these buttons are disabled if there is
     # no more steps in their direction)
     observeEvent(rv.process$current.pos, ignoreInit = TRUE, {
-      if (verbose) cat(yellow(paste0(id, '::observeEvent(rv.process$current.pos)\n\n')))
+      if (verbose) cat(crayon::yellow(paste0(id, '::observeEvent(rv.process$current.pos)\n\n')))
       
       ToggleState_NavBtns()
       # Hide all screens 
@@ -342,7 +342,7 @@ mod_nav_process_server <- function(id,
     # Default actions on reset pipeline or process.
     # 
     LocalReset = function(){
-      if(verbose) cat(yellow(paste0(id, '::LocalReset()\n\n')))
+      if(verbose) cat(crayon::yellow(paste0(id, '::LocalReset()\n\n')))
       #browser()
       rv.process$dataIn <- NULL
       #rv.process$temp.dataIn <- NULL

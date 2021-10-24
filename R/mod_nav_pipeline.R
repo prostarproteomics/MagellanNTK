@@ -364,7 +364,7 @@ mod_nav_pipeline_server <- function(id,
     
     
     CurrentStepName <- reactive({
-      cat(yellow(paste0('::GetCurrentStepName() from - ', id, '\n')))
+      cat(crayon::yellow(paste0('::GetCurrentStepName() from - ', id, '\n')))
       rv.process$config$steps[rv.process$current.pos]
     })
     
@@ -468,7 +468,7 @@ mod_nav_pipeline_server <- function(id,
 
       # The dataset to send is contained in the variable 'rv.process$dataIn'
 
-      Update_Data2send_Vector <- function(){
+      Update_Data2send_Vector = function(){
         # One only update the current position because the vector has been entirely
         # initialized to NULL so the other processes are already ready to be sent
        ind.last.validated <- GetMaxValidated_BeforePos()
@@ -500,9 +500,9 @@ mod_nav_pipeline_server <- function(id,
       } else
         rv.child$data2send[[CurrentStepName()]] <- Update_Data2send_Vector()
 
-      cat(blue("<----------------- Data sent to children ------------------> \n"))
+      cat(crayon::blue("<----------------- Data sent to children ------------------> \n"))
       print(rv.child$data2send)
-      cat(blue("<----------------------------------------------------> \n"))
+      cat(crayon::blue("<----------------------------------------------------> \n"))
     }
     
     # @description
@@ -520,8 +520,8 @@ mod_nav_pipeline_server <- function(id,
     #
     # @return Nothing
     #
-    ActionOn_Data_Trigger <- function(){
-      if(verbose) cat(yellow(paste0(id, '::ActionOn_Data_Trigger()\n\n')))
+    ActionOn_Data_Trigger = function(){
+      if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_Data_Trigger()\n\n')))
       #browser()
       processHasChanged <- newValue <- NULL
       return.trigger.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
@@ -535,9 +535,9 @@ mod_nav_pipeline_server <- function(id,
       return.values <- setNames(lapply(rv.process$config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
                                 rv.process$config$steps)
        
-      cat(blue('--------------- Data received from children --------------------\n'))
+      cat(crayon::blue('--------------- Data received from children --------------------\n'))
       print(return.values)
-      cat(blue('-------------------------------------------------------\n'))
+      cat(crayon::blue('-------------------------------------------------------\n'))
       #browser()
       # if (sum(triggerValues)==0){ # Init of core engine
       #   rv.process$dataIn <- rv.process$temp.dataIn
@@ -635,7 +635,7 @@ mod_nav_pipeline_server <- function(id,
     # @return Nothing
     #
     ActionOn_NewPosition = function(){
-      if(verbose) cat(yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
+      if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
       
       # Send dataset to child process only if the current position is enabled
       #if(rv.process$steps.enabled[rv.process$current.pos])

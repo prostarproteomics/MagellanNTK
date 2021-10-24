@@ -2,6 +2,8 @@
 #' 
 #' @description  A shiny Module.
 #' @param id xxx
+#' 
+#' @importFrom DT dataTableOutput
 #'
 #' @rdname mod_format_DT
 #' 
