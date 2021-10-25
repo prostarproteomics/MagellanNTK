@@ -31,7 +31,7 @@ mod_format_DT_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @importFrom DT replaceData dataTableProxy datatable
+#' @import DT
 #' @importFrom htmlwidgets JS   
 #' 
 #' @return xxx 
