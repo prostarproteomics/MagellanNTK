@@ -28,6 +28,7 @@ Collate:
     utils.R
     mod_nav_process.R
     mod_nav_pipeline.R
+    mod_navigation.R
     mod_timeline_h.R
     mod_timeline_v.R
 biocViews: Software, Proteomics, MassSpectrometry
