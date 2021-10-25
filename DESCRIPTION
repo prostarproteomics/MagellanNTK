@@ -9,13 +9,13 @@ Imports:
     golem,
     shiny,
     DT,
-    QFeatures,
     htmlwidgets,
     shinyBS,
     shinyjs,
     utils,
     sass,
-    shinyjqui
+    shinyjqui,
+    QFeatures
 Collate: 
     app_config.R
     app_server.R

@@ -39,7 +39,24 @@ xxx
 \section{Fields}{
 
 \describe{
-\item{\code{modal_txt}}{xxx}
+\item{\code{proc}}{contains the return value of the process module that has been called}
+
+\item{\code{status}}{A booelan vector which contains the status (validated,
+skipped or undone) of the steps}
+
+\item{\code{dataIn}}{Contains the dataset passed by argument to the module server}
+
+\item{\code{temp.dataIn}}{This variable is used to serves as a tampon between 
+the input of the module and the functions.}
+
+\item{\code{steps.enabled}}{Contains the value of the parameter 'is.enabled'}
+
+\item{\code{current.pos}}{Stores the current cursor position in the timeline and 
+indicates which of the process' steps is active
+
+
+
+xxx}
 }}
 
 \examples{
@@ -51,7 +68,7 @@ ui <- fluidPage(
 )
 server <- function(input, output){
 mod_nav_pipeline_server(id = 'Protein',
-                          dataIn = reactive({QFeatures::feat1})
+                          dataIn = reactive({feat1})
   )
 }
 shinyApp(ui, server)

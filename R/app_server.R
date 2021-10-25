@@ -15,12 +15,12 @@ verbose <- FALSE
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @importFrom utils data
-#' @import QFeatures
+#' @importFrom QFeatures readQFeatures
+#' @importFrom utils globalVariables
 #' 
 #' @noRd
 #'
 app_server <- function( input, output, session ) {
-  # Get a QFeatures dataset for example
   
   verbose <- FALSE 
   rv <- reactiveValues(
@@ -29,16 +29,12 @@ app_server <- function( input, output, session ) {
     package = 'DaparToolshed'
   )
   
-  data(hlpsms, package='QFeatures')
-  hl <- QFeatures::readQFeatures(hlpsms, ecol = seq_len(10), name = "psms")
+  # if (!require(QFeatures)){
+  #   data('hlpsms', envir = environment())
+  #   hl <- readQFeatures(hlpsms, ecol = seq_len(10), name = "psms")
+  # }
   
-  observe({
-    library(rv$package, character.only=TRUE)
-  })
-  
-
   observeEvent(req(input$choosePipeline),{
-    rv$pipeline <- Protein$new('App')
     rv$pipeline$server(dataIn = reactive({rv$dataIn}))
   })
   
@@ -48,10 +44,10 @@ app_server <- function( input, output, session ) {
     rv$pipeline$ui()
   })
   
-  observeEvent(input$send,{
-    if (input$send%%2 != 0)
-      rv$dataIn <- hl
-    else
-      rv$dataIn <- NULL
-  })
+  # observeEvent(input$send,{
+  #   if (input$send%%2 != 0)
+  #     rv$dataIn <- hl
+  #   else
+  #     rv$dataIn <- NULL
+  # })
 }

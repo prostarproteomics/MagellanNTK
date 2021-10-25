@@ -51,7 +51,7 @@ mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     rv <- reactiveValues(
-      dataIn = QFeatures::feat1,
+      dataIn = feat1,
       remoteReset = FALSE,
       remoteSkipped = FALSE,
       remoteEnabled = TRUE

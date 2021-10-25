@@ -35,7 +35,7 @@
 #' @export
 #' 
 Timestamp <- function(){ 
-  if(verbose) cat(paste0('::Timestamp() from - ', id, "\n\n"))
+  if(verbose) cat(paste0('::Timestamp()'))
   as.numeric(Sys.time())
 }
 
@@ -46,6 +46,8 @@ Timestamp <- function(){
 #' @param name xxx
 #' 
 #' @description xxx
+#' 
+#' @import QFeatures
 #' 
 #' @return NA
 #' 

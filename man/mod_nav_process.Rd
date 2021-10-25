@@ -55,7 +55,7 @@ ui <- fluidPage(
 )
 server <- function(input, output){
   mod_nav_process_server(id = 'Protein_Description',
-                         dataIn = reactive({QFeatures::feat1})
+                         dataIn = reactive({feat1})
   )
 }
 shinyApp(ui, server)

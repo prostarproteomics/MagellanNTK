@@ -22,7 +22,7 @@ ui <- fluidPage(
 server <- function(input, output, session) {
  
   DaparToolshed::mod_all_plots_server('plots',
-                                    dataIn = reactive({QFeatures::feat1})
+                                    dataIn = reactive({feat1})
   )
   mod_bsmodal_server('exemple',
                      title = 'Plots',

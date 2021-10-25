@@ -76,7 +76,7 @@ server <- function(session, input, output) {
   
   observeEvent(input$send, {
     updateTabItems(session, 'tabs', 'screen2')
-    shinyjs::delay(100, rv$dataIn <- QFeatures::feat1)
+    shinyjs::delay(100, rv$dataIn <- feat1)
     
   })
   
