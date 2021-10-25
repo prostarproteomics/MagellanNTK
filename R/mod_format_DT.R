@@ -2,8 +2,6 @@
 #' 
 #' @description  A shiny Module.
 #' @param id xxx
-#' 
-#' @importFrom DT dataTableOutput
 #'
 #' @rdname mod_format_DT
 #' 
@@ -12,7 +10,7 @@ mod_format_DT_ui <- function(id){
   tagList(
     div(
       div( style="display:inline-block; vertical-align: middle; align: center;",
-           DT::dataTableOutput(ns("dt"))
+           dataTableOutput(ns("dt"))
       )
     )
   )
@@ -33,7 +31,7 @@ mod_format_DT_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @import DT
+#' @importFrom DT replaceData dataTableProxy datatable
 #' @importFrom htmlwidgets JS   
 #' 
 #' @return xxx 
@@ -56,9 +54,9 @@ mod_format_DT_ui <- function(id){
 #' 
 mod_format_DT_server <- function(id,
                                  table2show,
-                                 withBtns=NULL,
-                                 showRownames=FALSE,
-                                 dom='Bt',
+                                 withBtns = NULL,
+                                 showRownames = FALSE,
+                                 dom = 'Bt',
                                  style = reactive({NULL})){
   
   
@@ -70,13 +68,13 @@ mod_format_DT_server <- function(id,
       #   #warning("The parameter table2show is null.")
       #   return(NULL)
       # } else {
-      DT::replaceData(proxy, table2show(), resetPaging = FALSE)  
+      replaceData(proxy, table2show(), resetPaging = FALSE)  
       # }
     })
     
-    proxy = DT::dataTableProxy(session$ns('dt'), session)
+    proxy = dataTableProxy(session$ns('dt'), session)
     
-    output$dt <- DT::renderDT({
+    output$dt <- renderDataTable({
       req(table2show())
       
       isolate({
