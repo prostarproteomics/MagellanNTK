@@ -1,20 +1,20 @@
-#' #' @title xxxx
-#' #' @description xxx
-#' #' @field btn_style xxxx
-#' #' @export
-#' global = list(VALIDATED = 1,
-#'               SKIPPED = -1,
-#'               UNDONE = 0
-#' )
-#' 
-#' #' @title xxxx
-#' #' @description xxx
-#' #' @field btn_style xxxx
-#' #' @export
-#' default_pos =list(VALIDATED = 1,
-#'                   SKIPPED = 1,
-#'                   UNDONE = 1
-#' )
+#' @title xxxx
+#' @description xxx
+#' @field btn_style xxxx
+#' @export
+global = list(VALIDATED = 1,
+              SKIPPED = -1,
+              UNDONE = 0
+)
+
+#' @title xxxx
+#' @description xxx
+#' @field btn_style xxxx
+#' @export
+default_pos =list(VALIDATED = 1,
+                  SKIPPED = 1,
+                  UNDONE = 1
+)
 
 #' @title xxxx
 #' @description xxx

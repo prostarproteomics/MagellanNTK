@@ -53,11 +53,12 @@ xxx
 library(shiny)
 library(shinyBS)
 ui <- fluidPage(
-  mod_nav_process_ui('Protein_Description')
+  mod_navigation_ui('Protein_Description')
 )
 server <- function(input, output){
-  mod_nav_process_server(id = 'Protein_Description',
-                         dataIn = reactive({feat1})
+  mod_navigation_server(id = 'Protein_Description',
+  nav.mode = 'process',
+  dataIn = reactive({feat1})
   )
 }
 shinyApp(ui, server)

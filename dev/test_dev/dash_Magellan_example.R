@@ -2,7 +2,6 @@ library(shiny)
 library(shinydashboard)
 library(R6)
 library(tibble)
-library(DaparToolshed)
 library(Magellan)
 options(shiny.fullstacktrace = TRUE)
 

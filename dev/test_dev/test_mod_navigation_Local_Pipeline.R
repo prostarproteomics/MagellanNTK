@@ -1,7 +1,7 @@
-library(highcharter)
+library(shiny)
 library(shinyjs)
-library(DT)
-library(tibble)
+library(crayon)
+library(Magellan)
 
 
 options(shiny.fullstacktrace = TRUE)
@@ -9,19 +9,23 @@ options(shiny.fullstacktrace = TRUE)
 setwd('~/GitHub/Magellan/dev/test_dev')
 
 dirpath <- '../../R'
-for (l in list.files(path = dirpath, pattern = ".R"))
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
+
+dirpath <- 'example_modules'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
+
 #--------------------------------------------
-source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
 
 
-mod_test_navigation_process_ui <- function(id){
+mod_test_navigation_pipeline_ui <- function(id){
   ns <- NS(id)
   tagList(
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
+                h3('Caller function'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -29,7 +33,7 @@ mod_test_navigation_process_ui <- function(id){
 }
 
 
-mod_test_navigation_process_server <- function(id){
+mod_test_navigation_pipeline_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -41,26 +45,16 @@ mod_test_navigation_process_server <- function(id){
     )
     
     observe({
-      
-      rv$dataOut <- mod_navigation_server(id = 'PipelineA_Description',
-                                          nav.mode = 'process',
+      rv$dataOut <- mod_navigation_server(id = 'PipelineA',
+                                          nav.mode = 'pipeline',
                                           dataIn = reactive({rv$dataIn}),
                                           is.enabled = reactive({TRUE}),
-                                          remoteReset = reactive({FALSE}),
-                                          is.skipped = reactive({FALSE})
-                                          )
-      
-      
-      
-      observeEvent(rv$dataOut$dataOut()$trigger, {
-        print(names(rv$dataOut$dataOut()$value))
+                                          remoteReset = reactive({FALSE})
+      )
+      output$UI <- renderUI({
+        mod_navigation_ui(ns('PipelineA'))
       })
     }, priority=1000)
-    
-    
-    output$UI <- renderUI({
-      mod_navigation_ui(ns('PipelineA_Description'))
-    })
     
     
     
@@ -70,25 +64,22 @@ mod_test_navigation_process_server <- function(id){
       fluidRow(
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data In")),
-               uiOutput(ns('show_rv_dataIn'))),
+               uiOutput(ns('show_rv_dataIn'))
+        ),
         column(width=2,
                tags$b(h4(style = 'color: blue;', "Data Out")),
-               uiOutput(ns('show_rv_dataOut')))
+               uiOutput(ns('show_rv_dataOut'))
+        )
       )
     })
     
     ###########---------------------------#################
     output$show_rv_dataIn <- renderUI({
-      req(rv$dataIn)
-      tagList(
-        lapply(names(rv$dataIn), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataIn), function(x){tags$p(x)})
     })
     
     output$show_rv_dataOut <- renderUI({
-       tagList(
-        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
     })
     
   })
@@ -97,16 +88,14 @@ mod_test_navigation_process_server <- function(id){
 
 #----------------------------------------------------------------------
 ui <- fluidPage(
-  mod_test_navigation_process_ui('test_mod_process')
+  mod_test_navigation_pipeline_ui('test_pipeline')
 )
-
 
 #----------------------------------------------------------------------
 server <- function(input, output){
-  mod_test_navigation_process_server('test_mod_process')
+  mod_test_navigation_pipeline_server('test_pipeline')
 }
+
+
 shinyApp(ui, server)
 
-
-# shinyApp(ui = mod_test_process_ui('test_mod_process'),
-#          server = mod_test_process_server('test_mod_process'))

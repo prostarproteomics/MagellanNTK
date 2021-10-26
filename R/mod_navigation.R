@@ -1,28 +1,4 @@
 
-#' @title xxx
-#'
-#' @description
-#' Removes one or more items from the dataset. This function is specific of the
-#' type of dataset.
-#' 
-#' 
-#' @param dataset xxx
-#' 
-#' @param range xxx
-#'
-#' @return
-#' The dataset minus some items
-#'
-#' @export
-#'
-#'@return xxx
-#'
-#' @examples 
-#' obj <- Keep_Items_from_Dataset(QFeatures::feat1, range = seq_len(1))
-#' 
-Keep_Items_from_Dataset <- function(dataset, range){
-  dataset[ , , range]
-}
 
 
 #' @title xxx
@@ -90,11 +66,12 @@ mod_navigation_ui <- function(id){
 #' library(shiny)
 #' library(shinyBS)
 #' ui <- fluidPage(
-#'   mod_nav_process_ui('Protein_Description')
+#'   mod_navigation_ui('Protein_Description')
 #' )
 #' server <- function(input, output){
-#'   mod_nav_process_server(id = 'Protein_Description',
-#'                          dataIn = reactive({feat1})
+#'   mod_navigation_server(id = 'Protein_Description',
+#'   nav.mode = 'process',
+#'   dataIn = reactive({feat1})
 #'   )
 #' }
 #' shinyApp(ui, server)
@@ -103,12 +80,12 @@ mod_navigation_ui <- function(id){
 #' @importFrom stats setNames
 #' 
 mod_navigation_server <- function(id,
-                                   nav.mode = NULL,
-                                   dataIn = reactive({NULL}),
-                                   is.enabled = reactive({TRUE}),
-                                   remoteReset = reactive({FALSE}),
-                                   is.skipped = reactive({FALSE})
-){
+                                  nav.mode = NULL,
+                                  dataIn = reactive({NULL}),
+                                  is.enabled = reactive({TRUE}),
+                                  remoteReset = reactive({FALSE}),
+                                  is.skipped = reactive({FALSE})
+                                  ){
   
   
   
@@ -128,15 +105,15 @@ mod_navigation_server <- function(id,
     # Declaration of global variables
     verbose <- FALSE
     
-    global <- list(VALIDATED = 1,
-                   SKIPPED = -1,
-                   UNDONE = 0
-    )
-    
-    default_pos <- list(VALIDATED = 1,
-                        SKIPPED = 1,
-                        UNDONE = 1
-    )
+    # global <- list(VALIDATED = 1,
+    #                SKIPPED = -1,
+    #                UNDONE = 0
+    # )
+    # 
+    # default_pos <- list(VALIDATED = 1,
+    #                     SKIPPED = 1,
+    #                     UNDONE = 1
+    # )
 
     #--------------------------------------------------------
     
@@ -148,7 +125,7 @@ mod_navigation_server <- function(id,
     )
     
     
-    #These reactive values are specific to this instance of mod_nav_process_server
+    #These reactive values are specific to this instance of mod_navigation_server
     rv.process <- reactiveValues(
       # @field proc contains the return value of the process module that has been called 
       proc = NULL,
@@ -220,7 +197,9 @@ mod_navigation_server <- function(id,
     
     
     observeEvent(nav.mode, {
-      rv.process$nav.mode <- nav.mode
+     
+      if (is.null(nav.mode) || !(nav.mode %in% c('process', 'pipeline')))
+        stop("nav.mode must be either 'process' or 'pipeline'.")
       
       prefix <- "This action will reset this "
       suffix <- ". The input dataset will be the output of the last previous
@@ -230,7 +209,7 @@ mod_navigation_server <- function(id,
     
   
   output$pipeline_ui <- renderUI({
-    req(rv.process$nav.mode == 'pipeline')
+    req(nav.mode == 'pipeline')
     fluidRow(
       column(width = 2, 
              wellPanel(
@@ -271,7 +250,7 @@ mod_navigation_server <- function(id,
   
   
   output$process_ui <- renderUI({
-    req(rv.process$nav.mode == 'process')
+    req(nav.mode == 'process')
     tagList(
     fluidRow(style = "display: flex;
     align-items: center;
@@ -351,8 +330,8 @@ mod_navigation_server <- function(id,
     if (is.null(ind.last.validated))
       data <- rv.process$temp.dataIn
     else
-      data <- Keep_Items_from_Dataset(dataset = rv.process$dataIn,
-                                      range = seq_len(ind.last.validated + rv.process$original.length -1)
+      data <- Keep_Datasets_from_Object(object = rv.process$dataIn,
+                                        range = seq_len(ind.last.validated + rv.process$original.length -1)
       )
     return(data)
   }
@@ -438,7 +417,7 @@ mod_navigation_server <- function(id,
       
       # The mode pipeline is a node and has to send
       # datasets to its children
-      if (rv.process$nav.mode == 'pipeline')
+      if (nav.mode == 'pipeline')
         if (is.null(rv.process$dataIn))
           PrepareData2Send() # Used by class pipeline
       
@@ -535,12 +514,10 @@ mod_navigation_server <- function(id,
   # @param name A number
   # 
   GetStringStatus = function(name){
-    if (name == global$VALIDATED) "Validated"
-    else if (name == global$UNDONE) "Undone"
-    else if (name == global$SKIPPED) 'Skipped'
+    if (name == Magellan::global$VALIDATED) "Validated"
+    else if (name == Magellan::global$UNDONE) "Undone"
+    else if (name == Magellan::global$SKIPPED) 'Skipped'
   }
-  
-  utils::globalVariables("GetStringStatus")
   
   
   
@@ -554,7 +531,7 @@ mod_navigation_server <- function(id,
   GetMaxValidated_AllSteps = function(){
     if(verbose) cat(crayon::yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
     val <- 0
-    ind <- grep(global$VALIDATED, rv.process$steps.status)
+    ind <- grep(Magellan::global$VALIDATED, rv.process$steps.status)
     if (length(ind) > 0) 
       val <-max(ind)
     val
@@ -582,7 +559,7 @@ mod_navigation_server <- function(id,
       pos <- rv.process$current.pos
     
     ind.max <- NULL
-    indices.validated <- which(rv.process$steps.status == global$VALIDATED)
+    indices.validated <- which(rv.process$steps.status == Magellan::global$VALIDATED)
     if (length(indices.validated) > 0){
       ind <- which(indices.validated < pos)
       if(length(ind) > 0)
@@ -636,14 +613,14 @@ mod_navigation_server <- function(id,
   # 
   Set_All_Skipped = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Set_All_Skipped()\n\n')))
-    rv.process$steps.status <- setNames(rep(global$SKIPPED, rv.process$length), 
+    rv.process$steps.status <- setNames(rep(Magellan::global$SKIPPED, rv.process$length), 
                                         rv.process$config$steps)
   }
   
   
   Unskip_All_Steps = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
-    rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), 
+    rv.process$steps.status <- setNames(rep(Magellan::global$UNDONE, rv.process$length), 
                                         rv.process$config$steps)
     Update_State_Screens()
   }
@@ -661,8 +638,8 @@ mod_navigation_server <- function(id,
     if(verbose) cat(crayon::yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
     for (i in seq_len(rv.process$length)){
       max.val <- GetMaxValidated_AllSteps()
-      if (rv.process$steps.status[i] != global$VALIDATED && max.val > i)
-        rv.process$steps.status[i] <- global$SKIPPED
+      if (rv.process$steps.status[i] != Magellan::global$VALIDATED && max.val > i)
+        rv.process$steps.status[i] <- Magellan::global$SKIPPED
     }
   }
   
@@ -732,7 +709,7 @@ mod_navigation_server <- function(id,
     
     Discover_Skipped_Steps()
     Update_State_Screens()
-    if (rv.process$steps.status[rv.process$length] == global$VALIDATED){
+    if (rv.process$steps.status[rv.process$length] == Magellan::global$VALIDATED){
       rv.process$current.pos <- rv.process$length
       Send_Result_to_Caller()
     }
@@ -815,7 +792,7 @@ mod_navigation_server <- function(id,
   # 
   ResetChildren = function(range){
     if(verbose) cat(paste0(id, '::ResetChildren()\n\n'))
-    if (rv.process$nav.mode != 'pipeline')
+    if (nav.mode != 'pipeline')
       return(NULL)
     #browser()
     # lapply(rv.process$config$steps, function(x){
@@ -836,12 +813,12 @@ mod_navigation_server <- function(id,
     rv.process$current.pos <- 1
     
     # The status of the steps are reinitialized to the default configuration of the process
-    rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), 
+    rv.process$steps.status <- setNames(rep(Magellan::global$UNDONE, rv.process$length), 
                                         rv.process$config$steps)
     
     # If the current module is a pipeline type (node and not leaf),
     # then sent to its children the information that they must reset themself
-    if (rv.process$nav.mode == 'pipeline')
+    if (nav.mode == 'pipeline')
       ResetChildren()
     
     # Return the NULL value as dataset
@@ -858,7 +835,7 @@ mod_navigation_server <- function(id,
     #browser()
     if (isTRUE(is.enabled()))
       lapply(range, function(x){
-        cond <- cond && !(rv.process$steps.status[x] == global$SKIPPED)
+        cond <- cond && !(rv.process$steps.status[x] == Magellan::global$SKIPPED)
         
         #Send to TL the enabled/disabled tags
         rv.process$steps.enabled[x] <- cond
@@ -927,7 +904,7 @@ mod_navigation_server <- function(id,
     
     
     rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-    rv.process$steps.status <- setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+    rv.process$steps.status <- setNames(rep(Magellan::global$UNDONE, rv.process$length), rv.process$config$steps)
     rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
     rv.process$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
     
@@ -984,7 +961,7 @@ mod_navigation_server <- function(id,
     
     
     rv.process$config$mandatory <- setNames(rv.process$config$mandatory, rv.process$config$steps)
-    rv.process$steps.status = setNames(rep(global$UNDONE, rv.process$length), rv.process$config$steps)
+    rv.process$steps.status = setNames(rep(Magellan::global$UNDONE, rv.process$length), rv.process$config$steps)
     rv.process$currentStepName <- reactive({rv.process$config$steps[rv.process$current.pos]})
     
     rv.process$steps.enabled <- setNames(rep(FALSE, length(rv.process$config$steps)), rv.process$config$steps)
@@ -1001,7 +978,7 @@ mod_navigation_server <- function(id,
     # develop other pipelines and processes. Tus, it will be easier.
     rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
                                                function(x){
-                                                 mod_nav_process_ui(ns(paste0(id, '_', x)))
+                                                 mod_navigation_ui(ns(paste0(id, '_', x)))
                                                }),
                                         paste0(rv.process$config$steps)
     )
@@ -1012,17 +989,18 @@ mod_navigation_server <- function(id,
     # rv.process$config$ll.UI <- setNames(lapply(rv.process$config$steps,
     #                                        function(x){
     #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-    #                                          mod_nav_process_ui(ns(paste0(id, '_', x)))
+    #                                          mod_navigation_ui(ns(paste0(id, '_', x)))
     #                                          }),
     #                                 paste0('screen_', rv.process$config$steps)
     # )
     
     lapply(rv.process$config$steps, function(x){
-      tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
-                                                dataIn = reactive({ rv.child$data2send[[x]] }),
-                                                is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
-                                                remoteReset = reactive({rv.process$resetChildren[x]}),
-                                                is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
+      tmp.return[[x]] <- mod_navigation_server(id = paste0(id, '_', x) ,
+                                               nav.mode = 'process',
+                                               dataIn = reactive({ rv.child$data2send[[x]] }),
+                                               is.enabled = reactive({isTRUE(rv.process$steps.enabled[x])}),
+                                               remoteReset = reactive({rv.process$resetChildren[x]}),
+                                               is.skipped = reactive({isTRUE(rv.process$steps.skipped[x])})
       )
     })
     
@@ -1062,7 +1040,7 @@ mod_navigation_server <- function(id,
   output$SkippedInfoPanel <- renderUI({
     #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
     
-    current_step_skipped <- rv.process$steps.status[rv.process$current.pos] == global$SKIPPED
+    current_step_skipped <- rv.process$steps.status[rv.process$current.pos] == Magellan::global$SKIPPED
     #entire_process_skipped <- isTRUE(sum(rv.process$steps.status) == global$SKIPPED * rv.process$length)
     req(current_step_skipped)
     
@@ -1088,7 +1066,7 @@ mod_navigation_server <- function(id,
   observeEvent(rv.process$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
     
     # If a value is returned, that is because the current is validated
-    rv.process$steps.status[rv.process$current.pos] <- global$VALIDATED
+    rv.process$steps.status[rv.process$current.pos] <- Magellan::global$VALIDATED
     
     #Look for new skipped steps
     Discover_Skipped_Steps()
@@ -1154,7 +1132,7 @@ mod_navigation_server <- function(id,
     if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
       print('The entire pipeline has been reseted')
       rv.process$dataIn <- NULL
-      rv.process$steps.status[seq_len(rv.process$length)] <- global$UNDONE
+      rv.process$steps.status[seq_len(rv.process$length)] <- Magellan::global$UNDONE
     } else {
       processHasChanged <- rv.process$config$steps[which(max(triggerValues, na.rm = TRUE)==triggerValues)]
       ind.processHasChanged <- which(rv.process$config$steps==processHasChanged)
@@ -1163,7 +1141,7 @@ mod_navigation_server <- function(id,
       if (is.null(newValue)){
         #browser()
         # A process has been reseted
-        rv.process$steps.status[ind.processHasChanged:rv.process$length] <- global$UNDONE
+        rv.process$steps.status[ind.processHasChanged:rv.process$length] <- Magellan::global$UNDONE
         rv.process$steps.enabled[ind.processHasChanged:rv.process$length] <- FALSE
         rv.process$steps.enabled[ind.processHasChanged] <- TRUE
         rv.process$steps.skipped[ind.processHasChanged:rv.process$length] <- FALSE
@@ -1184,7 +1162,7 @@ mod_navigation_server <- function(id,
         # One take the last validated step (before the one corresponding to processHasChanges
         # but it is straightforward because we just updates self$rv$status
         ind.last.validated <- NULL
-        validated.steps <- which(rv.process$steps.status == global$VALIDATED)
+        validated.steps <- which(rv.process$steps.status == Magellan::global$VALIDATED)
         if (length(validated.steps) !=0)
           ind.last.validated <- max(validated.steps)
         
@@ -1195,8 +1173,8 @@ mod_navigation_server <- function(id,
           name.last.validated <- rv.process$config$steps[ind.last.validated]
           dataIn.ind.last.validated <- which(names(rv.process$dataIn) == name.last.validated)
           #self$rv$dataIn <- self$rv$dataIn[ , , seq_len(dataIn.ind.last.validated)]
-          rv.process$dataIn <- Keep_Items_from_Dataset(dataset = rv.process$dataIn, 
-                                                       range = seq_len(dataIn.ind.last.validated))
+          rv.process$dataIn <- Keep_Datasets_from_Object(object = rv.process$dataIn, 
+                                                         range = seq_len(dataIn.ind.last.validated))
           
         }
         #Update_State_Screens()
@@ -1205,9 +1183,9 @@ mod_navigation_server <- function(id,
       } else {
         # browser()
         # A process has been validated
-        rv.process$steps.status[processHasChanged] <- global$VALIDATED
+        rv.process$steps.status[processHasChanged] <- Magellan::global$VALIDATED
         if (ind.processHasChanged < rv.process$length)
-          rv.process$steps.status[(1 + ind.processHasChanged):rv.process$length] <- global$UNDONE
+          rv.process$steps.status[(1 + ind.processHasChanged):rv.process$length] <- Magellan::global$UNDONE
         
         Discover_Skipped_Steps()
         rv.process$dataIn <- newValue
@@ -1243,7 +1221,7 @@ mod_navigation_server <- function(id,
     PrepareData2Send()
     #browser()
     # If the current step is validated, set the child current position to the last step
-    if (rv.process$steps.status[rv.process$current.pos] == global$VALIDATED)
+    if (rv.process$steps.status[rv.process$current.pos] == Magellan::global$VALIDATED)
       rv.child$position[rv.process$current.pos] <- paste0('last_', Timestamp())
   }
   
@@ -1257,7 +1235,7 @@ mod_navigation_server <- function(id,
     if (verbose) cat(crayon::yellow(paste0(id, '::observeEvent(rv.process$current.pos)\n\n')))
     
     
-    if (rv.process$nav.mode == 'process'){
+    if (nav.mode == 'process'){
     ToggleState_NavBtns()
     # Hide all screens 
     shinyjs::hide(selector = paste0(".page_", id))
@@ -1265,7 +1243,7 @@ mod_navigation_server <- function(id,
     #Show the current step which is identified by its name. This point is very important
     # and need that the renderUI functions of the process to be strickly well named
     shinyjs::show(rv.process$config$steps[rv.process$current.pos])
-    } else if (rv.process$nav.mode == 'pipeline'){
+    } else if (nav.mode == 'pipeline'){
       shinyjs::toggleState(id = "prevBtn", condition = rv.process$current.pos > 1)
       shinyjs::toggleState(id = "nextBtn", condition = rv.process$current.pos < rv.process$length)
       shinyjs::hide(selector = paste0(".page_", id))
@@ -1284,9 +1262,9 @@ mod_navigation_server <- function(id,
   output$SkippedInfoPanel <- renderUI({
     #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
     
-    current_step_skipped <- rv.process$steps.status[rv.process$current.pos] == global$SKIPPED
+    current_step_skipped <- rv.process$steps.status[rv.process$current.pos] == Magellan::global$SKIPPED
     req(current_step_skipped)
-    process_entirely_skipped <- isTRUE(sum(rv.process$steps.status) == global$SKIPPED * rv.process$length)
+    process_entirely_skipped <- isTRUE(sum(rv.process$steps.status) == Magellan::global$SKIPPED * rv.process$length)
     
     if (process_entirely_skipped){
       # This case appears when the process has been skipped from the

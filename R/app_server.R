@@ -14,9 +14,6 @@ verbose <- FALSE
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @importFrom utils data
-#' @importFrom QFeatures readQFeatures
-#' @importFrom utils globalVariables
 #' 
 #' @noRd
 #'
@@ -26,13 +23,9 @@ app_server <- function( input, output, session ) {
   rv <- reactiveValues(
     dataIn = NULL,
     pipeline = NULL,
-    package = 'DaparToolshed'
+    package = NULL
   )
-  
-  # if (!require(QFeatures)){
-  #   data('hlpsms', envir = environment())
-  #   hl <- readQFeatures(hlpsms, ecol = seq_len(10), name = "psms")
-  # }
+
   
   observeEvent(req(input$choosePipeline),{
     rv$pipeline$server(dataIn = reactive({rv$dataIn}))

@@ -1,6 +1,5 @@
 library(shiny)
 library(shinyjs)
-library(QFeatures)
 library(crayon)
 library(Magellan)
 
@@ -38,19 +37,22 @@ mod_test_pipeline_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    requireNamespace('QFeatures')
+    
     rv <- reactiveValues(
       dataIn = feat1,
       dataOut = NULL
     )
     
     observe({
-      rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineA',
+      rv$dataOut <- mod_navigation_server(id = 'PipelineA',
+                                            nav.mode = 'pipeline', 
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
                                             remoteReset = reactive({FALSE})
                                             )
       output$UI <- renderUI({
-        mod_nav_pipeline_ui(ns('PipelineA'))
+        mod_navigation_ui(ns('PipelineA'))
       })
     }, priority=1000)
     

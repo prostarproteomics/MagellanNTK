@@ -14,9 +14,9 @@ Imports:
     shinyjs,
     utils,
     sass,
-    shinyjqui,
-    QFeatures
+    shinyjqui
 Collate: 
+    AllGenerics.R
     app_config.R
     app_server.R
     app_ui.R
@@ -26,8 +26,6 @@ Collate:
     mod_popover_for_help.R
     mod_format_DT.R
     utils.R
-    mod_nav_process.R
-    mod_nav_pipeline.R
     mod_navigation.R
     mod_timeline_h.R
     mod_timeline_v.R
@@ -41,5 +39,6 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
-    crayon
+    crayon,
+    QFeatures
 VignetteBuilder: knitr

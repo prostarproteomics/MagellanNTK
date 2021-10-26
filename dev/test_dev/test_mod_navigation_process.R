@@ -1,7 +1,6 @@
 library(shiny)
 library(shinyjs)
-library(QFeatures)
-library(DaparToolshed)
+
 
 options(shiny.fullstacktrace = TRUE)
 
@@ -11,6 +10,9 @@ dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R"))
   source(file.path(dirpath, l), local=TRUE)$value
 
+dirpath <- 'example_modules'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
 
 
 
@@ -22,12 +24,12 @@ mod_test_navigation_process_ui <- function(id){
     fluidRow(
       column(width=2,
              selectInput(ns('choosePipeline'), 'Choose pipeline',
-                         choices = setNames(nm=c('', 'Protein')),
+                         choices = setNames(nm=c('', 'PipelineA')),
                          width = '200')
       ),
       column(width=2,
              selectInput(ns('chooseProcess'), 'Choose process', 
-                         choices = setNames(nm=c('', 'Description', 'Normalization')),
+                         choices = setNames(nm=c('', 'Description', 'ProcessA', 'ProcessB', 'ProcessC')),
                          width = '200')
       ),
       column(width=2, actionButton(ns('simReset'), 'Remote reset')),
@@ -49,6 +51,10 @@ mod_test_navigation_process_ui <- function(id){
 mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    
+    requireNamespace('QFeatures')
+    
+    
     rv <- reactiveValues(
       dataIn = feat1,
       remoteReset = FALSE,

@@ -1,8 +1,6 @@
 library(shiny)
 library(shinyjqui)
 library(shinyBS)
-library(DaparToolshed)
-library(QFeatures)
 library(shinyjs)
 
 source(file.path("../../R", "mod_popover_for_help.R"), local = TRUE)$value
@@ -21,13 +19,11 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
  
-  DaparToolshed::mod_all_plots_server('plots',
-                                    dataIn = reactive({feat1})
-  )
-  mod_bsmodal_server('exemple',
+    mod_bsmodal_server('exemple',
                      title = 'Plots',
                      width="75%", # en px ou % de largeur
-                     uiContent = DaparToolshed::mod_all_plots_ui('plots')
+                     uiContent = list(title = 'Title',
+                                      content = 'Content')
   )
 }
 
