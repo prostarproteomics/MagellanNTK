@@ -4,10 +4,8 @@
 \alias{dataset-processing}
 \alias{Keep_Datasets_from_Object}
 \alias{Keep_Datasets_from_Object,list-method}
-\alias{Keep_Datasets_from_Object,QFeatures-method}
 \alias{Add_Datasets_to_Object}
 \alias{Add_Datasets_to_Object,list-method}
-\alias{Add_Datasets_to_Object,QFeatures-method}
 \title{Datasets processing}
 \usage{
 \S4method{Keep_Datasets_from_Object}{list}(object, range)
@@ -43,7 +41,4 @@ are in range
 \details{
 The object must be of type list. Thetwo functions are implemented here for a simple list.
 For other dataset classes, their implementation must be part of the package which uses Magellan.
-}
-\examples{
-
 }

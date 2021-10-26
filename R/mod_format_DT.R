@@ -31,15 +31,13 @@ mod_format_DT_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @import DT
-#' @importFrom htmlwidgets JS   
+#' @importFrom DT replaceData dataTableProxy datatable %>% 
+#' @importFrom htmlwidgets JS
 #' 
 #' @return xxx 
 #' 
 #' @examples 
 #' \dontrun{
-#' library(shiny)
-#' library(DT)
 #' 
 #' ui <- fluidPage(
 #'   mod_format_DT_ui('tbl')

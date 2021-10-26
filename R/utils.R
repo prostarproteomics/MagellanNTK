@@ -1,4 +1,3 @@
-
 #' @title 
 #' xxx
 #' 
@@ -47,14 +46,12 @@ Timestamp <- function(){
 #'
 #' @return An processed object of the same class as `object`.
 #' 
-#' @aliases Keep_Datasets_from_Object Keep_Datasets_from_Object,list-method Keep_Datasets_from_Object,QFeatures-method
-#' @aliases Add_Datasets_to_Object Add_Datasets_to_Object,list-method Add_Datasets_to_Object,QFeatures-method
+#' @aliases Keep_Datasets_from_Object Keep_Datasets_from_Object,list-method
+#' @aliases Add_Datasets_to_Object Add_Datasets_to_Object,list-method
 #'
 #' @name dataset-processing
 #'
 #' @rdname dataset-processing
-#'
-#' @examples
 #'
 NULL
 
@@ -74,17 +71,17 @@ setMethod("Keep_Datasets_from_Object",
             object[range]
           })
 
-#' @rdname dataset-processing
-setMethod("Keep_Datasets_from_Object",
-          "QFeatures",
-          function(object, range) {
-            if (missing(range))
-              stop("Provide range of assays to be processed")
-
-            if (is.numeric(range)) range <- names(object)[[range]]
-
-            object[ , , range]
-          })
+# #' @rdname dataset-processing
+# setMethod("Keep_Datasets_from_Object",
+#           "QFeatures",
+#           function(object, range) {
+#             if (missing(range))
+#               stop("Provide range of assays to be processed")
+# 
+#             if (is.numeric(range)) range <- names(object)[[range]]
+# 
+#             object[ , , range]
+#           })
 
 
 

@@ -39,8 +39,6 @@ xxx
 }
 \examples{
 \dontrun{
-library(shiny)
-library(DT)
 
 ui <- fluidPage(
   mod_format_DT_ui('tbl')

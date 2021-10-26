@@ -1,6 +1,5 @@
 library(highcharter)
 library(shinyjs)
-library(DT)
 library(tibble)
 
 
