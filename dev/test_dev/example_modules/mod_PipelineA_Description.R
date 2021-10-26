@@ -32,19 +32,11 @@ mod_PipelineA_Description_ui <- function(id){
 #' @importFrom stats setNames
 #' 
 mod_PipelineA_Description_server <- function(id,
-                                        dataIn = reactive({NULL}),
-                                        steps.enabled = reactive({NULL}),
-                                        remoteReset = reactive({FALSE})
-                                        ){
-  
-  #' @field global xxxx
-  #global <- list(
-  #  VALIDATED = 1,
-  #  UNDONE = 0,
-  #  SKIPPED = -1
-  #)
-  
-  
+                                             dataIn = reactive({NULL}),
+                                             steps.enabled = reactive({NULL}),
+                                             remoteReset = reactive({FALSE})
+                                             ){
+
   config <- list(
     name = 'Description',
     parent = 'PipelineA',

@@ -2,7 +2,6 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
-#library(QFeatures)
 library(tibble)
 
 options(shiny.fullstacktrace = TRUE)

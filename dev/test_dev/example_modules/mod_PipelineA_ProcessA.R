@@ -375,7 +375,10 @@ mod_PipelineA_ProcessA_server <- function(id,
     
     observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
       # Add your stuff code here
-      rv$dataIn <- Add_Datasets_to_Object(rv$dataIn, config$name)
+
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn, 
+                                          dataset = rnorm(1:5),
+                                          name = config$name)
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       

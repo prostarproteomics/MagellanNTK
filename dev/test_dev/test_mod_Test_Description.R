@@ -32,8 +32,6 @@ mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    requireNamespace('QFeatures')
-    
     rv <- reactiveValues(
       dataIn = feat1,
       dataOut = NULL
