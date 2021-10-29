@@ -1,19 +1,22 @@
-
-
-
-#' @export
-#'
-mod_PipelineA_ProcessB_ui <- function(id){
-  ns <- NS(id)
-}
-
-
-#' @title xxx
+#' @title Shiny example process module.
 #'
 #' @description
 #' This module contains the configuration informations for the corresponding pipeline.
 #' It is called by the nav_pipeline module of the package Magellan
+#' 
+#' @seealso example_module_process1
+#' 
+#' @param id xxx
+#' 
+#' @rdname example_module_process3
+#' 
+#' @author Samuel Wieczorek
 #'
+mod_PipelineA_Process3_ui <- function(id){
+  ns <- NS(id)
+}
+
+
 #' @param id xxx
 #'
 #' @param dataIn The dataset
@@ -27,23 +30,26 @@ mod_PipelineA_ProcessB_ui <- function(id){
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
 #'
-#' @author Samuel Wieczorek
-#'
-#' @export
+#' @rdname example_module_process3
 #' 
-#' @importFrom stats setNames
+#' @importFrom stats setNames rnorm
 
-mod_PipelineA_ProcessB_server <- function(id,
+mod_PipelineA_Process3_server <- function(id,
+                                          nav.mode = 'process',
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE})
 ){
   
-  #' @field config xxxx
+  # This list contains the basic configuration of the process
   config <- list(
-    name = 'ProcessB',
+    # Name of the process
+    name = 'Process3',
+    # Name of the pipeline it belongs to
     parent = 'PipelineA',
+    # List of all steps of the process
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
+    # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, TRUE, TRUE)
   )
   
@@ -65,6 +71,10 @@ mod_PipelineA_ProcessB_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    
+    # Declaration of the variables that will contain the values of the widgets
+    # To avoid confusion, the first string is the name of the step while the second is the name
+    # of the widget
     rv.widgets <- reactiveValues(
       Step1_select1 = widgets.default.values$Step1_select1,
       Step1_select2 = widgets.default.values$Step1_select2,
@@ -76,13 +86,21 @@ mod_PipelineA_ProcessB_server <- function(id,
     
     # Reactive values during the run of the process
     rv <- reactiveValues(
+      # Stores the object given in input of the process
       dataIn = NULL,
+      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
       steps.status = NULL,
+      # xxx
       reset = NULL,
+      # A vector of boolean indicating if the steps are enabled or disabled
       steps.enabled = NULL
     )
     
+    
     # Returned value of the process
+    # * The trigger variable is used to trigger an event that can be catched by the 
+    #   Shiny functions observe() and observeEvent()
+    # * The value variable contains the object to return to the instance that has called the process.
     dataOut <- reactiveValues(
       trigger = NULL,
       value = NULL
@@ -92,8 +110,8 @@ mod_PipelineA_ProcessB_server <- function(id,
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
       if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), 
-                                     rv.process$config$steps)
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
+                                     rv$config$steps)
       else
         rv$steps.enabled <- steps.enabled()
     })
@@ -103,6 +121,20 @@ mod_PipelineA_ProcessB_server <- function(id,
       lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })
+    })
+    
+    ###### ------------------- Code for Description (step 0) -------------------------    #####
+    ###### -----        This step does not have to be modified ------ ##
+    
+    
+    
+    
+    output$Description <- renderUI({
+      tagList(
+        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
+        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('validationBtn_ui'))
+      )
     })
     
     
@@ -118,17 +150,6 @@ mod_PipelineA_ProcessB_server <- function(id,
                        class = btn_success_color)
         )
     })
-    
-    
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
-    output$Description <- renderUI({
-      tagList(
-        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
-        uiOutput(ns('datasetDescription')),
-        uiOutput(ns('validationBtn_ui'))
-      )
-    })
-    
     
     observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
       rv$dataIn <- dataIn()
@@ -370,7 +391,10 @@ mod_PipelineA_ProcessB_server <- function(id,
     
     observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
       # Add your stuff code here
-      rv$dataIn <- Add_Datasets_to_Object(rv$dataIn, config$name)
+      
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn, 
+                                          dataset = rnorm(1:5),
+                                          name = config$name)
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       
@@ -394,7 +418,6 @@ mod_PipelineA_ProcessB_server <- function(id,
     dataOut = reactive({dataOut})
     #steps.status = reactive({rv$steps.status})
     )
-    
     
   }
   )

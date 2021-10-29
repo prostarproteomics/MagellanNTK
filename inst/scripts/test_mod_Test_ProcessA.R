@@ -1,22 +1,33 @@
 library(highcharter)
 library(shinyjs)
 library(tibble)
+library(crayon)
 
 
 options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/dev/test_dev')
+setwd('~/GitHub/Magellan/inst/scripts')
 
 dirpath <- '../../R'
-for (l in list.files(path = dirpath, pattern = ".R"))
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
-#--------------------------------------------
-source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
 
 
 mod_test_navigation_process_ui <- function(id){
   ns <- NS(id)
   tagList(
+    fluidRow(
+      column(width=2, actionButton(ns('simReset'), 
+                                   'Remote reset', 
+                                   style='background-color: lightgrey;')),
+      column(width=2, actionButton(ns('simEnabled'), 
+                                   'Remote enable/disable', 
+                                   style='background-color: lightgrey;')),
+      column(width=2, actionButton(ns('simSkipped'), 
+                                   'Remote is.skipped', 
+                                   style='background-color: lightgrey;'))
+    ),
+    hr(),
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
@@ -31,7 +42,7 @@ mod_test_navigation_process_ui <- function(id){
 mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
+     
     rv <- reactiveValues(
       dataIn = feat1,
       dataOut = NULL
@@ -39,14 +50,13 @@ mod_test_navigation_process_server <- function(id){
     
     observe({
       
-      rv$dataOut <- mod_navigation_server(id = 'PipelineA_Description',
+      rv$dataOut <- mod_navigation_server(id = 'PipelineA_ProcessA',
                                           nav.mode = 'process',
                                           dataIn = reactive({rv$dataIn}),
-                                          is.enabled = reactive({TRUE}),
-                                          remoteReset = reactive({FALSE}),
-                                          is.skipped = reactive({FALSE})
+                                          remoteReset = reactive({input$simReset}),
+                                          is.skipped = reactive({input$simSkipped%%2 != 0}),
+                                          is.enabled = reactive({input$simEnabled%%2 == 0})
                                           )
-      
       
       
       observeEvent(rv$dataOut$dataOut()$trigger, {
@@ -56,7 +66,7 @@ mod_test_navigation_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_navigation_ui(ns('PipelineA_Description'))
+      mod_navigation_ui(ns('PipelineA_ProcessA'))
     })
     
     
@@ -76,16 +86,11 @@ mod_test_navigation_process_server <- function(id){
     
     ###########---------------------------#################
     output$show_rv_dataIn <- renderUI({
-      req(rv$dataIn)
-      tagList(
-        lapply(names(rv$dataIn), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataIn), function(x){tags$p(x)})
     })
     
     output$show_rv_dataOut <- renderUI({
-       tagList(
-        lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
-      )
+      lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
     })
     
   })

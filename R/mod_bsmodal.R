@@ -1,9 +1,9 @@
 # ouvre une fenetre, parametre renseigne quoi afficher dans la fenetre
 
 
-#' @title xxx
+#' @title Predefined modal
 #' 
-#' @description xxx
+#' @description Displays of formatted modal-dialog with 'Cancel' and 'Ok' buttons.
 #' 
 #' @rdname mod_bsmodal
 #' 
@@ -16,24 +16,20 @@ mod_bsmodal_ui <- function(id){
   )
 }
 
-#' @title xxxx
-#' 
-#' @description
-#' xxxx
-#' 
-#' @param id xxxx
-#' @param title xxx
-#' @param width xxx
-#' @param uiContent xxx
+
+#' @param id A `character(1)` which is the id of the instance of the module
+#' @param title A `character(1)`
+#' @param width A `character(1)` indicating the size of the modal window. Can be "s" for small (the default), "m" for medium, or "l" for large.
+#' @param uiContent The content of the modal dialog.
 #' 
 #' @importFrom shinyjqui jqui_draggable
 #' 
 #' @export
 #' 
-#' @return xxx
+#' @return A Shiny modal-dialog
 #' 
 #' @examples
-#' \dontrun{ 
+#' if(interactive()) {
 #' library(shiny)
 #' library(shinyBS)
 #' 
@@ -72,7 +68,7 @@ mod_bsmodal_server <- function(id,
       if(is.null(width))
         width <- 'small'
       tagList(
-        tags$head(tags$style(paste0(".modal-dialog { width:",width," }"))),
+        tags$head(tags$style(paste0(".modal-dialog { width:", width," }"))),
         tags$head(tags$style("#test .modal-dialog {width: fit-content !important;}")),
         actionButton(ns("openModalBtn"), "",
                      icon('chart-bar', lib = "font-awesome"),

@@ -3,6 +3,7 @@ set.seed(1)
 ## ---------------------------------------------------------
 ## Creating psms as <double> rather than <integer>
 ## ---------------------------------------------------------
+#' importFrom stats rnorm
 element1 <- data.frame(A1 = rnorm(1:5),
                        A2 = rnorm(1:5),
                        A3 = rnorm(1:5),

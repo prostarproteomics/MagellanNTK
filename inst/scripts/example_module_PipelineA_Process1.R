@@ -1,24 +1,31 @@
-
-# AddItemToDataset <- function(dataset, name){
-#   addAssay(dataset,
-#            dataset[[length(dataset)]],
-#            name=name)
-# }
-
-
-#' @export
-#'
-mod_PipelineA_ProcessA_ui <- function(id){
-  ns <- NS(id)
-}
-
-
-#' @title xxx
+#' @title Shiny example process module.
 #'
 #' @description
 #' This module contains the configuration informations for the corresponding pipeline.
 #' It is called by the nav_pipeline module of the package Magellan
+#' 
+#' The name of the server and ui functions are formatted with keywords separated by '_', as follows:
+#' * first string `mod`: indicates that it is a Shiny module
+#' * `pipeline name` is the name of the pipeline to which the process belongs
+#' * `process name` is the name of the process itself
+#' 
+#' This convention is important because Magellan call the different
+#' server and ui functions by building dynamically their name.
+#' 
+#' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
+#' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+#' 
+#' @param id xxx
+#' 
+#' @rdname example_module_process1
+#' 
+#' @author Samuel Wieczorek
 #'
+mod_PipelineA_Process1_ui <- function(id){
+  ns <- NS(id)
+}
+
+
 #' @param id xxx
 #'
 #' @param dataIn The dataset
@@ -32,23 +39,25 @@ mod_PipelineA_ProcessA_ui <- function(id){
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
 #'
-#' @author Samuel Wieczorek
-#'
-#' @export
+#' @rdname example_module_process1
 #' 
-#' @importFrom stats setNames
+#' @importFrom stats setNames rnorm
 
-mod_PipelineA_ProcessA_server <- function(id,
+mod_PipelineA_Process1_server <- function(id,
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE})
                                           ){
 
-  #' @field config xxxx
+  # This list contains the basic configuration of the process
   config <- list(
-    name = 'ProcessA',
+    # Name of the process
+    name = 'Process1',
+    # Name of the pipeline it belongs to
     parent = 'PipelineA',
+    # List of all steps of the process
     steps = c('Description', 'Step1', 'Step2', 'Step3'),
+    # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, TRUE, TRUE)
   )
   
@@ -70,6 +79,10 @@ mod_PipelineA_ProcessA_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    
+    # Declaration of the variables that will contain the values of the widgets
+    # To avoid confusion, the first string is the name of the step while the second is the name
+    # of the widget
     rv.widgets <- reactiveValues(
       Step1_select1 = widgets.default.values$Step1_select1,
       Step1_select2 = widgets.default.values$Step1_select2,
@@ -81,13 +94,22 @@ mod_PipelineA_ProcessA_server <- function(id,
     
     # Reactive values during the run of the process
     rv <- reactiveValues(
+      # Stores the object given in input of the process
       dataIn = NULL,
+      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
       steps.status = NULL,
+      # xxx
       reset = NULL,
+      
+      # A vector of boolean indicating if the steps are enabled or disabled
       steps.enabled = NULL
     )
     
+    
     # Returned value of the process
+    # * The trigger variable is used to trigger an event that can be catched by the 
+    #   Shiny functions observe() and observeEvent()
+    # * The value variable contains the object to return to the instance that has called the process.
     dataOut <- reactiveValues(
       trigger = NULL,
       value = NULL
@@ -97,8 +119,8 @@ mod_PipelineA_ProcessA_server <- function(id,
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
       if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), 
-                                     rv.process$config$steps)
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
+                                     rv$config$steps)
       else
         rv$steps.enabled <- steps.enabled()
     })
@@ -402,8 +424,7 @@ mod_PipelineA_ProcessA_server <- function(id,
     dataOut = reactive({dataOut})
     #steps.status = reactive({rv$steps.status})
     )
-    
-    
+
   }
   )
 }

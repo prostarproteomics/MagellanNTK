@@ -1,0 +1,169 @@
+---
+title: "Create a new process"
+subtitle: "A developer's guidelines"
+author: "Samuel Wieczorek"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  BiocStyle::html_document:
+  toc: true
+theme: united
+keep_md: true
+papersize: a4
+vignette: >
+  %\VignetteIndexEntry{Create a new process}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>")
+```
+
+
+```{r style, echo = FALSE, results = 'asis'}
+  BiocStyle::markdown()
+```
+
+
+
+# Introduction
+
+This vignette explains how to create a new process in the `Magellan` framework. A process is a set of data processes applied to a dataset (ie an object of class QFeatures).
+
+Examples of processes are in the inst/scripts directory. This tutorial aims to explain step-by-step the construction of the process
+
+As a process in `Magellan` is a shiny module, it comes with two functions ui() and server().
+
+# Nomenclature of ui and server functions
+
+The name of these functions is very important because Magellan call those functions by building their name dynamically. C'est pour cela qu'il est primordial de respecter la nomenclature.
+
+Chacune des deux fonctions contient quatre mots-clés séparés par '_':
+
+* `mod`:mot-clé fixe qui précise que la fonction est celle d'un module,
+* `pipeline`: le nom du pipeline auquel le process appartient,
+* `process`: le nom du process lui-même,
+* `ui` ou `server` selon qu'il s'agit de la fonction ui ou server.
+
+Par example, la fonction `mod_PipelineA_Process4_server()` est le nom du serveur pour le process 4 du pipeline A.
+
+
+
+# `ui()` function
+
+Normalement, la fonction ui() contient le code pour les interfacs graphiques. Ces interfaces sont gérées par Magellan et leur code réside dans la fonction serveur. En effet, il y a besoin qu'elles soient toutes dynamiques et de ce fait, on utilise les fonctions renderUI() et uiOutput() mais dans la partie serveur de sorte qu'on puisse les appeler dynamiquement.
+
+
+# `server()` function
+
+
+## Architecture overview
+
+La fonction serveur utilise l'architecture proposée par Shiny pour écrire un module.
+
+```{r serverArch}
+mod_PipelineA_Process3_server <- function(id,
+                                          dataIn = reactive({NULL}),
+                                          steps.enabled = reactive({NULL}),
+                                          remoteReset = reactive({FALSE})
+){
+  
+ # Put here static code that is not affected by the reactive programming
+
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    # Put here dynamic process code
+    
+    # ----- DO NOT MODIFY THIS PART  ---
+    # Definition of reactive variables and observers
+    # ----- END OF DO NOT MODIFY THIS PART ---
+    
+    # Definition of the ui for each steps
+    # Write here your own code
+    
+    
+    # ----- DO NOT MODIFY THIS PART ---
+    # Return value of the process
+    # ----- END OF DO NOT MODIFY THIS PART ---
+  })
+}
+
+```
+
+
+The input parameters of the server function are:
+
+* `id`: The name of the server,
+* `dataIn`: The object given as input to the process,
+* `steps.enabled`: A vector of boolean which has the same length of the steps
+of the pipeline. This information is used to enable/disable the widgets. It is not
+a communication variable between the caller and this module, thus there is no
+corresponding output variable,
+* `remoteReset`: It is a remote command to reset the module. A boolean that
+indicates is the pipeline has been reseted by a program of higher level
+Basically, it is the program which has called this module.
+
+The last three parameters are reactive because they are frequently updated during the execution of `Magellan`.
+
+The function `mod_PipelineA_Process3_server()` is the high-level function which acts as a wrapper for the server function. In this part, on store the definition of non-reactive variables (like global static variables).
+In a process, one can find:
+
+* The definition of the configuration data of the process (see below for more details),
+* The definition of the default values for the widgets
+
+The function `moduleServer()` is the real server function for the module. It contains the following elements:
+
+* Declaration of `rv.widgets` variables for widgets, This part must be modified only to write the list of widgets.
+* Declaration of `rv` reactive variables which contains the value of the input parameters. THIS PART MUST NOT BE MODIFIED
+* Declaration of the `dataOut` reactive values. THIS PART MUST NOT BE MODIFIED
+* Definition of the listener functions for the two parameters `steps.enabled()` and `remoteReset()`. THIS PART MUST NOT BE MODIFIED.
+* Code for each step (see below),
+* Return value of the process. THIS PART MUST NOT BE MODIFIED,
+    
+
+## Definition of the process (`config` variable)
+
+The `config` variable contains the information about the process. It is read by the pipeline which calls this process. The names of the 4 items must not be modified but the developper can customize their value to describe the new process
+
+* `name`: Name of the process,
+* `parent`: Name of the pipeline it belongs to,
+* `steps`: List of all steps of the process, Please note that the first step is always named 'Description'.
+* `mandatory`: A vector of boolean indicating if the steps are mandatory or not. Please note that the first step is mandatory.
+
+
+# Writing code for a step
+
+The steps of a process are all built on the same schema:
+
+* ObserveEvent of the widgets
+* A global `renderUI()` function that manage the ui (and further renderUI()) for the step. The `id` of this function
+must be equal to the name of the corresponding step.
+* Other `renderUI()` functions that define some widgets
+* `observeEvent()` for the validation button (last step). This part must not be modified
+* Code specific to the process.
+
+## Important note
+
+When a step is enabled/disabled, all its widgets are also. In order to have reliability, this state is managed by a 
+variable for each step (a given element in the `steps.status` vector, input parameter).
+Thus, it is mandatory that each widget have to be wrapped into an if/else statement in which the condition
+
+# Developer tool to create a new process
+
+A script (``) has been developped to facilitate the developpement of a process. It consists in a shiny app.
+
+This app proposes forms to configure certain aspects of the process. At the end of the setup, the user validate its configuration and a R script is written which contains the code for the module. The part which can be modified to customize the module are showed to the user. The, he has to customize this script.
+
+The app can be run in two several modes whether the level of finition of the process code:
+
+* A simple mode which permits to configure a lot of aspects of the module. It guides the developer in a lot of details but is not very versatile (the user must know exactly what he want to do),
+* An expert mode which proposes the minimal configuration for the process
+
+## Simple mode
+
+
+
+## Expert mode
+

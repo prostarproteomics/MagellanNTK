@@ -1,17 +1,23 @@
-
-#' @export
+#' @title Shiny example module `Pipeline A`
+#'
+#' @description
+#' This module contains the configuration informations for the corresponding pipeline.
+#' It is called by the nav_pipeline module of the package Magellan.
+#' This documentation is for developpers who want to create their own pipelines nor processes
+#' to be managed with `Magellan`.
+#' 
+#' @param id xxx
+#'
+#' @rdname example_module_process_step0
+#'
+#' @author Samuel Wieczorek
+#' 
 mod_PipelineA_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 
-#' @title xxx
-#'
-#' @description
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan
-#'
 #' @param id xxx
 #'
 #' @param dataIn The dataset
@@ -24,10 +30,8 @@ mod_PipelineA_Description_ui <- function(id){
 #' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
-#'
-#' @author Samuel Wieczorek
-#'
-#' @export
+#' 
+#' @rdname example_module_process_step0
 #' 
 #' @importFrom stats setNames
 #' 
@@ -38,8 +42,8 @@ mod_PipelineA_Description_server <- function(id,
                                              ){
 
   config <- list(
-    name = 'Description',
     parent = 'PipelineA',
+    name = 'Description',
     steps = c('Description'),
     mandatory = c(TRUE)
   )
@@ -76,7 +80,7 @@ mod_PipelineA_Description_server <- function(id,
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
       if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), rv$config$steps)
       else
         rv$steps.enabled <- steps.enabled()
     })

@@ -3,31 +3,29 @@
 \name{mod_bsmodal_ui}
 \alias{mod_bsmodal_ui}
 \alias{mod_bsmodal_server}
-\title{xxx}
+\title{Predefined modal}
 \usage{
 mod_bsmodal_ui(id)
 
 mod_bsmodal_server(id, title = NULL, width = NULL, uiContent = NULL)
 }
 \arguments{
-\item{id}{xxxx}
+\item{id}{A `character(1)` which is the id of the instance of the module}
 
-\item{title}{xxx}
+\item{title}{A `character(1)`}
 
-\item{width}{xxx}
+\item{width}{A `character(1)` indicating the size of the modal window. Can be "s" for small (the default), "m" for medium, or "l" for large.}
 
-\item{uiContent}{xxx}
+\item{uiContent}{The content of the modal dialog.}
 }
 \value{
-xxx
+A Shiny modal-dialog
 }
 \description{
-xxx
-
-xxxx
+Displays of formatted modal-dialog with 'Cancel' and 'Ok' buttons.
 }
 \examples{
-\dontrun{ 
+if(interactive()) {
 library(shiny)
 library(shinyBS)
 

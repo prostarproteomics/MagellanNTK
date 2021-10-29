@@ -1,31 +1,37 @@
-
+#' @title Shiny example module `Pipeline A`
+#'
+#' @description
+#' This module contains the configuration informations for the corresponding pipeline.
+#' It is called by the nav_pipeline module of the package Magellan.
+#' This documentation is for developpers who want to create their own pipelines nor processes
+#' to be managed with `Magellan`.
+#' 
+#' @param id xxx
+#'
+#' @rdname example_module_pipeline
+#'
+#' @author Samuel Wieczorek
+#' 
 mod_PipelineA_ui <- function(id){
   ns <- NS(id)
 }
 
 
-#' @title xxx
-#'
-#' @description
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan
-#'
+
 #' @param id xxx
 #'
 #' @param dataIn The dataset
 #'
-#' @param steps.enabled A vector of boolen which has the same length of the steps
+#' @param steps.enabled A vector of boolean which has the same length of the steps
 #' of the pipeline. xxx
 #'
-#' @param remoteReset It is a remote command to reset the module. A boolen that
+#' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
 #'
-#' @param status xxx
-#'
-#' @author Samuel Wieczorek
-#'
-#' @export
+#' @param steps.status xxx
+#' 
+#' @rdname example_module_pipeline
 #'
 #' @import shiny
 #' @importFrom stats setNames
@@ -38,9 +44,9 @@ mod_PipelineA_server <- function(id,
 
   config <- list(
     name = 'PipelineA',
-    steps = c('Description', 'ProcessA', 'ProcessB', 'ProcessC'),
+    parent = NULL,
+    steps = c('Description', 'Process1', 'Process2', 'Process3'),
     mandatory = c(TRUE, FALSE, FALSE, TRUE)
-    
   )
   
   ###-------------------------------------------------------------###
@@ -69,7 +75,7 @@ mod_PipelineA_server <- function(id,
     # Initialization of the module
     observeEvent(steps.enabled(), ignoreNULL = TRUE, {
       if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv.process$length), rv.process$config$steps)
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), rv$config$steps)
       else
         rv$steps.enabled <- steps.enabled()
     })
