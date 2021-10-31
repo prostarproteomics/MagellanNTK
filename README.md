@@ -5,5 +5,8 @@
   
 # Magellan
 
-Magellan is a collection of Shiny modules which provide the basis for a generic workflow manager for data processing tools with several steps. It works in combination with any package which implements data processing pipelines compliant with Magellan such as MSPipelines and Prostar.
-It can handle lists of objects and manage a hierarchy of levels.
+Magellan is a R package which proposes a framework to navigate between steps of a complex data processing tool when the succession of processes is mostly chronological.
+
+For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finaly the last one. It is like a dataflow manager.
+
+Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e.e a pipeline) in which each step is a whole process containing itself several steps.

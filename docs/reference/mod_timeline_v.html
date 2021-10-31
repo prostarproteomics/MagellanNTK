@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run the Shiny Application — run_app • Magellan</title>
+<title>timeline UI Function — mod_timeline_v_ui • Magellan</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Run the Shiny Application — run_app" />
-<meta property="og:description" content="Run the Shiny Application" />
+<meta property="og:title" content="timeline UI Function — mod_timeline_v_ui" />
+<meta property="og:description" content="A shiny Module.
+xxx" />
 
 
 
@@ -129,23 +130,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Run the Shiny Application</h1>
-    <small class="dont-index">Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/R/run_app.R'><code>R/run_app.R</code></a></small>
-    <div class="hidden name"><code>run_app.Rd</code></div>
+    <h1>timeline UI Function</h1>
+    <small class="dont-index">Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/R/mod_timeline_v.R'><code>R/mod_timeline_v.R</code></a></small>
+    <div class="hidden name"><code>mod_timeline_v.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Run the Shiny Application</p>
+    <p>A shiny Module.</p>
+<p>xxx</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_app</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mod_timeline_v_ui</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>
+
+<span class='fu'>mod_timeline_v_server</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>config</span>, <span class='va'>status</span>, <span class='va'>position</span>, <span class='va'>enabled</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>A series of options to be used inside the app.</p></td>
+      <th>id</th>
+      <td><p>xxx</p></td>
+    </tr>
+    <tr>
+      <th>config</th>
+      <td><p>xxx</p></td>
+    </tr>
+    <tr>
+      <th>status</th>
+      <td><p>xxx</p></td>
+    </tr>
+    <tr>
+      <th>position</th>
+      <td><p>xxx</p></td>
+    </tr>
+    <tr>
+      <th>enabled</th>
+      <td><p>xxx</p></td>
     </tr>
     </table>
 
@@ -153,6 +173,35 @@
 
     <p>xxx</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/actionButton.html'>actionButton</a></span><span class='op'>(</span><span class='st'>'changePos'</span>, <span class='st'>'Change position'</span><span class='op'>)</span>,
+<span class='fu'>mod_timeline_v_ui</span><span class='op'>(</span><span class='st'>'TLh'</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span><span class='op'>{</span>
+<span class='va'>rv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactiveValues.html'>reactiveValues</a></span><span class='op'>(</span>
+status <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+current.pos <span class='op'>=</span> <span class='fl'>1</span>,
+tl.tags.enabled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,
+position <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
+<span class='va'>config</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>'Protein_Filtering'</span>,
+steps <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Description'</span>, <span class='st'>'Step1'</span>, <span class='st'>'Step2'</span>, <span class='st'>'Step3'</span><span class='op'>)</span>,
+mandatory <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span>, <span class='cn'>TRUE</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='fu'>mod_timeline_v_server</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>'TLh'</span>,
+config <span class='op'>=</span> <span class='va'>config</span>,
+status <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span><span class='va'>rv</span><span class='op'>$</span><span class='va'>status</span><span class='op'>}</span><span class='op'>)</span>,
+position <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span><span class='va'>rv</span><span class='op'>$</span><span class='va'>current.pos</span><span class='op'>}</span><span class='op'>)</span>,
+enabled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span><span class='va'>rv</span><span class='op'>$</span><span class='va'>tl.tags.enabled</span><span class='op'>}</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+<span class='op'>}</span>
+   
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

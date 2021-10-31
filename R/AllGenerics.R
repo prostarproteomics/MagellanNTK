@@ -1,7 +1,9 @@
-##' @title Placeholder for generics functions documentation
-##'
-##' @name AllGenerics
-##' @rdname AllGenerics
+#' @title Placeholder for generics functions documentation
+#'
+#' @name AllGenerics
+#' @rdname AllGenerics
+#' 
+#' @importFrom methods setGeneric
 NULL
 
 

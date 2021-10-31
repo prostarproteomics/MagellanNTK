@@ -133,18 +133,7 @@ mod_PipelineA_Process1_server <- function(id,
     })
 
     
-    output$validationBtn_ui <- renderUI({
-      if (isTRUE(rv$steps.enabled['Description'])  )
-        actionButton(ns('btn_validate_Description'),
-                     paste0('Start ', config$name),
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns('btn_validate_Description'),
-                       paste0('Start ', config$name),
-                       class = btn_success_color)
-        )
-    })
+    
 
 
     ###### ------------------- Code for Description (step 0) -------------------------    #####
@@ -164,7 +153,18 @@ mod_PipelineA_Process1_server <- function(id,
       dataOut$value <- rv$dataIn
     })
     
-    
+    output$validationBtn_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['Description'])  )
+        actionButton(ns('btn_validate_Description'),
+                     paste0('Start ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_Description'),
+                       paste0('Start ', config$name),
+                       class = btn_success_color)
+        )
+    })
     
     ###### ------------------- Code for step 1 -------------------------    #####
     

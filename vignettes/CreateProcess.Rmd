@@ -150,9 +150,9 @@ When a step is enabled/disabled, all its widgets are also. In order to have reli
 variable for each step (a given element in the `steps.status` vector, input parameter).
 Thus, it is mandatory that each widget have to be wrapped into an if/else statement in which the condition
 
-# Developer tool to create a new process
+# A tool to create a new process
 
-A script (``) has been developped to facilitate the developpement of a process. It consists in a shiny app.
+A script (``) has been developed to facilitate the development of a process. It consists in a shiny app.
 
 This app proposes forms to configure certain aspects of the process. At the end of the setup, the user validate its configuration and a R script is written which contains the code for the module. The part which can be modified to customize the module are showed to the user. The, he has to customize this script.
 
@@ -161,9 +161,9 @@ The app can be run in two several modes whether the level of finition of the pro
 * A simple mode which permits to configure a lot of aspects of the module. It guides the developer in a lot of details but is not very versatile (the user must know exactly what he want to do),
 * An expert mode which proposes the minimal configuration for the process
 
-## Simple mode
+### Simple mode
 
 
 
-## Expert mode
+### Expert mode
 

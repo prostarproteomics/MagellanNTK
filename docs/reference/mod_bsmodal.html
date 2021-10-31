@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • Magellan</title>
+<title>Predefined modal — mod_bsmodal_ui • Magellan</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Predefined modal — mod_bsmodal_ui" />
+<meta property="og:description" content="Displays of formatted modal-dialog with 'Cancel' and 'Ok' buttons." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -128,25 +129,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Predefined modal</h1>
+    <small class="dont-index">Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/R/mod_bsmodal.R'><code>R/mod_bsmodal.R</code></a></small>
+    <div class="hidden name"><code>mod_bsmodal.Rd</code></div>
     </div>
 
-    <div id="magellan-0009000" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.0.9000">
-<a href="#magellan-0009000" class="anchor"></a>Magellan 0.0.0.9000</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Displays of formatted modal-dialog with 'Cancel' and 'Ok' buttons.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>mod_bsmodal_ui</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>
+
+<span class='fu'>mod_bsmodal_server</span><span class='op'>(</span><span class='va'>id</span>, title <span class='op'>=</span> <span class='cn'>NULL</span>, width <span class='op'>=</span> <span class='cn'>NULL</span>, uiContent <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>id</th>
+      <td><p>A `character(1)` which is the id of the instance of the module</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>A `character(1)`</p></td>
+    </tr>
+    <tr>
+      <th>width</th>
+      <td><p>A `character(1)` indicating the size of the modal window. Can be "s" for small (the default), "m" for medium, or "l" for large.</p></td>
+    </tr>
+    <tr>
+      <th>uiContent</th>
+      <td><p>The content of the modal dialog.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A Shiny modal-dialog</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ebailey78.github.io/shinyBS'>shinyBS</a></span><span class='op'>)</span>
+
+<span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
+  <span class='fu'>mod_bsmodal_ui</span><span class='op'>(</span><span class='st'>'tbl'</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'>mod_bsmodal_server</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>'tbl'</span>,
+                     title <span class='op'>=</span> <span class='st'>'test'</span>,
+                     uiContent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>p</a></span><span class='op'>(</span><span class='st'>'test'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 

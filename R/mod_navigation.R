@@ -285,44 +285,6 @@ mod_navigation_server <- function(id,
   
   
   
-  # @title 
-  # xxx
-  # 
-  # @description xxx
-  # 
-  # Check if the rv$config is correct
-  #
-  # @param conf A list containing the rv$configuration of the current object.
-  # See xxx
-  # 
-  CheckConfig = function(conf){
-    if(verbose) cat(crayon::yellow(paste0(id, '::CheckConfig()\n\n')))
-    passed <- TRUE
-    msg <- ""
-    if (!is.list(conf)){
-      passed <- FALSE
-      msg <- c(msg, "'rv$config' is not a list")
-    }
-    if (length(conf)!=3){
-      passed <- FALSE
-      msg <- c(msg, "The length of 'rv$config' is not equal to 4")
-    }
-    names.conf <- c("name", "steps", "mandatory")
-    if (!all(sapply(names.conf, function(x){x %in% names(conf)}))){
-      passed <- FALSE
-      msg <- c(msg, "The names of elements in 'rv$config' must be the following: 'name', 'steps', 'mandatory'")
-    }
-    if (length(conf$steps) != length(conf$mandatory)){
-      passed <- FALSE
-      msg <- c(msg, "The length of 'steps' and 'mandatory' must be equal.")
-    }
-    
-    passed <- TRUE
-    list(passed = passed,
-         msg = msg)
-  }
-  
-  
   Update_Data2send_Vector = function(){
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent

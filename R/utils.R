@@ -52,6 +52,8 @@ Timestamp <- function(){
 #' @name dataset-processing
 #'
 #' @rdname dataset-processing
+#' 
+#' @importFrom methods setMethod
 #'
 NULL
 
@@ -110,3 +112,51 @@ setMethod("Add_Datasets_to_Object",
 #                      dataset[[length(dataset)]], 
 #                      name = name)
 #           })
+
+
+
+
+
+#' @title 
+#' xxx
+#' 
+#' @description xxx
+#' 
+#' Check if the rv$config is correct
+#'
+#' @param config A list containing the rv$configuration of the current object.
+#' See xxx
+#' 
+#' @return A list of two items:
+#' * `passed`: A boolean that indicates if the config is correct or not.
+#' * `msg`: A `character(1)` as message.
+#' 
+#' @export
+#' 
+#' @author Samuel Wieczorek
+
+CheckConfig <- function(config){
+  passed <- TRUE
+  msg <- ""
+  
+  if (!is.list(config)){
+    passed <- FALSE
+    msg <- c(msg, "'rv$config' is not a list")
+  }
+  if (length(config) != 4){
+    passed <- FALSE
+    msg <- c(msg, "The length of 'rv$config' is not equal to 4")
+  }
+  names.config <- c("parent", "name", "steps", "mandatory")
+  if (!all(sapply(names.config, function(x){x %in% names(config)}))){
+    passed <- FALSE
+    msg <- c(msg, "The names of elements in 'rv$config' must be the following: 'parent', 'name', 'steps', 'mandatory'")
+  }
+  if (length(config$steps) != length(config$mandatory)){
+    passed <- FALSE
+    msg <- c(msg, "The length of 'steps' and 'mandatory' must be equal.")
+  }
+
+  list(passed = passed,
+       msg = msg)
+}
