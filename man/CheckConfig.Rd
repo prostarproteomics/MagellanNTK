@@ -26,7 +26,7 @@ name = "process",
 steps = c('Description', "Step 1", "Step 2", "Save"),
 mandatory = c(TRUE, TRUE, FALSE, TRUE)
 )
-CheckCOnfig(conf)
+CheckConfig(conf)
 
 }
 \author{

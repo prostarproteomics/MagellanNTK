@@ -56,9 +56,9 @@ mod_PipelineA_Process1_server <- function(id,
     # Name of the pipeline it belongs to
     parent = 'PipelineA',
     # List of all steps of the process
-    steps = c('Description', 'Step1', 'Step2', 'Step3'),
+    steps = c('Description', 'Step1', 'Step2', 'Step3', 'Step4', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, TRUE, TRUE)
+    mandatory = c(TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
   )
   
   # Define default selected values for widgets

@@ -126,6 +126,19 @@ Example
 Suppose the following configuration process
 
 
+
+```{r processnavexample1, results='markup', fig.cap="Process navigation UI.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/example1.png", error = FALSE)
+```
+
+
+* t0: The process has just been launched. Only the first step is enabled because in any case, it is mandatory,
+* t1: The user has validated the first step. All further steps could then be enabled until the first mandatory one (which is 'Step2'). Thus, the steps 'Step1' and 'Step2' are enabled while the other ones stay disabled. 
+* t2: the current step is 'Step2' and it has been validated. The step 'Step1' becomes now Skipped because a further step is validated. As for t1, the further steps are enabled until the first mandatory one ('Step3').
+* t3: The step 'Step3' is now validated, thus the two last ones are enabled.
+
+
+
 ### Resetting a step
 
 The button `Reset` is used to reset the current step. Obviously, Reseting steps after the last validated one has no effect on the workflow.
