@@ -92,7 +92,7 @@
             <h3 class="subtitle">A developer’s guidelines</h3>
                         <h4 class="author">Samuel Wieczorek</h4>
             
-            <h4 class="date">octobre 29, 2021</h4>
+            <h4 class="date">octobre 31, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/master/vignettes/CreateProcess.Rmd"><code>vignettes/CreateProcess.Rmd</code></a></small>
       <div class="hidden name"><code>CreateProcess.Rmd</code></div>
@@ -235,23 +235,23 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>When a step is enabled/disabled, all its widgets are also. In order to have reliability, this state is managed by a variable for each step (a given element in the <code>steps.status</code> vector, input parameter). Thus, it is mandatory that each widget have to be wrapped into an if/else statement in which the condition</p>
 </div>
 </div>
-<div id="developer-tool-to-create-a-new-process" class="section level1">
+<div id="a-tool-to-create-a-new-process" class="section level1">
 <h1 class="hasAnchor">
-<a href="#developer-tool-to-create-a-new-process" class="anchor"></a>Developer tool to create a new process</h1>
-<p>A script (``) has been developped to facilitate the developpement of a process. It consists in a shiny app.</p>
+<a href="#a-tool-to-create-a-new-process" class="anchor"></a>A tool to create a new process</h1>
+<p>A script (``) has been developed to facilitate the development of a process. It consists in a shiny app.</p>
 <p>This app proposes forms to configure certain aspects of the process. At the end of the setup, the user validate its configuration and a R script is written which contains the code for the module. The part which can be modified to customize the module are showed to the user. The, he has to customize this script.</p>
 <p>The app can be run in two several modes whether the level of finition of the process code:</p>
 <ul>
 <li>A simple mode which permits to configure a lot of aspects of the module. It guides the developer in a lot of details but is not very versatile (the user must know exactly what he want to do),</li>
 <li>An expert mode which proposes the minimal configuration for the process</li>
 </ul>
-<div id="simple-mode" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-mode" class="anchor"></a>Simple mode</h2>
+<div id="simple-mode" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simple-mode" class="anchor"></a>Simple mode</h3>
 </div>
-<div id="expert-mode" class="section level2">
-<h2 class="hasAnchor">
-<a href="#expert-mode" class="anchor"></a>Expert mode</h2>
+<div id="expert-mode" class="section level3">
+<h3 class="hasAnchor">
+<a href="#expert-mode" class="anchor"></a>Expert mode</h3>
 </div>
 </div>
   </div>

@@ -134,19 +134,25 @@ setMethod("Add_Datasets_to_Object",
 #' @export
 #' 
 #' @author Samuel Wieczorek
+#' 
+#' @examples
+#' conf <- list(parent = "pipeline",
+#' name = "process",
+#' steps = c('Description', "Step 1", "Step 2", "Save"),
+#' mandatory = c(TRUE, TRUE, FALSE, TRUE)
+#' )
+#' CheckCOnfig(conf)
+#' 
 
 CheckConfig <- function(config){
   passed <- TRUE
   msg <- ""
-  
+
   if (!is.list(config)){
     passed <- FALSE
     msg <- c(msg, "'rv$config' is not a list")
   }
-  if (length(config) != 4){
-    passed <- FALSE
-    msg <- c(msg, "The length of 'rv$config' is not equal to 4")
-  }
+  
   names.config <- c("parent", "name", "steps", "mandatory")
   if (!all(sapply(names.config, function(x){x %in% names(config)}))){
     passed <- FALSE

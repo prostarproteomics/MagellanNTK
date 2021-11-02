@@ -822,11 +822,6 @@ mod_navigation_server <- function(id,
   
    
   InitProcessServer <- function(){
-    # source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
-    # source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
-    # source(file.path('example_modules', 'mod_PipelineA_ProcessB.R'), local=TRUE)$value
-    # source(file.path('example_modules', 'mod_PipelineA_ProcessC.R'), local=TRUE)$value
-    # 
     #Call the module server of the process
     # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
     # more specifically, the temporary variable

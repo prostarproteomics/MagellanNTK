@@ -8,6 +8,9 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
+source(file.path('.', "example_module_PipelineA_Process1.R"), local=TRUE)$value
+
+
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
@@ -43,6 +46,7 @@ mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
      
+    data(feat1, package='Magellan')
     rv <- reactiveValues(
       dataIn = feat1,
       dataOut = NULL
@@ -50,7 +54,7 @@ mod_test_navigation_process_server <- function(id){
     
     observe({
       
-      rv$dataOut <- mod_navigation_server(id = 'PipelineA_ProcessA',
+      rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
                                           nav.mode = 'process',
                                           dataIn = reactive({rv$dataIn}),
                                           remoteReset = reactive({input$simReset}),
@@ -66,7 +70,7 @@ mod_test_navigation_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_navigation_ui(ns('PipelineA_ProcessA'))
+      mod_navigation_ui(ns('PipelineA_Process1'))
     })
     
     

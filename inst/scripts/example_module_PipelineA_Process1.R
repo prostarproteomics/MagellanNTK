@@ -273,13 +273,18 @@ mod_PipelineA_Process1_server <- function(id,
                             )
                       )
                   )
-                )
+                ),
+                plotOutput(ns('showPlot'))
       )
       
       
       
     })
     
+    
+    output$showPlot <- renderPlot({
+      plot(as.matrix(dataIn()[[1]]))
+    })
     
     observeEvent(input$btn_validate_Step1, ignoreInit = TRUE, {
       # Add your stuff code here

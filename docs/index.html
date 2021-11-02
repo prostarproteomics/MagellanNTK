@@ -92,7 +92,9 @@
 <div id="magellan" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#magellan" class="anchor"></a>Magellan</h1></div>
-<p>Magellan is a collection of Shiny modules which provide the basis for a generic workflow manager for data processing tools with several steps. It works in combination with any package which implements data processing pipelines compliant with Magellan such as MSPipelines and Prostar. It can handle lists of objects and manage a hierarchy of levels.</p>
+<p>Magellan is a R package which proposes a framework to navigate between steps of a complex data processing tool when the succession of processes is mostly chronological.</p>
+<p>For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finaly the last one. It is like a dataflow manager.</p>
+<p>Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e.e a pipeline) in which each step is a whole process containing itself several steps.</p>
 </div>
 
   </div>

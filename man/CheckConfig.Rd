@@ -20,6 +20,15 @@ xxx
 
 Check if the rv$config is correct
 }
+\examples{
+conf <- list(parent = "pipeline",
+name = "process",
+steps = c('Description', "Step 1", "Step 2", "Save"),
+mandatory = c(TRUE, TRUE, FALSE, TRUE)
+)
+CheckCOnfig(conf)
+
+}
 \author{
 Samuel Wieczorek
 }
