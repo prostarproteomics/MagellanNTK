@@ -131,6 +131,9 @@ Process overview.
 <div id="gui" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gui" class="anchor"></a>GUI</h1>
+<div id="overview-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#overview-1" class="anchor"></a>Overview</h2>
 <p>The graphical interface for the low level of Magellan is divided into two main parts:</p>
 <ul>
 <li>The navigation bar which contains four items:
@@ -148,36 +151,18 @@ Process overview.
 Process navigation UI.
 </p>
 </div>
-<div id="understanding-the-timeline" class="section level2">
+</div>
+<div id="buttons" class="section level2">
 <h2 class="hasAnchor">
-<a href="#understanding-the-timeline" class="anchor"></a>Understanding the timeline</h2>
+<a href="#buttons" class="anchor"></a>Buttons</h2>
+<p>The two buttons ‘Prev’ and ‘Next’ allow to go respectively forward or backward in the timeline. If the current step is the first one, than the ‘Prev’ button is disabled. If the current step is the last one, then the ‘Next’ button is disabled. In any other case, those buttons are enabled.</p>
+<p>The button ‘Reset’ allow to reset a process or step. Please refer to xxx for more details.</p>
+</div>
+<div id="timeline" class="section level2">
+<h2 class="hasAnchor">
+<a href="#timeline" class="anchor"></a>Timeline</h2>
 <p>The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.</p>
 <p>A short line is showed under the step that is currently active in the server. That means that the UI showed under the timeline correspond to this step and all processes on the object will be related to this step.</p>
-</div>
-<div id="hierarchical-levels-of-workflow-managers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#hierarchical-levels-of-workflow-managers" class="anchor"></a>Hierarchical levels of workflow managers</h2>
-<p><code>Magellan</code> proposes two types of workflow managers, depending of the nature of the steps.</p>
-<p>The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data.</p>
-<p>A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a <code>Magellan</code> implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.</p>
-<p>The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.</p>
-<div class="figure" style="text-align: center">
-<img src="figs/process_structure.png" alt="Process overview." width="100%"><p class="caption">
-Process overview.
-</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="figs/pipeline_structure.png" alt="Process overview." width="100%"><p class="caption">
-Process overview.
-</p>
-</div>
-<p>Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.</p>
-</div>
-</div>
-<div id="basic-workflow-process" class="section level1">
-<h1 class="hasAnchor">
-<a href="#basic-workflow-process" class="anchor"></a>Basic workflow (process)</h1>
-<p>Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics. It also contains a button called <code>Perform</code> which is used to validate the step.</p>
 <p>The steps are defined in the source code of the process, in the <code>config</code> variable. They have a property called ‘Mandatory’. That means that it must be validated by the user. The steps marked as non-mandatory are facultative.</p>
 <p>A step can be in three different states:</p>
 <ul>
@@ -204,12 +189,38 @@ Process overview.
 </ul>
 <p>If the color is plain, then the step is enabled, otherwise (transparent color) it is disabled. In the latter case, all the widgets of such a step are also disabled.</p>
 <p>If the circle is empty, then the step is either skipped or non validated.</p>
-<div id="general-behaviour" class="section level2">
-<h2 class="hasAnchor">
-<a href="#general-behaviour" class="anchor"></a>General behaviour</h2>
-<div id="validation-of-a-step" class="section level3">
+<div id="description-of-steps" class="section level3">
 <h3 class="hasAnchor">
-<a href="#validation-of-a-step" class="anchor"></a>Validation of a step</h3>
+<a href="#description-of-steps" class="anchor"></a>Description of steps</h3>
+<p>First step (description)</p>
+<p>It contains the description of the process and its different steps. If an object has been sent to the process server, then the <code>Load</code> button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.</p>
+<p>Data processing steps (mid-steps)</p>
+<p>Last step (Save)</p>
+<p>Each step is built on the same basic UI.</p>
+</div>
+</div>
+<div id="hierarchical-levels-of-workflow-managers" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hierarchical-levels-of-workflow-managers" class="anchor"></a>Hierarchical levels of workflow managers</h2>
+<p><code>Magellan</code> proposes two types of workflow managers, depending of the nature of the steps.</p>
+<p>The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data.</p>
+<p>A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a <code>Magellan</code> implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.</p>
+<p>The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.</p>
+<div class="figure" style="text-align: center">
+<img src="figs/hierarchical_structure.png" alt="Hierarchical strucure principle." width="100%"><p class="caption">
+Hierarchical strucure principle.
+</p>
+</div>
+<p>Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.</p>
+</div>
+</div>
+<div id="basic-workflow-process" class="section level1">
+<h1 class="hasAnchor">
+<a href="#basic-workflow-process" class="anchor"></a>Basic workflow (process)</h1>
+<p>Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics. It also contains a button called <code>Perform</code> which is used to validate the step.</p>
+<div id="validating-a-step" class="section level2">
+<h2 class="hasAnchor">
+<a href="#validating-a-step" class="anchor"></a>Validating a step</h2>
 <p>The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.</p>
 <p>So, the steps are executed from the first one (left) to the last one, at the right of the timeline.</p>
 <p>By default, all steps are <code>undone</code>. At any moment, the validation of the current step (by clicking on its <code>Perform</code> button) has several effects:</p>
@@ -233,9 +244,9 @@ Process navigation UI.
 <li>State 3: The step ‘Step3’ is now validated, thus the two last ones are enabled.</li>
 </ul>
 </div>
-<div id="resetting-a-step" class="section level3">
-<h3 class="hasAnchor">
-<a href="#resetting-a-step" class="anchor"></a>Resetting a step</h3>
+<div id="resetting-a-step" class="section level2">
+<h2 class="hasAnchor">
+<a href="#resetting-a-step" class="anchor"></a>Resetting a step</h2>
 <p>At this lower level of navigation (process), The button <code>Reset</code> is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.</p>
 <p>Rules of reseting:</p>
 <ul>
@@ -245,21 +256,6 @@ Process navigation UI.
 <li>The widgets of all disabled states are set to their default value.</li>
 </ul>
 <p>Example Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.</p>
-</div>
-</div>
-<div id="first-step-description" class="section level2">
-<h2 class="hasAnchor">
-<a href="#first-step-description" class="anchor"></a>First step (description)</h2>
-<p>It contains the description of the process and its different steps. If an object has been sent to the process server, then the <code>Load</code> button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.</p>
-</div>
-<div id="data-processing-steps-mid-steps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-processing-steps-mid-steps" class="anchor"></a>Data processing steps (mid-steps)</h2>
-</div>
-<div id="last-step-save" class="section level2">
-<h2 class="hasAnchor">
-<a href="#last-step-save" class="anchor"></a>Last step (Save)</h2>
-<p>Each step is built on the same basic UI.</p>
 <p>Once the process server has been loaded, the UI is opening on the first step of the process. This step is always a Description step which explains the content of the process</p>
 <p>The server can be loaded with an object that contains data or a NULL object. In the first case, it means that an object has been sent into the process and the user can work on its data</p>
 <p>At the beginning, the inner object is NULL and all the UIs are disabled. It is possible to navigate into steps in order to watch the different UIs but one cannot do anything at this time. In particular, the buttons are disabled except the button n the Description step.</p>

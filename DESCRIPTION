@@ -6,14 +6,15 @@ Description: Magellan is a collection of Shiny modules which provide the basis f
 License: Artistic-2.0
 Depends: R (>= 4.1.0)
 Imports: 
-    config,
     methods,
+    config,
     golem,
     DT,
     shiny,
     htmlwidgets,
     shinyBS,
     shinyjs,
+    utils,
     sass,
     shinyjqui
 Collate: 
@@ -26,12 +27,13 @@ Collate:
     global.R
     mod_bsmodal.R
     mod_popover_for_help.R
+    create_Process_Template.R
     mod_format_DT.R
     utils.R
+    check_funcs.R
     mod_navigation.R
     mod_timeline_h.R
     mod_timeline_v.R
-    create_Process_Template.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

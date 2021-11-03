@@ -8,7 +8,7 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
-source(file.path('.', "example_module_PipelineA_Process1.R"), local=TRUE)$value
+source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), local=TRUE)$value
 
 
 dirpath <- '../../R'
