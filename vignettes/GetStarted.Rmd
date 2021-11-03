@@ -1,0 +1,302 @@
+---
+title: "Navigate with Magellan"
+author: "Samuel Wieczorek"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
+    theme: united
+    keep_md: true
+    papersize: a4
+vignette: >
+  %\VignetteIndexEntry{Navigate with Magellan}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>")
+```
+
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+
+# Overview
+
+`Magellan` is a workflow manager which can handle processes with different steps. It works on objects of type `list`.
+
+The simple level is a process, defined with its steps; each of these steps realize some computation on the object.
+The input of the step n correspond to the output of the step `n-1` and the output of the step `n` will be the input for the step `n+1`.
+
+At each step, the input and ouput are the structure than the object given in input of the whole process.
+
+The process (and all of its steps) work on a specific item of the object (generally, the last one) and generate a new item. The output of the process is then tho object given in input plus the new item, processed by the steps.
+
+```{r processoverview, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_overview.png", error = FALSE)
+```
+Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another. 
+
+
+
+# User interface
+
+## Overview
+
+The graphical interface for the low level of Magellan is divided into two main parts:
+
+* The navigation bar which contains four items:
+  * A previous button to go back in the steps of the process,
+  * A Reset button to reset the module to default values,
+  * A timeline to vizualize the steps and other informations,
+  * A Next button to go further into the steps.
+  
+* A panel which shows the content of the current step
+
+
+
+
+```{r processnavui, results='markup', fig.cap="Process navigation UI.", out.extra='style="background-color: black; padding:1px;"', echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_navigation_ui.png", error = FALSE)
+```
+
+
+## Buttons
+
+The two buttons 'Prev' and 'Next' allow to go respectively forward or backward in the timeline. If the current step is the first one, than the 'Prev' button is disabled. If the current step is the last one, then the 'Next' button is disabled. In any other case, those buttons are enabled.
+
+The button 'Reset' allow to reset a process or step. Please refer to xxx for more details.
+
+
+## Timeline
+
+The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.
+
+A short line is showed under the step that is currently active in the server. That means that the UI showed under the timeline correspond to this step and all processes on the object will be related to this step.
+
+ The steps are defined in the source code of the process, in the `config` variable. They have a property called 'Mandatory'. That means that it must be validated by the user. The steps marked as non-mandatory are facultative. 
+
+A step can be in three different states:
+
+* `undone`: the step process has not been applied to the object. It is the default value for all steps,
+* `validated`: It it the state when the process related to the step has been applied to the object,
+* `skipped`: It is the state of a step which is `undone` and at least, one further step is `validated`.
+
+
+Different colors and style of the steps marks are available to easily vizualize the state of the steps:
+
+General rules:
+
+* An empty circle denotes an `undone` or `skipped` step
+* A fullfilled circle denotes a `validated` step.
+
+
+Legend of colors and styles:
+
+* a green fullfilled circle  denotes a step that has been `validated`
+* A red empty circle is for a mandatory step that is not `validated` neither `skipped`,
+* A green empty circle is for a non-mandatory and non-validated step,
+* A dashed grey circle denotes a skipped step.
+
+If the color is plain, then the step is enabled, otherwise (transparent color) it is disabled. In the latter case, all the widgets of such a step are also disabled.
+
+If the circle is empty, then the step is either skipped or non validated.
+ 
+ 
+### Description of steps
+
+The first and last steps are particular in the sense that they are the input and output doors of the workflow, thus they are mandatory. Moreover, there name is fixed.
+
+First step (description)
+
+It contains the description of the process and its different steps.
+If an object has been sent to the process server, then the `Load` button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.
+
+
+Data processing steps (mid-steps)
+
+
+Last step (Save)
+
+Each step is built on the same basic UI.
+
+## Hierarchical levels of workflow managers
+
+`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
+
+The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
+
+A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
+
+The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
+
+
+```{r hierarchicalstructure, results='markup', fig.cap="Hierarchical strucure principle.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/hierarchical_structure.png", error = FALSE)
+```
+
+
+
+Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
+
+
+
+
+
+
+
+# Basic workflow (process)
+
+Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics.
+It also contains a button called `Perform` which is used to validate the step.
+
+The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.
+
+So, the steps are executed from the first one (left) to the last one, at the right of the timeline.
+
+
+
+
+## Launching a module
+
+Once the process server has been loaded, the UI is opening on the first step of the process ('Description') which explains the content of the process
+
+
+The server function can be loaded with an object that contains data or a NULL object. In the first case, it means that an object has been sent into the process and the user can work on its data
+
+```{r launchmodule, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/tl_start.png", error = FALSE)
+```
+
+At the beginning, the inner object is NULL and all the UIs are disabled. It is possible to navigate into steps in order to watch the different UIs but one cannot do anything at this time. In particular, the buttons are disabled except the button n the Description step.
+
+In fact, when an object is sent to the server, it is stored in a temporary place. At this time, the server is ready to run. 
+When the user clicks on the load button on the Description step, then the input object is loaded in the process. The steps become either enabled or disabled w.r.t the rules previously discussed (see xxx).
+
+By default, all steps are `undone`. 
+
+## Navigate through steps
+
+Thanks to the buttons 'Next' and 'Prev', the user can view the different steps without execute them. The current (active) step is marked by an underline below the name of the step. The UI of the current step is shown.
+
+
+## Validate a step
+
+ 
+At any moment, the validation of the current step (by clicking on its `Perform` button) has several effects:
+
+* change of the color and style of its mark in the timeline,
+* the temporary variable containing the current object is modified
+* if there are undone steps before the current one, they are marked as `skipped`,
+* The further steps are enabled until the first mandatory one (included). After that steps, none step is enabled because it is mandatory and no step can be run until this mandatory step is run.
+
+
+Example
+
+Suppose the following configuration process
+
+
+
+```{r processnavexample1, results='markup', fig.cap="Process navigation UI.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/example1.png", error = FALSE)
+```
+
+
+* **State 0**: The process has just been launched. Only the first step is enabled because in any case, it is mandatory,
+* **State 1**: The user has validated the first step. All further steps could then be enabled until the first mandatory one (which is 'Step2'). Thus, the steps 'Step1' and 'Step2' are enabled while the other ones stay disabled. 
+* **State 2**: the current step is 'Step2' and it has been validated. The step 'Step1' becomes now Skipped because a further step is validated. As for t1, the further steps are enabled until the first mandatory one ('Step3').
+* **State 3**: The step 'Step3' is now validated, thus the two last ones are enabled.
+
+
+
+## Resetting a step
+
+At this lower level of navigation (process), The button `Reset` is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.
+
+Rules of reseting:
+
+  * The current step becomes the first one,
+  * The output dataset is deleted (set to NULL),
+  * All steps are disabled but the first one,
+  * The widgets of all disabled states are set to their default value.
+
+Example
+Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.
+
+
+## Saving a process
+
+When the last step ('Save') is enabled (which is the case even if there are skipped steps), it is possible to finish the process.
+
+This step is simple as it contains only a 'Save' button. By clicking on it, the output variable of the process is instantiated with the result of the entire process. If this process has been launched from another one (i.e. pipeline), this output dataset is caught by this caller program.
+
+
+The effect of this action is to enable the steps that can be enabled
+## Module process
+
+### Ouverture d'un module, 
+
+* on a la barre de navigation en haut avec à gauche les boutons 'Previous' (<<) et 'Reset' et à droite le bouton 'Next' (>>) à droite
+* La barrede navigation affiche les étapes du processus. Elles sont toutes désactivées sauf la première (Description). Le dataset est en "attente" au niveau de la première étape
+µ on peut naviguer sur les autres étapes
+* Pour les étapes désactivées, les widgets correspondants le sont aussi
+* Un reset à ce moment fonctionne déjà et remet le curseur au niveau de la première étape
+
+### Load d'un dataset
+
+* cette action est réalisée par un clic sur le bouton "Start" de l'étape de Description,
+* A chaque fois qu'une étape a été validée:
+    * le cercle correspondant dans la timeline se colore en vert et est désactivé.
+    * toutes les étapes ultérieures sont activées jusq'à la première obligatoire inclus. Les       suivantes restent désactivées car elles nécessitent la validation de l'étape                 obligatoire
+    
+### Navigation et validation
+
+* si on valide une étape i alors que des étapes i-x n'ont pas été validées, ces dernières sont considérées comme omises. Le repère sur la timeline devient grisé et les widgets sont désactivés
+* Si on revient sur une étape omise, un bandeau bleu s'affiche pour l'expliquer
+* lorsqu'une étape a été validée, ses widgets gardent leur valeur même si on navigue sur d'autres étapes
+* La validation de la dernière étape entraîne la mise à jour de la variable de sortie du module
+
+  
+
+ 
+# Complex workflow (pipeline)
+
+This section describes the behaviour of a complex workflow with two levels.
+
+## Differences with a basic workflow
+
+Globally, it respects the rules explained in the section xxx because each level follow the same logics: they only differ with the nature of each of their steps. So, for a general overview of the behaviour, please go to the section xxx.
+
+The main difference resides in the memory managment of intermediate datasets. In a simple process, a temporary variable stores the result of each step, erasing the previous one. Thus, having a history within the process module is not possible.
+
+In the complex workflow, the managment of results from each step is different. Each steps's result is stored in memory. This strategy consumes more memory but offer a more flexibility to xxx.
+
+However, there are some little differences and additional features when orking with two or more levels: the 'remote commands'.
+
+## Validate a step
+
+
+
+
+## Reset and 'remote' reset
+
+The 'remote reset' action come with the click on the Reset button on a higher level of workflow. Contrarly to the basic level, it does not reset all the workflow but only the current step. As for the simple workflow, this resets the entire interface by setting widgets to their default values. Moreover, the dataset in this step is emptied.
+Automatically, if there is a dataset ready to sent to this step, it is done.
+
+This action has two effects:
+
+The other effect is that it also resets all the underneath workflow: all its steps are reseted, widgets sets to their default values and it go to its start state.
+
+
+
+* it resets
+
+
+
+
