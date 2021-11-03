@@ -46,6 +46,8 @@ Contrary to the workflows of higher level, each step of a process does not affec
 
 # GUI
 
+## Overview
+
 The graphical interface for the low level of Magellan is divided into two main parts:
 
 * The navigation bar which contains four items:
@@ -64,49 +66,20 @@ knitr::include_graphics("./figs/process_navigation_ui.png", error = FALSE)
 ```
 
 
-## Understanding the timeline
+## Buttons
+
+The two buttons 'Prev' and 'Next' allow to go respectively forward or backward in the timeline. If the current step is the first one, than the 'Prev' button is disabled. If the current step is the last one, then the 'Next' button is disabled. In any other case, those buttons are enabled.
+
+The button 'Reset' allow to reset a process or step. Please refer to xxx for more details.
+
+
+## Timeline
 
 The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.
 
 A short line is showed under the step that is currently active in the server. That means that the UI showed under the timeline correspond to this step and all processes on the object will be related to this step.
 
- 
- 
-
-## Hierarchical levels of workflow managers
-
-`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
-
-The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
-
-A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
-
-The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
-
-
-```{r processstructure, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/process_structure.png", error = FALSE)
-```
-
-
-
-```{r treestructure, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/pipeline_structure.png", error = FALSE)
-```
-
-
-
-Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
-
-
-
-
-# Basic workflow (process)
-
-Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics.
-It also contains a button called `Perform` which is used to validate the step.
-
-The steps are defined in the source code of the process, in the `config` variable. They have a property called 'Mandatory'. That means that it must be validated by the user. The steps marked as non-mandatory are facultative. 
+ The steps are defined in the source code of the process, in the `config` variable. They have a property called 'Mandatory'. That means that it must be validated by the user. The steps marked as non-mandatory are facultative. 
 
 A step can be in three different states:
 
@@ -133,11 +106,54 @@ Legend of colors and styles:
 If the color is plain, then the step is enabled, otherwise (transparent color) it is disabled. In the latter case, all the widgets of such a step are also disabled.
 
 If the circle is empty, then the step is either skipped or non validated.
+ 
+ 
+### Description of steps
 
-## General behaviour
+First step (description)
+
+It contains the description of the process and its different steps.
+If an object has been sent to the process server, then the `Load` button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.
 
 
-### Validation of a step
+Data processing steps (mid-steps)
+
+
+Last step (Save)
+
+Each step is built on the same basic UI.
+
+## Hierarchical levels of workflow managers
+
+`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
+
+The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
+
+A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
+
+The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
+
+
+```{r hierarchicalstructure, results='markup', fig.cap="Hierarchical strucure principle.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/hierarchical_structure.png", error = FALSE)
+```
+
+
+
+Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
+
+
+
+
+
+
+
+# Basic workflow (process)
+
+Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics.
+It also contains a button called `Perform` which is used to validate the step.
+
+## Validating a step
 
 The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.
 
@@ -170,7 +186,7 @@ knitr::include_graphics("./figs/example1.png", error = FALSE)
 
 
 
-### Resetting a step
+## Resetting a step
 
 At this lower level of navigation (process), The button `Reset` is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.
 
@@ -184,18 +200,6 @@ Rules of reseting:
 Example
 Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.
 
-## First step (description)
-
-It contains the description of the process and its different steps.
-If an object has been sent to the process server, then the `Load` button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.
-
-
-## Data processing steps (mid-steps)
-
-
-## Last step (Save)
-
-Each step is built on the same basic UI.
 
 
 
