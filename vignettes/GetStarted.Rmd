@@ -1,5 +1,5 @@
 ---
-title: "How to navigate with Magellan"
+title: "Navigate with Magellan"
 author: "Samuel Wieczorek"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
@@ -42,6 +42,8 @@ knitr::include_graphics("./figs/process_overview.png", error = FALSE)
 ```
 Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another. 
 
+
+
 # GUI
 
 The graphical interface for the low level of Magellan is divided into two main parts:
@@ -62,15 +64,44 @@ knitr::include_graphics("./figs/process_navigation_ui.png", error = FALSE)
 ```
 
 
-## Understand the timeline
+## Understanding the timeline
 
 The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.
 
 A short line is showed under the step that is currently active in the server. That means that the UI showed under the timeline correspond to this step and all processes on the object will be related to this step.
 
  
+ 
 
-# Steps
+## Hierarchical levels of workflow managers
+
+`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
+
+The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
+
+A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
+
+The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
+
+
+```{r processstructure, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_structure.png", error = FALSE)
+```
+
+
+
+```{r treestructure, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/pipeline_structure.png", error = FALSE)
+```
+
+
+
+Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
+
+
+
+
+# Basic workflow (process)
 
 Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics.
 It also contains a button called `Perform` which is used to validate the step.
@@ -132,25 +163,28 @@ knitr::include_graphics("./figs/example1.png", error = FALSE)
 ```
 
 
-* t0: The process has just been launched. Only the first step is enabled because in any case, it is mandatory,
-* t1: The user has validated the first step. All further steps could then be enabled until the first mandatory one (which is 'Step2'). Thus, the steps 'Step1' and 'Step2' are enabled while the other ones stay disabled. 
-* t2: the current step is 'Step2' and it has been validated. The step 'Step1' becomes now Skipped because a further step is validated. As for t1, the further steps are enabled until the first mandatory one ('Step3').
-* t3: The step 'Step3' is now validated, thus the two last ones are enabled.
+* State 00: The process has just been launched. Only the first step is enabled because in any case, it is mandatory,
+* State 1: The user has validated the first step. All further steps could then be enabled until the first mandatory one (which is 'Step2'). Thus, the steps 'Step1' and 'Step2' are enabled while the other ones stay disabled. 
+* State 2: the current step is 'Step2' and it has been validated. The step 'Step1' becomes now Skipped because a further step is validated. As for t1, the further steps are enabled until the first mandatory one ('Step3').
+* State 3: The step 'Step3' is now validated, thus the two last ones are enabled.
 
 
 
 ### Resetting a step
 
-The button `Reset` is used to reset the current step. Obviously, Reseting steps after the last validated one has no effect on the workflow.
+At this lower level of navigation (process), The button `Reset` is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.
 
 Rules of reseting:
 
-* 
+  * The current step becomes the first one,
+  * The output dataset is deleted (set to NULL),
+  * All steps are disabled but the first one,
+  * The widgets of all disabled states are set to their default value.
 
 Example
 Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.
 
-## The first step (description)
+## First step (description)
 
 It contains the description of the process and its different steps.
 If an object has been sent to the process server, then the `Load` button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.
@@ -159,11 +193,11 @@ If an object has been sent to the process server, then the `Load` button is enab
 ## Data processing steps (mid-steps)
 
 
-## The last step (Save)
+## Last step (Save)
 
 Each step is built on the same basic UI.
 
-# Using Magellan
+
 
 
 Once the process server has been loaded, the UI is opening on the first step of the process. This step is always a Description step which explains the content of the process
@@ -202,19 +236,30 @@ The effect of this action is to enable the steps that can be enabled
 * lorsqu'une étape a été validée, ses widgets gardent leur valeur même si on navigue sur d'autres étapes
 * La validation de la dernière étape entraîne la mise à jour de la variable de sortie du module
 
-### Reset
-
-* Un clic sur le bouton 'Reset' a pour actions de:
-  * remettre le curseur sur l'étape 1
-  * Supprimer le dataset de sortie
-  * Désactiver toutes les étapes sauf la première
-  * Les widgets des étapes désactivées reprennent leur valeur par défaut
   
-### Remote commands
 
- * Le remoteReset a les mêmes effets que le Reset local
  
-## Module Pipeline
+# Complex workflow (pipeline)
+
+This section describes the behaviour of a complex workflow with two levels.
+
+Globally, it respects the rules explained in the section xxx because each level follow the same logics: they only differ with the nature of each of their steps. So, for a general overview of the behaviour, please go to the section xxx.
+
+However, there are some little differences and additional features when orking with two or more levels: the 'remote commands'.
+
+## Remote reset
+
+The 'remote reset' action come with the click on the Reset button on a higher level of workflow. Contrarly to the basic level, it does not reset all the workflow but only the current step. As for the simple workflow, this resets the entire interface by setting widgets to their default values. Moreover, the dataset in this step is emptied.
+Automatically, if there is a dataset ready to sent to this step, it is done.
+
+This action has two effects:
+
+The other effect is that it also resets all the underneath workflow: all its steps are reseted, widgets sets to their default values and it go to its start state.
+
+
+
+* it resets
+
 
 
 

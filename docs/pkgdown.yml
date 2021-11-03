@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   CreatePipeline: CreatePipeline.html
   CreateProcess: CreateProcess.html
+  GetStarted: GetStarted.html
   Magellan: Magellan.html
-last_built: 2021-10-31T04:50Z
+last_built: 2021-11-03T04:06Z
 
