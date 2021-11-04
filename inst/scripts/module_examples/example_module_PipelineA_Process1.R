@@ -81,6 +81,11 @@ mod_PipelineA_Process1_server <- function(id,
     ns <- session$ns
     
     
+    observe({
+      # Check the syntax and functions in the module before running it
+      
+    })
+    
     # Declaration of the variables that will contain the values of the widgets
     # To avoid confusion, the first string is the name of the step while the second is the name
     # of the widget
@@ -207,68 +212,12 @@ mod_PipelineA_Process1_server <- function(id,
     })"
       
       
+      code <- gsub("step.name", name, code)
       code
-      
     }
     
     
     lapply(config$steps, function(x) eval(parse(text = generateValidationBtnCode(x))))
-    
-    
-    
-    # output$validationBtn_Description_ui <- renderUI({
-    #   if (isTRUE(rv$steps.enabled['Description'])  )
-    #     actionButton(ns('btn_validate_Description'),
-    #                  paste0('Start ', config$name),
-    #                  class = btn_success_color)
-    #   else
-    #     shinyjs::disabled(
-    #       actionButton(ns('btn_validate_Description'),
-    #                    paste0('Start ', config$name),
-    #                    class = btn_success_color)
-    #     )
-    # })
-    
-    output$validationBtn_Step1_ui <- renderUI({
-      if (isTRUE(rv$steps.enabled['Step1'])  )
-        actionButton(ns('btn_validate_Step1'),
-                     paste0('Step1 ', config$name),
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns('btn_validate_Step1'),
-                       paste0('Step1 ', config$name),
-                       class = btn_success_color)
-        )
-    })
-    
-    output$validationBtn_Step2_ui <- renderUI({
-      if (isTRUE(rv$steps.enabled['Step2'])  )
-        actionButton(ns('btn_validate_Step2'),
-                     paste0('Step2 ', config$name),
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns('btn_validate_Step2'),
-                       paste0('Step2 ', config$name),
-                       class = btn_success_color)
-        )
-    })
-    
-    output$validationBtn_Step3_ui <- renderUI({
-      if (isTRUE(rv$steps.enabled['Step3'])  )
-        actionButton(ns('btn_validate_Step3'),
-                     paste0('Step3 ', config$name),
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns('btn_validate_Step3'),
-                       paste0('Step3 ', config$name),
-                       class = btn_success_color)
-        )
-    })
-    
-    
     
     
     ##-------------------------------------------------------------------
@@ -282,6 +231,8 @@ mod_PipelineA_Process1_server <- function(id,
       tagList(
         includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
         uiOutput(ns('datasetDescription')),
+        
+        # Insert validation button
         uiOutput(ns('validationBtn_Description_ui'))
       )
     })
@@ -371,6 +322,7 @@ mod_PipelineA_Process1_server <- function(id,
                                           width = '150px')
                             )
                       ),
+                      # Insert validation button
                       div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                           uiOutput(ns('validationBtn_Step1_ui'))
                       )
@@ -441,6 +393,7 @@ mod_PipelineA_Process1_server <- function(id,
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
                   uiOutput(ns('Step2_2_ui'))
               ),
+              # Insert validation button
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   uiOutput(ns('validationBtn_Step2_ui'))
               )
@@ -462,6 +415,7 @@ mod_PipelineA_Process1_server <- function(id,
       rv$steps.enabled
       tagList(
         h3('Step 3'),
+        # Insert validation button
         uiOutput(ns('validationBtn_Step3_ui'))
       )
       
