@@ -52,6 +52,73 @@ CheckConfig <- function(config){
 
 
 
+#' @title Clean source code before syntax analysis
+#' xxx
+#' 
+#' @description xxx
+#' 
+#' Check if the rv$config is correct
+#'
+#' @param source A vector in which each element is a line read from source code file
+#' 
+#' @return NA
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' conf <- list(parent = "pipeline",
+#' name = "process",
+#' steps = c('Description', "Step 1", "Step 2", "Save"),
+#' mandatory = c(TRUE, TRUE, FALSE, TRUE)
+#' )
+#' 
+#' 
+CleanSourceCode <- function(source = NULL){
+  
+  #toto <- readLines(f)
+  
+  source1  <- unlist(lapply(source, function(x) gsub(" ", "", x) ))
+  
+  
+  # Remove empty lines
+  source2 <- source1[-which(source1=="")]
+  
+  # Remove comments lines
+  res <- which(unlist(lapply(source2, function(x) unlist(gregexpr("#", x))[1]==1)))
+  
+  source3 <- source2[-res]
+  
+  
+  # Remove white spaces
+  source1  <- unlist(lapply(source, function(x) gsub(" ", "", x) ))
+  
+  # Replace " by '
+  source1  <- unlist(lapply(source1, function(x) gsub("\"", "'", x) ))
+  
+  # Remove empty lines
+  source2 <- source1[-which(source1=="")]
+  
+  # Remove comments lines
+  res <- which(unlist(lapply(source2, function(x) unlist(gregexpr("#", x))[1]==1)))
+  source3 <- source2[-res]
+  
+  # Concatenate in one vector
+  source4 <- paste0(source3, collapse = "")
+  
+  
+  
+}
+
+
+
+
+
+GetConfigCode <- function(source){
+  
+  
+  
+  return(config)
+}
+
 #' @title Check source code of a module process
 #' 
 #' @description Check if the source code of a process module is correct

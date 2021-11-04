@@ -23,7 +23,8 @@ xxx
 xxxx
 }
 \examples{
-f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", package="Magellan")
+f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", 
+package="Magellan")
 CheckProcessCode(f)
 
 }

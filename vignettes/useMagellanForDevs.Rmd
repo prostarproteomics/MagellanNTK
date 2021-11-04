@@ -1,0 +1,69 @@
+---
+title: "Use Magellan with external R package"
+subtitle: "A developer's guideline"
+author: "Samuel Wieczorek"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  BiocStyle::html_document:
+  toc: true
+number_sections: true
+theme: united
+keep_md: true
+papersize: a4
+vignette: >
+  %\VignetteIndexEntry{Use Magellan with external R package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      collapse = TRUE,
+                      comment = "#>")
+```
+
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+
+
+# Intro
+
+
+The package `Magellan` implements a workflow manager which is generic at two points of view
+
+First, it is suitable for objects of type list for which the fundamentla requirments are: 
+
+* A list of items
+* Each item is named and can be accessed either by its name or index
+* The exists an 'append' function and a 'Remove' function. The first one adds an additionnal item at the end of the list (append function). The last one can remove any of the item in the list (even with a range)
+We hope that the source code of modules in `Magellan` is sufficient to understand how it is structured. We give here several additional tips for a better understanding.
+
+
+## External R package with modules
+
+`Magellan` cannot be run alone, it is always run with a package which contains the informations about the steps to manage.
+
+## Requirments
+
+This package must have xxx.
+Two other articles are available that explain how to write a module for simple and composed workflows.
+
+
+# Specific functions to write
+
+Whether the class of the object, it may be necessary to write the code for two functions that cannot be generic
+
+* An append function named Add_Datasets_to_Object()
+* A remove function named Keep_Datasets_from_Object()
+
+Those functions must be part of the external package to avoid too many dependancies for the package `Magellan`.
+
+The developer of shiny modules that will use `Magellan` can find in  an exmaple of those functions that are implemented for the type `list` and for examples purpose.
+
+# Simple workflow
+
+
+# Composed workflow

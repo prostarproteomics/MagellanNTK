@@ -34,6 +34,9 @@ This vignette explains how to create a new process in the `Magellan` framework. 
 
 We hope that the source code is well documented but we think it is a good idea to start with this article. Normally, there is no need to go deep in the source code to write your own process.
 
+
+The code of a module for `Magellan` is structured so as to have very few functions to write and develop your own module.
+
 Examples of processes are in the inst/scripts directory. This tutorial aims to explain step-by-step the construction of the process
 
 As a process in `Magellan` is a shiny module, it comes with two functions ui() and server().
@@ -73,6 +76,11 @@ mod_PipelineA_Process3_server <- function(id,
 ){
   
  # Put here static code that is not affected by the reactive programming
+  widgets.default.values <- list()
+  config <- list(name = NULL,
+                 parent = NULL,
+                 seps = NULL,
+                 mandatory = NULL)
 
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -80,6 +88,43 @@ mod_PipelineA_Process3_server <- function(id,
     
     # ----- DO NOT MODIFY THIS PART  ---
     # Definition of reactive variables and observers
+    rv.widgets <- reactiveValues()
+    # Reactive values during the run of the process
+    rv <- reactiveValues(
+      # Stores the object given in input of the process
+      dataIn = NULL,
+      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
+      steps.status = NULL,
+      # xxx
+      reset = NULL,
+      
+      # A vector of boolean indicating if the steps are enabled or disabled
+      steps.enabled = NULL
+    )
+    
+    dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL
+    )
+    
+    
+    # Initialization of the module
+    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+      if (is.null(steps.enabled()))
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
+                                     rv$config$steps)
+      else
+        rv$steps.enabled <- steps.enabled()
+    })
+    
+    # Set all the widgets to their default value after the remote Reset()
+    observeEvent(remoteReset(), {
+      lapply(names(rv.widgets), function(x){
+        rv.widgets[[x]] <- widgets.default.values[[x]]
+      })
+    })
+    
+    
     # ----- END OF DO NOT MODIFY THIS PART ---
     
     # Definition of the ui for each steps
@@ -107,7 +152,7 @@ corresponding output variable,
 indicates is the pipeline has been reseted by a program of higher level
 Basically, it is the program which has called this module.
 
-The last three parameters are reactive because they are frequently updated during the execution of `Magellan`.
+Note: The last three parameters are reactive because they are frequently updated during the execution of `Magellan`.
 
 The function `mod_PipelineA_Process3_server()` is the high-level function which acts as a wrapper for the server function. In this part, on store the definition of non-reactive variables (like global static variables).
 In a process, one can find:

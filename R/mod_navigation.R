@@ -822,7 +822,10 @@ mod_navigation_server <- function(id,
   
    
   InitProcessServer <- function(){
-    #Call the module server of the process
+   
+    rv$current.pos  <- 1
+   
+     #Call the module server of the process
     # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
     # more specifically, the temporary variable
     # The parameter 'steps.enabled' is xxxx
@@ -834,7 +837,9 @@ mod_navigation_server <- function(id,
                                list(id = id,
                                     dataIn = reactive({rv$temp.dataIn}),
                                     steps.enabled = reactive({rv$steps.enabled}),
-                                    remoteReset = reactive({input$rstBtn + remoteReset()}))
+                                    remoteReset = reactive({input$rstBtn + remoteReset()}),
+                                    current.pos = reactive({rv$current.pos})
+                                    )
     )
     
     # Instantiate the local variables
@@ -851,8 +856,7 @@ mod_navigation_server <- function(id,
     
     
     rv$length <- length(rv$config$steps)
-    rv$current.pos  <- 1
-    
+     
     # Get the name of the parent of the process
     # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
     # and the second correspond to the child in the process hierarchy

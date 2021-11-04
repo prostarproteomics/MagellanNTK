@@ -46,9 +46,10 @@ mod_PipelineA_Process1_ui <- function(id){
 mod_PipelineA_Process1_server <- function(id,
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
-                                          remoteReset = reactive({FALSE})
-                                          ){
-
+                                          remoteReset = reactive({FALSE}),
+                                          current.pos = reactive({1})
+){
+  
   # This list contains the basic configuration of the process
   config <- list(
     # Name of the process
@@ -91,6 +92,14 @@ mod_PipelineA_Process1_server <- function(id,
       Step2_select2_2 = widgets.default.values$Step2_select2_2
     )
     
+    # ObserveEvent of the widgets
+    observeEvent(input$select1, {rv.widgets$Step1_select1 <- input$select1})
+    observeEvent(input$select2, {rv.widgets$Step1_select2 <- input$select2})
+    observeEvent(input$select3, {rv.widgets$Step1_select3 <- input$select3})
+    observeEvent(input$select2_1, {rv.widgets$Step2_select1 <- input$select2_1})
+    observeEvent(input$select2_2, {rv.widgets$Step2_select2 <- input$select2_2})
+    
+    
     
     # Reactive values during the run of the process
     rv <- reactiveValues(
@@ -131,29 +140,41 @@ mod_PipelineA_Process1_server <- function(id,
         rv.widgets[[x]] <- widgets.default.values[[x]]
       })
     })
+    
+    
+    
+    #-----------------------------------------------------
 
-    
+   # Observer for the validation buttons of all steps
+    observeEvent(lapply(config$steps, function(x) input[[paste0('btn_validate_', x)]]),
+                 ignoreInit = TRUE,
+                 ignoreNULL = TRUE,
+                 {
+                   test <- lapply(config$steps, function(x) input[[paste0('btn_validate_', x)]])
+                   if( sum(unlist(test)) != 1)
+                     return()
+                   
+                   if (current.pos() == length(config$steps)){
+                     rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                                         dataset = rnorm(1:5),
+                                                         name = config$name)
+                     }
+                   
+                   if (current.pos() == 1 ){
+                     rv$dataIn <- dataIn()
+                   }
+                   
+                   dataOut$trigger <- Magellan::Timestamp()
+                   dataOut$value <- rv$dataIn
+                   rv$steps.status[current.pos()] <- global$VALIDATED
+                   })
     
 
-
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
-    output$Description <- renderUI({
-      tagList(
-          includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
-          uiOutput(ns('datasetDescription')),
-          uiOutput(ns('validationBtn_ui'))
-        )
-    })
+## ----------------------------------
+    # Buttons must be explicitly enabled/disabled with a full code
+    # Otherwise, they do not disable
     
-    
-    observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
-      rv$dataIn <- dataIn()
-      rv$steps.status['Description'] <- global$VALIDATED
-      dataOut$trigger <- Magellan::Timestamp()
-      dataOut$value <- rv$dataIn
-    })
-    
-    output$validationBtn_ui <- renderUI({
+    toto <- "output$validationBtn_Description_ui <- renderUI({
       if (isTRUE(rv$steps.enabled['Description'])  )
         actionButton(ns('btn_validate_Description'),
                      paste0('Start ', config$name),
@@ -164,20 +185,112 @@ mod_PipelineA_Process1_server <- function(id,
                        paste0('Start ', config$name),
                        class = btn_success_color)
         )
+    })"
+    
+    generateValidationBtnCode <- function(name){
+      
+      label <- 'Perform'
+      if (name == 'Description')
+        label <- 'Start'
+      
+      code <- "output$validationBtn_step.name_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['step.name'])  )
+        actionButton(ns('btn_validate_step.name'),
+                     paste0('Start ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_step.name'),
+                       paste0('Start ', config$name),
+                       class = btn_success_color)
+        )
+    })"
+      
+      
+      code
+      
+    }
+    
+    
+    lapply(config$steps, function(x) eval(parse(text = generateValidationBtnCode(x))))
+    
+    
+    
+    # output$validationBtn_Description_ui <- renderUI({
+    #   if (isTRUE(rv$steps.enabled['Description'])  )
+    #     actionButton(ns('btn_validate_Description'),
+    #                  paste0('Start ', config$name),
+    #                  class = btn_success_color)
+    #   else
+    #     shinyjs::disabled(
+    #       actionButton(ns('btn_validate_Description'),
+    #                    paste0('Start ', config$name),
+    #                    class = btn_success_color)
+    #     )
+    # })
+    
+    output$validationBtn_Step1_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['Step1'])  )
+        actionButton(ns('btn_validate_Step1'),
+                     paste0('Step1 ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_Step1'),
+                       paste0('Step1 ', config$name),
+                       class = btn_success_color)
+        )
     })
     
+    output$validationBtn_Step2_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['Step2'])  )
+        actionButton(ns('btn_validate_Step2'),
+                     paste0('Step2 ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_Step2'),
+                       paste0('Step2 ', config$name),
+                       class = btn_success_color)
+        )
+    })
+    
+    output$validationBtn_Step3_ui <- renderUI({
+      if (isTRUE(rv$steps.enabled['Step3'])  )
+        actionButton(ns('btn_validate_Step3'),
+                     paste0('Step3 ', config$name),
+                     class = btn_success_color)
+      else
+        shinyjs::disabled(
+          actionButton(ns('btn_validate_Step3'),
+                       paste0('Step3 ', config$name),
+                       class = btn_success_color)
+        )
+    })
+    
+    
+    
+    
+    ##-------------------------------------------------------------------
+    
+    
+    
+    
+    
+    ###### ------------------- Code for Description (step 0) -------------------------    #####
+    output$Description <- renderUI({
+      tagList(
+        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
+        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('validationBtn_Description_ui'))
+      )
+    })
+    
+    
+    
+    
+    
     ###### ------------------- Code for step 1 -------------------------    #####
-    
-    
-    # ObserveEvent of the widgets
-    observeEvent(input$select1, {rv.widgets$Step1_select1 <- input$select1})
-    observeEvent(input$select2, {rv.widgets$Step1_select2 <- input$select2})
-    observeEvent(input$select3, {rv.widgets$Step1_select3 <- input$select3})
-    observeEvent(input$select2_1, {rv.widgets$Step2_select1 <- input$select2_1})
-    observeEvent(input$select2_2, {rv.widgets$Step2_select2 <- input$select2_2})
-    
-    
-    
     
     output$test1 <-renderUI({
       #rv$steps.enabled
@@ -217,8 +330,6 @@ mod_PipelineA_Process1_server <- function(id,
       
     })
     
-    # Buttons must be explicitly enabled/disabled with a full code
-    # Otherwise, they do not disable
     output$btn1_ui <- renderUI({
       if (rv$steps.enabled['Step1'])
         actionButton(ns('btn1'),
@@ -261,16 +372,7 @@ mod_PipelineA_Process1_server <- function(id,
                             )
                       ),
                       div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          if (rv$steps.enabled['Step1'])
-                            actionButton(ns(paste0('btn_validate_', name)),
-                                         'Perform',
-                                         class = btn_success_color)
-                          else
-                            shinyjs::disabled(
-                              actionButton(ns(paste0('btn_validate_', name)),
-                                           'Perform',
-                                           class = btn_success_color)
-                            )
+                          uiOutput(ns('validationBtn_Step1_ui'))
                       )
                   )
                 ),
@@ -286,14 +388,7 @@ mod_PipelineA_Process1_server <- function(id,
       plot(as.matrix(dataIn()[[1]]))
     })
     
-    observeEvent(input$btn_validate_Step1, ignoreInit = TRUE, {
-      # Add your stuff code here
-      # dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
-      # dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
-      dataOut$trigger <- Magellan::Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- global$VALIDATED
-    })
+    
     
     #-------------------------- Code for step 2 ------------------------------
     
@@ -347,16 +442,7 @@ mod_PipelineA_Process1_server <- function(id,
                   uiOutput(ns('Step2_2_ui'))
               ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  if (rv$steps.enabled['Step2'])
-                    actionButton(ns(paste0('btn_validate_', name)),
-                                 'Perform',
-                                 class = btn_success_color)
-                  else
-                    shinyjs::disabled(
-                      actionButton(ns(paste0('btn_validate_', name)),
-                                   'Perform',
-                                   class = btn_success_color)
-                    )
+                  uiOutput(ns('validationBtn_Step2_ui'))
               )
           )
         )
@@ -367,16 +453,7 @@ mod_PipelineA_Process1_server <- function(id,
       
     })
     
-    observeEvent(input$btn_validate_Step2, ignoreInit = TRUE, {
-      # Add your stuff code here
-      #dataOut$trigger <- Send_Result_to_Caller(rv$dataIn)$trigger
-      #dataOut$value <- Send_Result_to_Caller(rv$dataIn)$value
-      
-      dataOut$trigger <- Magellan::Timestamp()
-      dataOut$value <- rv$dataIn
-      
-      #rv$steps.status['Step2'] <- global$VALIDATED
-    })
+    
     
     
     #------------- Code for step 3 ---------------
@@ -385,33 +462,13 @@ mod_PipelineA_Process1_server <- function(id,
       rv$steps.enabled
       tagList(
         h3('Step 3'),
-        if (rv$steps.enabled['Step3'])
-          actionButton(ns('btn_validate_Step3'),
-                       'Perform',
-                       class = btn_success_color)
-        else
-          shinyjs::disabled(
-            actionButton(ns('btn_validate_Step3'),
-                         'Perform',
-                         class = btn_success_color)
-          )
+        uiOutput(ns('validationBtn_Step3_ui'))
       )
       
       
     })
     
-    observeEvent(input$btn_validate_Step3, ignoreInit = TRUE, {
-      # Add your stuff code here
 
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn, 
-                                          dataset = rnorm(1:5),
-                                          name = config$name)
-      dataOut$trigger <- Magellan::Timestamp()
-      dataOut$value <- rv$dataIn
-      
-       rv$steps.status['Step3'] <- global$VALIDATED
-    })
-    
     
     
     
@@ -429,7 +486,7 @@ mod_PipelineA_Process1_server <- function(id,
     dataOut = reactive({dataOut})
     #steps.status = reactive({rv$steps.status})
     )
-
+    
   }
   )
 }

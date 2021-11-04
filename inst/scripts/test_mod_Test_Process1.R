@@ -45,7 +45,7 @@ mod_test_navigation_process_ui <- function(id){
 mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-     
+    
     data(feat1, package='Magellan')
     rv <- reactiveValues(
       dataIn = feat1,
@@ -60,7 +60,7 @@ mod_test_navigation_process_server <- function(id){
                                           remoteReset = reactive({input$simReset}),
                                           is.skipped = reactive({input$simSkipped%%2 != 0}),
                                           is.enabled = reactive({input$simEnabled%%2 == 0})
-                                          )
+      )
       
       
       observeEvent(rv$dataOut$dataOut()$trigger, {
@@ -113,6 +113,3 @@ server <- function(input, output){
 }
 shinyApp(ui, server)
 
-
-# shinyApp(ui = mod_test_process_ui('test_mod_process'),
-#          server = mod_test_process_server('test_mod_process'))

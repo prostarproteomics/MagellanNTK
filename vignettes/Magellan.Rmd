@@ -34,7 +34,60 @@ This tutorial concerns the use of `Magellan` at a end-user level. It briefly exp
 
 # Overview
 
-`Magellan` is a workflow manager which can handle processes with different steps. It works on objects of type `list`.
+`Magellan` is a workflow manager which can handle processes with a series of steps. It works on objects of type `list`.
+
+
+## Magellan and modules of process
+
+
+The package `Magellan` does not contain any module of process. It contains only the modules which allow to navigate between steps of a process.
+
+Thus, to use `Magellan`, it is necessary to use another package which provides Magellan-compliant modules (or write your own modules)
+
+For starting Magellan, it is necessary to provides some parameters that are the steps configuration (containing some textual informations and the UIs for each steps)
+
+
+```{r launchMagellan, echo=TRUE, eval=FALSE}
+library(Magellan)
+
+f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", package="Magellan")
+source(file(f), local=TRUE)$value
+
+ui <- fluidPage(
+  mod_navigation_ui('PipelineA_Process1')
+)
+
+
+server <- function(input, output){
+  data(feat1, package='Magellan')
+  rv <- reactiveValues(
+    dataIn = feat1,
+    dataOut = NULL
+  )
+  
+  observe({
+    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+                                        nav.mode = 'process',
+                                        dataIn = reactive({rv$dataIn})
+                                        )
+    }, priority=1000)
+}
+
+
+shinyApp(ui, server)
+```
+
+
+## Launch a `Magellan` workflow
+
+As `Magellan` consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework.
+This app does not to be complex but is is used for its ui() and server() functions.
+
+`Magellan` is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.
+
+
+
+A module using ``
 
 The simple level is a process, defined with its steps; each of these steps realize some computation on the object.
 The input of the step n correspond to the output of the step `n-1` and the output of the step `n` will be the input for the step `n+1`.
@@ -50,11 +103,11 @@ Contrary to the workflows of higher level, each step of a process does not affec
 
 
 
-# GUI
+# User interface of a workflow
 
 ## Overview
 
-The graphical interface for the low level of Magellan is divided into two main parts:
+The userr interface for the low level of Magellan is divided into two main parts:
 
 * The navigation bar which contains four items:
   * A previous button to go back in the steps of the process,
