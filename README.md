@@ -10,3 +10,11 @@ Magellan is a R package which proposes a framework to navigate between steps of 
 For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finaly the last one. It is like a dataflow manager.
 
 Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e.e a pipeline) in which each step is a whole process containing itself several steps.
+
+
+# List of articles
+
+* In the menu 'Get started', xxxx
+* 'Articles > Create a pipeline': for developers
+* 'Articles > Create a process': for developers
+* 

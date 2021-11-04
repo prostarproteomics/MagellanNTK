@@ -1,5 +1,5 @@
 ---
-title: "Add a new pipeline"
+title: "Create a composed workflow"
 subtitle: "A developer's guidelines"
 author: "Samuel Wieczorek"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
@@ -10,7 +10,7 @@ output:
     keep_md: true
     papersize: a4
 vignette: >
-  %\VignetteIndexEntry{Create a new pipeline}
+  %\VignetteIndexEntry{Create a composed workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

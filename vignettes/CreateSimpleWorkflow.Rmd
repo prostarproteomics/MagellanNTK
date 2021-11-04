@@ -1,5 +1,5 @@
 ---
-title: "Create a new process"
+title: "Create a simple workflow"
 subtitle: "A developer's guidelines"
 author: "Samuel Wieczorek"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
@@ -10,7 +10,7 @@ theme: united
 keep_md: true
 papersize: a4
 vignette: >
-  %\VignetteIndexEntry{Create a new process}
+  %\VignetteIndexEntry{Create a simple workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -31,6 +31,8 @@ knitr::opts_chunk$set(echo = TRUE,
 # Introduction
 
 This vignette explains how to create a new process in the `Magellan` framework. A process is a set of data processes applied to a dataset (ie an object of class QFeatures).
+
+We hope that the source code is well documented but we think it is a good idea to start with this article. Normally, there is no need to go deep in the source code to write your own process.
 
 Examples of processes are in the inst/scripts directory. This tutorial aims to explain step-by-step the construction of the process
 
