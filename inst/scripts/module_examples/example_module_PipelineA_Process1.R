@@ -235,11 +235,12 @@ mod_PipelineA_Process1_server <- function(id,
     
     ###### ------------------- Code for step 1 -------------------------    #####
     
-    output$test1 <-renderUI({
-      #rv$steps.enabled
-      rv.widgets$select1
-      if (rv$steps.enabled['Step1'])
-        selectInput(ns('Step1_select1'), 'Select 1 in renderUI',
+    output$Step1_select1_ui <-renderUI({
+      rv$steps.enabled
+      rv.widgets$Step1_select1
+       if (rv$steps.enabled['Step1'])
+        selectInput(ns('Step1_select1'), 
+                    'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step1_select1,
                     width = '150px')
@@ -250,11 +251,12 @@ mod_PipelineA_Process1_server <- function(id,
                       selected = rv.widgets$Step1_select1,
                       width = '150px')
         )
+
     })
     
     
     
-    output$test2 <-renderUI({
+    output$Step1_select2_ui <-renderUI({
       
       rv$steps.enabled
       if (rv$steps.enabled['Step1'])
@@ -273,7 +275,7 @@ mod_PipelineA_Process1_server <- function(id,
       
     })
     
-    output$btn1_ui <- renderUI({
+    output$Step1_btn1_ui <- renderUI({
       if (rv$steps.enabled['Step1'])
         actionButton(ns('Step1_btn1'),
                      'Step1_btn1',
@@ -289,14 +291,14 @@ mod_PipelineA_Process1_server <- function(id,
     # ------------------------ STEP 1 : UI ------------------------------------
     output$Step1 <- renderUI({
       wellPanel(
-        uiOutput(ns('btn1_ui')),
+        uiOutput(ns('Step1_btn1_ui')),
         tagList(
-          div(id=ns('Step1a'),
-              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  uiOutput(ns('test1'))
+          div(
+            div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+                  uiOutput(ns('Step1_select1_ui'))
                   ),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  uiOutput(ns('test2'))
+                  uiOutput(ns('Step1_select2_ui'))
                   ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
                   if (rv$steps.enabled['Step1'])
@@ -373,8 +375,8 @@ mod_PipelineA_Process1_server <- function(id,
       rv$steps.enabled
       wellPanel(
         tagList(
-          div(id = ns('Step2'),
-              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+          div(
+            div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
                   uiOutput(ns('Step2_select1_ui'))
               ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
@@ -387,11 +389,7 @@ mod_PipelineA_Process1_server <- function(id,
           )
         )
       )
-      
-      
-      
-      
-    })
+      })
     
     
     
