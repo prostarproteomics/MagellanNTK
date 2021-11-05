@@ -67,8 +67,8 @@ mod_PipelineA_Process1_server <- function(id,
     Step1_select1 = 1,
     Step1_select2 = NULL,
     Step1_select3 = 1,
-    Step2_select2_1 = 1,
-    Step2_select2_2 = 1
+    Step2_select1 = 1,
+    Step2_select2 = 1
   )
   
   
@@ -93,17 +93,23 @@ mod_PipelineA_Process1_server <- function(id,
       Step1_select1 = widgets.default.values$Step1_select1,
       Step1_select2 = widgets.default.values$Step1_select2,
       Step1_select3 = widgets.default.values$Step1_select3,
-      Step2_select2_1 = widgets.default.values$Step2_select2_1,
-      Step2_select2_2 = widgets.default.values$Step2_select2_2
+      Step2_select1 = widgets.default.values$Step2_select2,
+      Step2_select2 = widgets.default.values$Step2_select2
     )
     
     # ObserveEvent of the widgets
-    observeEvent(input$select1, {rv.widgets$Step1_select1 <- input$select1})
-    observeEvent(input$select2, {rv.widgets$Step1_select2 <- input$select2})
-    observeEvent(input$select3, {rv.widgets$Step1_select3 <- input$select3})
-    observeEvent(input$select2_1, {rv.widgets$Step2_select1 <- input$select2_1})
-    observeEvent(input$select2_2, {rv.widgets$Step2_select2 <- input$select2_2})
+    # observeEvent(input$select1, {rv.widgets$Step1_select1 <- input$select1})
+    # observeEvent(input$select2, {rv.widgets$Step1_select2 <- input$select2})
+    # observeEvent(input$select3, {rv.widgets$Step1_select3 <- input$select3})
+    # observeEvent(input$select2_1, {rv.widgets$Step2_select1 <- input$select2_1})
+    # observeEvent(input$select2_2, {rv.widgets$Step2_select2 <- input$select2_2})
     
+    # Generate dynamically the observeEvent function for each widget
+    basis.fun.txt <- "observeEvent(input$widget.name, {rv.widgets$widget.name <- input$widget.name})"
+    lapply(names(widgets.default.values), 
+           function(x) 
+             eval(parse(text = gsub('widget.name', x, basis.fun.txt)))
+           )
     
     
     # Reactive values during the run of the process
@@ -114,16 +120,16 @@ mod_PipelineA_Process1_server <- function(id,
       steps.status = NULL,
       # xxx
       reset = NULL,
-      
       # A vector of boolean indicating if the steps are enabled or disabled
       steps.enabled = NULL
     )
     
     
     # Returned value of the process
-    # * The trigger variable is used to trigger an event that can be catched by the 
-    #   Shiny functions observe() and observeEvent()
-    # * The value variable contains the object to return to the instance that has called the process.
+    # * The trigger variable is used to trigger an event that can be catched by 
+    # the Shiny functions observe() and observeEvent()
+    # * The value variable contains the object to return to the instance that 
+    # has called the process.
     dataOut <- reactiveValues(
       trigger = NULL,
       value = NULL
@@ -179,19 +185,6 @@ mod_PipelineA_Process1_server <- function(id,
     # Buttons must be explicitly enabled/disabled with a full code
     # Otherwise, they do not disable
     
-    toto <- "output$validationBtn_Description_ui <- renderUI({
-      if (isTRUE(rv$steps.enabled['Description'])  )
-        actionButton(ns('btn_validate_Description'),
-                     paste0('Start ', config$name),
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns('btn_validate_Description'),
-                       paste0('Start ', config$name),
-                       class = btn_success_color)
-        )
-    })"
-    
     generateValidationBtnCode <- function(name){
       
       label <- 'Perform'
@@ -215,7 +208,6 @@ mod_PipelineA_Process1_server <- function(id,
       code <- gsub("step.name", name, code)
       code
     }
-    
     
     lapply(config$steps, function(x) eval(parse(text = generateValidationBtnCode(x))))
     
@@ -247,13 +239,13 @@ mod_PipelineA_Process1_server <- function(id,
       #rv$steps.enabled
       rv.widgets$select1
       if (rv$steps.enabled['Step1'])
-        selectInput(ns('select1'), 'Select 1 in renderUI',
+        selectInput(ns('Step1_select1'), 'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step1_select1,
                     width = '150px')
       else
         shinyjs::disabled(
-          selectInput(ns('select1'), 'Select 1 in renderUI',
+          selectInput(ns('Step1_select1'), 'Select 1 in renderUI',
                       choices = 1:4,
                       selected = rv.widgets$Step1_select1,
                       width = '150px')
@@ -266,13 +258,13 @@ mod_PipelineA_Process1_server <- function(id,
       
       rv$steps.enabled
       if (rv$steps.enabled['Step1'])
-        selectInput(ns('select2'), 'Select 2 in renderUI',
+        selectInput(ns('Step1_select2'), 'Select 2 in renderUI',
                     choices = 1:3,
                     selected = rv.widgets$Step1_select2,
                     width = '150px')
       else
         shinyjs::disabled(
-          selectInput(ns('select2'), 'Select 2 in renderUI',
+          selectInput(ns('Step1_select2'), 'Select 2 in renderUI',
                       choices = 1:4,
                       selected = rv.widgets$Step1_select2,
                       width = '150px')
@@ -283,57 +275,52 @@ mod_PipelineA_Process1_server <- function(id,
     
     output$btn1_ui <- renderUI({
       if (rv$steps.enabled['Step1'])
-        actionButton(ns('btn1'),
-                     'btn1',
+        actionButton(ns('Step1_btn1'),
+                     'Step1_btn1',
                      class = btn_success_color)
       else
         shinyjs::disabled(
-          actionButton(ns('btn1'),
-                       'btn1',
+          actionButton(ns('Step1_btn1'),
+                       'Step1_btn1',
                        class = btn_success_color)
         )
     })
     
     # ------------------------ STEP 1 : UI ------------------------------------
     output$Step1 <- renderUI({
-      name <- 'Step1'
-      wellPanel(id = ns('toto'),
-                uiOutput(ns('btn1_ui')),
-                
-                tagList(
-                  div(id=ns('Step1a'),
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          uiOutput(ns('test1'))
-                      ),
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          uiOutput(ns('test2'))
-                      ),
-                      div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                          if (rv$steps.enabled['Step1'])
-                            selectInput(ns('select3'), 'Select step 3',
-                                        choices = 1:3,
-                                        selected = rv.widgets$Step1_select3,
-                                        width = '150px')
-                          else
-                            shinyjs::disabled(
-                              selectInput(ns('select3'), 'Select step 3',
-                                          choices = 1:5,
-                                          selected = rv.widgets$Step1_select3,
-                                          width = '150px')
-                            )
-                      ),
-                      # Insert validation button
-                      div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                          uiOutput(ns('validationBtn_Step1_ui'))
+      wellPanel(
+        uiOutput(ns('btn1_ui')),
+        tagList(
+          div(id=ns('Step1a'),
+              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+                  uiOutput(ns('test1'))
+                  ),
+              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+                  uiOutput(ns('test2'))
+                  ),
+              div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
+                  if (rv$steps.enabled['Step1'])
+                    selectInput(ns('Step1_select3'), 'Step1_select3 in UI',
+                                choices = 1:3,
+                                selected = rv.widgets$Step1_select3,
+                                width = '150px')
+                  else
+                    shinyjs::disabled(
+                      selectInput(ns('Step1_select3'), 'Step1_select3 in UI',
+                                  choices = 1:5,
+                                  selected = rv.widgets$Step1_select3,
+                                  width = '150px')
                       )
+                  ),
+              # Insert validation button
+              div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
+                  uiOutput(ns('validationBtn_Step1_ui'))
                   )
-                ),
-                plotOutput(ns('showPlot'))
-      )
-      
-      
-      
-    })
+              )
+          ),
+        plotOutput(ns('showPlot'))
+        )
+      })
     
     
     output$showPlot <- renderPlot({
@@ -346,16 +333,16 @@ mod_PipelineA_Process1_server <- function(id,
     
     
     
-    output$select2_1_UI <-renderUI({
+    output$Step2_select1_ui <-renderUI({
       rv$steps.enabled
       if (rv$steps.enabled['Step2'])
-        selectInput(ns('select2_1'), 'Select 2_1 in renderUI',
+        selectInput(ns('Step2_select1'), 'Step2_select1 in renderUI',
                     choices = 1:3,
                     selected = rv.widgets$Step2_select1,
                     width = '150px')
       else
         shinyjs::disabled(
-          selectInput(ns('select2_1'), 'Select 2_1 in renderUI',
+          selectInput(ns('Step2_select1'), 'Step2_select1 in renderUI',
                       choices = 1:3,
                       selected = rv.widgets$Step2_select1,
                       width = '150px')
@@ -364,18 +351,19 @@ mod_PipelineA_Process1_server <- function(id,
     })
     
     
-    output$Step2_2_ui <- renderUI({
+    output$Step2_select2_ui <- renderUI({
       if (rv$steps.enabled['Step2'])
-        selectInput(ns('select2_2'), 'Select 2_2',
+        selectInput(ns('Step2_select2'), 
+                    'Step2_Select2_2',
                     choices = 1:5,
-                    selected = rv.widgets$Step2_select1,
+                    selected = rv.widgets$Step2_select2,
                     width = '150px')
       else
         shinyjs::disabled(
-          selectInput(ns('select2_2'),
-                      'Select 2_2',
+          selectInput(ns('Step2_select2_2'),
+                      'Step2_Select2',
                       choices = 1:5,
-                      selected = rv.widgets$Step2_select1,
+                      selected = rv.widgets$Step2_select2,
                       width = '150px')
         )
     })
@@ -383,15 +371,14 @@ mod_PipelineA_Process1_server <- function(id,
     
     output$Step2 <- renderUI({
       rv$steps.enabled
-      name <- 'Step2'
       wellPanel(
         tagList(
-          div(id=ns(name),
+          div(id = ns('Step2'),
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",
-                  uiOutput(ns('select2_1_UI'))
+                  uiOutput(ns('Step2_select1_ui'))
               ),
               div(style="display:inline-block; vertical-align: middle; padding-right: 40px;",
-                  uiOutput(ns('Step2_2_ui'))
+                  uiOutput(ns('Step2_select2_ui'))
               ),
               # Insert validation button
               div(style="display:inline-block; vertical-align: middle;padding-right: 20px;",

@@ -29,6 +29,11 @@ BiocStyle::markdown()
 
 
 
+
+# Naming conventions
+
+
+
 # Intro
 
 
@@ -40,6 +45,12 @@ First, it is suitable for objects of type list for which the fundamentla requirm
 * Each item is named and can be accessed either by its name or index
 * The exists an 'append' function and a 'Remove' function. The first one adds an additionnal item at the end of the list (append function). The last one can remove any of the item in the list (even with a range)
 We hope that the source code of modules in `Magellan` is sufficient to understand how it is structured. We give here several additional tips for a better understanding.
+
+
+
+`Magellan` is intimely linked to the data anaysis modules and vice-versa. 
+SO as to facilitate both the developement of a new module and the maintenance,
+we have volontary want to have a quite contraint code and Module template. It guarantees xxx
 
 
 ## External R package with modules

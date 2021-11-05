@@ -28,6 +28,9 @@ knitr::opts_chunk$set(echo = TRUE,
 
 
 
+# Naming conventions
+
+
 # Introduction
 
 This vignette explains how to create a new process in the `Magellan` framework. A process is a set of data processes applied to a dataset (ie an object of class QFeatures).
