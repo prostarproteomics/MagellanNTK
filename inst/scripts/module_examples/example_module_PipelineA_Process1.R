@@ -48,7 +48,7 @@ mod_PipelineA_Process1_server <- function(id,
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE}),
                                           current.pos = reactive({1})
-){
+                                          ){
   
   # This list contains the basic configuration of the process
   config <- list(
@@ -57,9 +57,9 @@ mod_PipelineA_Process1_server <- function(id,
     # Name of the pipeline it belongs to
     parent = 'PipelineA',
     # List of all steps of the process
-    steps = c('Description', 'Step1', 'Step2', 'Step3', 'Step4', 'Save'),
+    steps = c('Description', 'Step1', 'Step2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
+    mandatory = c(TRUE, FALSE, TRUE, TRUE)
   )
   
   # Define default selected values for widgets
@@ -81,11 +81,9 @@ mod_PipelineA_Process1_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    # Insert necessary code which is hosted by Magellan
     eval(parse(text = ModuleCoreCode(widgets = names(widgets.default.values),
-                                     steps = config$steps
-                                     )
-               )
-         )
+                                     steps = config$steps )))
 
 
     ###### ------------------- Code for Description (step 0) -------------------------    #####
@@ -204,31 +202,14 @@ mod_PipelineA_Process1_server <- function(id,
     
     #------------- Code for step 3 ---------------
     
-    output$Step3 <- renderUI({
+    output$Save <- renderUI({
        tagList(
         # Insert validation button
-        uiOutput(ns('Step3_validationBtn_ui'))
+        uiOutput(ns('Save_validationBtn_ui'))
       )
     })
     
-
-    
-    
-    
-    # Return value of module
-    # DO NOT MODIFY THIS PART
-    list(config = reactive({
-      config$ll.UI <- setNames(lapply(config$steps,
-                                      function(x){
-                                        do.call('uiOutput', list(ns(x)))
-                                      }),
-                               paste0('screen_', config$steps)
-      )
-      config
-    }),
-    dataOut = reactive({dataOut})
-    #steps.status = reactive({rv$steps.status})
-    )
+eval(parse(text = Module_Return_Func()))
     
   }
   )

@@ -313,6 +313,43 @@ Generate_RenderUI_Code_For_Single_Widgets <- function(widgets){
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' \dontrun{
+#' code <- Module_Return_Func()
+#' cat(code)
+#' }
+#' 
+Module_Return_Func <- function(){
+  
+  code <- "# Return value of module
+# DO NOT MODIFY THIS PART
+list(config = reactive({
+  config$ll.UI <- setNames(lapply(config$steps,
+                                  function(x){
+                                    do.call('uiOutput', list(ns(x)))
+                                  }),
+                           paste0('screen_', config$steps)
+  )
+  config
+}),
+dataOut = reactive({dataOut})
+#steps.status = reactive({rv$steps.status})
+)
+
+
+"
+
+code
+
+}
+
+#' @title Code for declaring xxx
+#' 
+#' @description This function xxx
+#' # Generate dynamically the observeEvent function for each widget
+#' 
 #' @param widgets xxx
 #' 
 #' @param steps xxx
