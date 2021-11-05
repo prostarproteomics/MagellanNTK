@@ -57,10 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/CreatePipeline.html">Add a new pipeline</a>
+      <a href="../articles/CreateComplexWorkflow.html">Create a composed workflow</a>
     </li>
     <li>
-      <a href="../articles/CreateProcess.html">Create a new process</a>
+      <a href="../articles/CreateSimpleWorkflow.html">Create a simple workflow</a>
+    </li>
+    <li>
+      <a href="../articles/useMagellanForDevs.html">Use Magellan with external R package</a>
     </li>
   </ul>
 </li>
@@ -91,7 +94,7 @@
       <h1 data-toc-skip>Navigate with Magellan</h1>
                         <h4 class="author">Samuel Wieczorek</h4>
             
-            <h4 class="date">novembre 03, 2021</h4>
+            <h4 class="date">novembre 05, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/master/vignettes/Magellan.Rmd"><code>vignettes/Magellan.Rmd</code></a></small>
       <div class="hidden name"><code>Magellan.Rmd</code></div>
@@ -111,10 +114,52 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><div id="overview" class="section level1">
+</script><p>This tutorial concerns the use of <code>Magellan</code> at a end-user level. It briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, if developers want to write their own process modules or just better understand deeply how <code>Magellan</code> works, we advice beginning with this article.</p>
+<div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p><code>Magellan</code> is a workflow manager which can handle processes with different steps. It works on objects of type <code>list</code>.</p>
+<p><code>Magellan</code> is a workflow manager which can handle processes with a series of steps. It works on objects of type <code>list</code>.</p>
+<div id="magellan-and-modules-of-process" class="section level2">
+<h2 class="hasAnchor">
+<a href="#magellan-and-modules-of-process" class="anchor"></a>Magellan and modules of process</h2>
+<p>The package <code>Magellan</code> does not contain any module of process. It contains only the modules which allow to navigate between steps of a process.</p>
+<p>Thus, to use <code>Magellan</code>, it is necessary to use another package which provides Magellan-compliant modules (or write your own modules)</p>
+<p>For starting Magellan, it is necessary to provides some parameters that are the steps configuration (containing some textual informations and the UIs for each steps)</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samWieczorek/Magellan">Magellan</a></span><span class="op">)</span>
+
+<span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"scripts/module_examples"</span>, <span class="st">"example_module_PipelineA_Process1.R"</span>, package<span class="op">=</span><span class="st">"Magellan"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">file</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span>, local<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>
+
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html">fluidPage</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/mod_navigation_ui.html">mod_navigation_ui</a></span><span class="op">(</span><span class="st">'PipelineA_Process1'</span><span class="op">)</span>
+<span class="op">)</span>
+
+
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">feat1</span>, package<span class="op">=</span><span class="st">'Magellan'</span><span class="op">)</span>
+  <span class="va">rv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html">reactiveValues</a></span><span class="op">(</span>
+    dataIn <span class="op">=</span> <span class="va">feat1</span>,
+    dataOut <span class="op">=</span> <span class="cn">NULL</span>
+  <span class="op">)</span>
+  
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observe.html">observe</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="va">rv</span><span class="op">$</span><span class="va">dataOut</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mod_navigation_ui.html">mod_navigation_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">'PipelineA_Process1'</span>,
+                                        nav.mode <span class="op">=</span> <span class="st">'process'</span>,
+                                        dataIn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html">reactive</a></span><span class="op">(</span><span class="op">{</span><span class="va">rv</span><span class="op">$</span><span class="va">dataIn</span><span class="op">}</span><span class="op">)</span>
+                                        <span class="op">)</span>
+    <span class="op">}</span>, priority<span class="op">=</span><span class="fl">1000</span><span class="op">)</span>
+<span class="op">}</span>
+
+
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="launch-a-magellan-workflow" class="section level2">
+<h2 class="hasAnchor">
+<a href="#launch-a-magellan-workflow" class="anchor"></a>Launch a <code>Magellan</code> workflow</h2>
+<p>As <code>Magellan</code> consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework. This app does not to be complex but is is used for its ui() and server() functions.</p>
+<p><code>Magellan</code> is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.</p>
+<p>A module using ``</p>
 <p>The simple level is a process, defined with its steps; each of these steps realize some computation on the object. The input of the step n correspond to the output of the step <code>n-1</code> and the output of the step <code>n</code> will be the input for the step <code>n+1</code>.</p>
 <p>At each step, the input and ouput are the structure than the object given in input of the whole process.</p>
 <p>The process (and all of its steps) work on a specific item of the object (generally, the last one) and generate a new item. The output of the process is then tho object given in input plus the new item, processed by the steps.</p>
@@ -125,13 +170,14 @@ Process overview.
 </div>
 <p>Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another.</p>
 </div>
-<div id="gui" class="section level1">
+</div>
+<div id="user-interface-of-a-workflow" class="section level1">
 <h1 class="hasAnchor">
-<a href="#gui" class="anchor"></a>GUI</h1>
+<a href="#user-interface-of-a-workflow" class="anchor"></a>User interface of a workflow</h1>
 <div id="overview-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview-1" class="anchor"></a>Overview</h2>
-<p>The graphical interface for the low level of Magellan is divided into two main parts:</p>
+<p>The userr interface for the low level of Magellan is divided into two main parts:</p>
 <ul>
 <li>The navigation bar which contains four items:
 <ul>
@@ -212,26 +258,40 @@ Hierarchical strucure principle.
 <p>Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.</p>
 </div>
 </div>
-<div id="basic-workflow-process" class="section level1">
+<div id="simple-workflow" class="section level1">
 <h1 class="hasAnchor">
-<a href="#basic-workflow-process" class="anchor"></a>Basic workflow (process)</h1>
+<a href="#simple-workflow" class="anchor"></a>Simple workflow </h1>
 <p>Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics. It also contains a button called <code>Perform</code> which is used to validate the step.</p>
-<div id="launching-the-module" class="section level2">
+<div id="launch-the-module" class="section level2">
 <h2 class="hasAnchor">
-<a href="#launching-the-module" class="anchor"></a>Launching the module</h2>
+<a href="#launch-the-module" class="anchor"></a>Launch the module </h2>
 <p>Once the process server has been loaded, the UI is opening on the first step of the process. This step is always a Description step which explains the content of the process</p>
 <p>The server can be loaded with an object that contains data or a NULL object. In the first case, it means that an object has been sent into the process and the user can work on its data</p>
 <p>At the beginning, the inner object is NULL and all the UIs are disabled. It is possible to navigate into steps in order to watch the different UIs but one cannot do anything at this time. In particular, the buttons are disabled except the button n the Description step.</p>
 <p>In fact, when an object is sent to the server, it is stored in a temporary place. At this time, the server is ready to run. When the user clicks on the load button on the Description step, then the object is loaded in the process.</p>
+<ul>
+<li><p>on a la barre de navigation en haut avec à gauche les boutons ‘Previous’ (&lt;&lt;) et ‘Reset’ et à droite le bouton ‘Next’ (&gt;&gt;) à droite</p></li>
+<li><p>La barrede navigation affiche les étapes du processus. Elles sont toutes désactivées sauf la première (Description). Le dataset est en “attente” au niveau de la première étape µ on peut naviguer sur les autres étapes</p></li>
+<li><p>Pour les étapes désactivées, les widgets correspondants le sont aussi</p></li>
+<li><p>Un reset à ce moment fonctionne déjà et remet le curseur au niveau de la première étape</p></li>
+<li><p>cette action est réalisée par un clic sur le bouton “Start” de l’étape de Description,</p></li>
+<li>
+<p>A chaque fois qu’une étape a été validée:</p>
+<ul>
+<li>le cercle correspondant dans la timeline se colore en vert et est désactivé.</li>
+<li>toutes les étapes ultérieures sont activées jusq’à la première obligatoire inclus. Les suivantes restent désactivées car elles nécessitent la validation de l’étape obligatoire</li>
+</ul>
+</li>
+</ul>
 </div>
 <div id="navigate-through-steps" class="section level2">
 <h2 class="hasAnchor">
-<a href="#navigate-through-steps" class="anchor"></a>Navigate through steps</h2>
+<a href="#navigate-through-steps" class="anchor"></a>Navigate through steps </h2>
 <p>Thanks to the buttons ‘Next’ and ‘Prev’, the user can view the different steps without execute them.</p>
 </div>
-<div id="validating-a-step" class="section level2">
+<div id="validate-a-step" class="section level2">
 <h2 class="hasAnchor">
-<a href="#validating-a-step" class="anchor"></a>Validating a step</h2>
+<a href="#validate-a-step" class="anchor"></a>Validate a step </h2>
 <p>The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.</p>
 <p>So, the steps are executed from the first one (left) to the last one, at the right of the timeline.</p>
 <p>By default, all steps are <code>undone</code>. At any moment, the validation of the current step (by clicking on its <code>Perform</code> button) has several effects:</p>
@@ -259,9 +319,9 @@ Process navigation UI.
 <strong>State 3</strong>: The step ‘Step3’ is now validated, thus the two last ones are enabled.</li>
 </ul>
 </div>
-<div id="resetting-a-step" class="section level2">
+<div id="reset-a-step" class="section level2">
 <h2 class="hasAnchor">
-<a href="#resetting-a-step" class="anchor"></a>Resetting a step</h2>
+<a href="#reset-a-step" class="anchor"></a>Reset a step </h2>
 <p>At this lower level of navigation (process), The button <code>Reset</code> is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.</p>
 <p>Rules of reseting:</p>
 <ul>
@@ -272,38 +332,12 @@ Process navigation UI.
 </ul>
 <p>Example Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.</p>
 </div>
-<div id="saving-a-process" class="section level2">
+<div id="save-the-workflow" class="section level2">
 <h2 class="hasAnchor">
-<a href="#saving-a-process" class="anchor"></a>Saving a process</h2>
+<a href="#save-the-workflow" class="anchor"></a>Save the workflow </h2>
 <p>When the last step (‘Save’) is enabled (which is the case even if there are skipped steps), it is possible to finish the process.</p>
 <p>This step is simple as it contains only a ‘Save’ button. By clicking on it, the output variable of the process is instantiated with the result of the entire process. If this process has been launched from another one (i.e. pipeline), this output dataset is caught by this caller program.</p>
-<p>The effect of this action is to enable the steps that can be enabled ## Module process</p>
-<div id="ouverture-dun-module" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ouverture-dun-module" class="anchor"></a>Ouverture d’un module,</h3>
-<ul>
-<li>on a la barre de navigation en haut avec à gauche les boutons ‘Previous’ (&lt;&lt;) et ‘Reset’ et à droite le bouton ‘Next’ (&gt;&gt;) à droite</li>
-<li>La barrede navigation affiche les étapes du processus. Elles sont toutes désactivées sauf la première (Description). Le dataset est en “attente” au niveau de la première étape µ on peut naviguer sur les autres étapes</li>
-<li>Pour les étapes désactivées, les widgets correspondants le sont aussi</li>
-<li>Un reset à ce moment fonctionne déjà et remet le curseur au niveau de la première étape</li>
-</ul>
-</div>
-<div id="load-dun-dataset" class="section level3">
-<h3 class="hasAnchor">
-<a href="#load-dun-dataset" class="anchor"></a>Load d’un dataset</h3>
-<ul>
-<li>cette action est réalisée par un clic sur le bouton “Start” de l’étape de Description,</li>
-<li>A chaque fois qu’une étape a été validée:
-<ul>
-<li>le cercle correspondant dans la timeline se colore en vert et est désactivé.</li>
-<li>toutes les étapes ultérieures sont activées jusq’à la première obligatoire inclus. Les suivantes restent désactivées car elles nécessitent la validation de l’étape obligatoire</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id="navigation-et-validation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#navigation-et-validation" class="anchor"></a>Navigation et validation</h3>
+<p>The effect of this action is to enable the steps that can be enabled</p>
 <ul>
 <li>si on valide une étape i alors que des étapes i-x n’ont pas été validées, ces dernières sont considérées comme omises. Le repère sur la timeline devient grisé et les widgets sont désactivés</li>
 <li>Si on revient sur une étape omise, un bandeau bleu s’affiche pour l’expliquer</li>
@@ -312,24 +346,44 @@ Process navigation UI.
 </ul>
 </div>
 </div>
-</div>
-<div id="complex-workflow-pipeline" class="section level1">
+<div id="composed-workflow" class="section level1">
 <h1 class="hasAnchor">
-<a href="#complex-workflow-pipeline" class="anchor"></a>Complex workflow (pipeline)</h1>
+<a href="#composed-workflow" class="anchor"></a>Composed workflow </h1>
 <p>This section describes the behaviour of a complex workflow with two levels.</p>
+<p>Here, each step is itself a (simple or composed) workflow (see xxx)</p>
+<div id="launch-the-module-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#launch-the-module-1" class="anchor"></a>Launch the module </h2>
 <p>Globally, it respects the rules explained in the section xxx because each level follow the same logics: they only differ with the nature of each of their steps. So, for a general overview of the behaviour, please go to the section xxx.</p>
 <p>The main difference resides in the memory managment of intermediate datasets. In a simple process, a temporary variable stores the result of each step, erasing the previous one. Thus, having a history within the process module is not possible.</p>
 <p>In the complex workflow, the managment of results from each step is different. Each steps’s result is stored in memory. This strategy consumes more memory but offer a more flexibility to xxx.</p>
-<p>However, there are some little differences and additional features when orking with two or more levels: the ‘remote commands’.</p>
-<div id="remote-reset" class="section level2">
+<p>However, there are some little differences and additional features when working with two or more levels: the ‘remote commands’.</p>
+</div>
+<div id="navigate-through-workflows" class="section level2">
 <h2 class="hasAnchor">
-<a href="#remote-reset" class="anchor"></a>Remote reset</h2>
+<a href="#navigate-through-workflows" class="anchor"></a>Navigate through workflows </h2>
+<p>The same rules of navigation as (xxx) apply here.</p>
+</div>
+<div id="validate-a-step-workflow" class="section level2">
+<h2 class="hasAnchor">
+<a href="#validate-a-step-workflow" class="anchor"></a>Validate a step (workflow) </h2>
+<p>The validation here differs from the simple workflow. There is no specific ‘Save’ button: the button used to validate a workflow is implemented in the last step of a simple workflow. Its validation leads to automatically xxx</p>
+<p>In the latter case,</p>
+<p>Here, each time a steps is validated (with its own interface),</p>
+</div>
+<div id="reset-a-step-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reset-a-step-1" class="anchor"></a>Reset a step </h2>
+<p>As for any workflow in <code>Magellan</code>, a ‘Reset’ button allows to set the current step back to its default values. The effects of this action are the same as those described in section xxx for a single process. The difference here is that a process is a workflow itself, which means that resetting a step in a complex workflow also implies resetting a basic workflow. In such a case, it is like a ‘remote reset’ for the lower level workflow: it is reseted not by clicking on its own ‘Reset’ button but via the ‘Reset’ button of another workflow. However, the effects are the same.</p>
+<p>The other difference resides in the strategy implemented in <code>Magellan</code>. When reseting the current step, all further steps are also (and automatically) reseted. This guarantees that the relative order to execution of processes in the workflow is correct. This feature is possible with complex workflows because the module keeps in memory the datasets generated by each step, which is not the case with simple workflows (see section xxx)</p>
 <p>The ‘remote reset’ action come with the click on the Reset button on a higher level of workflow. Contrarly to the basic level, it does not reset all the workflow but only the current step. As for the simple workflow, this resets the entire interface by setting widgets to their default values. Moreover, the dataset in this step is emptied. Automatically, if there is a dataset ready to sent to this step, it is done.</p>
 <p>This action has two effects:</p>
 <p>The other effect is that it also resets all the underneath workflow: all its steps are reseted, widgets sets to their default values and it go to its start state.</p>
-<ul>
-<li>it resets</li>
-</ul>
+</div>
+<div id="save-the-workflow-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#save-the-workflow-1" class="anchor"></a>Save the workflow</h2>
+<p>xxxx</p>
 </div>
 </div>
   </div>

@@ -39,7 +39,7 @@ BiocStyle::markdown()
 
 The package `Magellan` implements a workflow manager which is generic at two points of view
 
-First, it is suitable for objects of type list for which the fundamentla requirments are: 
+First, it is suitable for objects of type list for which the fundamental requirments are: 
 
 * A list of items
 * Each item is named and can be accessed either by its name or index
@@ -56,6 +56,13 @@ we have volontary want to have a quite contraint code and Module template. It gu
 ## External R package with modules
 
 `Magellan` cannot be run alone, it is always run with a package which contains the informations about the steps to manage.
+
+
+
+```{r globalArch, results='markup', fig.cap="Global architecture of connectivity between Magellan, Shiny and packages containing the code for modules.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/globalArch.png", error = FALSE)
+```
+
 
 ## Requirments
 

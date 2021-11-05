@@ -110,11 +110,17 @@ CleanSourceCode <- function(source = NULL){
 
 
 
-
-
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param source xxx
+#' 
+#' @author Samuel Wieczorek
+#' 
 GetConfigCode <- function(source){
   
-  
+  config <- NULL
   
   return(config)
 }
