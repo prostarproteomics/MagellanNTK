@@ -1,3 +1,4 @@
+#' @importFrom utils globalVariables
 utils::globalVariables(c("Change_Current_Pos", 
                          'Update_Data2send_Vector',
                          'Update_State_Screens', 
