@@ -285,9 +285,33 @@ mod_navigation_server <- function(id,
   
   
   
+  
+  
+  
+  
   eval(parse(text = GetCode_Update_Data2send_Vector()))
-  eval(parse(text=GetCode_Change_Current_Pos()))
-  eval(parse(text=GetCode_Update_State_Screens()))
+  eval(parse(text = GetCode_Change_Current_Pos()), envir=environment())
+  eval(parse(text = GetCode_Update_State_Screens()))
+  eval(parse(text= GetCode_PrepareData2Send()))
+  eval(parse(text= GetCode_Send_Result_to_Caller()))
+  eval(parse(text= GetCode_EncapsulateScreens()))
+  eval(parse(text= GetCode_GetStringStatus()))
+  eval(parse(text= GetCode_GetMaxValidated_AllSteps()))
+  eval(parse(text= GetCode_GetMaxValidated_BeforePos()))
+  eval(parse(text= GetCode_GetFirstMandatoryNotValidated()))
+  eval(parse(text= GetCode_Set_All_Skipped()))
+  eval(parse(text= GetCode_Unskip_All_Steps()))
+  eval(parse(text= GetCode_Discover_Skipped_Steps()))
+  eval(parse(text= GetCode_dataModal()))
+  eval(parse(text= GetCode_ToggleState_ResetBtn()))
+  eval(parse(text= GetCode_NavPage()))
+  eval(parse(text= GetCode_LocalReset()))
+  eval(parse(text = GetCode_ToggleState_Screens()))
+  eval(parse(text = GetCode_ToggleState_NavBtns()))
+  eval(parse(text = GetCode_ActionOn_Data_Trigger()))
+  
+  
+  
   CurrentStepName <- reactive({
     cat(crayon::yellow(paste0('::GetCurrentStepName() from - ', id, '\n')))
     rv$config$steps[rv$current.pos]
@@ -342,30 +366,13 @@ mod_navigation_server <- function(id,
     })
   })
   
-  eval(parse(text=GetCode_PrepareData2Send()))
-  eval(parse(text=GetCode_Send_Result_to_Caller()))
-  eval(parse(text=GetCode_EncapsulateScreens()))
-  eval(parse(text=GetCode_GetStringStatus()))
-  eval(parse(text=GetCode_GetMaxValidated_AllSteps()))
-  eval(parse(text=GetCode_GetMaxValidated_BeforePos()))
-  eval(parse(text=GetCode_GetFirstMandatoryNotValidated()))
-  eval(parse(text=GetCode_Set_All_Skipped()))
-  eval(parse(text=GetCode_Unskip_All_Steps()))
-  eval(parse(text=GetCode_Discover_Skipped_Steps()))
-  eval(parse(text=GetCode_dataModal()))
-  eval(parse(text=GetCode_ToggleState_ResetBtn()))
-  eval(parse(text=GetCode_NavPage()))
-  eval(parse(text=GetCode_LocalReset()))
-  eval(parse(text = GetCode_ToggleState_Screens()))
-  eval(parse(text = GetCode_ToggleState_NavBtns()))
-  eval(parse(text=GetCode_ActionOn_Data_Trigger()))
   
   
   switch(nav.mode,
          pipeline = {
            eval(parse(text = GetCode_InitPipelineServer()))
            eval(parse(text = GetCode_ResetChildren()))
-           eval(parse(text=GetCode_ActionOn_NewPosition()))
+           eval(parse(text=GetCode_ActionOn_NewPosition()), envir=environment())
          },
          process = {
            eval(parse(text = GetCode_InitProcessServer()))

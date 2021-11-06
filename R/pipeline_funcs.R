@@ -8,26 +8,15 @@
 #' @return Source code for function ResetChildren
 #' 
 GetCode_ResetChildren <- function(){
-  #' @title xxx
-  #' 
-  #' @description
-  #' et to skipped all steps of the current object
-  #' 
-  #' @param range xx
-  #' 
-  #' @author Samuel Wieczorek
-  #' 
-  #' @return Source code for function ResetChildren
-  #'
+  code.string <- "
+  
   ResetChildren = function(range){
   if(verbose) cat(paste0(id, '::ResetChildren()\n\n'))
  
   rv$resetChildren[range] <- 1 + rv$resetChildren[range]
   }
   
-  code.string <- paste0("ResetChildren <- ", 
-                        paste0(deparse(ResetChildren), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
   
 }
@@ -37,7 +26,9 @@ GetCode_ResetChildren <- function(){
 
 GetCode_InitPipelineServer <- function(){
   
-InitPipelineServer = function(){
+  code <- "
+  
+  InitPipelineServer = function(){
   # Call the server module of the pipeline which name is the parameter 'id'
   # This will give access to its config
   rv$proc <- do.call(paste0('mod_', id, '_server'),
@@ -49,10 +40,6 @@ InitPipelineServer = function(){
                      )
   )
   
-  
-  
-  
-  
   # Update the reactive value config with the config of the pipeline
   rv$config <- rv$proc$config()
   
@@ -60,7 +47,7 @@ InitPipelineServer = function(){
   # Check if the config variable is correct
   # check <- CheckPipelineConfig(rv$config)
   # if (!check$passed)
-  #   stop(paste0("Errors in 'rv$config'", paste0(check$msg, collapse=' ')))
+  #   stop(paste0(\"Errors in 'rv$config'\", paste0(check$msg, collapse=' ')))
   # 
   
   
@@ -126,9 +113,7 @@ InitPipelineServer = function(){
   )
 }
 
-code <- paste0("ToggleState_NavBtns <- ", 
-                      paste0(deparse(ToggleState_NavBtns), collapse = "\n"),
-                      "\n\n")
+"
 code 
 }
 
@@ -154,6 +139,8 @@ GetCode_ActionOn_Data_Trigger <- function(){
   #
   # @return Nothing
   #
+  code.string <- "
+  
   ActionOn_Data_Trigger = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_Data_Trigger()\n\n')))
     #browser()
@@ -244,9 +231,7 @@ GetCode_ActionOn_Data_Trigger <- function(){
     Send_Result_to_Caller()
   }
   
-  code.string <- paste0("ActionOn_Data_Trigger <- ", 
-                        paste0(deparse(ActionOn_Data_Trigger), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
@@ -258,7 +243,9 @@ GetCode_PrepareData2Send <- function(){
 #
 # @return Nothing
 #
-PrepareData2Send = function(){
+  code.string <- "
+  
+  PrepareData2Send = function(){
   if(verbose) cat(paste0(id, '::PrepareData2Send()\n\n'))
   #browser()
   # Returns NULL to all modules except the one pointed by the current position
@@ -288,14 +275,12 @@ PrepareData2Send = function(){
   } else
     rv.child$data2send[[CurrentStepName()]] <- Update_Data2send_Vector()
   
-  cat(crayon::blue("<----------------- Data sent to children ------------------> \n"))
+  cat(crayon::blue('<----------------- Data sent to children ------------------> \n'))
   print(rv.child$data2send)
-  cat(crayon::blue("<----------------------------------------------------> \n"))
+  cat(crayon::blue('<----------------------------------------------------> \n'))
 }
 
+"
 
-code.string <- paste0("PrepareData2Send <- ", 
-                      paste0(deparse(PrepareData2Send), collapse = "\n"),
-                      "\n\n")
 code.string 
 }

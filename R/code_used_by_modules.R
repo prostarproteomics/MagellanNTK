@@ -376,7 +376,5 @@ ModuleCoreCode <- function(widgets, steps){
                  Generate_RenderUI_Code_For_Single_Widgets(widgets),
                  sep = "\n"
                  )
-  cat(core)
-  #browser()
   core
 }

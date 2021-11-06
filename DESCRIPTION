@@ -31,13 +31,13 @@ Collate:
     mod_format_DT.R
     utils.R
     check_funcs.R
-    mod_navigation.R
     mod_timeline_h.R
     mod_timeline_v.R
     code_used_by_modules.R
     general_nav_funcs.R
     pipeline_funcs.R
     process_funcs.R
+    mod_navigation.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

@@ -1,3 +1,27 @@
+utils::globalVariables(c("Change_Current_Pos", 
+                         'Update_Data2send_Vector',
+                         'Update_State_Screens', 
+                         'PrepareData2Send',
+                         'EncapsulateScreens', 
+                         'Send_Result_to_Caller',
+                         'GetStringStatus', 
+                         'GetMaxValidated_AllSteps',
+                         'GetMaxValidated_BeforePos', 
+                         'GetFirstMandatoryNotValidated',
+                         'Set_All_Skipped', 
+                         'Discover_Skipped_Steps',
+                         'Unskip_All_Steps', 
+                         'dataModal', 
+                         'ToggleState_ResetBtn',
+                         'NavPage', 'LocalReset', 
+                         'ToggleState_Screens',
+                         'ToggleState_NavBtns', 
+                         'ActionOn_Data_Trigger',
+                         'InitProcessServer',
+                         'InitPipelineServer',
+                         'ActionOn_NewPosition')
+)
+
 #' @title xxxx
 #' @description xxx
 #' @field btn_style xxxx

@@ -1,5 +1,7 @@
 GetCode_InitProcessServer <- function(){
+  code.string <- "
   
+    
   InitProcessServer = function(){
     
     rv$current.pos  <- 1
@@ -30,7 +32,7 @@ GetCode_InitProcessServer <- function(){
     # Check if the config variable is correct
     check <- CheckConfig(rv$config)
     if (!check$passed)
-      stop(paste0("Errors in 'rv$config'", paste0(check$msg, collapse=' ')))
+      stop(paste0(\"Errors in 'rv$config'\", paste0(check$msg, collapse=' ')))
     
     
     
@@ -62,8 +64,6 @@ GetCode_InitProcessServer <- function(){
     
   }
   
-  code <- paste0("InitProcessServer <- ", 
-                        paste0(deparse(InitProcessServer), collapse = "\n"),
-                        "\n\n")
-  code
+"
+  code.string
 }

@@ -4,8 +4,8 @@ GetCode_ToggleState_Screens <- function(){
   # This function changes the state (enabled, disabled) of the steps in the process
   # The parameter 'cond' is the new state
   # The parameter 'range' corresponds to the range of steps to update
-  ToggleState_Screens = function(cond, range){
-  if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_Screens(cond = ', cond, ', range = ', paste0(range, collapse = " "), ')\n\n')))
+  code.string <- "ToggleState_Screens = function(cond, range){
+  if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_Screens(cond = ', cond, ', range = ', paste0(range, collapse = ' '), ')\n\n')))
   #browser()
   if (isTRUE(is.enabled()))
     lapply(range, function(x){
@@ -16,32 +16,28 @@ GetCode_ToggleState_Screens <- function(){
     })
   }
   
-  code.string <- paste0("ToggleState_Screens <- ", 
-                        paste0(deparse(ToggleState_Screens), collapse = "\n"),
-                        "\n\n")
+  "
   code.string 
-  
-  
 }
 
 
 GetCode_ToggleState_NavBtns <- function(){
   
+  code.string <- "
   ToggleState_NavBtns = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_NavBtns()\n\n')))
     
     # If the cursor is not on the first position, show the 'prevBtn'
     cond <-  rv$current.pos != 1
-    shinyjs::toggleState(id = "prevBtn", condition = cond)
+    shinyjs::toggleState(id = 'prevBtn', condition = cond)
     
     # If the cursor is set before the last step, show the 'nextBtn'
     cond <- rv$current.pos < rv$length
-    shinyjs::toggleState(id = "nextBtn", condition = cond)
+    shinyjs::toggleState(id = 'nextBtn', condition = cond)
   }
   
-  code.string <- paste0("ToggleState_NavBtns <- ", 
-                        paste0(deparse(ToggleState_NavBtns), collapse = "\n"),
-                        "\n\n")
+  "
+
   code.string 
   
 }
@@ -49,6 +45,7 @@ GetCode_ToggleState_NavBtns <- function(){
 
 GetCode_ActionOn_NewPosition <- function(){
   
+  code.string <- "
   ActionOn_NewPosition = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
     
@@ -61,10 +58,8 @@ GetCode_ActionOn_NewPosition <- function(){
       rv.child$position[rv$current.pos] <- paste0('last_', Timestamp())
   }
   
-  
-  code.string <- paste0("ActionOn_NewPosition <- ", 
-                        paste0(deparse(ActionOn_NewPosition), collapse = "\n"),
-                        "\n\n")
+  "
+
   code.string 
   
 }
@@ -72,7 +67,8 @@ GetCode_ActionOn_NewPosition <- function(){
 
 
 GetCode_LocalReset <- function(){
-  LocalReset = function(){
+ code.string <- " 
+ LocalReset = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::LocalReset()\n\n')))
     #browser()
     rv$dataIn <- NULL
@@ -95,9 +91,8 @@ GetCode_LocalReset <- function(){
     #dataOut <- reactive({Send_Result_to_Caller(rv$dataIn)})
   }
   
-  code.string <- paste0("LocalReset <- ", 
-                        paste0(deparse(LocalReset), collapse = "\n"),
-                        "\n\n")
+  "
+
   code.string 
 }
 
@@ -112,6 +107,7 @@ GetCode_NavPage <- function(){
   # 
   # @param direction xxx
   #
+  code.string <- "
   NavPage = function(direction) {
     newval <- rv$current.pos + direction 
     newval <- max(1, newval)
@@ -119,9 +115,7 @@ GetCode_NavPage <- function(){
     rv$current.pos <- newval
   }
   
-  code.string <- paste0("NavPage <- ", 
-                        paste0(deparse(NavPage), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
@@ -135,21 +129,25 @@ GetCode_dataModal <- function(){
 # Return the UI for a modal dialog with data selection input. If 'failed' is
 # TRUE, then display a message that the previous value was invalid.
 # 
+  
+code.string <- 
+  
+"
 dataModal = function() {
   
-  tags$div(id="modal1", 
+  tags$div(id='modal1', 
            modalDialog(
              span(gsub('nav.mode', nav.mode, modal_txt)),
              footer = tagList(
-               actionButton(ns("closeModal"), "Cancel", class='btn-info'),
-               actionButton(ns("modal_ok"), "OK")
+               actionButton(ns('closeModal'), 'Cancel', class='btn-info'),
+               actionButton(ns('modal_ok'), 'OK')
              )
            )
   )
 }
-code.string <- paste0("dataModal <- ", 
-                      paste0(deparse(dataModal), collapse = "\n"),
-                      "\n\n")
+
+"
+
 code.string 
 }
 
@@ -162,7 +160,9 @@ GetCode_Discover_Skipped_Steps <- function(){
 #
 # @return Nothing.
 # 
-Discover_Skipped_Steps = function(){
+  code.string <- 
+  "
+  Discover_Skipped_Steps = function(){
   if(verbose) cat(crayon::yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
   for (i in seq_len(rv$length)){
     max.val <- GetMaxValidated_AllSteps()
@@ -171,10 +171,8 @@ Discover_Skipped_Steps = function(){
   }
 }
 
+"
 
-code.string <- paste0("Discover_Skipped_Steps <- ", 
-                      paste0(deparse(Discover_Skipped_Steps), collapse = "\n"),
-                      "\n\n")
 code.string 
 }
 
@@ -182,17 +180,17 @@ code.string
 
 
 GetCode_Unskip_All_Steps <- function(){
-  Unskip_All_Steps = function(){
+ code.string <- "
+ 
+ Unskip_All_Steps = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
     rv$steps.status <- setNames(rep(Magellan::global$UNDONE, rv$length), 
                                 rv$config$steps)
     Update_State_Screens()
   }
   
-  
-  code.string <- paste0("Unskip_All_Steps <- ", 
-                        paste0(deparse(Unskip_All_Steps), collapse = "\n"),
-                        "\n\n")
+ " 
+
   code.string 
 }
 
@@ -205,15 +203,15 @@ GetCode_Set_All_Skipped <- function(){
   # 
   # @return Nothing.
   # 
+  code.string <- "
+  
   Set_All_Skipped = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Set_All_Skipped()\n\n')))
     rv$steps.status <- setNames(rep(Magellan::global$SKIPPED, rv$length), 
                                 rv$config$steps)
   }
   
-  code.string <- paste0("Set_All_Skipped <- ", 
-                        paste0(deparse(Set_All_Skipped), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
@@ -229,6 +227,8 @@ GetCode_GetFirstMandatoryNotValidated <- function(){
   #
   # @param range xxx
   # 
+  code.string <- "
+  
   GetFirstMandatoryNotValidated = function(range){
     if(verbose) cat(crayon::yellow(paste0(id, '::GetFirstMandatoryNotValidated()\n\n')))
     
@@ -241,9 +241,7 @@ GetCode_GetFirstMandatoryNotValidated <- function(){
       NULL
   }
   
-  code.string <- paste0("GetFirstMandatoryNotValidated <- ", 
-                        paste0(deparse(GetFirstMandatoryNotValidated), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
@@ -256,11 +254,10 @@ GetCode_Change_Current_Pos <- function(){
   # 
   # @param i An integer that corresponds to the new position
   #
+  code.string <- "
   Change_Current_Pos = function(i){ rv$current.pos <- i}
   
-  code.string <- paste0("Change_Current_Pos <- ", 
-                        paste0(deparse(Change_Current_Pos), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
   
 }
@@ -275,15 +272,15 @@ GetCode_ToggleState_ResetBtn <- function(){
   # 
   # @param cond xxx
   # 
+  code.string <- "
+  
   ToggleState_ResetBtn = function(cond){
     if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_ResetBtn(', cond, '))\n\n')))
     
     shinyjs::toggleState('rstBtn', condition = cond)
   }
   
-  code.string <- paste0("ToggleState_ResetBtn <- ", 
-                        paste0(deparse(ToggleState_ResetBtn), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
   
 }
@@ -303,6 +300,8 @@ GetCode_GetMaxValidated_BeforePos <- function(){
   # 
   # @return Nothing
   #
+  code.string <- "
+  
   GetMaxValidated_BeforePos = function(pos = NULL){
     if(verbose) cat(crayon::yellow(paste0(id, 'GetMaxValidated_BeforePos()\n\n')))
     
@@ -319,9 +318,7 @@ GetCode_GetMaxValidated_BeforePos <- function(){
     ind.max
   }
   
-  code.string <- paste0("GetMaxValidated_BeforePos <- ", 
-                        paste0(deparse(GetMaxValidated_BeforePos), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
   
   
@@ -336,6 +333,8 @@ GetCode_GetMaxValidated_AllSteps <- function(){
   # This function analyzes the reactive variable rv$steps.status
   # to find the indice of the last validated step among all steps
   # 
+  code.string <- "
+  
   GetMaxValidated_AllSteps = function(){
     if(verbose) cat(crayon::yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
     val <- 0
@@ -345,26 +344,26 @@ GetCode_GetMaxValidated_AllSteps <- function(){
     val
   }
   
-  code.string <- paste0("GetMaxValidated_AllSteps <- ", 
-                        paste0(deparse(GetMaxValidated_AllSteps), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
 
 GetCode_EncapsulateScreens <- function(){
+  code.string <- "
+  
   EncapsulateScreens = function(){
     tagList(
       lapply(seq_len(rv$length), function(i) {
         if (i==1)
           div(id = ns(rv$config$steps[i]),
-              class = paste0("page_", id),
+              class = paste0('page_', id),
               rv$config$ll.UI[[i]]
           )
         else
           shinyjs::hidden(
             div(id =  ns(rv$config$steps[i]),
-                class = paste0("page_", id),
+                class = paste0('page_', id),
                 rv$config$ll.UI[[i]]
             )
           )
@@ -373,9 +372,7 @@ GetCode_EncapsulateScreens <- function(){
     )
   }
   
-  code.string <- paste0("EncapsulateScreens <- ", 
-                        paste0(deparse(EncapsulateScreens), collapse = "\n"),
-                        "\n\n")
+"
   code.string 
 }
 
@@ -388,15 +385,16 @@ GetCode_GetStringStatus <- function(){
   #
   # @param name A number
   # 
+  code.string <- "
+  
   GetStringStatus = function(name){
-    if (name == Magellan::global$VALIDATED) "Validated"
-    else if (name == Magellan::global$UNDONE) "Undone"
+    if (name == Magellan::global$VALIDATED) 'Validated'
+    else if (name == Magellan::global$UNDONE) 'Undone'
     else if (name == Magellan::global$SKIPPED) 'Skipped'
   }
   
-  paste0("GetStringStatus <- ", 
-         paste0(deparse(GetStringStatus), collapse = "\n"),
-         "\n\n")
+  "
+code.string
   
 }
 
@@ -411,6 +409,8 @@ GetCode_Update_State_Screens <- function(){
   # after this mandatory step are disabled
   # * xxx 
   #' 
+  code.string <- "
+  
   Update_State_Screens = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Update_State_Screens()\n\n')))
     
@@ -438,9 +438,9 @@ GetCode_Update_State_Screens <- function(){
       ToggleState_NavBtns()
     }
   }
-  paste0("Update_State_Screens <- ", 
-         paste0(deparse(Update_State_Screens), collapse = "\n"),
-         "\n\n")
+
+  "
+  code.string
   
 }
 
@@ -453,18 +453,22 @@ GetCode_Send_Result_to_Caller <- function(){
   # #' 
   # #' @export
   # #' 
+  code.string <- "
+  
   Send_Result_to_Caller = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Send_Result_to_Caller()\n\n')))
     dataOut$trigger <- Timestamp()
     dataOut$value <- rv$dataIn
   }
-  paste0("Send_Result_to_Caller <- ", 
-         paste0(deparse(Send_Result_to_Caller), collapse = "\n"),
-         "\n\n")
+
+  "
+  code.string
 }
 
 
 GetCode_Update_Data2send_Vector <- function(){
+  code.string <- "
+  
   Update_Data2send_Vector = function(){
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent
@@ -478,9 +482,8 @@ GetCode_Update_Data2send_Vector <- function(){
     return(data)
   }
   
-  paste0("Update_Data2send_Vector <- ", 
-         paste0(deparse(Update_Data2send_Vector), collapse = "\n"),
-         "\n\n")
+"
+code.string
 }
 
 

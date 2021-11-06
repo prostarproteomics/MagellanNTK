@@ -6,21 +6,12 @@
 \usage{
 GetCode_ResetChildren()
 }
-\arguments{
-\item{range}{xx}
-}
 \value{
-Source code for function ResetChildren
-
 Source code for function ResetChildren
 }
 \description{
 et to skipped all steps of the current object
-
-et to skipped all steps of the current object
 }
 \author{
-Samuel Wieczorek
-
 Samuel Wieczorek
 }
