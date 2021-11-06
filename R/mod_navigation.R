@@ -285,77 +285,14 @@ mod_navigation_server <- function(id,
   
   
   
-  Update_Data2send_Vector = function(){
-    # One only update the current position because the vector has been entirely
-    # initialized to NULL so the other processes are already ready to be sent
-    ind.last.validated <- GetMaxValidated_BeforePos()
-    if (is.null(ind.last.validated))
-      data <- rv$temp.dataIn
-    else
-      data <- Keep_Datasets_from_Object(object = rv$dataIn,
-                                        range = seq_len(ind.last.validated + rv$original.length -1)
-      )
-    return(data)
-  }
-  
+  eval(parse(text = GetCode_Update_Data2send_Vector()))
+  eval(parse(text=GetCode_Change_Current_Pos()))
+  eval(parse(text=GetCode_Update_State_Screens()))
   CurrentStepName <- reactive({
     cat(crayon::yellow(paste0('::GetCurrentStepName() from - ', id, '\n')))
     rv$config$steps[rv$current.pos]
   })
   
-  # @description
-  # This function calls the server part of each module composing the pipeline
-  #
-  # @return Nothing
-  #
-  PrepareData2Send = function(){
-    if(verbose) cat(paste0(id, '::PrepareData2Send()\n\n'))
-    #browser()
-    # Returns NULL to all modules except the one pointed by the current position
-    # Initialization of the pipeline : one send dataIn() to the
-    # first module
-    
-    # The dataset to send is contained in the variable 'rv$dataIn'
-    
-    
-    
-    # Initialize vector to all NULL values
-    rv.child$data2send <- setNames(
-      lapply(rv$config$steps, function(x){NULL}),
-      rv$config$steps)
-    
-    if (is.null(rv$dataIn)){ # Init of core engine
-      
-      # Only the first process will receive the data
-      rv.child$data2send[[1]] <- rv$temp.dataIn
-      
-      # The other processes are by default disabled.
-      # If they have to be enabled, they will be by another function later
-      lapply(seq_len(rv$length), function(x){
-        rv$steps.enabled[x] <- x==1
-      })
-      
-    } else
-      rv.child$data2send[[CurrentStepName()]] <- Update_Data2send_Vector()
-    
-    cat(crayon::blue("<----------------- Data sent to children ------------------> \n"))
-    print(rv.child$data2send)
-    cat(crayon::blue("<----------------------------------------------------> \n"))
-  }
-  
-  
-  # #' @title 
-  # #' xxx
-  # #' 
-  # #' @description xxx
-  # #' 
-  # #' @export
-  # #' 
-  Send_Result_to_Caller = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::Send_Result_to_Caller()\n\n')))
-    dataOut$trigger <- Timestamp()
-    dataOut$value <- rv$dataIn
-  }
   
   
   # Catch a new value on the parameter 'dataIn()' variable, sent by the caller. This value 
@@ -405,260 +342,37 @@ mod_navigation_server <- function(id,
     })
   })
   
-  
-  # This function is updated each time the status vector is changed. It is 
-  # used to decide which steps must be enabled or disabled w.r.t the new
-  # status vector value. 
-  # The behaviour is the following:
-  # * All the steps before the last validated one are disabled
-  # * all the steps before a undone mandatory step are enable and the ones
-  # after this mandatory step are disabled
-  # * xxx 
-  #' 
-  Update_State_Screens = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::Update_State_Screens()\n\n')))
-    
-    if (isTRUE(is.skipped())){
-      ToggleState_Screens(cond = FALSE, range = seq_len(rv$length))
-    } else {
-      
-      # Ensure that all steps before the last validated one are disabled
-      ind.max <- GetMaxValidated_AllSteps()
-      if (ind.max > 0)
-        ToggleState_Screens(cond = FALSE, range = seq_len(ind.max))
-      
-      if (ind.max < rv$length){
-        # Enable all steps after the current one but the ones
-        # after the first mandatory not validated
-        firstM <- GetFirstMandatoryNotValidated((ind.max+1):rv$length)
-        if (is.null(firstM)){
-          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(rv$length))
-        } else {
-          ToggleState_Screens(cond = TRUE, range = (1 + ind.max):(ind.max + firstM))
-          if (ind.max + firstM < rv$length)
-            ToggleState_Screens(cond = FALSE, range = (ind.max + firstM + 1):rv$length)
-        }
-      }
-      ToggleState_NavBtns()
-    }
-  }
+  eval(parse(text=GetCode_PrepareData2Send()))
+  eval(parse(text=GetCode_Send_Result_to_Caller()))
+  eval(parse(text=GetCode_EncapsulateScreens()))
+  eval(parse(text=GetCode_GetStringStatus()))
+  eval(parse(text=GetCode_GetMaxValidated_AllSteps()))
+  eval(parse(text=GetCode_GetMaxValidated_BeforePos()))
+  eval(parse(text=GetCode_GetFirstMandatoryNotValidated()))
+  eval(parse(text=GetCode_Set_All_Skipped()))
+  eval(parse(text=GetCode_Unskip_All_Steps()))
+  eval(parse(text=GetCode_Discover_Skipped_Steps()))
+  eval(parse(text=GetCode_dataModal()))
+  eval(parse(text=GetCode_ToggleState_ResetBtn()))
+  eval(parse(text=GetCode_NavPage()))
+  eval(parse(text=GetCode_LocalReset()))
+  eval(parse(text = GetCode_ToggleState_Screens()))
+  eval(parse(text = GetCode_ToggleState_NavBtns()))
+  eval(parse(text=GetCode_ActionOn_Data_Trigger()))
   
   
-  
-  
-  EncapsulateScreens = function(){
-    tagList(
-      lapply(seq_len(rv$length), function(i) {
-        if (i==1)
-          div(id = ns(rv$config$steps[i]),
-              class = paste0("page_", id),
-              rv$config$ll.UI[[i]]
-          )
-        else
-          shinyjs::hidden(
-            div(id =  ns(rv$config$steps[i]),
-                class = paste0("page_", id),
-                rv$config$ll.UI[[i]]
-            )
-          )
-      }
-      )
-    )
-  }
-  
-  
-  
-  # @title 
-  # xxx
-  # @description
-  # Converts the numerical code for status into string.
-  #
-  # @param name A number
-  # 
-  GetStringStatus = function(name){
-    if (name == Magellan::global$VALIDATED) "Validated"
-    else if (name == Magellan::global$UNDONE) "Undone"
-    else if (name == Magellan::global$SKIPPED) 'Skipped'
-  }
-  
-  
-  
-  
-  # @title 
-  # Get the last validated step among all the steps
-  # @description 
-  # This function analyzes the reactive variable rv$steps.status
-  # to find the indice of the last validated step among all steps
-  # 
-  GetMaxValidated_AllSteps = function(){
-    if(verbose) cat(crayon::yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
-    val <- 0
-    ind <- grep(Magellan::global$VALIDATED, rv$steps.status)
-    if (length(ind) > 0) 
-      val <-max(ind)
-    val
-  }
-  
-  
-  
-  
-  # @title 
-  # Get the last validated step before a given position
-  # @description
-  # This function analyzes the reactive variable rv$steps.status
-  # to find the indice of the last validated step among all steps before
-  # the current position (parameter pos set to NULL) or a given position (
-  # parameter pos set to an integer).
-  #
-  # @param pos xxx
-  # 
-  # @return Nothing
-  #
-  GetMaxValidated_BeforePos = function(pos = NULL){
-    if(verbose) cat(crayon::yellow(paste0(id, 'GetMaxValidated_BeforePos()\n\n')))
-    
-    if (is.null(pos))
-      pos <- rv$current.pos
-    
-    ind.max <- NULL
-    indices.validated <- which(rv$steps.status == Magellan::global$VALIDATED)
-    if (length(indices.validated) > 0){
-      ind <- which(indices.validated < pos)
-      if(length(ind) > 0)
-        ind.max <- max(ind)
-    }
-    ind.max
-  }
-  
-  
-  
-  
-  # @title 
-  # Get first mandatory step not yet validated
-  # @description 
-  # This function analyses the vectors mandatory and status to find the first
-  # step which is mandatory and not yet validated in a range of integers
-  #
-  # @param range xxx
-  # 
-  GetFirstMandatoryNotValidated = function(range){
-    if(verbose) cat(crayon::yellow(paste0(id, '::GetFirstMandatoryNotValidated()\n\n')))
-    
-    first <- NULL
-    first <- unlist((lapply(range, 
-                            function(x){rv$config$mandatory[x] && !rv$steps.status[x]})))
-    if (sum(first) > 0)
-      min(which(first == TRUE))
-    else
-      NULL
-  }
-  
-  
-  
-  
-  # @title 
-  # Set current position
-  # @description 
-  # Change the cursor position to a given position
-  # 
-  # @param i An integer that corresponds to the new position
-  #
-  Change_Current_Pos = function(i){ rv$current.pos <- i}
-  
-  
-  # @title 
-  # Set all steps of the current process to skipped
-  # @description
-  # Set to skipped all steps of the current object
-  # 
-  # @return Nothing.
-  # 
-  Set_All_Skipped = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::Set_All_Skipped()\n\n')))
-    rv$steps.status <- setNames(rep(Magellan::global$SKIPPED, rv$length), 
-                                        rv$config$steps)
-  }
-  
-  
-  Unskip_All_Steps = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
-    rv$steps.status <- setNames(rep(Magellan::global$UNDONE, rv$length), 
-                                        rv$config$steps)
-    Update_State_Screens()
-  }
-  
-  
-  
-  # @title 
-  # Discover new skipped steps.
-  # @description
-  # This function looks for new skipped steps after the vector status has been updated.
-  #
-  # @return Nothing.
-  # 
-  Discover_Skipped_Steps = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
-    for (i in seq_len(rv$length)){
-      max.val <- GetMaxValidated_AllSteps()
-      if (rv$steps.status[i] != Magellan::global$VALIDATED && max.val > i)
-        rv$steps.status[i] <- Magellan::global$SKIPPED
-    }
-  }
-  
-  
-  
-  
-  
-  
-  # @title 
-  # xxx
-  # 
-  # @description 
-  # Return the UI for a modal dialog with data selection input. If 'failed' is
-  # TRUE, then display a message that the previous value was invalid.
-  # 
-  dataModal = function() {
-    
-    tags$div(id="modal1", 
-             modalDialog(
-               span(gsub('nav.mode', nav.mode, modal_txt)),
-               footer = tagList(
-                 actionButton(ns("closeModal"), "Cancel", class='btn-info'),
-                 actionButton(ns("modal_ok"), "OK")
-               )
-             )
-    )
-  }
-  
-  
-  # @title xxx
-  # 
-  # @description 
-  # xxx
-  # 
-  # @param cond xxx
-  # 
-  ToggleState_ResetBtn = function(cond){
-    if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_ResetBtn(', cond, '))\n\n')))
-    
-    shinyjs::toggleState('rstBtn', condition = cond)
-  }
-  
-  
-  # @title Change current position.
-  # 
-  # @description
-  # Change current position.
-  # 
-  # @param direction xxx
-  #
-  NavPage = function(direction) {
-    newval <- rv$current.pos + direction 
-    newval <- max(1, newval)
-    newval <- min(newval, rv$length)
-    rv$current.pos <- newval
-  }
-  
+  switch(nav.mode,
+         pipeline = {
+           eval(parse(text = GetCode_InitPipelineServer()))
+           eval(parse(text = GetCode_ResetChildren()))
+           eval(parse(text=GetCode_ActionOn_NewPosition()))
+         },
+         process = {
+           eval(parse(text = GetCode_InitProcessServer()))
+         }
+  )
+           
+ 
   observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
   observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
   
@@ -737,240 +451,10 @@ mod_navigation_server <- function(id,
   observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
     # Catches a clic on the `Ok` button of the modal for resetting a module
     if (verbose) cat(crayon::yellow(paste0(id, '::observeEvent(input$modal_ok)\n\n')))
-    #browser()
-    #rv$steps.reset <- input$rstBtn + reset()
-    #Set_All_Reset()
     LocalReset()
-    
     removeModal()
   })
   
-  
-  # @description
-  # et to skipped all steps of the current object
-  # 
-  # @return Nothing.
-  # 
-  ResetChildren = function(range){
-    if(verbose) cat(paste0(id, '::ResetChildren()\n\n'))
-    if (nav.mode != 'pipeline')
-      return(NULL)
-    #browser()
-    # lapply(rv$config$steps, function(x){
-    #   rv$resetChildren[x] <- 1 + rv$resetChildren[x]
-    # })
-    rv$resetChildren[range] <- 1 + rv$resetChildren[range]
-  }
-  
-  # Default actions on reset pipeline or process.
-  # 
-  LocalReset = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::LocalReset()\n\n')))
-    #browser()
-    rv$dataIn <- NULL
-    #rv$temp.dataIn <- NULL
-    
-    # The cursor is set to the first step
-    rv$current.pos <- 1
-    
-    # The status of the steps are reinitialized to the default configuration of the process
-    rv$steps.status <- setNames(rep(Magellan::global$UNDONE, rv$length), 
-                                        rv$config$steps)
-    
-    # If the current module is a pipeline type (node and not leaf),
-    # then sent to its children the information that they must reset themself
-    if (nav.mode == 'pipeline')
-      ResetChildren()
-    
-    # Return the NULL value as dataset
-    Send_Result_to_Caller()
-    #dataOut <- reactive({Send_Result_to_Caller(rv$dataIn)})
-  }
-  
-  
-  # This function changes the state (enabled, disabled) of the steps in the process
-  # The parameter 'cond' is the new state
-  # The parameter 'range' corresponds to the range of steps to update
-  ToggleState_Screens = function(cond, range){
-    if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_Screens(cond = ', cond, ', range = ', paste0(range, collapse = " "), ')\n\n')))
-    #browser()
-    if (isTRUE(is.enabled()))
-      lapply(range, function(x){
-        cond <- cond && !(rv$steps.status[x] == Magellan::global$SKIPPED)
-        
-        #Send to TL the enabled/disabled tags
-        rv$steps.enabled[x] <- cond
-      })
-    
-    
-    # Update the state enabled/disabled of the navigation buttons
-    #ToggleState_NavBtns()
-  }
-  
-  ToggleState_NavBtns = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_NavBtns()\n\n')))
-    
-    # If the cursor is not on the first position, show the 'prevBtn'
-    cond <-  rv$current.pos != 1
-    shinyjs::toggleState(id = "prevBtn", condition = cond)
-    
-    # If the cursor is set before the last step, show the 'nextBtn'
-    cond <- rv$current.pos < rv$length
-    shinyjs::toggleState(id = "nextBtn", condition = cond)
-  }
-  
-  
-   
-  InitProcessServer <- function(){
-   
-    rv$current.pos  <- 1
-   
-     #Call the module server of the process
-    # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
-    # more specifically, the temporary variable
-    # The parameter 'steps.enabled' is xxxx
-    # The parameter 'remoteReset' send to the process module the information that it has to 
-    # be reseted. It is the sum of the input$rstBtn (the local reset button of the nav_process) and
-    # the remoteReset() variable which correspond to the reset button of the container of
-    # the nav process (ie the mod_nav_pipeline)
-    rv$proc <- do.call(paste0('mod_', id, '_server'),
-                               list(id = id,
-                                    dataIn = reactive({rv$temp.dataIn}),
-                                    steps.enabled = reactive({rv$steps.enabled}),
-                                    remoteReset = reactive({input$rstBtn + remoteReset()}),
-                                    current.pos = reactive({rv$current.pos})
-                                    )
-    )
-    
-    # Instantiate the local variables
-    # Get the config variable from the process that has been called
-    # This config contains all the UI for the each steps (config$ll.UI)
-    # and the dataset returned by the process (config$dataOut)
-    rv$config <- rv$proc$config()
-    
-    # Check if the config variable is correct
-    check <- CheckConfig(rv$config)
-    if (!check$passed)
-      stop(paste0("Errors in 'rv$config'", paste0(check$msg, collapse=' ')))
-    
-    
-    
-    rv$length <- length(rv$config$steps)
-     
-    # Get the name of the parent of the process
-    # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
-    # and the second correspond to the child in the process hierarchy
-    rv$parent <- unlist(strsplit(id, split='_'))[1]
-    
-    
-    rv$config$mandatory <- setNames(rv$config$mandatory, rv$config$steps)
-    rv$steps.status <- setNames(rep(Magellan::global$UNDONE, rv$length), rv$config$steps)
-    rv$currentStepName <- reactive({rv$config$steps[rv$current.pos]})
-    rv$steps.enabled <- setNames(rep(FALSE, rv$length), rv$config$steps)
-    
-    
-    # Launch the horizontal timeline server
-    # The parameter 'config' is used to xxx
-    # The parameter 'status' is used to color the bullets
-    # the parameter 'position' is used to put the cursor at the current position
-    # The parameter 'enabled' is used to modify the bullets whether the corresponding step is enabled or disabled
-    mod_timeline_h_server(id = 'timeline',
-                          config =  rv$config,
-                          status = reactive({rv$steps.status}),
-                          position = reactive({rv$current.pos}),
-                          enabled = reactive({rv$steps.enabled})
-    )
-    
-  }
-  
-  InitPipelineServer <- function(){
-    # Call the server module of the pipeline which name is the parameter 'id'
-    # This will give access to its config
-    rv$proc <- do.call(paste0('mod_', id, '_server'),
-                               list(id = id,
-                                    dataIn = reactive({rv$temp.dataIn}),
-                                    steps.enabled = reactive({rv$steps.enabled}),
-                                    remoteReset = reactive({FALSE}),
-                                    steps.status = reactive({rv$steps.status})
-                               )
-    )
-    
-    
-    
-    
-    
-    # Update the reactive value config with the config of the pipeline
-    rv$config <- rv$proc$config()
-    
-    # TODO Write the CheckPipelineConfig function
-    # Check if the config variable is correct
-    # check <- CheckPipelineConfig(rv$config)
-    # if (!check$passed)
-    #   stop(paste0("Errors in 'rv$config'", paste0(check$msg, collapse=' ')))
-    # 
-    
-    
-    rv$length <- length(rv$config$steps)
-    rv$current.pos <- 1
-    
-    # Get the name of the parent of the process
-    # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
-    # and the second correspond to the child in the process hierarchy
-    rv$parent.name <- unlist(strsplit(id, split='_'))[1]
-    rv$child.name <- unlist(strsplit(id, split='_'))[2]
-    
-    
-    rv$config$mandatory <- setNames(rv$config$mandatory, rv$config$steps)
-    rv$steps.status = setNames(rep(Magellan::global$UNDONE, rv$length), rv$config$steps)
-    rv$currentStepName <- reactive({rv$config$steps[rv$current.pos]})
-    
-    rv$steps.enabled <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
-    rv$steps.skipped <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
-    rv$resetChildren <- setNames(rep(0, length(rv$config$steps)), rv$config$steps)
-    
-    rv.child$data2send <- setNames(lapply(as.list(rv$config$steps), function(x) NULL), 
-                                   nm = rv$config$steps)
-    
-    # Launch the ui for each step of the pipeline
-    # This function could be stored in the source file of the pipeline
-    # but the strategy is to insert minimum extra code in the files for
-    # pipelines and processes. This is useful when other devs will
-    # develop other pipelines and processes. Tus, it will be easier.
-    rv$config$ll.UI <- setNames(lapply(rv$config$steps,
-                                               function(x){
-                                                 mod_navigation_ui(ns(paste0(id, '_', x)))
-                                               }),
-                                        paste0(rv$config$steps)
-    )
-    
-    
-    
-    #browser()
-    # rv$config$ll.UI <- setNames(lapply(rv$config$steps,
-    #                                        function(x){
-    #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-    #                                          mod_navigation_ui(ns(paste0(id, '_', x)))
-    #                                          }),
-    #                                 paste0('screen_', rv$config$steps)
-    # )
-    
-    lapply(rv$config$steps, function(x){
-      tmp.return[[x]] <- mod_navigation_server(id = paste0(id, '_', x) ,
-                                               nav.mode = 'process',
-                                               dataIn = reactive({ rv.child$data2send[[x]] }),
-                                               is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
-                                               remoteReset = reactive({rv$resetChildren[x]}),
-                                               is.skipped = reactive({isTRUE(rv$steps.skipped[x])})
-      )
-    })
-    
-    mod_timeline_v_server(id = 'timelinev',
-                          config =  rv$config,
-                          status = reactive({rv$steps.status}),
-                          position = reactive({rv$current.pos}),
-                          enabled = reactive({rv$steps.enabled})
-    )
-  }
   
   
   
@@ -978,7 +462,6 @@ mod_navigation_server <- function(id,
   observeEvent(id, {
     # Launch of the module process server
     cat(crayon::yellow(paste0("Launching ", paste0('mod_', id, '_server\n\n'))))
-    #browser()
     
     switch(nav.mode,
            process = InitProcessServer(),
@@ -990,34 +473,37 @@ mod_navigation_server <- function(id,
   # * initialize the UI (only the first screen is shown),
   # * encapsulate the UI in a div (used to hide all screens at a time before
   # showing the one corresponding to the current position)
-  output$EncapsulateScreens_ui <- renderUI({
-    EncapsulateScreens()
-  })
+  output$EncapsulateScreens_ui <- renderUI({EncapsulateScreens()})
   
   
   
-  # This function displays a short message under a step if it is disabled
+  # Show/hide an information panel if the process is entirely skipped
+  # This functions can be used for both nav_process and nav_pipeline modules
   output$SkippedInfoPanel <- renderUI({
     #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
     
     current_step_skipped <- rv$steps.status[rv$current.pos] == Magellan::global$SKIPPED
-    #entire_process_skipped <- isTRUE(sum(rv$steps.status) == global$SKIPPED * rv$length)
     req(current_step_skipped)
+    process_entirely_skipped <- isTRUE(sum(rv$steps.status) == Magellan::global$SKIPPED * rv$length)
     
-    # This case appears when the process has been skipped from the
-    # pipeline. Thus, it is not necessary to show the info box because
-    # it is shown below the timeline of the pipeline
-    #if (entire_process_skipped){}
-    
-    txt <- paste0("This ", rv$config$type, " is skipped so it has been disabled.")
-    wellPanel(
-      style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
-      height = 100,
-      width = 300,
-      align = "center",
-      p(style = "color: black;", paste0('Info: ',txt))
-    )
+    if (process_entirely_skipped){
+      # This case appears when the process has been skipped from the
+      # pipeline. Thus, it is not necessary to show the info box because
+      # it is shown below the timeline of the pipeline
+    } else {
+      txt <- paste0("This ", rv$config$type, " is skipped so it has been disabled.")
+      wellPanel(
+        style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
+        height = 100,
+        width=300,
+        align="center",
+        p(style = "color: black;", paste0('Info: ',txt))
+      )
+    }
   })
+  
+  
+  
   
   # Catch the dataset returned by the process module. The event is observed by a change in the 'trigger' value
   # and instantiate the rv$dataOut variable
@@ -1049,114 +535,7 @@ mod_navigation_server <- function(id,
     
   })
   
-  
-  
-  
-  # @description
-  # Catch the return value of a module and update the list of isDone modules
-  # This list is updated with the names of datasets present in the rv$tmp
-  # variable. One set to TRUE all the elements in isDone which have a corresponding
-  # element in names(rv$tmp).
-  # One cannot simply set to TRUE the last element of rv$tmp because it will does
-  # not work in case of a reseted module (it is not in the names(rv$tmp) list
-  # anymore)
-  # If a value (not NULL) is received, then it corresponds to the module
-  # pointed by the current position
-  # This function also updates the list isDone
-  # This function updates the current dataset (self$rv$dataIn)
-  #
-  # @return Nothing
-  #
-  ActionOn_Data_Trigger = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_Data_Trigger()\n\n')))
-    #browser()
-    processHasChanged <- newValue <- NULL
-    return.trigger.values <- setNames(lapply(rv$config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
-                                      rv$config$steps)
-    
-    # Replace NULL values by NA
-    return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
-    triggerValues <- unlist(return.trigger.values)
-    
-    
-    return.values <- setNames(lapply(rv$config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
-                              rv$config$steps)
-    
-    cat(crayon::blue('--------------- Data received from children --------------------\n'))
-    print(return.values)
-    cat(crayon::blue('-------------------------------------------------------\n'))
-    #browser()
-    # if (sum(triggerValues)==0){ # Init of core engine
-    #   rv$dataIn <- rv$temp.dataIn
-    # } else
-    if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
-      print('The entire pipeline has been reseted')
-      rv$dataIn <- NULL
-      rv$steps.status[seq_len(rv$length)] <- Magellan::global$UNDONE
-    } else {
-      processHasChanged <- rv$config$steps[which(max(triggerValues, na.rm = TRUE)==triggerValues)]
-      ind.processHasChanged <- which(rv$config$steps==processHasChanged)
-      newValue <- tmp.return[[processHasChanged]]$dataOut()$value
-      
-      if (is.null(newValue)){
-        #browser()
-        # A process has been reseted
-        rv$steps.status[ind.processHasChanged:rv$length] <- Magellan::global$UNDONE
-        rv$steps.enabled[ind.processHasChanged:rv$length] <- FALSE
-        rv$steps.enabled[ind.processHasChanged] <- TRUE
-        rv$steps.skipped[ind.processHasChanged:rv$length] <- FALSE
-        
-        #browser()
-        # Reset all further steps also
-        #ResetChildren(range = ind.processHasChanged:rv$length)
-        #if (ind.processHasChanged < rv$length)
-        #  rv$resetChildren[(1+ind.processHasChanged):rv$length] <- TRUE
-        #rv$resetChildren[seq_len(ind.processHasChanged-1)] <- FALSE
-        
-        # Reset all further steps also
-        #rv.child$reset[ind.processHasChanged:length(rv$config$steps)] <- TRUE
-        #ResetChildren(range = ind.processHasChanged:rv$length)
-        #rv.child$reset[seq_len(ind.processHasChanged-1)] <- FALSE
-        
-        # browser()
-        # One take the last validated step (before the one corresponding to processHasChanges
-        # but it is straightforward because we just updates self$rv$status
-        ind.last.validated <- NULL
-        validated.steps <- which(rv$steps.status == Magellan::global$VALIDATED)
-        if (length(validated.steps) !=0)
-          ind.last.validated <- max(validated.steps)
-        
-        #There is no validated step (the first step has been reseted)
-        if(is.null(ind.last.validated) || ind.last.validated == 1)
-          rv$dataIn <- rv$temp.dataIn
-        else{
-          name.last.validated <- rv$config$steps[ind.last.validated]
-          dataIn.ind.last.validated <- which(names(rv$dataIn) == name.last.validated)
-          #self$rv$dataIn <- self$rv$dataIn[ , , seq_len(dataIn.ind.last.validated)]
-          rv$dataIn <- Keep_Datasets_from_Object(object = rv$dataIn, 
-                                                         range = seq_len(dataIn.ind.last.validated))
-          
-        }
-        #Update_State_Screens()
-        # In this case, one force the update of the input dataset
-        #PrepareData2Send()
-      } else {
-        # browser()
-        # A process has been validated
-        rv$steps.status[processHasChanged] <- Magellan::global$VALIDATED
-        if (ind.processHasChanged < rv$length)
-          rv$steps.status[(1 + ind.processHasChanged):rv$length] <- Magellan::global$UNDONE
-        
-        Discover_Skipped_Steps()
-        rv$dataIn <- newValue
-      }
-      
-    }
-    
-    # PrepareData2Send()
-    Send_Result_to_Caller()
-  }
-  
+ 
   # Catches a new value of the cursor position
   observeEvent(req(!is.null(rv$position)), ignoreInit = TRUE, {
     pos <- strsplit(rv$position, '_')[[1]][1]
@@ -1165,26 +544,6 @@ mod_navigation_server <- function(id,
     else if (is.numeric(pos))
       rv$current.pos <- rv$position
   })
-  
-  
-  
-  # @description
-  # xxx
-  #
-  # @return Nothing
-  #
-  ActionOn_NewPosition = function(){
-    if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
-    
-    # Send dataset to child process only if the current position is enabled
-    #if(rv$steps.enabled[rv$current.pos])
-    PrepareData2Send()
-    #browser()
-    # If the current step is validated, set the child current position to the last step
-    if (rv$steps.status[rv$current.pos] == Magellan::global$VALIDATED)
-      rv.child$position[rv$current.pos] <- paste0('last_', Timestamp())
-  }
-  
   
   
   # Catches a new position to show/hide the correct screen. This function
@@ -1217,30 +576,6 @@ mod_navigation_server <- function(id,
   
   
   
-  # Show/hide an information panel if the process is entirely skipped
-  # This functions can be used for both nav_process and nav_pipeline modules
-  output$SkippedInfoPanel <- renderUI({
-    #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, "\n\n"))
-    
-    current_step_skipped <- rv$steps.status[rv$current.pos] == Magellan::global$SKIPPED
-    req(current_step_skipped)
-    process_entirely_skipped <- isTRUE(sum(rv$steps.status) == Magellan::global$SKIPPED * rv$length)
-    
-    if (process_entirely_skipped){
-      # This case appears when the process has been skipped from the
-      # pipeline. Thus, it is not necessary to show the info box because
-      # it is shown below the timeline of the pipeline
-    } else {
-      txt <- paste0("This ", rv$config$type, " is skipped so it has been disabled.")
-      wellPanel(
-        style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;",
-        height = 100,
-        width=300,
-        align="center",
-        p(style = "color: black;", paste0('Info: ',txt))
-      )
-    }
-  })
   
   
   

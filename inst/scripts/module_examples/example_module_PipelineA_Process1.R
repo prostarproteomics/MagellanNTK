@@ -82,26 +82,31 @@ mod_PipelineA_Process1_server <- function(id,
     ns <- session$ns
 
     # Insert necessary code which is hosted by Magellan
+    # DO NOT MODITY THIS LINE
     eval(parse(text = ModuleCoreCode(widgets = names(widgets.default.values),
                                      steps = config$steps )))
 
 
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
+    # >>> START ------------- Code for Description UI---------------
+    
     output$Description <- renderUI({
       tagList(
-        includeMarkdown(paste0("md/", paste0(config$parent, '_', config$name, ".md"))),
+        includeMarkdown(paste0("md/", 
+                               paste0(config$parent, '_', config$name, ".md"))),
         uiOutput(ns('datasetDescription')),
         
         # Insert validation button
         uiOutput(ns('Description_validationBtn_ui'))
       )
     })
-    
+    # <<< END ------------- Code for step 3 UI---------------
 
     
     
     
-    ###### ------------------- Code for step 1 -------------------------    #####
+    # >>>
+    # >>> START ------------- Code for step 3 UI---------------
+    # >>> 
     
     # >>>> -------------------- STEP 1 : Global UI ------------------------------------
     output$Step1 <- renderUI({
@@ -158,17 +163,13 @@ mod_PipelineA_Process1_server <- function(id,
     
     # >>> END: Definition of the widgets
     
-    
-    
-    
-
     output$showPlot <- renderPlot({
       plot(as.matrix(dataIn()[[1]]))
     })
+    # <<< END ------------- Code for step 1 UI---------------
     
     
-    
-    #-------------------------- Code for step 2 ------------------------------
+    # >>> START ------------- Code for step 2 UI---------------
     
     output$Step2 <- renderUI({
       wellPanel(
@@ -197,10 +198,10 @@ mod_PipelineA_Process1_server <- function(id,
                   selected = rv.widgets$Step2_select2,
                   width = '150px')
     })
-    
+    # <<< END ------------- Code for step 2 UI---------------
 
     
-    #------------- Code for step 3 ---------------
+    # >>> START ------------- Code for step 3 UI---------------
     
     output$Save <- renderUI({
        tagList(
@@ -208,8 +209,11 @@ mod_PipelineA_Process1_server <- function(id,
         uiOutput(ns('Save_validationBtn_ui'))
       )
     })
-    
-eval(parse(text = Module_Return_Func()))
+    # <<< END ------------- Code for step 3 UI---------------
+
+    # Insert necessary code which is hosted by Magellan
+    # DO NOT MODITY THIS LINE
+    eval(parse(text = Module_Return_Func()))
     
   }
   )
