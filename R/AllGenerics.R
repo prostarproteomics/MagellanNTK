@@ -4,7 +4,7 @@
 #' @rdname AllGenerics
 #' 
 #' @importFrom methods setGeneric
-
+NULL
 
 setGeneric("Keep_Datasets_from_Object",
            function(object, range) standardGeneric("Keep_Datasets_from_Object"))
