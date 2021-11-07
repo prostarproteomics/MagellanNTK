@@ -7,7 +7,7 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
-source(file.path('./module_examples', "mod_PipelineA_Description.R"), 
+source(file.path('./module_examples', "example_module_PipelineA_Description.R"), 
        local=TRUE)$value
 
 dirpath <- '../../R'
@@ -26,7 +26,6 @@ ui <- fluidPage(
 
 
 server <- function(input, output){
-  data(feat1, package='Magellan')
   rv <- reactiveValues(
     dataIn = feat1,
     dataOut = NULL

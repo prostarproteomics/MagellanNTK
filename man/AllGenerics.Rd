@@ -3,6 +3,9 @@
 \name{AllGenerics}
 \alias{AllGenerics}
 \title{Placeholder for generics functions documentation}
+\usage{
+Keep_Datasets_from_Object(object, range)
+}
 \description{
 Placeholder for generics functions documentation
 }

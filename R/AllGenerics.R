@@ -4,7 +4,6 @@
 #' @rdname AllGenerics
 #' 
 #' @importFrom methods setGeneric
-NULL
 
 
 setGeneric("Keep_Datasets_from_Object",

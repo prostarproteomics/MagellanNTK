@@ -3,7 +3,7 @@
 \name{mod_navigation_ui}
 \alias{mod_navigation_ui}
 \alias{mod_navigation_server}
-\title{xxx}
+\title{The ui() function of the module `mod_navigation`}
 \usage{
 mod_navigation_ui(id)
 
@@ -17,13 +17,16 @@ mod_navigation_server(
 )
 }
 \arguments{
-\item{id}{xxx}
+\item{id}{A `character(1)` which defines the id of the module. It is the same
+as for the ui() function.}
 
-\item{nav.mode}{xxx}
+\item{nav.mode}{A `character(1)` indicating the type of workflow. It can be
+either 'process' (for a simple workflow) or 'pipeline' (for a composed 
+workflow). Default is NULL: a value is necessary.}
 
 \item{dataIn}{The dataset}
 
-\item{is.enabled}{A boolean. This variable is a remote command to specify
+\item{is.enabled}{A `boolean`. This variable is a remote command to specify
 if the corresponding module is enabled/disabled in the calling module of upper level.
 For example, if this module is part of a pipeline and the pipeline calculates
 that it is disabled (i.e. skipped), then this variable is set to TRUE. Then,
@@ -40,13 +43,12 @@ Basically, it is the program which has called this module}
 A list of four items:
 * dataOut xxx
 * steps.enabled xxxxx
-* status xxxx
+* status A vector of `integer(1)` of the same length than the config$steps
+  vector
 * reset xxxx
 }
 \description{
-xxxxxx
-
-xxx
+The module navigation can be launched via a Shiny app.
 }
 \examples{
 \dontrun{
@@ -64,4 +66,7 @@ server <- function(input, output){
 shinyApp(ui, server)
 }
 
+}
+\author{
+Samuel Wieczorek
 }

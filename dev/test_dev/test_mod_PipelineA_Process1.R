@@ -8,7 +8,8 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
-source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), local=TRUE)$value
+source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), 
+       local=TRUE)$value
 
 
 dirpath <- '../../R'
@@ -34,7 +35,6 @@ mod_test_navigation_process_ui <- function(id){
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )

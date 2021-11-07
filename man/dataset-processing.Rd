@@ -6,9 +6,15 @@
 \alias{Keep_Datasets_from_Object,list-method}
 \alias{Add_Datasets_to_Object}
 \alias{Add_Datasets_to_Object,list-method}
+\alias{Keep_Datasets_from_Object,NULL-method}
+\alias{Add_Datasets_to_Object,NULL-method}
 \title{Datasets processing}
 \usage{
+\S4method{Keep_Datasets_from_Object}{`NULL`}(object, range)
+
 \S4method{Keep_Datasets_from_Object}{list}(object, range)
+
+\S4method{Add_Datasets_to_Object}{`NULL`}(object, dataset, name)
 
 \S4method{Add_Datasets_to_Object}{list}(object, dataset, name)
 }

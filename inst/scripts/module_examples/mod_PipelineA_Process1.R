@@ -87,25 +87,34 @@ mod_PipelineA_Process1_server <- function(id,
                                      steps = config$steps )))
 
 
-    # >>> START ------------- Code for Description UI---------------
+    # >>> START ------------- Code for Description UI ---------------
     
     output$Description <- renderUI({
       tagList(
-        includeMarkdown(paste0("md/", 
-                               paste0(config$parent, '_', config$name, ".md"))),
-        uiOutput(ns('datasetDescription')),
+        # In this example, the md file is found in the module_examples directory
+        # but with a real app, it should be provided by the package which
+        # contains the UI for the different steps of the process module.
+        # system.file(xxx)
+        
+        includeMarkdown(system.file("scripts/module_examples/md/", 
+                                    paste0(config$parent, '_', config$name, ".md"), 
+                                    package="Magellan")),
+        
+       # Used to show some information about the dataset which is loaded
+       # This function must be provided by the package of the process module
+       uiOutput(ns('datasetDescription')),
         
         # Insert validation button
         uiOutput(ns('Description_validationBtn_ui'))
       )
     })
-    # <<< END ------------- Code for step 3 UI---------------
+    # <<< END ------------- Code for Description UI---------------
 
     
     
     
     # >>>
-    # >>> START ------------- Code for step 3 UI---------------
+    # >>> START ------------- Code for step 1 UI---------------
     # >>> 
     
     # >>>> -------------------- STEP 1 : Global UI ------------------------------------
@@ -113,6 +122,11 @@ mod_PipelineA_Process1_server <- function(id,
       wellPanel(
         # uiOutput for all widgets in this UI
         # This part is mandatory
+        # The renderUI() function of each widget is managed by Magellan
+        # The dev only have to define a reactive() function for each
+        # widget he want to insert
+        # Be aware of the naming convention for ids in uiOutput()
+        # For more details, please refer to the dev document.
         uiOutput(ns('Step1_btn1_ui')),
         uiOutput(ns('Step1_select1_ui')),
         uiOutput(ns('Step1_select2_ui')),
@@ -125,8 +139,7 @@ mod_PipelineA_Process1_server <- function(id,
       )
     })
     
-    
-    
+
     # >>> START: Definition of the widgets
     # This part must be customized by the developer of a new module
     widget_Step1_select1 <- reactive({
@@ -136,7 +149,7 @@ mod_PipelineA_Process1_server <- function(id,
                   selected = rv.widgets$Step1_select1,
                   width = '150px')
     })
-    
+
     
     widget_Step1_select2 <- reactive({
       selectInput(ns('Step1_select2'), 
@@ -173,10 +186,12 @@ mod_PipelineA_Process1_server <- function(id,
     
     output$Step2 <- renderUI({
       wellPanel(
+        # Two examples of widgets in a renderUI() function
         uiOutput(ns('Step2_select1_ui')),
         uiOutput(ns('Step2_select2_ui')),
         
         # Insert validation button
+        # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Step2_validationBtn_ui'))
       )
     })
@@ -202,19 +217,20 @@ mod_PipelineA_Process1_server <- function(id,
 
     
     # >>> START ------------- Code for step 3 UI---------------
-    
     output$Save <- renderUI({
        tagList(
         # Insert validation button
+        # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Save_validationBtn_ui'))
       )
     })
     # <<< END ------------- Code for step 3 UI---------------
 
+    
+    
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODITY THIS LINE
     eval(parse(text = Module_Return_Func()))
-    
   }
   )
 }

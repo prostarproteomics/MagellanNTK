@@ -307,7 +307,6 @@ Generate_RenderUI_Code_For_Single_Widgets <- function(widgets){
 
 
 
-
 #' @title Code for declaring xxx
 #' 
 #' @description This function xxx

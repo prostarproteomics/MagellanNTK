@@ -1,14 +1,14 @@
 
 
 
-#' @title xxx
+#' @title The ui() function of the module `mod_navigation`
 #' 
-#' @description 
-#' xxxxxx
-#' 
-#' @param id xxx
+#' @param id A `character(1)` which defines the id of the module. It is the same
+#' as for the server() function.
 #' 
 #' @rdname mod_navigation
+#' 
+#' @author Samuel Wieczorek
 #' 
 #' @export
 #'
@@ -28,17 +28,20 @@ mod_navigation_ui <- function(id){
 
 
 
-#' @title xxx
+#' @title The server() function of the module `mod_navigation`
 #' 
-#' @description xxx
+#' @description The module navigation can be launched via a Shiny app.
 #' 
-#' @param id xxx
+#' @param id A `character(1)` which defines the id of the module. It is the same
+#' as for the ui() function.
 #' 
-#' @param nav.mode xxx
+#' @param nav.mode A `character(1)` indicating the type of workflow. It can be
+#' either 'process' (for a simple workflow) or 'pipeline' (for a composed 
+#' workflow). Default is NULL: a value is necessary.
 #' 
 #' @param dataIn The dataset
 #' 
-#' @param is.enabled A boolean. This variable is a remote command to specify
+#' @param is.enabled A `boolean`. This variable is a remote command to specify
 #' if the corresponding module is enabled/disabled in the calling module of upper level.
 #' For example, if this module is part of a pipeline and the pipeline calculates
 #' that it is disabled (i.e. skipped), then this variable is set to TRUE. Then,
@@ -54,7 +57,8 @@ mod_navigation_ui <- function(id){
 #' @return A list of four items:
 #' * dataOut xxx
 #' * steps.enabled xxxxx
-#' * status xxxx
+#' * status A vector of `integer(1)` of the same length than the config$steps
+#'   vector
 #' * reset xxxx
 #' 
 #' @export

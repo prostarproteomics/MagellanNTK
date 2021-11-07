@@ -67,10 +67,19 @@ NULL
 #' @exportMethod Keep_Datasets_from_Object
 #' @rdname dataset-processing
 setMethod("Keep_Datasets_from_Object",
+          "NULL",
+          function(object, range) {
+            return()
+          })
+
+#' @rdname dataset-processing
+setMethod("Keep_Datasets_from_Object",
           "list",
           function(object, range) {
             if (missing(range))
               stop("Provide range of assays to be processed")
+            if (is.null(object))
+              return()
             
             if (is.numeric(range)) range <- names(object)[[range]]
             object[range]
@@ -96,11 +105,25 @@ setMethod("Keep_Datasets_from_Object",
 ## -------------------------------------------------------
 
 #' @exportMethod Add_Datasets_to_Object
+#' 
+#' @rdname dataset-processing
+setMethod("Add_Datasets_to_Object",
+          "NULL",
+          function(object, dataset, name) {
+            return()
+          })
+
+
 #' @rdname dataset-processing
 setMethod("Add_Datasets_to_Object",
           "list",
           function(object, dataset, name) {
-            append(object, setNames(list(dataset), nm = name))
+            browser()
+            print(class(object))
+            if (is.null(object))
+              setNames(list(dataset), nm = name)
+            else
+              append(object, setNames(list(dataset), nm = name))
           })
 
 # #' @rdname dataset-processing
