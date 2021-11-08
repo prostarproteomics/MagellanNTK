@@ -53,7 +53,7 @@ mod_PipelineA_server <- function(id,
     parent = NULL,
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('Description', 'Process1', 'Process2', 'Save'),
+    steps = c('Description', 'Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, FALSE, TRUE)
   )

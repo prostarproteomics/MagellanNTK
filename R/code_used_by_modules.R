@@ -17,13 +17,18 @@
 #' cat(code)
 #' }
 #' 
-Get_Code_Declare_widgetsDefaultValues <- function(widgets.names){
-  basis <- "w.name = widgets.default.values$w.name"
-  ls_list <- lapply(widgets.names,
-                    function(x) gsub('w.name', x, basis) )
-  declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n", 
-                               paste0("\t", ls_list, sep="", collapse= ",\n"),
-                               "\n)\n\n")
+Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
+  # If one is on a composed workflow which do not have explicit ui
+  if (is.null(widgets.names))
+    declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
+  else {
+    basis <- "w.name = widgets.default.values$w.name"
+    ls_list <- lapply(widgets.names,
+                      function(x) gsub('w.name', x, basis) )
+    declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n", 
+                                paste0("\t", ls_list, sep="", collapse= ",\n"),
+                                "\n)\n\n")
+  }
   
   declare_rv_widgets
 }
@@ -364,7 +369,8 @@ code
 #' }
 #' 
 ComposedeWorflowCoreCode <- function(widgets, steps){
-  core <- paste0(Get_Code_for_rv_reactiveValues(),
+  core <- paste0(Get_Code_Declare_widgetsDefaultValues(),
+                 Get_Code_for_rv_reactiveValues(),
                  Get_Code_for_dataOut(),
                  Get_Code_for_observeEven_stepsEnabled(),
                  Get_Code_for_observeEvent_remoteReset(),

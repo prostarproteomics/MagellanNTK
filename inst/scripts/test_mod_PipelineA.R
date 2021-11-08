@@ -13,14 +13,10 @@ source(file.path('./module_examples', "mod_PipelineA_Description.R"),
        local=TRUE)$value
 source(file.path('./module_examples', "mod_PipelineA_Process1.R"), 
        local=TRUE)$value
-
-
-# trick to generate another process source file based on mod_PipelineA_Process1.R
-code <- readLines(file.path('./module_examples', "mod_PipelineA_Process1.R"))
-code <- gsub('xxx', 'xxx', code)
-
-
-
+source(file.path('./module_examples', "mod_PipelineA_Process2.R"), 
+       local=TRUE)$value
+source(file.path('./module_examples', "mod_PipelineA_Process3.R"), 
+       local=TRUE)$value
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
