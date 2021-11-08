@@ -63,6 +63,7 @@ mod_PipelineA_Process1_server <- function(id,
   )
   
   # Define default selected values for widgets
+  # This is only for simple workflows
   widgets.default.values <- list(
     Step1_select1 = 1,
     Step1_select2 = NULL,
@@ -82,8 +83,8 @@ mod_PipelineA_Process1_server <- function(id,
     ns <- session$ns
 
     # Insert necessary code which is hosted by Magellan
-    # DO NOT MODITY THIS LINE
-    eval(parse(text = ModuleCoreCode(widgets = names(widgets.default.values),
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = SimpleWorflowCoreCode(widgets = names(widgets.default.values),
                                      steps = config$steps )))
 
 
@@ -229,7 +230,7 @@ mod_PipelineA_Process1_server <- function(id,
     
     
     # Insert necessary code which is hosted by Magellan
-    # DO NOT MODITY THIS LINE
+    # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
   }
   )

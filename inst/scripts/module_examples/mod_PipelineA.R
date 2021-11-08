@@ -8,7 +8,7 @@
 #' 
 #' @param id xxx
 #'
-#' @rdname example_module_pipeline
+#' @rdname example_mod_pipelineA
 #'
 #' @author Samuel Wieczorek
 #' 
@@ -23,7 +23,10 @@ mod_PipelineA_ui <- function(id){
 #' @param dataIn The dataset
 #'
 #' @param steps.enabled A vector of boolean which has the same length of the steps
-#' of the pipeline. xxx
+#' of the pipeline. This information is used to enable/disable the widgets. It is not
+#' a communication variable between the caller and this module, thus there is no
+#' corresponding output variable
+#'
 #'
 #' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
@@ -31,7 +34,7 @@ mod_PipelineA_ui <- function(id){
 #'
 #' @param steps.status xxx
 #' 
-#' @rdname example_module_pipeline
+#' @rdname example_mod_pipelineA
 #'
 #' @import shiny
 #' @importFrom stats setNames
@@ -43,11 +46,21 @@ mod_PipelineA_server <- function(id,
                                  steps.status = reactive({NULL})){
 
   config <- list(
+    # Name of the process
     name = 'PipelineA',
+    # Name of the pipeline it belongs to
+    # In this case, the module is the last one and do note have any parent.
     parent = NULL,
-    steps = c('Description', 'Process1', 'Process2', 'Process3'),
+    # List of all steps of the process
+    # Here, each step is a workflow
+    steps = c('Description', 'Process1', 'Process2', 'Save'),
+    # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, FALSE, TRUE)
   )
+  
+  
+  # Contrary to the simple workflow, there is no widget in this module
+  # because all the widgets are provided by the simple workflows.
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -57,43 +70,14 @@ mod_PipelineA_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    rv <- reactiveValues(
-      dataIn = NULL,
-      steps.status = NULL,
-      steps.reset = NULL,
-      steps.enabled = NULL
-    )
-    
-    # Returned value of the process
-    dataOut <- reactiveValues(
-      trigger = NULL,
-      value = NULL
-    )
-    
-    observeEvent(steps.status(), { rv$steps.status <- steps.status()})
-    
-    # Initialization of the module
-    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-      if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv$length), rv$config$steps)
-      else
-        rv$steps.enabled <- steps.enabled()
-    })
+    # Insert necessary code which is hosted by Magellan
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = ComposedeWorflowCoreCode(steps = config$steps )))
     
     
-    # Return value of module
-    # DO NOT MODIFY THIS PART
-    list(config = reactive({config$ll.UI <- setNames(lapply(config$steps,
-                                                            function(x){
-                                                              do.call('uiOutput', list(ns(x)))
-                                                            }),
-                                                     paste0('screen_', config$steps)
-    )
-    config}),
-         dataOut = reactive({dataOut})
-         #status = reactive({rv$status})
-    )
-    
-  }
+    # Insert necessary code which is hosted by Magellan
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = Module_Return_Func()))
+    }
   )
 }

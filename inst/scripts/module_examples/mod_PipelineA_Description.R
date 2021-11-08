@@ -67,8 +67,8 @@ mod_PipelineA_Description_server <- function(id,
     ns <- session$ns
     
     # Insert necessary code which is hosted by Magellan
-    # DO NOT MODITY THIS LINE
-    eval(parse(text = ModuleCoreCode(widgets = names(widgets.default.values),
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = SimpleWorflowCoreCode(widgets = names(widgets.default.values),
                                      steps = config$steps )))
     
      
@@ -87,7 +87,7 @@ mod_PipelineA_Description_server <- function(id,
     })
 
     # Insert necessary code which is hosted by Magellan
-    # DO NOT MODITY THIS LINE
+    # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
 
   }

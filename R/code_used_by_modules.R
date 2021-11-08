@@ -359,11 +359,43 @@ code
 #' \dontrun{
 #' widgets <- paste0('widget', 1:3)
 #' steps <- paste0('step', 1:3)
-#' code <- ModuleCoreCode(widgets, steps)
+#' code <- ComposedeWorflowCoreCode(widgets, steps)
 #' cat(code)
 #' }
 #' 
-ModuleCoreCode <- function(widgets, steps){
+ComposedeWorflowCoreCode <- function(widgets, steps){
+  core <- paste0(Get_Code_for_rv_reactiveValues(),
+                 Get_Code_for_dataOut(),
+                 Get_Code_for_observeEven_stepsEnabled(),
+                 Get_Code_for_observeEvent_remoteReset(),
+                 sep = "\n"
+                 )
+  core
+}
+
+
+
+
+#' @title Code for declaring xxx
+#' 
+#' @description This function xxx
+#' # Generate dynamically the observeEvent function for each widget
+#' 
+#' @param widgets xxx
+#' 
+#' @param steps xxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' \dontrun{
+#' widgets <- paste0('widget', 1:3)
+#' steps <- paste0('step', 1:3)
+#' code <- SimpleWorflowCoreCode(widgets, steps)
+#' cat(code)
+#' }
+#' 
+SimpleWorflowCoreCode <- function(widgets, steps){
   core <- paste0(Get_Code_Declare_widgetsDefaultValues(widgets),
                  Get_Code_for_ObserveEvent_widgets(widgets),
                  Get_Code_for_rv_reactiveValues(),
@@ -374,6 +406,6 @@ ModuleCoreCode <- function(widgets, steps){
                  Generate_code_for_ValidationBtns_renderUI(steps),
                  Generate_RenderUI_Code_For_Single_Widgets(widgets),
                  sep = "\n"
-                 )
+  )
   core
 }

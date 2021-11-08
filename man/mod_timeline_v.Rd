@@ -3,30 +3,33 @@
 \name{mod_timeline_v_ui}
 \alias{mod_timeline_v_ui}
 \alias{mod_timeline_v_server}
-\title{timeline UI Function}
+\title{Module timeline functions}
 \usage{
 mod_timeline_v_ui(id)
 
 mod_timeline_v_server(id, config, status, position, enabled)
 }
 \arguments{
-\item{id}{xxx}
+\item{id}{The `id` of the server}
 
-\item{config}{xxx}
+\item{config}{A static `list` (not `reactiveList`) containing the same elements 
+as the process module.}
 
-\item{status}{xxx}
+\item{status}{A `reactive vector` which contain the status (validated, 
+skipped or undone) of each step of the process module. Its length is equal 
+to the number of steps.}
 
-\item{position}{xxx}
+\item{position}{A `reactive integer` that reflects the position of the 
+current (active) step.}
 
-\item{enabled}{xxx}
+\item{enabled}{A `reactive vector` of length the number of steps and which 
+indicate whether the step is enabled or disabled.}
 }
 \value{
 xxx
 }
 \description{
 A shiny Module.
-
-xxx
 }
 \examples{
 \dontrun{
@@ -56,4 +59,9 @@ enabled = reactive({rv$tl.tags.enabled})
 shinyApp(ui, server)
 }
    
+}
+\author{
+Samuel WIeczorek
+
+Samuel Wieczorek
 }

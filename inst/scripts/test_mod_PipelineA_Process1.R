@@ -17,12 +17,12 @@ for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
 
 
-
-
 #----------------------------------------------------------------------
 ui <- fluidPage(
   tagList(
     uiOutput('UI'),
+    
+    # Just for example purpose
     wellPanel(
       uiOutput('show_Debug_Infos')
     )

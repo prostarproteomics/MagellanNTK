@@ -10,15 +10,20 @@ mod_timeline_h_ui(id)
 mod_timeline_h_server(id, config, status, position, enabled)
 }
 \arguments{
-\item{id}{xxx}
+\item{id}{The `id` of the module,}
 
-\item{config}{xxx}
+\item{config}{A static `list` (not `reactiveList`) containing the same elements 
+as the process module.}
 
-\item{status}{xxx}
+\item{status}{A `reactive vector` which contain the status (validated, 
+skipped or undone) of each step of the process module. Its length is equal 
+to the number of steps.}
 
-\item{position}{xxx}
+\item{position}{A `reactive integer` that reflects the position of the 
+current (active) step.}
 
-\item{enabled}{xxx}
+\item{enabled}{A `reactive vector` of length the number of steps and which 
+indicate whether the step is enabled or disabled.}
 }
 \value{
 xxx
@@ -27,8 +32,6 @@ xxx
 }
 \description{
 A shiny Module.
-
-xxx
 }
 \examples{
 \dontrun{

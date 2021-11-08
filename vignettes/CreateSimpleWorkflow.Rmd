@@ -1,5 +1,5 @@
 ---
-title: "Create a simple workflow"
+title: "Writing a simple workflow"
 subtitle: "A developer's guidelines"
 author: "Samuel Wieczorek"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
@@ -33,6 +33,13 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Introduction
 
+# Deep inside a module process 
+
+
+
+# Writing your own module process
+
+## Hard way
 
 
 ### Simple mode

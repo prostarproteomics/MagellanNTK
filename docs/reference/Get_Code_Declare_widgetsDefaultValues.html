@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The ui() function of the module `mod_navigation` — mod_navigation_ui • Magellan</title>
+<title>Code for declaring widgets.default.values reactive variable — Get_Code_Declare_widgetsDefaultValues • Magellan</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,12 @@
 
 
 
-<meta property="og:title" content="The ui() function of the module `mod_navigation` — mod_navigation_ui" />
-<meta property="og:description" content="The module navigation can be launched via a Shiny app." />
+<meta property="og:title" content="Code for declaring widgets.default.values reactive variable — Get_Code_Declare_widgetsDefaultValues" />
+<meta property="og:description" content="This function create the source code needed inside a module
+to declare the reactive variable called 'widgets.default.values'.
+# Declaration of the variables that will contain the values of the widgets
+To avoid confusion, the first string is the name of the step while the second is the name
+of the widget" />
 
 
 
@@ -132,91 +136,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The ui() function of the module `mod_navigation`</h1>
-    <small class="dont-index">Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/R/mod_navigation.R'><code>R/mod_navigation.R</code></a></small>
-    <div class="hidden name"><code>mod_navigation.Rd</code></div>
+    <h1>Code for declaring widgets.default.values reactive variable</h1>
+    <small class="dont-index">Source: <a href='https://github.com/samWieczorek/Magellan/blob/master/R/code_used_by_modules.R'><code>R/code_used_by_modules.R</code></a></small>
+    <div class="hidden name"><code>Get_Code_Declare_widgetsDefaultValues.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The module navigation can be launched via a Shiny app.</p>
+    <p>This function create the source code needed inside a module
+to declare the reactive variable called 'widgets.default.values'.
+# Declaration of the variables that will contain the values of the widgets
+To avoid confusion, the first string is the name of the step while the second is the name
+of the widget</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mod_navigation_ui</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>
-
-<span class='fu'>mod_navigation_server</span><span class='op'>(</span>
-  <span class='va'>id</span>,
-  nav.mode <span class='op'>=</span> <span class='cn'>NULL</span>,
-  dataIn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>     <span class='cn'>NULL</span> <span class='op'>}</span><span class='op'>)</span>,
-  is.enabled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>     <span class='cn'>TRUE</span> <span class='op'>}</span><span class='op'>)</span>,
-  remoteReset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>     <span class='cn'>FALSE</span> <span class='op'>}</span><span class='op'>)</span>,
-  is.skipped <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span>     <span class='cn'>FALSE</span> <span class='op'>}</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>Get_Code_Declare_widgetsDefaultValues</span><span class='op'>(</span><span class='va'>widgets.names</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>A `character(1)` which defines the id of the module. It is the same
-as for the ui() function.</p></td>
-    </tr>
-    <tr>
-      <th>nav.mode</th>
-      <td><p>A `character(1)` indicating the type of workflow. It can be
-either 'process' (for a simple workflow) or 'pipeline' (for a composed 
-workflow). Default is NULL: a value is necessary.</p></td>
-    </tr>
-    <tr>
-      <th>dataIn</th>
-      <td><p>The dataset</p></td>
-    </tr>
-    <tr>
-      <th>is.enabled</th>
-      <td><p>A `boolean`. This variable is a remote command to specify
-if the corresponding module is enabled/disabled in the calling module of upper level.
-For example, if this module is part of a pipeline and the pipeline calculates
-that it is disabled (i.e. skipped), then this variable is set to TRUE. Then,
-all the widgets will be disabled. If not, the enabling/disabling of widgets
-is deciding by this module.</p></td>
-    </tr>
-    <tr>
-      <th>remoteReset</th>
-      <td><p>It is a remote command to reset the module. A boolen that 
-indicates is the pipeline has been reseted by a program of higher level
-Basically, it is the program which has called this module</p></td>
-    </tr>
-    <tr>
-      <th>is.skipped</th>
+      <th>widgets.names</th>
       <td><p>xxx</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A list of four items:
-* dataOut xxx
-* steps.enabled xxxxx
-* status A vector of `integer(1)` of the same length than the config$steps
-  vector
-* reset xxxx</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Samuel Wieczorek</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ebailey78.github.io/shinyBS'>shinyBS</a></span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>ui</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span></span>
-<span class='r-in'>  <span class='fu'>mod_navigation_ui</span><span class='op'>(</span><span class='st'>'Protein_Description'</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>server</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span><span class='op'>)</span><span class='op'>{</span></span>
-<span class='r-in'>  <span class='fu'>mod_navigation_server</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>'Protein_Description'</span>,</span>
-<span class='r-in'>  nav.mode <span class='op'>=</span> <span class='st'>'process'</span>,</span>
-<span class='r-in'>  dataIn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/reactive.html'>reactive</a></span><span class='op'>(</span><span class='op'>{</span><span class='va'>feat1</span><span class='op'>}</span><span class='op'>)</span></span>
-<span class='r-in'>  <span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>ui</span>, <span class='va'>server</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>widgets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>'widget'</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>code</span> <span class='op'>&lt;-</span> <span class='fu'>Get_Code_Declare_widgetsDefaultValues</span><span class='op'>(</span><span class='va'>widgets</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='va'>code</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>
 </pre>
