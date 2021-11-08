@@ -11,12 +11,11 @@ source(file.path('./module_examples', "mod_PipelineA.R"),
        local=TRUE)$value
 source(file.path('./module_examples', "mod_PipelineA_Description.R"), 
        local=TRUE)$value
-source(file.path('./module_examples', "mod_PipelineA_Process1.R"), 
-       local=TRUE)$value
-source(file.path('./module_examples', "mod_PipelineA_Process2.R"), 
-       local=TRUE)$value
-source(file.path('./module_examples', "mod_PipelineA_Process3.R"), 
-       local=TRUE)$value
+
+for (i in 1:3)
+  source(file.path('./module_examples', 
+                   paste0("mod_PipelineA_Process", i, ".R")), 
+         local=TRUE)$value
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
