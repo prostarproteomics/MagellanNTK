@@ -7,13 +7,14 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
-source(file.path('./module_examples', "mod_PipelineA_Description.R"), 
-       local=TRUE)$value
+
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
 
+source(file.path('./module_examples', "mod_PipelineA_Description.R"), 
+       local=TRUE)$value
 
 ui <- fluidPage(
   tagList(
@@ -33,16 +34,20 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Description',
-                                        nav.mode = 'process',
-                                        dataIn = reactive({rv$dataIn})
-                                        )
+    # rv$dataOut <- mod_navigation_server(id = 'PipelineA_Description',
+    #                                     nav.mode = 'process',
+    #                                     dataIn = reactive({rv$dataIn})
+    #                                     )
+    rv$dataOut <- mod_nav_process_server(id = 'PipelineA_Description',
+                                         dataIn = reactive({rv$dataIn})
+    )
 
   }, priority=1000)
   
   
   output$UI <- renderUI({
-    mod_navigation_ui('PipelineA_Description')
+    #mod_navigation_ui('PipelineA_Description')
+    mod_nav_process_ui('PipelineA_Description')
   })
   
   #--------------------------------------------------------------------

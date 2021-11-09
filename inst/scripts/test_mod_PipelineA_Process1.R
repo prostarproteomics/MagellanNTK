@@ -40,15 +40,19 @@ server <- function(input, output){
   
   observe({
     
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
-                                        nav.mode = 'process',
-                                        dataIn = reactive({rv$dataIn})
-    )
+    # rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+    #                                     nav.mode = 'process',
+    #                                     dataIn = reactive({rv$dataIn})
+    #                                     )
+    
+    rv$dataOut <- mod_nav_process_server(id = 'PipelineA_Process1',
+                                        dataIn = reactive({rv$dataIn}))
   }, priority=1000)
   
   
   output$UI <- renderUI({
-    mod_navigation_ui('PipelineA_Process1')
+    #mod_navigation_ui('PipelineA_Process1')
+    mod_nav_process_ui('PipelineA_Process1')
   })
   
   

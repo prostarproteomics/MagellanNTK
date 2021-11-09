@@ -13,10 +13,16 @@ element1 <- data.frame(A1 = rnorm(1:5),
 )
 
 
-feat1 <- list(assay1 = element1,
-             assay2 = element1,
-             assay3 = element1,
-             assay4 = element1)
+element2 <- data.frame(A1 = rnorm(1:5),
+                       A2 = rnorm(1:5),
+                       A3 = rnorm(1:5),
+                       B1 = rnorm(1:5),
+                       B2 = rnorm(1:5),
+                       B3 = rnorm(1:5)
+)
+
+feat1 <- list(assay1 = round(element1, digits=2),
+              assay2 = round(element2, digits=2))
 
 save(feat1, file = "../../data/feat1.rda", compress = "xz", compression_level = 9)
 

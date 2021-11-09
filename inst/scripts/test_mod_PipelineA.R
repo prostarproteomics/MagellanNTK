@@ -46,13 +46,19 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA',
-                                        nav.mode = 'pipeline',
-                                        dataIn = reactive({rv$dataIn})
-                                        )
+    # rv$dataOut <- mod_navigation_server(id = 'PipelineA',
+    #                                     nav.mode = 'pipeline',
+    #                                     dataIn = reactive({rv$dataIn})
+    #                                     )
+    rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineA',
+                                          dataIn = reactive({rv$dataIn}),
+                                          is.enabled = reactive({TRUE}),
+                                          remoteReset = reactive({FALSE})
+    )
     
     output$UI <- renderUI({
       mod_navigation_ui('PipelineA')
+      mod_nav_pipeline_ui('PipelineA')
     })
   }, priority=1000)
   

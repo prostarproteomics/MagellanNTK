@@ -81,7 +81,7 @@ setMethod("Keep_Datasets_from_Object",
             if (is.null(object))
               return()
             
-            if (is.numeric(range)) range <- names(object)[[range]]
+            if (is.numeric(range)) range <- names(object)[range]
             object[range]
           })
 
@@ -118,8 +118,6 @@ setMethod("Add_Datasets_to_Object",
 setMethod("Add_Datasets_to_Object",
           "list",
           function(object, dataset, name) {
-            browser()
-            print(class(object))
             if (is.null(object))
               setNames(list(dataset), nm = name)
             else
