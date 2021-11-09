@@ -28,90 +28,108 @@ GetCode_InitPipelineServer <- function(){
   
   code <- "
   
-  InitPipelineServer = function(){
-  # Call the server module of the pipeline which name is the parameter 'id'
-  # This will give access to its config
-  rv$proc <- do.call(paste0('mod_', id, '_server'),
-                     list(id = id,
-                          dataIn = reactive({rv$temp.dataIn}),
-                          steps.enabled = reactive({rv$steps.enabled}),
-                          remoteReset = reactive({FALSE}),
-                          steps.status = reactive({rv$steps.status})
-                     )
-  )
-  
-  # Update the reactive value config with the config of the pipeline
-  rv$config <- rv$proc$config()
-  
-  # TODO Write the CheckPipelineConfig function
-  # Check if the config variable is correct
-  # check <- CheckPipelineConfig(rv$config)
-  # if (!check$passed)
-  #   stop(paste0(\"Errors in 'rv$config'\", paste0(check$msg, collapse=' ')))
-  # 
-  
-  
-  rv$length <- length(rv$config$steps)
-  rv$current.pos <- 1
-  
-  # Get the name of the parent of the process
-  # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
-  # and the second correspond to the child in the process hierarchy
-  rv$parent.name <- unlist(strsplit(id, split='_'))[1]
-  rv$child.name <- unlist(strsplit(id, split='_'))[2]
-  
-  
-  rv$config$mandatory <- setNames(rv$config$mandatory, rv$config$steps)
-  rv$steps.status = setNames(rep(Magellan::global$UNDONE, rv$length), rv$config$steps)
-  rv$currentStepName <- reactive({rv$config$steps[rv$current.pos]})
-  
-  rv$steps.enabled <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
-  rv$steps.skipped <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
-  rv$resetChildren <- setNames(rep(0, length(rv$config$steps)), rv$config$steps)
-  
-  rv.child$data2send <- setNames(lapply(as.list(rv$config$steps), function(x) NULL), 
-                                 nm = rv$config$steps)
-  
-  # Launch the ui for each step of the pipeline
-  # This function could be stored in the source file of the pipeline
-  # but the strategy is to insert minimum extra code in the files for
-  # pipelines and processes. This is useful when other devs will
-  # develop other pipelines and processes. Tus, it will be easier.
-  rv$config$ll.UI <- setNames(lapply(rv$config$steps,
-                                     function(x){
-                                       mod_navigation_ui(ns(paste0(id, '_', x)))
-                                     }),
-                              paste0(rv$config$steps)
-  )
-  
-  
-  
-  #browser()
-  # rv$config$ll.UI <- setNames(lapply(rv$config$steps,
-  #                                        function(x){
-  #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
-  #                                          mod_navigation_ui(ns(paste0(id, '_', x)))
-  #                                          }),
-  #                                 paste0('screen_', rv$config$steps)
-  # )
-  
-  lapply(rv$config$steps, function(x){
-    tmp.return[[x]] <- mod_navigation_server(id = paste0(id, '_', x) ,
-                                             nav.mode = 'process',
-                                             dataIn = reactive({ rv.child$data2send[[x]] }),
-                                             is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
-                                             remoteReset = reactive({rv$resetChildren[x]}),
-                                             is.skipped = reactive({isTRUE(rv$steps.skipped[x])})
-    )
-  })
-  
-  mod_timeline_v_server(id = 'timelinev',
-                        config =  rv$config,
-                        status = reactive({rv$steps.status}),
-                        position = reactive({rv$current.pos}),
-                        enabled = reactive({rv$steps.enabled})
-  )
-}
+  # Catch any event on the 'id' parameter. As this parameter change only
+    # when the server is created, this function can be view as the initialization
+    # of the server
+    observeEvent(id, {
+      # The package containing the code for processes is supposed to be
+      # already launched. Just check if the server module is ok
+      # if (!exists('mod_Protein_server', where='package:DaparToolshed', mode='function')){
+      #   warning('This pipeline is not available in DaparToolshed')
+      #   return(NULL)
+      # }
+      req(nav.mode == 'pipeline')
+      rv$current.pos <- 1
+      
+      
+      # Call the server module of the pipeline which name is the parameter 'id'
+      # This will give access to its config
+      rv$proc <- do.call(paste0('mod_', id, '_server'),
+                                 list(id = id,
+                                      dataIn = reactive({rv$temp.dataIn}),
+                                      steps.enabled = reactive({rv$steps.enabled}),
+                                      remoteReset = reactive({FALSE}),
+                                      steps.status = reactive({rv$steps.status})
+                                      )
+                                 )
+      
+      
+      
+      
+     
+      # Update the reactive value config with the config of the pipeline
+      rv$config <- rv$proc$config()
+      
+      # TODO Write the CheckPipelineConfig function
+      # Check if the config variable is correct
+      # check <- CheckPipelineConfig(rv$config)
+      # if (!check$passed)
+      #   stop(paste0(\"Errors in 'rv$config'\", paste0(check$msg, collapse=' ')))
+      # 
+      
+      
+      rv$length <- length(rv$config$steps)
+      
+      # Get the name of the parent of the process
+      # The id variable is composed of two ids separate by '_'. The first id correspond to the parent
+      # and the second correspond to the child in the process hierarchy
+      rv$parent.name <- unlist(strsplit(id, split='_'))[1]
+      rv$child.name <- unlist(strsplit(id, split='_'))[2]
+      
+      
+      rv$config$mandatory <- setNames(rv$config$mandatory, rv$config$steps)
+      rv$steps.status = setNames(rep(global$UNDONE, rv$length), rv$config$steps)
+      rv$currentStepName <- reactive({rv$config$steps[rv$current.pos]})
+      
+      rv$steps.enabled <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
+      rv$steps.skipped <- setNames(rep(FALSE, length(rv$config$steps)), rv$config$steps)
+      rv$resetChildren <- setNames(rep(0, length(rv$config$steps)), rv$config$steps)
+      
+      rv.child$data2send <- setNames(lapply(as.list(rv$config$steps), function(x) NULL), 
+                                     nm = rv$config$steps)
+      
+      # Launch the ui for each step of the pipeline
+      # This function could be stored in the source file of the pipeline
+      # but the strategy is to insert minimum extra code in the files for
+      # pipelines and processes. This is useful when other devs will
+      # develop other pipelines and processes. Tus, it will be easier.
+      rv$config$ll.UI <- setNames(lapply(rv$config$steps,
+                         function(x){
+                            mod_nav_process_ui(ns(paste0(id, '_', x)))
+                         }),
+                  paste0(rv$config$steps)
+         )
+      
+      
+      
+      #browser()
+      # rv$config$ll.UI <- setNames(lapply(rv$config$steps,
+      #                                        function(x){
+      #                                          source(file.path('.', paste0('mod_', paste0(id, '_', x), '.R')), local=TRUE)
+      #                                          mod_nav_process_ui(ns(paste0(id, '_', x)))
+      #                                          }),
+      #                                 paste0('screen_', rv$config$steps)
+      # )
+      
+      lapply(rv$config$steps, function(x){
+        tmp.return[[x]] <- mod_nav_process_server(id = paste0(id, '_', x) ,
+                                                  dataIn = reactive({ rv.child$data2send[[x]] }),
+                                                  is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
+                                                  remoteReset = reactive({rv$resetChildren[x]}),
+                                                  is.skipped = reactive({isTRUE(rv$steps.skipped[x])})
+                                                  )
+      })
+      
+      mod_timeline_v_server(id = 'timelinev',
+                            config =  rv$config,
+                            status = reactive({rv$steps.status}),
+                            position = reactive({rv$current.pos}),
+                            enabled = reactive({rv$steps.enabled})
+      )
+      
+    }, priority=1000) 
+    
+
 
 "
 code 
@@ -284,3 +302,52 @@ GetCode_PrepareData2Send <- function(){
 
 code.string 
 }
+
+
+
+
+
+GetCode_ActionOn_NewPosition <- function(){
+
+  code.string <- "
+  ActionOn_NewPosition = function(){
+    req(nav.mode == 'pipeline')
+    if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
+
+    # Send dataset to child process only if the current position is enabled
+    #if(rv$steps.enabled[rv$current.pos])
+    PrepareData2Send()
+    #browser()
+    # If the current step is validated, set the child current position to the last step
+    if (rv$steps.status[rv$current.pos] == Magellan::global$VALIDATED)
+      rv.child$position[rv$current.pos] <- paste0('last_', Timestamp())
+  }
+
+  "
+
+  code.string
+
+}
+
+
+
+GetCode_Update_Data2send_Vector <- function(){
+  code.string <- "
+
+  Update_Data2send_Vector = function(){
+    # One only update the current position because the vector has been entirely
+    # initialized to NULL so the other processes are already ready to be sent
+    ind.last.validated <- GetMaxValidated_BeforePos()
+    if (is.null(ind.last.validated))
+      data <- rv$temp.dataIn
+    else
+      data <- Keep_Datasets_from_Object(object = rv$dataIn,
+                                        range = seq_len(ind.last.validated + rv$original.length -1)
+      )
+    return(data)
+  }
+
+"
+  code.string
+}
+
