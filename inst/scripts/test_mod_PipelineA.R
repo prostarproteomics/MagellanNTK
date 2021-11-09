@@ -57,7 +57,7 @@ server <- function(input, output){
     )
     
     output$UI <- renderUI({
-      mod_navigation_ui('PipelineA')
+      #mod_navigation_ui('PipelineA')
       mod_nav_pipeline_ui('PipelineA')
     })
   }, priority=1000)
