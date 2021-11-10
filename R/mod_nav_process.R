@@ -14,12 +14,7 @@ mod_nav_process_ui <- function(id){
     shinyjs::useShinyjs(),
     
     uiOutput(ns('nav_process_ui')),
-    wellPanel(title = 'foo',
-              tagList(
-                uiOutput(ns('show_Debug_Infos'))
-              )
-    )
-
+    mod_Debug_Infos_ui(ns('debug_infos'))
   )
 }
 
@@ -213,92 +208,18 @@ mod_nav_process_server <- function(id,
     
     
     
+    mod_Debug_Infos_server(id = 'debug_infos',
+                           config = reactive({rv$config}),
+                           rv.dataIn = reactive({rv$dataIn}),
+                           dataIn = reactive({dataIn()}),
+                           dataOut = reactive({dataOut}),
+                           steps.status = reactive({rv$steps.status}),
+                           current.pos = reactive({ rv$current.pos}),
+                           steps.enabled = reactive({rv$steps.enabled}),
+                           is.enabled = reactive({is.enabled()}))
     
     
-    
-    # The following functions are only there for dev and debugging reasons
-    # They will not be part of the final code
-    
-    output$show_Debug_Infos <- renderUI({
-      tagList(
-        h3(paste0('module process "', id, '"')),
-        uiOutput(ns('show_tag_enabled')),
-        fluidRow(
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("dataIn() ", rv$config$type))),
-                 uiOutput(ns('show_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("rv$dataIn ", rv$config$type))),
-                 uiOutput(ns('show_rv_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("dataOut$value ", rv$config$type))),
-                 uiOutput(ns('show_rv_dataOut'))),
-          column(width=4,
-                 tags$b(h4(style = 'color: blue;', "status")),
-                 uiOutput(ns('show_status')))
-        )
-      )
-    })
-    
-    ###########---------------------------#################
-    output$show_dataIn <- renderUI({
-     # if (verbose) cat(grey(paste0(id, '::output$show_dataIn\n\n')))
-      req(dataIn())
-      tagList(
-        # h4('show dataIn()'),
-        lapply(names(dataIn()), function(x){tags$p(x)})
-      )
-    })
-    
-    # output$show_rv_dataIn <- renderUI({
-    #   if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
-    #   req(rv$dataIn)
-    #   tagList(
-    #     # h4('show dataIn()'),
-    #     lapply(names(rv$dataIn), function(x){tags$p(x)})
-    #   )
-    # })
-    
-    output$show_rv_dataOut <- renderUI({
-      req(dataOut$value)
-      #if (verbose) cat(grey(paste0(id, '::output$show_rv_dataOut\n\n')))
-      tagList(
-        #h4('show dataOut$value'),
-        lapply(names(dataOut$value), function(x){tags$p(x)})
-      )
-    })
-    
-    
-    output$show_status <- renderUI({
-      tagList(lapply(seq_len(rv$length), 
-                     function(x){
-                       color <- if(rv$steps.enabled[x]) 'black' else 'lightgrey'
-                       if (x == rv$current.pos)
-                         tags$p(style = paste0('color: ', color, ';'),
-                                tags$b(paste0('---> ', rv$config$steps[x], ' - ', GetStringStatus(rv$steps.status[[x]])), ' <---'))
-                       else 
-                         tags$p(style = paste0('color: ', color, ';'),
-                                paste0(rv$config$steps[x], ' - ', GetStringStatus(rv$steps.status[[x]])))
-                     }))
-    })
-    
-    output$show_tag_enabled <- renderUI({
-      tagList(
-        p(paste0('steps.enabled = ', paste0(as.numeric(rv$steps.enabled), collapse=' '))),
-        p(paste0('enabled() = ', as.numeric(is.enabled())))
-      )
-    })
-
-    
-    
-    output$show_rv_dataIn <- renderUI({
-     # if (verbose) cat(paste0('::output$show_rv_dataIn from - ', id, "\n\n"))
-      req(rv$dataIn)
-      tagList(
-        # h4('show dataIn()'),
-        lapply(names(rv$dataIn), function(x){tags$p(x)})
-      )
-    })
+   
 
     
     # The return value of the nav_process module server
