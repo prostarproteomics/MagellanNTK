@@ -1,3 +1,78 @@
+GetCode_observeEvent_currentPos_pipeline <- function(){
+  
+  code <- "
+  
+  observeEvent(rv$current.pos, ignoreInit = TRUE, {
+      if (verbose) cat(paste0(id, '::observeEvent(rv$current.pos)\n\n'))
+      
+      shinyjs::toggleState(id = 'prevBtn', condition = rv$current.pos > 1)
+      shinyjs::toggleState(id = 'nextBtn', condition = rv$current.pos < rv$length)
+      shinyjs::hide(selector = paste0('.page_', id))
+      shinyjs::show(rv$config$steps[rv$current.pos])
+      
+      #Specific to pipeline code
+      ActionOn_NewPosition()
+      
+    })
+    
+    "
+  
+  code
+  
+  }
+
+GetCode_Pipeline_ui <- function(){
+  
+  code <- "
+  
+  output$nav_pipeline_ui <- renderUI({
+      req(nav.mode == 'pipeline')
+      tagList(
+        fluidRow(
+        column(width=2, 
+               wellPanel(
+                 div(style = 'padding: 10px',
+                     div(style = btn_style,
+                         shinyjs::disabled(
+                           actionButton(ns('prevBtn'), '<<',
+                                        class = PrevNextBtnClass,
+                                        style='padding:4px; font-size:80%')
+                         ),
+                         actionButton(ns('rstBtn'), 'Reset',
+                                      class = redBtnClass,
+                                      style='padding:4px; font-size:80%')
+                     ),
+                     div(style = btn_style,
+                         actionButton(ns('nextBtn'),'>>',
+                                      class = PrevNextBtnClass,
+                                      style='padding:4px; font-size:80%')
+                     ),
+                     mod_timeline_v_ui(ns('timelinev'))
+                 )
+               )),
+        column(width=10,
+               style=' padding-left: 20px;',
+               wellPanel(
+                 div(id = ns('Screens'),
+                     uiOutput(ns('SkippedInfoPanel')),
+                     uiOutput(ns('EncapsulateScreens_ui'))
+                     
+                 )
+               )
+               )
+        
+      )
+      )
+    })
+    
+    "
+  
+  code
+}
+
+
+
+
 #' @title xxx
 #' 
 #' @description

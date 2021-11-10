@@ -3,10 +3,8 @@ GetCode_SkippedInfoPanel_UI <- function(){
   
   code <- "
   
-  # Show/hide an information panel if the process is entirely skipped
-    # This functions can be used for both nav_process and nav_pipeline modules
-    output$SkippedInfoPanel <- renderUI({
-      #if (verbose) cat(paste0(class(self)[1], '::output$SkippedInfoPanel from - ', self$id, '\n\n'))
+  output$SkippedInfoPanel <- renderUI({
+      if (verbose) cat(paste0(class(self)[1], \"::output$SkippedInfoPanel from - \", self$id, \"\n\n\"))
       
       current_step_skipped <- rv$steps.status[rv$current.pos] == global$SKIPPED
       req(current_step_skipped)
@@ -17,13 +15,14 @@ GetCode_SkippedInfoPanel_UI <- function(){
         # pipeline. Thus, it is not necessary to show the info box because
         # it is shown below the timeline of the pipeline
       } else {
-        txt <- paste0('This ', rv$config$type, ' is skipped so it has been disabled.')
+        txt <- paste0(\"This \", rv$config$type, \" is skipped so it has been disabled.\")
         wellPanel(
-          style = 'background-color: #7CC9F0; opacity: 0.72; padding: 0px; align: center; vertical-align: center;',
-    height = 100,
-    width = 300,
-    align = 'center',
-    p(style = "color: black;", paste0('Info: ',txt))
+          style = \"background-color: #7CC9F0; opacity: 0.72; padding: 0px;
+                   align: center; vertical-align: center;\",
+          height = 100,
+          width = 300,
+          align = \"center\",
+        p(style = \"color: black;\", paste0(\"Info: \",txt))
     )
 }
 })
@@ -297,7 +296,7 @@ GetCode_LocalReset <- function(){
 
 
 
-GetCode_NavPage <- function(){
+GetCode_NavPage_Managment <- function(){
   # @title Change current position.
   #
   # @description
@@ -312,6 +311,10 @@ GetCode_NavPage <- function(){
     newval <- min(newval, rv$length)
     rv$current.pos <- newval
   }
+  
+  observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
+  observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
+    
 
 "
   code.string
@@ -343,6 +346,9 @@ dataModal = function() {
            )
   )
 }
+
+observeEvent(input$closeModal, {removeModal() })
+    
 
 "
 

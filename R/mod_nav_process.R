@@ -13,29 +13,7 @@ mod_nav_process_ui <- function(id){
   tagList(
     shinyjs::useShinyjs(),
     
-    fluidRow(style="display: flex;
-    align-items: center;
-             justify-content: center;",
-             column(width=1, shinyjs::disabled(
-               actionButton(ns("prevBtn"), "<<",
-                            class = PrevNextBtnClass,
-                            style='font-size:80%')
-             )),
-             column(width=1, actionButton(ns("rstBtn"), "Reset",
-                                          class = redBtnClass,
-                                          style='font-size:80%')),
-             column(width=9, mod_timeline_h_ui(ns('timeline'))),
-             column(width=1, shinyjs::disabled(
-               actionButton(ns("nextBtn"),">>",
-                            class = PrevNextBtnClass,
-                            style='font-size:80%'))
-             )
-    ),
-    div(id = ns('Screens'),
-        uiOutput(ns('SkippedInfoPanel')),
-        uiOutput(ns('EncapsulateScreens_ui'))
-        
-    ),
+    uiOutput(ns('nav_process_ui')),
     wellPanel(title = 'foo',
               tagList(
                 uiOutput(ns('show_Debug_Infos'))
@@ -99,6 +77,7 @@ mod_nav_process_server <- function(id,
                                    is.skipped = reactive({FALSE})
                                    ){
   
+  verbose <- FALSE
   nav.mode <- "process"
   
   ###-------------------------------------------------------------###
@@ -110,7 +89,6 @@ mod_nav_process_server <- function(id,
     ns <- session$ns
     
     
-    verbose <- FALSE
     
     
     # Reactive values that will be used to output the current dataset when 
@@ -149,8 +127,20 @@ mod_nav_process_server <- function(id,
     )
     
     
+    # This text is showed in the modal when the user click on the 'Reset' button.
+    modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
+                      validated process and all further datasets will be removed"
     
     
+    
+    
+    
+    # Launch the renderUI function for the user interface of the module
+    # Apparently, the renderUI() cannot be stored in the expression
+    output$nav_process_ui <- renderUI({
+      req(nav.mode == 'process')
+      eval(str2expression(GetCode_Process_ui()))
+    })
     
     
     eval(str2expression(GetCode_observeEvent_dataIn()))
@@ -167,7 +157,7 @@ mod_nav_process_server <- function(id,
     eval(str2expression(GetCode_Discover_Skipped_Steps()))
     eval(str2expression(GetCode_dataModal()))
     eval(str2expression(GetCode_ToggleState_ResetBtn()))
-    eval(str2expression(GetCode_NavPage()))
+    eval(str2expression(GetCode_NavPage_Managment()))
     eval(str2expression(GetCode_observeEvent_stepsStatus()))
     eval(str2expression(GetCode_observeEvent_isSkipped()))
     eval(str2expression(GetCode_observeEvent_rstBtn()))
@@ -178,24 +168,11 @@ mod_nav_process_server <- function(id,
     eval(str2expression(GetCode_ToggleState_NavBtns()))
     eval(str2expression(GetCode_InitProcessServer()))
     eval(str2expression(GetCode_observeEvent_isEnabled()))
+    
+    
+    # Show/hide an information panel if the process is entirely skipped
+    # This functions can be used for both nav_process and nav_pipeline module
     eval(str2expression(GetCode_SkippedInfoPanel_UI()))
-    
-    
-    
-    # This text is showed in the modal when the user click on the 'Reset' button.
-    modal_txt <- "This action will reset this process. The input dataset will be the output of the last previous
-                      validated process and all further datasets will be removed"
-    
-    
-    
-    
-    
-    
-    
-    observeEvent(input$closeModal, {removeModal() })
-    
-    observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
-    observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
     
     
     
@@ -214,31 +191,7 @@ mod_nav_process_server <- function(id,
     # and instantiate the rv$dataOut variable
     # which is the return value of the module.
     # This function is only used to communicate between the process module and and the caller
-    observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
-      
-      # If a value is returned, that is because the current is validated
-      rv$steps.status[rv$current.pos] <- global$VALIDATED
-      
-      #Look for new skipped steps
-      Discover_Skipped_Steps()
-      
-      # If it is the first step (description step), then xxxx
-      if (rv$current.pos==1)
-        rv$dataIn <- rv$temp.dataIn
-       else #if it is the last step of the process
-      if (rv$current.pos == rv$length){
-        #Update the work variable of the nav_process with the dataset returned by the process
-        rv$dataIn <- rv$proc$dataOut()$value
-        
-        #Update the 'dataOut' reactive value to return this dataset to the caller
-        # this nav_process is only a bridge between the process and the caller
-        Send_Result_to_Caller()
-        
-        # dataOut$trigger <- rv$proc$dataOut()$trigger
-        # dataOut$value <- rv$proc$dataOut()$value
-      }
-
-    })
+    eval(str2expression(GetCode_observeEvent_dataOut_trigger()))
     
 
     # Catches a new value of the cursor position
@@ -255,18 +208,7 @@ mod_nav_process_server <- function(id,
     # also manages the enabling/disabling of the `Prev` and `Next` buttons
     # w.r.t predefined rules (each of these buttons are disabled if there is
     # no more steps in their direction)
-    observeEvent(rv$current.pos, ignoreInit = TRUE, {
-      if (verbose) cat(yellow(paste0(id, '::observeEvent(rv$current.pos)\n\n')))
-      
-      ToggleState_NavBtns()
-      # Hide all screens 
-      shinyjs::hide(selector = paste0(".page_", id))
-      
-      #Show the current step which is identified by its name. This point is very important
-      # and need that the renderUI functions of the process to be strickly well named
-      shinyjs::show(rv$config$steps[rv$current.pos])
-      
-      })
+    eval(str2expression(GetCode_observeEvent_currentPos_process()))
 
     
     

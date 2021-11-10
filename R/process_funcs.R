@@ -1,3 +1,60 @@
+GetCode_observeEvent_currentPos_process <- function(){
+  
+  code <- "
+  observeEvent(rv$current.pos, ignoreInit = TRUE, {
+      if (verbose) cat(yellow(paste0(id, '::observeEvent(rv$current.pos)\n\n')))
+      
+      ToggleState_NavBtns()
+      # Hide all screens 
+      shinyjs::hide(selector = paste0('.page_', id))
+      
+      #Show the current step which is identified by its name. This point is very important
+      # and need that the renderUI functions of the process to be strickly well named
+      shinyjs::show(rv$config$steps[rv$current.pos])
+      
+      })
+  
+  "
+  
+  code
+  
+  }
+
+
+GetCode_Process_ui <- function(){
+  
+  code <- "
+  
+      tagList(
+        fluidRow(style = 'display: flex; align-items: center;
+                          justify-content: center;',
+             column(width=1, shinyjs::disabled(
+               actionButton(ns('prevBtn'), '<<',
+                            class = PrevNextBtnClass,
+                            style='font-size:80%')
+             )),
+             column(width=1, actionButton(ns('rstBtn'), 'Reset',
+                                          class = redBtnClass,
+                                          style='font-size:80%')),
+             column(width=9, mod_timeline_h_ui(ns('timeline'))),
+             column(width=1, shinyjs::disabled(
+               actionButton(ns('nextBtn'),'>>',
+                            class = PrevNextBtnClass,
+                            style='font-size:80%'))
+             )
+    ),
+    div(id = ns('Screens'),
+        uiOutput(ns('SkippedInfoPanel')),
+        uiOutput(ns('EncapsulateScreens_ui'))
+    )
+      )
+    
+    "
+  
+  code
+  }
+
+
 GetCode_InitProcessServer <- function(){
   code.string <- "
   
@@ -81,4 +138,40 @@ GetCode_InitProcessServer <- function(){
   
 "
   code.string
+}
+
+
+GetCode_observeEvent_dataOut_trigger <- function(){
+  
+  code <- "
+  
+  observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
+      req(nav.mode == 'process')
+      # If a value is returned, that is because the current is validated
+      rv$steps.status[rv$current.pos] <- global$VALIDATED
+      
+      #Look for new skipped steps
+      Discover_Skipped_Steps()
+      
+      # If it is the first step (description step), then xxxx
+      if (rv$current.pos==1)
+        rv$dataIn <- rv$temp.dataIn
+       else #if it is the last step of the process
+      if (rv$current.pos == rv$length){
+        #Update the work variable of the nav_process with the dataset returned by the process
+        rv$dataIn <- rv$proc$dataOut()$value
+        
+        #Update the 'dataOut' reactive value to return this dataset to the caller
+        # this nav_process is only a bridge between the process and the caller
+        Send_Result_to_Caller()
+        
+        # dataOut$trigger <- rv$proc$dataOut()$trigger
+        # dataOut$value <- rv$proc$dataOut()$value
+      }
+
+    })
+  
+  "
+  
+  code
 }
