@@ -37,9 +37,8 @@ Collate:
     general_nav_funcs.R
     pipeline_funcs.R
     process_funcs.R
-    mod_navigation.R
-    mod_nav_pipeline.R
-    mod_nav_process.R
+    mod_Debug_Infos.R
+    mod_nav.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

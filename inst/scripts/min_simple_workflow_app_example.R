@@ -4,7 +4,7 @@ f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R
 source(file(f), local=TRUE)$value
 
 ui <- fluidPage(
-  mod_navigation_ui('PipelineA_Process1')
+  mod_nav_ui('PipelineA_Process1')
 )
 
 
@@ -16,7 +16,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+    rv$dataOut <- mod_nav_server(id = 'PipelineA_Process1',
                                         nav.mode = 'process',
                                         dataIn = reactive({rv$dataIn})
                                         )

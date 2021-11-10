@@ -9,7 +9,7 @@ library(Magellan)
 # workflow and the name of its parent.
 # See xxx for more details
 ui <- fluidPage(
-  mod_navigation_ui('parent_name')
+  mod_nav_ui('parent_name')
 )
 
 
@@ -26,7 +26,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_navigation_server(id = 'parent_name',
+    rv$dataOut <- mod_nav_server(id = 'parent_name',
                                         nav.mode = 'process',
                                         dataIn = reactive({rv$dataIn})
     )

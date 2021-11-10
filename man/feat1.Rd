@@ -5,7 +5,7 @@
 \alias{feat1}
 \title{Feature example data}
 \format{
-An object of class \code{list} of length 4.
+An object of class \code{list} of length 2.
 }
 \usage{
 feat1
