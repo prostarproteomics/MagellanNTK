@@ -36,6 +36,7 @@ Collate:
     code_used_by_external_modules.R
     mod_Debug_Infos.R
     mod_nav.R
+    test.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

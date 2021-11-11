@@ -108,6 +108,8 @@ mod_nav_server <- function(id,
 
     source(system.file('extdata/general_nav_funcs.R', package='Magellan'), local = TRUE)$value
     
+    output$SkippedInfoPanel <- Build_SkippedInfoPanel(rv$steps.status, rv$current.pos, rv$config)
+
     
     switch (nav.mode,
             pipeline = {
