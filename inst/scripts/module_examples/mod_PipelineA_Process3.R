@@ -52,6 +52,8 @@ mod_PipelineA_Process3_server <- function(id,
   
   # This list contains the basic configuration of the process
   config <- list(
+    # Type de process
+    nav.mode = 'process',
     # Name of the process
     name = 'Process3',
     # Name of the pipeline it belongs to

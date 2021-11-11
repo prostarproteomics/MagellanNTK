@@ -60,8 +60,6 @@ mod_Debug_Infos_server <- function(id,
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    eval(str2expression(GetCode_GetStringStatus()))
-    
     # The following functions are only there for dev and debugging reasons
     # They will not be part of the final code
     
@@ -102,7 +100,11 @@ mod_Debug_Infos_server <- function(id,
       )
     })
     
-    
+    GetStringStatus <- function(name){
+      if (name == global$VALIDATED) 'Validated'
+    else if (name == global$UNDONE) 'Undone'
+    else if (name == global$SKIPPED) 'Skipped'
+  }
     output$show_status <- renderUI({
       tagList(lapply(seq_len(length(config()$steps)), 
                      function(x){

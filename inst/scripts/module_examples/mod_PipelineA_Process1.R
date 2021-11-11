@@ -52,6 +52,7 @@ mod_PipelineA_Process1_server <- function(id,
   
   # This list contains the basic configuration of the process
   config <- list(
+    nav.mode = 'process',
     # Name of the process
     name = 'Process1',
     # Name of the pipeline it belongs to
@@ -82,10 +83,14 @@ mod_PipelineA_Process1_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    #browser()
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(str2expression(SimpleWorflowCoreCode(widgets = names(widgets.default.values),steps = config$steps )))
+    eval(str2expression(
+      SimpleWorflowCoreCode(
+        widgets = names(widgets.default.values),
+        steps = config$steps )
+      )
+      )
     
     
     

@@ -1,10 +1,6 @@
 
 
-GetCode_Declare_reactiveValues <- function(){
-  
-  code <- "
-  
-  # Reactive values that will be used to output the current dataset when 
+# Reactive values that will be used to output the current dataset when 
     # the last step is validated
     dataOut <- reactiveValues(
       trigger = NULL,
@@ -15,7 +11,7 @@ GetCode_Declare_reactiveValues <- function(){
       # @field proc contains the return value of the process module that has been called 
       proc = NULL,
       
-      # @field status A booelan vector which contains the status (validated,
+      # @field status A boolan vector which contains the status (validated,
       # skipped or undone) of the steps
       steps.status = NULL,
       
@@ -48,19 +44,12 @@ GetCode_Declare_reactiveValues <- function(){
       length = NULL,
       config = NULL
     )
-  "
-  
-  code
-  
-}
 
 
-GetCode_SkippedInfoPanel_UI <- function(){
-  
-  code <- "
-  
-  output$SkippedInfoPanel <- renderUI({
-      if (verbose) cat(paste0(class(self)[1], \"::output$SkippedInfoPanel from - \", self$id, \"\n\n\"))
+
+
+output$SkippedInfoPanel <- renderUI({
+      if (verbose) cat(paste0(class(self)[1], "::output$SkippedInfoPanel from - ", self$id, "\n\n"))
       
       current_step_skipped <- rv$steps.status[rv$current.pos] == global$SKIPPED
       req(current_step_skipped)
@@ -71,38 +60,24 @@ GetCode_SkippedInfoPanel_UI <- function(){
         # pipeline. Thus, it is not necessary to show the info box because
         # it is shown below the timeline of the pipeline
       } else {
-        txt <- paste0(\"This \", rv$config$type, \" is skipped so it has been disabled.\")
+        txt <- paste0("This ", rv$config$type, " is skipped so it has been disabled.")
         wellPanel(
-          style = \"background-color: #7CC9F0; opacity: 0.72; padding: 0px;
-                   align: center; vertical-align: center;\",
+          style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px;
+                   align: center; vertical-align: center;",
           height = 100,
           width = 300,
-          align = \"center\",
-        p(style = \"color: black;\", paste0(\"Info: \",txt))
+          align = "center",
+        p(style = "color: black;", paste0("Info: ",txt))
     )
 }
 })
 
-"
-
-code
-      }
 
 
-GetCode_observeEvent_dataIn <- function(){
-  
-  code <- "
-  
-  # Catch a new value on the parameter 'dataIn()' variable, sent by the caller. This value 
-    # may be NULL or contain a dataset.
-    # The first action is to store the dataset in the temporary variable 
-    # temp.dataIn. Then, two behaviours:
-    # * if the variable is NULL. xxxx
-    # * if the variable contains a dataset. xxx
-    #
-    observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
+
+observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
       #observe({
-      if (verbose) cat(yellow(paste0(id, \"::observe(dataIn())\n\n\")))
+      if (verbose) cat(yellow(paste0(id, "::observe(dataIn())\n\n")))
       #browser()
       isolate({
         # A new value on dataIn() means a new dataset sent to the process
@@ -139,22 +114,10 @@ GetCode_observeEvent_dataIn <- function(){
         ToggleState_Screens(TRUE, 1)
       })
     })
-    
-    "
-  
-  code
-  
-  }
 
-GetCode_observeEvent_isEnabled <- function(){
-  
-  code <- "
-  
-  # Disable an entire process
-    # @description 
-    # The parameter is.enabled() is updated by the caller and tells the process
-    # if it is enabled or disabled (remote action from the caller)
-    observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
+
+
+observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
       if (verbose) cat(yellow(paste0(id, '::is.enabled()\n\n')))
       if (isTRUE(is.enabled())){
         Update_State_Screens()
@@ -163,18 +126,10 @@ GetCode_observeEvent_isEnabled <- function(){
                                      rv$config$steps)
       }
     })
-  
-  "
-  
-  code
-}
 
-GetCode_observeEvent_stepsStatus <- function(){
-  
-  code <- "
-  
-  # Catch new status event
-    observeEvent(rv$steps.status, ignoreInit = TRUE, {
+
+
+observeEvent(rv$steps.status, ignoreInit = TRUE, {
       # https://github.com/daattali/shinyjs/issues/166
       # https://github.com/daattali/shinyjs/issues/25
       if (verbose) cat(yellow(paste0(id, '::observeEvent(rv$steps.status)\n\n')))
@@ -186,23 +141,11 @@ GetCode_observeEvent_stepsStatus <- function(){
         Send_Result_to_Caller()
       }
     })
-  
-  "
-  
-  code
-}
 
 
-GetCode_observeEvent_isSkipped <- function(){
-  
-  code <- "
-  
-  #' @title
-    #' Skipping an entire process
-    #' @description 
-    #' The parameter is.skipped() is set by the caller and tells the process
-    #' if it is skipped or not (remote action from the caller)
-    observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit = TRUE,{
+
+
+observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit = TRUE,{
       # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
       # that the caller program wants this module to reset itself.
       if (verbose) cat(yellow(paste0(id, '::observeEvent(is.skipped()). Value = ', is.skipped(), '\n\n')))
@@ -212,74 +155,41 @@ GetCode_observeEvent_isSkipped <- function(){
         Unskip_All_Steps()
         Update_State_Screens()
       }
-    })"
-  
-  code
-}
+    })
 
-GetCode_observeEvent_remoteReset <- function(){
-  
-  code <- "
-  
-  observeEvent(remoteReset(), ignoreInit = TRUE, {
-      # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-      # that the caller program wants this module to reset itself. 
+
+observeEvent(remoteReset(), ignoreInit = TRUE, {
       if (verbose) cat(yellow(paste0(id, '::observeEvent(remoteReset()). Value = ', remoteReset(), '\n\n')))
       LocalReset()
     })
     
-    "
-  code
+
   
-  }
+
     
     
     
-GetCode_observeEvent_rstBtn <- function(){
-  
-  code <- "
-  
-  observeEvent(input$rstBtn, ignoreInit = TRUE, {
-      # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-      # that the caller program wants this module to reset itself. 
+observeEvent(input$rstBtn, ignoreInit = TRUE, {
       if (verbose) cat(yellow(paste0('::observeEvent(input$rstBtn) from - ', id, '\n\n')))
       showModal(dataModal())
     })
-    
-    "
-  
-  code
-  
-  }
 
 
-GetCode_observeEvent_modal_ok <- function(){
-  
-  code <- "
-  
-  observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
-  # Catches a clic on the `Ok` button of the modal for resetting a module
+
+
+observeEvent(input$modal_ok, ignoreInit=FALSE, ignoreNULL = TRUE, {
   if (verbose) cat(yellow(paste0(id, '::observeEvent(input$modal_ok)\n\n')))
   LocalReset()
   removeModal()
 })
 
-"
 
-  code
-  
-  }
 
 
 
 
 #' 
-GetCode_ToggleState_Screens <- function(){
-
-  # This function changes the state (enabled, disabled) of the steps in the process
-  # The parameter 'cond' is the new state
-  # The parameter 'range' corresponds to the range of steps to update
-  code.string <- "ToggleState_Screens = function(cond, range){
+ToggleState_Screens = function(cond, range){
   if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_Screens(cond = ', cond, ', range = ', paste0(range, collapse = ' '), ')\n\n')))
   #browser()
   if (isTRUE(is.enabled()))
@@ -291,15 +201,10 @@ GetCode_ToggleState_Screens <- function(){
     })
   }
 
-  "
-  code.string
-}
+
 
 #' 
-GetCode_ToggleState_NavBtns <- function(){
-
-  code.string <- "
-  ToggleState_NavBtns = function(){
+ToggleState_NavBtns = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_NavBtns()\n\n')))
 
     # If the cursor is not on the first position, show the 'prevBtn'
@@ -311,17 +216,11 @@ GetCode_ToggleState_NavBtns <- function(){
     shinyjs::toggleState(id = 'nextBtn', condition = cond)
   }
 
-  "
-
-  code.string
-
-}
 
 
 
-GetCode_LocalReset <- function(){
- code.string <- "
- LocalReset = function(){
+
+LocalReset = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::LocalReset()\n\n')))
     #browser()
     rv$dataIn <- NULL
@@ -344,24 +243,11 @@ GetCode_LocalReset <- function(){
     #dataOut <- reactive({Send_Result_to_Caller(rv$dataIn)})
   }
 
-  "
-
-  code.string
-}
 
 
 
 
-GetCode_NavPage_Managment <- function(){
-  # @title Change current position.
-  #
-  # @description
-  # Change current position.
-  #
-  # @param direction xxx
-  #
-  code.string <- "
-  NavPage = function(direction) {
+NavPage = function(direction) {
     newval <- rv$current.pos + direction
     newval <- max(1, newval)
     newval <- min(newval, rv$length)
@@ -370,26 +256,11 @@ GetCode_NavPage_Managment <- function(){
   
   observeEvent(input$prevBtn, ignoreInit = TRUE, {NavPage(-1)})
   observeEvent(input$nextBtn, ignoreInit = TRUE, {NavPage(1)})
-    
-
-"
-  code.string
-}
 
 
 
-GetCode_dataModal <- function(){
-# @title
-# xxx
-#
-# @description
-# Return the UI for a modal dialog with data selection input. If 'failed' is
-# TRUE, then display a message that the previous value was invalid.
-#
 
-code.string <-
 
-"
 dataModal = function() {
   # Used to show an explanation for the reset feature whether the navigation mode is 'process' nor 'pipeline'.
   template_reset_modal_txt <- 'This action will reset this nav.mode. The input dataset will be the output of the last previous
@@ -407,25 +278,10 @@ validated process and all further datasets will be removed'
 }
 
 observeEvent(input$closeModal, {removeModal() })
-    
-
-"
-
-code.string
-}
 
 
-GetCode_Discover_Skipped_Steps <- function(){
-# @title
-# Discover new skipped steps.
-# @description
-# This function looks for new skipped steps after the vector status has been updated.
-#
-# @return Nothing.
-#
-  code.string <-
-  "
-  Discover_Skipped_Steps = function(){
+
+Discover_Skipped_Steps = function(){
   if(verbose) cat(crayon::yellow(paste0(id, '::Discover_Skipped_Steps()\n\n')))
   for (i in seq_len(rv$length)){
     max.val <- GetMaxValidated_AllSteps()
@@ -434,65 +290,30 @@ GetCode_Discover_Skipped_Steps <- function(){
   }
 }
 
-"
-
-code.string
-}
 
 
 
 
-GetCode_Unskip_All_Steps <- function(){
- code.string <- "
-
- Unskip_All_Steps = function(){
+Unskip_All_Steps = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Unskip_All_Steps()\n\n')))
     rv$steps.status <- setNames(rep(Magellan::global$UNDONE, rv$length),
                                 rv$config$steps)
     Update_State_Screens()
   }
 
- "
-
-  code.string
-}
 
 
-GetCode_Set_All_Skipped <- function(){
-  # @title
-  # Set all steps of the current process to skipped
-  # @description
-  # Set to skipped all steps of the current object
-  #
-  # @return Nothing.
-  #
-  code.string <- "
-
-  Set_All_Skipped = function(){
+Set_All_Skipped = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Set_All_Skipped()\n\n')))
     rv$steps.status <- setNames(rep(Magellan::global$SKIPPED, rv$length),
                                 rv$config$steps)
   }
 
-"
-  code.string
-}
 
 
 
 
-GetCode_GetFirstMandatoryNotValidated <- function(){
-  # @title
-  # Get first mandatory step not yet validated
-  # @description
-  # This function analyses the vectors mandatory and status to find the first
-  # step which is mandatory and not yet validated in a range of integers
-  #
-  # @param range xxx
-  #
-  code.string <- "
-
-  GetFirstMandatoryNotValidated = function(range){
+GetFirstMandatoryNotValidated = function(range){
     if(verbose) cat(crayon::yellow(paste0(id, '::GetFirstMandatoryNotValidated()\n\n')))
 
     first <- NULL
@@ -504,68 +325,21 @@ GetCode_GetFirstMandatoryNotValidated <- function(){
       NULL
   }
 
-"
-  code.string
-}
 
 
-GetCode_Change_Current_Pos <- function(){
-  # @title
-  # Set current position
-  # @description
-  # Change the cursor position to a given position
-  #
-  # @param i An integer that corresponds to the new position
-  #
-  code.string <- "
-  Change_Current_Pos = function(i){ rv$current.pos <- i}
-
-"
-  code.string
-
-}
+Change_Current_Pos = function(i){ rv$current.pos <- i}
 
 
-GetCode_ToggleState_ResetBtn <- function(){
 
-  # @title xxx
-  #
-  # @description
-  # xxx
-  #
-  # @param cond xxx
-  #
-  code.string <- "
-
-  ToggleState_ResetBtn = function(cond){
+ToggleState_ResetBtn = function(cond){
     if(verbose) cat(crayon::yellow(paste0(id, '::ToggleState_ResetBtn(', cond, '))\n\n')))
 
     shinyjs::toggleState('rstBtn', condition = cond)
   }
 
-"
-  code.string
-
-}
 
 
-GetCode_GetMaxValidated_BeforePos <- function(){
-
-  # @title
-  # Get the last validated step before a given position
-  # @description
-  # This function analyzes the reactive variable rv$steps.status
-  # to find the indice of the last validated step among all steps before
-  # the current position (parameter pos set to NULL) or a given position (
-  # parameter pos set to an integer).
-  #
-  # @param pos xxx
-  #
-  # @return Nothing
-  #
-  code.string <- "
-
-  GetMaxValidated_BeforePos = function(pos = NULL){
+GetMaxValidated_BeforePos = function(pos = NULL){
     if(verbose) cat(crayon::yellow(paste0(id, 'GetMaxValidated_BeforePos()\n\n')))
 
     if (is.null(pos))
@@ -581,24 +355,10 @@ GetCode_GetMaxValidated_BeforePos <- function(){
     ind.max
   }
 
-"
-  code.string
-
-
-}
 
 #' 
 #' 
-GetCode_GetMaxValidated_AllSteps <- function(){
-  # @title
-  # Get the last validated step among all the steps
-  # @description
-  # This function analyzes the reactive variable rv$steps.status
-  # to find the indice of the last validated step among all steps
-  #
-  code.string <- "
-
-  GetMaxValidated_AllSteps = function(){
+GetMaxValidated_AllSteps = function(){
     if(verbose) cat(crayon::yellow(paste0( id, '::GetMaxValidated_AllSteps()\n\n')))
     val <- 0
     ind <- grep(Magellan::global$VALIDATED, rv$steps.status)
@@ -607,13 +367,9 @@ GetCode_GetMaxValidated_AllSteps <- function(){
     val
   }
 
-"
-  code.string
-}
 
 
-GetCode_EncapsulateScreens <- function(){
-  code.string <- "
+
 output$EncapsulateScreens_ui <- renderUI({
   #EncapsulateScreens = function(){
     tagList(
@@ -635,46 +391,15 @@ output$EncapsulateScreens_ui <- renderUI({
     )
   })
 
-"
-  code.string
-}
 
 
-GetCode_GetStringStatus <- function(){
-  # @title
-  # xxx
-  # @description
-  # Converts the numerical code for status into string.
-  #
-  # @param name A number
-  #
-  code.string <- "
-
-  GetStringStatus = function(name){
-    if (name == Magellan::global$VALIDATED) 'Validated'
-    else if (name == Magellan::global$UNDONE) 'Undone'
-    else if (name == Magellan::global$SKIPPED) 'Skipped'
+GetStringStatus = function(name){
+    if (name == global$VALIDATED) 'Validated'
+    else if (name == global$UNDONE) 'Undone'
+    else if (name == global$SKIPPED) 'Skipped'
   }
 
-  "
-code.string
-
-}
-
-
-GetCode_Update_State_Screens <- function(){
-  # This function is updated each time the status vector is changed. It is
-  # used to decide which steps must be enabled or disabled w.r.t the new
-  # status vector value.
-  # The behaviour is the following:
-  # * All the steps before the last validated one are disabled
-  # * all the steps before a undone mandatory step are enable and the ones
-  # after this mandatory step are disabled
-  # * xxx
-  #'
-  code.string <- "
-
-  Update_State_Screens = function(){
+Update_State_Screens = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Update_State_Screens()\n\n')))
 
     if (isTRUE(is.skipped())){
@@ -702,43 +427,16 @@ GetCode_Update_State_Screens <- function(){
     }
   }
 
-  "
-  code.string
-
-}
 
 
-GetCode_Send_Result_to_Caller <- function(){
-  # #' @title
-  # #' xxx
-  # #'
-  # #' @description xxx
-  # #'
-  # #' @export
-  # #'
-  code.string <- "
-
-  Send_Result_to_Caller = function(){
+Send_Result_to_Caller = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::Send_Result_to_Caller()\n\n')))
     dataOut$trigger <- Timestamp()
     dataOut$value <- rv$dataIn
   }
 
-  "
-  code.string
-}
 
-GetCode_CurrentStepName <- function(){
-  
-  code <- "
-  
-  
 CurrentStepName <- reactive({
   cat(crayon::yellow(paste0('::GetCurrentStepName() from - ', id, '\n')))
   rv$config$steps[rv$current.pos]
 })
-
-"
-  
-  code
-}

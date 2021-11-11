@@ -34,9 +34,6 @@ Collate:
     mod_timeline_h.R
     mod_timeline_v.R
     code_used_by_external_modules.R
-    general_nav_funcs.R
-    pipeline_funcs.R
-    process_funcs.R
     mod_Debug_Infos.R
     mod_nav.R
 biocViews: Software, Proteomics, MassSpectrometry

@@ -1,8 +1,4 @@
-GetCode_observeEvent_currentPos_pipeline <- function(){
-  
-  code <- "
-  
-  observeEvent(rv$current.pos, ignoreInit = TRUE, {
+observeEvent(rv$current.pos, ignoreInit = TRUE, {
       if (verbose) cat(paste0(id, '::observeEvent(rv$current.pos)\n\n'))
       
       shinyjs::toggleState(id = 'prevBtn', condition = rv$current.pos > 1)
@@ -14,16 +10,9 @@ GetCode_observeEvent_currentPos_pipeline <- function(){
       ActionOn_NewPosition()
       
     })
-    
-    "
-  
-  code
-  
-  }
 
-GetCode_pipeline_ui <- function(){
-  
-  code <- "
+
+output$pipeline_ui <- renderUI({
   
   tagList(
         fluidRow(
@@ -62,45 +51,22 @@ GetCode_pipeline_ui <- function(){
       )
       )
     
-    "
-  
-  code
-}
+})
 
 
 
 
-#' @title xxx
-#' 
-#' @description
-#' et to skipped all steps of the current object
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @return Source code for function ResetChildren
-#' 
-GetCode_ResetChildren <- function(){
-  code.string <- "
-  
-  ResetChildren = function(range){
+ResetChildren = function(range){
   if(verbose) cat(paste0(id, '::ResetChildren()\n\n'))
  
   rv$resetChildren[range] <- 1 + rv$resetChildren[range]
   }
-  
-"
-  code.string 
-  
-}
 
 
 
 
-GetCode_Init_pipeline_Server <- function(){
-  
-  code <- "
-  
-  # Catch any event on the 'id' parameter. As this parameter change only
+
+# Catch any event on the 'id' parameter. As this parameter change only
     # when the server is created, this function can be view as the initialization
     # of the server
     observeEvent(id, {
@@ -110,7 +76,7 @@ GetCode_Init_pipeline_Server <- function(){
       #   warning('This pipeline is not available in DaparToolshed')
       #   return(NULL)
       # }
-      req(nav.mode == 'pipeline')
+      req(rv$config$nav.mode == 'pipeline')
       rv$current.pos <- 1
       
       
@@ -203,35 +169,13 @@ GetCode_Init_pipeline_Server <- function(){
     
 
 
-"
-code 
-}
 
 
 
 
 
 
-
-GetCode_ActionOn_Data_Trigger <- function(){
-  # @description
-  # Catch the return value of a module and update the list of isDone modules
-  # This list is updated with the names of datasets present in the rv$tmp
-  # variable. One set to TRUE all the elements in isDone which have a corresponding
-  # element in names(rv$tmp).
-  # One cannot simply set to TRUE the last element of rv$tmp because it will does
-  # not work in case of a reseted module (it is not in the names(rv$tmp) list
-  # anymore)
-  # If a value (not NULL) is received, then it corresponds to the module
-  # pointed by the current position
-  # This function also updates the list isDone
-  # This function updates the current dataset (self$rv$dataIn)
-  #
-  # @return Nothing
-  #
-  code.string <- "
-  
-  ActionOn_Data_Trigger = function(){
+ActionOn_Data_Trigger = function(){
     if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_Data_Trigger()\n\n')))
     #browser()
     processHasChanged <- newValue <- NULL
@@ -321,21 +265,11 @@ GetCode_ActionOn_Data_Trigger <- function(){
     Send_Result_to_Caller()
   }
   
-"
-  code.string 
-}
 
 
 
-GetCode_PrepareData2Send <- function(){
-# @description
-# This function calls the server part of each module composing the pipeline
-#
-# @return Nothing
-#
-  code.string <- "
-  
-  PrepareData2Send = function(){
+
+PrepareData2Send = function(){
   if(verbose) cat(paste0(id, '::PrepareData2Send()\n\n'))
   #browser()
   # Returns NULL to all modules except the one pointed by the current position
@@ -370,20 +304,14 @@ GetCode_PrepareData2Send <- function(){
   cat(crayon::blue('<----------------------------------------------------> \n'))
 }
 
-"
-
-code.string 
-}
 
 
 
 
 
-GetCode_ActionOn_NewPosition <- function(){
 
-  code.string <- "
-  ActionOn_NewPosition = function(){
-    req(nav.mode == 'pipeline')
+ActionOn_NewPosition = function(){
+    req(rv$config$nav.mode == 'pipeline')
     if(verbose) cat(crayon::yellow(paste0(id, '::ActionOn_NewPosition()\n\n')))
 
     # Send dataset to child process only if the current position is enabled
@@ -395,18 +323,9 @@ GetCode_ActionOn_NewPosition <- function(){
       rv.child$position[rv$current.pos] <- paste0('last_', Timestamp())
   }
 
-  "
-
-  code.string
-
-}
 
 
-
-GetCode_Update_Data2send_Vector <- function(){
-  code.string <- "
-
-  Update_Data2send_Vector = function(){
+Update_Data2send_Vector = function(){
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent
     ind.last.validated <- GetMaxValidated_BeforePos()
@@ -419,17 +338,10 @@ GetCode_Update_Data2send_Vector <- function(){
     return(data)
   }
 
-"
-  code.string
-}
 
 
 
-GetCode_observeEvent_returnValuesOfProcesses <- function(){
-  
-  code <- "
-  
-  # Catch the returned values of the process                                                           
+# Catch the returned values of the process                                                           
 observeEvent(lapply(rv$config$steps, 
                     function(x){
                       tmp.return[[x]]$dataOut()$trigger}), ignoreInit = TRUE, {
@@ -438,23 +350,12 @@ observeEvent(lapply(rv$config$steps,
                         ActionOn_Data_Trigger()
                       })
                       
-                      "
-  code
-  
-}
 
 
-GetCode_Declare_Pipeline_reactiveValues <- function(){
-  
-  code <- "
-  
-# Specific to pipeline module
+
 # Used to store the return values (lists) of child processes
-# ONLY USED WITH PIPELINE
 tmp.return <- reactiveValues()
 
-# Used to xxx
-# ONLY USED WITH PIPELINE
 rv.child <- reactiveValues(
   # A vector of boolean where each element indicates if the corresponding
   # child if enable or disable
@@ -471,7 +372,3 @@ rv.child <- reactiveValues(
   data2send = NULL
 )
 
-"
-code
-
-}

@@ -1,6 +1,44 @@
 
 
 
+
+#' @title 
+#' xxx
+#' 
+#' @description 
+#' Returns the date and time in timestamp UNIX format.
+#' 
+#' @param f a filename
+#' 
+#' @return A `character(1)` vector containing as a character the
+#' source code of the file 'f'. Ready to use with eval(str2expression())
+#' 
+#' @author Samuel Wieczorek
+#'
+insertCode <- function(f){
+  code <- paste0(readLines(f), collapse="\n")
+  as.character(code)
+}
+
+
+
+#' @title 
+#' xxx
+#' 
+#' @description 
+#' Returns the date and time in timestamp UNIX format.
+#' 
+#' @return A boolean
+#' 
+#' @export
+#' 
+
+ModuleExists <- function(name){
+  
+  
+  
+}
+
 #' @title 
 #' xxx
 #' 

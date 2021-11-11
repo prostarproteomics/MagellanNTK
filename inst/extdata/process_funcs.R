@@ -1,7 +1,4 @@
-GetCode_observeEvent_currentPos_process <- function(){
-  
-  code <- "
-  observeEvent(rv$current.pos, ignoreInit = TRUE, {
+observeEvent(rv$current.pos, ignoreInit = TRUE, {
       if (verbose) cat(yellow(paste0(id, '::observeEvent(rv$current.pos)\n\n')))
       
       ToggleState_NavBtns()
@@ -13,19 +10,11 @@ GetCode_observeEvent_currentPos_process <- function(){
       shinyjs::show(rv$config$steps[rv$current.pos])
       
       })
-  
-  "
-  
-  code
-  
-  }
 
 
-GetCode_process_ui <- function(){
+output$process_ui <- renderUI({
   
-  code <- "
-  
-      tagList(
+  tagList(
         fluidRow(style = 'display: flex; align-items: center;
                           justify-content: center;',
              column(width=1, shinyjs::disabled(
@@ -49,35 +38,19 @@ GetCode_process_ui <- function(){
     )
       )
     
-    "
-  
-  code
-  }
+})
 
 
-GetCode_Init_process_Server <- function(){
-  code.string <- "
-  
-    
- ##### Initialization of the module. ####
-    # The first action is to instantiate the module process which contains the 
-    # configuration and UI of the process. Then, it instantiates the local 
-    # (reactive) variables of the nav_process module. Finally, launches the 
-    # timeline module server.
-    observeEvent(id, {
-      #browser()
+observeEvent(id, {
       # Launch of the module process server
-      cat(yellow(paste0(\"Launching \", paste0('mod_', id, '_server\n\n'))))
-      #browser()
-      req(nav.mode == 'process')
+      cat(yellow(paste0("Launching ", paste0('mod_', id, '_server\n\n'))))
       rv$current.pos  <- 1
       
-      # source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
-      # source(file.path('example_modules', 'mod_PipelineA_ProcessA.R'), local=TRUE)$value
-      # source(file.path('example_modules', 'mod_PipelineA_ProcessB.R'), local=TRUE)$value
-      # source(file.path('example_modules', 'mod_PipelineA_ProcessC.R'), local=TRUE)$value
-      # 
-      #Call the module server of the process
+      if (!exists(paste0('mod_', id, '_server')) || !exists(paste0('mod_', id, '_ui')))
+        stop('Cannot found the module functions.')
+      
+      
+      # Call the module server of the process
       # The 'dataIn' parameter correspond to the dataset passed to this nav_process server
       # more specifically, the temporary variable
       # The parameter 'steps.enabled' is xxxx
@@ -103,7 +76,7 @@ GetCode_Init_process_Server <- function(){
       # Check if the config variable is correct
       check <- CheckConfig(rv$config)
       if (!check$passed)
-        stop(paste0(\"Errors in 'rv$config'\", paste0(check$msg, collapse=' ')))
+        stop(paste0("Errors in 'rv$config'", paste0(check$msg, collapse=' ')))
       
       
       
@@ -136,17 +109,9 @@ GetCode_Init_process_Server <- function(){
       
     }, priority=1000) 
   
-"
-  code.string
-}
 
-
-GetCode_observeEvent_dataOut_trigger <- function(){
-  
-  code <- "
-  
-  observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
-      req(nav.mode == 'process')
+observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
+      req(rv$config$nav.mode == 'process')
       # If a value is returned, that is because the current is validated
       rv$steps.status[rv$current.pos] <- global$VALIDATED
       
@@ -170,27 +135,14 @@ GetCode_observeEvent_dataOut_trigger <- function(){
       }
 
     })
-  
-  "
-  
-  code
-}
 
 
-GetCode_observeEvent_rv_position <- function(){
 
-  code <- "
-  
-  observeEvent(req(!is.null(rv$position)), ignoreInit = TRUE, {
+observeEvent(req(!is.null(rv$position)), ignoreInit = TRUE, {
   pos <- strsplit(rv$position, '_')[[1]][1]
   if (pos == 'last')
     rv$current.pos <- rv$length
   else if (is.numeric(pos))
     rv$current.pos <- rv$position
 })
-
-"
-
-  code
-}
 

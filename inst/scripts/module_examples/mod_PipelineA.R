@@ -46,6 +46,7 @@ mod_PipelineA_server <- function(id,
                                  steps.status = reactive({NULL})){
 
   config <- list(
+    nav.mode = 'pipeline',
     # Name of the process
     name = 'PipelineA',
     # Name of the pipeline it belongs to
