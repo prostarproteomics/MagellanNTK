@@ -11,8 +11,8 @@ observeEvent(rv$current.pos, ignoreInit = TRUE, {
       
     })
 
-
-output$pipeline_ui <- renderUI({
+Build_pipeline_ui <- function(){
+  renderUI({
   
   tagList(
         fluidRow(
@@ -52,6 +52,8 @@ output$pipeline_ui <- renderUI({
       )
     
 })
+  
+}
 
 
 
@@ -255,14 +257,16 @@ ActionOn_Data_Trigger = function(){
         if (ind.processHasChanged < rv$length)
           rv$steps.status[(1 + ind.processHasChanged):rv$length] <- Magellan::global$UNDONE
         
-        Discover_Skipped_Steps()
+        rv$steps.status <- Discover_Skipped_Steps(len = rv$length,
+                                                  steps.status = rv$steps.status
+        )
         rv$dataIn <- newValue
       }
       
     }
     
     # PrepareData2Send()
-    Send_Result_to_Caller()
+    dataOut <- Send_Result_to_Caller(rv$dataIn)
   }
   
 
@@ -297,7 +301,7 @@ PrepareData2Send = function(){
     })
     
   } else
-    rv.child$data2send[[CurrentStepName()]] <- Update_Data2send_Vector()
+    rv.child$data2send[[CurrentStepName(rv$current.pos, rv$config$steps)]] <- Update_Data2send_Vector()
   
   cat(crayon::blue('<----------------- Data sent to children ------------------> \n'))
   print(rv.child$data2send)
@@ -328,7 +332,9 @@ ActionOn_NewPosition = function(){
 Update_Data2send_Vector = function(){
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent
-    ind.last.validated <- GetMaxValidated_BeforePos()
+    ind.last.validated <- GetMaxValidated_BeforePos(current.pos = xxx,
+                                                    pos = xxx,
+                                                    steps.status = xxx)
     if (is.null(ind.last.validated))
       data <- rv$temp.dataIn
     else

@@ -116,7 +116,9 @@ observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
       rv$steps.status[rv$current.pos] <- global$VALIDATED
       
       #Look for new skipped steps
-      Discover_Skipped_Steps()
+      rv$steps.status <- Discover_Skipped_Steps(len = rv$length,
+                                                steps.status = rv$steps.status
+      )
       
       # If it is the first step (description step), then xxxx
       if (rv$current.pos==1)
@@ -128,7 +130,7 @@ observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
         
         #Update the 'dataOut' reactive value to return this dataset to the caller
         # this nav_process is only a bridge between the process and the caller
-        Send_Result_to_Caller()
+        dataOut <- Send_Result_to_Caller(rv$dataIn)
         
         # dataOut$trigger <- rv$proc$dataOut()$trigger
         # dataOut$value <- rv$proc$dataOut()$value
