@@ -2,6 +2,7 @@
 
 export(CheckConfig)
 export(CheckProcessCode)
+export(ModuleExists)
 export(PrevNextBtnClass)
 export(Timestamp)
 export(btn_style)

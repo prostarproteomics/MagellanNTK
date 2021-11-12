@@ -28,11 +28,12 @@ insertCode <- function(f){
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
+#' @param name xxx
+#' 
 #' @return A boolean
 #' 
 #' @export
 #' 
-
 ModuleExists <- function(name){
   
   

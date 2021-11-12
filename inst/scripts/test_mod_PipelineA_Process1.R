@@ -57,27 +57,7 @@ server <- function(input, output){
                          title = 'Infos from global shiny app',
                          rv.dataIn = reactive({rv$dataIn}),
                          dataOut = reactive({rv$dataOut$dataOut()}))
-  
-  #--------------------------------------------------------------------
-  # The following functions are only for example purpose
-  output$show_Debug_Infos <- renderUI({
-    fluidRow(
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', "Data In")),
-             uiOutput('show_rv_dataIn')),
-      column(width=2,
-             tags$b(h4(style = 'color: blue;', "Data Out")),
-             uiOutput('show_rv_dataOut'))
-    )
-  })
-  
-  output$show_rv_dataIn <- renderUI({
-    lapply(names(rv$dataIn), function(x){tags$p(x)})
-  })
-  
-  output$show_rv_dataOut <- renderUI({
-    lapply(names(rv$dataOut$dataOut()$value), function(x){tags$p(x)})
-  })
+
 }
 
 

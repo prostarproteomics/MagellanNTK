@@ -2,8 +2,8 @@
 # Contains the functions scpecific to a module process,
 # in addition to the file general_nav_funcs.R
 
-Build_process_ui <- function(){
-  renderUI({
+Build_process_ui <- function(ns){
+
     tagList(
     fluidRow(style = 'display: flex; align-items: center;
                       justify-content: center;',
@@ -27,7 +27,7 @@ Build_process_ui <- function(){
         uiOutput(ns('EncapsulateScreens_ui'))
     )
   )
-  
-})
-  
+
 }
+
+

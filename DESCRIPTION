@@ -39,6 +39,7 @@ Collate:
     general_nav_funcs.R
     pipeline_funcs.R
     process_funcs.R
+    general_nav_observers.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true
