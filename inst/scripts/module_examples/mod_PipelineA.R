@@ -34,6 +34,8 @@ mod_PipelineA_ui <- function(id){
 #'
 #' @param steps.status xxx
 #' 
+#' @param current.pos xxx
+#' 
 #' @rdname example_mod_pipelineA
 #'
 #' @import shiny
@@ -43,10 +45,12 @@ mod_PipelineA_server <- function(id,
                                  dataIn = reactive({NULL}),
                                  steps.enabled = reactive({NULL}),
                                  remoteReset = reactive({FALSE}),
-                                 steps.status = reactive({NULL})){
+                                 steps.status = reactive({NULL}),
+                                 current.pos = reactive({1})
+                                 ){
 
   config <- list(
-    nav.mode = 'pipeline',
+    mode = 'pipeline',
     # Name of the process
     name = 'PipelineA',
     # Name of the pipeline it belongs to

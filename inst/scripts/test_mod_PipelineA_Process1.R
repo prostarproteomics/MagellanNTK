@@ -39,7 +39,6 @@ server <- function(input, output){
   observe({
     
       rv$dataOut <- mod_nav_server(id = 'PipelineA_Process1',
-                                   nav.mode = 'process',
                                    dataIn = reactive({rv$dataIn})
                                    )
     

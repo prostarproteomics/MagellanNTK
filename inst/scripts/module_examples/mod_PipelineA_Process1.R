@@ -38,6 +38,10 @@ mod_PipelineA_Process1_ui <- function(id){
 #' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
+#' 
+#' @param steps.status xxx
+#' 
+#' @param current.pos xxx
 #'
 #' @rdname example_module_process1
 #' 
@@ -47,12 +51,14 @@ mod_PipelineA_Process1_server <- function(id,
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE}),
+                                          steps.status = reactive({NULL}),
                                           current.pos = reactive({1})
                                           ){
   
   # This list contains the basic configuration of the process
   config <- list(
-    nav.mode = 'process',
+    # Define the type of module
+    mode = 'process',
     # Name of the process
     name = 'Process1',
     # Name of the pipeline it belongs to

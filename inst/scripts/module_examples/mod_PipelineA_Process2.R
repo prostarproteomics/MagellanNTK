@@ -47,11 +47,14 @@ mod_PipelineA_Process2_server <- function(id,
                                           dataIn = reactive({NULL}),
                                           steps.enabled = reactive({NULL}),
                                           remoteReset = reactive({FALSE}),
+                                          steps.status = reactive({NULL}),
                                           current.pos = reactive({1})
                                           ){
   
   # This list contains the basic configuration of the process
   config <- list(
+    mode = 'process',
+    
     # Name of the process
     name = 'Process2',
     # Name of the pipeline it belongs to

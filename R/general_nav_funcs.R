@@ -208,20 +208,20 @@ NavPage <- function(direction, current.pos, len) {
 #' @description xxx
 #' 
 #' @param ns xxx
-#' @param nav.mode xxx
+#' @param mode xxx
 #' 
 #' @return A tag div for ui
 #' 
 dataModal <- function(ns, 
-                      nav.mode
+                      mode
                       ) {
   # Used to show an explanation for the reset feature whether the navigation mode is 'process' nor 'pipeline'.
-  template_reset_modal_txt <- 'This action will reset this nav.mode. The input dataset will be the output of the last previous
+  template_reset_modal_txt <- 'This action will reset this mode. The input dataset will be the output of the last previous
 validated process and all further datasets will be removed'
   
   tags$div(id = 'modal1',
            modalDialog(
-             span(gsub('nav.mode', nav.mode, template_reset_modal_txt)),
+             span(gsub('mode', mode, template_reset_modal_txt)),
              footer = tagList(
                actionButton(ns('closeModal'), 'Cancel', class='btn-info'),
                actionButton(ns('modal_ok'), 'OK')
@@ -406,7 +406,7 @@ ToggleState_ResetBtn <- function(cond){
 #' 
 #' @description xxx
 #' 
-#' @param nav.mode xxx
+#' @param mode xxx
 #' @param rv xxx
 #' 
 #' @return A list of four items:
@@ -415,7 +415,7 @@ ToggleState_ResetBtn <- function(cond){
 #' * current.pos: xxx
 #' * steps.status: xxx
 #'
-LocalReset <- function(nav.mode,
+LocalReset <- function(mode,
                        rv
                        ){
   dataIn <- NULL
@@ -430,7 +430,7 @@ LocalReset <- function(nav.mode,
   # If the current module is a pipeline type (node and not leaf),
   # then sent to its children the information that they must reset themself
   resetChildren <- NULL
-  if (nav.mode == 'pipeline')
+  if (mode == 'pipeline')
     resetChildren <- ResetChildren(range = range,
                                    resetChildren = rv$resetChildren
     )

@@ -31,6 +31,10 @@ mod_PipelineA_Description_ui <- function(id){
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
 #' 
+#' @param steps.status xxx
+#' 
+#' @param current.pos xxx
+#' 
 #' @rdname example_module_process_step0
 #' 
 #' @importFrom stats setNames
@@ -39,10 +43,13 @@ mod_PipelineA_Description_server <- function(id,
                                              dataIn = reactive({NULL}),
                                              steps.enabled = reactive({NULL}),
                                              remoteReset = reactive({FALSE}),
+                                             steps.status = reactive({NULL}),
                                              current.pos = reactive({1})
-                                             ){
+                                            ){
 
   config <- list(
+    mode = 'process',
+    
     # Name of the pipeline it belongs to
     parent = 'PipelineA',
     # Name of the process
