@@ -476,8 +476,7 @@ mod_nav_server <- function(id,
               
               
               observeEvent(rv$current.pos, ignoreInit = TRUE, {
-                shinyjs::toggleState(id = 'prevBtn', condition = rv$current.pos > 1)
-                shinyjs::toggleState(id = 'nextBtn', condition = rv$current.pos < rv$length)
+                ToggleState_NavBtns(rv)
                 shinyjs::hide(selector = paste0('.page_', id))
                 shinyjs::show(rv$config$steps[rv$current.pos])
                 
@@ -499,25 +498,16 @@ mod_nav_server <- function(id,
               ActionOn_Data_Trigger = function(){
                 processHasChanged <- newValue <- NULL
                 
-                # Get the tigger values for each steps of the module
-                return.trigger.values <- setNames(lapply(rv$config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
-                                                  nm = rv$config$steps)
                 
-                # Replace NULL values by NA
-                return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
-                triggerValues <- unlist(return.trigger.values)
-                
-                
-                return.values <- setNames(lapply(rv$config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
-                                          rv$config$steps)
+                values.children <- GetValuesFromChildren(tmp.return = tmp.return, config = rv$config)
+                triggerValues <- values.children$triggers
+                return.values <- values.children$values
                 
                 cat(crayon::blue('--------------- Data received from children --------------------\n'))
                 print(return.values)
                 cat(crayon::blue('-------------------------------------------------------\n'))
-                #browser()
-                # if (sum(triggerValues)==0){ # Init of core engine
-                #   rv$dataIn <- rv$temp.dataIn
-                # } else
+                
+                
                 if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
                   print('The entire pipeline has been reseted')
                   rv$dataIn <- NULL

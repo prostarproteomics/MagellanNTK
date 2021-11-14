@@ -1,3 +1,27 @@
+GetValuesFromChildren <- function(config,
+                                  tmp.return
+                                  ){
+  # Get the trigger values for each steps of the module
+  return.trigger.values <- setNames(lapply(config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
+                                    nm = config$steps)
+  
+  # Replace NULL values by NA
+  return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
+  triggerValues <- unlist(return.trigger.values)
+  
+  
+  # Get the values returned by each step of the modules
+  return.values <- setNames(lapply(config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
+                            nm = config$steps)
+  
+  
+list(triggers = triggerValues,
+     values = return.values
+     )  
+  }
+
+
+
 ResetChildren <- function(range, 
                           resetChildren
                           ){
