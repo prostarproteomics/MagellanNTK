@@ -4,14 +4,12 @@
 \alias{GetFirstMandatoryNotValidated}
 \title{xxx}
 \usage{
-GetFirstMandatoryNotValidated(range, mandatory, steps.status)
+GetFirstMandatoryNotValidated(range, rv)
 }
 \arguments{
 \item{range}{xxx}
 
-\item{mandatory}{xxx}
-
-\item{steps.status}{xxx}
+\item{rv}{}
 }
 \value{
 xxx

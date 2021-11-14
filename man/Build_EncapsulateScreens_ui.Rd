@@ -4,16 +4,14 @@
 \alias{Build_EncapsulateScreens_ui}
 \title{xxx}
 \usage{
-Build_EncapsulateScreens_ui(ns, id, steps, ll.UI)
+Build_EncapsulateScreens_ui(ns, id, config)
 }
 \arguments{
 \item{ns}{xxx}
 
 \item{id}{xxx}
 
-\item{steps}{xxx}
-
-\item{ll.UI}{xxx}
+\item{config}{xxx}
 }
 \value{
 A `renderUI` function

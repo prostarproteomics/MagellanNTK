@@ -4,14 +4,12 @@
 \alias{GetMaxValidated_BeforePos}
 \title{xxx}
 \usage{
-GetMaxValidated_BeforePos(current.pos, pos = NULL, steps.status)
+GetMaxValidated_BeforePos(pos = NULL, rv)
 }
 \arguments{
-\item{current.pos}{xxx}
-
 \item{pos}{xxx}
 
-\item{steps.status}{xxx}
+\item{rv}{xxx}
 }
 \value{
 xxx

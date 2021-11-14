@@ -4,12 +4,12 @@
 \alias{dataModal}
 \title{xxx}
 \usage{
-dataModal(ns, nav.mode)
+dataModal(ns, mode)
 }
 \arguments{
 \item{ns}{xxx}
 
-\item{nav.mode}{xxx}
+\item{mode}{xxx}
 }
 \value{
 A tag div for ui

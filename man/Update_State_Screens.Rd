@@ -4,29 +4,14 @@
 \alias{Update_State_Screens}
 \title{xxx}
 \usage{
-Update_State_Screens(
-  is.skipped,
-  steps.status,
-  steps.enabled,
-  is.enabled,
-  current.pos,
-  mandatory
-)
+Update_State_Screens(is.skipped, is.enabled, rv)
 }
 \arguments{
 \item{is.skipped}{xxx}
 
-\item{steps.status}{xxx}
-
-\item{steps.enabled}{xxx}
-
 \item{is.enabled}{xxx}
 
-\item{current.pos}{xxx}
-
-\item{mandatory}{xxx}
-
-\item{xxx}{}
+\item{rv}{xxx}
 }
 \description{
 xxx

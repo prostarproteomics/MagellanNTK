@@ -4,16 +4,16 @@
 \alias{ToggleState_Screens}
 \title{xxx}
 \usage{
-ToggleState_Screens(cond, range, steps.status, is.enabled, steps.enabled)
+ToggleState_Screens(cond, range, is.enabled, rv)
 }
 \arguments{
 \item{cond}{xxx}
 
 \item{range}{xxx}
 
-\item{steps.status}{xxx}
-
 \item{is.enabled}{xxx}
+
+\item{steps.status}{xxx}
 
 \item{steps.enabled}{xxx}
 }

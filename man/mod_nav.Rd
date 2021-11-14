@@ -9,7 +9,6 @@ mod_nav_ui(id)
 
 mod_nav_server(
   id,
-  nav.mode = NULL,
   dataIn = reactive({     NULL }),
   is.enabled = reactive({     TRUE }),
   remoteReset = reactive({     FALSE }),
@@ -19,10 +18,6 @@ mod_nav_server(
 \arguments{
 \item{id}{A `character(1)` which defines the id of the module. It is the same
 as for the ui() function.}
-
-\item{nav.mode}{A `character(1)` indicating the type of workflow. It can be
-either 'process' (for a simple workflow) or 'pipeline' (for a composed 
-workflow). Default is NULL: a value is necessary.}
 
 \item{dataIn}{The dataset}
 
@@ -59,7 +54,6 @@ ui <- fluidPage(
 )
 server <- function(input, output){
   mod_nav_server(id = 'Protein_Description',
-  nav.mode = 'process',
   dataIn = reactive({feat1})
   )
 }

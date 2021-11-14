@@ -4,12 +4,12 @@
 \alias{LocalReset}
 \title{xxx}
 \usage{
-LocalReset(steps, nav.mode)
+LocalReset(mode, rv)
 }
 \arguments{
-\item{steps}{xxx}
+\item{mode}{xxx}
 
-\item{nav.mode}{xxx}
+\item{rv}{xxx}
 }
 \value{
 A list of four items:

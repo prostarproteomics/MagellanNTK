@@ -498,7 +498,7 @@ mod_nav_server <- function(id,
               ActionOn_Data_Trigger = function(){
                 processHasChanged <- newValue <- NULL
                 
-                
+                # Get the values returned by all children (steps) of the module
                 values.children <- GetValuesFromChildren(tmp.return = tmp.return, config = rv$config)
                 triggerValues <- values.children$triggers
                 return.values <- values.children$values
@@ -508,72 +508,41 @@ mod_nav_server <- function(id,
                 cat(crayon::blue('-------------------------------------------------------\n'))
                 
                 
-                if (is.null(unlist(return.values))) { # The entire pipeline has been reseted
-                  print('The entire pipeline has been reseted')
+                if (is.null(return.values)) { # The entire pipeline has been reseted
                   rv$dataIn <- NULL
-                  rv$steps.status[seq_len(rv$length)] <- Magellan::global$UNDONE
+                  rv$steps.status[seq_len(rv$length)] <- global$UNDONE
                 } else {
-                  processHasChanged <- rv$config$steps[which(max(triggerValues, na.rm = TRUE)==triggerValues)]
-                  ind.processHasChanged <- which(rv$config$steps==processHasChanged)
+                  # A process has changed
+                  # Either it has returned a value (newValue contains a dataset)
+                  # or it has been reseted (newValue is NULL)
+                  ind.process.has.changed <- which(max(triggerValues, na.rm = TRUE)==triggerValues)
+                  processHasChanged <- rv$config$steps[ind.process.has.changed]
+                  
+                  # Indice of the dataset in the object
+                  # If the original length is not 1, then this indice is different
+                  # than the above one
+                  #ind.processHasChanged <- which(rv$config$steps==processHasChanged)
+                  
+                  # Get the new value
                   newValue <- tmp.return[[processHasChanged]]$dataOut()$value
                   
-                  if (is.null(newValue)){
-                    #browser()
-                    # A process has been reseted
-                    rv$steps.status[ind.processHasChanged:rv$length] <- Magellan::global$UNDONE
-                    rv$steps.enabled[ind.processHasChanged:rv$length] <- FALSE
-                    rv$steps.enabled[ind.processHasChanged] <- TRUE
-                    rv$steps.skipped[ind.processHasChanged:rv$length] <- FALSE
-                    
-                    #browser()
-                    # Reset all further steps also
-                    #ResetChildren(range = ind.processHasChanged:rv$length)
-                    #if (ind.processHasChanged < rv$length)
-                    #  rv$resetChildren[(1+ind.processHasChanged):rv$length] <- TRUE
-                    #rv$resetChildren[seq_len(ind.processHasChanged-1)] <- FALSE
-                    
-                    # Reset all further steps also
-                    #rv.child$reset[ind.processHasChanged:length(rv$config$steps)] <- TRUE
-                    #ResetChildren(range = ind.processHasChanged:rv$length)
-                    #rv.child$reset[seq_len(ind.processHasChanged-1)] <- FALSE
-                    
-                    # browser()
-                    # One take the last validated step (before the one corresponding to processHasChanges
-                    # but it is straightforward because we just updates self$rv$status
-                    ind.last.validated <- NULL
-                    validated.steps <- which(rv$steps.status == Magellan::global$VALIDATED)
-                    if (length(validated.steps) !=0)
-                      ind.last.validated <- max(validated.steps)
-                    
-                    #There is no validated step (the first step has been reseted)
-                    if(is.null(ind.last.validated) || ind.last.validated == 1)
-                      rv$dataIn <- rv$temp.dataIn
-                    else{
-                      name.last.validated <- rv$config$steps[ind.last.validated]
-                      dataIn.ind.last.validated <- which(names(rv$dataIn) == name.last.validated)
-                      #self$rv$dataIn <- self$rv$dataIn[ , , seq_len(dataIn.ind.last.validated)]
-                      rv$dataIn <- Keep_Datasets_from_Object(object = rv$dataIn, 
-                                                             range = seq_len(dataIn.ind.last.validated))
-                      
-                    }
-                    #Update_State_Screens()
-                    # In this case, one force the update of the input dataset
-                    #PrepareData2Send()
-                  } else {
-                    # browser()
-                    # A process has been validated
-                    rv$steps.status[processHasChanged] <- Magellan::global$VALIDATED
-                    if (ind.processHasChanged < rv$length)
-                      rv$steps.status[(1 + ind.processHasChanged):rv$length] <- Magellan::global$UNDONE
-                    
-                    rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)
-                    
-                    rv$dataIn <- newValue
-                  }
+                  ret <- ActionOn_Child_Changed(temp.dataIn = rv$temp.dataIn,
+                                         dataIn = rv$dataIn,
+                                         steps.status = rv$steps.status,
+                                         steps = rv$config$steps,
+                                         steps.enabled = rv$steps.enabled,
+                                         steps.skipped = rv$steps.skipped,
+                                         processHasChanged = processHasChanged,
+                                         newValue = newValue)
                   
+                  
+                  rv$dataIn = ret$dataIn
+                  rv$steps.status = ret$steps.status
+                  rv$steps.enabled = ret$steps.enabled
+                  rv$steps.skipped = ret$steps.skipped
+
                 }
-                
-                # PrepareData2Send()
+
                 # Send result
                 res <- Send_Result_to_Caller(rv$dataIn)
                 dataOut$trigger <- res$trigger

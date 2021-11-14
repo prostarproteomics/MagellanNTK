@@ -1,3 +1,93 @@
+#' @title xxx
+#' 
+#' @description 
+#' xxxx
+#' 
+#' @param dataIn xxx
+#' @param steps.status xxx
+#' @param steps xxx
+#' @param steps.enabled xxx
+#' @param steps.skipped xxx
+#' @param processHasChanged xxxx
+#' @param newValue xxx 
+#' 
+#' @author Samuel Wieczorek
+#' 
+ActionOn_Child_Changed <- function(temp.dataIn,
+                                   dataIn,
+                                   steps.status,
+                                   steps,
+                                   steps.enabled,
+                                   steps.skipped,
+                                   processHasChanged,
+                                   newValue){
+  # Indice of the dataset in the object
+  # If the original length is not 1, then this indice is different
+  # than the above one
+  ind.processHasChanged <- which(steps==processHasChanged)
+  
+  len <- length(steps)
+  
+  if (is.null(newValue)){
+    # A process has been reseted
+    
+    # One take the last validated step (before the one 
+    # corresponding to processHasChanges
+    # but it is straightforward because we just updates rv$status
+    steps.status[ind.processHasChanged:len] <-  global$UNDONE
+    
+    steps.enabled[(ind.processHasChanged+1):len] <- FALSE
+    steps.enabled[ind.processHasChanged] <- TRUE
+    
+    steps.skipped[ind.processHasChanged:len] <- FALSE
+    
+    validated.steps <- which(steps.status == global$VALIDATED)
+    if (length(validated.steps) > 0)
+      ind.last.validated <- max(validated.steps)
+    else 
+      ind.last.validated <- 0
+    
+    # There is no validated step (the first step has been reseted)
+    if(ind.last.validated %in% c(0,1))
+      dataIn <- temp.dataIn
+    
+    else {
+      name.last.validated <- steps[ind.last.validated]
+      dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
+      dataIn <- Keep_Datasets_from_Object(object = dataIn, 
+                                          range = seq_len(dataIn.ind.last.validated))
+      }
+    
+  } else {
+    # A process has been validated
+    steps.status[processHasChanged] <- global$VALIDATED
+    
+    if (ind.processHasChanged < len)
+      steps.status[(1 + ind.processHasChanged):len] <- global$UNDONE
+    
+    steps.status <- Discover_Skipped_Steps(steps.status)
+    dataIn <- newValue
+  }
+  
+
+  return(
+    list(dataIn = dataIn,
+         steps.status = steps.status,
+         steps.enabled = steps.enabled,
+         steps.skipped = steps.skipped
+         )
+  )
+  }
+
+
+
+#' @title xxxx
+#' @description xxx
+#'
+#' @param config xxxx
+#' @param tmp.return xxx
+#' 
+#' 
 GetValuesFromChildren <- function(config,
                                   tmp.return
                                   ){
@@ -16,12 +106,18 @@ GetValuesFromChildren <- function(config,
   
   
 list(triggers = triggerValues,
-     values = return.values
+     values = unlist(return.values)
      )  
   }
 
 
-
+#' @title xxxx
+#' @description xxx
+#'
+#' @param range xxxx
+#' @param resetChildren xxx
+#' 
+#' 
 ResetChildren <- function(range, 
                           resetChildren
                           ){
@@ -34,7 +130,12 @@ ResetChildren <- function(range,
 
 
 
-
+#' @title xxxx
+#' @description xxx
+#'
+#' @param rv xxxx
+#' 
+#' 
 Update_Data2send_Vector <- function(rv){
   # One only update the current position because the vector has been entirely
   # initialized to NULL so the other processes are already ready to be sent
@@ -51,11 +152,14 @@ Update_Data2send_Vector <- function(rv){
 
 
 
-PrepareData2Send <- function(rv,
-                             pos
-                              ){
-  cat('::PrepareData2Send()\n\n')
-  #browser()
+#' @title xxxx
+#' @description xxx
+#'
+#' @param rv xxxx
+#' @param pos xxx
+#' 
+#' 
+PrepareData2Send <- function(rv, pos){
   # Returns NULL to all modules except the one pointed by the current position
   # Initialization of the pipeline : one send dataIn() to the
   # first module
@@ -67,7 +171,7 @@ PrepareData2Send <- function(rv,
   # Initialize vector to all NULL values
   data2send <- setNames(
     lapply(rv$config$steps, function(x){NULL}),
-    rv$config$steps)
+    nm = rv$config$steps)
   
   if (is.null(rv$dataIn)){ # Init of core engine
     
@@ -97,7 +201,12 @@ PrepareData2Send <- function(rv,
 
 
 
-
+#' @title xxxx
+#' @description xxx
+#'
+#' @param ns xxxx
+#' 
+#' 
 Build_pipeline_ui <- function(ns){
   tagList(
       fluidRow(

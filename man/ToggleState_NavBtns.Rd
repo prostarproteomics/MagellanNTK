@@ -4,7 +4,7 @@
 \alias{ToggleState_NavBtns}
 \title{xxx}
 \usage{
-ToggleState_NavBtns(current.pos, len)
+ToggleState_NavBtns(rv)
 }
 \arguments{
 \item{current.pos}{xxx}
