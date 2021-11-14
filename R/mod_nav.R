@@ -155,22 +155,6 @@ mod_nav_server <- function(id,
     )
     
     
-    rv.child <- reactiveValues(
-      # A vector of boolean where each element indicates if the corresponding
-      # child if enable or disable
-      enabled = NULL,
-      
-      # xxxx
-      reset = NULL,
-      
-      # A vector of integers where each element denotes the current position 
-      # of the corresponding element.
-      position = NULL,
-      
-      # xxxx
-      data2send = NULL
-    )
-    
     # Specific to pipeline module
     # Used to store the return values (lists) of child processes
     tmp.return <- reactiveValues()
@@ -228,6 +212,7 @@ mod_nav_server <- function(id,
       if (rv$steps.status[rv$length] == global$VALIDATED){
         # Set current position to the last one
         rv$current.pos <- rv$length
+        
         # Send result
         res <- Send_Result_to_Caller(rv$dataIn)
         dataOut$trigger <- res$trigger
@@ -236,16 +221,11 @@ mod_nav_server <- function(id,
     })
     
     
-    
-    # @title
-    # Skipping an entire process
     # @description 
     # The parameter is.skipped() is set by the caller and tells the process
     # if it is skipped or not (remote action from the caller)
     
     observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit = TRUE,{
-      # Catches a new value on the remote parameter `Reset`. A TRUE value indicates
-      # that the caller program wants this module to reset itself.
       
       if (isTRUE(is.skipped()))
         rv$steps.status <- All_Skipped_tag(rv$steps.status, global$SKIPPED)
@@ -258,46 +238,33 @@ mod_nav_server <- function(id,
     })
     
     
-    observeEvent(remoteReset(), ignoreInit = TRUE, {
-       res.reset <- LocalReset(mode = rv$mode,
-                              rv = rv
-                              )
+    
+    # Catch a click of a the button 'Ok' of a reset modal. This can be in the local module
+    # or in the module parent UI (remoteReset)
+    observeEvent(c(remoteReset(), req(input$modal_ok)), ignoreInit = FALSE, ignoreNULL = TRUE, {
       
-      rv$dataIn = res.reset$dataIn
-      dataOut = res.reset$dataOut
-      rv$current.pos = res.reset$current.pos
-      rv$steps.status = res.reset$steps.status
-      rv$resetChildren = res.reset$resetChildren
+      res <- LocalReset(mode = rv$mode, rv = rv)
+      
+      rv$dataIn = res$dataIn
+      dataOut = res$dataOut
+      rv$current.pos = res$current.pos
+      rv$steps.status = res$steps.status
+      rv$resetChildren = res$resetChildren
       
       removeModal()
     })
     
     
+    # Catch a click on the 'Reset' button. Then, open the modal for info on resetting.
     observeEvent(input$rstBtn, ignoreInit = TRUE, {
       showModal(
-        dataModal(ns, mode)
+        dataModal(ns, rv$mode)
         )
     })
     
     
-    
-    
-    observeEvent(input$modal_ok, ignoreInit = FALSE, ignoreNULL = TRUE, {
-      
-      res.reset <- LocalReset(mode = mode, rv = rv )
-      
-      rv$dataIn = res.reset$dataIn
-      dataOut = res.reset$dataOut
-      rv$current.pos = res.reset$current.pos
-      rv$steps.status = res.reset$steps.status
-      rv$resetChildren = res.reset$resetChildren
-      
-      removeModal()
-    })
-    
-    
-    
-     output$SkippedInfoPanel <- renderUI({
+    # Show the ui for a skipped module
+    output$SkippedInfoPanel <- renderUI({
       Build_SkippedInfoPanel(steps.status = rv$steps.status,
                              current.pos = rv$current.pos,
                              config = rv$config
@@ -317,25 +284,25 @@ mod_nav_server <- function(id,
      
      
      # Launch the renderUI function for the user interface of the module
-     # Apparently, the renderUI() cannot be stored in the expression
+     # Apparently, the renderUI() cannot be stored in the function 'Build..'
      output$nav_mod_ui <- renderUI({
        do.call(paste0('Build_', rv$mode, '_ui'), list(ns))
      })
      
      
-     # Catch any event on the 'id' parameter. As this parameter change only
-     # when the server is created, this function can be view as the initialization
-     # of the server
-     # This part is generic to both process and pipeline modules
+     # Catch any event on the 'id' parameter. As this parameter is static and is
+     # attached to the server, this function can be view as the initialization
+     # of the server module
+     # This code is generic to both process and pipeline modules
      observeEvent(id, {
-       # The package containing the code for processes is supposed to be
-       # already launched. Just check if the server module is ok
-       # if (!exists('mod_Protein_server', where='package:DaparToolshed', mode='function')){
-       #   warning('This pipeline is not available in DaparToolshed')
+       # The function of the module server (and ui) are supposed to be already
+       # loaded. Check if it is the case. If not, show a message and abort
+
+       # if (!exists('mod_Protein_server', mode='function')){
+       #   warning(paste0('Cannot find functions for the module ', xxx'))
        #   return(NULL)
        # }
-      # browser()
-       
+ 
        rv$current.pos <- 1
        
        

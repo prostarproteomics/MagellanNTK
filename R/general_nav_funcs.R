@@ -212,9 +212,7 @@ NavPage <- function(direction, current.pos, len) {
 #' 
 #' @return A tag div for ui
 #' 
-dataModal <- function(ns, 
-                      mode
-                      ) {
+dataModal <- function(ns, mode) {
   # Used to show an explanation for the reset feature whether the navigation mode is 'process' nor 'pipeline'.
   template_reset_modal_txt <- 'This action will reset this mode. The input dataset will be the output of the last previous
 validated process and all further datasets will be removed'
