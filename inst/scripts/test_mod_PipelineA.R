@@ -38,7 +38,8 @@ server <- function(input, output){
   
   observe({
      rv$dataOut <- mod_nav_server(id = 'PipelineA',
-                                  dataIn = reactive({rv$dataIn})
+                                  dataIn = reactive({rv$dataIn}),
+                                  timelines = c('v', 'h')
                                   )
     
     output$UI <- renderUI({

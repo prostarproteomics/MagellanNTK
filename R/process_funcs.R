@@ -15,7 +15,7 @@ Build_process_ui <- function(ns){
              column(width=1, actionButton(ns('rstBtn'), 'Reset',
                                           class = redBtnClass,
                                           style='font-size:80%')),
-             column(width=9, mod_timeline_h_ui(ns('timeline'))),
+             column(width=9, uiOutput(ns('show_TL'))),
              column(width=1, shinyjs::disabled(
                actionButton(ns('nextBtn'),'>>',
                             class = PrevNextBtnClass,

@@ -1,7 +1,12 @@
+
+
 #' @title xxx
 #' 
 #' @description 
-#' xxxx
+#' # A process has changed
+# Either it has returned a value (newValue contains a dataset)
+# or it has been reseted (newValue is NULL)
+
 #' 
 #' @param dataIn xxx
 #' @param steps.status xxx
@@ -228,7 +233,7 @@ Build_pipeline_ui <- function(ns){
                                       class = PrevNextBtnClass,
                                       style='padding:4px; font-size:80%')
                      ),
-                     mod_timeline_v_ui(ns('timelinev'))
+                     uiOutput(ns('show_TL'))
                  )
                )),
         column(width=10,

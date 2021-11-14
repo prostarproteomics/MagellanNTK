@@ -79,7 +79,8 @@ mod_nav_server <- function(id,
                            dataIn = reactive({NULL}),
                            is.enabled = reactive({TRUE}),
                            remoteReset = reactive({FALSE}),
-                           is.skipped = reactive({FALSE})
+                           is.skipped = reactive({FALSE}),
+                           timelines = NULL
                            ){
   
   
@@ -241,7 +242,9 @@ mod_nav_server <- function(id,
     
     # Catch a click of a the button 'Ok' of a reset modal. This can be in the local module
     # or in the module parent UI (remoteReset)
-    observeEvent(c(remoteReset(), req(input$modal_ok)), ignoreInit = FALSE, ignoreNULL = TRUE, {
+    observeEvent(c(remoteReset(), req(input$modal_ok)), 
+                 ignoreInit = FALSE, 
+                 ignoreNULL = TRUE, {
       
       res <- LocalReset(mode = rv$mode, rv = rv)
       
@@ -290,6 +293,30 @@ mod_nav_server <- function(id,
      })
      
      
+     
+     observeEvent(timelines, ignoreNULL = FALSE, {
+       
+       do.call(paste0('mod_timeline_', timelines[1], '_server'),
+               list(
+                 id = paste0('timeline', timelines[1]),
+                 config =  rv$config,
+                 status = reactive({rv$steps.status}),
+                 position = reactive({rv$current.pos}),
+                 enabled = reactive({rv$steps.enabled})
+                 )
+       )
+
+       output$show_TL <- renderUI({
+         do.call(paste0('mod_timeline_', timelines[1], '_ui'),
+                 list(ns(paste0('timeline', timelines[1]))
+                 )
+         )
+       })
+       
+     })
+     
+     
+     
      # Catch any event on the 'id' parameter. As this parameter is static and is
      # attached to the server, this function can be view as the initialization
      # of the server module
@@ -314,7 +341,7 @@ mod_nav_server <- function(id,
                                remoteReset = reactive({input$rstBtn + remoteReset()}),
                                steps.status = reactive({rv$steps.status}),
                                current.pos = reactive({rv$current.pos})
-                          )
+                               )
        )
        
        # Update the reactive value config with the config of the pipeline
@@ -369,7 +396,6 @@ mod_nav_server <- function(id,
      # * if the variable is NULL. xxxx
      # * if the variable contains a dataset. xxx
      observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
-       cat(crayon::yellow(paste0(id, "::observe(dataIn())\n\n")))
        isolate({
          # A new value on dataIn() means a new dataset sent to the process
          #browser()
@@ -377,7 +403,6 @@ mod_nav_server <- function(id,
          
          # Get the new dataset in a temporary variable
          rv$temp.dataIn <- dataIn()
-         #ActionOn_New_DataIn() # Used by class pipeline
          
          # The mode pipeline is a node and has to send
          # datasets to its children
@@ -417,6 +442,28 @@ mod_nav_server <- function(id,
          
        })
      })
+     
+     
+     
+     
+     
+     observeEvent(rv$current.pos, ignoreInit = TRUE, {
+       ToggleState_NavBtns(rv)
+       shinyjs::hide(selector = paste0('.page_', id))
+       shinyjs::show(rv$config$steps[rv$current.pos])
+       
+       if (rv$mode == 'pipeline'){
+         #Specific to pipeline code
+         res <-  PrepareData2Send(rv = rv, pos = NULL)
+         rv$child.data2send <- res$data2send
+         rv$steps.enabled <- res$steps.enabled
+         
+         if (rv$steps.status[rv$current.pos] == global$VALIDATED)
+           rv$child.position[rv$current.pos] <- paste0('last_', Timestamp())
+       }
+     })
+     
+     
      
      
      # Catch the time when the mode is defined
@@ -461,38 +508,13 @@ mod_nav_server <- function(id,
                                                   dataIn = reactive({rv$child.data2send[[x]]}),
                                                   is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),
-                                                  is.skipped = reactive({isTRUE(rv$steps.skipped[x])})
-                )
-              })
-              
-              mod_timeline_v_server(id = 'timelinev',
-                                    config =  rv$config,
-                                    status = reactive({rv$steps.status}),
-                                    position = reactive({rv$current.pos}),
-                                    enabled = reactive({rv$steps.enabled})
-              )
+                                                  is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
+                                                  timelines = timelines[-1]
+                                                  )
+                })
               
               
               
-              
-              observeEvent(rv$current.pos, ignoreInit = TRUE, {
-                ToggleState_NavBtns(rv)
-                shinyjs::hide(selector = paste0('.page_', id))
-                shinyjs::show(rv$config$steps[rv$current.pos])
-                
-                #Specific to pipeline code
-                res <-  PrepareData2Send(rv = rv, pos = NULL)
-                rv$child.data2send <- res$data2send
-                rv$steps.enabled <- res$steps.enabled
-                
-                if (rv$steps.status[rv$current.pos] == global$VALIDATED)
-                  rv$child.position[rv$current.pos] <- paste0('last_', Timestamp())
-
-              })
-              
-              
-              
-             
               
               
               ActionOn_Data_Trigger = function(){
@@ -512,16 +534,8 @@ mod_nav_server <- function(id,
                   rv$dataIn <- NULL
                   rv$steps.status[seq_len(rv$length)] <- global$UNDONE
                 } else {
-                  # A process has changed
-                  # Either it has returned a value (newValue contains a dataset)
-                  # or it has been reseted (newValue is NULL)
-                  ind.process.has.changed <- which(max(triggerValues, na.rm = TRUE)==triggerValues)
+                  ind.process.has.changed <- which(max(triggerValues, na.rm = TRUE) == triggerValues)
                   processHasChanged <- rv$config$steps[ind.process.has.changed]
-                  
-                  # Indice of the dataset in the object
-                  # If the original length is not 1, then this indice is different
-                  # than the above one
-                  #ind.processHasChanged <- which(rv$config$steps==processHasChanged)
                   
                   # Get the new value
                   newValue <- tmp.return[[processHasChanged]]$dataOut()$value
@@ -540,7 +554,6 @@ mod_nav_server <- function(id,
                   rv$steps.status = ret$steps.status
                   rv$steps.enabled = ret$steps.enabled
                   rv$steps.skipped = ret$steps.skipped
-
                 }
 
                 # Send result
@@ -559,30 +572,17 @@ mod_nav_server <- function(id,
               },
             process = {
               
-              observeEvent(rv$current.pos, ignoreInit = TRUE, {
-               
-                ToggleState_NavBtns(rv = rv)
-                # Hide all screens 
-                shinyjs::hide(selector = paste0('.page_', id))
-                
-                #Show the current step which is identified by its name. This point is very important
-                # and need that the renderUI functions of the process to be strickly well named
-                shinyjs::show(rv$config$steps[rv$current.pos])
-                
-              })
-              
-              
                 # Launch the horizontal timeline server
                 # The parameter 'config' is used to xxx
                 # The parameter 'status' is used to color the bullets
                 # the parameter 'position' is used to put the cursor at the current position
                 # The parameter 'enabled' is used to modify the bullets whether the corresponding step is enabled or disabled
-                mod_timeline_h_server(id = 'timeline',
-                                      config =  rv$config,
-                                      status = reactive({rv$steps.status}),
-                                      position = reactive({rv$current.pos}),
-                                      enabled = reactive({rv$steps.enabled})
-                )
+                # mod_timeline_h_server(id = 'timeline',
+                #                       config =  rv$config,
+                #                       status = reactive({rv$steps.status}),
+                #                       position = reactive({rv$current.pos}),
+                #                       enabled = reactive({rv$steps.enabled})
+                # )
 
               
               observeEvent(rv$proc$dataOut()$trigger, ignoreNULL = TRUE, ignoreInit = TRUE, {
@@ -597,8 +597,7 @@ mod_nav_server <- function(id,
                 # load the dataset in work variable 'dataIn'
                 if (rv$current.pos==1)
                   rv$dataIn <- rv$temp.dataIn
-                else #if it is the last step of the process
-                  if (rv$current.pos == rv$length){
+                else if (rv$current.pos == rv$length){
                     # Update the work variable of the nav_process with the dataset returned by the process
                     # Thus, the variable rv$temp.dataIn keeps trace of the original dataset sent to
                     # this  workflow and will be used in case of reset
