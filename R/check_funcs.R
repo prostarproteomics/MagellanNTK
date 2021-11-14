@@ -1,5 +1,17 @@
 
 
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param id xxx
+#' 
+Found_Mod_Funcs <- function(id){
+  server.exists = exists(paste0('mod_', id, '_server'), mode='function')
+  ui.exists = exists(paste0('mod_', id, '_ui'), mode='function')
+  return(server.exists && ui.exists)
+}
+
 #' @title 
 #' xxx
 #' 

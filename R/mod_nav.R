@@ -297,11 +297,10 @@ mod_nav_server <- function(id,
      observeEvent(id, {
        # The function of the module server (and ui) are supposed to be already
        # loaded. Check if it is the case. If not, show a message and abort
-
-       # if (!exists('mod_Protein_server', mode='function')){
-       #   warning(paste0('Cannot find functions for the module ', xxx'))
-       #   return(NULL)
-       # }
+      if (!Found_Mod_Funcs(id)){
+          warning(paste0('Cannot find functions for the module ', id))
+          return(NULL)
+        }
  
        rv$current.pos <- 1
        
@@ -320,6 +319,9 @@ mod_nav_server <- function(id,
        
        # Update the reactive value config with the config of the pipeline
        rv$config <- rv$proc$config()
+       
+       
+       
        
        # TODO Write the CheckPipelineConfig function
        # Check if the config variable is correct
@@ -430,7 +432,13 @@ mod_nav_server <- function(id,
        switch (rv$mode,
             default = {},
             pipeline = {
-              
+              # Before continuing the initialization, check if all modules functions
+              # are found in the environment
+              for (i in rv$config$steps)
+                if (!Found_Mod_Funcs(paste0(rv$module.name, '_',i))){
+                  warning(paste0('Cannot find functions ui() and server() for the module ', i))
+                  return(NULL)
+                }
               
               rv$steps.skipped <- setNames(rep(FALSE, rv$length), rv$config$steps)
               rv$resetChildren <- setNames(rep(0, rv$length), rv$config$steps)
@@ -490,8 +498,10 @@ mod_nav_server <- function(id,
               
               ActionOn_Data_Trigger = function(){
                 processHasChanged <- newValue <- NULL
+                
+                # Get the tigger values for each steps of the module
                 return.trigger.values <- setNames(lapply(rv$config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
-                                                  rv$config$steps)
+                                                  nm = rv$config$steps)
                 
                 # Replace NULL values by NA
                 return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
