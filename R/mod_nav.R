@@ -289,7 +289,7 @@ mod_nav_server <- function(id,
      # Launch the renderUI function for the user interface of the module
      # Apparently, the renderUI() cannot be stored in the function 'Build..'
      output$nav_mod_ui <- renderUI({
-       do.call(paste0('Build_', rv$mode, '_ui'), list(ns))
+       do.call(paste0('Build_nav_', timelines[1], '_ui'), list(ns))
      })
      
      
@@ -324,14 +324,13 @@ mod_nav_server <- function(id,
      observeEvent(id, {
        # The function of the module server (and ui) are supposed to be already
        # loaded. Check if it is the case. If not, show a message and abort
-      if (!Found_Mod_Funcs(id)){
-          warning(paste0('Cannot find functions for the module ', id))
-          return(NULL)
-        }
+       if (!Found_Mod_Funcs(id)){
+         return(NULL)
+       }
  
        rv$current.pos <- 1
        
-       
+  
        # Call the server module of the pipeline which name is the parameter 'id'
        # This will give access to its config
        rv$proc <- do.call(paste0('mod_', id, '_server'),
@@ -481,10 +480,11 @@ mod_nav_server <- function(id,
             pipeline = {
               # Before continuing the initialization, check if all modules functions
               # are found in the environment
-              for (i in rv$config$steps)
-                if (!Found_Mod_Funcs(paste0(rv$module.name, '_',i))){
-                  warning(paste0('Cannot find functions ui() and server() for the module ', i))
+              
+              for (i in rv$config$steps){
+                if (!Found_Mod_Funcs(i)){
                   return(NULL)
+                }
                 }
               
               rv$steps.skipped <- setNames(rep(FALSE, rv$length), rv$config$steps)
@@ -497,14 +497,14 @@ mod_nav_server <- function(id,
               # develop other pipelines and processes. Thus, it will be easier.
               rv$config$ll.UI <- setNames(lapply(rv$config$steps,
                                                  function(x){
-                                                   mod_nav_ui(ns(paste0(id, '_', x)))
+                                                   mod_nav_ui(ns(paste0(x)))
                                                  }),
                                           paste0(rv$config$steps)
               )
               
               
               lapply(rv$config$steps, function(x){
-                tmp.return[[x]] <- mod_nav_server(id = paste0(id, '_', x) ,
+                tmp.return[[x]] <- mod_nav_server(id = paste0(x) ,
                                                   dataIn = reactive({rv$child.data2send[[x]]}),
                                                   is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),

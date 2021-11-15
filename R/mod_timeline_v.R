@@ -183,23 +183,18 @@ mod_timeline_v_server <- function(id,
       })
     
     output$show_v_TL <- renderUI  ({
-        # tl_status <- rep('undone', length(config$steps))
-        # tl_status[which(config$mandatory)] <- 'mandatory'
-        # tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
-        # tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
-        # 
-        # for (i in seq_len(length(enabled())))
-        #   if (!enabled()[i])
-        #     tl_status[i] <- paste0(tl_status[i], 'Disabled')
-        # 
-        # active  <- rep('', length(config$steps))
-        # active[position()] <- 'active'
-
-      tags$div(style='width: 150px;',
+        tags$div(style='width: 150px;',
                lapply(seq_len(length(config$steps)), function(x){
              # tags$li(tags$p( class=UpdateTags()[x], config$steps[x]))
-               tags$p(style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x]),
-                      config$steps[x])
+               tags$p(style=paste0("font-weight: 100;
+                                   border: 3px solid lightgrey;
+                                   border-radius: 10px;
+                                   display: block;color: #000;
+                                   padding: 8px 10px;margin: 10px;
+                                   text-align: center;", 
+                                   GetStyle()[x]
+                                   ),
+                      names(config$steps)[x])
               # actionButton(inputId = ns(paste0('toto',x)),
               #              label = config$steps[x],
               #              style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x])

@@ -7,8 +7,18 @@
 #' @param id xxx
 #' 
 Found_Mod_Funcs <- function(id){
-  server.exists = exists(paste0('mod_', id, '_server'), mode='function')
-  ui.exists = exists(paste0('mod_', id, '_ui'), mode='function')
+  server.func <- paste0('mod_', id, '_server')
+  server.exists = exists(server.func, mode='function')
+  
+  ui.func <- paste0('mod_', id, '_ui')
+  ui.exists = exists(ui.func, mode='function')
+  
+  if (!server.exists)
+    warning(paste0("Cannot found ", server.func, '()'))
+  
+  if (!ui.exists)
+    warning(paste0("Cannot found ", ui.func, '()'))
+  
   return(server.exists && ui.exists)
 }
 

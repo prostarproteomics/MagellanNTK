@@ -1,3 +1,150 @@
+Get_Code_Update_Config <- function(){
+
+  code <- "
+
+  config$steps <- c('Description', config$steps)
+    config$steps <- setNames(config$steps, nm = config$steps)
+    config$mandatory <- c(TRUE, config$mandatory)
+
+
+    "
+  
+  
+  # code <- "
+  # 
+  #  config$steps <- c(paste0(config$name, '_Description'), config$steps)
+  #  config$steps <- setNames(config$steps,
+  #                             nm = gsub(paste0(config$name, '_'), '', config$steps))
+  #    config$mandatory <- c(TRUE, config$mandatory)
+  # 
+  # "
+  
+  code
+}
+
+Get_Code_for_module_Description <- function(id){
+  
+  code <- "
+  
+  mod_replaceId_Description_ui <- function(id){
+    ns <- NS(id)
+  }
+  
+  
+  
+  mod_replaceId_Description_server <- function(id,
+                                             dataIn = reactive({NULL}),
+                                             steps.enabled = reactive({NULL}),
+                                             remoteReset = reactive({FALSE}),
+                                             steps.status = reactive({NULL}),
+                                             current.pos = reactive({1})
+                                            ){
+
+  config <- list(
+    mode = 'process',
+    
+    name = 'Description',
+    
+    # List of all steps of the process
+    steps = c(),
+    # A vector of boolean indicating if the steps are mandatory or not.
+    mandatory = c()
+  )
+  
+  # Define default selected values for widgets
+  # By default, this list is empty for the Description module
+  # but it can be customized
+  widgets.default.values <- list()
+  
+  ###-------------------------------------------------------------###
+  ###                                                             ###
+  ### ------------------- MODULE SERVER --------------------------###
+  ###                                                             ###
+  ###-------------------------------------------------------------###
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Insert necessary code which is hosted by Magellan
+    # DO NOT MODIFY THIS LINE
+    eval(str2expression(Get_Code_Update_Config()))
+    
+    eval(parse(text = SimpleWorflowCoreCode(
+    name = config$name,
+    widgets = names(widgets.default.values),
+    steps = config$steps )))
+    
+     
+    ###### ------------------- Code for Description (step 0) -------------------------    #####
+    output$Description <- renderUI({
+      tagList(
+        includeMarkdown(system.file('scripts/module_examples/md/', 
+                                    paste0(id, '_Description.md'), 
+                                    package='Magellan')),
+        
+        uiOutput(ns('datasetDescription')),
+        
+        # Insert validation button
+        uiOutput(ns('Description_validationBtn_ui'))
+      )
+    })
+
+    # Insert necessary code which is hosted by Magellan
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = Module_Return_Func()))
+
+  }
+  )
+}
+
+  
+  "
+
+code <- gsub('replaceId', id, code)
+
+
+}
+
+
+
+
+
+
+Get_Code_for_Description_renderUI <- function(id){
+  
+  code <- "
+  
+  
+  output$Description <- renderUI({
+      tagList(
+        # In this example, the md file is found in the module_examples directory
+        # but with a real app, it should be provided by the package which
+        # contains the UI for the different steps of the process module.
+        # system.file(xxx)
+        
+        includeMarkdown(system.file('scripts/module_examples/md/', 
+                                    paste0('replaceid', '.md'), 
+                                    package = 'Magellan'
+                                    )
+                      ),
+        
+       # Used to show some information about the dataset which is loaded
+       # This function must be provided by the package of the process module
+       uiOutput(ns('datasetDescription')),
+        
+        # Insert validation button
+        uiOutput(ns('Description_validationBtn_ui'))
+      )
+    })
+    
+    
+    "
+  
+  gsub('replaceid', id, code)
+  
+  
+}
+
+
 #' @title Code for declaring widgets.default.values reactive variable
 #' 
 #' @description This function create the source code needed inside a module
@@ -209,7 +356,7 @@ Code_ObserveEvent_ValidationBtns <- function(){
                  if (current.pos() == length(config$steps)){
                    rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
                                                        dataset = rnorm(1:5),
-                                                       name = config$name)
+                                                       name = id)
                  }
                  
                  # First step (Description)
@@ -422,8 +569,10 @@ ComposedeWorflowCoreCode <- function(widgets, steps){
 #' cat(code)
 #' }
 #' 
-SimpleWorflowCoreCode <- function(widgets, steps){
-  core <- paste0(Get_Code_Declare_widgetsDefaultValues(widgets),
+SimpleWorflowCoreCode <- function(name, widgets, steps){
+  core <- paste0(
+    #Get_Code_Update_Config(),
+                 Get_Code_Declare_widgetsDefaultValues(widgets),
                  Get_Code_for_ObserveEvent_widgets(widgets),
                  Get_Code_for_rv_reactiveValues(),
                  Get_Code_for_dataOut(),
@@ -432,6 +581,7 @@ SimpleWorflowCoreCode <- function(widgets, steps){
                  Code_ObserveEvent_ValidationBtns(),
                  Generate_code_for_ValidationBtns_renderUI(steps),
                  Generate_RenderUI_Code_For_Single_Widgets(widgets),
+                 Get_Code_for_Description_renderUI(name),
                  sep = "\n"
   )
   core

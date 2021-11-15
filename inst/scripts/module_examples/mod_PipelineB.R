@@ -8,11 +8,11 @@
 #' 
 #' @param id xxx
 #'
-#' @rdname example_module_process_step0
+#' @rdname example_mod_pipelineA
 #'
 #' @author Samuel Wieczorek
 #' 
-mod_PipelineA_Description_ui <- function(id){
+mod_PipelineB_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -27,43 +27,43 @@ mod_PipelineA_Description_ui <- function(id){
 #' a communication variable between the caller and this module, thus there is no
 #' corresponding output variable
 #'
+#'
 #' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
-#' 
+#'
 #' @param steps.status xxx
 #' 
 #' @param current.pos xxx
 #' 
-#' @rdname example_module_process_step0
-#' 
+#' @rdname example_mod_pipelineA
+#'
+#' @import shiny
 #' @importFrom stats setNames
-#' 
-mod_PipelineA_Description_server <- function(id,
-                                             dataIn = reactive({NULL}),
-                                             steps.enabled = reactive({NULL}),
-                                             remoteReset = reactive({FALSE}),
-                                             steps.status = reactive({NULL}),
-                                             current.pos = reactive({1})
-                                            ){
+#'
+mod_PipelineB_server <- function(id,
+                                 dataIn = reactive({NULL}),
+                                 steps.enabled = reactive({NULL}),
+                                 remoteReset = reactive({FALSE}),
+                                 steps.status = reactive({NULL}),
+                                 current.pos = reactive({1})
+                                 ){
 
   config <- list(
-    mode = 'process',
+    mode = 'pipeline',
     
-    # Name of the pipeline it belongs to
-    parent = 'PipelineA',
-    # Name of the process
-    name = 'Description',
+    name = 'PipelineB',
+    
     # List of all steps of the process
-    steps = c('Description'),
+    # Here, each step is a workflow
+    steps = c('Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE)
+    mandatory = c(FALSE, FALSE, TRUE)
   )
   
-  # Define default selected values for widgets
-  # By default, this list is empty for the Description module
-  # but it can be customized
-  widgets.default.values <- list()
+  
+  # Contrary to the simple workflow, there is no widget in this module
+  # because all the widgets are provided by the simple workflows.
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -73,30 +73,23 @@ mod_PipelineA_Description_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    
+     config$steps <- c(paste0(config$name, '_Description'), config$steps)
+     config$steps <- setNames(config$steps,
+                              nm = gsub(paste0(config$name, '_'), '', config$steps))
+     config$mandatory <- c(TRUE, config$mandatory)
+    
+    #eval(str2expression(Get_Code_Update_Config()))
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(parse(text = SimpleWorflowCoreCode(widgets = names(widgets.default.values),
-                                     steps = config$steps )))
+    eval(parse(text = ComposedeWorflowCoreCode(steps = config$steps )))
     
-     
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
-    output$Description <- renderUI({
-      tagList(
-        includeMarkdown(system.file("scripts/module_examples/md/", 
-                                    paste0(config$parent, '_', config$name, ".md"), 
-                                    package="Magellan")),
-        
-        uiOutput(ns('datasetDescription')),
-        
-        # Insert validation button
-        uiOutput(ns('Description_validationBtn_ui'))
-      )
-    })
-
+    eval(parse(text = Get_Code_for_module_Description(config$name)),
+         envir = .GlobalEnv)
+    
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
-
-  }
+    }
   )
 }

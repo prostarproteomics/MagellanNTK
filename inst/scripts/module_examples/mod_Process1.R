@@ -21,7 +21,7 @@
 #' 
 #' @author Samuel Wieczorek
 #'
-mod_PipelineA_Process1_ui <- function(id){
+mod_Process1_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -38,28 +38,35 @@ mod_PipelineA_Process1_ui <- function(id){
 #' @param remoteReset It is a remote command to reset the module. A boolean that
 #' indicates is the pipeline has been reseted by a program of higher level
 #' Basically, it is the program which has called this module
+#' 
+#' @param steps.status xxx
+#' 
+#' @param current.pos xxx
 #'
 #' @rdname example_module_process1
 #' 
 #' @importFrom stats setNames rnorm
 
-mod_PipelineA_Process1_server <- function(id,
-                                          dataIn = reactive({NULL}),
-                                          steps.enabled = reactive({NULL}),
-                                          remoteReset = reactive({FALSE}),
-                                          current.pos = reactive({1})
-){
+mod_Process1_server <- function(id,
+                                dataIn = reactive({NULL}),
+                                steps.enabled = reactive({NULL}),
+                                remoteReset = reactive({FALSE}),
+                                steps.status = reactive({NULL}),
+                                current.pos = reactive({1})
+                                ){
   
   # This list contains the basic configuration of the process
   config <- list(
-    # Name of the process
+    # Define the type of module
+    mode = 'process',
+    
     name = 'Process1',
-    # Name of the pipeline it belongs to
-    parent = 'PipelineA',
+    
+    
     # List of all steps of the process
-    steps = c('Description', 'Step1', 'Step2', 'Save'),
+    steps = c('Step1', 'Step2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, TRUE, TRUE)
+    mandatory = c( FALSE, TRUE, TRUE)
   )
   
   # Define default selected values for widgets
@@ -81,37 +88,17 @@ mod_PipelineA_Process1_server <- function(id,
   ###-------------------------------------------------------------###
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
+
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(parse(text = SimpleWorflowCoreCode(widgets = names(widgets.default.values),
-                                            steps = config$steps )))
-    
-    
-    # >>> START ------------- Code for Description UI ---------------
-    
-    output$Description <- renderUI({
-      tagList(
-        # In this example, the md file is found in the module_examples directory
-        # but with a real app, it should be provided by the package which
-        # contains the UI for the different steps of the process module.
-        # system.file(xxx)
-        
-        includeMarkdown(system.file("scripts/module_examples/md/", 
-                                    paste0(config$parent, '_', config$name, ".md"), 
-                                    package="Magellan")),
-        
-        # Used to show some information about the dataset which is loaded
-        # This function must be provided by the package of the process module
-        uiOutput(ns('datasetDescription')),
-        
-        # Insert validation button
-        uiOutput(ns('Description_validationBtn_ui'))
+    eval(str2expression(Get_Code_Update_Config()))
+    eval(str2expression(
+      SimpleWorflowCoreCode(
+        name = config$name,
+        widgets = names(widgets.default.values),
+        steps = config$steps)
       )
-    })
-    # <<< END ------------- Code for Description UI---------------
-    
-    
+      )
     
     
     # >>>
@@ -140,7 +127,7 @@ mod_PipelineA_Process1_server <- function(id,
       )
     })
     
-    
+
     # >>> START: Definition of the widgets
     # This part must be customized by the developer of a new module
     widget_Step1_select1 <- reactive({
@@ -150,7 +137,7 @@ mod_PipelineA_Process1_server <- function(id,
                   selected = rv.widgets$Step1_select1,
                   width = '150px')
     })
-    
+
     
     widget_Step1_select2 <- reactive({
       selectInput(ns('Step1_select2'), 
@@ -215,18 +202,18 @@ mod_PipelineA_Process1_server <- function(id,
                   width = '150px')
     })
     # <<< END ------------- Code for step 2 UI---------------
-    
+
     
     # >>> START ------------- Code for step 3 UI---------------
     output$Save <- renderUI({
-      tagList(
+       tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Save_validationBtn_ui'))
       )
     })
     # <<< END ------------- Code for step 3 UI---------------
-    
+
     
     
     # Insert necessary code which is hosted by Magellan

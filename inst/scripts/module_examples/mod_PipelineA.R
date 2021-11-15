@@ -51,16 +51,14 @@ mod_PipelineA_server <- function(id,
 
   config <- list(
     mode = 'pipeline',
-    # Name of the process
+    
     name = 'PipelineA',
-    # Name of the pipeline it belongs to
-    # In this case, the module is the last one and do note have any parent.
-    parent = NULL,
+    
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('Description', 'Process1', 'Process2', 'Process3'),
+    steps = c('Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, FALSE, TRUE)
+    mandatory = c(FALSE, FALSE, TRUE)
   )
   
   
@@ -75,10 +73,19 @@ mod_PipelineA_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    
+     config$steps <- c(paste0(config$name, '_Description'), config$steps)
+     config$steps <- setNames(config$steps,
+                              nm = gsub(paste0(config$name, '_'), '', config$steps))
+     config$mandatory <- c(TRUE, config$mandatory)
+    
+    #eval(str2expression(Get_Code_Update_Config()))
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(parse(text = ComposedeWorflowCoreCode(steps = config$steps )))
     
+    eval(parse(text = Get_Code_for_module_Description(config$name)),
+         envir = .GlobalEnv)
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE

@@ -1,5 +1,6 @@
-library(shiny)
+library(highcharter)
 library(shinyjs)
+library(tibble)
 library(crayon)
 
 
@@ -27,34 +28,34 @@ ui <- fluidPage(
   )
 )
 
+
 #----------------------------------------------------------------------
 server <- function(input, output){
-  
-  data(feat1, package='Magellan')
+  data(feat1, package = 'Magellan')
   rv <- reactiveValues(
     dataIn = feat1,
     dataOut = NULL
   )
   
   observe({
-     rv$dataOut <- mod_nav_server(id = 'PipelineA',
-                                  dataIn = reactive({rv$dataIn}),
-                                  timelines = c('h', 'h')
-                                  )
-    
-    output$UI <- renderUI({
-      mod_nav_ui('PipelineA')
-    })
+    rv$dataOut <- mod_nav_server(id = 'Process1',
+                                 dataIn = reactive({rv$dataIn}),
+                                 timelines = c('h')
+    )
   }, priority=1000)
   
+  
+  output$UI <- renderUI({
+    mod_nav_ui('Process1')
+  })
   
   mod_Debug_Infos_server(id = 'debug_infos',
                          title = 'Infos from global shiny app',
                          rv.dataIn = reactive({rv$dataIn}),
-                         dataOut = reactive({rv$dataOut$dataOut()}))
+                         dataOut = reactive({rv$dataOut$dataOut()})
+                         )
   
 }
-
 
 
 shinyApp(ui, server)

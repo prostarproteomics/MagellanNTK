@@ -22,8 +22,8 @@ utils::globalVariables(
     'Init_process_Server',
     'Init_pipeline_Server',
     'ActionOn_NewPosition',
-    'GetCode_Declare_reactiveValues',
-    'GetCode_Declare_Pipeline_reactiveValues',
+    'Get_Code_Declare_reactiveValues',
+    'Get_Code_Declare_Pipeline_reactiveValues',
     'dataOut',
     'rv'
   )
