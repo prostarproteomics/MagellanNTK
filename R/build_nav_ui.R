@@ -63,11 +63,10 @@ Build_nav_h_ui <- function(ns){
                                           class = redBtnClass,
                                           style='font-size:80%')),
              column(width=9, uiOutput(ns('show_TL'))),
-             column(width=1, shinyjs::disabled(
+             column(width=1, 
                actionButton(ns('nextBtn'),'>>',
                             class = PrevNextBtnClass,
                             style='font-size:80%'))
-             )
     ),
     div(id = ns('Screens'),
         uiOutput(ns('SkippedInfoPanel')),

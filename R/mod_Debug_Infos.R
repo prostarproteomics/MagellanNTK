@@ -94,7 +94,7 @@ mod_Debug_Infos_server <- function(id,
     
     
     output$show_rv_dataOut <- renderUI({
-      req(dataOut()$value)
+      #req(dataOut()$value)
       tagList(
         lapply(names(dataOut()$value), function(x){tags$p(x)})
       )

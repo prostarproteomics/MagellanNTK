@@ -413,39 +413,39 @@ ToggleState_ResetBtn <- function(cond){
 #' * current.pos: xxx
 #' * steps.status: xxx
 #'
-LocalReset <- function(mode,
-                       rv
-                       ){
-  dataIn <- NULL
-  #rv$temp.dataIn <- NULL
-  
-  # The cursor is set to the first step
-  current.pos <- 1
-  
-  # The status of the steps are reinitialized to the default configuration of the process
-  steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), rv$config$steps)
-  
-  # If the current module is a pipeline type (node and not leaf),
-  # then sent to its children the information that they must reset themself
-  resetChildren <- NULL
-  if (mode == 'pipeline')
-    resetChildren <- ResetChildren(range = range,
-                                   resetChildren = rv$resetChildren
-    )
-  
-  
-  # Return the NULL value as dataset
-  dataOut <- Send_Result_to_Caller(rv$dataIn)
-  
-  return(
-    list(dataIn = dataIn,
-         dataOut = dataOut,
-         current.pos = current.pos,
-         steps.status = steps.status,
-         resetChildren = resetChildren
-         )
-  )
-}
+# LocalReset <- function(mode,
+#                        rv
+#                        ){
+#   L
+#   #rv$temp.dataIn <- NULL
+#   
+#   # The cursor is set to the first step
+#   current.pos <- 1
+#   
+#   # The status of the steps are reinitialized to the default configuration of the process
+#   steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), rv$config$steps)
+#   
+#   # If the current module is a pipeline type (node and not leaf),
+#   # then sent to its children the information that they must reset themself
+#   resetChildren <- NULL
+#   if (mode == 'pipeline')
+#     resetChildren <- ResetChildren(range = range,
+#                                    resetChildren = rv$resetChildren
+#     )
+#   
+#   
+#   # Return the NULL value as dataset
+#   dataOut <- Send_Result_to_Caller(rv$dataIn)
+#   
+#   return(
+#     list(dataIn = dataIn,
+#          dataOut = dataOut,
+#          current.pos = current.pos,
+#          steps.status = steps.status,
+#          resetChildren = resetChildren
+#          )
+#   )
+# }
 
 
 

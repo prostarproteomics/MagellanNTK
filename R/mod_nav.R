@@ -246,14 +246,25 @@ mod_nav_server <- function(id,
                  ignoreInit = FALSE, 
                  ignoreNULL = TRUE, {
       
-      res <- LocalReset(mode = rv$mode, rv = rv)
-      
-      rv$dataIn = res$dataIn
-      dataOut = res$dataOut
-      rv$current.pos = res$current.pos
-      rv$steps.status = res$steps.status
-      rv$resetChildren = res$resetChildren
-      
+                   rv$dataIn <- NULL
+                   # The cursor is set to the first step
+                   rv$current.pos <- 1
+                   
+                   # The status of the steps are reinitialized to the default configuration of the process
+                   rv$steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), rv$config$steps)
+                   
+                   # If the current module is a pipeline type (node and not leaf),
+                   # then sent to its children the information that they must reset themself
+                   #rv$resetChildren <- NULL
+                   if (rv$mode == 'pipeline')
+                     rv$resetChildren <- ResetChildren(range = range,
+                                                    resetChildren = rv$resetChildren
+                                                    )
+                   
+                   browser()
+                   # Return the NULL value as dataset
+                   dataOut <- Send_Result_to_Caller(rv$dataIn)
+
       removeModal()
     })
     
@@ -363,7 +374,6 @@ mod_nav_server <- function(id,
        # 
        
        rv$length <- length(rv$config$steps)
-       #browser()
        rv$mode <- rv$config$mode
        rv$parent.name <- rv$config$parent
        rv$module.name <- rv$config$name
@@ -415,7 +425,6 @@ mod_nav_server <- function(id,
          
          if(is.null(dataIn())){
            # The process has been reseted or is not concerned
-           cat(blue('In observe(dataIn()) : dataIn() is NULL\n\n'))
            # Disable all screens of the process
            rv$steps.enabled <- ToggleState_Screens(cond = FALSE, 
                                                    range = seq_len(rv$length),
@@ -423,7 +432,6 @@ mod_nav_server <- function(id,
                                                    rv = rv)
          } else { 
            # A new dataset has been loaded
-           cat(blue('In observe(dataIn()) : dataIn() is not NULL\n\n'))
            # Update the different screens in the process
            rv$steps.enabled <- Update_State_Screens(is.skipped = is.skipped(),
                                                     is.enabled = is.enabled(),
