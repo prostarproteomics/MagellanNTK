@@ -263,7 +263,9 @@ mod_nav_server <- function(id,
                    
                    browser()
                    # Return the NULL value as dataset
-                   dataOut <- Send_Result_to_Caller(rv$dataIn)
+                   res <- Send_Result_to_Caller(rv$dataIn)
+                   dataOut$trigger <- res$trigger
+                   dataOut$value <- res$value
 
       removeModal()
     })
