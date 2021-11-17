@@ -31,7 +31,7 @@ ActionOn_Child_Changed(
 \item{newValue}{xxx}
 }
 \description{
-xxxx
+# A process has changed
 }
 \author{
 Samuel Wieczorek

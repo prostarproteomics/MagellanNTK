@@ -3,8 +3,8 @@ Get_Code_Update_Config <- function(){
   code <- "
 
   config$steps <- c('Description', config$steps)
-    config$steps <- setNames(config$steps, nm = config$steps)
-    config$mandatory <- c(TRUE, config$mandatory)
+  config$steps <- setNames(config$steps, nm = config$steps)
+  config$mandatory <- c(TRUE, config$mandatory)
 
 
     "
@@ -22,6 +22,15 @@ Get_Code_Update_Config <- function(){
   code
 }
 
+
+
+#' @title xxx
+#' 
+#' @description 
+#' 
+#' @param id xxx
+#' 
+#' 
 Get_Code_for_module_Description <- function(id){
   
   code <- "
@@ -531,7 +540,7 @@ code
 #' cat(code)
 #' }
 #' 
-ComposedeWorflowCoreCode <- function(widgets, steps){
+ComposedeWorflowCoreCode <- function(name, steps){
   core <- paste0(Get_Code_Declare_widgetsDefaultValues(),
                  Get_Code_for_ObserveEvent_widgets(),
                  Get_Code_for_rv_reactiveValues(),

@@ -1,21 +1,24 @@
 library(shiny)
 library(shinyjs)
 library(crayon)
-
+#library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/Magellan/inst/scripts')
 
-dirpath <- 'module_examples'
-for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
-  source(file.path(dirpath, l), local=TRUE)$value
 
-
+# This line is just for dev purpose.
+# Once the package will be finished, remove this part because it will
+# be useless. And decomment the line for library(Magellan)
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
 
+#dirpath(system.file('scripts/module_examples', package='Magellan'))
+dirpath <- 'module_examples'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
 
 #----------------------------------------------------------------------
 ui <- fluidPage(
@@ -52,7 +55,6 @@ server <- function(input, output){
                          title = 'Infos from global shiny app',
                          rv.dataIn = reactive({rv$dataIn}),
                          dataOut = reactive({rv$dataOut$dataOut()}))
-  
 }
 
 

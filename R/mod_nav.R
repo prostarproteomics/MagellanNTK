@@ -215,9 +215,8 @@ mod_nav_server <- function(id,
         rv$current.pos <- rv$length
         
         # Send result
-        res <- Send_Result_to_Caller(rv$dataIn)
-        dataOut$trigger <- res$trigger
-        dataOut$value <- res$value
+        dataOut$trigger <- Timestamp()
+        dataOut$value <- rv$dataIn
       }
     })
     
@@ -256,16 +255,17 @@ mod_nav_server <- function(id,
                    # If the current module is a pipeline type (node and not leaf),
                    # then sent to its children the information that they must reset themself
                    #rv$resetChildren <- NULL
+                   # The reset of the children is made by incrementing
+                   # the values by 1. This has for effect to be detected
+                   # by the observeEvent function. It works like an actionButton
+                   # widget
                    if (rv$mode == 'pipeline')
-                     rv$resetChildren <- ResetChildren(range = range,
-                                                    resetChildren = rv$resetChildren
-                                                    )
+                     rv$resetChildren[range] <- 1 + rv$resetChildren[range]
                    
-                   browser()
+                  # browser()
                    # Return the NULL value as dataset
-                   res <- Send_Result_to_Caller(rv$dataIn)
-                   dataOut$trigger <- res$trigger
-                   dataOut$value <- res$value
+                   dataOut$trigger <- Timestamp()
+                   dataOut$value <- rv$dataIn
 
       removeModal()
     })
@@ -567,9 +567,8 @@ mod_nav_server <- function(id,
                 }
 
                 # Send result
-                res <- Send_Result_to_Caller(rv$dataIn)
-                dataOut$trigger <- res$trigger
-                dataOut$value <- res$value
+                dataOut$trigger <- Timestamp()
+                dataOut$value <- rv$dataIn
               }
               
             
@@ -617,9 +616,8 @@ mod_nav_server <- function(id,
                     # this nav_process is only a bridge between the process and the caller
                     # For a pipeline, the output is updated each time a process has 
                     # been validated
-                    res <- Send_Result_to_Caller(rv$dataIn)
-                    dataOut$trigger <- res$trigger
-                    dataOut$value <- res$value
+                    dataOut$trigger <- Timestamp()
+                    dataOut$value <- rv$dataIn
                   }
                 
               })

@@ -92,6 +92,7 @@ mod_Process1_server <- function(id,
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(str2expression(Get_Code_Update_Config()))
+    
     eval(str2expression(
       SimpleWorflowCoreCode(
         name = config$name,

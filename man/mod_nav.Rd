@@ -12,7 +12,8 @@ mod_nav_server(
   dataIn = reactive({     NULL }),
   is.enabled = reactive({     TRUE }),
   remoteReset = reactive({     FALSE }),
-  is.skipped = reactive({     FALSE })
+  is.skipped = reactive({     FALSE }),
+  timelines = NULL
 )
 }
 \arguments{

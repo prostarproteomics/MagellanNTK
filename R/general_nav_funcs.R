@@ -165,22 +165,6 @@ GetStringStatus <- function(name){
 
 
 
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' @param dataIn xxx
-#' 
-#' @return xxx
-#' 
-Send_Result_to_Caller = function(dataIn){
-  return(
-    list(trigger = Timestamp(),
-         value = dataIn
-         )
-  )
-}
-
 
 #' @title xxx
 #' 
@@ -293,18 +277,6 @@ GetFirstMandatoryNotValidated <- function(range,
 
 
 
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' @param current.pos xxx
-#' @param steps xxx
-#' 
-#' @return xxx
-#' 
-CurrentStepName <- function(current.pos, steps){
-  return(steps[current.pos])
-}
 
 
 #' @title xxx
@@ -396,56 +368,4 @@ ToggleState_NavBtns <- function(rv){
 ToggleState_ResetBtn <- function(cond){
   shinyjs::toggleState('rstBtn', condition = cond)
 }
-
-
-
-
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' @param mode xxx
-#' @param rv xxx
-#' 
-#' @return A list of four items:
-#' * dataIn:  xx
-#' * dataOut: xxx
-#' * current.pos: xxx
-#' * steps.status: xxx
-#'
-# LocalReset <- function(mode,
-#                        rv
-#                        ){
-#   L
-#   #rv$temp.dataIn <- NULL
-#   
-#   # The cursor is set to the first step
-#   current.pos <- 1
-#   
-#   # The status of the steps are reinitialized to the default configuration of the process
-#   steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), rv$config$steps)
-#   
-#   # If the current module is a pipeline type (node and not leaf),
-#   # then sent to its children the information that they must reset themself
-#   resetChildren <- NULL
-#   if (mode == 'pipeline')
-#     resetChildren <- ResetChildren(range = range,
-#                                    resetChildren = rv$resetChildren
-#     )
-#   
-#   
-#   # Return the NULL value as dataset
-#   dataOut <- Send_Result_to_Caller(rv$dataIn)
-#   
-#   return(
-#     list(dataIn = dataIn,
-#          dataOut = dataOut,
-#          current.pos = current.pos,
-#          steps.status = steps.status,
-#          resetChildren = resetChildren
-#          )
-#   )
-# }
-
-
 

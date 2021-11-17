@@ -189,8 +189,10 @@ PrepareData2Send <- function(rv, pos){
       rv$steps.enabled[x] <- x==1
     })
     
-  } else
-    data2send[[CurrentStepName(rv$current.pos, rv$config$steps)]] <- Update_Data2send_Vector(rv)
+  } else{
+    current.step.name <- rv$config$steps[rv$current.pos]
+    data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
+  }
   
   cat(crayon::blue('<----------------- Data sent to children ------------------> \n'))
   print(data2send)

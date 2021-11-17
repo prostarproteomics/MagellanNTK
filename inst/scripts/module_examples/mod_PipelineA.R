@@ -82,8 +82,14 @@ mod_PipelineA_server <- function(id,
     #eval(str2expression(Get_Code_Update_Config()))
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(parse(text = ComposedeWorflowCoreCode(steps = config$steps )))
+    eval(parse(text = ComposedeWorflowCoreCode(
+      name = config$name,
+      steps = config$steps)
+      )
+      )
     
+    
+    # Insert code for the description renderUI()
     eval(parse(text = Get_Code_for_module_Description(config$name)),
          envir = .GlobalEnv)
     

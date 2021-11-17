@@ -4,7 +4,7 @@
 \alias{SimpleWorflowCoreCode}
 \title{Code for declaring xxx}
 \usage{
-SimpleWorflowCoreCode(widgets, steps)
+SimpleWorflowCoreCode(name, widgets, steps)
 }
 \arguments{
 \item{widgets}{xxx}
