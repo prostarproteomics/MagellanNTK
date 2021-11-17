@@ -1,10 +1,10 @@
 library(Magellan)
 
-f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", package="Magellan")
+f <- system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
 source(file(f), local=TRUE)$value
 
 ui <- fluidPage(
-  mod_nav_ui('PipelineA_Process1')
+  mod_nav_ui('Process1')
 )
 
 
@@ -16,10 +16,9 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_nav_server(id = 'PipelineA_Process1',
-                                        nav.mode = 'process',
-                                        dataIn = reactive({rv$dataIn})
-                                        )
+    rv$dataOut <- mod_nav_server(id = 'Process1',
+                                 dataIn = reactive({rv$dataIn})
+                                 )
     }, priority=1000)
 }
 

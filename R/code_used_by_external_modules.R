@@ -3,30 +3,26 @@ Get_Code_Update_Config <- function(){
   code <- "
 
   config$steps <- c('Description', config$steps)
-  config$steps <- setNames(config$steps, nm = config$steps)
+  config$steps <- setNames(config$steps, 
+                          nm = gsub(' ', '', config$steps, fixed = TRUE))
   config$mandatory <- c(TRUE, config$mandatory)
 
 
     "
-  
-  
-  # code <- "
-  # 
-  #  config$steps <- c(paste0(config$name, '_Description'), config$steps)
-  #  config$steps <- setNames(config$steps,
-  #                             nm = gsub(paste0(config$name, '_'), '', config$steps))
-  #    config$mandatory <- c(TRUE, config$mandatory)
-  # 
-  # "
-  
+
   code
 }
 
 
 
-#' @title xxx
+#' @title Generate code for a pipeline Description module
 #' 
-#' @description 
+#' @description This function gives the necessary code to
+#' provide the module (ui() and server() functions) relative to
+#' the Description of a pipeline.
+#' The work differs from the process strategy because a 
+#' pipeline does not have its own UIs as it is only a bridge
+#' between the user shiny app and the UIs of the processes.
 #' 
 #' @param id xxx
 #' 
@@ -75,8 +71,7 @@ Get_Code_for_module_Description <- function(id){
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    #eval(str2expression(Get_Code_Update_Config()))
-    config$steps <- setNames(config$steps, nm = config$steps)
+    config$steps <- setNames(config$steps, nm = gsub(' ', '', config$steps, fixed=TRUE))
     
     eval(parse(text = SimpleWorflowCoreCode(
     name = config$name,
@@ -302,7 +297,7 @@ Get_Code_for_observeEven_stepsEnabled  <- function(){
   code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
   if (is.null(steps.enabled()))
     rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-                                 rv$config$steps)
+                                 nm = names(rv$config$steps))
   else
     rv$steps.enabled <- steps.enabled()
 })
@@ -353,12 +348,12 @@ Code_ObserveEvent_ValidationBtns <- function(){
   code <- "
   # Observer for the validation buttons of all steps
   # DO NOT MODIFY THIS FUNCTION
-  observeEvent(lapply(config$steps, function(x) input[[paste0(x, \"_btn_validate\")]]),
+  observeEvent(lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]]),
                ignoreInit = TRUE,
                ignoreNULL = TRUE,
                {
                  #browser()
-                 test <- lapply(config$steps, function(x) input[[paste0(x, \"_btn_validate\")]])
+                 test <- lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]])
                  if( sum(unlist(test)) != 1)
                    return()
                  
@@ -503,16 +498,15 @@ Module_Return_Func <- function(){
   code <- "# Return value of module
 # DO NOT MODIFY THIS PART
 list(config = reactive({
-  config$ll.UI <- setNames(lapply(config$steps,
+  config$ll.UI <- setNames(lapply(names(config$steps),
                                   function(x){
                                     do.call(\"uiOutput\", list(ns(x)))
                                   }),
-                           paste0(\"screen_\", config$steps)
+                           paste0(\"screen_\", names(config$steps))
   )
   config
 }),
 dataOut = reactive({dataOut})
-#steps.status = reactive({rv$steps.status})
 )
 
 
@@ -527,9 +521,8 @@ code
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #' 
-#' @param widgets xxx
-#' 
-#' @param steps xxx
+#' @param name The name of the module.
+#' @param steps The list of the steps composing the module.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -565,8 +558,8 @@ ComposedeWorflowCoreCode <- function(name, steps){
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #' 
+#' @param name xxx
 #' @param widgets xxx
-#' 
 #' @param steps xxx
 #' 
 #' @author Samuel Wieczorek

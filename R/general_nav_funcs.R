@@ -54,13 +54,13 @@ Build_EncapsulateScreens_ui <- function(ns,
     tagList(
       lapply(seq_len(len), function(i) {
         if (i==1)
-          div(id = ns(config$steps[i]),
+          div(id = ns(names(config$steps)[i]),
               class = paste0('page_', id),
               config$ll.UI[[i]]
           )
         else
           shinyjs::hidden(
-            div(id =  ns(config$steps[i]),
+            div(id =  ns(names(config$steps)[i]),
                 class = paste0('page_', id),
                 config$ll.UI[[i]]
             )
@@ -116,7 +116,7 @@ GetMaxValidated_AllSteps <- function(steps.status){
   val <- 0
   ind <- grep(global$VALIDATED, steps.status)
   if (length(ind) > 0)
-    val <-max(ind)
+    val <- max(ind)
   
   return(val)
 }
@@ -129,9 +129,8 @@ GetMaxValidated_AllSteps <- function(steps.status){
 #' 
 #' @param cond xxx
 #' @param range xxx
-#' @param steps.status xxx
 #' @param is.enabled xxx
-#' @param steps.enabled xxx
+#' @param rv xxx
 #' 
 #' @return xxx
 #' 
@@ -257,7 +256,7 @@ All_Skipped_tag <- function(steps.status, tag){
 #' @description xxx
 #' 
 #' @param range xxx
-#' @param rv
+#' @param rv xxx
 #' 
 #' @return xxx
 #'
@@ -331,7 +330,9 @@ Update_State_Screens = function(is.skipped,
       }
     }
     
-    ToggleState_NavBtns(rv = rv)
+    ToggleState_NavBtns(current.pos = rv$current.pos,
+                        nSteps = rv$length
+                        )
   }
   
   return(steps.enabled)
@@ -343,17 +344,17 @@ Update_State_Screens = function(is.skipped,
 #' @description xxx
 #' 
 #' @param current.pos xxx
-#' @param len xxx
+#' @param nSteps xxx
 #' 
 #' @return NA
 #' 
-ToggleState_NavBtns <- function(rv){
+ToggleState_NavBtns <- function(current.pos, nSteps){
   
   # If the cursor is not on the first position, show the 'prevBtn'
-  shinyjs::toggleState(id = 'prevBtn', condition = rv$current.pos != 1)
+  shinyjs::toggleState(id = 'prevBtn', condition = current.pos != 1)
   
   # If the cursor is set before the last step, show the 'nextBtn'
-  shinyjs::toggleState(id = 'nextBtn', condition = rv$current.pos < length(rv$config$steps))
+  shinyjs::toggleState(id = 'nextBtn', condition = current.pos < nSteps)
 }
 
 

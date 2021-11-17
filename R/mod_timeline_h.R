@@ -15,7 +15,7 @@ mod_timeline_h_ui <- function(id){
   ns <- NS(id)
   fpath <- system.file("app/www/sass", 
                        "h_timeline.sass", 
-                       package="Magellan")
+                       package = "Magellan")
     tagList(
       shinyjs::useShinyjs(),
       
@@ -99,7 +99,7 @@ mod_timeline_h_server = function(id,
                       function(x){
                         tags$li(class = paste0('li ', UpdateTags()[x]),
                                 tags$div(class='timestamp status',
-                                         tags$h4(names(config$steps)[x])
+                                         tags$h4(config$steps[x])
                                          )
                                 )
                         })

@@ -4,12 +4,12 @@
 \alias{ComposedeWorflowCoreCode}
 \title{Code for declaring xxx}
 \usage{
-ComposedeWorflowCoreCode(widgets, steps)
+ComposedeWorflowCoreCode(name, steps)
 }
 \arguments{
-\item{widgets}{xxx}
+\item{name}{The name of the module.}
 
-\item{steps}{xxx}
+\item{steps}{The list of the steps composing the module.}
 }
 \description{
 This function xxx

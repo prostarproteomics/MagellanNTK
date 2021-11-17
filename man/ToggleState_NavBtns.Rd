@@ -4,12 +4,12 @@
 \alias{ToggleState_NavBtns}
 \title{xxx}
 \usage{
-ToggleState_NavBtns(rv)
+ToggleState_NavBtns(current.pos, nSteps)
 }
 \arguments{
 \item{current.pos}{xxx}
 
-\item{len}{xxx}
+\item{nSteps}{xxx}
 }
 \value{
 NA

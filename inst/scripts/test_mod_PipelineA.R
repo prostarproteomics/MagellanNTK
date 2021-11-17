@@ -1,6 +1,3 @@
-library(shiny)
-library(shinyjs)
-library(crayon)
 library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)

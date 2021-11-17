@@ -8,13 +8,19 @@
 # or it has been reseted (newValue is NULL)
 
 #' 
+#' @param temp.dataIn xxx
 #' @param dataIn xxx
 #' @param steps.status xxx
-#' @param steps xxx
+#' @param steps A vector of names which are the names of the steps
+#' in the process
 #' @param steps.enabled xxx
 #' @param steps.skipped xxx
-#' @param processHasChanged xxxx
-#' @param newValue xxx 
+#' @param processHasChanged A character(1) which is the name of the process
+#' which has changed its return value.
+#' @param newValue The new value given by the step which has changed.
+#' It can be either NULL (the process has been reseted) or contain
+#' a dataset (the process has been validated and returned the result
+#' of its calculations) 
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -194,9 +200,9 @@ PrepareData2Send <- function(rv, pos){
     data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
   }
   
-  cat(crayon::blue('<----------------- Data sent to children ------------------> \n'))
+  cat('<----------------- Data sent to children ------------------> \n')
   print(data2send)
-  cat(crayon::blue('<----------------------------------------------------> \n'))
+  cat('<----------------------------------------------------> \n')
   
   return(
     list(data2send = data2send,

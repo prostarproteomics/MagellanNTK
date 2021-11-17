@@ -47,6 +47,10 @@ mod_nav_ui <- function(id){
 #' 
 #' @param is.skipped xxx
 #' 
+#' @param timelines A vector of character ('h' for horizontal, 'v' for vertical)
+#' where each item correspond to the orientation of the timeline for a given
+#' level of navigation module.
+#' 
 #' @return A list of four items:
 #' * dataOut xxx
 #' * steps.enabled xxxxx
@@ -186,15 +190,13 @@ mod_nav_server <- function(id,
     # The parameter is.enabled() is updated by the caller and tells the process
     # if it is enabled or disabled (remote action from the caller)
     observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
-      cat(yellow('::is.enabled()\n\n'))
-      
       if (isTRUE(is.enabled())){
         rv$steps.enabled <- Update_State_Screens(is.skipped = is.skipped(),
                                                  is.enabled = is.enabled(),
                                                  rv = rv)
       } else {
         rv$steps.enabled <- setNames(rep(is.enabled(), rv$length), 
-                                     nm = rv$config$steps)
+                                     nm = names(rv$config$steps))
       }
     })
     
@@ -250,11 +252,12 @@ mod_nav_server <- function(id,
                    rv$current.pos <- 1
                    
                    # The status of the steps are reinitialized to the default configuration of the process
-                   rv$steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), rv$config$steps)
+                   rv$steps.status <- setNames(rep(global$UNDONE, length(rv$config$steps)), 
+                                               nm = names(rv$config$steps))
                    
                    # If the current module is a pipeline type (node and not leaf),
                    # then sent to its children the information that they must reset themself
-                   #rv$resetChildren <- NULL
+                   # rv$resetChildren <- NULL
                    # The reset of the children is made by incrementing
                    # the values by 1. This has for effect to be detected
                    # by the observeEvent function. It works like an actionButton
@@ -378,22 +381,19 @@ mod_nav_server <- function(id,
        rv$length <- length(rv$config$steps)
        rv$mode <- rv$config$mode
        rv$parent.name <- rv$config$parent
-       rv$module.name <- rv$config$name
        
+       rv$config$mandatory <- setNames(rv$config$mandatory, nm = names(rv$config$steps))
+       rv$steps.status <- setNames(rep(global$UNDONE, rv$length), nm = names(rv$config$steps))
        
+       rv$steps.enabled <- setNames(rep(FALSE, rv$length), nm = names(rv$config$steps))
+       rv$steps.skipped <- setNames(rep(FALSE, rv$length), nm = names(rv$config$steps))
+       rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
        
-       rv$config$mandatory <- setNames(rv$config$mandatory, rv$config$steps)
-       rv$steps.status <- setNames(rep(global$UNDONE, rv$length), rv$config$steps)
-       
-       rv$steps.enabled <- setNames(rep(FALSE, rv$length), rv$config$steps)
-       rv$steps.skipped <- setNames(rep(FALSE, rv$length), rv$config$steps)
-       rv$resetChildren <- setNames(rep(0, rv$length), rv$config$steps)
-       
-       rv$child.data2send <- setNames(lapply(as.list(rv$config$steps), 
+       rv$child.data2send <- setNames(lapply(as.list(names(rv$config$steps)), 
                                              function(x) NULL), 
-                                      nm = rv$config$steps)
+                                      nm = names(rv$config$steps))
        
-       rv$currentStepName <- reactive({rv$config$steps[rv$current.pos]})
+       rv$currentStepName <- reactive({names(rv$config$steps)[rv$current.pos]})
       }, priority=1000) 
      
      
@@ -457,9 +457,11 @@ mod_nav_server <- function(id,
      
      
      observeEvent(rv$current.pos, ignoreInit = TRUE, {
-       ToggleState_NavBtns(rv)
+       ToggleState_NavBtns(current.pos = rv$current.pos,
+                           nSteps = rv$length
+                           )
        shinyjs::hide(selector = paste0('.page_', id))
-       shinyjs::show(rv$config$steps[rv$current.pos])
+       shinyjs::show(names(rv$config$steps)[rv$current.pos])
        
        if (rv$mode == 'pipeline'){
          #Specific to pipeline code
@@ -491,30 +493,30 @@ mod_nav_server <- function(id,
               # Before continuing the initialization, check if all modules functions
               # are found in the environment
               
-              for (i in rv$config$steps){
+              for (i in names(rv$config$steps)){
                 if (!Found_Mod_Funcs(i)){
                   return(NULL)
                 }
                 }
               
-              rv$steps.skipped <- setNames(rep(FALSE, rv$length), rv$config$steps)
-              rv$resetChildren <- setNames(rep(0, rv$length), rv$config$steps)
+              rv$steps.skipped <- setNames(rep(FALSE, rv$length), nm = names(rv$config$steps))
+              rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
               
               # Launch the ui for each step of the pipeline
               # This function could be stored in the source file of the pipeline
               # but the strategy is to insert minimum extra code in the files for
               # pipelines and processes. This is useful when other devs will
               # develop other pipelines and processes. Thus, it will be easier.
-              rv$config$ll.UI <- setNames(lapply(rv$config$steps,
+              rv$config$ll.UI <- setNames(lapply(names(rv$config$steps),
                                                  function(x){
-                                                   mod_nav_ui(ns(paste0(x)))
+                                                   mod_nav_ui(ns(x))
                                                  }),
-                                          paste0(rv$config$steps)
+                                          nm = paste0(names(rv$config$steps))
               )
               
               
-              lapply(rv$config$steps, function(x){
-                tmp.return[[x]] <- mod_nav_server(id = paste0(x) ,
+              lapply(names(rv$config$steps), function(x){
+                tmp.return[[x]] <- mod_nav_server(id = x ,
                                                   dataIn = reactive({rv$child.data2send[[x]]}),
                                                   is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),
@@ -535,9 +537,9 @@ mod_nav_server <- function(id,
                 triggerValues <- values.children$triggers
                 return.values <- values.children$values
                 
-                cat(crayon::blue('--------------- Data received from children --------------------\n'))
+                cat('--------------- Data received from children --------------------\n')
                 print(return.values)
-                cat(crayon::blue('-------------------------------------------------------\n'))
+                cat('-------------------------------------------------------\n')
                 
                 
                 if (is.null(return.values)) { # The entire pipeline has been reseted
@@ -545,7 +547,7 @@ mod_nav_server <- function(id,
                   rv$steps.status[seq_len(rv$length)] <- global$UNDONE
                 } else {
                   ind.process.has.changed <- which(max(triggerValues, na.rm = TRUE) == triggerValues)
-                  processHasChanged <- rv$config$steps[ind.process.has.changed]
+                  processHasChanged <- names(rv$config$steps)[ind.process.has.changed]
                   
                   # Get the new value
                   newValue <- tmp.return[[processHasChanged]]$dataOut()$value
@@ -573,7 +575,7 @@ mod_nav_server <- function(id,
               
             
               # Catch the returned values of the processes attached to pipeline                                                           
-              observeEvent(lapply(rv$config$steps, 
+              observeEvent(lapply(names(rv$config$steps), 
                                   function(x){
                                     tmp.return[[x]]$dataOut()$trigger}), ignoreInit = TRUE, {
                                       ActionOn_Data_Trigger()

@@ -194,7 +194,7 @@ mod_timeline_v_server <- function(id,
                                    text-align: center;", 
                                    GetStyle()[x]
                                    ),
-                      names(config$steps)[x])
+                      config$steps[x])
               # actionButton(inputId = ns(paste0('toto',x)),
               #              label = config$steps[x],
               #              style=paste0("font-weight: 100;border: 3px solid lightgrey;border-radius: 10px;display: block;color: #000;padding: 8px 10px;margin: 10px;text-align: center;", GetStyle()[x])

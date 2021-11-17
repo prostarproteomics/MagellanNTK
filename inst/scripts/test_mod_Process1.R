@@ -1,8 +1,4 @@
-library(highcharter)
-library(shinyjs)
-library(tibble)
-library(crayon)
-
+library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)
 

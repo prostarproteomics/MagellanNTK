@@ -7,6 +7,8 @@
 SimpleWorflowCoreCode(name, widgets, steps)
 }
 \arguments{
+\item{name}{xxx}
+
 \item{widgets}{xxx}
 
 \item{steps}{xxx}

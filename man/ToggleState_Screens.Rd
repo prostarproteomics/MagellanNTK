@@ -13,9 +13,7 @@ ToggleState_Screens(cond, range, is.enabled, rv)
 
 \item{is.enabled}{xxx}
 
-\item{steps.status}{xxx}
-
-\item{steps.enabled}{xxx}
+\item{rv}{xxx}
 }
 \value{
 xxx

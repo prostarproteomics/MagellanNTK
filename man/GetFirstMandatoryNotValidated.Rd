@@ -9,7 +9,7 @@ GetFirstMandatoryNotValidated(range, rv)
 \arguments{
 \item{range}{xxx}
 
-\item{rv}{}
+\item{rv}{xxx}
 }
 \value{
 xxx

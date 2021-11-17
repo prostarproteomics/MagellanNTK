@@ -60,11 +60,8 @@ mod_Process1_server <- function(id,
     # Define the type of module
     mode = 'process',
     
-    name = 'Process1',
-    
-    
     # List of all steps of the process
-    steps = c('Step1', 'Step2', 'Save'),
+    steps = c('Step 1', 'Step 2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c( FALSE, TRUE, TRUE)
   )
@@ -95,9 +92,9 @@ mod_Process1_server <- function(id,
     
     eval(str2expression(
       SimpleWorflowCoreCode(
-        name = config$name,
+        name = id,
         widgets = names(widgets.default.values),
-        steps = config$steps)
+        steps = names(config$steps))
       )
       )
     
