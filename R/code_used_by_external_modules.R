@@ -13,6 +13,23 @@ Get_Code_Update_Config <- function(){
   code
 }
 
+Get_Code_Update_Config_Pipeline <- function(){
+  
+  code <- "
+
+
+config$steps <- c(paste0(config$name, '_Description'), config$steps)
+config$steps <- setNames(config$steps,
+                         nm = gsub(paste0(config$name, '_'), '', config$steps))
+config$steps <- setNames(config$steps, 
+                         nm = gsub(' ', '', config$steps, fixed = TRUE))
+config$mandatory <- c(TRUE, config$mandatory)
+
+
+"
+
+  code
+}
 
 
 #' @title Generate code for a pipeline Description module

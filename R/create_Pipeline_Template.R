@@ -1,4 +1,4 @@
-#' @title Create process template code
+#' @title Create pipeline template code
 #' 
 #' @description xxx
 #' 
@@ -6,22 +6,22 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' conf <- list(mode = "process",
+#' conf <- list(mode = "pipeline",
 #' steps = c("Step 1", "Step 2", "Save"),
 #' mandatory = c(TRUE, FALSE, TRUE)
 #' )
-#' createProcessTemplateForExpert('Process1', conf)
+#' createPipelineTemplateForExpert('Process1', conf)
 #' }
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #' 
-createProcessTemplateForExpert <- function(name = NULL,
+createPipelineTemplateForExpert <- function(name = NULL,
                                            config = NULL){
   
   # Check config integrity
- # check <- CheckConfig(config)
- # if (!check$passed)
+  # check <- CheckConfig(config)
+  # if (!check$passed)
   #  stop(paste0("Errors in 'config'", paste0(check$msg, collapse=' ')))
   
   # Create file
@@ -38,11 +38,10 @@ createProcessTemplateForExpert <- function(name = NULL,
   writeLines(get_ui_function(name))
   writeLines(get_header_server_func(name))
   writeLines(get_config_code(config))
-  writeLines(get_code_for_default_value_widgets())
   writeLines(get_module_server_header())
   writeLines(get_renderUI_for_steps(config$steps))
   writeLines(get_output_func())
-
+  
   close(con)
 }
 
@@ -57,9 +56,9 @@ get_ui_function <- function(name){
   }
   
   "
-
+  
   gsub('#name#', name, code)
-
+  
 }
 
 #' @noRd
@@ -76,7 +75,7 @@ get_header_server_func <- function(name){
                                 ){
   "
   gsub('#name#', name, code)
-
+  
 }
 
 
@@ -93,8 +92,8 @@ vec2code <- function(ls_list, is.char = FALSE) {
   # create string
   if(is.char)
     st_string_from_list = paste0("c('", 
-                               paste0(ls_list, sep="", collapse= coll)
-                               )
+                                 paste0(ls_list, sep="", collapse= coll)
+    )
   else
     st_string_from_list = paste0("c(", 
                                  paste0(ls_list, sep="", collapse= coll)
@@ -131,18 +130,6 @@ get_config_code <- function(config){
 }
 
 
-#' @noRd
-#' 
-get_code_for_default_value_widgets <- function(){
-  code <- "
-  # Define default selected values for widgets
-  # This is only for simple workflows
-  widgets.default.values <- list()
-  
-  "
-  
-  code
-}
 
 
 #' @noRd
@@ -159,17 +146,23 @@ get_module_server_header <- function(){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
   
+  
+   config$steps <- c(paste0(config$name, '_Description'), config$steps)
+     config$steps <- setNames(config$steps,
+                              nm = gsub(paste0(config$name, '_'), '', config$steps))
+     config$mandatory <- c(TRUE, config$mandatory)
+    
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(str2expression(Get_Code_Update_Config()))
-    
-    eval(str2expression(
-      SimpleWorflowCoreCode(
-        name = id,
-        widgets = names(widgets.default.values),
-        steps = config$steps)
+    eval(parse(text = ComposedeWorflowCoreCode(
+      name = id,
+      steps = config$steps)
       )
       )
+      
+      # Insert code for the description renderUI()
+    eval(parse(text = Get_Code_for_module_Description(config$name)),
+         envir = .GlobalEnv)
       
   "
   

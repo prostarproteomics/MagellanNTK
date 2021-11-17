@@ -74,16 +74,13 @@ mod_PipelineA_server <- function(id,
     ns <- session$ns
     
     
-     config$steps <- c(paste0(config$name, '_Description'), config$steps)
-     config$steps <- setNames(config$steps,
-                              nm = gsub(paste0(config$name, '_'), '', config$steps))
-     config$mandatory <- c(TRUE, config$mandatory)
+     
+    eval(str2expression(Get_Code_Update_Config_Pipeline()))
     
-    #eval(str2expression(Get_Code_Update_Config()))
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(parse(text = ComposedeWorflowCoreCode(
-      name = config$name,
+      name = id,
       steps = config$steps)
       )
       )
