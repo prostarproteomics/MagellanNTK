@@ -1,7 +1,7 @@
 library(shiny)
 library(shinyjs)
 library(crayon)
-#library(Magellan)
+library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)
 
@@ -45,9 +45,7 @@ server <- function(input, output){
                                   timelines = c('h', 'h')
                                   )
     
-    output$UI <- renderUI({
-      mod_nav_ui('PipelineA')
-    })
+    output$UI <- renderUI({mod_nav_ui('PipelineA')})
   }, priority=1000)
   
   

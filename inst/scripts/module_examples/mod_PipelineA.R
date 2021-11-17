@@ -88,7 +88,6 @@ mod_PipelineA_server <- function(id,
       )
       )
     
-    
     # Insert code for the description renderUI()
     eval(parse(text = Get_Code_for_module_Description(config$name)),
          envir = .GlobalEnv)

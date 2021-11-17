@@ -45,9 +45,7 @@ server <- function(input, output){
   }, priority=1000)
   
   
-  output$UI <- renderUI({
-    mod_nav_ui('Process1')
-  })
+  output$UI <- renderUI({mod_nav_ui('Process1')})
   
   mod_Debug_Infos_server(id = 'debug_infos',
                          title = 'Infos from global shiny app',

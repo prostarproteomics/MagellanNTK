@@ -55,9 +55,9 @@ Get_Code_for_module_Description <- function(id){
     name = 'Description',
     
     # List of all steps of the process
-    steps = c(),
+    steps = c('Description'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c()
+    mandatory = c(TRUE)
   )
   
   # Define default selected values for widgets
@@ -75,7 +75,8 @@ Get_Code_for_module_Description <- function(id){
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(str2expression(Get_Code_Update_Config()))
+    #eval(str2expression(Get_Code_Update_Config()))
+    config$steps <- setNames(config$steps, nm = config$steps)
     
     eval(parse(text = SimpleWorflowCoreCode(
     name = config$name,
@@ -109,7 +110,7 @@ Get_Code_for_module_Description <- function(id){
   "
 
 code <- gsub('replaceId', id, code)
-
+code
 
 }
 
