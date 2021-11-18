@@ -58,10 +58,10 @@ CheckConfig <- function(config){
     msg <- c(msg, "'rv$config' is not a list")
   }
   
-  names.config <- c("parent", "name", "steps", "mandatory")
+  names.config <- c("mode", "steps", "mandatory")
   if (!all(sapply(names.config, function(x){x %in% names(config)}))){
     passed <- FALSE
-    msg <- c(msg, "The names of elements in 'rv$config' must be the following: 'parent', 'name', 'steps', 'mandatory'")
+    msg <- c(msg, "The names of elements in 'config' must be the following: 'mode', 'steps', 'mandatory'")
   }
   if (length(config$steps) != length(config$mandatory)){
     passed <- FALSE
@@ -87,62 +87,115 @@ CheckConfig <- function(config){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' conf <- list(parent = "pipeline",
-#' name = "process",
-#' steps = c('Description', "Step 1", "Step 2", "Save"),
-#' mandatory = c(TRUE, TRUE, FALSE, TRUE)
-#' )
+#' file <-system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
+#' s <- CleanSourceCode(file)
 #' 
-#' 
-CleanSourceCode <- function(source = NULL){
+CleanSourceCode <- function(file = NULL){
   
-  #toto <- readLines(f)
+  source <- readLines(file)
   
-  source1  <- unlist(lapply(source, function(x) gsub(" ", "", x) ))
-  
-  
-  # Remove empty lines
-  source2 <- source1[-which(source1=="")]
-  
-  # Remove comments lines
-  res <- which(unlist(lapply(source2, function(x) unlist(gregexpr("#", x))[1]==1)))
-  
-  source3 <- source2[-res]
-  
-  
-  # Remove white spaces
-  source1  <- unlist(lapply(source, function(x) gsub(" ", "", x) ))
+  source  <- unlist(lapply(source, function(x) gsub(" ", "", x) ))
   
   # Replace " by '
-  source1  <- unlist(lapply(source1, function(x) gsub("\"", "'", x) ))
+  source  <- unlist(lapply(source, function(x) gsub("\"", "'", x) ))
+  
   
   # Remove empty lines
-  source2 <- source1[-which(source1=="")]
+  source <- source[-which(source=="")]
   
   # Remove comments lines
-  res <- which(unlist(lapply(source2, function(x) unlist(gregexpr("#", x))[1]==1)))
-  source3 <- source2[-res]
+  res <- which(unlist(lapply(source, function(x) unlist(gregexpr("#", x))[1]==1)))
   
+  source <- source[-res]
+
   # Concatenate in one vector
-  source4 <- paste0(source3, collapse = "")
+  source <- paste0(source, collapse = "")
   
-  
+  source
   
 }
+
+
+#' @title xxx
+#' 
+#' @param text xxx
+#' @param openPos xxx
+#' 
+#' @examples
+#' text <- "myfunc <- function(a, b){ return (a+b)}"
+#' posParam <- 19
+#' FindClosingParenthesis(text, posParam)
+#' 
+FindClosingParenthesis <- function(text, openPos){
+  
+  closePos <- openPos
+  counter <- 1
+  while (counter > 0) {
+    c <- substr(text, closePos + 1, closePos + 1)
+    if (c == '(')
+      counter <- counter +1
+     else if (c == ')') 
+        counter <- counter - 1
+    closePos <- closePos + 1
+  
+  }
+  return(closePos)
+}
+
+
 
 
 
 #' @title xxx
 #' 
-#' @description xxx
+#' @description Analyze the source code to extract the config variable
 #' 
-#' @param source xxx
+#' @param source The complete source code of the process module
+#' 
+#' @return A list containing the configuration of the module
 #' 
 #' @author Samuel Wieczorek
 #' 
-GetConfigCode <- function(source){
+#' @importFrom stringi stri_locate
+#' 
+GetConfig <- function(s){
   
   config <- NULL
+  
+  keyword <- 'config<-list('
+  len <- nchar(keyword)
+  start.index <- stri_locate(pattern = keyword, s, fixed = TRUE)[1]
+  end.index <- FindClosingParenthesis(s, start.index + len)
+  
+  config.string <- substr(s, start.index, end.index)
+  
+  # Get mode value
+  keyword <- 'mode='
+  len <- nchar(keyword)
+  mode.start <- stri_locate(pattern = keyword, config.string, fixed = TRUE)[1]
+  tmp <- substr(config.string, mode.start + len, nchar(config.string))
+  end_g <- stri_locate_all(pattern = substr(tmp, 1, 1),
+                           tmp,
+                           fixed = TRUE)[[1]][2, 1]
+  
+  mode <- substr(tmp, 2, end_g - 1)
+  
+  
+  # Get steps values
+  
+  steps.start <- stri_locate(pattern = 'steps=', config.string, fixed = TRUE)[1]
+  
+  
+  
+  # Get mandatory slot values
+  mandatory.start <- stri_locate(pattern = 'mandatory=', config.string, fixed = TRUE)[1]
+  
+  
+  config <- list(
+    mode = mode,
+    steps = steps,
+    mandatory = mandatory
+  )
   
   return(config)
 }

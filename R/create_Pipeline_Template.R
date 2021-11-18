@@ -38,9 +38,8 @@ createPipelineTemplateForExpert <- function(name = NULL,
   writeLines(get_ui_function(name))
   writeLines(get_header_server_func(name))
   writeLines(get_config_code(config))
-  writeLines(get_module_server_header())
-  writeLines(get_renderUI_for_steps(config$steps))
-  writeLines(get_output_func())
+  writeLines(get_module_server())
+
   
   close(con)
 }
@@ -134,7 +133,7 @@ get_config_code <- function(config){
 
 #' @noRd
 #' 
-get_module_server_header <- function(){
+get_module_server <- function(){
   code <- "
   
   
@@ -147,10 +146,7 @@ get_module_server_header <- function(){
     ns <- session$ns
   
   
-   config$steps <- c(paste0(config$name, '_Description'), config$steps)
-     config$steps <- setNames(config$steps,
-                              nm = gsub(paste0(config$name, '_'), '', config$steps))
-     config$mandatory <- c(TRUE, config$mandatory)
+   eval(parse(text = Get_Code_Update_Config_Pipeline()))
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
@@ -163,40 +159,16 @@ get_module_server_header <- function(){
       # Insert code for the description renderUI()
     eval(parse(text = Get_Code_for_module_Description(config$name)),
          envir = .GlobalEnv)
+         
+         # Insert necessary code which is hosted by Magellan
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = Module_Return_Func()))
+  }
+  )
+}
       
   "
   
   code
 }
 
-
-get_renderUI_for_steps <- function(steps){
-  code <- NULL
-  
-  for(i in names(steps)){ 
-    code <- paste0(code, 
-                   "
-output$#step# <- renderUI({ })
-
-")
-    code <- gsub('#step#', i, code)
-  }
-  
-  code
-  
-}
-
-
-get_output_func <- function(){
-  
-  code <- "
-   # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    eval(parse(text = Module_Return_Func()))
-  }
-  )
-}
-
-  "
-code
-}
