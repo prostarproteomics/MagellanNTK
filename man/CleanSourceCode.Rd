@@ -5,26 +5,22 @@
 \title{Clean source code before syntax analysis
 xxx}
 \usage{
-CleanSourceCode(source = NULL)
+CleanSourceCode(file = NULL)
 }
 \arguments{
-\item{source}{A vector in which each element is a line read from source code file}
+\item{file}{A vector in which each element is a line read from source code file}
 }
 \value{
-NA
+A string which contains the source code condensed
 }
 \description{
 xxx
-
-Check if the rv$config is correct
 }
 \examples{
-conf <- list(parent = "pipeline",
-name = "process",
-steps = c('Description', "Step 1", "Step 2", "Save"),
-mandatory = c(TRUE, TRUE, FALSE, TRUE)
-)
-
+\dontrun{
+file <-system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
+s <- CleanSourceCode(file)
+}
 
 }
 \author{

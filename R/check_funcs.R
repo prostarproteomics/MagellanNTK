@@ -78,17 +78,18 @@ CheckConfig <- function(config){
 #' xxx
 #' 
 #' @description xxx
-#' 
-#' Check if the rv$config is correct
 #'
-#' @param source A vector in which each element is a line read from source code file
+#' @param file A vector in which each element is a line read from source code file
 #' 
-#' @return NA
+#' @return A string which contains the source code condensed
+#' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
+#' \dontrun{
 #' file <-system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
 #' s <- CleanSourceCode(file)
+#' }
 #' 
 CleanSourceCode <- function(file = NULL){
   
@@ -126,6 +127,8 @@ CleanSourceCode <- function(file = NULL){
 #' posParam <- 19
 #' FindClosingParenthesis(text, posParam)
 #' 
+#' @export
+#' 
 FindClosingParenthesis <- function(text, openPos){
   
   closePos <- openPos
@@ -150,7 +153,7 @@ FindClosingParenthesis <- function(text, openPos){
 #' 
 #' @description Analyze the source code to extract the config variable
 #' 
-#' @param source The complete source code of the process module
+#' @param s The complete source code of the process module
 #' 
 #' @return A list containing the configuration of the module
 #' 
@@ -186,9 +189,11 @@ GetConfig <- function(s){
   steps.start <- stri_locate(pattern = 'steps=', config.string, fixed = TRUE)[1]
   
   
-  
+  steps <- ''
   # Get mandatory slot values
   mandatory.start <- stri_locate(pattern = 'mandatory=', config.string, fixed = TRUE)[1]
+  
+  mandatory <- ''
   
   
   config <- list(

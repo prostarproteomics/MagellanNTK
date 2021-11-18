@@ -18,3 +18,11 @@ Moreover, this navigation system, which is at the core of Magellan, can by used 
 * 'Articles > Create a pipeline': for developers
 * 'Articles > Create a process': for developers
 * 
+
+
+
+# Future developments
+
+* Generalize Magellan for more than two levels,
+* implements a shiny app to help users to develop a module process
+* Integrate synctatic analyzers for modules

@@ -16,7 +16,8 @@ Imports:
     shinyjs,
     utils,
     sass,
-    shinyjqui
+    shinyjqui,
+    stringi
 Collate: 
     AllGenerics.R
     data.R
@@ -27,7 +28,7 @@ Collate:
     global.R
     mod_bsmodal.R
     mod_popover_for_help.R
-    create_Process_Template.R
+    createModuleTemplate.R
     mod_format_DT.R
     utils.R
     check_funcs.R
