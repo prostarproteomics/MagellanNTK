@@ -28,13 +28,17 @@ BiocStyle::markdown()
 
 
 
-This tutorial concerns the use of `Magellan` at a end-user level. It briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, if developers want to write their own process modules or just better understand deeply how `Magellan` works, we advice beginning with this article.
+This tutorial concerns the use of `Magellan` at a end-user level. It describes how the interface works. briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, the developers who want to write their own process modules or just better understand deeply how `Magellan` works, we advice beginning with this articlebefore switching to more detailed articles.
 
 
 
 # Overview
 
-`Magellan` is a workflow manager which can handle processes with a series of steps. It works on objects of type `list`.
+`Magellan` is a workflow manager which can handle processes with a series of steps. 
+We define as:
+
+* 'process' a data treatment program which take a dataset as input, modify it and the return the dataset augmented by the result of the computations. Those computations may require one or more steps/ui: all of those are included in the process ui. With the actual version of Magellan, the different intermediate results (of each step) are not accessible.
+* a 'pipeline' as a set of processes 
 
 
 ## Magellan and modules of process
