@@ -28,7 +28,7 @@ BiocStyle::markdown()
 
 
 
-This tutorial concerns the use of `Magellan` at a end-user level. It describes how the interface works. briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, the developers who want to write their own process modules or just better understand deeply how `Magellan` works, we advice beginning with this articlebefore switching to more detailed articles.
+This tutorial concerns the use of `Magellan` at a end-user level. It describes how the interface works. briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, the developers who want to write their own process modules or just better understand deeply how `Magellan` works, we advice beginning with this article before switching to more detailed articles.
 
 
 
@@ -38,27 +38,62 @@ This tutorial concerns the use of `Magellan` at a end-user level. It describes h
 We define as:
 
 * 'process' a data treatment program which take a dataset as input, modify it and the return the dataset augmented by the result of the computations. Those computations may require one or more steps/ui: all of those are included in the process ui. With the actual version of Magellan, the different intermediate results (of each step) are not accessible.
-* a 'pipeline' as a set of processes 
+* a 'pipeline' as a set of steps, each step can either be a pipeline or a process.
 
 
-## Magellan and modules of process
+```{r processoverview, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_overview.png", error = FALSE)
+```
 
 
-The package `Magellan` does not contain any module of process. It contains only the modules which allow to navigate between steps of a process.
+## Hierarchical levels of workflow managers
 
-Thus, to use `Magellan`, it is necessary to use another package which provides Magellan-compliant modules (or write your own modules)
+`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
 
-For starting Magellan, it is necessary to provides some parameters that are the steps configuration (containing some textual informations and the UIs for each steps)
+The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
 
+A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
+
+The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
+
+
+```{r hierarchicalstructure, results='markup', fig.cap="Hierarchical strucure principle.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/hierarchical_structure.png", error = FALSE)
+```
+
+
+
+Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
+
+
+
+
+
+
+
+# Launch Magellan
+
+
+As `Magellan` consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework.
+This app does not to be complex but is is used for its ui() and server() functions.
+
+`Magellan` is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.
+
+The package `Magellan` is heavily based on Shiny modules and the processes/pipelines it manages are also built as Shiny modules. A module correspond to a single process or pipeline.
+However, `Magellan` is just the core program to manage the different steps and results and it does not contain any module of process nor pipeline. It contains only the modules which allow to navigate between steps of a process.
+
+Thus, to use `Magellan` with a process module, it is necessary to load in memory the functions relatives to those modules (it can be in individual scripts or included in a package).
+
+
+Suppose we have a module called 'process1'. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call thoses functions).
+
+In the example below, one launch Magellan with the process 'Process1' and an example dataset feat1, provided by Magellan.
 
 ```{r launchMagellan, echo=TRUE, eval=FALSE}
 library(Magellan)
 
-f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", package="Magellan")
-source(file(f), local=TRUE)$value
-
 ui <- fluidPage(
-  mod_navigation_ui('PipelineA_Process1')
+  mod_nav_ui('Process1')
 )
 
 
@@ -70,26 +105,15 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
-                                        nav.mode = 'process',
-                                        dataIn = reactive({rv$dataIn})
-                                        )
+    rv$dataOut <- mod_nav_server(id = 'Process1',
+                                 dataIn = reactive({rv$dataIn})
+                                 )
     }, priority=1000)
 }
 
 
 shinyApp(ui, server)
 ```
-
-
-## Launch a `Magellan` workflow
-
-As `Magellan` consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework.
-This app does not to be complex but is is used for its ui() and server() functions.
-
-`Magellan` is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.
-
-
 
 A module using ``
 
@@ -100,27 +124,34 @@ At each step, the input and ouput are the structure than the object given in inp
 
 The process (and all of its steps) work on a specific item of the object (generally, the last one) and generate a new item. The output of the process is then tho object given in input plus the new item, processed by the steps.
 
-```{r processoverview, results='markup', fig.cap="Process overview.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/process_overview.png", error = FALSE)
-```
 
 Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another. 
 
 
+The same code can be used for a pipeline module. But, it is necessary to both have the fucntions for the pipeline module and the functions for each of its process
 
-# User interface of a workflow
+For example, suppose that we use a pipeline 'PipeA' which uses two processes called 'Proc1' and 'Proc2'. Then, before launching the app, the following functions may be loaded in R:
 
-## Overview
+* mod_PipeA_server() and mod_PipeA_ui(),
+* mod_Proc1_server() and mod_Proc1_ui(),
+* mod_Proc2_server() and mod_Proc2_ui()
 
-The userr interface for the low level of Magellan is divided into two main parts:
+An error will occur if one of these functions are missing.
 
-* The navigation bar which contains four items:
-  * A previous button to go back in the steps of the process,
-  * A Reset button to reset the module to default values,
+
+# User interface of a process
+
+
+The user interface for the low level of Magellan is divided into two main parts:
+
+The **navigation bar** which contains four items:
+
+  * A "previous" >> button to go back in the steps of the process,
+  * A "Reset" button to reset the module to default values,
   * A timeline to vizualize the steps and other informations,
-  * A Next button to go further into the steps.
+  * A "Next" button to go further into the steps.
   
-* A panel which shows the content of the current step
+A **panel** which shows the content of the current step
 
 
 
@@ -130,14 +161,17 @@ knitr::include_graphics("./figs/process_navigation_ui.png", error = FALSE)
 ```
 
 
-## Buttons
+## Navigation bar
+
+
+### Buttons
 
 The two buttons 'Prev' and 'Next' allow to go respectively forward or backward in the timeline. If the current step is the first one, than the 'Prev' button is disabled. If the current step is the last one, then the 'Next' button is disabled. In any other case, those buttons are enabled.
 
 The button 'Reset' allow to reset a process or step. Please refer to xxx for more details.
 
 
-## Timeline
+### Timeline
 
 The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.
 
@@ -171,47 +205,21 @@ If the color is plain, then the step is enabled, otherwise (transparent color) i
 
 If the circle is empty, then the step is either skipped or non validated.
  
- 
-### Description of steps
+
+## Screens for steps (steps UI)
 
 The first and last steps are particular in the sense that they are the input and output doors of the workflow, thus they are mandatory. Moreover, there name is fixed.
 
-First step (description)
-
-It contains the description of the process and its different steps.
+The **first step** (called 'Description') contains the description of the process and its different steps.
 If an object has been sent to the process server, then the `Load` button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.
 
-
-Data processing steps (mid-steps)
-
-
-Last step (Save)
-
-Each step is built on the same basic UI.
-
-## Hierarchical levels of workflow managers
-
-`Magellan` proposes two types of workflow managers, depending of the nature of the steps.
-
-The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data. 
-
-A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a `Magellan` implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.
-
-The navigation in such a complex structure is the same as for the simple brick as it respect the order of processes.
+Its look & feel is standardized if the developer use common scripts in Magellan to create its own module.
 
 
-```{r hierarchicalstructure, results='markup', fig.cap="Hierarchical strucure principle.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/hierarchical_structure.png", error = FALSE)
-```
+The **Data processing steps** (mid-steps) contain the interface to perform actions on the dataset. Their name is defined by the developer of the module and contained in the configuration part of the module as well as all the widgets, plots, etc...
 
 
-
-Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
-
-
-
-
-
+The **last step** (names 'Save') does not contain any treatment on the dataset. It only contatenate the result of the process (which lead to a dataset) and append to the dataset given in input. This new object is then the result of the module.
 
 
 # Simple workflow \label{simpleWorkflow}
