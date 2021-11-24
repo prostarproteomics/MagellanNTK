@@ -9,7 +9,6 @@ output:
     theme: united
     keep_md: true
     papersize: a4
-    extra_dependencies: ["float"]
 vignette: >
   %\VignetteIndexEntry{Navigate with Magellan}
   %\VignetteEngine{knitr::rmarkdown}
@@ -262,7 +261,7 @@ When the user clicks on the load button on the Description step, then the object
 Thanks to the buttons 'Next' and 'Prev', the user can view the different steps without execute them.
 
 
-## Validate a step \label{simpleWFNavigate}
+## Validate a step \label{simpleWFValidate}
 
 The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.
 

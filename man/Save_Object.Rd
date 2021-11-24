@@ -9,7 +9,7 @@ Save_Object(object, file)
 \arguments{
 \item{object}{xxx}
 
-\item{file}{xxx}
+\item{file}{A `characte(1)` naming the file to save the object.}
 }
 \description{
 xxx

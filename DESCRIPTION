@@ -4,7 +4,7 @@ Version: 0.99.2
 Authors@R: person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', role = c('cre', 'aut'))
 Description: Magellan is a collection of Shiny modules which provide the basis for a generic workflow manager for data processing toolswith several steps. It works in combination with any package which implements data processing pipelines compliant with Magellan such as MSPipelines and Prostar. It can handle lists of objects and manage a hierarchy of levels.
 License: Artistic-2.0
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.1.2)
 Imports: 
     methods,
     config,
@@ -41,6 +41,8 @@ Collate:
     pipeline_funcs.R
     process_funcs.R
     build_nav_ui.R
+    example_mod_Pipeline.R
+    example_mod_Process.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

@@ -6,6 +6,8 @@
 #' 
 #' @param id xxx
 #' 
+#' @export
+#' 
 Found_Mod_Funcs <- function(id){
   server.func <- paste0('mod_', id, '_server')
   server.exists = exists(server.func, envir = .GlobalEnv, mode='function')
@@ -87,7 +89,7 @@ CheckConfig <- function(config){
 #' 
 #' @examples
 #' \dontrun{
-#' file <-system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
+#' file <-system.file("module_examples", "mod_Process1.R", package="Magellan")
 #' s <- CleanSourceCode(file)
 #' }
 #' 
@@ -224,7 +226,7 @@ GetConfig <- function(s){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' f <- system.file("scripts/module_examples", "example_module_PipelineA_Process1.R", 
+#' f <- system.file("module_examples", "example_module_PipelineA_Process1.R", 
 #' package="Magellan")
 #' CheckProcessCode(f)
 #' 

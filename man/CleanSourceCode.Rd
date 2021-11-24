@@ -18,7 +18,7 @@ xxx
 }
 \examples{
 \dontrun{
-file <-system.file("scripts/module_examples", "mod_Process1.R", package="Magellan")
+file <-system.file("module_examples", "mod_Process1.R", package="Magellan")
 s <- CleanSourceCode(file)
 }
 

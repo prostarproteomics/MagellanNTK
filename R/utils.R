@@ -1,5 +1,39 @@
 
 
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param object xxx
+#' @param file A `characte(1)` naming the file to save the object.
+#' 
+#' @export
+#' 
+Save_Object <- function(object, file) {
+  if (is.null(object))
+    return()
+  if (missing(file))
+    return()
+  
+  saveRDS(object, file = file)
+}
+
+
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param file xxx
+#' 
+#' @export
+#' 
+Upload_Object <- function(file) {
+  if (missing(file))
+    return()
+  
+  readRDS(file)
+}
+
 
 
 #' @title 
@@ -28,24 +62,6 @@ insertCode <- function(f){
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
-#' @param name xxx
-#' 
-#' @return A boolean
-#' 
-#' @export
-#' 
-ModuleExists <- function(name){
-  
-  
-  
-}
-
-#' @title 
-#' xxx
-#' 
-#' @description 
-#' Returns the date and time in timestamp UNIX format.
-#' 
 #' @return NA
 #' 
 #' @export
@@ -57,10 +73,10 @@ Timestamp <- function(){
 
 
 
-#' @title Datasets processing
+#' @title
+#' Datasets processing
 #'
 #' @description
-#'
 #' This manual page describes manipulation methods using [list] objects. In the following
 #' functions, if `object` is of class `list`, and optional assay
 #' index or name `i` can be specified to define the assay (by name of
@@ -87,8 +103,6 @@ Timestamp <- function(){
 #'     logarithms are computed. Default is log2.
 #'
 #' @param name A `character(1)` naming the new assay name.
-#' 
-#' @param file A `characte(1)` naming the file to save the object.
 #'
 #' @return An processed object of the same class as `object`.
 #' 
@@ -96,7 +110,6 @@ Timestamp <- function(){
 #' @aliases Add_Datasets_to_Object Add_Datasets_to_Object,list-method
 #'
 #' @name dataset-processing
-#'
 #' @rdname dataset-processing
 #' 
 #' @importFrom methods setMethod
@@ -180,39 +193,3 @@ setMethod("Add_Datasets_to_Object",
 #                      name = name)
 #           })
 
-
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' @param object xxx
-#' @param file xxx
-#' 
-#' @export
-#' 
-Save_Object <- function(object, file) {
-  if (is.null(object))
-    return()
-  if (missing(file))
-    return()
-  
-  saveRDS(object, file = file)
-}
-
-
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' @param file xxx
-#' 
-#' @export
-#' 
-Upload_Object <- function(file) {
-  if (is.null(object))
-    return()
-  if (missing(file))
-    return()
-  
-  saveRDS(object, file = file)
-}

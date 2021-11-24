@@ -13,7 +13,8 @@ mod_nav_server(
   is.enabled = reactive({     TRUE }),
   remoteReset = reactive({     FALSE }),
   is.skipped = reactive({     FALSE }),
-  timelines = NULL
+  timelines = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ Basically, it is the program which has called this module}
 \item{timelines}{A vector of character ('h' for horizontal, 'v' for vertical)
 where each item correspond to the orientation of the timeline for a given
 level of navigation module.}
+
+\item{verbose}{xxx}
 }
 \value{
 A list of four items:

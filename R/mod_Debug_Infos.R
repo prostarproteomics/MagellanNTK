@@ -58,7 +58,8 @@ mod_Debug_Infos_server <- function(id,
                                    steps.status = reactive({NULL}),
                                    current.pos = reactive({NULL}),
                                    steps.enabled = reactive({NULL}),
-                                   is.enabled = reactive({NULL})){
+                                   is.enabled = reactive({NULL})
+                                   ){
   
   
   moduleServer(id, function(input, output, session){
@@ -98,7 +99,6 @@ mod_Debug_Infos_server <- function(id,
     
     
     output$show_rv_dataOut <- renderUI({
-      #req(dataOut()$value)
       tagList(
         lapply(names(dataOut()$value), function(x){tags$p(x)})
       )
@@ -121,6 +121,7 @@ mod_Debug_Infos_server <- function(id,
                                 paste0(config()$steps[x], ' - ', GetStringStatus(steps.status()[[x]])))
                      }))
     })
+    
     
     output$show_tag_enabled <- renderUI({
       tagList(

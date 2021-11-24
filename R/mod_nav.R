@@ -14,7 +14,7 @@ mod_nav_ui <- function(id){
   tagList(
     shinyjs::useShinyjs(),
     uiOutput(ns('nav_mod_ui')),
-    mod_Debug_Infos_ui(ns('debug_infos'))
+    uiOutput(ns('debug_infos_ui'))
   )
 }
 
@@ -51,6 +51,8 @@ mod_nav_ui <- function(id){
 #' where each item correspond to the orientation of the timeline for a given
 #' level of navigation module.
 #' 
+#' @param verbose xxx
+#' 
 #' @return A list of four items:
 #' * dataOut xxx
 #' * steps.enabled xxxxx
@@ -84,7 +86,8 @@ mod_nav_server <- function(id,
                            is.enabled = reactive({TRUE}),
                            remoteReset = reactive({FALSE}),
                            is.skipped = reactive({FALSE}),
-                           timelines = NULL
+                           timelines = NULL,
+                           verbose = FALSE
                            ){
   
   
@@ -290,6 +293,25 @@ mod_nav_server <- function(id,
                              )
       })
      
+    
+    
+    output$debug_infos_ui <- renderUI({
+      req(verbose)
+      mod_Debug_Infos_ui(ns('debug_infos'))
+      })
+    
+    mod_Debug_Infos_server(id = 'debug_infos',
+                           title = paste0('Infos from ', rv$config$mode, ': ', id),
+                           config = reactive({rv$config}),
+                           rv.dataIn = reactive({rv$dataIn}),
+                           dataIn = reactive({dataIn()}),
+                           dataOut = reactive({dataOut}),
+                           steps.status = reactive({rv$steps.status}),
+                           current.pos = reactive({ rv$current.pos}),
+                           steps.enabled = reactive({rv$steps.enabled}),
+                           is.enabled = reactive({is.enabled()}))
+    
+    
      # This function uses the UI definition to:
      # * initialize the UI (only the first screen is shown),
      # * encapsulate the UI in a div (used to hide all screens at a time before
@@ -521,7 +543,8 @@ mod_nav_server <- function(id,
                                                   is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),
                                                   is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                                                  timelines = timelines[-1]
+                                                  timelines = timelines[-1],
+                                                  verbose = verbose
                                                   )
                 })
               
@@ -643,16 +666,6 @@ mod_nav_server <- function(id,
     
 
     
-    mod_Debug_Infos_server(id = 'debug_infos',
-                           title = paste0('Infos from pipeline : ', id),
-                           config = reactive({rv$config}),
-                           rv.dataIn = reactive({rv$dataIn}),
-                           dataIn = reactive({dataIn()}),
-                           dataOut = reactive({dataOut}),
-                           steps.status = reactive({rv$steps.status}),
-                           current.pos = reactive({ rv$current.pos}),
-                           steps.enabled = reactive({rv$steps.enabled}),
-                           is.enabled = reactive({is.enabled()}))
     
     # The return value of the nav_process module server
     # The item 'dataOut' has been updated by the module process and it is returned to the

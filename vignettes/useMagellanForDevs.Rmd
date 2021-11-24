@@ -273,7 +273,7 @@ Launch the packages
 ```{r minshinyappexample_launchpackages,attr.source = ".numberLines", eval = FALSE}
 library(Magellan)
 
-f <- system.file("scripts/module_examples", 
+f <- system.file("module_examples", 
                  "example_module_PipelineA_Process1.R", 
                  package="Magellan")
 source(file(f), local=TRUE)$value

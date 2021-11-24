@@ -27,8 +27,6 @@
 logarithms are computed. Default is log2.}
 
 \item{name}{A `character(1)` naming the new assay name.}
-
-\item{file}{A `characte(1)` naming the file to save the object.}
 }
 \value{
 An processed object of the same class as `object`.

@@ -1,3 +1,9 @@
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @export
+#' 
 Get_Code_Update_Config <- function(){
 
   code <- "
@@ -13,6 +19,12 @@ Get_Code_Update_Config <- function(){
   code
 }
 
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @export
+#' 
 Get_Code_Update_Config_Pipeline <- function(){
   
   code <- "
@@ -43,6 +55,7 @@ config$mandatory <- c(TRUE, config$mandatory)
 #' 
 #' @param id xxx
 #' 
+#' @export
 #' 
 Get_Code_for_module_Description <- function(id){
   
@@ -99,7 +112,7 @@ Get_Code_for_module_Description <- function(id){
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       tagList(
-        includeMarkdown(system.file('scripts/module_examples/md/', 
+        includeMarkdown(system.file('module_examples/md/', 
                                     paste0(id, '_Description.md'), 
                                     package='Magellan')),
         
@@ -130,7 +143,19 @@ code
 
 
 
-
+#' @title Generate code for a pipeline Description module
+#' 
+#' @description This function gives the necessary code to
+#' provide the module (ui() and server() functions) relative to
+#' the Description of a pipeline.
+#' The work differs from the process strategy because a 
+#' pipeline does not have its own UIs as it is only a bridge
+#' between the user shiny app and the UIs of the processes.
+#' 
+#' @param id xxx
+#' 
+#' @export
+#' 
 Get_Code_for_Description_renderUI <- function(id){
   
   code <- "
@@ -143,7 +168,7 @@ Get_Code_for_Description_renderUI <- function(id){
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
         
-        includeMarkdown(system.file('scripts/module_examples/md/', 
+        includeMarkdown(system.file('module_examples/md/', 
                                     paste0('replaceid', '.md'), 
                                     package = 'Magellan'
                                     )
@@ -510,6 +535,8 @@ Generate_RenderUI_Code_For_Single_Widgets <- function(widgets=NULL){
 #' cat(code)
 #' }
 #' 
+#' @export
+#' 
 Module_Return_Func <- function(){
   
   code <- "# Return value of module
@@ -550,6 +577,8 @@ code
 #' code <- ComposedeWorflowCoreCode(widgets, steps)
 #' cat(code)
 #' }
+#' 
+#' @export
 #' 
 ComposedeWorflowCoreCode <- function(name, steps){
   core <- paste0(Get_Code_Declare_widgetsDefaultValues(),

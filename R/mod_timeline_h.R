@@ -70,6 +70,8 @@ mod_timeline_h_ui <- function(id){
 #' 
 #' @rdname mod_timeline_h
 #' 
+#' @export
+#' 
 mod_timeline_h_server = function(id, 
                                  config,
                                  status,

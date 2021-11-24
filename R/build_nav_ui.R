@@ -27,7 +27,7 @@ Build_nav_v_ui <- function(ns){
                                     class = PrevNextBtnClass,
                                     style='padding:4px; font-size:80%')
                    ),
-                   uiOutput(ns('mod_timeline_v_ui'))
+                   uiOutput(ns('show_TL'))
                )
              )),
       column(width=10,

@@ -8,7 +8,9 @@
 #' 
 #' @rdname mod_timeline_v
 #' 
-#' @author Samuel WIeczorek
+#' @author Samuel Wieczorek
+#' 
+#' @export
 #' 
 mod_timeline_v_ui <- function(id){
   ns <- NS(id)
@@ -70,7 +72,9 @@ mod_timeline_v_ui <- function(id){
 #' @rdname mod_timeline_v
 #' 
 #' @author Samuel Wieczorek
-
+#' 
+#' @export
+#' 
 mod_timeline_v_server <- function(id, 
                                   config, 
                                   status, 
