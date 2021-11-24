@@ -12,6 +12,8 @@
 #'
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 mod_PipelineA_ui <- function(id){
   ns <- NS(id)
 }
@@ -40,6 +42,8 @@ mod_PipelineA_ui <- function(id){
 #'
 #' @import shiny
 #' @importFrom stats setNames
+#' 
+#' @export
 #'
 mod_PipelineA_server <- function(id,
                                  dataIn = reactive({NULL}),

@@ -9,6 +9,7 @@ output:
     theme: united
     keep_md: true
     papersize: a4
+    extra_dependencies: ["float"]
 vignette: >
   %\VignetteIndexEntry{Navigate with Magellan}
   %\VignetteEngine{knitr::rmarkdown}
@@ -196,7 +197,7 @@ General rules:
 
 Legend of colors and styles:
 
-* a green fullfilled circle  denotes a step that has been `validated`
+* a green fullfilled circle ![](./figs/validated_enabled.png) denotes a step that has been `validated`
 * A red empty circle is for a mandatory step that is not `validated` neither `skipped`,
 * A green empty circle is for a non-mandatory and non-validated step,
 * A dashed grey circle denotes a skipped step.

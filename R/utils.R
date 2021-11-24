@@ -73,6 +73,8 @@ Timestamp <- function(){
 #'
 #' - `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the object (of type list)
 #' 
+#' - `Save(object, file)` stores the object to a .RData file
+#' 
 #' @details
 #' The object must be of type list. Thetwo functions are implemented here for a simple list.
 #' For other dataset classes, their implementation must be part of the package which uses Magellan.
@@ -82,9 +84,11 @@ Timestamp <- function(){
 #' @param range A xxxx
 #'
 #' @param dataset `character(1)` providing the base with respect to which
-#'     logarithms are computed. Defaults is 2.
+#'     logarithms are computed. Default is log2.
 #'
 #' @param name A `character(1)` naming the new assay name.
+#' 
+#' @param file A `characte(1)` naming the file to save the object.
 #'
 #' @return An processed object of the same class as `object`.
 #' 
@@ -177,4 +181,38 @@ setMethod("Add_Datasets_to_Object",
 #           })
 
 
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param object xxx
+#' @param file xxx
+#' 
+#' @export
+#' 
+Save_Object <- function(object, file) {
+  if (is.null(object))
+    return()
+  if (missing(file))
+    return()
+  
+  saveRDS(object, file = file)
+}
 
+
+#' @title xxx
+#' 
+#' @description xxx
+#' 
+#' @param file xxx
+#' 
+#' @export
+#' 
+Upload_Object <- function(file) {
+  if (is.null(object))
+    return()
+  if (missing(file))
+    return()
+  
+  saveRDS(object, file = file)
+}

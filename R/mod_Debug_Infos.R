@@ -5,6 +5,8 @@
 #'
 #' @rdname mod_Debug_Infos
 #' 
+#' @export
+#' 
 mod_Debug_Infos_ui <- function(id){
   ns <- NS(id)
   uiOutput(ns('show_Debug_Infos'))
@@ -44,6 +46,8 @@ mod_Debug_Infos_ui <- function(id){
 #' }
 #' 
 #' @rdname mod_Debug_Infos
+#' 
+#' @export
 #' 
 mod_Debug_Infos_server <- function(id,
                                    title = NULL,

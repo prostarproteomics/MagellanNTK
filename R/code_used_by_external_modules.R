@@ -589,6 +589,8 @@ ComposedeWorflowCoreCode <- function(name, steps){
 #' cat(code)
 #' }
 #' 
+#' @export
+#' 
 SimpleWorflowCoreCode <- function(name, widgets, steps){
   core <- paste0(
     #Get_Code_Update_Config(),

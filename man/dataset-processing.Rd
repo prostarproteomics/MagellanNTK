@@ -24,9 +24,11 @@
 \item{range}{A xxxx}
 
 \item{dataset}{`character(1)` providing the base with respect to which
-logarithms are computed. Defaults is 2.}
+logarithms are computed. Default is log2.}
 
 \item{name}{A `character(1)` naming the new assay name.}
+
+\item{file}{A `characte(1)` naming the file to save the object.}
 }
 \value{
 An processed object of the same class as `object`.
@@ -43,6 +45,8 @@ The following functions are currently available:
 are in range
 
 - `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the object (of type list)
+
+- `Save(object, file)` stores the object to a .RData file
 }
 \details{
 The object must be of type list. Thetwo functions are implemented here for a simple list.

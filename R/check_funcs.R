@@ -8,10 +8,10 @@
 #' 
 Found_Mod_Funcs <- function(id){
   server.func <- paste0('mod_', id, '_server')
-  server.exists = exists(server.func, mode='function')
+  server.exists = exists(server.func, envir = .GlobalEnv, mode='function')
   
   ui.func <- paste0('mod_', id, '_ui')
-  ui.exists = exists(ui.func, mode='function')
+  ui.exists = exists(ui.func, envir = .GlobalEnv, mode='function')
   
   if (!server.exists)
     warning(paste0("Cannot found ", server.func, '()'))

@@ -1,18 +1,17 @@
 library(Magellan)
 
-options(shiny.fullstacktrace = TRUE)
+#options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/inst/scripts')
+#setwd('~/GitHub/Magellan/inst/scripts')
 
-dirpath <- 'module_examples'
+dirpath <- system.file('scripts/module_examples', package='Magellan')
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
-  source(file.path(dirpath, l), local=TRUE)$value
+  source(file.path(dirpath, l), local=FALSE)$value
 
-
-dirpath <- '../../R'
-for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
-  source(file.path(dirpath, l), local=TRUE)$value
-
+# dirpath <- '../../R'
+# for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+#   source(file.path(dirpath, l), local=TRUE)$value
+# 
 
 #----------------------------------------------------------------------
 ui <- fluidPage(

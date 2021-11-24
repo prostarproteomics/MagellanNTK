@@ -20,6 +20,8 @@
 #' @rdname example_module_Process3
 #' 
 #' @author Samuel Wieczorek
+#' 
+#' @export
 #'
 mod_Process3_ui <- function(id){
   ns <- NS(id)
@@ -46,7 +48,9 @@ mod_Process3_ui <- function(id){
 #' @rdname example_module_Process3
 #' 
 #' @importFrom stats setNames rnorm
-
+#' 
+#' @export
+#' 
 mod_Process3_server <- function(id,
                                 dataIn = reactive({NULL}),
                                 steps.enabled = reactive({NULL}),

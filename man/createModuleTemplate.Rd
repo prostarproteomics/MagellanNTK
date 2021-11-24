@@ -20,13 +20,13 @@ conf.process <- list(mode = "process",
 steps = c("Step 1", "Step 2", "Save"),
 mandatory = c(TRUE, FALSE, TRUE)
 )
-createModuleTemplate('Process1', conf)
+createModuleTemplate('Process1', conf.process)
 
 conf.pipeline <- list(mode = "pipeline",
 steps = c("Process 1", "Process 2", "Process 3"),
 mandatory = c(TRUE, FALSE, TRUE)
 )
-createModuleTemplate('PipelineA', conf)
+createModuleTemplate('PipelineA', conf.pipeline)
 }
 
 }
