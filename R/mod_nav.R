@@ -560,10 +560,11 @@ mod_nav_server <- function(id,
                 triggerValues <- values.children$triggers
                 return.values <- values.children$values
                 
-                cat('--------------- Data received from children --------------------\n')
-                print(return.values)
-                cat('-------------------------------------------------------\n')
-                
+                if (verbose){
+                  cat('--------------- Data received from children --------------------\n')
+                  print(return.values)
+                  cat('-------------------------------------------------------\n')
+                }
                 
                 if (is.null(return.values)) { # The entire pipeline has been reseted
                   rv$dataIn <- NULL

@@ -6,7 +6,8 @@
 #' This documentation is for developpers who want to create their own pipelines nor processes
 #' to be managed with `Magellan`.
 #' 
-#' @param verbose xxx
+#' @param verbose A `boolean` that indicates whether to show some infos in the console
+#' and add the shiny module for debugging
 #'
 #' @rdname example_mod_pipeline
 #'

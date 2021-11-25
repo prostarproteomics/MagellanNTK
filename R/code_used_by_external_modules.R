@@ -1,6 +1,11 @@
-#' @title xxx
+#' @title R code to update the 'config' variable of a process module
 #' 
-#' @description xxx
+#' @description This function generates the necessary code to
+#' modify the variable 'config' (slots steps and mandatory). It adds
+#' a 'Description' step and a TRUE value at the beginning of the 'steps' and 'mandatory'
+#'  list, erases all white spaces for the names of the steps.
+#' 
+#' @return A `string` containing some R code
 #' 
 #' @export
 #' 
@@ -19,9 +24,12 @@ Get_Code_Update_Config <- function(){
   code
 }
 
-#' @title xxx
+#' @title R code to update the 'config' variable of a pipeline module
 #' 
-#' @description xxx
+#' @description This function generates the necessary code to
+#' modify the variable 'config' (slots steps and mandatory). It adds
+#' a 'Description' step and a TRUE value at the beginning of the 'steps' and 'mandatory'
+#'  list, erases all white spaces for the names of the steps.
 #' 
 #' @export
 #' 
@@ -111,11 +119,13 @@ Get_Code_for_module_Description <- function(id){
      
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
+      file <- paste0(config$path_to_md_dir, '/', id, '_Description.md')
       tagList(
-        includeMarkdown(system.file('module_examples/md/', 
-                                    paste0(id, '_Description.md'), 
-                                    package='Magellan')),
-        
+        if (file.exists(file))
+          includeMarkdown(file)
+        else
+          p('No Description available'),
+
         uiOutput(ns('datasetDescription')),
         
         # Insert validation button
@@ -152,7 +162,7 @@ code
 #' pipeline does not have its own UIs as it is only a bridge
 #' between the user shiny app and the UIs of the processes.
 #' 
-#' @param id xxx
+#' @param id The 'id' of the module that calls this function.
 #' 
 #' @export
 #' 
@@ -162,17 +172,19 @@ Get_Code_for_Description_renderUI <- function(id){
   
   
   output$Description <- renderUI({
-      tagList(
+  file <- paste0(config$path_to_md_dir, '/', 'replaceid', '.md')
+  
+        tagList(
         # In this example, the md file is found in the module_examples directory
         # but with a real app, it should be provided by the package which
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
         
-        includeMarkdown(system.file('module_examples/md/', 
-                                    paste0('replaceid', '.md'), 
-                                    package = 'Magellan'
-                                    )
-                      ),
+        if (file.exists(file))
+          includeMarkdown(file)
+        else
+          p('No Description available'),
+
         
        # Used to show some information about the dataset which is loaded
        # This function must be provided by the package of the process module
@@ -200,7 +212,8 @@ Get_Code_for_Description_renderUI <- function(id){
 #' To avoid confusion, the first string is the name of the step while the second is the name
 #' of the widget
 #' 
-#' @param widgets.names xxx
+#' @param widgets.names A `list` containing the names of the widgets in all
+#' steps of the module.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -237,7 +250,8 @@ Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #' 
-#' @param widgets.names xxx
+#' @param widgets.names A `list` containing the names of the widgets in all
+#' steps of the module.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -269,6 +283,8 @@ Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
 #' @title Code for declaring widgets.default.values reactive variable
 #' 
 #' @description This function createxxx
+#' 
+#' @return A `string` containing some R code
 #' 
 #' @author Samuel Wieczorek
 #' 

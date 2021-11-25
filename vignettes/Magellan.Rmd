@@ -34,6 +34,15 @@ This tutorial concerns the use of `Magellan` at a end-user level. It describes h
 
 # Overview
 
+As `Magellan` consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework.
+This app does not to be complex but is is used for its ui() and server() functions.
+
+`Magellan` is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.
+
+The package `Magellan` is heavily based on Shiny modules and the processes/pipelines it manages are also built as Shiny modules. A module correspond to a single process or pipeline.
+However, `Magellan` is just the core program to manage the different steps and results and it does not contain any module of process nor pipeline. It contains only the modules which allow to navigate between steps of a process.
+
+
 `Magellan` is a workflow manager which can handle processes with a series of steps. 
 We define as:
 
@@ -66,77 +75,15 @@ knitr::include_graphics("./figs/hierarchical_structure.png", error = FALSE)
 Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.
 
 
+# Requirements
+
+the package `Magellan` is has be used with processes/pipelines. These processes are Shiny modules which functions ui() and server() must be available (loaded in the R environment). They can be in individual R scripts of embedded in a R package
 
 
+A md file may also be accessible as for the Description step.
 
 
-
-# Launch Magellan
-
-
-As `Magellan` consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework.
-This app does not to be complex but is is used for its ui() and server() functions.
-
-`Magellan` is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.
-
-The package `Magellan` is heavily based on Shiny modules and the processes/pipelines it manages are also built as Shiny modules. A module correspond to a single process or pipeline.
-However, `Magellan` is just the core program to manage the different steps and results and it does not contain any module of process nor pipeline. It contains only the modules which allow to navigate between steps of a process.
-
-Thus, to use `Magellan` with a process module, it is necessary to load in memory the functions relatives to those modules (it can be in individual scripts or included in a package).
-
-
-Suppose we have a module called 'process1'. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call thoses functions).
-
-In the example below, one launch Magellan with the process 'Process1' and an example dataset feat1, provided by Magellan.
-
-```{r launchMagellan, echo=TRUE, eval=FALSE}
-library(Magellan)
-
-ui <- fluidPage(
-  mod_nav_ui('Process1')
-)
-
-
-server <- function(input, output){
-  data(feat1, package='Magellan')
-  rv <- reactiveValues(
-    dataIn = feat1,
-    dataOut = NULL
-  )
-  
-  observe({
-    rv$dataOut <- mod_nav_server(id = 'Process1',
-                                 dataIn = reactive({rv$dataIn})
-                                 )
-    }, priority=1000)
-}
-
-
-shinyApp(ui, server)
-```
-
-A module using ``
-
-The simple level is a process, defined with its steps; each of these steps realize some computation on the object.
-The input of the step n correspond to the output of the step `n-1` and the output of the step `n` will be the input for the step `n+1`.
-
-At each step, the input and ouput are the structure than the object given in input of the whole process.
-
-The process (and all of its steps) work on a specific item of the object (generally, the last one) and generate a new item. The output of the process is then tho object given in input plus the new item, processed by the steps.
-
-
-Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another. 
-
-
-The same code can be used for a pipeline module. But, it is necessary to both have the fucntions for the pipeline module and the functions for each of its process
-
-For example, suppose that we use a pipeline 'PipeA' which uses two processes called 'Proc1' and 'Proc2'. Then, before launching the app, the following functions may be loaded in R:
-
-* mod_PipeA_server() and mod_PipeA_ui(),
-* mod_Proc1_server() and mod_Proc1_ui(),
-* mod_Proc2_server() and mod_Proc2_ui()
-
-An error will occur if one of these functions are missing.
+Each process
 
 
 # User interface of a process
@@ -222,13 +169,62 @@ The **Data processing steps** (mid-steps) contain the interface to perform actio
 The **last step** (names 'Save') does not contain any treatment on the dataset. It only contatenate the result of the process (which lead to a dataset) and append to the dataset given in input. This new object is then the result of the module.
 
 
-# Simple workflow \label{simpleWorkflow}
+# Process workflow \label{simpleWorkflow}
 
 Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics.
 It also contains a button called `Perform` which is used to validate the step.
 
 
 ## Launch the module \label{simpleWFLaunch}
+
+
+
+
+Thus, to use `Magellan` with a process module, it is necessary to load in memory the functions relatives to those modules (it can be in individual scripts or included in a package).
+
+
+Suppose we have a module called 'process1'. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call thoses functions).
+
+In the example below, one launch Magellan with the process 'Process1' and an example dataset feat1, provided by Magellan.
+
+```{r launchMagellan, echo=TRUE, eval=FALSE}
+library(Magellan)
+
+ui <- fluidPage(
+  mod_nav_ui('Process1')
+)
+
+
+server <- function(input, output){
+  data(feat1, package='Magellan')
+  rv <- reactiveValues(
+    dataIn = feat1,
+    dataOut = NULL
+  )
+  
+  observe({
+    rv$dataOut <- mod_nav_server(id = 'Process1',
+                                 dataIn = reactive({rv$dataIn})
+                                 )
+    }, priority=1000)
+}
+
+
+shinyApp(ui, server)
+```
+
+A module using ``
+
+The simple level is a process, defined with its steps; each of these steps realize some computation on the object.
+The input of the step n correspond to the output of the step `n-1` and the output of the step `n` will be the input for the step `n+1`.
+
+At each step, the input and ouput are the structure than the object given in input of the whole process.
+
+The process (and all of its steps) work on a specific item of the object (generally, the last one) and generate a new item. The output of the process is then tho object given in input plus the new item, processed by the steps.
+
+
+Contrary to the workflows of higher level, each step of a process does not affect the object. The results of computations are stored in a temporary variable and this is this variable that is modified from step to another. 
+
 
 Once the process server has been loaded, the UI is opening on the first step of the process. This step is always a Description step which explains the content of the process
 
@@ -309,7 +305,7 @@ Example
 Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.
 
 
-## Save the workflow \label{simpleWFSave}
+## Save the process \label{simpleWFSave}
 
 When the last step ('Save') is enabled (which is the case even if there are skipped steps), it is possible to finish the process.
 
@@ -328,7 +324,7 @@ The effect of this action is to enable the steps that can be enabled
   
 
  
-# Composed workflow \label{composedWF}
+# Pipeline workflow \label{composedWF}
 
 This section describes the behaviour of a complex workflow with two levels.
 
@@ -336,6 +332,18 @@ Here, each step is itself a (simple or composed) workflow (see xxx)
 
 
 ## Launch the module \label{composedWFLaunch}
+
+
+
+The same code can be used for a pipeline module. But, it is necessary to both have the fucntions for the pipeline module and the functions for each of its process
+
+For example, suppose that we use a pipeline 'PipeA' which uses two processes called 'Proc1' and 'Proc2'. Then, before launching the app, the following functions may be loaded in R:
+
+* mod_PipeA_server() and mod_PipeA_ui(),
+* mod_Proc1_server() and mod_Proc1_ui(),
+* mod_Proc2_server() and mod_Proc2_ui()
+
+An error will occur if one of these functions are missing.
 
 Globally, it respects the rules explained in the section xxx because each level follow the same logics: they only differ with the nature of each of their steps. So, for a general overview of the behaviour, please go to the section xxx.
 
@@ -346,12 +354,12 @@ In the complex workflow, the managment of results from each step is different. E
 However, there are some little differences and additional features when working with two or more levels: the 'remote commands'.
 
 
-## Navigate through workflows \label{composedWFNavigate}
+## Navigate through processes \label{composedWFNavigate}
 
 The same rules of navigation as (xxx) apply here.
 
 
-## Validate a step (workflow) \label{composedWFValidate}
+## Validate a process \label{composedWFValidate}
 
 The validation here differs from the simple workflow. There is no specific 'Save' button: the button used to validate a workflow is implemented in the last step of a simple workflow. Its validation leads to automatically xxx
 
@@ -359,7 +367,12 @@ In the latter case,
 
 Here, each time a steps is validated (with its own interface), 
 
-## Reset a step \label{composedWFReset}
+## Resetting \label{composedWFReset}
+
+### A single process
+
+### The entire pipeline
+
 
 As for any workflow in `Magellan`, a 'Reset' button allows to set the current step back to its default values. The effects of this action are the same as those described in section xxx for a single process. The difference here is that a process is a workflow itself, which means that resetting a step in a complex workflow also implies resetting a basic workflow. In such a case, it is like a 'remote reset' for the lower level workflow: it is reseted not by clicking on its own 'Reset' button but via the 'Reset' button of another workflow. However, the effects are the same.
 
@@ -373,7 +386,7 @@ This action has two effects:
 
 The other effect is that it also resets all the underneath workflow: all its steps are reseted, widgets sets to their default values and it go to its start state.
 
-## Save the workflow
+## Save the pipeline
 
 
 xxxx

@@ -69,7 +69,8 @@ mod_Process3_server <- function(id,
     # List of all steps of the process
     steps = c('Step1', 'Step2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c( FALSE, TRUE, TRUE)
+    mandatory = c( FALSE, TRUE, TRUE),
+    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
   )
   
   # Define default selected values for widgets

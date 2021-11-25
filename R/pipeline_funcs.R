@@ -132,7 +132,8 @@ list(triggers = triggerValues,
 ResetChildren <- function(range, 
                           resetChildren
                           ){
-  cat('ResetChildren()\n\n')
+  if (verbose)
+    cat('ResetChildren()\n\n')
   
   resetChildren[range] <- 1 + resetChildren[range]
   
@@ -200,9 +201,11 @@ PrepareData2Send <- function(rv, pos){
     data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
   }
   
-  cat('<----------------- Data sent to children ------------------> \n')
-  print(data2send)
-  cat('<----------------------------------------------------> \n')
+  if (verbose) {
+    cat('<----------------- Data sent to children ------------------> \n')
+    print(data2send)
+    cat('<----------------------------------------------------> \n')
+  }
   
   return(
     list(data2send = data2send,

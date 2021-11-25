@@ -8,7 +8,8 @@
 #' This documentation is for developpers who want to create their own pipelines nor processes
 #' to be managed with `Magellan`.
 #' 
-#' @param verbose xxx
+#' @param verbose A `boolean` that indicates whether to show some infos in the console
+#' and add the shiny module for debugging
 #'
 #' @rdname example_mod_pipeline
 #'
@@ -17,6 +18,11 @@
 #' @importFrom utils data
 #' 
 #' @export
+#' 
+#' @examples
+#' \dontrun{
+#' example_mod_Process()
+#' }
 #' 
 example_mod_Process <- function(verbose = FALSE){
   
@@ -54,7 +60,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_nav_server(id = 'Process1',
+    rv$dataOut <- mod_nav_server(id = 'Process2',
                                  dataIn = reactive({rv$dataIn}),
                                  timelines = c('h'),
                                  verbose = verbose
@@ -62,7 +68,7 @@ server <- function(input, output){
   }, priority=1000)
   
   
-  output$UI <- renderUI({mod_nav_ui('Process1')})
+  output$UI <- renderUI({mod_nav_ui('Process2')})
 }
 
 

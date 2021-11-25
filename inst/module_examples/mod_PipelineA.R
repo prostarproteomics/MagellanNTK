@@ -62,7 +62,8 @@ mod_PipelineA_server <- function(id,
     # Here, each step is a workflow
     steps = c('Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, FALSE, TRUE)
+    mandatory = c(FALSE, FALSE, TRUE),
+    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
   )
   
   
