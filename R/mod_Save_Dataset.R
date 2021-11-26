@@ -1,59 +1,70 @@
-#' @title mod_Debug_Infos
+#' @title mod_Load_Dataset
 #' 
 #' @description  A shiny Module.
 #' @param id xxx
 #'
-#' @rdname mod_Debug_Infos
+#' @rdname mod_Save_Dataset
 #' 
 #' @export
 #' 
 mod_Save_Dataset_ui <- function(id){
   ns <- NS(id)
-  tagList(xxx)
+  uiOutput(ns('show_download_ui'))
 }
 
-# Module Server
-#' @title xxx
+#' @param dataIn xxx
 #' 
-#' @description xxx
+#' @return NA 
 #' 
-#' 
-#' @param id xxx
-#' 
-#' @export
-#' @return xxx 
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' ui <- fluidPage(
-#'   mod_format_DT_ui('tbl')
-#' )
-#' server <- function(input, output){
-#'   mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
-#' }
-#' shinyApp(ui, server)
-#' }
-#' 
-#' @rdname mod_Debug_Infos
+#' @rdname mod_Save_Dataset
 #' 
 #' @export
 #' 
-mod_Save_Dataset_server <- function(id){
+mod_Save_Dataset_server <- function(id, 
+                                    dataIn = reactive({NULL})
+                                    ){
   
+  
+  req(dataIn())
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
+    # modal <- function(){
+    #   modalDialog(
+    #     #textInput(ns("nameExport"), 
+    #     #          label = "Save as rds file. Choose filename"),
+    #     footer = tagList(
+    #       modalButton('Cancel'),
+    #       downloadLink(ns('download'), 'Download file')
+    #     )
+    #   )
+    # }
+    # 
+    # observe({showModal(modal())})
+    # 
+    # observeEvent(input$Cancel, {removeModal()})
+
+    
+    output$show_download_ui <- renderUI({
+      
+    downloadLink(ns('download'), 'Quick link')
+    })
     
     
+    
+    output$download <- downloadHandler(
+      filename = function() {
+        #paste0(input$nameExport, '.rds')
+        paste0('foo.rds')
+        },
+      content = function(file) {
+        fname <- tempfile()
+        saveRDS(dataIn(), file = fname)
+        file.copy(fname, file)
+        file.remove(fname)  
+        removeModal()
+        }
+      )
   })
-  
 }
-
-## To be copied in the UI
-# mod_format_DT_ui("format_DT_ui_1")
-
-## To be copied in the server
-# callModule(mod_format_DT_server, "format_DT_ui_1")
-

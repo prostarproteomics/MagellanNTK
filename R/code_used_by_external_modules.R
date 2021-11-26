@@ -420,7 +420,8 @@ Code_ObserveEvent_ValidationBtns <- function(){
                    rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
                                                        dataset = rnorm(1:5),
                                                        name = id)
-                 }
+                    mod_Save_Dataset_server('toto', dataIn = reactive({rv$dataIn}))
+                   }
                  
                  # First step (Description)
                  if (current.pos() == 1 ){
@@ -430,6 +431,9 @@ Code_ObserveEvent_ValidationBtns <- function(){
                  dataOut$trigger <- Magellan::Timestamp()
                  dataOut$value <- rv$dataIn
                  rv$steps.status[current.pos()] <- global$VALIDATED
+                 
+                 
+                
                })
                
                "
@@ -459,6 +463,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   # DO NOT MODIFY THIS FUNCTION
   
   output$step.name_validationBtn_ui <- renderUI({
+      tagList(
       if (isTRUE(rv$steps.enabled[\"step.name\"])  )
         actionButton(ns(\"step.name_btn_validate\"),
                      \"label\",
@@ -469,6 +474,9 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
                        \"label\",
                        class = btn_success_color)
         )
+        
+        Add_download_link
+        )
     })
     
     "
@@ -476,13 +484,20 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   ls_list <- lapply(steps, function(x) {
     code <- gsub("step.name", x, code)
     
-    if (x == 'Description')
-      new.label <- 'Start '
-    else if (x == 'Save')
-      new.label <- 'Save '
-    else
-      new.label <- 'Perform '
+    add <- '
+    '
     
+    if (x == 'Description'){
+      new.label <- 'Start '
+    } else if (x == 'Save'){
+      new.label <- 'Save '
+      add <- ",mod_Save_Dataset_ui(ns('toto'))
+      "
+      } else {
+      new.label <- 'Perform '
+      }
+    
+    code <- gsub('Add_download_link', add, code)
     code <- gsub('label', paste0(new.label, x, sep = " "), code)
   }
   )

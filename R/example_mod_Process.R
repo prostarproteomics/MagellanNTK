@@ -60,7 +60,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_nav_server(id = 'Process2',
+    rv$dataOut <- mod_nav_server(id = 'Process1',
                                  dataIn = reactive({rv$dataIn}),
                                  timelines = c('h'),
                                  verbose = verbose
@@ -68,7 +68,7 @@ server <- function(input, output){
   })
   
   
-  output$UI <- renderUI({mod_nav_ui('Process2')})
+  output$UI <- renderUI({mod_nav_ui('Process1')})
 }
 
 

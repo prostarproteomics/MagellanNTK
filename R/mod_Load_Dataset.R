@@ -1,52 +1,53 @@
-#' @title mod_Debug_Infos
+#' @title mod_Load_Dataset
 #' 
 #' @description  A shiny Module.
 #' @param id xxx
 #'
-#' @rdname mod_Debug_Infos
+#' @rdname mod_Load_Dataset
 #' 
 #' @export
 #' 
 mod_Load_Dataset_ui <- function(id){
-  ns <- NS(id)
-  tagList(xxx)
+
 }
 
-# Module Server
-#' @title xxx
-#' 
-#' @description xxx
-#' 
-#' 
-#' @param id xxx
-#' 
-#' @export
+
 #' @return xxx 
 #' 
-#' @examples 
-#' \dontrun{
-#' 
-#' ui <- fluidPage(
-#'   mod_format_DT_ui('tbl')
-#' )
-#' server <- function(input, output){
-#'   mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
-#' }
-#' shinyApp(ui, server)
-#' }
-#' 
-#' @rdname mod_Debug_Infos
+#' @rdname mod_Load_Dataset
 #' 
 #' @export
 #' 
 mod_Load_Dataset_server <- function(id){
   
-  
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
+    rv <- reactiveValues(data = NULL)
+
+    modal <- function(){
+      modalDialog(
+        fileInput(ns("file"), "Open file", 
+                  multiple = FALSE,
+                  accept = ".rds"),
+        footer = tagList(
+          modalButton('Cancel'),
+          actionButton(ns('ok'), 'OK')
+        )
+      )
+    }
+
+    observe({showModal(modal())})
     
+    observeEvent(input$Cancel, {removeModal()})
     
+    observeEvent(input$ok, { 
+      req(input$file)
+      rv$data <- readRDS(input$file$datapath)
+      removeModal()
+    })
+  
+    reactive({rv$data})
   })
   
 }
@@ -56,4 +57,5 @@ mod_Load_Dataset_server <- function(id){
 
 ## To be copied in the server
 # callModule(mod_format_DT_server, "format_DT_ui_1")
+
 
