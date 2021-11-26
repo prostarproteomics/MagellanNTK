@@ -86,10 +86,35 @@ A md file may also be accessible as for the Description step.
 Each process
 
 
-# User interface of a process
+# User interface
 
 
-The user interface for the low level of Magellan is divided into two main parts:
+## Layouts
+
+The basic user interface of Magellan is divided into two main parts: a **navigation bar** and a **panel** which shows the content of the current step.
+As one can see in xxx, two layouts are implemented: a horizontal navigation bar or a vertical one.
+
+This layout is used by the process workflow.
+
+
+```{r processlayout, results='markup', fig.cap="Process layouts.", out.extra='style="background-color: black; padding:1px;"', echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_layout.png", error = FALSE)
+```
+
+
+In the case of a pipeline workflow, the same schema is used. The difference is in the content of the screens part: in the process worklow, it contains the simple screens of the steps and in a pipeline workflow, it contains the user interface of the different processes (see xxx). As for simpler workflow, two layouts are available for the position of th navigation bar.
+
+
+```{r pipelinelayout, results='markup', fig.cap="Pipeline layouts.", out.extra='style="background-color: black; padding:1px;"', echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/pipeline_layout.png", error = FALSE)
+```
+
+
+
+
+
+## Navigation bar
+
 
 The **navigation bar** which contains four items:
 
@@ -98,18 +123,6 @@ The **navigation bar** which contains four items:
   * A timeline to vizualize the steps and other informations,
   * A "Next" button to go further into the steps.
   
-A **panel** which shows the content of the current step
-
-
-
-
-```{r processnavui, results='markup', fig.cap="Process navigation UI.", out.extra='style="background-color: black; padding:1px;"', echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/process_navigation_ui.png", error = FALSE)
-```
-
-
-## Navigation bar
-
 
 ### Buttons
 
@@ -177,15 +190,12 @@ It also contains a button called `Perform` which is used to validate the step.
 
 ## Launch the module \label{simpleWFLaunch}
 
-
-
-
 Thus, to use `Magellan` with a process module, it is necessary to load in memory the functions relatives to those modules (it can be in individual scripts or included in a package).
 
 
-Suppose we have a module called 'process1'. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call thoses functions).
+Suppose we have a module called 'process1'. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call those functions). If there are not found, a warning appears and Magellan stops.
 
-In the example below, one launch Magellan with the process 'Process1' and an example dataset feat1, provided by Magellan.
+In the example below, one launch Magellan with the process 'Process1' and an dataset called 'feat1', provided by Magellan.
 
 ```{r launchMagellan, echo=TRUE, eval=FALSE}
 library(Magellan)
@@ -206,14 +216,16 @@ server <- function(input, output){
     rv$dataOut <- mod_nav_server(id = 'Process1',
                                  dataIn = reactive({rv$dataIn})
                                  )
-    }, priority=1000)
+    })
 }
 
 
 shinyApp(ui, server)
 ```
 
-A module using ``
+
+
+In the example above, the dataset is loaded directly in the server function for a simpler example. If t
 
 The simple level is a process, defined with its steps; each of these steps realize some computation on the object.
 The input of the step n correspond to the output of the step `n-1` and the output of the step `n` will be the input for the step `n+1`.

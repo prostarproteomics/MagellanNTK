@@ -46,7 +46,7 @@ server <- function(input, output){
                                   )
     
     output$UI <- renderUI({mod_nav_ui('PipelineA')})
-  }, priority=1000)
+  })
   
   output$debugInfos_ui <- renderUI({
     req(verbose)

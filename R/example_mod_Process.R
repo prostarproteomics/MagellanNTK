@@ -65,7 +65,7 @@ server <- function(input, output){
                                  timelines = c('h'),
                                  verbose = verbose
                                  )
-  }, priority=1000)
+  })
   
   
   output$UI <- renderUI({mod_nav_ui('Process2')})
