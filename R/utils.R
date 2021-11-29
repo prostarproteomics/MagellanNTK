@@ -5,6 +5,31 @@
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
+#' @return NA
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#'
+load_examples <- function(){
+  dirpath <- system.file('module_examples', package='Magellan')
+   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)){
+     name <- unlist(strsplit(l, split='.', fixed=TRUE))[1]
+     name <- substr(name, 5, 1000000L)
+     source(file.path(dirpath, l), local=TRUE)$value
+     if (Found_Mod_Funcs(name)    )
+       cat(paste0('Module ', name, ' is loaded\n'))
+   }
+}
+
+
+
+#' @title 
+#' xxx
+#' 
+#' @description 
+#' Returns the date and time in timestamp UNIX format.
+#' 
 #' @param f a filename
 #' 
 #' @return A `character(1)` vector containing as a character the

@@ -8,25 +8,35 @@
 #' This documentation is for developpers who want to create their own pipelines nor processes
 #' to be managed with `Magellan`.
 #' 
+#' @param id xxx
 #' @param verbose A `boolean` that indicates whether to show some infos in the console
 #' and add the shiny module for debugging
+#' 
+#' @param ... Additional parameters for mod_nav 
 #'
 #' @rdname example_mod_pipeline
 #'
 #' @author Samuel Wieczorek
 #' 
 #' @importFrom utils data
+#' @import shiny
 #' 
 #' @export
 #' 
 #' @examples
 #' \dontrun{
-#' example_mod_Process()
+#' dirpath <- system.file('module_examples', package='Magellan')
+#' for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+#'  source(file.path(dirpath, l), local=FALSE)$value
+#'
+#' run_workflow('Process1')
+#' 
+#' run_workflow('PipelineA', layout = c('h', 'h'))
 #' }
 #' 
 run_workflow <- function(id,
-                         layout = 'h',
-                         verbose = FALSE
+                         verbose = FALSE,
+                         ...
                          ){
   
   if(missing(id)){
@@ -64,9 +74,8 @@ run_workflow <- function(id,
     
     observeEvent(req(dataIn()), {
       rv$dataOut <- mod_nav_server(id = id,
-                                   dataIn = reactive({dataIn()}),
-                                   timelines = layout,
-                                   verbose = verbose
+                                   verbose = verbose,
+                                   dataIn = reactive({dataIn()})
                                    )
       
       mod_Debug_Infos_server(id = 'debug_infos',

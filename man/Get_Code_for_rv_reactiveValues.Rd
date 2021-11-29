@@ -6,6 +6,9 @@
 \usage{
 Get_Code_for_rv_reactiveValues()
 }
+\value{
+A `string` containing some R code
+}
 \description{
 This function createxxx
 }

@@ -47,7 +47,7 @@ mod_nav_ui <- function(id){
 #' 
 #' @param is.skipped xxx
 #' 
-#' @param timelines A vector of character ('h' for horizontal, 'v' for vertical)
+#' @param layout A vector of character ('h' for horizontal, 'v' for vertical)
 #' where each item correspond to the orientation of the timeline for a given
 #' level of navigation module.
 #' 
@@ -86,7 +86,7 @@ mod_nav_server <- function(id,
                            is.enabled = reactive({TRUE}),
                            remoteReset = reactive({FALSE}),
                            is.skipped = reactive({FALSE}),
-                           timelines = NULL,
+                           layout = NULL,
                            verbose = FALSE
                            ){
   
@@ -113,6 +113,8 @@ mod_nav_server <- function(id,
       proc = NULL,
       
       mode = NULL,
+      
+      layout = NULL,
       
       # @field status A boolan vector which contains the status (validated,
       # skipped or undone) of the steps
@@ -327,16 +329,19 @@ mod_nav_server <- function(id,
      # Launch the renderUI function for the user interface of the module
      # Apparently, the renderUI() cannot be stored in the function 'Build..'
      output$nav_mod_ui <- renderUI({
-       do.call(paste0('Build_nav_', timelines[1], '_ui'), list(ns))
+       # Wait until the layout variable is instantiated
+       #browser()
+       req(rv$layout)
+       do.call(paste0('Build_nav_', rv$layout[1], '_ui'), list(ns))
      })
      
      
-     
-     observeEvent(timelines, ignoreNULL = FALSE, {
-       
-       do.call(paste0('mod_timeline_', timelines[1], '_server'),
+
+     observeEvent(req(rv$layout), ignoreNULL = FALSE, {
+
+       do.call(paste0('mod_timeline_', rv$layout[1], '_server'),
                list(
-                 id = paste0('timeline', timelines[1]),
+                 id = paste0('timeline', rv$layout[1]),
                  config =  rv$config,
                  status = reactive({rv$steps.status}),
                  position = reactive({rv$current.pos}),
@@ -345,12 +350,12 @@ mod_nav_server <- function(id,
        )
 
        output$show_TL <- renderUI({
-         do.call(paste0('mod_timeline_', timelines[1], '_ui'),
-                 list(ns(paste0('timeline', timelines[1]))
+         do.call(paste0('mod_timeline_', rv$layout[1], '_ui'),
+                 list(ns(paste0('timeline', rv$layout[1]))
                  )
          )
        })
-       
+
      })
      
      
@@ -416,6 +421,34 @@ mod_nav_server <- function(id,
                                       nm = names(rv$config$steps))
        
        rv$currentStepName <- reactive({names(rv$config$steps)[rv$current.pos]})
+       
+       if(is.null(layout))
+         switch(rv$mode,
+              process = rv$layout <- c('h'),
+              pipeline = rv$layout <- c('h', 'h')
+         )
+       else
+         rv$layout <- layout
+       
+       # do.call(paste0('mod_timeline_', layout[1], '_server'),
+       #         list(
+       #           id = paste0('timeline', layout[1]),
+       #           config =  rv$config,
+       #           status = reactive({rv$steps.status}),
+       #           position = reactive({rv$current.pos}),
+       #           enabled = reactive({rv$steps.enabled})
+       #         )
+       # )
+       # 
+       # output$show_TL <- renderUI({
+       #   do.call(paste0('mod_timeline_', layout[1], '_ui'),
+       #           list(ns(paste0('timeline', layout[1]))
+       #           )
+       #   )
+       # })
+       
+       
+       
       }, priority=1000) 
      
      
@@ -521,6 +554,7 @@ mod_nav_server <- function(id,
                 }
                 }
               
+              
               rv$steps.skipped <- setNames(rep(FALSE, rv$length), nm = names(rv$config$steps))
               rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
               
@@ -543,7 +577,7 @@ mod_nav_server <- function(id,
                                                   is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),
                                                   is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                                                  timelines = timelines[-1],
+                                                  layout = rv$layout[-1],
                                                   verbose = verbose
                                                   )
                 })

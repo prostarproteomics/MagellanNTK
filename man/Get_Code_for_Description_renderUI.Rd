@@ -7,7 +7,7 @@
 Get_Code_for_Description_renderUI(id)
 }
 \arguments{
-\item{id}{xxx}
+\item{id}{The 'id' of the module that calls this function.}
 }
 \description{
 This function gives the necessary code to

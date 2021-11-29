@@ -52,10 +52,3 @@ mod_Load_Dataset_server <- function(id){
   
 }
 
-## To be copied in the UI
-# mod_format_DT_ui("format_DT_ui_1")
-
-## To be copied in the server
-# callModule(mod_format_DT_server, "format_DT_ui_1")
-
-

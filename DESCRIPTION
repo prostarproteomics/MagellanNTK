@@ -41,12 +41,10 @@ Collate:
     pipeline_funcs.R
     process_funcs.R
     build_nav_ui.R
-    example_mod_Pipeline.R
-    example_mod_Process.R
     mod_Save_Dataset.R
     mod_Load_Dataset.R
     load_save.R
-    process_workflow.R
+    run_workflow.R
 biocViews: Software, Proteomics, MassSpectrometry
 Encoding: UTF-8
 LazyData: true

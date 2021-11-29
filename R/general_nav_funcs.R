@@ -134,6 +134,8 @@ GetMaxValidated_AllSteps <- function(steps.status){
 #' 
 #' @return xxx
 #' 
+#' @export
+#' 
 ToggleState_Screens <- function(cond, 
                                 range, 
                                 is.enabled,

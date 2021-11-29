@@ -7,7 +7,8 @@
 Get_Code_for_ObserveEvent_widgets(widgets.names = NULL)
 }
 \arguments{
-\item{widgets.names}{xxx}
+\item{widgets.names}{A `list` containing the names of the widgets in all
+steps of the module.}
 }
 \description{
 This function xxx

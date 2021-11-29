@@ -347,11 +347,11 @@ code
 #' 
 #' @examples 
 #' \dontrun{
-#' code <- Get_Code_for_observeEven_stepsEnabled()
+#' code <- Get_Code_for_observeEvent_stepsEnabled()
 #' cat(code)
 #' }
 #' 
-Get_Code_for_observeEven_stepsEnabled  <- function(){
+Get_Code_for_observeEvent_stepsEnabled  <- function(){
   code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
   if (is.null(steps.enabled()))
     rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
@@ -420,7 +420,6 @@ Code_ObserveEvent_ValidationBtns <- function(){
                    rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
                                                        dataset = rnorm(1:5),
                                                        name = id)
-                    mod_Save_Dataset_server('toto', dataIn = reactive({rv$dataIn}))
                    }
                  
                  # First step (Description)
@@ -432,7 +431,7 @@ Code_ObserveEvent_ValidationBtns <- function(){
                  dataOut$value <- rv$dataIn
                  rv$steps.status[current.pos()] <- global$VALIDATED
                  
-                 
+                 mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
                 
                })
                
@@ -475,7 +474,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
                        class = btn_success_color)
         )
         
-        Add_download_link
+       #Add_download_link
         )
     })
     
@@ -491,13 +490,13 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
       new.label <- 'Start '
     } else if (x == 'Save'){
       new.label <- 'Save '
-      add <- ",mod_Save_Dataset_ui(ns('toto'))
+      add <- ",mod_Save_Dataset_ui(ns('createQuickLink'))
       "
       } else {
       new.label <- 'Perform '
       }
     
-    code <- gsub('Add_download_link', add, code)
+    code <- gsub('#Add_download_link', add, code)
     code <- gsub('label', paste0(new.label, x, sep = " "), code)
   }
   )
@@ -616,7 +615,7 @@ ComposedeWorflowCoreCode <- function(name, steps){
                  Get_Code_for_ObserveEvent_widgets(),
                  Get_Code_for_rv_reactiveValues(),
                  Get_Code_for_dataOut(),
-                 Get_Code_for_observeEven_stepsEnabled(),
+                 Get_Code_for_observeEvent_stepsEnabled(),
                  Get_Code_for_observeEvent_remoteReset(),
                  Code_ObserveEvent_ValidationBtns(),
                  Generate_code_for_ValidationBtns_renderUI(steps),
@@ -658,7 +657,7 @@ SimpleWorflowCoreCode <- function(name, widgets, steps){
                  Get_Code_for_ObserveEvent_widgets(widgets),
                  Get_Code_for_rv_reactiveValues(),
                  Get_Code_for_dataOut(),
-                 Get_Code_for_observeEven_stepsEnabled(),
+                 Get_Code_for_observeEvent_stepsEnabled(),
                  Get_Code_for_observeEvent_remoteReset(),
                  Code_ObserveEvent_ValidationBtns(),
                  Generate_code_for_ValidationBtns_renderUI(steps),

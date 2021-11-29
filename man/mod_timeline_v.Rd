@@ -61,7 +61,7 @@ shinyApp(ui, server)
    
 }
 \author{
-Samuel WIeczorek
+Samuel Wieczorek
 
 Samuel Wieczorek
 }

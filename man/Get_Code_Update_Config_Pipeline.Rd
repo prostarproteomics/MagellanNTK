@@ -2,10 +2,13 @@
 % Please edit documentation in R/code_used_by_external_modules.R
 \name{Get_Code_Update_Config_Pipeline}
 \alias{Get_Code_Update_Config_Pipeline}
-\title{xxx}
+\title{R code to update the 'config' variable of a pipeline module}
 \usage{
 Get_Code_Update_Config_Pipeline()
 }
 \description{
-xxx
+This function generates the necessary code to
+modify the variable 'config' (slots steps and mandatory). It adds
+a 'Description' step and a TRUE value at the beginning of the 'steps' and 'mandatory'
+ list, erases all white spaces for the names of the steps.
 }

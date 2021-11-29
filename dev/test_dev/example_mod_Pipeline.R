@@ -41,7 +41,7 @@ server <- function(input, output){
   observe({
      rv$dataOut <- mod_nav_server(id = 'PipelineA',
                                   dataIn = reactive({rv$dataIn}),
-                                  timelines = c('v', 'h'),
+                                  layout = c('v', 'h'),
                                   verbose = verbose
                                   )
     

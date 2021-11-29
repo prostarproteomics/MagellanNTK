@@ -1,9 +1,14 @@
 
 
-#' @title xxxx
-#' @description xxx
+#' @title Vertical timeline UI
+#' 
+#' @description This function displays the timeline UI with a vertical layout
 #'
-#' @param ns xxxx
+#' @param ns The namespace variable from the module that called this function.
+#' 
+#' @return A shiny UI
+#' 
+#' @author Samuel Wieczorek
 #' 
 #' 
 Build_nav_v_ui <- function(ns){
@@ -48,7 +53,16 @@ Build_nav_v_ui <- function(ns){
 
 
 
-
+#' @title Horizontal timeline UI
+#' 
+#' @description This function displays the timeline UI with a horizontal layout
+#'
+#' @param ns The namespace variable from the module that called this function.
+#' 
+#' @return A shiny UI
+#' 
+#' @author Samuel Wieczorek
+#'
 Build_nav_h_ui <- function(ns){
   
   tagList(

@@ -7,7 +7,8 @@
 Get_Code_Declare_widgetsDefaultValues(widgets.names = NULL)
 }
 \arguments{
-\item{widgets.names}{xxx}
+\item{widgets.names}{A `list` containing the names of the widgets in all
+steps of the module.}
 }
 \description{
 This function create the source code needed inside a module

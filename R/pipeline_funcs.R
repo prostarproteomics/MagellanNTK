@@ -23,6 +23,8 @@
 #' of its calculations) 
 #' 
 #' @author Samuel Wieczorek
+#'
+#' @export
 #' 
 ActionOn_Child_Changed <- function(temp.dataIn,
                                    dataIn,
@@ -98,6 +100,7 @@ ActionOn_Child_Changed <- function(temp.dataIn,
 #' @param config xxxx
 #' @param tmp.return xxx
 #' 
+#' @export
 #' 
 GetValuesFromChildren <- function(config,
                                   tmp.return
@@ -128,6 +131,7 @@ list(triggers = triggerValues,
 #' @param range xxxx
 #' @param resetChildren xxx
 #' 
+#' @export
 #' 
 ResetChildren <- function(range, 
                           resetChildren
@@ -146,6 +150,8 @@ ResetChildren <- function(range,
 #' @description xxx
 #'
 #' @param rv xxxx
+#'
+#' @export
 #' 
 #' 
 Update_Data2send_Vector <- function(rv){
@@ -170,6 +176,7 @@ Update_Data2send_Vector <- function(rv){
 #' @param rv xxxx
 #' @param pos xxx
 #' 
+#' @export
 #' 
 PrepareData2Send <- function(rv, pos){
   # Returns NULL to all modules except the one pointed by the current position
