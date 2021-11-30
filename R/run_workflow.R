@@ -75,7 +75,8 @@ run_workflow <- function(id,
     observeEvent(req(dataIn()), {
       rv$dataOut <- mod_nav_server(id = id,
                                    verbose = verbose,
-                                   dataIn = reactive({dataIn()})
+                                   dataIn = reactive({dataIn()}),
+                                   tl.layout = tl.layout
                                    )
       
       mod_Debug_Infos_server(id = 'debug_infos',

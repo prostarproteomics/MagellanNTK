@@ -46,6 +46,8 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config){
 #' 
 #' @return A `renderUI` function
 #' 
+#' @export
+#' 
 Build_EncapsulateScreens_ui <- function(ns, 
                                         id, 
                                         config){
@@ -84,6 +86,8 @@ Build_EncapsulateScreens_ui <- function(ns,
 #' 
 #' @return xxx
 #' 
+#' @export
+#' 
 GetMaxValidated_BeforePos <- function(pos = NULL,
                                       rv){
   
@@ -111,6 +115,8 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
 #' @param steps.status xxx
 #' 
 #' @return xxx
+#' 
+#' @export
 #' 
 GetMaxValidated_AllSteps <- function(steps.status){
   val <- 0
@@ -156,6 +162,8 @@ ToggleState_Screens <- function(cond,
 #' 
 #' @return xxx
 #' 
+#' @export
+#' 
 GetStringStatus <- function(name){
   string <- if (name == global$VALIDATED) 'Validated'
   else if (name == global$UNDONE) 'Undone'
@@ -177,6 +185,8 @@ GetStringStatus <- function(name){
 #' 
 #' @return xxx
 #' 
+#' @export
+#' 
 NavPage <- function(direction, current.pos, len) {
   newval <- current.pos + direction
   newval <- max(1, newval)
@@ -196,6 +206,8 @@ NavPage <- function(direction, current.pos, len) {
 #' @param mode xxx
 #' 
 #' @return A tag div for ui
+#' 
+#' @export
 #' 
 dataModal <- function(ns, mode) {
   # Used to show an explanation for the reset feature whether the navigation mode is 'process' nor 'pipeline'.
@@ -224,6 +236,8 @@ validated process and all further datasets will be removed'
 #' 
 #' @return xxx
 #' 
+#' @export
+#' 
 Discover_Skipped_Steps <- function(steps.status){
   for (i in seq_len(length(steps.status))){
     max.val <- GetMaxValidated_AllSteps(steps.status)
@@ -245,6 +259,8 @@ Discover_Skipped_Steps <- function(steps.status){
 #' @param tag xxx
 #' 
 #' @return xxx
+#' 
+#' @export
 #'
 All_Skipped_tag <- function(steps.status, tag){
   steps.status <- setNames(rep(tag, length(steps.status)), steps.status)
@@ -261,6 +277,8 @@ All_Skipped_tag <- function(steps.status, tag){
 #' @param rv xxx
 #' 
 #' @return xxx
+#' 
+#' @export
 #'
 GetFirstMandatoryNotValidated <- function(range, 
                                           rv){
@@ -288,7 +306,9 @@ GetFirstMandatoryNotValidated <- function(range,
 #' @param is.enabled xxx
 #' @param rv xxx
 #' 
-Update_State_Screens = function(is.skipped,
+#' @export
+#' 
+Update_State_Screens <- function(is.skipped,
                                 is.enabled,
                                 rv){
   
@@ -350,6 +370,8 @@ Update_State_Screens = function(is.skipped,
 #' 
 #' @return NA
 #' 
+#' @export
+#' 
 ToggleState_NavBtns <- function(current.pos, nSteps){
   
   # If the cursor is not on the first position, show the 'prevBtn'
@@ -367,6 +389,8 @@ ToggleState_NavBtns <- function(current.pos, nSteps){
 #' @param cond xxx
 #' 
 #' @return NA
+#' 
+#' @export
 #' 
 ToggleState_ResetBtn <- function(cond){
   shinyjs::toggleState('rstBtn', condition = cond)

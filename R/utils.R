@@ -16,7 +16,7 @@ load_examples <- function(){
    for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)){
      name <- unlist(strsplit(l, split='.', fixed=TRUE))[1]
      name <- substr(name, 5, 1000000L)
-     source(file.path(dirpath, l), local=TRUE)$value
+     source(file.path(dirpath, l), local=FALSE)$value
      if (Found_Mod_Funcs(name)    )
        cat(paste0('Module ', name, ' is loaded\n'))
    }
