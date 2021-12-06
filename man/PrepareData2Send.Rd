@@ -4,12 +4,20 @@
 \alias{PrepareData2Send}
 \title{xxxx}
 \usage{
-PrepareData2Send(rv, pos)
+PrepareData2Send(
+  steps.info,
+  pos,
+  temp.dataIn,
+  dataIn,
+  config,
+  current.pos,
+  original.length
+)
 }
 \arguments{
-\item{rv}{xxxx}
-
 \item{pos}{xxx}
+
+\item{rv}{xxxx}
 }
 \description{
 xxx

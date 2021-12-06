@@ -4,7 +4,7 @@
 \alias{ToggleState_Screens}
 \title{xxx}
 \usage{
-ToggleState_Screens(cond, range, is.enabled, rv)
+ToggleState_Screens(cond, range, is.enabled, steps.info)
 }
 \arguments{
 \item{cond}{xxx}

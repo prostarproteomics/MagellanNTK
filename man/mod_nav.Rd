@@ -13,7 +13,7 @@ mod_nav_server(
   is.enabled = reactive({     TRUE }),
   remoteReset = reactive({     FALSE }),
   is.skipped = reactive({     FALSE }),
-  layout = NULL,
+  tl.layout = NULL,
   verbose = FALSE
 )
 }
@@ -36,7 +36,7 @@ Basically, it is the program which has called this module}
 
 \item{is.skipped}{xxx}
 
-\item{layout}{A vector of character ('h' for horizontal, 'v' for vertical)
+\item{tl.layout}{A vector of character ('h' for horizontal, 'v' for vertical)
 where each item correspond to the orientation of the timeline for a given
 level of navigation module.}
 

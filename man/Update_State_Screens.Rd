@@ -4,7 +4,7 @@
 \alias{Update_State_Screens}
 \title{xxx}
 \usage{
-Update_State_Screens(is.skipped, is.enabled, rv)
+Update_State_Screens(is.skipped, is.enabled, steps.info, config, current.pos)
 }
 \arguments{
 \item{is.skipped}{xxx}

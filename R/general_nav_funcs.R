@@ -11,6 +11,8 @@
 #' 
 #' @return A `wellPanel`
 #' 
+#' @export
+#' 
 Build_SkippedInfoPanel <- function(steps.status, current.pos, config){
   
    req(steps.status[current.pos] == global$SKIPPED)
@@ -77,32 +79,35 @@ Build_EncapsulateScreens_ui <- function(ns,
 
 
 
-#' @title xxx
+#' @title Last validated step before current step.
 #' 
 #' @description xxx
 #' 
 #' @param pos xxx
-#' @param rv xxx
+#' @param current.pos xxx
+#' @param steps.status xxx
 #' 
-#' @return xxx
+#' @return A `integer(1)` which is the indice in the set of steps
+#' that corresponds to the last validated step before the one identified
+#' by current.pos.
 #' 
 #' @export
 #' 
 GetMaxValidated_BeforePos <- function(pos = NULL,
-                                      rv){
+                                      current.pos,
+                                      steps.status){
   
   if (is.null(pos))
-    pos <- rv$current.pos
+    pos <- current.pos
   
   ind.max <- NULL
-  indices.validated <- which(rv$steps.status == global$VALIDATED)
+  indices.validated <- which(steps.status == global$VALIDATED)
   if (length(indices.validated) > 0){
     ind <- which(indices.validated < pos)
     if(length(ind) > 0)
       ind.max <- max(ind)
   }
-  
-  
+
   return(ind.max)
 }
 
@@ -138,19 +143,19 @@ GetMaxValidated_AllSteps <- function(steps.status){
 #' @param is.enabled xxx
 #' @param rv xxx
 #' 
-#' @return xxx
+#' @return A vector for steps.enabled
 #' 
 #' @export
 #' 
 ToggleState_Screens <- function(cond, 
                                 range, 
                                 is.enabled,
-                                rv){
+                                steps.info){
   
   if (isTRUE(is.enabled))
-    rv$steps.enabled[range] <- cond && !(rv$steps.status[range] == global$SKIPPED)
+    steps.info$enabled[range] <- cond && !(steps.info$status[range] == global$SKIPPED)
     
-    return(rv$steps.enabled)
+    return(steps.info$enabled)
 }
 
 
@@ -183,7 +188,7 @@ GetStringStatus <- function(name){
 #' @param current.pos xxx
 #' @param len xxx
 #' 
-#' @return xxx
+#' @return A `integer(1)` which is the new current position.
 #' 
 #' @export
 #' 
@@ -228,7 +233,7 @@ validated process and all further datasets will be removed'
 
 
 
-#' @title xxx
+#' @title Discover Skipped Steps
 #' 
 #' @description xxx
 #' 
@@ -263,101 +268,111 @@ Discover_Skipped_Steps <- function(steps.status){
 #' @export
 #'
 All_Skipped_tag <- function(steps.status, tag){
-  steps.status <- setNames(rep(tag, length(steps.status)), steps.status)
+  steps.status <- rep(tag, length(steps.status))
   
   return(steps.status)
   
 }
 
-#' @title xxx
+#' @title Get First Mandatory Not Validated
 #' 
 #' @description xxx
 #' 
 #' @param range xxx
 #' @param rv xxx
 #' 
-#' @return xxx
+#' @return A `integer(1)` which correspond to 
 #' 
 #' @export
 #'
 GetFirstMandatoryNotValidated <- function(range, 
-                                          rv){
-  res <- NULL
+                                          steps.info,
+                                          config){
+  ind <- NULL
   first <- NULL
   first <- unlist((lapply(range,
-                          function(x){rv$config$mandatory[x] && !rv$steps.status[x]})))
-  res <- if (sum(first) > 0)
+                          function(x){config$mandatory[x] && !steps.info$status[x]})))
+  ind <- if (sum(first) > 0)
     min(which(first == TRUE))
   else
     NULL
   
-  return(res)
+  return(ind)
 }
 
 
 
 
 
-#' @title xxx
+#' @title Update_State_Screens
 #' 
-#' @description xxx
+#' @description Updates the tag 'enabled' w.r.t. the actual state of
+#' the module (timeline, validated steps, ...)
+#' 
 #' 
 #' @param is.skipped xxx
 #' @param is.enabled xxx
-#' @param rv xxx
+#' @param steps.info xxx
+#' @param config xxx
+#' @param current.pos xxx
+#' 
+#' @return A vector of enabled tag for the steps. 
 #' 
 #' @export
 #' 
 Update_State_Screens <- function(is.skipped,
-                                is.enabled,
-                                rv){
+                                 is.enabled,
+                                 steps.info,
+                                 config,
+                                 current.pos){
   
-  len <- length(rv$steps.status)
-  
+  len <- nrow(steps.info)
+  #browser()
   if (isTRUE(is.skipped)){
-    steps.enabled <- ToggleState_Screens(cond = FALSE,
+    steps.info$enabled <- ToggleState_Screens(cond = FALSE,
                                          range = seq_len(len),
                                          is.enabled = is.enabled,
-                                         rv = rv)
+                                         steps.info = steps.info)
   } else {
     
     # Ensure that all steps before the last validated one are disabled
-    ind.max <- GetMaxValidated_AllSteps(rv$steps.status)
+    ind.max <- GetMaxValidated_AllSteps(steps.info$status)
     if (ind.max > 0)
-      steps.enabled <- ToggleState_Screens(cond = FALSE, 
+      steps.info$enabled <- ToggleState_Screens(cond = FALSE, 
                                            range = seq_len(ind.max),
                                            is.enabled = is.enabled,
-                                           rv = rv)
+                                           steps.info = steps.info)
     
     if (ind.max < len){
       # Enable all steps after the current one but the ones
       # after the first mandatory not validated
       firstM <- GetFirstMandatoryNotValidated(range = (ind.max+1):len,
-                                              rv = rv)
+                                              steps.info = steps.info,
+                                              config = config)
       if (is.null(firstM)){
-        steps.enabled <- ToggleState_Screens(cond = TRUE, 
-                                             range = (1 + ind.max):(len),
-                                             is.enabled = is.enabled,
-                                             rv = rv)
+        steps.info$enabled <- ToggleState_Screens(cond = TRUE, 
+                                                       range = (1 + ind.max):(len),
+                                                       is.enabled = is.enabled,
+                                                       steps.info = steps.info)
       } else {
-        steps.enabled <- ToggleState_Screens(cond = TRUE, 
-                                             range = (1 + ind.max):(ind.max + firstM),
-                                             is.enabled = is.enabled,
-                                             rv = rv )
+        steps.info$enabled <- ToggleState_Screens(cond = TRUE, 
+                                                       range = (1 + ind.max):(ind.max + firstM),
+                                                       is.enabled = is.enabled,
+                                                       steps.info = steps.info )
         if (ind.max + firstM < len)
-          steps.enabled <- ToggleState_Screens(cond = FALSE,
-                                               range = (ind.max + firstM + 1):len,
-                                               is.enabled = is.enabled,
-                                               rv = rv )
+          steps.info$enabled <- ToggleState_Screens(cond = FALSE,
+                                                         range = (ind.max + firstM + 1):len,
+                                                         is.enabled = is.enabled,
+                                                         steps.info = steps.info )
       }
     }
     
-    ToggleState_NavBtns(current.pos = rv$current.pos,
-                        nSteps = rv$length
+    ToggleState_NavBtns(current.pos = current.pos,
+                        nSteps = len
                         )
   }
   
-  return(steps.enabled)
+  return(steps.info$enabled)
 }
 
 

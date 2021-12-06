@@ -77,10 +77,10 @@ Get_Code_for_module_Description <- function(id){
   
   mod_replaceId_Description_server <- function(id,
                                              dataIn = reactive({NULL}),
-                                             steps.enabled = reactive({NULL}),
+                                             steps.info = reactive({NULL}),
                                              remoteReset = reactive({FALSE}),
-                                             steps.status = reactive({NULL}),
-                                             current.pos = reactive({1})
+                                             current.pos = reactive({1}),
+                                             verbose = FALSE
                                             ){
 
   config <- list(
@@ -90,6 +90,7 @@ Get_Code_for_module_Description <- function(id){
     
     # List of all steps of the process
     steps = c('Description'),
+    
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE)
   )
@@ -111,10 +112,14 @@ Get_Code_for_module_Description <- function(id){
     # DO NOT MODIFY THIS LINE
     config$steps <- setNames(config$steps, nm = gsub(' ', '', config$steps, fixed=TRUE))
     
-    eval(parse(text = SimpleWorflowCoreCode(
-    name = config$name,
-    widgets = names(widgets.default.values),
-    steps = config$steps )))
+    eval(
+    parse(text = SimpleWorflowCoreCode(
+                          name = config$name,
+                          widgets = names(widgets.default.values),
+                          steps = config$steps
+                          )
+              )
+        )
     
      
     ###### ------------------- Code for Description (step 0) -------------------------    #####
@@ -299,12 +304,16 @@ Get_Code_for_rv_reactiveValues <- function(){
     # Stores the object given in input of the process
     dataIn = NULL,
     # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-    steps.status = NULL,
+    steps.info = NULL,
     # xxx
-    reset = NULL,
-    # A vector of boolean indicating if the steps are enabled or disabled
-    steps.enabled = NULL
+    reset = NULL
   )
+  #browser()
+  rv$steps.info <- DataFrame(status = rep(global$UNDONE, length(config$steps)),
+                             enabled = rep(FALSE, length(config$steps)),
+                             skipped = rep(FALSE, length(config$steps)),
+                             row.names = names(config$steps)
+                             )        
   
   "
   basis
@@ -329,10 +338,11 @@ Get_Code_for_rv_reactiveValues <- function(){
 #' }
 #' 
 Get_Code_for_dataOut <- function(){
-  code <- "dataOut <- reactiveValues(
-  trigger = NULL,
-  value = NULL
-)
+  code <- "
+  dataOut <- reactiveValues(
+                  trigger = NULL,
+                  value = NULL
+                  )
 
 "
 
@@ -352,12 +362,15 @@ code
 #' }
 #' 
 Get_Code_for_observeEvent_stepsEnabled  <- function(){
-  code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-  if (is.null(steps.enabled()))
-    rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-                                 nm = names(rv$config$steps))
+  code <- "
+  
+  
+  observeEvent(steps.info(), ignoreNULL = TRUE, {
+  print(\"observeEvent(steps.info()$enabled)\")
+  if (is.null(steps.info()))
+    rv$steps.info$enabled <- rep(FALSE, length(config$steps))
   else
-    rv$steps.enabled <- steps.enabled()
+    rv$steps.info$enabled <- steps.info()$enabled
 })
 
 "
@@ -380,6 +393,10 @@ Get_Code_for_observeEvent_stepsEnabled  <- function(){
 #' 
 Get_Code_for_observeEvent_remoteReset <- function(){
   code <- "observeEvent(remoteReset(), {
+  #browser()
+  if(isTRUE(verbose))
+  cat(paste0('observeEvent(remoteReset() from ', id, '\n'))
+  
   lapply(names(rv.widgets), function(x){
     rv.widgets[[x]] <- widgets.default.values[[x]]
   })
@@ -390,7 +407,7 @@ Get_Code_for_observeEvent_remoteReset <- function(){
 }
 
 
-#' @title Code for xxxx
+#' @title Create code for ObserveEvent Validation Buttons
 #' 
 #' @description xxxx
 #' 
@@ -406,12 +423,16 @@ Code_ObserveEvent_ValidationBtns <- function(){
   code <- "
   # Observer for the validation buttons of all steps
   # DO NOT MODIFY THIS FUNCTION
+  
   observeEvent(lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]]),
                ignoreInit = TRUE,
                ignoreNULL = TRUE,
                {
                  #browser()
-                 test <- lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]])
+                if(verbose)
+  cat(paste0('lapply(names(config$steps) from ', id, '\n'))
+    
+                  test <- lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]])
                  if( sum(unlist(test)) != 1)
                    return()
                  
@@ -429,9 +450,11 @@ Code_ObserveEvent_ValidationBtns <- function(){
                  
                  dataOut$trigger <- Magellan::Timestamp()
                  dataOut$value <- rv$dataIn
-                 rv$steps.status[current.pos()] <- global$VALIDATED
+                 rv$steps.info$status[current.pos()] <- global$VALIDATED
                  
                  mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+                shinyjs::toggle('createQuickLink', 
+                                condition = current.pos() == length(config$steps))
                 
                })
                
@@ -462,8 +485,11 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   # DO NOT MODIFY THIS FUNCTION
   
   output$step.name_validationBtn_ui <- renderUI({
+      if(verbose)
+  cat(paste0(' --output$step.name_validationBtn_ui <- renderUI -- from ', id, '\n'))
+  #browser()
       tagList(
-      if (isTRUE(rv$steps.enabled[\"step.name\"])  )
+      if (rv$steps.info[\"step.name\", 'enabled'])
         actionButton(ns(\"step.name_btn_validate\"),
                      \"label\",
                      class = btn_success_color)
@@ -474,7 +500,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
                        class = btn_success_color)
         )
         
-       #Add_download_link
+       #Add_download_link_for_save_step
         )
     })
     
@@ -490,13 +516,21 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
       new.label <- 'Start '
     } else if (x == 'Save'){
       new.label <- 'Save '
-      add <- ",mod_Save_Dataset_ui(ns('createQuickLink'))
+      add <- ",
+      if (rv$steps.info['Save', 'status'] == global$VALIDATED) {
+        mod_Save_Dataset_ui(ns('createQuickLink'))
+        #browser()
+        }
+     # else
+     #   shinyjs::disabled(
+     #     mod_Save_Dataset_ui(ns('createQuickLink'))
+     #   )
       "
-      } else {
+    } else {
       new.label <- 'Perform '
-      }
+    }
     
-    code <- gsub('#Add_download_link', add, code)
+    code <- gsub('#Add_download_link_for_save_step', add, code)
     code <- gsub('label', paste0(new.label, x, sep = " "), code)
   }
   )
@@ -528,7 +562,10 @@ Generate_RenderUI_Code_For_Single_Widgets <- function(widgets=NULL){
     
     
     code <- "output$widget.name_ui <- renderUI({
-      if (rv$steps.enabled[\"step.name\"])
+      if(verbose)
+  cat(paste0('output$widget.name_ui <- renderUI() from ', id, '\n'))
+  #browser()
+  if (rv$steps.info[\"step.name\", 'enabled'])
         widget_widget.name()
       else
         shinyjs::disabled(widget_widget.name())

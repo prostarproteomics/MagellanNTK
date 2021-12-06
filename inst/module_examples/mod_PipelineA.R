@@ -47,10 +47,10 @@ mod_PipelineA_ui <- function(id){
 #'
 mod_PipelineA_server <- function(id,
                                  dataIn = reactive({NULL}),
-                                 steps.enabled = reactive({NULL}),
+                                 steps.info = reactive({NULL}),
                                  remoteReset = reactive({FALSE}),
-                                 steps.status = reactive({NULL}),
-                                 current.pos = reactive({1})
+                                 current.pos = reactive({1}),
+                                 verbose = FALSE
                                  ){
 
   config <- list(

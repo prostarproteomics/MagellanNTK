@@ -4,7 +4,13 @@
 \alias{Update_Data2send_Vector}
 \title{xxxx}
 \usage{
-Update_Data2send_Vector(rv)
+Update_Data2send_Vector(
+  current.pos,
+  steps.info,
+  temp.dataIn,
+  dataIn,
+  original.length
+)
 }
 \arguments{
 \item{rv}{xxxx}

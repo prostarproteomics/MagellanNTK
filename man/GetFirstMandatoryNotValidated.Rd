@@ -4,7 +4,7 @@
 \alias{GetFirstMandatoryNotValidated}
 \title{xxx}
 \usage{
-GetFirstMandatoryNotValidated(range, rv)
+GetFirstMandatoryNotValidated(range, steps.info, config)
 }
 \arguments{
 \item{range}{xxx}

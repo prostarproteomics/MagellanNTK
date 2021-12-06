@@ -4,7 +4,7 @@
 \alias{GetMaxValidated_BeforePos}
 \title{xxx}
 \usage{
-GetMaxValidated_BeforePos(pos = NULL, rv)
+GetMaxValidated_BeforePos(pos = NULL, current.pos, steps.info)
 }
 \arguments{
 \item{pos}{xxx}

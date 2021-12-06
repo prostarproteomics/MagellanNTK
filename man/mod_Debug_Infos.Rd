@@ -14,9 +14,8 @@ mod_Debug_Infos_server(
   rv.dataIn = reactive({     NULL }),
   dataIn = reactive({     NULL }),
   dataOut = reactive({     NULL }),
-  steps.status = reactive({     NULL }),
+  steps.infos = reactive({     NULL }),
   current.pos = reactive({     NULL }),
-  steps.enabled = reactive({     NULL }),
   is.enabled = reactive({     NULL })
 )
 }
@@ -33,13 +32,13 @@ mod_Debug_Infos_server(
 
 \item{dataOut}{xxxx}
 
-\item{steps.status}{xxx}
-
 \item{current.pos}{xxx}
 
-\item{steps.enabled}{xxxx}
-
 \item{is.enabled}{xxx}
+
+\item{steps.status}{xxx}
+
+\item{steps.enabled}{xxxx}
 }
 \value{
 xxx

@@ -55,9 +55,8 @@ mod_Debug_Infos_server <- function(id,
                                    rv.dataIn = reactive({NULL}),
                                    dataIn = reactive({NULL}),
                                    dataOut = reactive({NULL}),
-                                   steps.status = reactive({NULL}),
+                                   steps.infos = reactive({NULL}),
                                    current.pos = reactive({NULL}),
-                                   steps.enabled = reactive({NULL}),
                                    is.enabled = reactive({NULL})
                                    ){
   
@@ -71,7 +70,8 @@ mod_Debug_Infos_server <- function(id,
     output$show_Debug_Infos <- renderUI({
       wellPanel(
         h3(title),
-        uiOutput(ns('show_tag_enabled')),
+        DT::dataTableOutput(ns('show_steps_infos')),
+        uiOutput(ns('show_is_enabled')),
         fluidRow(
           column(width=2,
                  tags$b(h4(style = 'color: blue;', paste0("dataIn() ", config()$type))),
@@ -112,22 +112,25 @@ mod_Debug_Infos_server <- function(id,
     output$show_status <- renderUI({
       tagList(lapply(seq_len(length(config()$steps)), 
                      function(x){
-                       color <- if(steps.enabled()[x]) 'black' else 'lightgrey'
+                       color <- if(steps.infos()$enabled[x]) 'black' else 'lightgrey'
                        if (x == current.pos())
                          tags$p(style = paste0('color: ', color, ';'),
-                                tags$b(paste0('---> ', config()$steps[x], ' - ', GetStringStatus(steps.status()[[x]])), ' <---'))
+                                tags$b(paste0('---> ', config()$steps[x], ' - ', GetStringStatus(steps.infos()$status[x])), ' <---'))
                        else 
                          tags$p(style = paste0('color: ', color, ';'),
-                                paste0(config()$steps[x], ' - ', GetStringStatus(steps.status()[[x]])))
+                                paste0(config()$steps[x], ' - ', GetStringStatus(steps.infos()$status[x])))
                      }))
     })
     
+    output$show_is_enabled <- renderUI({
+      p(paste0('is.enabled() = ', as.numeric(is.enabled())))
+    })
     
-    output$show_tag_enabled <- renderUI({
-      tagList(
-        p(paste0('steps.enabled = ', paste0(as.numeric(steps.enabled()), collapse=' '))),
-        p(paste0('enabled() = ', as.numeric(is.enabled())))
+    output$show_steps_infos <- DT::renderDataTable({
+      DT::datatable(as.data.frame(steps.infos()),
+                    options = list(dom='rt')
       )
+      
     })
     
     

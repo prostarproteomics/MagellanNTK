@@ -36,8 +36,7 @@
 #' 
 run_workflow <- function(id,
                          verbose = FALSE,
-                         ...
-                         ){
+                         tl.layout = NULL){
   
   if(missing(id)){
     warning("'id' is required.")
