@@ -300,7 +300,7 @@ mod_nav_server <- function(id,
     # The parameter is.enabled() is updated by the caller and tells the process
     # if it is enabled or disabled (remote action from the caller)
     observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
-      if (isTRUE(is.enabled()))
+      if (is.enabled())
         rv$steps.info$enabled <- Update_State_Screens(is.skipped = is.skipped(),
                               is.enabled = is.enabled(),
                               steps.info = rv$steps.info,
@@ -346,7 +346,7 @@ mod_nav_server <- function(id,
     
     observeEvent(is.skipped(), ignoreNULL = FALSE, ignoreInit = TRUE,{
       
-      if (isTRUE(is.skipped()))
+      if (is.skipped())
         rv$steps.info$status <- All_Skipped_tag(rv$steps.info$status, global$SKIPPED)
       else{
         rv$steps.info$status <- All_Skipped_tag(rv$steps.info$status, global$UNDONE)
@@ -529,10 +529,12 @@ mod_nav_server <- function(id,
          rv$original.length <- length(dataIn())
          
          # Enable the first screen
-         rv$steps.info$enabled <- ToggleState_Screens(cond = TRUE, 
-                                                           range = 1,
-                                                           is.enabled = is.enabled(),
-                                                           steps.info = rv$steps.info)
+         rv$steps.info$enabled <- ToggleState_Screens(cond = TRUE,
+                                                      range = 1,
+                                                      is.enabled = is.enabled(),
+                                                      steps.info = rv$steps.info
+                                                      )
+         
        })
      })
      
@@ -604,13 +606,13 @@ mod_nav_server <- function(id,
                                           nm = paste0(names(rv$config$steps))
               )
               
-              
+              # Launch the server function for each step of the pipeline
               lapply(names(rv$config$steps), function(x){
                 tmp.return[[x]] <- mod_nav_server(id = x ,
                                                   dataIn = reactive({rv$child.data2send[[x]]}),
-                                                  is.enabled = reactive({isTRUE(rv$steps.info$enabled[x])}),
+                                                  is.enabled = reactive({rv$steps.info[x, 'enabled']}),
                                                   remoteReset = reactive({rv$resetChildren[x]}),
-                                                  is.skipped = reactive({isTRUE(rv$steps.info$skipped[x])}),
+                                                  is.skipped = reactive({rv$steps.info[x, 'skipped']}),
                                                   tl.layout = rv$tl.layout[-1],
                                                   verbose = verbose)
                 })
@@ -646,7 +648,6 @@ mod_nav_server <- function(id,
                   ret <- ActionOn_Child_Changed(temp.dataIn = rv$temp.dataIn,
                                                 dataIn = rv$dataIn,
                                                 steps.info = rv$steps.info,
-                                                steps = rv$config$steps,
                                                 processHasChanged = processHasChanged,
                                                 newValue = newValue
                                                 )

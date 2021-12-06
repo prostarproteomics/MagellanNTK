@@ -114,7 +114,7 @@ Get_Code_for_module_Description <- function(id){
     
     eval(
     parse(text = SimpleWorflowCoreCode(
-                          name = config$name,
+                          name = id,
                           widgets = names(widgets.default.values),
                           steps = config$steps
                           )
@@ -394,7 +394,7 @@ Get_Code_for_observeEvent_stepsEnabled  <- function(){
 Get_Code_for_observeEvent_remoteReset <- function(){
   code <- "observeEvent(remoteReset(), {
   #browser()
-  if(isTRUE(verbose))
+  if(verbose)
   cat(paste0('observeEvent(remoteReset() from ', id, '\n'))
   
   lapply(names(rv.widgets), function(x){
@@ -487,7 +487,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   output$step.name_validationBtn_ui <- renderUI({
       if(verbose)
   cat(paste0(' --output$step.name_validationBtn_ui <- renderUI -- from ', id, '\n'))
-  #browser()
+
       tagList(
       if (rv$steps.info[\"step.name\", 'enabled'])
         actionButton(ns(\"step.name_btn_validate\"),
@@ -517,7 +517,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
     } else if (x == 'Save'){
       new.label <- 'Save '
       add <- ",
-      if (rv$steps.info['Save', 'status'] == global$VALIDATED) {
+      if (rv$mode == 'process' && rv$steps.info['Save', 'status'] == global$VALIDATED) {
         mod_Save_Dataset_ui(ns('createQuickLink'))
         #browser()
         }

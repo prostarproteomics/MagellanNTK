@@ -153,7 +153,7 @@ ToggleState_Screens <- function(cond,
                                 steps.info){
   
   if (isTRUE(is.enabled))
-    steps.info$enabled[range] <- cond && !(steps.info$status[range] == global$SKIPPED)
+    steps.info[range, 'enabled'] <- cond && !(steps.info[range, 'status'] == global$SKIPPED)
     
     return(steps.info$enabled)
 }

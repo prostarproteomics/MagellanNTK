@@ -29,15 +29,14 @@
 ActionOn_Child_Changed <- function(temp.dataIn,
                                    dataIn,
                                    steps.info,
-                                   steps,
                                    processHasChanged,
-                                   newValue){
+                                   newValue = NULL){
   # Indice of the dataset in the object
   # If the original length is not 1, then this indice is different
   # than the above one
-  ind.processHasChanged <- which(steps==processHasChanged)
+  ind.processHasChanged <- which(rownames(steps.info)==processHasChanged)
   
-  len <- length(steps)
+  len <- nrow(steps.info)
   
   if (is.null(newValue)){
     # A process has been reseted
@@ -45,12 +44,12 @@ ActionOn_Child_Changed <- function(temp.dataIn,
     # One take the last validated step (before the one 
     # corresponding to processHasChanges
     # but it is straightforward because we just updates rv$status
-    steps.info$status[ind.processHasChanged:len] <-  global$UNDONE
+    steps.info[ind.processHasChanged:len, 'status'] <-  global$UNDONE
     
-    steps.info$enabled[(ind.processHasChanged+1):len] <- FALSE
-    steps.info$enabled[ind.processHasChanged] <- TRUE
+    steps.info[(ind.processHasChanged+1):len, 'enabled'] <- FALSE
+    steps.info[ind.processHasChanged, 'enabled'] <- TRUE
     
-    steps.info$skipped[ind.processHasChanged:len] <- FALSE
+    steps.info[ind.processHasChanged:len, 'skipped'] <- FALSE
     
     validated.steps <- which(steps.info$status == global$VALIDATED)
     if (length(validated.steps) > 0)
@@ -63,7 +62,7 @@ ActionOn_Child_Changed <- function(temp.dataIn,
       dataIn <- temp.dataIn
     
     else {
-      name.last.validated <- steps[ind.last.validated]
+      name.last.validated <- rownames(steps.info)[ind.last.validated]
       dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
       dataIn <- Keep_Datasets_from_Object(object = dataIn, 
                                           range = seq_len(dataIn.ind.last.validated))
@@ -71,10 +70,10 @@ ActionOn_Child_Changed <- function(temp.dataIn,
     
   } else {
     # A process has been validated
-    steps.info$status[processHasChanged] <- global$VALIDATED
+    steps.info[processHasChanged, 'status'] <- global$VALIDATED
     
     if (ind.processHasChanged < len)
-      steps.info$status[(1 + ind.processHasChanged):len] <- global$UNDONE
+      steps.info[(1 + ind.processHasChanged):len, 'status'] <- global$UNDONE
     
     steps.info$status <- Discover_Skipped_Steps(steps.info$status)
     dataIn <- newValue
@@ -206,7 +205,7 @@ PrepareData2Send <- function(steps.info,
     # The other processes are by default disabled.
     # If they have to be enabled, they will be by another function later
     lapply(seq_len(length(config$steps)), function(x){
-      steps.info$enabled[x] <- x==1
+      steps.info[x, 'enabled'] <- x == 1
     })
     
   } else{
