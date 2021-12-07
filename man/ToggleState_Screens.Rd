@@ -13,10 +13,10 @@ ToggleState_Screens(cond, range, is.enabled, steps.info)
 
 \item{is.enabled}{xxx}
 
-\item{rv}{xxx}
+\item{steps.info}{xxx}
 }
 \value{
-xxx
+A vector for steps.enabled
 }
 \description{
 Updates the status of steps in range

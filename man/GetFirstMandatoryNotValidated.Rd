@@ -2,17 +2,19 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{GetFirstMandatoryNotValidated}
 \alias{GetFirstMandatoryNotValidated}
-\title{xxx}
+\title{Get First Mandatory Not Validated}
 \usage{
 GetFirstMandatoryNotValidated(range, steps.info, config)
 }
 \arguments{
 \item{range}{xxx}
 
-\item{rv}{xxx}
+\item{steps.info}{xxx}
+
+\item{config}{xxx}
 }
 \value{
-xxx
+A `integer(1)` which correspond to
 }
 \description{
 xxx

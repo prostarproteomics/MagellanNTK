@@ -32,13 +32,11 @@ mod_Debug_Infos_server(
 
 \item{dataOut}{xxxx}
 
+\item{steps.infos}{xxx}
+
 \item{current.pos}{xxx}
 
 \item{is.enabled}{xxx}
-
-\item{steps.status}{xxx}
-
-\item{steps.enabled}{xxxx}
 }
 \value{
 xxx

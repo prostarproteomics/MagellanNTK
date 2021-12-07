@@ -10,11 +10,7 @@
 #' 
 #' @param temp.dataIn xxx
 #' @param dataIn xxx
-#' @param steps.status xxx
-#' @param steps A vector of names which are the names of the steps
-#' in the process
-#' @param steps.enabled xxx
-#' @param steps.skipped xxx
+#' @param steps.info xxx
 #' @param processHasChanged A character(1) which is the name of the process
 #' which has changed its return value.
 #' @param newValue The new value given by the step which has changed.
@@ -141,10 +137,15 @@ ResetChildren <- function(range,
 
 
 
-#' @title xxxx
+#' @title Update Data to send
+#' 
 #' @description xxx
 #'
-#' @param rv xxxx
+#' @param current.pos xxx
+#' @param steps.info xxx
+#' @param temp.dataIn xxx
+#' @param dataIn xxx
+#' @param original.length xxx
 #'
 #' @export
 #' 
@@ -170,11 +171,15 @@ Update_Data2send_Vector <- function(current.pos,
 
 
 
-#' @title xxxx
+#' @title Prepare Data to Send
 #' @description xxx
 #'
-#' @param rv xxxx
-#' @param pos xxx
+#' @param steps.info xxx
+#' @param temp.dataIn xxx
+#' @param dataIn xxx
+#' @param config xxx
+#' @param current.pos xxx
+#' @param original.length xxx
 #' 
 #' @export
 #' 

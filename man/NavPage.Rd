@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{NavPage}
 \alias{NavPage}
-\title{xxx}
+\title{Change active page}
 \usage{
 NavPage(direction, current.pos, len)
 }
@@ -14,7 +14,7 @@ NavPage(direction, current.pos, len)
 \item{len}{xxx}
 }
 \value{
-xxx
+A `integer(1)` which is the new current position.
 }
 \description{
 xxx

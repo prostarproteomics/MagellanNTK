@@ -2,12 +2,14 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{GetStringStatus}
 \alias{GetStringStatus}
-\title{xxx}
+\title{Status to string}
 \usage{
-GetStringStatus(name)
+GetStringStatus(i, title.style = FALSE)
 }
 \arguments{
-\item{name}{xxx}
+\item{i}{xxx}
+
+\item{title.style}{xxx}
 }
 \value{
 xxx

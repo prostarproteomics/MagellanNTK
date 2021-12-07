@@ -13,7 +13,9 @@
 #' 
 #' @export
 #' 
-Build_SkippedInfoPanel <- function(steps.status, current.pos, config){
+Build_SkippedInfoPanel <- function(steps.status, 
+                                   current.pos, 
+                                   config){
   
    req(steps.status[current.pos] == global$SKIPPED)
   process_entirely_skipped <- isTRUE(sum(steps.status) == global$SKIPPED * length(config$steps))
@@ -141,7 +143,7 @@ GetMaxValidated_AllSteps <- function(steps.status){
 #' @param cond xxx
 #' @param range xxx
 #' @param is.enabled xxx
-#' @param rv xxx
+#' @param steps.info xxx
 #' 
 #' @return A vector for steps.enabled
 #' 
@@ -159,28 +161,31 @@ ToggleState_Screens <- function(cond,
 }
 
 
-#' @title xxx
+#' @title Status to string
 #' 
 #' @description xxx
 #' 
-#' @param name xxx
+#' @param i xxx
+#' 
+#' @param title.style xxx
 #' 
 #' @return xxx
 #' 
 #' @export
 #' 
-GetStringStatus <- function(name){
-  string <- if (name == global$VALIDATED) 'Validated'
-  else if (name == global$UNDONE) 'Undone'
-  else if (name == global$SKIPPED) 'Skipped'
+GetStringStatus <- function(i, title.style = FALSE){
+  txt <- names(which(global == i))
   
-  return(string)
+  if (title.style)
+  txt <- paste(substr(txt, 1, 1), 
+               tolower(substr(txt, 2, nchar(txt))), 
+               sep="")
+  txt
 }
 
 
 
-
-#' @title xxx
+#' @title Change active page
 #' 
 #' @description xxx
 #' 
@@ -192,7 +197,9 @@ GetStringStatus <- function(name){
 #' 
 #' @export
 #' 
-NavPage <- function(direction, current.pos, len) {
+NavPage <- function(direction, 
+                    current.pos, 
+                    len) {
   newval <- current.pos + direction
   newval <- max(1, newval)
   newval <- min(newval, len)
@@ -203,7 +210,7 @@ NavPage <- function(direction, current.pos, len) {
 
 
 
-#' @title xxx
+#' @title Builds data modal.
 #' 
 #' @description xxx
 #' 
@@ -256,7 +263,7 @@ Discover_Skipped_Steps <- function(steps.status){
 
 
 
-#' @title xxx
+#' @title Set skipped tag to all steps
 #' 
 #' @description xxx
 #' 
@@ -279,7 +286,8 @@ All_Skipped_tag <- function(steps.status, tag){
 #' @description xxx
 #' 
 #' @param range xxx
-#' @param rv xxx
+#' @param steps.info xxx
+#' @param config xxx
 #' 
 #' @return A `integer(1)` which correspond to 
 #' 
@@ -304,7 +312,7 @@ GetFirstMandatoryNotValidated <- function(range,
 
 
 
-#' @title Update_State_Screens
+#' @title Update State Screens
 #' 
 #' @description Updates the tag 'enabled' w.r.t. the actual state of
 #' the module (timeline, validated steps, ...)
@@ -376,7 +384,7 @@ Update_State_Screens <- function(is.skipped,
 }
 
 
-#' @title xxx
+#' @title ToggleState Navigation Buttons
 #' 
 #' @description xxx
 #' 
@@ -387,7 +395,8 @@ Update_State_Screens <- function(is.skipped,
 #' 
 #' @export
 #' 
-ToggleState_NavBtns <- function(current.pos, nSteps){
+ToggleState_NavBtns <- function(current.pos, 
+                                nSteps){
   
   # If the cursor is not on the first position, show the 'prevBtn'
   shinyjs::toggleState(id = 'prevBtn', condition = current.pos != 1)
@@ -397,7 +406,7 @@ ToggleState_NavBtns <- function(current.pos, nSteps){
 }
 
 
-#' @title xxx
+#' @title ToggleState Reset Button
 #' 
 #' @description xxx
 #' 

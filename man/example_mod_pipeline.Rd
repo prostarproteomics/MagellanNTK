@@ -12,7 +12,7 @@ run_workflow(id, verbose = FALSE, tl.layout = NULL)
 \item{verbose}{A `boolean` that indicates whether to show some infos in the console
 and add the shiny module for debugging}
 
-\item{...}{Additional parameters for mod_nav}
+\item{tl.layout}{xxx}
 }
 \description{
 This module contains the configuration informations for the corresponding pipeline.

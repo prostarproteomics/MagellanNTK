@@ -2,7 +2,7 @@
 % Please edit documentation in R/pipeline_funcs.R
 \name{Update_Data2send_Vector}
 \alias{Update_Data2send_Vector}
-\title{xxxx}
+\title{Update Data to send}
 \usage{
 Update_Data2send_Vector(
   current.pos,
@@ -13,7 +13,15 @@ Update_Data2send_Vector(
 )
 }
 \arguments{
-\item{rv}{xxxx}
+\item{current.pos}{xxx}
+
+\item{steps.info}{xxx}
+
+\item{temp.dataIn}{xxx}
+
+\item{dataIn}{xxx}
+
+\item{original.length}{xxx}
 }
 \description{
 xxx

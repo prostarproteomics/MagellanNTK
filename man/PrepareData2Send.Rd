@@ -2,11 +2,10 @@
 % Please edit documentation in R/pipeline_funcs.R
 \name{PrepareData2Send}
 \alias{PrepareData2Send}
-\title{xxxx}
+\title{Prepare Data to Send}
 \usage{
 PrepareData2Send(
   steps.info,
-  pos,
   temp.dataIn,
   dataIn,
   config,
@@ -15,9 +14,17 @@ PrepareData2Send(
 )
 }
 \arguments{
-\item{pos}{xxx}
+\item{steps.info}{xxx}
 
-\item{rv}{xxxx}
+\item{temp.dataIn}{xxx}
+
+\item{dataIn}{xxx}
+
+\item{config}{xxx}
+
+\item{current.pos}{xxx}
+
+\item{original.length}{xxx}
 }
 \description{
 xxx

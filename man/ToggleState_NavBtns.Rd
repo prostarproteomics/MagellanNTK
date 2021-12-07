@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{ToggleState_NavBtns}
 \alias{ToggleState_NavBtns}
-\title{xxx}
+\title{ToggleState Navigation Buttons}
 \usage{
 ToggleState_NavBtns(current.pos, nSteps)
 }

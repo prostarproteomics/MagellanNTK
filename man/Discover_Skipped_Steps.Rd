@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{Discover_Skipped_Steps}
 \alias{Discover_Skipped_Steps}
-\title{xxx}
+\title{Discover Skipped Steps}
 \usage{
 Discover_Skipped_Steps(steps.status)
 }

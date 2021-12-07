@@ -25,9 +25,8 @@ mod_Debug_Infos_ui <- function(id){
 #' @param rv.dataIn xxx
 #' @param dataIn xxx
 #' @param dataOut xxxx
-#' @param steps.status xxx
+#' @param steps.infos xxx
 #' @param current.pos xxx
-#' @param steps.enabled xxxx
 #' @param is.enabled xxx
 #' 
 #' @export
@@ -47,6 +46,7 @@ mod_Debug_Infos_ui <- function(id){
 #' 
 #' @rdname mod_Debug_Infos
 #' 
+#' @import DT
 #' @export
 #' 
 mod_Debug_Infos_server <- function(id,
@@ -70,85 +70,96 @@ mod_Debug_Infos_server <- function(id,
     output$show_Debug_Infos <- renderUI({
       wellPanel(
         h3(title),
-        DT::dataTableOutput(ns('show_steps_infos')),
+        # div(DT::DTOutput(ns('show_steps_infos')), 
+        #     style = "font-size: 100%; width: 30%"),
+        # div(DT::DTOutput(ns('show_varContent')), 
+        #     style = "font-size: 100%; width: 30%"),
+        # 
         uiOutput(ns('show_is_enabled')),
         fluidRow(
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("dataIn() ", config()$type))),
-                 uiOutput(ns('show_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("rv$dataIn ", config()$type))),
-                 uiOutput(ns('show_rv_dataIn'))),
-          column(width=2,
-                 tags$b(h4(style = 'color: blue;', paste0("dataOut()$value ", config()$type))),
-                 uiOutput(ns('show_rv_dataOut'))),
-          column(width=4,
-                 tags$b(h4(style = 'color: blue;', "status")),
-                 uiOutput(ns('show_status')))
+          column(width=4, DT::DTOutput(ns('show_steps_infos'))),
+          column(width=4, DT::DTOutput(ns('show_varContent')))
         )
       )
     })
     
-    ###########---------------------------#################
-    output$show_dataIn <- renderUI({
-      req(dataIn())
-      tagList(
-        lapply(names(dataIn()), function(x){tags$p(x)})
-      )
-    })
     
-    
-    output$show_rv_dataOut <- renderUI({
-      tagList(
-        lapply(names(dataOut()$value), function(x){tags$p(x)})
-      )
-    })
-    
-    GetStringStatus <- function(name){
-      if (name == global$VALIDATED) 'Validated'
-    else if (name == global$UNDONE) 'Undone'
-    else if (name == global$SKIPPED) 'Skipped'
-  }
-    output$show_status <- renderUI({
-      tagList(lapply(seq_len(length(config()$steps)), 
-                     function(x){
-                       color <- if(steps.infos()$enabled[x]) 'black' else 'lightgrey'
-                       if (x == current.pos())
-                         tags$p(style = paste0('color: ', color, ';'),
-                                tags$b(paste0('---> ', config()$steps[x], ' - ', GetStringStatus(steps.infos()$status[x])), ' <---'))
-                       else 
-                         tags$p(style = paste0('color: ', color, ';'),
-                                paste0(config()$steps[x], ' - ', GetStringStatus(steps.infos()$status[x])))
-                     }))
-    })
     
     output$show_is_enabled <- renderUI({
       p(paste0('is.enabled() = ', as.numeric(is.enabled())))
     })
     
-    output$show_steps_infos <- DT::renderDataTable({
-      DT::datatable(as.data.frame(steps.infos()),
-                    options = list(dom='rt')
+    
+    GetVariableContent <- reactive({
+      VC <- data.frame(paste0(names(dataIn()), collapse='<br>'),
+                       paste0(names(rv.dataIn), collapse='<br>'),
+                       paste0(names(dataOut()$value), collapse='<br>')
+                       )
+      colnames(VC) = c('<span style="color:red">dataIn()</span>', 
+                       '<span style="color:red">rv$dataIn</span>',
+                       '<span style="color:red">dataOut()$value</span>')
+      
+      VC
+    })
+    
+    
+    GetData <- reactive({
+      req(steps.infos())
+      df <- steps.infos()
+      
+      df$status <- lapply(df$status, function(x) {
+        paste0(GetStringStatus(x), ' (', x, ')')}
       )
       
+      df <- cbind(df, 
+                  currentPos = unlist(lapply(1:nrow(df), function(x) current.pos() == x)))
+
+      df
     })
+
+    output$show_steps_infos <- DT::renderDT({
+      df <- as.data.frame(GetData())
+      DT::datatable(df,
+                    escape=FALSE,
+                    rownames = TRUE,
+                    class = 'compact',
+                    options=list(
+                      dom = 't',
+                      autoWidth=FALSE,
+                      columnDefs = list(
+                        list(
+                          targets = c(4), visible = FALSE)
+                        )
+                    )
+                    )  %>%
+        DT::formatStyle(
+          'currentPos',
+          target = 'row',
+          fontWeight = "bold",
+          color = styleEqual(c(FALSE, TRUE), c('grey', 'blue')),
+          backgroundSize = '98% 48%',
+          backgroundRepeat = 'no-repeat',
+          backgroundPosition = 'center'
+        )
+    })
+
     
     
-    
-    output$show_rv_dataIn <- renderUI({
-      req(rv.dataIn())
-      tagList(
-        lapply(names(rv.dataIn()), function(x){tags$p(x)})
+    output$show_varContent <- DT::renderDT({
+      df <- GetVariableContent()
+      DT::datatable(df,
+                    escape=FALSE,
+                    rownames = FALSE,
+                    class = 'compact',
+                    options=list(
+                      dom = 't',
+                      autoWidth=FALSE
+                    )
       )
     })
     
-  })
+
+})
+  }
   
-}
-
-## To be copied in the UI
-# mod_format_DT_ui("format_DT_ui_1")
-
-## To be copied in the server
-# callModule(mod_format_DT_server, "format_DT_ui_1")
 

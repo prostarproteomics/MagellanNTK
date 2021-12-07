@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{dataModal}
 \alias{dataModal}
-\title{xxx}
+\title{Builds data modal.}
 \usage{
 dataModal(ns, mode)
 }

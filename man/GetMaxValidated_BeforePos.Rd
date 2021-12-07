@@ -2,17 +2,21 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{GetMaxValidated_BeforePos}
 \alias{GetMaxValidated_BeforePos}
-\title{xxx}
+\title{Last validated step before current step.}
 \usage{
-GetMaxValidated_BeforePos(pos = NULL, current.pos, steps.info)
+GetMaxValidated_BeforePos(pos = NULL, current.pos, steps.status)
 }
 \arguments{
 \item{pos}{xxx}
 
-\item{rv}{xxx}
+\item{current.pos}{xxx}
+
+\item{steps.status}{xxx}
 }
 \value{
-xxx
+A `integer(1)` which is the indice in the set of steps
+that corresponds to the last validated step before the one identified
+by current.pos.
 }
 \description{
 xxx
