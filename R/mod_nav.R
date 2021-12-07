@@ -268,23 +268,22 @@ mod_nav_server <- function(id,
                                pipeline = c('h', 'h')
                                )
 
+      do.call(paste0('mod_timeline_', rv$tl.layout[1], '_server'),
+              list(
+                id = paste0('timeline', rv$tl.layout[1]),
+                config =  rv$config,
+                status = reactive({rv$steps.info$status}),
+                position = reactive({rv$current.pos}),
+                enabled = reactive({rv$steps.info$enabled})
+              )
+      )
       
-      # do.call(paste0('mod_timeline_', tl.layout[1], '_server'),
-      #         list(
-      #           id = paste0('timeline', tl.layout[1]),
-      #           config =  rv$config,
-      #           status = reactive({rv$steps.info['status', ]}),
-      #           position = reactive({rv$current.pos}),
-      #           enabled = reactive({rv$steps.info['enabled', ]})
-      #         )
-      # )
-      # 
-      # output$show_TL <- renderUI({
-      #   do.call(paste0('mod_timeline_', tl.layout[1], '_ui'),
-      #           list(ns(paste0('timeline', tl.layout[1]))
-      #           )
-      #   )
-      # })
+      output$show_TL <- renderUI({
+        do.call(paste0('mod_timeline_', rv$tl.layout[1], '_ui'),
+                list(ns(paste0('timeline', rv$tl.layout[1]))
+                )
+        )
+      })
       
       
       
@@ -447,26 +446,26 @@ mod_nav_server <- function(id,
      
      
 
-     observeEvent(req(rv$tl.layout), ignoreNULL = FALSE, {
-
-       do.call(paste0('mod_timeline_', rv$tl.layout[1], '_server'),
-               list(
-                 id = paste0('timeline', rv$tl.layout[1]),
-                 config =  rv$config,
-                 status = reactive({rv$steps.info$status}),
-                 position = reactive({rv$current.pos}),
-                 enabled = reactive({rv$steps.info$enabled})
-                 )
-       )
-
-       output$show_TL <- renderUI({
-         do.call(paste0('mod_timeline_', rv$tl.layout[1], '_ui'),
-                 list(ns(paste0('timeline', rv$tl.layout[1]))
-                 )
-         )
-       })
-
-     })
+     # observeEvent(req(rv$tl.layout), ignoreNULL = FALSE, {
+     # 
+     #   do.call(paste0('mod_timeline_', rv$tl.layout[1], '_server'),
+     #           list(
+     #             id = paste0('timeline', rv$tl.layout[1]),
+     #             config =  rv$config,
+     #             status = reactive({rv$steps.info$status}),
+     #             position = reactive({rv$current.pos}),
+     #             enabled = reactive({rv$steps.info$enabled})
+     #             )
+     #   )
+     # 
+     #   output$show_TL <- renderUI({
+     #     do.call(paste0('mod_timeline_', rv$tl.layout[1], '_ui'),
+     #             list(ns(paste0('timeline', rv$tl.layout[1]))
+     #             )
+     #     )
+     #   })
+     # 
+     # })
      
      
      
@@ -622,7 +621,8 @@ mod_nav_server <- function(id,
                 processHasChanged <- newValue <- NULL
                 
                 # Get the values returned by all children (steps) of the module
-                values.children <- GetValuesFromChildren(tmp.return = tmp.return, config = rv$config)
+                values.children <- GetValuesFromChildren(tmp.return = tmp.return, 
+                                                         config = rv$config)
                 triggerValues <- values.children$triggers
                 return.values <- values.children$values
                 
@@ -649,7 +649,7 @@ mod_nav_server <- function(id,
                                                 newValue = newValue
                                                 )
                   
-                  
+                  browser()
                   rv$dataIn = ret$dataIn
                   rv$steps.info = ret$steps.info
                 }

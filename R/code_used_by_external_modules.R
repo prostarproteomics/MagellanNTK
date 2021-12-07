@@ -122,6 +122,10 @@ Get_Code_for_module_Description <- function(id){
         )
     
      
+     
+     observeEvent(steps.info(), {
+     print('tutu')
+     })
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       file <- paste0(config$path_to_md_dir, '/', id, '_Description.md')
@@ -487,7 +491,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   output$step.name_validationBtn_ui <- renderUI({
       if(verbose)
   cat(paste0(' --output$step.name_validationBtn_ui <- renderUI -- from ', id, '\n'))
-  #browser()
+  browser()
       tagList(
       if (rv$steps.info[\"step.name\", 'enabled'])
         actionButton(ns(\"step.name_btn_validate\"),
@@ -519,7 +523,6 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
       add <- ",
       if (rv$mode == 'process' && rv$steps.info['Save', 'status'] == global$VALIDATED) {
         mod_Save_Dataset_ui(ns('createQuickLink'))
-        #browser()
         }
      # else
      #   shinyjs::disabled(
