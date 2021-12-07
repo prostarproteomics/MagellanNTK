@@ -119,17 +119,6 @@ mod_nav_server <- function(id,
       
       tl.layout = NULL,
       
-      # @field status A boolan vector which contains the status (validated,
-      # skipped or undone) of the steps
-      #steps.status = NULL,
-      # @field steps.enabled Contains the value of the parameter 'is.enabled'
-      #steps.enabled = NULL,
-      
-      # A vector of boolean where each element indicates whether 
-      # the corresponding process is skipped or not
-      # ONLY USED WITH PIPELINE
-      #steps.skipped = NULL,
-      
       steps.info = NULL,
       
       # @field dataIn Contains the dataset passed by argument to the module server
@@ -138,15 +127,7 @@ mod_nav_server <- function(id,
       # @field temp.dataIn This variable is used to serves as a tampon between 
       # the input of the module and the functions. 
       temp.dataIn = NULL,
-      
-      
-      # A vector of integers that indicates if each step must be reseted
-      # This is an information sent to the child processes. Each time a child 
-      # process must be reseted, the corresponding element is incremented
-      # in order to modify its value. Thus, it can be catched by Shiny observers
-      # ONLY USED WITH PIPELINE
-      resetChildren = NULL,
-      
+
       # @field current.pos Stores the current cursor position in the timeline and 
       # indicates which of the process' steps is active
       current.pos = 1,
@@ -154,16 +135,23 @@ mod_nav_server <- function(id,
       length = NULL,
       config = NULL,
       
+      
+      
       # A vector of boolean where each element indicates if the corresponding
       # child if enable or disable
-      child.enabled = NULL,
+      #child.enabled = NULL,
       
-      # xxxx
-      child.reset = NULL,
-      
+      # A vector of integers that indicates if each step must be reseted
+      # This is an information sent to the child processes. Each time a child 
+      # process must be reseted, the corresponding element is incremented
+      # in order to modify its value. Thus, it can be catched by Shiny observers
+      # ONLY USED WITH PIPELINE
+      #resetChildren = NULL,
+
       # A vector of integers where each element denotes the current position 
       # of the corresponding element.
-      child.position = NULL,
+      #child.position = NULL,
+      children.info = NULL,
       
       # xxxx
       child.data2send = NULL
@@ -247,15 +235,24 @@ mod_nav_server <- function(id,
       rv$mode <- rv$config$mode
       rv$parent.name <- rv$config$parent
       
-      rv$config$mandatory <- setNames(rv$config$mandatory, nm = names(rv$config$steps))
+      rv$config$mandatory <- setNames(rv$config$mandatory, 
+                                      nm = names(rv$config$steps))
+      
       rv$steps.info <- DataFrame(status = rep(global$UNDONE, rv$length),
                                  enabled = rep(FALSE, rv$length),
                                  skipped = rep(FALSE, rv$length),
                                  row.names = names(rv$config$steps)
                                  )
+      #browser()
+      rv$children.info <- DataFrame(reset = rep(0, rv$length),
+                                    enabled = rep(FALSE, rv$length),
+                                    position = rep(0, rv$length),
+                                    row.names = names(rv$config$steps)
+                                    )
+      
       
       #browser()
-      rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
+      #rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
       
       rv$child.data2send <- setNames(lapply(as.list(names(rv$config$steps)), 
                                             function(x) NULL), 
@@ -381,8 +378,8 @@ mod_nav_server <- function(id,
                    # by the observeEvent function. It works like an actionButton
                    # widget
                    if (rv$mode == 'pipeline')
-                     rv$resetChildren[range] <- 1 + rv$resetChildren[range]
-                   
+                     rv$children.info[1:rv$length, 'reset'] <- 1 + rv$children.info[1:rv$length, 'reset'] 
+                     
                   # browser()
                    # Return the NULL value as dataset
                    dataOut$trigger <- Timestamp()
@@ -561,7 +558,7 @@ mod_nav_server <- function(id,
          rv$steps.info$enabled <- res$steps.enabled
          
          if (rv$steps.info$status[rv$current.pos] == global$VALIDATED)
-           rv$child.position[rv$current.pos] <- paste0('last_', Timestamp())
+           rv$children.info[rv$current.pos, 'position'] <- paste0('last_', Timestamp())
        }
      })
      
@@ -592,7 +589,7 @@ mod_nav_server <- function(id,
               
               
               rv$steps.info$skipped <- rep(FALSE, rv$length)
-              rv$resetChildren <- setNames(rep(0, rv$length), nm = names(rv$config$steps))
+              rv$children.info[, 'reset'] <- rep(0, rv$length)
               
               # Launch the ui for each step of the pipeline
               # This function could be stored in the source file of the pipeline
@@ -611,7 +608,7 @@ mod_nav_server <- function(id,
                 tmp.return[[x]] <- mod_nav_server(id = x ,
                                                   dataIn = reactive({rv$child.data2send[[x]]}),
                                                   is.enabled = reactive({rv$steps.info[x, 'enabled']}),
-                                                  remoteReset = reactive({rv$resetChildren[x]}),
+                                                  remoteReset = reactive({rv$children.info[x,'reset']}),
                                                   is.skipped = reactive({rv$steps.info[x, 'skipped']}),
                                                   tl.layout = rv$tl.layout[-1],
                                                   verbose = verbose)

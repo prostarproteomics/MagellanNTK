@@ -114,7 +114,7 @@ Get_Code_for_module_Description <- function(id){
     
     eval(
     parse(text = SimpleWorflowCoreCode(
-                          name = id,
+                          name = config$name,
                           widgets = names(widgets.default.values),
                           steps = config$steps
                           )
@@ -487,7 +487,7 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   output$step.name_validationBtn_ui <- renderUI({
       if(verbose)
   cat(paste0(' --output$step.name_validationBtn_ui <- renderUI -- from ', id, '\n'))
-
+  #browser()
       tagList(
       if (rv$steps.info[\"step.name\", 'enabled'])
         actionButton(ns(\"step.name_btn_validate\"),

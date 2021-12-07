@@ -118,22 +118,6 @@ list(triggers = triggerValues,
 
 #' @title xxxx
 #' @description xxx
-#'
-#' @param range xxxx
-#' @param resetChildren xxx
-#' 
-#' @export
-#' 
-ResetChildren <- function(range, 
-                          resetChildren
-                          ){
-  if (verbose)
-    cat('ResetChildren()\n\n')
-  
-  resetChildren[range] <- 1 + resetChildren[range]
-  
-  return(resetChildren)
-}
 
 
 

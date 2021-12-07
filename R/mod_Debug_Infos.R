@@ -46,7 +46,8 @@ mod_Debug_Infos_ui <- function(id){
 #' 
 #' @rdname mod_Debug_Infos
 #' 
-#' @import DT
+#' @importFrom DT renderDT DTOutput formatStyle %>% styleEqual
+#' 
 #' @export
 #' 
 mod_Debug_Infos_server <- function(id,
@@ -108,7 +109,7 @@ mod_Debug_Infos_server <- function(id,
       df <- steps.infos()
       
       df$status <- lapply(df$status, function(x) {
-        paste0(GetStringStatus(x), ' (', x, ')')}
+        paste0(GetStringStatus(x, TRUE), ' (', x, ')')}
       )
       
       df <- cbind(df, 
@@ -135,7 +136,6 @@ mod_Debug_Infos_server <- function(id,
         DT::formatStyle(
           'currentPos',
           target = 'row',
-          fontWeight = "bold",
           color = styleEqual(c(FALSE, TRUE), c('grey', 'blue')),
           backgroundSize = '98% 48%',
           backgroundRepeat = 'no-repeat',
