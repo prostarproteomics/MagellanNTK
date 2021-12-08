@@ -43,9 +43,8 @@ mod_PipelineB_ui <- function(id){
 #'
 mod_PipelineB_server <- function(id,
                                  dataIn = reactive({NULL}),
-                                 steps.enabled = reactive({NULL}),
+                                 steps.info = reactive({NULL}),
                                  remoteReset = reactive({FALSE}),
-                                 steps.status = reactive({NULL}),
                                  current.pos = reactive({1})
                                  ){
 

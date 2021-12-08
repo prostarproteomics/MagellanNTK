@@ -272,9 +272,8 @@ mod_nav_server <- function(id,
               list(
                 id = paste0('timeline', rv$tl.layout[1]),
                 config =  rv$config,
-                status = reactive({rv$steps.info$status}),
-                position = reactive({rv$current.pos}),
-                enabled = reactive({rv$steps.info$enabled})
+                steps.info = reactive({rv$steps.info}),
+                position = reactive({rv$current.pos})
               )
       )
       
@@ -417,7 +416,7 @@ mod_nav_server <- function(id,
                            rv.dataIn = reactive({rv$dataIn}),
                            dataIn = reactive({dataIn()}),
                            dataOut = reactive({dataOut}),
-                           steps.infos = reactive({rv$steps.info}),
+                           steps.info = reactive({rv$steps.info}),
                            current.pos = reactive({ rv$current.pos}),
                            is.enabled = reactive({is.enabled()}))
     

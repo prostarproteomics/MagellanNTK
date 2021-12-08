@@ -25,7 +25,7 @@ mod_Debug_Infos_ui <- function(id){
 #' @param rv.dataIn xxx
 #' @param dataIn xxx
 #' @param dataOut xxxx
-#' @param steps.infos xxx
+#' @param steps.info xxx
 #' @param current.pos xxx
 #' @param is.enabled xxx
 #' 
@@ -56,7 +56,7 @@ mod_Debug_Infos_server <- function(id,
                                    rv.dataIn = reactive({NULL}),
                                    dataIn = reactive({NULL}),
                                    dataOut = reactive({NULL}),
-                                   steps.infos = reactive({NULL}),
+                                   steps.info = reactive({NULL}),
                                    current.pos = reactive({NULL}),
                                    is.enabled = reactive({NULL})
                                    ){
@@ -105,8 +105,8 @@ mod_Debug_Infos_server <- function(id,
     
     
     GetData <- reactive({
-      req(steps.infos())
-      df <- steps.infos()
+      req(steps.info())
+      df <- steps.info()
       
       df$status <- lapply(df$status, function(x) {
         paste0(GetStringStatus(x, TRUE), ' (', x, ')')}

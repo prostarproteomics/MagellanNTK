@@ -74,20 +74,20 @@ mod_timeline_h_ui <- function(id){
 #' 
 mod_timeline_h_server = function(id, 
                                  config,
-                                 status,
-                                 position, 
-                                 enabled) {
+                                 steps.info,
+                                 position
+                                 ) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     UpdateTags <- reactive({
       tl_status <- rep('undone', length(config$steps))
       tl_status[which(config$mandatory)] <- 'mandatory'
-      tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
-      tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
+      tl_status[which(steps.info()$status == global$VALIDATED)] <- 'completed'
+      tl_status[which(steps.info()$status == global$SKIPPED)] <- 'skipped'
     
-      for (i in seq_len(length(enabled())))
-        if (!enabled()[i])
+      for (i in seq_len(length(steps.info()$enabled)))
+        if (!steps.info()$enabled[i])
           tl_status[i] <- paste0(tl_status[i], 'Disabled')
 
       tl_status[position()] <- paste0(tl_status[position()], ' active')

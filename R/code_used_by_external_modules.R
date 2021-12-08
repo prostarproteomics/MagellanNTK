@@ -77,7 +77,8 @@ Get_Code_for_module_Description <- function(id){
   
   mod_replaceId_Description_server <- function(id,
                                              dataIn = reactive({NULL}),
-                                             steps.info = reactive({NULL}),
+                                             steps.enabled = reactive({NULL}),
+                                             steps.status = reactive({NULL}),
                                              remoteReset = reactive({FALSE}),
                                              current.pos = reactive({1}),
                                              verbose = FALSE
@@ -121,11 +122,7 @@ Get_Code_for_module_Description <- function(id){
               )
         )
     
-     
-     
-     observeEvent(steps.info(), {
-     print('tutu')
-     })
+
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       file <- paste0(config$path_to_md_dir, '/', id, '_Description.md')
@@ -308,17 +305,19 @@ Get_Code_for_rv_reactiveValues <- function(){
     # Stores the object given in input of the process
     dataIn = NULL,
     # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-    steps.info = NULL,
+    steps.enabled = NULL,
+    steps.status = NULL,
+    steps.skipped = NULL,
     # xxx
     reset = NULL
   )
   #browser()
-  rv$steps.info <- DataFrame(status = rep(global$UNDONE, length(config$steps)),
-                             enabled = rep(FALSE, length(config$steps)),
-                             skipped = rep(FALSE, length(config$steps)),
-                             row.names = names(config$steps)
-                             )        
-  
+  # rv$steps.info <- DataFrame(status = rep(global$UNDONE, length(config$steps)),
+  #                            enabled = rep(FALSE, length(config$steps)),
+  #                            skipped = rep(FALSE, length(config$steps)),
+  #                            row.names = names(config$steps)
+  #                            )        
+  # 
   "
   basis
 }
@@ -369,12 +368,12 @@ Get_Code_for_observeEvent_stepsEnabled  <- function(){
   code <- "
   
   
-  observeEvent(steps.info(), ignoreNULL = TRUE, {
+  observeEvent(steps.enabled(), ignoreNULL = TRUE, {
   print(\"observeEvent(steps.info()$enabled)\")
-  if (is.null(steps.info()))
-    rv$steps.info$enabled <- rep(FALSE, length(config$steps))
+  if (is.null(steps.enabled()))
+    rv$steps.enabled <- rep(FALSE, length(config$steps))
   else
-    rv$steps.info$enabled <- steps.info()$enabled
+    rv$steps.enabled <- steps.enabled()
 })
 
 "
@@ -454,7 +453,7 @@ Code_ObserveEvent_ValidationBtns <- function(){
                  
                  dataOut$trigger <- Magellan::Timestamp()
                  dataOut$value <- rv$dataIn
-                 rv$steps.info$status[current.pos()] <- global$VALIDATED
+                 rv$steps.status[current.pos()] <- global$VALIDATED
                  
                  mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
                 shinyjs::toggle('createQuickLink', 
@@ -491,9 +490,9 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
   output$step.name_validationBtn_ui <- renderUI({
       if(verbose)
   cat(paste0(' --output$step.name_validationBtn_ui <- renderUI -- from ', id, '\n'))
-  browser()
+ # browser()
       tagList(
-      if (rv$steps.info[\"step.name\", 'enabled'])
+      if (rv$steps.enabled[\"step.name\"])
         actionButton(ns(\"step.name_btn_validate\"),
                      \"label\",
                      class = btn_success_color)
@@ -509,19 +508,19 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
     })
     
     "
-  
-  ls_list <- lapply(steps, function(x) {
-    code <- gsub("step.name", x, code)
+  browser()
+  ls_list <- lapply(1:length(steps), function(x) {
+    code <- gsub("step.name", steps[x], code)
     
     add <- '
     '
     
-    if (x == 'Description'){
+    if (x == 1){
       new.label <- 'Start '
-    } else if (x == 'Save'){
+    } else if (x == length(steps) && mode == 'process'){
       new.label <- 'Save '
       add <- ",
-      if (rv$mode == 'process' && rv$steps.info['Save', 'status'] == global$VALIDATED) {
+      if (rv$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
         mod_Save_Dataset_ui(ns('createQuickLink'))
         }
      # else
@@ -568,7 +567,7 @@ Generate_RenderUI_Code_For_Single_Widgets <- function(widgets=NULL){
       if(verbose)
   cat(paste0('output$widget.name_ui <- renderUI() from ', id, '\n'))
   #browser()
-  if (rv$steps.info[\"step.name\", 'enabled'])
+  if (rv$steps.enabled[\"step.name\"])
         widget_widget.name()
       else
         shinyjs::disabled(widget_widget.name())
