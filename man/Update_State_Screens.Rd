@@ -2,25 +2,17 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{Update_State_Screens}
 \alias{Update_State_Screens}
-\title{Update State Screens}
+\title{xxx}
 \usage{
-Update_State_Screens(is.skipped, is.enabled, steps.info, config, current.pos)
+Update_State_Screens(is.skipped, is.enabled, rv)
 }
 \arguments{
 \item{is.skipped}{xxx}
 
 \item{is.enabled}{xxx}
 
-\item{steps.info}{xxx}
-
-\item{config}{xxx}
-
-\item{current.pos}{xxx}
-}
-\value{
-A vector of enabled tag for the steps.
+\item{rv}{xxx}
 }
 \description{
-Updates the tag 'enabled' w.r.t. the actual state of
-the module (timeline, validated steps, ...)
+xxx
 }

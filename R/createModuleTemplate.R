@@ -95,8 +95,9 @@ get_process_header_server_func <- function(name){
   
   mod_#name#_server <- function(id,
                                 dataIn = reactive({NULL}),
-                                steps.info = reactive({NULL}),
+                                steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
+                                steps.status = reactive({NULL}),
                                 current.pos = reactive({1})
                                 ){
   "
@@ -259,8 +260,9 @@ get_pipeline_header_server_func <- function(name){
   
   mod_#name#_server <- function(id,
                                 dataIn = reactive({NULL}),
-                                steps.info = reactive({NULL}),
+                                steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
+                                steps.status = reactive({NULL}),
                                 current.pos = reactive({1})
                                 ){
   "

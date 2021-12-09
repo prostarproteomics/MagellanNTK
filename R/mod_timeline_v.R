@@ -77,9 +77,9 @@ mod_timeline_v_ui <- function(id){
 #' 
 mod_timeline_v_server <- function(id, 
                                   config, 
-                                  steps.info,
-                                  position
-                                  ) {
+                                  status, 
+                                  position, 
+                                  enabled) {
   
   # Define colors for the different status of steps  
   colCompletedDisabled <- "#ABDBAC"
@@ -98,11 +98,11 @@ mod_timeline_v_server <- function(id,
     UpdateTags <- reactive({
       tl_status <- rep('undone', length(config$steps))
       tl_status[which(config$mandatory)] <- 'mandatory'
-      tl_status[which(steps.info()$status == global$VALIDATED)] <- 'completed'
-      tl_status[which(steps.info()$status == global$SKIPPED)] <- 'skipped'
+      tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
+      tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
         
-      for (i in seq_len(length(steps.info()$enabled)))
-        if (!steps.info()$enabled[i])
+      for (i in seq_len(length(enabled())))
+        if (!enabled()[i])
           tl_status[i] <- paste0(tl_status[i], 'Disabled')
       
       tl_status[position()] <- paste0(tl_status[position()], ' active')
@@ -171,16 +171,16 @@ mod_timeline_v_server <- function(id,
     
     GetStyle <- reactive({
       tl_status <- rep(undone(), length(config$steps))
-      tl_status[which(steps.info()$enabled==1)] <- undoneDisabled()
+      tl_status[which(enabled()==1)] <- undoneDisabled()
         
-      tl_status[intersect(which(config$mandatory), which(steps.info()$enabled==1))] <- mandatory()
-      tl_status[intersect(which(config$mandatory), which(steps.info()$enabled==0))] <- mandatoryDisabled()
+      tl_status[intersect(which(config$mandatory), which(enabled()==1))] <- mandatory()
+      tl_status[intersect(which(config$mandatory), which(enabled()==0))] <- mandatoryDisabled()
         
-      tl_status[intersect(which(steps.info()$status == global$VALIDATED), which(steps.info()$enabled==1))] <- completed()
-      tl_status[intersect(which(steps.info()$status == global$VALIDATED), which(steps.info()$enabled==0))] <- completedDisabled()
+      tl_status[intersect(which(unlist(status()) == global$VALIDATED), which(enabled()==1))] <- completed()
+      tl_status[intersect(which(unlist(status()) == global$VALIDATED), which(enabled()==0))] <- completedDisabled()
         
-      tl_status[intersect(which(steps.info()$status == global$SKIPPED), which(steps.info()$enabled==1))] <- skipped()
-      tl_status[intersect(which(steps.info()$status == global$SKIPPED), which(steps.info()$enabled==0))] <- skippedDisabled()
+      tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==1))] <- skipped()
+      tl_status[intersect(which(unlist(status()) == global$SKIPPED), which(enabled()==0))] <- skippedDisabled()
       
        tl_status[position()] <- paste0(tl_status[position()],  active())
         tl_status

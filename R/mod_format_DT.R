@@ -10,7 +10,7 @@ mod_format_DT_ui <- function(id){
   tagList(
     div(
       div( style="display:inline-block; vertical-align: middle; align: center;",
-           DTOutput(ns("dt"))
+           dataTableOutput(ns("dt"))
       )
     )
   )
@@ -72,7 +72,7 @@ mod_format_DT_server <- function(id,
     
     proxy = dataTableProxy(session$ns('dt'), session)
     
-    output$dt <- renderDT({
+    output$dt <- renderDataTable({
       req(table2show())
       
       isolate({

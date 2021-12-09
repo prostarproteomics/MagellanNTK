@@ -12,7 +12,7 @@
 #' @param verbose A `boolean` that indicates whether to show some infos in the console
 #' and add the shiny module for debugging
 #' 
-#' @param tl.layout xxx 
+#' @param tl.layout Additional parameters for mod_nav 
 #'
 #' @rdname example_mod_pipeline
 #'
@@ -36,7 +36,8 @@
 #' 
 run_workflow <- function(id,
                          verbose = FALSE,
-                         tl.layout = NULL){
+                         tl.layout = NULL
+                         ){
   
   if(missing(id)){
     warning("'id' is required.")
@@ -89,7 +90,7 @@ run_workflow <- function(id,
       req(rv$dataOut)
       rv$dataOut$dataOut()$value
       mod_Save_Dataset_server(id = 'exemple', 
-                              dataIn = reactive({rv$dataOut$dataOut()$value}))
+                            dataIn = reactive({rv$dataOut$dataOut()$value}))
     })
 
   }

@@ -25,8 +25,7 @@ utils::globalVariables(
     'Get_Code_Declare_reactiveValues',
     'Get_Code_Declare_Pipeline_reactiveValues',
     'dataOut',
-    'rv',
-    'DataFrame'
+    'rv'
   )
 )
 

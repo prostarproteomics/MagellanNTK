@@ -53,21 +53,23 @@ mod_Process2_ui <- function(id){
 #' 
 mod_Process2_server <- function(id,
                                 dataIn = reactive({NULL}),
-                                steps.info = reactive({NULL}),
+                                steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
-                                current.pos = reactive({1}),
-                                verbose = FALSE){
+                                steps.status = reactive({NULL}),
+                                current.pos = reactive({1})
+){
   
   # This list contains the basic configuration of the process
   config <- list(
     # Define the type of module
     mode = 'process',
     
+    name = 'Process2',
+    
     # List of all steps of the process
-    steps = c('Step 1', 'Step 2', 'Save'),
+    steps = c('Step1', 'Step2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c( FALSE, TRUE, TRUE),
-    
     path_to_md_dir = system.file('module_examples/md/', package='Magellan')
   )
   
@@ -91,17 +93,21 @@ mod_Process2_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
     eval(str2expression(Get_Code_Update_Config()))
-    
     eval(str2expression(
       SimpleWorflowCoreCode(
-        name = id,
+        name = config$name,
         widgets = names(widgets.default.values),
-        steps = names(config$steps))
+        steps = config$steps)
     )
     )
+    
+    
+    # >>> START ------------- Code for Description UI ---------------
+    eval(parse(text = Get_Code_for_Description_renderUI(config$name)))
+    # <<< END ------------- Code for Description UI---------------
+    
+    
     
     
     # >>>

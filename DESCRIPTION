@@ -6,6 +6,7 @@ Description: Magellan is a collection of Shiny modules which provide the basis f
 License: Artistic-2.0
 Depends: R (>= 4.1.0)
 Imports: 
+    S4Vectors,
     methods,
     config,
     golem,
@@ -52,7 +53,6 @@ RoxygenNote: 7.1.2
 URL: https://github.com/samWieczorek/Magellan
 BugReports: https://github.com/samWieczorek/Magellan/issues
 Suggests: 
-    S4Vectors,
     knitr,
     rmarkdown,
     BiocStyle

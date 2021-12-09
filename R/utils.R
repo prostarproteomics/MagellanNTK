@@ -1,6 +1,4 @@
 
-
-
 #' @title 
 #' xxx
 #' 
@@ -124,7 +122,7 @@ setMethod("Keep_Datasets_from_Object",
           function(object, range) {
             if (missing(range))
               stop("Provide range of assays to be processed")
-            if (is.na(object))
+            if (is.null(object))
               return()
             
             if (is.numeric(range)) range <- names(object)[range]
@@ -164,7 +162,7 @@ setMethod("Add_Datasets_to_Object",
 setMethod("Add_Datasets_to_Object",
           "list",
           function(object, dataset, name) {
-            if (is.na(object))
+            if (is.null(object))
               setNames(list(dataset), nm = name)
             else
               append(object, setNames(list(dataset), nm = name))

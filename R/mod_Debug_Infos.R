@@ -25,7 +25,9 @@ mod_Debug_Infos_ui <- function(id){
 #' @param rv.dataIn xxx
 #' @param dataIn xxx
 #' @param dataOut xxxx
-#' @param steps.info xxx
+#' @param steps.enabled xxx
+#' @param steps.status xxx
+#' @param steps.skipped xxx
 #' @param current.pos xxx
 #' @param is.enabled xxx
 #' 
@@ -47,6 +49,7 @@ mod_Debug_Infos_ui <- function(id){
 #' @rdname mod_Debug_Infos
 #' 
 #' @importFrom DT renderDT DTOutput formatStyle %>% styleEqual
+#' @importFrom S4Vectors DataFrame
 #' 
 #' @export
 #' 
@@ -56,10 +59,12 @@ mod_Debug_Infos_server <- function(id,
                                    rv.dataIn = reactive({NULL}),
                                    dataIn = reactive({NULL}),
                                    dataOut = reactive({NULL}),
-                                   steps.info = reactive({NULL}),
+                                   steps.enabled = reactive({NULL}),
+                                   steps.status = reactive({NULL}),
+                                   steps.skipped = reactive({NULL}),
                                    current.pos = reactive({NULL}),
                                    is.enabled = reactive({NULL})
-                                   ){
+){
   
   
   moduleServer(id, function(input, output, session){
@@ -95,7 +100,7 @@ mod_Debug_Infos_server <- function(id,
       VC <- data.frame(paste0(names(dataIn()), collapse='<br>'),
                        paste0(names(rv.dataIn), collapse='<br>'),
                        paste0(names(dataOut()$value), collapse='<br>')
-                       )
+      )
       colnames(VC) = c('<span style="color:red">dataIn()</span>', 
                        '<span style="color:red">rv$dataIn</span>',
                        '<span style="color:red">dataOut()$value</span>')
@@ -105,19 +110,18 @@ mod_Debug_Infos_server <- function(id,
     
     
     GetData <- reactive({
-      req(steps.info())
-      df <- steps.info()
+      req(c(steps.enabled(), steps.status(), steps.skipped()))
       
-      df$status <- lapply(df$status, function(x) {
-        paste0(GetStringStatus(x, TRUE), ' (', x, ')')}
-      )
-      
-      df <- cbind(df, 
-                  currentPos = unlist(lapply(1:nrow(df), function(x) current.pos() == x)))
-
+      #browser()
+      df <- DataFrame(status = unlist(lapply(steps.status(), function(x) {
+        paste0(GetStringStatus(x, TRUE), ' (', x, ')')})),
+                  enabled = steps.enabled(),
+                  skipped = steps.skipped(),
+                  currentPos = unlist(lapply(1:length(steps.status()), function(x) current.pos() == x)))
+      rownames(df) <- names(steps.status())
       df
     })
-
+    
     output$show_steps_infos <- DT::renderDT({
       df <- as.data.frame(GetData())
       DT::datatable(df,
@@ -130,19 +134,19 @@ mod_Debug_Infos_server <- function(id,
                       columnDefs = list(
                         list(
                           targets = c(4), visible = FALSE)
-                        )
+                      )
                     )
-                    )  %>%
+      )  %>%
         DT::formatStyle(
           'currentPos',
           target = 'row',
-          color = styleEqual(c(FALSE, TRUE), c('grey', 'blue')),
+          color = DT::styleEqual(c(FALSE, TRUE), c('grey', 'blue')),
           backgroundSize = '98% 48%',
           backgroundRepeat = 'no-repeat',
           backgroundPosition = 'center'
         )
     })
-
+    
     
     
     output$show_varContent <- DT::renderDT({
@@ -158,8 +162,6 @@ mod_Debug_Infos_server <- function(id,
       )
     })
     
-
-})
-  }
-  
-
+    
+  })
+}

@@ -7,9 +7,12 @@
 ActionOn_Child_Changed(
   temp.dataIn,
   dataIn,
-  steps.info,
+  steps.status,
+  steps,
+  steps.enabled,
+  steps.skipped,
   processHasChanged,
-  newValue = NULL
+  newValue
 )
 }
 \arguments{
@@ -17,7 +20,14 @@ ActionOn_Child_Changed(
 
 \item{dataIn}{xxx}
 
-\item{steps.info}{xxx}
+\item{steps.status}{xxx}
+
+\item{steps}{A vector of names which are the names of the steps
+in the process}
+
+\item{steps.enabled}{xxx}
+
+\item{steps.skipped}{xxx}
 
 \item{processHasChanged}{A character(1) which is the name of the process
 which has changed its return value.}

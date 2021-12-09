@@ -10,7 +10,11 @@
 #' 
 #' @param temp.dataIn xxx
 #' @param dataIn xxx
-#' @param steps.info xxx
+#' @param steps.status xxx
+#' @param steps A vector of names which are the names of the steps
+#' in the process
+#' @param steps.enabled xxx
+#' @param steps.skipped xxx
 #' @param processHasChanged A character(1) which is the name of the process
 #' which has changed its return value.
 #' @param newValue The new value given by the step which has changed.
@@ -24,15 +28,18 @@
 #' 
 ActionOn_Child_Changed <- function(temp.dataIn,
                                    dataIn,
-                                   steps.info,
+                                   steps.status,
+                                   steps,
+                                   steps.enabled,
+                                   steps.skipped,
                                    processHasChanged,
-                                   newValue = NULL){
+                                   newValue){
   # Indice of the dataset in the object
   # If the original length is not 1, then this indice is different
   # than the above one
-  ind.processHasChanged <- which(rownames(steps.info)==processHasChanged)
+  ind.processHasChanged <- which(steps==processHasChanged)
   
-  len <- nrow(steps.info)
+  len <- length(steps)
   
   if (is.null(newValue)){
     # A process has been reseted
@@ -40,14 +47,14 @@ ActionOn_Child_Changed <- function(temp.dataIn,
     # One take the last validated step (before the one 
     # corresponding to processHasChanges
     # but it is straightforward because we just updates rv$status
-    steps.info[ind.processHasChanged:len, 'status'] <-  global$UNDONE
+    steps.status[ind.processHasChanged:len] <-  global$UNDONE
     
-    steps.info[(ind.processHasChanged+1):len, 'enabled'] <- FALSE
-    steps.info[ind.processHasChanged, 'enabled'] <- TRUE
+    steps.enabled[(ind.processHasChanged+1):len] <- FALSE
+    steps.enabled[ind.processHasChanged] <- TRUE
     
-    steps.info[ind.processHasChanged:len, 'skipped'] <- FALSE
+    steps.skipped[ind.processHasChanged:len] <- FALSE
     
-    validated.steps <- which(steps.info$status == global$VALIDATED)
+    validated.steps <- which(steps.status == global$VALIDATED)
     if (length(validated.steps) > 0)
       ind.last.validated <- max(validated.steps)
     else 
@@ -58,7 +65,7 @@ ActionOn_Child_Changed <- function(temp.dataIn,
       dataIn <- temp.dataIn
     
     else {
-      name.last.validated <- rownames(steps.info)[ind.last.validated]
+      name.last.validated <- steps[ind.last.validated]
       dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
       dataIn <- Keep_Datasets_from_Object(object = dataIn, 
                                           range = seq_len(dataIn.ind.last.validated))
@@ -66,19 +73,21 @@ ActionOn_Child_Changed <- function(temp.dataIn,
     
   } else {
     # A process has been validated
-    steps.info[processHasChanged, 'status'] <- global$VALIDATED
+    steps.status[processHasChanged] <- global$VALIDATED
     
     if (ind.processHasChanged < len)
-      steps.info[(1 + ind.processHasChanged):len, 'status'] <- global$UNDONE
+      steps.status[(1 + ind.processHasChanged):len] <- global$UNDONE
     
-    steps.info$status <- Discover_Skipped_Steps(steps.info$status)
+    steps.status <- Discover_Skipped_Steps(steps.status)
     dataIn <- newValue
   }
   
 
   return(
     list(dataIn = dataIn,
-         steps.info = steps.info
+         steps.status = steps.status,
+         steps.enabled = steps.enabled,
+         steps.skipped = steps.skipped
          )
   )
   }
@@ -118,36 +127,42 @@ list(triggers = triggerValues,
 
 #' @title xxxx
 #' @description xxx
-
-
-
-#' @title Update Data to send
+#'
+#' @param range xxxx
+#' @param resetChildren xxx
 #' 
+#' @export
+#' 
+ResetChildren <- function(range, 
+                          resetChildren
+                          ){
+  if (verbose)
+    cat('ResetChildren()\n\n')
+  
+  resetChildren[range] <- 1 + resetChildren[range]
+  
+  return(resetChildren)
+}
+
+
+
+#' @title xxxx
 #' @description xxx
 #'
-#' @param current.pos xxx
-#' @param steps.info xxx
-#' @param temp.dataIn xxx
-#' @param dataIn xxx
-#' @param original.length xxx
+#' @param rv xxxx
 #'
 #' @export
 #' 
 #' 
-Update_Data2send_Vector <- function(current.pos,
-                                    steps.info,
-                                    temp.dataIn,
-                                    dataIn,
-                                    original.length){
+Update_Data2send_Vector <- function(rv){
   # One only update the current position because the vector has been entirely
   # initialized to NULL so the other processes are already ready to be sent
-  ind.last.validated <- GetMaxValidated_BeforePos(current.pos = current.pos,
-                                                  steps.status = steps.info$status)
+  ind.last.validated <- GetMaxValidated_BeforePos(rv = rv)
   if (is.null(ind.last.validated))
-    data <- temp.dataIn
+    data <- rv$temp.dataIn
   else
-    data <- Keep_Datasets_from_Object(object = dataIn,
-                                      range = seq_len(ind.last.validated + original.length -1)
+    data <- Keep_Datasets_from_Object(object = rv$dataIn,
+                                      range = seq_len(ind.last.validated + rv$original.length -1)
     )
   return(data)
 }
@@ -155,24 +170,15 @@ Update_Data2send_Vector <- function(current.pos,
 
 
 
-#' @title Prepare Data to Send
+#' @title xxxx
 #' @description xxx
 #'
-#' @param steps.info xxx
-#' @param temp.dataIn xxx
-#' @param dataIn xxx
-#' @param config xxx
-#' @param current.pos xxx
-#' @param original.length xxx
+#' @param rv xxxx
+#' @param pos xxx
 #' 
 #' @export
 #' 
-PrepareData2Send <- function(steps.info,
-                             temp.dataIn,
-                             dataIn,
-                             config,
-                             current.pos,
-                             original.length){
+PrepareData2Send <- function(rv, pos){
   # Returns NULL to all modules except the one pointed by the current position
   # Initialization of the pipeline : one send dataIn() to the
   # first module
@@ -183,27 +189,23 @@ PrepareData2Send <- function(steps.info,
   
   # Initialize vector to all NULL values
   data2send <- setNames(
-    lapply(config$steps, function(x){NULL}),
-    nm = config$steps)
+    lapply(rv$config$steps, function(x){NULL}),
+    nm = rv$config$steps)
   
-  if (is.null(dataIn)){ # Init of core engine
+  if (is.null(rv$dataIn)){ # Init of core engine
     
     # Only the first process will receive the data
-    data2send[[1]] <- temp.dataIn
+    data2send[[1]] <- rv$temp.dataIn
     
     # The other processes are by default disabled.
     # If they have to be enabled, they will be by another function later
-    lapply(seq_len(length(config$steps)), function(x){
-      steps.info[x, 'enabled'] <- x == 1
+    lapply(seq_len(length(rv$config$steps)), function(x){
+      rv$steps.enabled[x] <- x==1
     })
     
   } else{
-    current.step.name <- config$steps[current.pos]
-    data2send[[current.step.name]] <- Update_Data2send_Vector(current.pos = current.pos,
-                                                              steps.info = steps.info,
-                                                              temp.dataIn = temp.dataIn,
-                                                              dataIn = dataIn,
-                                                              original.length = original.length)
+    current.step.name <- rv$config$steps[rv$current.pos]
+    data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
   }
   
   if (verbose) {
@@ -214,7 +216,7 @@ PrepareData2Send <- function(steps.info,
   
   return(
     list(data2send = data2send,
-         steps.enabled = steps.info$enabled
+         steps.enabled = rv$steps.enabled
          )
   )
 }

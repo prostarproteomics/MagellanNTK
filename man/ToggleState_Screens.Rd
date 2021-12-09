@@ -4,7 +4,7 @@
 \alias{ToggleState_Screens}
 \title{xxx}
 \usage{
-ToggleState_Screens(cond, range, is.enabled, steps.info)
+ToggleState_Screens(cond, range, is.enabled, rv)
 }
 \arguments{
 \item{cond}{xxx}
@@ -13,10 +13,10 @@ ToggleState_Screens(cond, range, is.enabled, steps.info)
 
 \item{is.enabled}{xxx}
 
-\item{steps.info}{xxx}
+\item{rv}{xxx}
 }
 \value{
-A vector for steps.enabled
+xxx
 }
 \description{
 Updates the status of steps in range

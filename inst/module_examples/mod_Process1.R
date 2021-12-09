@@ -53,10 +53,12 @@ mod_Process1_ui <- function(id){
 #' 
 mod_Process1_server <- function(id,
                                 dataIn = reactive({NULL}),
-                                steps.info = reactive({NULL}),
+                                steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
+                                steps.status = reactive({NULL}),
                                 current.pos = reactive({1}),
-                                verbose = FALSE){
+                                verbose = FALSE
+                                ){
   
   # This list contains the basic configuration of the process
   config <- list(

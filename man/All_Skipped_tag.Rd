@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{All_Skipped_tag}
 \alias{All_Skipped_tag}
-\title{Set skipped tag to all steps}
+\title{xxx}
 \usage{
 All_Skipped_tag(steps.status, tag)
 }

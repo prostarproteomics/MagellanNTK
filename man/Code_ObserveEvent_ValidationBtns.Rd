@@ -2,7 +2,7 @@
 % Please edit documentation in R/code_used_by_external_modules.R
 \name{Code_ObserveEvent_ValidationBtns}
 \alias{Code_ObserveEvent_ValidationBtns}
-\title{Create code for ObserveEvent Validation Buttons}
+\title{Code for xxxx}
 \usage{
 Code_ObserveEvent_ValidationBtns()
 }

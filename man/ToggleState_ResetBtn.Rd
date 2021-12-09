@@ -2,7 +2,7 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{ToggleState_ResetBtn}
 \alias{ToggleState_ResetBtn}
-\title{ToggleState Reset Button}
+\title{xxx}
 \usage{
 ToggleState_ResetBtn(cond)
 }
