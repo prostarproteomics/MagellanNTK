@@ -21,10 +21,10 @@ xxx
 Check if the rv$config is correct
 }
 \examples{
-conf <- list(parent = "pipeline",
-name = "process",
-steps = c('Description', "Step 1", "Step 2", "Save"),
-mandatory = c(TRUE, TRUE, FALSE, TRUE)
+conf <- list(mode = "process",
+steps = c("Step 1", "Step 2", "Save"),
+mandatory = c( TRUE, FALSE, TRUE),
+path_to_md_dir = system.file('module_examples/md/', package='Magellan')
 )
 CheckConfig(conf)
 

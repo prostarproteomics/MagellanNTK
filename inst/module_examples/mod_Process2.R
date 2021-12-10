@@ -56,8 +56,9 @@ mod_Process2_server <- function(id,
                                 steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
                                 steps.status = reactive({NULL}),
-                                current.pos = reactive({1})
-){
+                                current.pos = reactive({1}),
+                                verbose = FALSE
+                                ){
   
   # This list contains the basic configuration of the process
   config <- list(

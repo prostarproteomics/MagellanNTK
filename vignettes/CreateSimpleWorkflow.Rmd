@@ -42,9 +42,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ## Hard way
 
 
-### Simple mode
+### Steps
 
 
-
-### Expert mode
+Write the uiOutput() function for each widgets and the corresponding reactive({}) function with the definition of the widget (widget_#name# <- reactive({}))
 

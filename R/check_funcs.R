@@ -43,10 +43,10 @@ Found_Mod_Funcs <- function(id){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' conf <- list(parent = "pipeline",
-#' name = "process",
-#' steps = c('Description', "Step 1", "Step 2", "Save"),
-#' mandatory = c(TRUE, TRUE, FALSE, TRUE)
+#' conf <- list(mode = "process",
+#' steps = c("Step 1", "Step 2", "Save"),
+#' mandatory = c( TRUE, FALSE, TRUE),
+#' path_to_md_dir = system.file('module_examples/md/', package='Magellan')
 #' )
 #' CheckConfig(conf)
 #' 
@@ -57,13 +57,13 @@ CheckConfig <- function(config){
   
   if (!is.list(config)){
     passed <- FALSE
-    msg <- c(msg, "'rv$config' is not a list")
+    msg <- c(msg, "'config' is not a list")
   }
   
-  names.config <- c("mode", "steps", "mandatory")
+  names.config <- c("mode", "steps", "mandatory", "path_to_md_dir")
   if (!all(sapply(names.config, function(x){x %in% names(config)}))){
     passed <- FALSE
-    msg <- c(msg, "The names of elements in 'config' must be the following: 'mode', 'steps', 'mandatory'")
+    msg <- c(msg, "The names of elements in 'config' must be the following: 'mode', 'steps', 'mandatory', 'path_to_md_dir")
   }
   if (length(config$steps) != length(config$mandatory)){
     passed <- FALSE

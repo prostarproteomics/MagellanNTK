@@ -9,13 +9,15 @@
 #' \dontrun{
 #' conf.process <- list(mode = "process",
 #' steps = c("Step 1", "Step 2", "Save"),
-#' mandatory = c(TRUE, FALSE, TRUE)
+#' mandatory = c(TRUE, FALSE, TRUE),
+#' path_to_md_dir = NULL
 #' )
 #' createModuleTemplate('Process1', conf.process)
 #' 
 #' conf.pipeline <- list(mode = "pipeline",
 #' steps = c("Process 1", "Process 2", "Process 3"),
-#' mandatory = c(TRUE, FALSE, TRUE)
+#' mandatory = c(TRUE, FALSE, TRUE),
+#' path_to_md_dir = system.file('module_examples/md/', package='Magellan')
 #' )
 #' createModuleTemplate('PipelineA', conf.pipeline)
 #' }
@@ -98,7 +100,8 @@ get_process_header_server_func <- function(name){
                                 steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
                                 steps.status = reactive({NULL}),
-                                current.pos = reactive({1})
+                                current.pos = reactive({1}),
+                                verbose = FALSE
                                 ){
   "
   gsub('#name#', name, code)
@@ -147,12 +150,18 @@ get_process_config_code <- function(config){
     steps = #steps#,
     
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = #mandatory#
+    mandatory = #mandatory#,
+    
+    path_to_md_dir = #path_to_md_dir#
   )
   "
-  
   code <- gsub('#steps#', vec2code(config$steps, TRUE), code)
   code <- gsub('#mandatory#', vec2code(config$mandatory, FALSE), code)
+  if(is.null(config$path_to_md_dir))
+    config$path_to_md_dir <- 'NULL'
+  code <- gsub('#path_to_md_dir#', config$path_to_md_dir, code)
+  
+  
   code
 }
 

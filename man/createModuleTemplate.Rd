@@ -18,13 +18,15 @@ xxx
 \dontrun{
 conf.process <- list(mode = "process",
 steps = c("Step 1", "Step 2", "Save"),
-mandatory = c(TRUE, FALSE, TRUE)
+mandatory = c(TRUE, FALSE, TRUE),
+path_to_md_dir = NULL
 )
 createModuleTemplate('Process1', conf.process)
 
 conf.pipeline <- list(mode = "pipeline",
 steps = c("Process 1", "Process 2", "Process 3"),
-mandatory = c(TRUE, FALSE, TRUE)
+mandatory = c(TRUE, FALSE, TRUE),
+path_to_md_dir = system.file('module_examples/md/', package='Magellan')
 )
 createModuleTemplate('PipelineA', conf.pipeline)
 }

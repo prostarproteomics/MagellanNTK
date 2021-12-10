@@ -9,20 +9,20 @@
 #' 
 #' @export
 #' 
-Get_Code_Update_Config <- function(){
-
-  code <- "
-
-  config$steps <- c('Description', config$steps)
-  config$steps <- setNames(config$steps, 
-                          nm = gsub(' ', '', config$steps, fixed = TRUE))
-  config$mandatory <- c(TRUE, config$mandatory)
-
-
-    "
-
-  code
-}
+# Get_Code_Update_Config <- function(){
+# 
+#   code <- "
+# 
+#   config$steps <- c('Description', config$steps)
+#   config$steps <- setNames(config$steps, 
+#                           nm = gsub(' ', '', config$steps, fixed = TRUE))
+#   config$mandatory <- c(TRUE, config$mandatory)
+# 
+# 
+#     "
+# 
+#   code
+# }
 
 #' @title R code to update the 'config' variable of a pipeline module
 #' 
@@ -168,42 +168,42 @@ code
 #' 
 #' @export
 #' 
-Get_Code_for_Description_renderUI <- function(id){
-  
-  code <- "
-  
-  
-  output$Description <- renderUI({
-  file <- paste0(config$path_to_md_dir, '/', 'replaceid', '.md')
-  
-        tagList(
-        # In this example, the md file is found in the module_examples directory
-        # but with a real app, it should be provided by the package which
-        # contains the UI for the different steps of the process module.
-        # system.file(xxx)
-        
-        if (file.exists(file))
-          includeMarkdown(file)
-        else
-          p('No Description available'),
-
-        
-       # Used to show some information about the dataset which is loaded
-       # This function must be provided by the package of the process module
-       uiOutput(ns('datasetDescription')),
-        
-        # Insert validation button
-        uiOutput(ns('Description_validationBtn_ui'))
-      )
-    })
-    
-    
-    "
-  
-  gsub('replaceid', id, code)
-  
-  
-}
+# Get_Code_for_Description_renderUI <- function(id){
+#   
+#   code <- "
+#   
+#   
+#   output$Description <- renderUI({
+#   file <- paste0(config$path_to_md_dir, '/', 'replaceid', '.md')
+#   
+#         tagList(
+#         # In this example, the md file is found in the module_examples directory
+#         # but with a real app, it should be provided by the package which
+#         # contains the UI for the different steps of the process module.
+#         # system.file(xxx)
+#         
+#         if (file.exists(file))
+#           includeMarkdown(file)
+#         else
+#           p('No Description available'),
+# 
+#         
+#        # Used to show some information about the dataset which is loaded
+#        # This function must be provided by the package of the process module
+#        uiOutput(ns('datasetDescription')),
+#         
+#         # Insert validation button
+#         uiOutput(ns('Description_validationBtn_ui'))
+#       )
+#     })
+#     
+#     
+#     "
+#   
+#   gsub('replaceid', id, code)
+#   
+#   
+# }
 
 
 #' @title Code for declaring widgets.default.values reactive variable
@@ -226,21 +226,21 @@ Get_Code_for_Description_renderUI <- function(id){
 #' cat(code)
 #' }
 #' 
-Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
-  # If one is on a composed workflow which do not have explicit ui
-  if (is.null(widgets.names))
-    declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
-  else {
-    basis <- "w.name = widgets.default.values$w.name"
-    ls_list <- lapply(widgets.names,
-                      function(x) gsub('w.name', x, basis) )
-    declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n", 
-                                 paste0("\t", ls_list, sep="", collapse= ",\n"),
-                                 "\n)\n\n")
-  }
-  
-  declare_rv_widgets
-}
+# Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
+#   # If one is on a composed workflow which do not have explicit ui
+#   if (is.null(widgets.names))
+#     declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
+#   else {
+#     basis <- "w.name = widgets.default.values$w.name"
+#     ls_list <- lapply(widgets.names,
+#                       function(x) gsub('w.name', x, basis) )
+#     declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n", 
+#                                  paste0("\t", ls_list, sep="", collapse= ",\n"),
+#                                  "\n)\n\n")
+#   }
+#   
+#   declare_rv_widgets
+# }
 
 
 
@@ -264,20 +264,20 @@ Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
 #' cat(code)
 #' }
 #' 
-Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
-  
-  declare_rv_widgets <- NULL
-  if(!is.null(widgets.names)){
-    basis <- "observeEvent(input$widget.name, {rv.widgets$widget.name <- input$widget.name})"
-    ls_list <- lapply(widgets.names, 
-                      function(x) gsub('widget.name', x, basis)
-    )
-    
-    declare_rv_widgets <- paste0(ls_list, collapse= "\n")
-    declare_rv_widgets <- paste0(declare_rv_widgets, "\n\n\n")
-  }
-  declare_rv_widgets
-}
+# Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
+#   
+#   declare_rv_widgets <- NULL
+#   if(!is.null(widgets.names)){
+#     basis <- "observeEvent(input$widget.name, {rv.widgets$widget.name <- input$widget.name})"
+#     ls_list <- lapply(widgets.names, 
+#                       function(x) gsub('widget.name', x, basis)
+#     )
+#     
+#     declare_rv_widgets <- paste0(ls_list, collapse= "\n")
+#     declare_rv_widgets <- paste0(declare_rv_widgets, "\n\n\n")
+#   }
+#   declare_rv_widgets
+# }
 
 
 
@@ -296,21 +296,21 @@ Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
 #' cat(code)
 #' }
 #' 
-Get_Code_for_rv_reactiveValues <- function(){
-  basis <- "rv <- reactiveValues(
-    # Stores the object given in input of the process
-    dataIn = NULL,
-    # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-    steps.status = NULL,
-    # xxx
-    reset = NULL,
-    # A vector of boolean indicating if the steps are enabled or disabled
-    steps.enabled = NULL
-  )
-  
-  "
-  basis
-}
+# Get_Code_for_rv_reactiveValues <- function(){
+#   basis <- "rv <- reactiveValues(
+#     # Stores the object given in input of the process
+#     dataIn = NULL,
+#     # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
+#     steps.status = NULL,
+#     # xxx
+#     reset = NULL,
+#     # A vector of boolean indicating if the steps are enabled or disabled
+#     steps.enabled = NULL
+#   )
+#   
+#   "
+#   basis
+# }
 
 
 #' @title Code for xxx
@@ -330,16 +330,16 @@ Get_Code_for_rv_reactiveValues <- function(){
 #' cat(code)
 #' }
 #' 
-Get_Code_for_dataOut <- function(){
-  code <- "dataOut <- reactiveValues(
-  trigger = NULL,
-  value = NULL
-)
-
-"
-
-code
-}
+# Get_Code_for_dataOut <- function(){
+#   code <- "dataOut <- reactiveValues(
+#   trigger = NULL,
+#   value = NULL
+# )
+# 
+# "
+# 
+# code
+# }
 
 #' @title Code for declaring xxx
 #' 
@@ -353,27 +353,27 @@ code
 #' cat(code)
 #' }
 #' 
-Get_Code_for_observeEvent_stepsEnabled  <- function(){
-  code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-  if (is.null(steps.enabled()))
-    rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-                                 nm = names(rv$config$steps))
-  else
-    rv$steps.enabled <- steps.enabled()
-})
-
-observeEvent(steps.status(), ignoreNULL = TRUE, {
-  if (is.null(steps.enabled()))
-    rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
-                                 nm = names(rv$config$steps))
-  else
-    rv$steps.status <- steps.status()
-})
-
-"
-  
-  code
-}
+# Get_Code_for_observeEvent_stepsEnabled  <- function(){
+#   code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+#   if (is.null(steps.enabled()))
+#     rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
+#                                  nm = names(rv$config$steps))
+#   else
+#     rv$steps.enabled <- steps.enabled()
+# })
+# 
+# observeEvent(steps.status(), ignoreNULL = TRUE, {
+#   if (is.null(steps.enabled()))
+#     rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
+#                                  nm = names(rv$config$steps))
+#   else
+#     rv$steps.status <- steps.status()
+# })
+# 
+# "
+#   
+#   code
+# }
 
 
 #' @title Code for xxxx
@@ -388,16 +388,16 @@ observeEvent(steps.status(), ignoreNULL = TRUE, {
 #' cat(code)
 #' }
 #' 
-Get_Code_for_observeEvent_remoteReset <- function(){
-  code <- "observeEvent(remoteReset(), {
-  lapply(names(rv.widgets), function(x){
-    rv.widgets[[x]] <- widgets.default.values[[x]]
-  })
-})
-  
-  "
-  code
-}
+# Get_Code_for_observeEvent_remoteReset <- function(){
+#   code <- "observeEvent(remoteReset(), {
+#   lapply(names(rv.widgets), function(x){
+#     rv.widgets[[x]] <- widgets.default.values[[x]]
+#   })
+# })
+#   
+#   "
+#   code
+# }
 
 
 #' @title Code for xxxx
@@ -412,43 +412,43 @@ Get_Code_for_observeEvent_remoteReset <- function(){
 #' cat(code)
 #' }
 #' 
-Code_ObserveEvent_ValidationBtns <- function(){
-  code <- "
-  # Observer for the validation buttons of all steps
-  # DO NOT MODIFY THIS FUNCTION
-  observeEvent(lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]]),
-               ignoreInit = TRUE,
-               ignoreNULL = TRUE,
-               {
-                 #browser()
-                 test <- lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]])
-                 if( sum(unlist(test)) != 1)
-                   return()
-                 
-                 # Last step
-                 if (current.pos() == length(config$steps)){
-                   rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                                       dataset = rnorm(1:5),
-                                                       name = id)
-                   }
-                 
-                 # First step (Description)
-                 if (current.pos() == 1 ){
-                   rv$dataIn <- dataIn()
-                 }
-                 
-                 dataOut$trigger <- Magellan::Timestamp()
-                 dataOut$value <- rv$dataIn
-                 rv$steps.status[current.pos()] <- global$VALIDATED
-                 
-                 mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
-                
-               })
-               
-               "
-  
-  code
-}
+# Code_ObserveEvent_ValidationBtns <- function(){
+#   code <- "
+#   # Observer for the validation buttons of all steps
+#   # DO NOT MODIFY THIS FUNCTION
+#   observeEvent(lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]]),
+#                ignoreInit = TRUE,
+#                ignoreNULL = TRUE,
+#                {
+#                  #browser()
+#                  test <- lapply(names(config$steps), function(x) input[[paste0(x, \"_btn_validate\")]])
+#                  if( sum(unlist(test)) != 1)
+#                    return()
+#                  
+#                  # Last step
+#                  if (current.pos() == length(config$steps)){
+#                    rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+#                                                        dataset = rnorm(1:5),
+#                                                        name = id)
+#                    }
+#                  
+#                  # First step (Description)
+#                  if (current.pos() == 1 ){
+#                    rv$dataIn <- dataIn()
+#                  }
+#                  
+#                  dataOut$trigger <- Magellan::Timestamp()
+#                  dataOut$value <- rv$dataIn
+#                  rv$steps.status[current.pos()] <- global$VALIDATED
+#                  
+#                  mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+#                 
+#                })
+#                
+#                "
+#   
+#   code
+# }
 
 
 #' @title Code for validation buttons renderUI()
@@ -466,61 +466,61 @@ Code_ObserveEvent_ValidationBtns <- function(){
 #' cat(code)
 #' }
 #' 
-Generate_code_for_ValidationBtns_renderUI <- function(steps){
-  code <- "# Buttons must be explicitly enabled/disabled with a full code
-  # Otherwise, they do not disable
-  # DO NOT MODIFY THIS FUNCTION
-  output$step.name_validationBtn_ui <- renderUI({
-      #browser()
-  tagList(
-      if (isTRUE(rv$steps.enabled[\"step.name\"])  )
-        actionButton(ns(\"step.name_btn_validate\"),
-                     \"label\",
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns(\"step.name_btn_validate\"),
-                       \"label\",
-                       class = btn_success_color)
-        )
-        
-       #Add_download_link_for_save_step
-        )
-    })
-    
-    "
-  
-  ls_list <- lapply(1:length(steps), function(x) {
-    code <- gsub("step.name", steps[x], code)
-    
-    add <- '
-    '
-    
-    if (x == 1){
-      new.label <- 'Start '
-    } else if (x == length(steps)){
-      new.label <- 'Save '
-      add <- ",
-      if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
-        mod_Save_Dataset_ui(ns('createQuickLink'))
-        }
-     # else
-     #   shinyjs::disabled(
-     #     mod_Save_Dataset_ui(ns('createQuickLink'))
-     #   )
-      "
-    } else {
-      new.label <- 'Perform '
-    }
-    
-    code <- gsub('#Add_download_link_for_save_step', add, code)
-    code <- gsub('label', paste0(new.label, x, sep = " "), code)
-  }
-  )
-  
-  code <- paste0(ls_list, collapse= "\n")
-  code
-}
+# Generate_code_for_ValidationBtns_renderUI <- function(steps){
+#   code <- "# Buttons must be explicitly enabled/disabled with a full code
+#   # Otherwise, they do not disable
+#   # DO NOT MODIFY THIS FUNCTION
+#   output$step.name_validationBtn_ui <- renderUI({
+#       #browser()
+#   tagList(
+#       if (isTRUE(rv$steps.enabled[\"step.name\"])  )
+#         actionButton(ns(\"step.name_btn_validate\"),
+#                      \"label\",
+#                      class = btn_success_color)
+#       else
+#         shinyjs::disabled(
+#           actionButton(ns(\"step.name_btn_validate\"),
+#                        \"label\",
+#                        class = btn_success_color)
+#         )
+#         
+#        #Add_download_link_for_save_step
+#         )
+#     })
+#     
+#     "
+#   
+#   ls_list <- lapply(1:length(steps), function(x) {
+#     code <- gsub("step.name", steps[x], code)
+#     
+#     add <- '
+#     '
+#     
+#     if (x == 1){
+#       new.label <- 'Start '
+#     } else if (x == length(steps)){
+#       new.label <- 'Save '
+#       add <- ",
+#       if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
+#         mod_Save_Dataset_ui(ns('createQuickLink'))
+#         }
+#      # else
+#      #   shinyjs::disabled(
+#      #     mod_Save_Dataset_ui(ns('createQuickLink'))
+#      #   )
+#       "
+#     } else {
+#       new.label <- 'Perform '
+#     }
+#     
+#     code <- gsub('#Add_download_link_for_save_step', add, code)
+#     code <- gsub('label', paste0(new.label, x, sep = " "), code)
+#   }
+#   )
+#   
+#   code <- paste0(ls_list, collapse= "\n")
+#   code
+# }
 
 
 
@@ -539,33 +539,33 @@ Generate_code_for_ValidationBtns_renderUI <- function(steps){
 #' cat(code)
 #' }
 #'
-Generate_RenderUI_Code_For_Single_Widgets <- function(widgets=NULL){
-  code <- NULL 
-  if(!is.null(widgets)){
-    
-    
-    code <- "output$widget.name_ui <- renderUI({
-      if (rv$steps.enabled[\"step.name\"])
-        widget_widget.name()
-      else
-        shinyjs::disabled(widget_widget.name())
-    })
-    
-    
-    "
-    
-    ls_list <- lapply(widgets, 
-                      function(x) {
-                        step.name <- unlist(strsplit(x, split='_'))[1]
-                        code <- gsub('widget.name', x, code)
-                        code <- gsub('step.name', step.name, code)
-                      }
-    )
-    
-    code <- paste0(ls_list, collapse= "\n")
-  }
-  code
-}
+# Generate_RenderUI_Code_For_Single_Widgets <- function(widgets=NULL){
+#   code <- NULL 
+#   if(!is.null(widgets)){
+#     
+#     
+#     code <- "output$widget.name_ui <- renderUI({
+#       if (rv$steps.enabled[\"step.name\"])
+#         widget_widget.name()
+#       else
+#         shinyjs::disabled(widget_widget.name())
+#     })
+#     
+#     
+#     "
+#     
+#     ls_list <- lapply(widgets, 
+#                       function(x) {
+#                         step.name <- unlist(strsplit(x, split='_'))[1]
+#                         code <- gsub('widget.name', x, code)
+#                         code <- gsub('step.name', step.name, code)
+#                       }
+#     )
+#     
+#     code <- paste0(ls_list, collapse= "\n")
+#   }
+#   code
+# }
 
 
 
@@ -667,20 +667,20 @@ ComposedeWorflowCoreCode <- function(name, steps){
 #' 
 #' @export
 #' 
-SimpleWorflowCoreCode <- function(name, widgets, steps){
-  core <- paste0(
-    #Get_Code_Update_Config(),
-                 Get_Code_Declare_widgetsDefaultValues(widgets),
-                 Get_Code_for_ObserveEvent_widgets(widgets),
-                 Get_Code_for_rv_reactiveValues(),
-                 Get_Code_for_dataOut(),
-                 Get_Code_for_observeEvent_stepsEnabled(),
-                 Get_Code_for_observeEvent_remoteReset(),
-                 Code_ObserveEvent_ValidationBtns(),
-                 Generate_code_for_ValidationBtns_renderUI(steps),
-                 Generate_RenderUI_Code_For_Single_Widgets(widgets),
-                 Get_Code_for_Description_renderUI(name),
-                 sep = "\n"
-  )
-  core
-}
+# SimpleWorflowCoreCode <- function(name, widgets, steps){
+#   core <- paste0(
+#     #Get_Code_Update_Config(),
+#                  #Get_Code_Declare_widgetsDefaultValues(widgets),
+#                  #Get_Code_for_ObserveEvent_widgets(widgets),
+#                  #Get_Code_for_rv_reactiveValues(),
+#                  #Get_Code_for_dataOut(),
+#                  #Get_Code_for_observeEvent_stepsEnabled(),
+#                  #Get_Code_for_observeEvent_remoteReset(),
+#                  #Code_ObserveEvent_ValidationBtns(),
+#                  Generate_code_for_ValidationBtns_renderUI(steps),
+#                  Generate_RenderUI_Code_For_Single_Widgets(widgets),
+#                  Get_Code_for_Description_renderUI(name),
+#                  sep = "\n"
+#   )
+#   core
+# }

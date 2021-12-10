@@ -2,15 +2,107 @@
 % Please edit documentation in R/code_used_by_external_modules.R
 \name{Module_Return_Func}
 \alias{Module_Return_Func}
-\title{Code for declaring xxx}
+\title{Generate code for a pipeline Description module}
 \usage{
 Module_Return_Func()
 }
+\arguments{
+\item{id}{The 'id' of the module that calls this function.}
+
+\item{widgets.names}{A `list` containing the names of the widgets in all
+steps of the module.}
+
+\item{steps}{xxx}
+
+\item{widgets}{xxx}
+}
+\value{
+A `string` containing some R code
+}
 \description{
+This function gives the necessary code to
+provide the module (ui() and server() functions) relative to
+the Description of a pipeline.
+The work differs from the process strategy because a 
+pipeline does not have its own UIs as it is only a bridge
+between the user shiny app and the UIs of the processes.
+
+This function create the source code needed inside a module
+to declare the reactive variable called 'widgets.default.values'.
+# Declaration of the variables that will contain the values of the widgets
+To avoid confusion, the first string is the name of the step while the second is the name
+of the widget
+
+This function xxx
+# Generate dynamically the observeEvent function for each widget
+
+This function createxxx
+
+Returned value of the process
+
+xxx
+
+xxxx
+
+xxxx
+
+This function Generates dynamically the observeEvent function for each widget
+
+This function Generate dynamically the observeEvent function for each widget
+
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 }
 \examples{
+\dontrun{
+widgets <- paste0('widget', 1:3)
+code <- Get_Code_Declare_widgetsDefaultValues(widgets)
+cat(code)
+}
+
+\dontrun{
+widgets <- paste0('widget', 1:3)
+code <- Get_Code_for_ObserveEvent_widgets(widgets)
+cat(code)
+}
+
+\dontrun{
+code <- Get_Code_for_rv_reactiveValues()
+cat(code)
+}
+
+\dontrun{
+code <- Get_Code_for_dataOut()
+cat(code)
+}
+
+\dontrun{
+code <- Get_Code_for_observeEvent_stepsEnabled()
+cat(code)
+}
+
+\dontrun{
+code <- Get_Code_for_observeEvent_remoteReset()
+cat(code)
+}
+
+\dontrun{
+code <- Code_ObserveEvent_ValidationBtns()
+cat(code)
+}
+
+\dontrun{
+steps <- paste0('step', 1:3)
+code <- Generate_code_for_ValidationBtns_renderUI(steps)
+cat(code)
+}
+
+\dontrun{
+widgets <- paste0('widget', 1:3)
+code <- Generate_RenderUI_Code_For_Single_Widgets(widgets)
+cat(code)
+}
+
 \dontrun{
 code <- Module_Return_Func()
 cat(code)
@@ -18,5 +110,23 @@ cat(code)
 
 }
 \author{
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
+Samuel Wieczorek
+
 Samuel Wieczorek
 }
