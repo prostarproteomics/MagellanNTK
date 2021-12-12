@@ -9,20 +9,18 @@
 #' 
 #' @export
 #' 
-# Get_Code_Update_Config <- function(){
-# 
-#   code <- "
-# 
-#   config$steps <- c('Description', config$steps)
-#   config$steps <- setNames(config$steps, 
-#                           nm = gsub(' ', '', config$steps, fixed = TRUE))
-#   config$mandatory <- c(TRUE, config$mandatory)
-# 
-# 
-#     "
-# 
-#   code
-# }
+Get_Code_Update_Config_Variable <- function(){
+
+  code <- "
+
+  config$steps <- setNames(config$steps,
+                          nm = gsub(' ', '', config$steps, fixed = TRUE))
+  
+
+    "
+
+  code
+}
 
 #' @title R code to update the 'config' variable of a pipeline module
 #' 
@@ -33,23 +31,23 @@
 #' 
 #' @export
 #' 
-Get_Code_Update_Config_Pipeline <- function(){
-  
-  code <- "
-
-
-config$steps <- c(paste0(config$name, '_Description'), config$steps)
-config$steps <- setNames(config$steps,
-                         nm = gsub(paste0(config$name, '_'), '', config$steps))
-config$steps <- setNames(config$steps, 
-                         nm = gsub(' ', '', config$steps, fixed = TRUE))
-config$mandatory <- c(TRUE, config$mandatory)
-
-
-"
-
-  code
-}
+# Get_Code_Update_Config_Pipeline <- function(){
+#   
+#   code <- "
+# 
+# 
+# config$steps <- c(paste0(config$name, '_Description'), config$steps)
+# config$steps <- setNames(config$steps,
+#                          nm = gsub(paste0(config$name, '_'), '', config$steps))
+# config$steps <- setNames(config$steps, 
+#                          nm = gsub(' ', '', config$steps, fixed = TRUE))
+# config$mandatory <- c(TRUE, config$mandatory)
+# 
+# 
+# "
+# 
+#   code
+# }
 
 
 #' @title Generate code for a pipeline Description module
@@ -65,91 +63,91 @@ config$mandatory <- c(TRUE, config$mandatory)
 #' 
 #' @export
 #' 
-Get_Code_for_module_Description <- function(id){
-  
-  code <- "
-  
-  mod_replaceId_Description_ui <- function(id){
-    ns <- NS(id)
-  }
-  
-  
-  
-  mod_replaceId_Description_server <- function(id,
-                                             dataIn = reactive({NULL}),
-                                             steps.enabled = reactive({NULL}),
-                                             remoteReset = reactive({FALSE}),
-                                             steps.status = reactive({NULL}),
-                                             current.pos = reactive({1}),
-                                             verbose = FALSE
-                                            
-                                            ){
-
-  config <- list(
-    mode = 'process',
-    
-    name = 'Description',
-    
-    # List of all steps of the process
-    steps = c('Description'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE)
-  )
-  
-  # Define default selected values for widgets
-  # By default, this list is empty for the Description module
-  # but it can be customized
-  widgets.default.values <- list()
-  
-  ###-------------------------------------------------------------###
-  ###                                                             ###
-  ### ------------------- MODULE SERVER --------------------------###
-  ###                                                             ###
-  ###-------------------------------------------------------------###
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-    
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    config$steps <- setNames(config$steps, nm = gsub(' ', '', config$steps, fixed=TRUE))
-    
-    eval(parse(text = SimpleWorflowCoreCode(
-    name = config$name,
-    widgets = names(widgets.default.values),
-    steps = config$steps )))
-    
-     
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
-    output$Description <- renderUI({
-      file <- paste0(config$path_to_md_dir, '/', id, '_Description.md')
-      tagList(
-        if (file.exists(file))
-          includeMarkdown(file)
-        else
-          p('No Description available'),
-
-        uiOutput(ns('datasetDescription')),
-        
-        # Insert validation button
-        uiOutput(ns('Description_validationBtn_ui'))
-      )
-    })
-
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    eval(parse(text = Module_Return_Func()))
-
-  }
-  )
-}
-
-  
-  "
-
-code <- gsub('replaceId', id, code)
-code
-
-}
+# Get_Code_for_module_Description <- function(id){
+#   
+#   code <- "
+#   
+#   mod_replaceId_Description_ui <- function(id){
+#     ns <- NS(id)
+#   }
+#   
+#   
+#   
+#   mod_replaceId_Description_server <- function(id,
+#                                              dataIn = reactive({NULL}),
+#                                              steps.enabled = reactive({NULL}),
+#                                              remoteReset = reactive({FALSE}),
+#                                              steps.status = reactive({NULL}),
+#                                              current.pos = reactive({1}),
+#                                              verbose = FALSE
+#                                             
+#                                             ){
+# 
+#   config <- list(
+#     mode = 'process',
+#     
+#     name = 'Description',
+#     
+#     # List of all steps of the process
+#     steps = c('Description'),
+#     # A vector of boolean indicating if the steps are mandatory or not.
+#     mandatory = c(TRUE)
+#   )
+#   
+#   # Define default selected values for widgets
+#   # By default, this list is empty for the Description module
+#   # but it can be customized
+#   widgets.default.values <- list()
+#   
+#   ###-------------------------------------------------------------###
+#   ###                                                             ###
+#   ### ------------------- MODULE SERVER --------------------------###
+#   ###                                                             ###
+#   ###-------------------------------------------------------------###
+#   moduleServer(id, function(input, output, session) {
+#     ns <- session$ns
+#     
+#     # Insert necessary code which is hosted by Magellan
+#     # DO NOT MODIFY THIS LINE
+#     config$steps <- setNames(config$steps, nm = gsub(' ', '', config$steps, fixed=TRUE))
+#     
+#     eval(parse(text = SimpleWorflowCoreCode(
+#     name = config$name,
+#     widgets = names(widgets.default.values),
+#     steps = config$steps )))
+#     
+#      
+#     ###### ------------------- Code for Description (step 0) -------------------------    #####
+#     output$Description <- renderUI({
+#       file <- paste0(config$path_to_md_dir, '/', id, '_Description.md')
+#       tagList(
+#         if (file.exists(file))
+#           includeMarkdown(file)
+#         else
+#           p('No Description available'),
+# 
+#         uiOutput(ns('datasetDescription')),
+#         
+#         # Insert validation button
+#         uiOutput(ns('Description_validationBtn_ui'))
+#       )
+#     })
+# 
+#     # Insert necessary code which is hosted by Magellan
+#     # DO NOT MODIFY THIS LINE
+#     eval(parse(text = Module_Return_Func()))
+# 
+#   }
+#   )
+# }
+# 
+#   
+#   "
+# 
+# code <- gsub('replaceId', id, code)
+# code
+# 
+# }
 
 
 
@@ -219,6 +217,8 @@ code
 #' 
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
 #' \dontrun{
 #' widgets <- paste0('widget', 1:3)
@@ -226,21 +226,22 @@ code
 #' cat(code)
 #' }
 #' 
-# Get_Code_Declare_widgetsDefaultValues <- function(widgets.names=NULL){
-#   # If one is on a composed workflow which do not have explicit ui
-#   if (is.null(widgets.names))
-#     declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
-#   else {
-#     basis <- "w.name = widgets.default.values$w.name"
-#     ls_list <- lapply(widgets.names,
-#                       function(x) gsub('w.name', x, basis) )
-#     declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n", 
-#                                  paste0("\t", ls_list, sep="", collapse= ",\n"),
-#                                  "\n)\n\n")
-#   }
-#   
-#   declare_rv_widgets
-# }
+Get_Code_Declare_widgets <- function(widgets.names=NULL){
+  # If one is on a composed workflow which do not have explicit ui
+ # browser()
+  if (is.null(widgets.names))
+    declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
+  else {
+    basis <- "w.name = widgets.default.values$w.name"
+    ls_list <- lapply(widgets.names,
+                      function(x) gsub('w.name', x, basis) )
+    declare_rv_widgets <- paste0("rv.widgets <- reactiveValues(\n",
+                                 paste0("\t", ls_list, sep="", collapse= ",\n"),
+                                 "\n)\n\n")
+  }
+
+  declare_rv_widgets
+}
 
 
 
@@ -257,6 +258,8 @@ code
 #' 
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
 #' \dontrun{
 #' widgets <- paste0('widget', 1:3)
@@ -264,20 +267,20 @@ code
 #' cat(code)
 #' }
 #' 
-# Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
-#   
-#   declare_rv_widgets <- NULL
-#   if(!is.null(widgets.names)){
-#     basis <- "observeEvent(input$widget.name, {rv.widgets$widget.name <- input$widget.name})"
-#     ls_list <- lapply(widgets.names, 
-#                       function(x) gsub('widget.name', x, basis)
-#     )
-#     
-#     declare_rv_widgets <- paste0(ls_list, collapse= "\n")
-#     declare_rv_widgets <- paste0(declare_rv_widgets, "\n\n\n")
-#   }
-#   declare_rv_widgets
-# }
+Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL){
+
+  declare_rv_widgets <- NULL
+  if(!is.null(widgets.names)){
+    basis <- "observeEvent(input$widget.name, {rv.widgets$widget.name <- input$widget.name})"
+    ls_list <- lapply(widgets.names,
+                      function(x) gsub('widget.name', x, basis)
+    )
+
+    declare_rv_widgets <- paste0(ls_list, collapse= "\n")
+    declare_rv_widgets <- paste0(declare_rv_widgets, "\n\n\n")
+  }
+  declare_rv_widgets
+}
 
 
 
@@ -290,27 +293,29 @@ code
 #' 
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
 #' \dontrun{
 #' code <- Get_Code_for_rv_reactiveValues()
 #' cat(code)
 #' }
 #' 
-# Get_Code_for_rv_reactiveValues <- function(){
-#   basis <- "rv <- reactiveValues(
-#     # Stores the object given in input of the process
-#     dataIn = NULL,
-#     # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-#     steps.status = NULL,
-#     # xxx
-#     reset = NULL,
-#     # A vector of boolean indicating if the steps are enabled or disabled
-#     steps.enabled = NULL
-#   )
-#   
-#   "
-#   basis
-# }
+Get_Code_for_rv_reactiveValues <- function(){
+  basis <- "rv <- reactiveValues(
+    # Stores the object given in input of the process
+    dataIn = NULL,
+    # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
+    steps.status = NULL,
+    # xxx
+    reset = NULL,
+    # A vector of boolean indicating if the steps are enabled or disabled
+    steps.enabled = NULL
+  )
+
+  "
+  basis
+}
 
 
 #' @title Code for xxx
@@ -324,22 +329,24 @@ code
 #' 
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples
 #' \dontrun{
 #' code <- Get_Code_for_dataOut()
 #' cat(code)
 #' }
 #' 
-# Get_Code_for_dataOut <- function(){
-#   code <- "dataOut <- reactiveValues(
-#   trigger = NULL,
-#   value = NULL
-# )
-# 
-# "
-# 
-# code
-# }
+Get_Code_for_dataOut <- function(){
+  code <- "dataOut <- reactiveValues(
+  trigger = NULL,
+  value = NULL
+)
+
+"
+
+code
+}
 
 #' @title Code for declaring xxx
 #' 
@@ -347,33 +354,42 @@ code
 #' 
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
 #' \dontrun{
 #' code <- Get_Code_for_observeEvent_stepsEnabled()
 #' cat(code)
 #' }
 #' 
-# Get_Code_for_observeEvent_stepsEnabled  <- function(){
-#   code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-#   if (is.null(steps.enabled()))
-#     rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-#                                  nm = names(rv$config$steps))
-#   else
-#     rv$steps.enabled <- steps.enabled()
-# })
-# 
-# observeEvent(steps.status(), ignoreNULL = TRUE, {
-#   if (is.null(steps.enabled()))
-#     rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
-#                                  nm = names(rv$config$steps))
-#   else
-#     rv$steps.status <- steps.status()
-# })
-# 
-# "
-#   
-#   code
-# }
+Get_Code_for_General_observeEvents  <- function(){
+  code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+  if (is.null(steps.enabled()))
+    rv$steps.enabled <- setNames(rep(FALSE, rv$length),
+                                 nm = names(rv$config$steps))
+  else
+    rv$steps.enabled <- steps.enabled()
+})
+
+observeEvent(steps.status(), ignoreNULL = TRUE, {
+  if (is.null(steps.enabled()))
+    rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
+                                 nm = names(rv$config$steps))
+  else
+    rv$steps.status <- steps.status()
+})
+
+observeEvent(remoteReset(), {
+      lapply(names(rv.widgets), function(x){
+        rv.widgets[[x]] <- widgets.default.values[[x]]
+      })
+})   
+      
+
+"
+
+  code
+}
 
 
 #' @title Code for xxxx
@@ -381,6 +397,8 @@ code
 #' @description xxxx
 #' 
 #' @author Samuel Wieczorek
+#' 
+#' @export
 #' 
 #' @examples 
 #' \dontrun{
@@ -627,21 +645,21 @@ code
 #' 
 #' @export
 #' 
-ComposedeWorflowCoreCode <- function(name, steps){
-  core <- paste0(Get_Code_Declare_widgetsDefaultValues(),
-                 Get_Code_for_ObserveEvent_widgets(),
-                 Get_Code_for_rv_reactiveValues(),
-                 Get_Code_for_dataOut(),
-                 Get_Code_for_observeEvent_stepsEnabled(),
-                 Get_Code_for_observeEvent_remoteReset(),
-                 Code_ObserveEvent_ValidationBtns(),
-                 Generate_code_for_ValidationBtns_renderUI(steps),
-                 Generate_RenderUI_Code_For_Single_Widgets(),
-                 
-                 sep = "\n"
-  )
-  core
-}
+# ComposedeWorflowCoreCode <- function(name, steps){
+#   core <- paste0(Get_Code_Declare_widgetsDefaultValues(),
+#                  Get_Code_for_ObserveEvent_widgets(),
+#                  Get_Code_for_rv_reactiveValues(),
+#                  Get_Code_for_dataOut(),
+#                  Get_Code_for_observeEvent_stepsEnabled(),
+#                  Get_Code_for_observeEvent_remoteReset(),
+#                  Code_ObserveEvent_ValidationBtns(),
+#                  Generate_code_for_ValidationBtns_renderUI(steps),
+#                  Generate_RenderUI_Code_For_Single_Widgets(),
+#                  
+#                  sep = "\n"
+#   )
+#   core
+# }
 
 
 
@@ -667,20 +685,15 @@ ComposedeWorflowCoreCode <- function(name, steps){
 #' 
 #' @export
 #' 
-# SimpleWorflowCoreCode <- function(name, widgets, steps){
-#   core <- paste0(
-#     #Get_Code_Update_Config(),
-#                  #Get_Code_Declare_widgetsDefaultValues(widgets),
-#                  #Get_Code_for_ObserveEvent_widgets(widgets),
-#                  #Get_Code_for_rv_reactiveValues(),
-#                  #Get_Code_for_dataOut(),
-#                  #Get_Code_for_observeEvent_stepsEnabled(),
-#                  #Get_Code_for_observeEvent_remoteReset(),
-#                  #Code_ObserveEvent_ValidationBtns(),
-#                  Generate_code_for_ValidationBtns_renderUI(steps),
-#                  Generate_RenderUI_Code_For_Single_Widgets(widgets),
-#                  Get_Code_for_Description_renderUI(name),
-#                  sep = "\n"
-#   )
-#   core
-# }
+Get_Worflow_Core_Code <- function(w.names){
+  core <- paste0(
+    Get_Code_Declare_widgets(names(w.names)),
+    Get_Code_Update_Config_Variable(),
+    Get_Code_for_ObserveEvent_widgets(names(w.names)),
+    Get_Code_for_rv_reactiveValues(),
+    Get_Code_for_dataOut(),
+    Get_Code_for_General_observeEvents(),
+    sep = "\n"
+  )
+  core
+}

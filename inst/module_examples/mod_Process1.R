@@ -75,10 +75,6 @@ mod_Process1_server <- function(id,
   )
   
   
-  
-  
-  
-  
   # Define default selected values for widgets
   # This is only for simple workflows
   widgets.default.values <- list(
@@ -99,69 +95,9 @@ mod_Process1_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    config$steps <- c('Description', config$steps)
-    config$steps <- setNames(config$steps, 
-                             nm = gsub(' ', '', config$steps, fixed = TRUE))
-    config$mandatory <- c(TRUE, config$mandatory)
-    
-    rv.widgets <- reactiveValues(
-      Step1_select1 = widgets.default.values$Step1_select1,
-      Step1_select2 = widgets.default.values$Step1_select2,
-      Step1_select3 = widgets.default.values$Step1_select3,
-      Step1_btn1 = widgets.default.values$Step1_btn1,
-      Step2_select1 = widgets.default.values$Step2_select1,
-      Step2_select2 = widgets.default.values$Step2_select2
-    )
-    
-    # Generate the observeEvent() function for each widget
-    observeEvent(input$Step1_select1, {rv.widgets$Step1_select1 <- input$Step1_select1})
-    observeEvent(input$Step1_select2, {rv.widgets$Step1_select2 <- input$Step1_select2})
-    observeEvent(input$Step1_select3, {rv.widgets$Step1_select3 <- input$Step1_select3})
-    observeEvent(input$Step1_btn1, {rv.widgets$Step1_btn1 <- input$Step1_btn1})
-    observeEvent(input$Step2_select1, {rv.widgets$Step2_select1 <- input$Step2_select1})
-    observeEvent(input$Step2_select2, {rv.widgets$Step2_select2 <- input$Step2_select2})
-    
-    
-    rv <- reactiveValues(
-      # Stores the object given in input of the process
-      dataIn = NULL,
-      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-      steps.status = NULL,
-      # xxx
-      reset = NULL,
-      # A vector of boolean indicating if the steps are enabled or disabled
-      steps.enabled = NULL
-    )
-    
-    dataOut <- reactiveValues(
-      trigger = NULL,
-      value = NULL
-    )
-    
-    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-      if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-                                     nm = names(rv$config$steps))
-      else
-        rv$steps.enabled <- steps.enabled()
-    })
-    
-    observeEvent(steps.status(), ignoreNULL = TRUE, {
-      if (is.null(steps.enabled()))
-        rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
-                                    nm = names(rv$config$steps))
-      else
-        rv$steps.status <- steps.status()
-    })
-    
-    
-    observeEvent(remoteReset(), {
-      lapply(names(rv.widgets), function(x){
-        rv.widgets[[x]] <- widgets.default.values[[x]]
-      })
-    })
-    
-    
+    eval(str2expression(Get_Worflow_Core_Code(
+      w.names = names(widgets.default.values)
+    )))
     
     
     
@@ -190,26 +126,20 @@ mod_Process1_server <- function(id,
         uiOutput(ns('datasetDescription')),
         
         # Insert validation button
-        uiOutput(ns('Description_validationBtn_ui'))
+        uiOutput(ns('Description_btn_validate_ui'))
       )
     })
     
     
-    output$Description_validationBtn_ui <- renderUI({
-      if (rv$steps.enabled['Description'])
-        actionButton(ns("Description_btn_validate"),
-                     "Start",
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns("Description_btn_validate"),
-                       "Start",
-                       class = btn_success_color)
-        )
+    output$Description_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Description_btn_validate"),
+                             "Start",
+                             class = btn_success_color)
+     toggleWidget(rv$steps.enabled['Description'], widget)
     })
     
     
-    observeEvent(input$Description_validationBtn, {
+    observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
@@ -237,7 +167,7 @@ mod_Process1_server <- function(id,
         uiOutput(ns('Step1_select2_ui')),
         uiOutput(ns('Step1_select3_ui')),
         # Insert validation button
-        uiOutput(ns('Step1_validationBtn_ui')),
+        uiOutput(ns('Step1_btn_validate_ui')),
         
         # Additional code
         plotOutput(ns('showPlot'))
@@ -253,86 +183,55 @@ mod_Process1_server <- function(id,
     })
     
     output$Step1_btn1_ui <- renderUI({
-      test <- actionButton(ns('Step1_btn_validate'),
+      widget <- actionButton(ns('Step1_btn1'),
                            'Step1_btn1',
                            class = btn_success_color)
-      
-      if (rv$steps.enabled["Step1"])
-        test
-      else
-        shinyjs::disabled(test)
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
     # This part must be customized by the developer of a new module
     output$Step1_select1_ui <- renderUI({
-      if (rv$steps.enabled["Step1"])
-      selectInput(ns('Step1_select1'),
+      widget <- selectInput(ns('Step1_select1'),
                   'Select 1 in renderUI',
                   choices = 1:4,
                   selected = rv.widgets$Step1_select1,
                   width = '150px')
-      else
-        shinyjs::disabled(selectInput(ns('Step1_select1'),
-                                      'Select 1 in renderUI',
-                                      choices = 1:4,
-                                      selected = rv.widgets$Step1_select1,
-                                      width = '150px')
-                          )
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
 
     
     output$Step1_select2_ui <- renderUI({
-      if (rv$steps.enabled["Step1"])
-        selectInput(ns('Step1_select2'),
+      widget <- selectInput(ns('Step1_select2'),
                     'Select 2 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step1_select2,
                     width = '150px')
-      else
-        shinyjs::disabled(selectInput(ns('Step1_select2'),
-                                      'Select 2 in renderUI',
-                                      choices = 1:4,
-                                      selected = rv.widgets$Step1_select2,
-                                      width = '150px')
-        )
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
     
     output$Step1_select3_ui <- renderUI({
-      if (rv$steps.enabled["Step1"])
-        selectInput(ns('Step1_select3'),
+      widget <- selectInput(ns('Step1_select3'),
                     'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step1_select3,
                     width = '150px')
-      else
-        shinyjs::disabled(selectInput(ns('Step1_select3'),
-                                      'Select 1 in renderUI',
-                                      choices = 1:4,
-                                      selected = rv.widgets$Step1_select3,
-                                      width = '150px')
-        )
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
 
     
     output$Step1_btn_validate_ui <- renderUI({
-    if (rv$steps.enabled['Step1'])
-      actionButton(ns("Step1_btn_validate"),
+    widget <-  actionButton(ns("Step1_btn_validate"),
                    "Perform",
                    class = btn_success_color)
-    else
-      shinyjs::disabled(
-        actionButton(ns("Step1_btn_validate"),
-                     "Perfom",
-                     class = btn_success_color)
-      )
+      toggleWidget(rv$steps.enabled['Step1'], widget )
       
     })
     # >>> END: Definition of the widgets
     
     
-    observeEvent(input$Step1_validationBtn_ui, {
+    observeEvent(input$Step1_btn_validate, {
       # Do some stuff
       
       
@@ -359,57 +258,37 @@ mod_Process1_server <- function(id,
         
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Step2_validationBtn_ui'))
+        uiOutput(ns('Step2_btn_validate_ui'))
       )
     })
     
     
     output$Step2_select1_ui <- renderUI({
-      if (rv$steps.enabled["Step2"])
-        selectInput(ns('Step2_select1'),
+      widget <- selectInput(ns('Step2_select1'),
                     'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step2_select1,
                     width = '150px')
-      else
-        shinyjs::disabled(selectInput(ns('Step2_select1'),
-                                      'Select 2 in renderUI',
-                                      choices = 1:4,
-                                      selected = rv.widgets$Step2_select1,
-                                      width = '150px')
-        )
+      toggleWidget(rv$steps.enabled['Step2'], widget )
     })
     
     output$Step2_select2_ui <- renderUI({
-      if (rv$steps.enabled["Step2"])
-        selectInput(ns('Step2_select2'),
+      widget <- selectInput(ns('Step2_select2'),
                     'Select 1 in renderUI',
                     choices = 1:4,
                     selected = rv.widgets$Step2_select2,
                     width = '150px')
-      else
-        shinyjs::disabled(selectInput(ns('Step2_select2'),
-                                      'Select 2 in renderUI',
-                                      choices = 1:4,
-                                      selected = rv.widgets$Step2_select2,
-                                      width = '150px')
-        )
+      toggleWidget(rv$steps.enabled['Step2'], widget )
     })
     
     output$Step2_btn_validate_ui <- renderUI({
-      if (rv$steps.enabled['Step2'])
-        actionButton(ns("Step1_btn_validate"),
+      widget <- actionButton(ns("Step2_btn_validate"),
                      "Perform",
                      class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns("Step2_btn_validate"),
-                       "Perfom",
-                       class = btn_success_color)
-        )
+      toggleWidget(rv$steps.enabled['Step2'], widget )
     })
     
-    observeEvent(input$Step2_validationBtn_ui, {
+    observeEvent(input$Step2_btn_validate, {
       # Do some stuff
       
       
@@ -427,34 +306,27 @@ mod_Process1_server <- function(id,
        tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Save_validationBtn_ui'))
+        uiOutput(ns('Save_btn_validate_ui'))
       )
     })
     
     output$Save_btn_validate_ui <- renderUI({
       tagList(
-        if (rv$steps.enabled['Save'])
-        actionButton(ns("Save_btn_validate"), "Save",
-                     class = btn_success_color)
-      else
-        shinyjs::disabled(
-          actionButton(ns("Save_btn_validate"), "Save",
-                       class = btn_success_color)
-        ),
+        toggleWidget(rv$steps.enabled['Save'], 
+                     actionButton(ns("Save_btn_validate"), "Save",
+                                  class = btn_success_color)
+                     ),
       if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
         mod_Save_Dataset_ui(ns('createQuickLink'))
       }
       )
       
     })
-    observeEvent(input$Save_validationBtn_ui, {
+    observeEvent(input$Save_btn_validate, {
       # Do some stuff
       rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
                                           dataset = rnorm(1:5),
                                           name = id)
-      
-      
-      
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Magellan::Timestamp()

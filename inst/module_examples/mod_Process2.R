@@ -58,21 +58,26 @@ mod_Process2_server <- function(id,
                                 steps.status = reactive({NULL}),
                                 current.pos = reactive({1}),
                                 verbose = FALSE
-                                ){
+){
   
   # This list contains the basic configuration of the process
   config <- list(
     # Define the type of module
     mode = 'process',
     
-    name = 'Process2',
     
     # List of all steps of the process
-    steps = c('Step1', 'Step2', 'Save'),
+    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c( FALSE, TRUE, TRUE),
+    mandatory = c(TRUE, FALSE, TRUE, TRUE),
+    
     path_to_md_dir = system.file('module_examples/md/', package='Magellan')
   )
+  
+  
+  
+  
+  
   
   # Define default selected values for widgets
   # This is only for simple workflows
@@ -94,20 +99,114 @@ mod_Process2_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    eval(str2expression(Get_Code_Update_Config()))
-    eval(str2expression(
-      SimpleWorflowCoreCode(
-        name = config$name,
-        widgets = names(widgets.default.values),
-        steps = config$steps)
+    config$steps <- setNames(config$steps, 
+                             nm = gsub(' ', '', config$steps, fixed = TRUE))
+    
+    rv.widgets <- reactiveValues(
+      Step1_select1 = widgets.default.values$Step1_select1,
+      Step1_select2 = widgets.default.values$Step1_select2,
+      Step1_select3 = widgets.default.values$Step1_select3,
+      Step1_btn1 = widgets.default.values$Step1_btn1,
+      Step2_select1 = widgets.default.values$Step2_select1,
+      Step2_select2 = widgets.default.values$Step2_select2
     )
+    
+    # Generate the observeEvent() function for each widget
+    observeEvent(input$Step1_select1, {rv.widgets$Step1_select1 <- input$Step1_select1})
+    observeEvent(input$Step1_select2, {rv.widgets$Step1_select2 <- input$Step1_select2})
+    observeEvent(input$Step1_select3, {rv.widgets$Step1_select3 <- input$Step1_select3})
+    observeEvent(input$Step1_btn1, {rv.widgets$Step1_btn1 <- input$Step1_btn1})
+    observeEvent(input$Step2_select1, {rv.widgets$Step2_select1 <- input$Step2_select1})
+    observeEvent(input$Step2_select2, {rv.widgets$Step2_select2 <- input$Step2_select2})
+    
+    
+    rv <- reactiveValues(
+      # Stores the object given in input of the process
+      dataIn = NULL,
+      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
+      steps.status = NULL,
+      # xxx
+      reset = NULL,
+      # A vector of boolean indicating if the steps are enabled or disabled
+      steps.enabled = NULL
     )
     
+    dataOut <- reactiveValues(
+      trigger = NULL,
+      value = NULL
+    )
     
-    # >>> START ------------- Code for Description UI ---------------
-    eval(parse(text = Get_Code_for_Description_renderUI(config$name)))
-    # <<< END ------------- Code for Description UI---------------
+    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
+      if (is.null(steps.enabled()))
+        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
+                                     nm = names(rv$config$steps))
+      else
+        rv$steps.enabled <- steps.enabled()
+    })
     
+    observeEvent(steps.status(), ignoreNULL = TRUE, {
+      if (is.null(steps.enabled()))
+        rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
+                                    nm = names(rv$config$steps))
+      else
+        rv$steps.status <- steps.status()
+    })
+    
+    
+    observeEvent(remoteReset(), {
+      lapply(names(rv.widgets), function(x){
+        rv.widgets[[x]] <- widgets.default.values[[x]]
+      })
+    })
+    
+    
+    
+    
+    
+    # >>>
+    # >>> START ------------- Code for Description UI---------------
+    # >>> 
+    
+    
+    output$Description <- renderUI({
+      file <- paste0(config$path_to_md_dir, '/', id, '.md')
+      
+      tagList(
+        # In this example, the md file is found in the module_examples directory
+        # but with a real app, it should be provided by the package which
+        # contains the UI for the different steps of the process module.
+        # system.file(xxx)
+        
+        if (file.exists(file))
+          includeMarkdown(file)
+        else
+          p('No Description available'),
+        
+        
+        # Used to show some information about the dataset which is loaded
+        # This function must be provided by the package of the process module
+        uiOutput(ns('datasetDescription')),
+        
+        # Insert validation button
+        uiOutput(ns('Description_btn_validate_ui'))
+      )
+    })
+    
+    
+    output$Description_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Description_btn_validate"),
+                             "Start",
+                             class = btn_success_color)
+      toggleWidget(rv$steps.enabled['Description'], widget)
+    })
+    
+    
+    observeEvent(input$Description_btn_validate, {
+      rv$dataIn <- dataIn()
+      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Description'] <- global$VALIDATED
+    })
     
     
     
@@ -130,7 +229,7 @@ mod_Process2_server <- function(id,
         uiOutput(ns('Step1_select2_ui')),
         uiOutput(ns('Step1_select3_ui')),
         # Insert validation button
-        uiOutput(ns('Step1_validationBtn_ui')),
+        uiOutput(ns('Step1_btn_validate_ui')),
         
         # Additional code
         plotOutput(ns('showPlot'))
@@ -139,40 +238,71 @@ mod_Process2_server <- function(id,
     
     
     # >>> START: Definition of the widgets
+    
+    output$Step1_btn1_ui <- renderUI({
+      
+      
+    })
+    
+    output$Step1_btn1_ui <- renderUI({
+      widget <- actionButton(ns('Step1_btn1'),
+                             'Step1_btn1',
+                             class = btn_success_color)
+      toggleWidget(rv$steps.enabled['Step1'], widget )
+    })
+    
     # This part must be customized by the developer of a new module
-    widget_Step1_select1 <- reactive({
-      selectInput(ns('Step1_select1'),
-                  'Select 1 in renderUI',
-                  choices = 1:4,
-                  selected = rv.widgets$Step1_select1,
-                  width = '150px')
+    output$Step1_select1_ui <- renderUI({
+      widget <- selectInput(ns('Step1_select1'),
+                            'Select 1 in renderUI',
+                            choices = 1:4,
+                            selected = rv.widgets$Step1_select1,
+                            width = '150px')
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
     
-    widget_Step1_select2 <- reactive({
-      selectInput(ns('Step1_select2'), 
-                  'Select 2 in renderUI',
-                  choices = 1:4,
-                  selected = rv.widgets$Step1_select2,
-                  width = '150px')
-    })
-    
-    widget_Step1_select3 <- reactive({
-      selectInput(ns('Step1_select3'), 
-                  'Select 3 in renderUI',
-                  choices = 1:4,
-                  selected = rv.widgets$Step1_select3,
-                  width = '150px')
+    output$Step1_select2_ui <- renderUI({
+      widget <- selectInput(ns('Step1_select2'),
+                            'Select 2 in renderUI',
+                            choices = 1:4,
+                            selected = rv.widgets$Step1_select2,
+                            width = '150px')
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
     
-    widget_Step1_btn1 <- reactive({
-      actionButton(ns('Step1_btn1'),
-                   'Step1_btn1',
-                   class = btn_success_color)
+    output$Step1_select3_ui <- renderUI({
+      widget <- selectInput(ns('Step1_select3'),
+                            'Select 1 in renderUI',
+                            choices = 1:4,
+                            selected = rv.widgets$Step1_select3,
+                            width = '150px')
+      toggleWidget(rv$steps.enabled['Step1'], widget )
     })
     
+    
+    
+    output$Step1_btn_validate_ui <- renderUI({
+      widget <-  actionButton(ns("Step1_btn_validate"),
+                              "Perform",
+                              class = btn_success_color)
+      toggleWidget(rv$steps.enabled['Step1'], widget )
+      
+    })
     # >>> END: Definition of the widgets
+    
+    
+    observeEvent(input$Step1_btn_validate, {
+      # Do some stuff
+      
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step1'] <- global$VALIDATED
+    })
+    
     
     output$showPlot <- renderPlot({
       plot(as.matrix(dataIn()[[1]]))
@@ -190,27 +320,46 @@ mod_Process2_server <- function(id,
         
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Step2_validationBtn_ui'))
+        uiOutput(ns('Step2_btn_validate_ui'))
       )
     })
     
     
-    
-    widget_Step2_select1 <- reactive({
-      selectInput(ns('Step2_select1'),
-                  'Step2_select1 in renderUI',
-                  choices = 1:4,
-                  selected = rv.widgets$Step2_select1,
-                  width = '150px')
+    output$Step2_select1_ui <- renderUI({
+      widget <- selectInput(ns('Step2_select1'),
+                            'Select 1 in renderUI',
+                            choices = 1:4,
+                            selected = rv.widgets$Step2_select1,
+                            width = '150px')
+      toggleWidget(rv$steps.enabled['Step2'], widget )
     })
     
-    widget_Step2_select2 <- reactive({
-      selectInput(ns('Step2_select2'),
-                  'Step2_select2 in renderUI',
-                  choices = 1:4,
-                  selected = rv.widgets$Step2_select2,
-                  width = '150px')
+    output$Step2_select2_ui <- renderUI({
+      widget <- selectInput(ns('Step2_select2'),
+                            'Select 1 in renderUI',
+                            choices = 1:4,
+                            selected = rv.widgets$Step2_select2,
+                            width = '150px')
+      toggleWidget(rv$steps.enabled['Step2'], widget )
     })
+    
+    output$Step2_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Step2_btn_validate"),
+                             "Perform",
+                             class = btn_success_color)
+      toggleWidget(rv$steps.enabled['Step2'], widget )
+    })
+    
+    observeEvent(input$Step2_btn_validate, {
+      # Do some stuff
+      
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step2'] <- global$VALIDATED
+    })
+    
     # <<< END ------------- Code for step 2 UI---------------
     
     
@@ -219,8 +368,34 @@ mod_Process2_server <- function(id,
       tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Save_validationBtn_ui'))
+        uiOutput(ns('Save_btn_validate_ui'))
       )
+    })
+    
+    output$Save_btn_validate_ui <- renderUI({
+      tagList(
+        toggleWidget(rv$steps.enabled['Save'], 
+                     actionButton(ns("Save_btn_validate"), "Save",
+                                  class = btn_success_color)
+        ),
+        if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
+          mod_Save_Dataset_ui(ns('createQuickLink'))
+        }
+      )
+      
+    })
+    observeEvent(input$Save_btn_validate, {
+      # Do some stuff
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = rnorm(1:5),
+                                          name = id)
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Save'] <- global$VALIDATED
+      mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      
     })
     # <<< END ------------- Code for step 3 UI---------------
     

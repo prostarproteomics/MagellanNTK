@@ -57,19 +57,19 @@ mod_PipelineA_server <- function(id,
   config <- list(
     mode = 'pipeline',
     
-    name = 'PipelineA',
-    
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('Process1', 'Process2', 'Process3'),
+    steps = c('PipelineA_Description', 'Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, FALSE, TRUE),
+    mandatory = c(TRUE, FALSE, FALSE, TRUE),
+    
     path_to_md_dir = system.file('module_examples/md/', package='Magellan')
   )
   
   
   # Contrary to the simple workflow, there is no widget in this module
   # because all the widgets are provided by the simple workflows.
+  widgets.default.values <- list()
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -80,20 +80,9 @@ mod_PipelineA_server <- function(id,
     ns <- session$ns
     
     
-     
-    eval(str2expression(Get_Code_Update_Config_Pipeline()))
-    
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    eval(parse(text = ComposedeWorflowCoreCode(
-      name = id,
-      steps = config$steps)
-      )
-      )
-    
-    # Insert code for the description renderUI()
-    eval(parse(text = Get_Code_for_module_Description(config$name)),
-         envir = .GlobalEnv)
+    eval(str2expression(Get_Worflow_Core_Code(
+      w.names = names(widgets.default.values)
+    )))
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE

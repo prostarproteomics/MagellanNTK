@@ -1,3 +1,27 @@
+#' @title 
+#' xxx
+#' 
+#' @description 
+#' Returns the date and time in timestamp UNIX format.
+#' 
+#' @param is.enabled xxx
+#' @param widget xxx
+#' 
+#' @return NA
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#'
+
+toggleWidget <- function(is.enabled, widget){
+  if (is.enabled)
+    widget
+  else
+    shinyjs::disabled(widget)
+}
+
+
 
 #' @title 
 #' xxx
