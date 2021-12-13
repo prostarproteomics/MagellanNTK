@@ -75,10 +75,6 @@ mod_Process2_server <- function(id,
   )
   
   
-  
-  
-  
-  
   # Define default selected values for widgets
   # This is only for simple workflows
   widgets.default.values <- list(
@@ -99,67 +95,9 @@ mod_Process2_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    config$steps <- setNames(config$steps, 
-                             nm = gsub(' ', '', config$steps, fixed = TRUE))
-    
-    rv.widgets <- reactiveValues(
-      Step1_select1 = widgets.default.values$Step1_select1,
-      Step1_select2 = widgets.default.values$Step1_select2,
-      Step1_select3 = widgets.default.values$Step1_select3,
-      Step1_btn1 = widgets.default.values$Step1_btn1,
-      Step2_select1 = widgets.default.values$Step2_select1,
-      Step2_select2 = widgets.default.values$Step2_select2
-    )
-    
-    # Generate the observeEvent() function for each widget
-    observeEvent(input$Step1_select1, {rv.widgets$Step1_select1 <- input$Step1_select1})
-    observeEvent(input$Step1_select2, {rv.widgets$Step1_select2 <- input$Step1_select2})
-    observeEvent(input$Step1_select3, {rv.widgets$Step1_select3 <- input$Step1_select3})
-    observeEvent(input$Step1_btn1, {rv.widgets$Step1_btn1 <- input$Step1_btn1})
-    observeEvent(input$Step2_select1, {rv.widgets$Step2_select1 <- input$Step2_select1})
-    observeEvent(input$Step2_select2, {rv.widgets$Step2_select2 <- input$Step2_select2})
-    
-    
-    rv <- reactiveValues(
-      # Stores the object given in input of the process
-      dataIn = NULL,
-      # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED) of the steps
-      steps.status = NULL,
-      # xxx
-      reset = NULL,
-      # A vector of boolean indicating if the steps are enabled or disabled
-      steps.enabled = NULL
-    )
-    
-    dataOut <- reactiveValues(
-      trigger = NULL,
-      value = NULL
-    )
-    
-    observeEvent(steps.enabled(), ignoreNULL = TRUE, {
-      if (is.null(steps.enabled()))
-        rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-                                     nm = names(rv$config$steps))
-      else
-        rv$steps.enabled <- steps.enabled()
-    })
-    
-    observeEvent(steps.status(), ignoreNULL = TRUE, {
-      if (is.null(steps.enabled()))
-        rv$steps.status <- setNames(rep(global$UNDONE, rv$length), 
-                                    nm = names(rv$config$steps))
-      else
-        rv$steps.status <- steps.status()
-    })
-    
-    
-    observeEvent(remoteReset(), {
-      lapply(names(rv.widgets), function(x){
-        rv.widgets[[x]] <- widgets.default.values[[x]]
-      })
-    })
-    
-    
+    eval(str2expression(Get_Worflow_Core_Code(
+      w.names = names(widgets.default.values)
+    )))
     
     
     
@@ -185,13 +123,19 @@ mod_Process2_server <- function(id,
         
         # Used to show some information about the dataset which is loaded
         # This function must be provided by the package of the process module
-        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('datasetDescription_ui')),
         
         # Insert validation button
         uiOutput(ns('Description_btn_validate_ui'))
       )
     })
     
+    output$datasetDescription_ui <- renderUI({
+      # Insert your own code to vizualise some information
+      # about your dataset. It will appear once the 'Start' button
+      # has been clicked
+      
+    })
     
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),

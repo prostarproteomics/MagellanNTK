@@ -7,27 +7,13 @@
 Get_Worflow_Core_Code(w.names)
 }
 \arguments{
-\item{name}{xxx}
-
-\item{widgets}{xxx}
-
-\item{steps}{xxx}
+\item{w.names}{xxx}
 }
 \description{
 This function xxx
 # Generate dynamically the observeEvent function for each widget
-
-This function xxx
-# Generate dynamically the observeEvent function for each widget
 }
 \examples{
-\dontrun{
-widgets <- paste0('widget', 1:3)
-steps <- paste0('step', 1:3)
-code <- ComposedeWorflowCoreCode(widgets, steps)
-cat(code)
-}
-
 \dontrun{
 widgets <- paste0('widget', 1:3)
 steps <- paste0('step', 1:3)
@@ -37,7 +23,5 @@ cat(code)
 
 }
 \author{
-Samuel Wieczorek
-
 Samuel Wieczorek
 }

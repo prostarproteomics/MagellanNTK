@@ -2,50 +2,15 @@
 % Please edit documentation in R/code_used_by_external_modules.R
 \name{Module_Return_Func}
 \alias{Module_Return_Func}
-\title{Code for xxxx}
+\title{Code for declaring xxx}
 \usage{
 Module_Return_Func()
 }
-\arguments{
-\item{steps}{xxx}
-
-\item{widgets}{xxx}
-}
 \description{
-xxxx
-
-xxxx
-
-This function Generates dynamically the observeEvent function for each widget
-
-This function Generate dynamically the observeEvent function for each widget
-
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 }
 \examples{
-\dontrun{
-code <- Get_Code_for_observeEvent_remoteReset()
-cat(code)
-}
-
-\dontrun{
-code <- Code_ObserveEvent_ValidationBtns()
-cat(code)
-}
-
-\dontrun{
-steps <- paste0('step', 1:3)
-code <- Generate_code_for_ValidationBtns_renderUI(steps)
-cat(code)
-}
-
-\dontrun{
-widgets <- paste0('widget', 1:3)
-code <- Generate_RenderUI_Code_For_Single_Widgets(widgets)
-cat(code)
-}
-
 \dontrun{
 code <- Module_Return_Func()
 cat(code)
@@ -53,13 +18,5 @@ cat(code)
 
 }
 \author{
-Samuel Wieczorek
-
-Samuel Wieczorek
-
-Samuel Wieczorek
-
-Samuel Wieczorek
-
 Samuel Wieczorek
 }

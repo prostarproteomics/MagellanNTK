@@ -123,13 +123,19 @@ mod_Process1_server <- function(id,
         
         # Used to show some information about the dataset which is loaded
         # This function must be provided by the package of the process module
-        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('datasetDescription_ui')),
         
         # Insert validation button
         uiOutput(ns('Description_btn_validate_ui'))
       )
     })
     
+    output$datasetDescription_ui <- renderUI({
+      # Insert your own code to vizualise some information
+      # about your dataset. It will appear once the 'Start' button
+      # has been clicked
+      
+    })
     
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),

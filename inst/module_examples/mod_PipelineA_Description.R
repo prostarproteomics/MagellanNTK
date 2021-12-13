@@ -49,20 +49,29 @@ mod_PipelineA_Description_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      file <- paste0(config$path_to_md_dir, '/', id, '.md')
+      name <- strsplit(id, split='_')[[1]][1]
+      file <- paste0(config$path_to_md_dir, '/', name, '.md')
       tagList(
         if (file.exists(file))
           includeMarkdown(file)
         else
           p('No Description available'),
         
-        uiOutput(ns('datasetDescription')),
+        uiOutput(ns('datasetDescription_ui')),
         
         # Insert validation button
         uiOutput(ns('Description_btn_validate_ui'))
       )
     })
     
+    
+    
+    output$datasetDescription_ui <- renderUI({
+      # Insert your own code to vizualise some information
+      # about your dataset. It will appear once the 'Start' button
+      # has been clicked
+      
+    })
     
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
