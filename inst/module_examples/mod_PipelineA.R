@@ -84,6 +84,8 @@ mod_PipelineA_server <- function(id,
       w.names = names(widgets.default.values)
     )))
     
+    rv.custom <- reactiveValues()
+    
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))

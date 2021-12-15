@@ -76,3 +76,9 @@ optionsBtnClass <- "info"
 #' @field btn_style xxxx
 #' @export
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
+
+#' @title xxxx
+#' @description xxx
+#' @field primary xxxx
+#' @export
+actionBtnClass <- "btn-primary"

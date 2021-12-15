@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Magellan</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.00.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/Magellan.html">Get started</a>
 </li>
@@ -60,10 +56,10 @@
       <a href="articles/CreateComplexWorkflow.html">Create a composed workflow</a>
     </li>
     <li>
-      <a href="articles/CreateSimpleWorkflow.html">Create a simple workflow</a>
+      <a href="articles/CreateSimpleWorkflow.html">Writing a simple workflow</a>
     </li>
     <li>
-      <a href="articles/useMagellanForDevs.html">Use Magellan with external R package</a>
+      <a href="articles/useMagellanForDevs.html">Inside Magellan by example</a>
     </li>
   </ul>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/samWieczorek/Magellan/">
+  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,17 +87,17 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-
-<div id="magellan" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#magellan" class="anchor"></a>Magellan</h1></div>
+<p><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/samWieczorek/Magellan/actions" class="external-link"><img src="https://github.com/samWieczorek/Magellan/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> [<img src="https://img.shields.io/github/issues/samWieczorek/Magellan.svg" alt="Issues opened"><!-- badges: end --></p>
+<div class="section level1">
+<div class="page-header"><h1 id="magellan">Magellan<a class="anchor" aria-label="anchor" href="#magellan"></a>
+</h1></div>
 <p>Magellan is a R package which proposes a framework to navigate between steps of a complex data processing tool when the succession of processes is mostly chronological.</p>
 <p>For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finaly the last one. It is like a dataflow manager.</p>
 <p>Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e.e a pipeline) in which each step is a whole process containing itself several steps.</p>
 </div>
-<div id="list-of-articles" class="section level1">
-<h1 class="hasAnchor">
-<a href="#list-of-articles" class="anchor"></a>List of articles</h1>
+<div class="section level1">
+<h1 id="list-of-articles">List of articles<a class="anchor" aria-label="anchor" href="#list-of-articles"></a>
+</h1>
 <ul>
 <li>In the menu ‘Get started’, xxxx</li>
 <li>‘Articles &gt; Create a pipeline’: for developers</li>
@@ -110,49 +106,63 @@
 </li>
 </ul>
 </div>
+<div class="section level1">
+<h1 id="future-developments">Future developments<a class="anchor" aria-label="anchor" href="#future-developments"></a>
+</h1>
+<ul>
+<li>Generalize Magellan for more than two levels,</li>
+<li>implements a shiny app to help users to develop a module process</li>
+<li>Integrate synctatic analyzers for modules</li>
+</ul>
+</div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/samWieczorek/Magellan/">https://​github.com/​samWieczorek/​Magellan/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/samWieczorek/Magellan/issues">https://​github.com/​samWieczorek/​Magellan/​issues</a>
-</li>
+<li><a href="https://github.com/samWieczorek/Magellan/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/samWieczorek/Magellan/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/Artistic-2.0">Artistic-2.0</a></li>
+<li><a href="https://www.r-project.org/Licenses/Artistic-2.0" class="external-link">Artistic-2.0</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing Magellan</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Samuel Wieczorek <br><small class="roles"> Maintainer, author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/samWieczorek/Magellan/actions"><img src="https://github.com/samWieczorek/Magellan/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-</ul>
-</div>
-</div>
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Samuel Wieczorek.</p>
+  <p></p>
+<p>Developed by Samuel Wieczorek.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -160,6 +170,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -47,6 +47,8 @@ mod_PipelineA_Description_server <- function(id,
       w.names = names(widgets.default.values)
     )))
     
+    rv.custom <- reactiveValues()
+    
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       name <- strsplit(id, split='_')[[1]][1]

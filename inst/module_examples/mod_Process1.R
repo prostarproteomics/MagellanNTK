@@ -99,7 +99,7 @@ mod_Process1_server <- function(id,
       w.names = names(widgets.default.values)
     )))
     
-    
+    rv.custom <- reactiveValues()
     
     # >>>
     # >>> START ------------- Code for Description UI---------------

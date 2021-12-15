@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Magellan</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.00.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Magellan.html">Get started</a>
 </li>
@@ -60,10 +56,10 @@
       <a href="../articles/CreateComplexWorkflow.html">Create a composed workflow</a>
     </li>
     <li>
-      <a href="../articles/CreateSimpleWorkflow.html">Create a simple workflow</a>
+      <a href="../articles/CreateSimpleWorkflow.html">Writing a simple workflow</a>
     </li>
     <li>
-      <a href="../articles/useMagellanForDevs.html">Use Magellan with external R package</a>
+      <a href="../articles/useMagellanForDevs.html">Inside Magellan by example</a>
     </li>
   </ul>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/samWieczorek/Magellan/">
+  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,16 +84,16 @@
 
       
 
-      </header><script src="CreateComplexWorkflow_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Create a composed workflow</h1>
-            <h3 class="subtitle">A developer’s guidelines</h3>
-                        <h4 class="author">Samuel Wieczorek</h4>
+            <h3 data-toc-skip class="subtitle">A developer’s guidelines</h3>
+                        <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
             
-            <h4 class="date">novembre 07, 2021</h4>
+            <h4 data-toc-skip class="date">décembre 15, 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/master/vignettes/CreateComplexWorkflow.Rmd"><code>vignettes/CreateComplexWorkflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/CreateComplexWorkflow.Rmd" class="external-link"><code>vignettes/CreateComplexWorkflow.Rmd</code></a></small>
       <div class="hidden name"><code>CreateComplexWorkflow.Rmd</code></div>
 
     </div>
@@ -115,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+</script><div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
 <p>This vignette explains how to create a new pipeline in the Prostar framework. A pipeline is a set of data processes applied to a dataset (ie an object of class QFeatures).</p>
 <p>A pipeline can be associated with datasets of specific type. Such, the use of a certain dataset restraint the set of possible pipelines. For example, if the current dataset is a protein one, it can be processed only by a protein pipeline.</p>
 <p>It is divided in several parts:</p>
@@ -127,31 +123,31 @@ document.addEventListener("DOMContentLoaded", function() {
 <li>xxx</li>
 </ol>
 </div>
-<div id="configuration-file" class="section level1">
-<h1 class="hasAnchor">
-<a href="#configuration-file" class="anchor"></a>Configuration file</h1>
+<div class="section level1">
+<h1 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
+</h1>
 <p>This file (R/config.R) contains a list named def.pipeline in which each element is the definition of one pipeline implemented in Prostar. Here is a list with only one element:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pipeline.defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  peptide<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'module_Peptide_Filtering'</span>,
+<code class="sourceCode R"><span class="va">pipeline.defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  peptide<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'module_Peptide_Filtering'</span>,
              <span class="st">'module_Peptide_Normalization'</span>,
              <span class="st">'module_Peptide_Imputation'</span>,
              <span class="st">'module_Peptide_HypothesisTest'</span><span class="op">)</span>
              <span class="op">)</span></code></pre></div>
 <p>The name of each item (here <em>peptide</em>) is the name of the pipeline. It is important because it serves asa reference all along the code of Prostar. Each element is a vector a processes names with a specific nomenclature which has to be respected. Each process name begins with the keyword ‘module_’, followed by the name of the pipeline (here ‘Peptide’) and ends with the proper name of the process. This complete name is also the name of the file containing the code for the process. for example, the file ‘module_Peptide_Normalization.R’ contains the code for the normalization process over peptides.</p>
 </div>
-<div id="instanciation-of-a-pipeline" class="section level1">
-<h1 class="hasAnchor">
-<a href="#instanciation-of-a-pipeline" class="anchor"></a>Instanciation of a pipeline</h1>
+<div class="section level1">
+<h1 id="instanciation-of-a-pipeline">Instanciation of a pipeline<a class="anchor" aria-label="anchor" href="#instanciation-of-a-pipeline"></a>
+</h1>
 <p>A pipeline is choosen by the user when he loads a dataset (the UI proposes a liste a possible pipelines for the type of data).The type of pipeline used by the user is set in a variable in the metadata of the dataset. Thus, back to Prostar, it is easy to know which pipeline has to be activated.</p>
 <p>Once a dataset has been loaded in Prostar, subitems are created in the menu ‘Data processing’</p>
 <p>By default, when no dataset has been loaded yet, all the steps are disabled # Writing new process</p>
 <p>A process such as usable with Magellan is a R6 classes which contains: * the configuration of the process, * the list of screens with their severs (shiny)</p>
 <p>This class inherits from classes in Magellan: this is how the core engine is integrated in xxx.</p>
 </div>
-<div id="writing-a-new-pipeline" class="section level1">
-<h1 class="hasAnchor">
-<a href="#writing-a-new-pipeline" class="anchor"></a>Writing a new pipeline</h1>
+<div class="section level1">
+<h1 id="writing-a-new-pipeline">Writing a new pipeline<a class="anchor" aria-label="anchor" href="#writing-a-new-pipeline"></a>
+</h1>
 </div>
   </div>
 
@@ -166,11 +162,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
       <footer><div class="copyright">
-  <p>Developed by Samuel Wieczorek.</p>
+  <p></p>
+<p>Developed by Samuel Wieczorek.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -178,6 +176,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   
 
+
+  
 
   </body>
 </html>

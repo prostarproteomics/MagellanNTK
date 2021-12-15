@@ -43,7 +43,9 @@ run_workflow <- function(id,
     warning("'id' is required.")
     return(NULL)
   }
-  
+  if (!Found_Mod_Funcs(id)){
+    return(NULL)
+  }
   
   
   ui <- fluidPage(
@@ -56,6 +58,8 @@ run_workflow <- function(id,
   
   #----------------------------------------------------------------------
   server <- function(input, output){
+    
+    
     
     rv <- reactiveValues(
       dataOut = NULL
