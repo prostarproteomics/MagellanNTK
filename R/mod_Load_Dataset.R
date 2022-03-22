@@ -43,7 +43,9 @@ mod_Load_Dataset_server <- function(id){
     
     observeEvent(input$ok, { 
       req(input$file)
+      #browser()
       rv$data <- readRDS(input$file$datapath)
+      #rv$data <- load(input$file$datapath)
       removeModal()
     })
   

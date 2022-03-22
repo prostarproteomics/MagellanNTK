@@ -32,10 +32,10 @@ createModuleTemplate <- function(name = NULL,
                                  config = NULL){
   
   # Check config integrity
-   check <- CheckConfig(config)
-   if (!check$passed)
-    stop(paste0("Errors in 'config'", paste0(check$msg, collapse=' ')))
-   
+   # check <- CheckConfig(config)
+   # if (!check$passed)
+   #  stop(paste0("Errors in 'config'", paste0(check$msg, collapse=' ')))
+   # 
    # Create file
    mod.filename <- paste0('mod_', name, '.R')
    if (file.exists(mod.filename))
@@ -43,22 +43,22 @@ createModuleTemplate <- function(name = NULL,
    con <- file(mod.filename, open = 'a')
    
    
-   switch(config$mode,
+   switch(config@mode,
           process = {
-            config$steps <- setNames(config$steps, 
-                                     nm = gsub(' ', '', config$steps))
+            config@steps <- setNames(config@steps, 
+                                     nm = gsub(' ', '', config@steps))
             # Write different parts of the module functions
             writeLines(get_process_ui_function(name))
             writeLines(get_process_header_server_func(name))
             writeLines(get_process_config_code(config))
             writeLines(get_process_code_for_default_value_widgets())
             writeLines(get_process_module_server_header())
-            writeLines(get_process_renderUI_for_steps(config$steps))
+            writeLines(get_process_renderUI_for_steps(config@steps))
             writeLines(get_process_output_func())
           },
           pipeline = {
-            config$steps <- setNames(config$steps, 
-                                     nm = gsub(' ', '', config$steps))
+            config@steps <- setNames(config@steps, 
+                                     nm = gsub(' ', '', config@steps))
             # Write different parts of the module functions
             writeLines(get_pipeline_ui_function(name))
             writeLines(get_pipeline_header_server_func(name))
@@ -155,11 +155,11 @@ get_process_config_code <- function(config){
     path_to_md_dir = #path_to_md_dir#
   )
   "
-  code <- gsub('#steps#', vec2code(config$steps, TRUE), code)
-  code <- gsub('#mandatory#', vec2code(config$mandatory, FALSE), code)
-  if(is.null(config$path_to_md_dir))
-    config$path_to_md_dir <- 'NULL'
-  code <- gsub('#path_to_md_dir#', config$path_to_md_dir, code)
+  code <- gsub('#steps#', vec2code(config@steps, TRUE), code)
+  code <- gsub('#mandatory#', vec2code(config@mandatory, FALSE), code)
+  if(is.null(config@path_to_md_dir))
+    config@path_to_md_dir <- 'NULL'
+  code <- gsub('#path_to_md_dir#', config@path_to_md_dir, code)
   
   
   code
@@ -202,7 +202,7 @@ get_process_module_server_header <- function(){
       SimpleWorflowCoreCode(
         name = id,
         widgets = names(widgets.default.values),
-        steps = config$steps)
+        steps = config@steps)
       )
       )
       
@@ -298,8 +298,8 @@ get_pipeline_config_code <- function(config){
   )
   "
   
-  code <- gsub('#steps#', vec2code(config$steps, TRUE), code)
-  code <- gsub('#mandatory#', vec2code(config$mandatory, FALSE), code)
+  code <- gsub('#steps#', vec2code(config@steps, TRUE), code)
+  code <- gsub('#mandatory#', vec2code(config@mandatory, FALSE), code)
   code
 }
 
@@ -327,12 +327,12 @@ get_pipeline_module_server <- function(){
     # DO NOT MODIFY THIS LINE
     eval(parse(text = ComposedeWorflowCoreCode(
       name = id,
-      steps = config$steps)
+      steps = config@steps)
       )
       )
       
       # Insert code for the description renderUI()
-    eval(parse(text = Get_Code_for_module_Description(config$name)),
+    eval(parse(text = Get_Code_for_module_Description(config@name)),
          envir = .GlobalEnv)
          
          # Insert necessary code which is hosted by Magellan

@@ -81,8 +81,8 @@ mod_timeline_h_server = function(id,
     ns <- session$ns
     
     UpdateTags <- reactive({
-      tl_status <- rep('undone', length(config$steps))
-      tl_status[which(config$mandatory)] <- 'mandatory'
+      tl_status <- rep('undone', length(config@steps))
+      tl_status[which(config@mandatory)] <- 'mandatory'
       tl_status[which(unlist(status()) == global$VALIDATED)] <- 'completed'
       tl_status[which(unlist(status()) == global$SKIPPED)] <- 'skipped'
     
@@ -97,11 +97,11 @@ mod_timeline_h_server = function(id,
     output$show_h_TL <- renderUI  ({
       tags$div(class='timeline',
                id='timeline',
-               lapply(seq_len(length(config$steps)), 
+               lapply(seq_len(length(config@steps)), 
                       function(x){
                         tags$li(class = paste0('li ', UpdateTags()[x]),
                                 tags$div(class='timestamp status',
-                                         tags$h4(config$steps[x])
+                                         tags$h4(config@steps[x])
                                          )
                                 )
                         })

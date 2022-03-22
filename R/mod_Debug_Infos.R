@@ -21,15 +21,15 @@ mod_Debug_Infos_ui <- function(id){
 #' @param id xxx
 #' 
 #' @param title xxx
-#' @param config xxx
+#' @param config A `list`
 #' @param rv.dataIn xxx
-#' @param dataIn xxx
-#' @param dataOut xxxx
-#' @param steps.enabled xxx
-#' @param steps.status xxx
-#' @param steps.skipped xxx
-#' @param current.pos xxx
-#' @param is.enabled xxx
+#' @param dataIn An instance of the class `QFeatures`
+#' @param dataOut An instance of the class `QFeatures`
+#' @param steps.enabled A `logical()` xxxx
+#' @param steps.status A `logical()` xxxx
+#' @param steps.skipped A `logical()` xxxx
+#' @param current.pos A `integer(1)` xxxx
+#' @param is.enabled A `logical(1)` xxxx
 #' 
 #' @export
 #' @return xxx 
@@ -98,7 +98,7 @@ mod_Debug_Infos_server <- function(id,
     
     GetVariableContent <- reactive({
       VC <- data.frame(paste0(names(dataIn()), collapse='<br>'),
-                       paste0(names(rv.dataIn), collapse='<br>'),
+                       paste0(names(rv.dataIn()), collapse='<br>'),
                        paste0(names(dataOut()$value), collapse='<br>')
       )
       colnames(VC) = c('<span style="color:red">dataIn()</span>', 

@@ -13,8 +13,8 @@ Get_Code_Update_Config_Variable <- function(){
 
   code <- "
 
-  config$steps <- setNames(config$steps,
-                          nm = gsub(' ', '', config$steps, fixed = TRUE))
+  config@steps <- setNames(config@steps,
+                          nm = gsub(' ', '', config@steps, fixed = TRUE))
   
 
     "
@@ -59,7 +59,7 @@ Get_Code_Declare_widgets <- function(widgets.names=NULL){
                                  paste0("\t", ls_list, sep="", collapse= ",\n"),
                                  "\n)\n\n")
   }
-
+#browser()
   declare_rv_widgets
 }
 
@@ -186,7 +186,7 @@ Get_Code_for_General_observeEvents  <- function(){
   code <- "observeEvent(steps.enabled(), ignoreNULL = TRUE, {
   if (is.null(steps.enabled()))
     rv$steps.enabled <- setNames(rep(FALSE, rv$length),
-                                 nm = names(rv$config$steps))
+                                 nm = names(rv$config@steps))
   else
     rv$steps.enabled <- steps.enabled()
 })
@@ -194,7 +194,7 @@ Get_Code_for_General_observeEvents  <- function(){
 observeEvent(steps.status(), ignoreNULL = TRUE, {
   if (is.null(steps.enabled()))
     rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
-                                 nm = names(rv$config$steps))
+                                 nm = names(rv$config@steps))
   else
     rv$steps.status <- steps.status()
 })
@@ -234,11 +234,11 @@ Module_Return_Func <- function(){
   code <- "# Return value of module
 # DO NOT MODIFY THIS PART
 list(config = reactive({
-  config$ll.UI <- setNames(lapply(names(config$steps),
+  config@ll.UI <- setNames(lapply(names(config@steps),
                                   function(x){
                                     do.call(\"uiOutput\", list(ns(x)))
                                   }),
-                           paste0(\"screen_\", names(config$steps))
+                           paste0(\"screen_\", names(config@steps))
   )
   config
 }),
@@ -272,10 +272,11 @@ code
 #' @export
 #' 
 Get_Worflow_Core_Code <- function(w.names){
+  #browser()
   core <- paste0(
-    Get_Code_Declare_widgets(names(w.names)),
+    Get_Code_Declare_widgets(w.names),
     Get_Code_Update_Config_Variable(),
-    Get_Code_for_ObserveEvent_widgets(names(w.names)),
+    Get_Code_for_ObserveEvent_widgets(w.names),
     Get_Code_for_rv_reactiveValues(),
     Get_Code_for_dataOut(),
     Get_Code_for_General_observeEvents(),

@@ -24,56 +24,6 @@ Found_Mod_Funcs <- function(id){
   return(server.exists && ui.exists)
 }
 
-#' @title 
-#' xxx
-#' 
-#' @description xxx
-#' 
-#' Check if the rv$config is correct
-#'
-#' @param config A list containing the rv$configuration of the current object.
-#' See xxx
-#' 
-#' @return A list of two items:
-#' * `passed`: A boolean that indicates if the config is correct or not.
-#' * `msg`: A `character(1)` as message.
-#' 
-#' @export
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' conf <- list(mode = "process",
-#' steps = c("Step 1", "Step 2", "Save"),
-#' mandatory = c( TRUE, FALSE, TRUE),
-#' path_to_md_dir = system.file('module_examples/md/', package='Magellan')
-#' )
-#' CheckConfig(conf)
-#' 
-
-CheckConfig <- function(config){
-  passed <- TRUE
-  msg <- ""
-  
-  if (!is.list(config)){
-    passed <- FALSE
-    msg <- c(msg, "'config' is not a list")
-  }
-  
-  names.config <- c("mode", "steps", "mandatory", "path_to_md_dir")
-  if (!all(sapply(names.config, function(x){x %in% names(config)}))){
-    passed <- FALSE
-    msg <- c(msg, "The names of elements in 'config' must be the following: 'mode', 'steps', 'mandatory', 'path_to_md_dir")
-  }
-  if (length(config$steps) != length(config$mandatory)){
-    passed <- FALSE
-    msg <- c(msg, "The length of 'steps' and 'mandatory' must be equal.")
-  }
-  
-  list(passed = passed,
-       msg = msg)
-}
-
 
 
 #' @title Clean source code before syntax analysis

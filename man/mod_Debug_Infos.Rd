@@ -26,23 +26,23 @@ mod_Debug_Infos_server(
 
 \item{title}{xxx}
 
-\item{config}{xxx}
+\item{config}{A `list`}
 
 \item{rv.dataIn}{xxx}
 
-\item{dataIn}{xxx}
+\item{dataIn}{An instance of the class `QFeatures`}
 
-\item{dataOut}{xxxx}
+\item{dataOut}{An instance of the class `QFeatures`}
 
-\item{steps.enabled}{xxx}
+\item{steps.enabled}{A `logical()` xxxx}
 
-\item{steps.status}{xxx}
+\item{steps.status}{A `logical()` xxxx}
 
-\item{steps.skipped}{xxx}
+\item{steps.skipped}{A `logical()` xxxx}
 
-\item{current.pos}{xxx}
+\item{current.pos}{A `integer(1)` xxxx}
 
-\item{is.enabled}{xxx}
+\item{is.enabled}{A `logical(1)` xxxx}
 }
 \value{
 xxx

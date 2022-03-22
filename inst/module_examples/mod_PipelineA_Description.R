@@ -79,7 +79,7 @@ mod_PipelineA_Description_server <- function(id,
       widget <- actionButton(ns("Description_btn_validate"),
                              "Start",
                              class = btn_success_color)
-      toggleWidget(rv$steps.enabled['Description'], widget)
+      toggleWidget(widget, rv$steps.enabled['Description'])
     })
     
     

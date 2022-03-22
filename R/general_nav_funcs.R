@@ -14,14 +14,14 @@
 Build_SkippedInfoPanel <- function(steps.status, current.pos, config){
   
    req(steps.status[current.pos] == global$SKIPPED)
-  process_entirely_skipped <- isTRUE(sum(steps.status) == global$SKIPPED * length(config$steps))
+  process_entirely_skipped <- isTRUE(sum(steps.status) == global$SKIPPED * length(config@steps))
   
   if (process_entirely_skipped){
     # This case appears when the process has been skipped from the
     # pipeline. Thus, it is not necessary to show the info box because
     # it is shown below the timeline of the pipeline
   } else {
-    txt <- paste0("This ", config$type, " is skipped so it has been disabled.")
+    txt <- paste0("This ", config@mode, " is skipped so it has been disabled.")
     wellPanel(
       style = "background-color: #7CC9F0; opacity: 0.72; padding: 0px;
                    align: center; vertical-align: center;",
@@ -51,20 +51,20 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config){
 Build_EncapsulateScreens_ui <- function(ns, 
                                         id, 
                                         config){
-  len <- length(config$ll.UI)
+  len <- length(config@ll.UI)
   renderUI({
     tagList(
       lapply(seq_len(len), function(i) {
         if (i==1)
-          div(id = ns(names(config$steps)[i]),
+          div(id = ns(names(config@steps)[i]),
               class = paste0('page_', id),
-              config$ll.UI[[i]]
+              config@ll.UI[[i]]
           )
         else
           shinyjs::hidden(
-            div(id =  ns(names(config$steps)[i]),
+            div(id =  ns(names(config@steps)[i]),
                 class = paste0('page_', id),
-                config$ll.UI[[i]]
+                config@ll.UI[[i]]
             )
           )
       }
@@ -288,7 +288,7 @@ GetFirstMandatoryNotValidated <- function(range,
   res <- NULL
   first <- NULL
   first <- unlist((lapply(range,
-                          function(x){rv$config$mandatory[x] && !rv$steps.status[x]})))
+                          function(x){rv$config@mandatory[x] && !rv$steps.status[x]})))
   res <- if (sum(first) > 0)
     min(which(first == TRUE))
   else

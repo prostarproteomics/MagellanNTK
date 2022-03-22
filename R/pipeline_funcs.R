@@ -106,8 +106,8 @@ GetValuesFromChildren <- function(config,
                                   tmp.return
                                   ){
   # Get the trigger values for each steps of the module
-  return.trigger.values <- setNames(lapply(config$steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
-                                    nm = config$steps)
+  return.trigger.values <- setNames(lapply(config@steps, function(x){tmp.return[[x]]$dataOut()$trigger}),
+                                    nm = config@steps)
   
   # Replace NULL values by NA
   return.trigger.values[sapply(return.trigger.values, is.null)] <- NA
@@ -115,8 +115,8 @@ GetValuesFromChildren <- function(config,
   
   
   # Get the values returned by each step of the modules
-  return.values <- setNames(lapply(config$steps, function(x){tmp.return[[x]]$dataOut()$value}),
-                            nm = config$steps)
+  return.values <- setNames(lapply(config@steps, function(x){tmp.return[[x]]$dataOut()$value}),
+                            nm = config@steps)
   
   
 list(triggers = triggerValues,
@@ -189,8 +189,8 @@ PrepareData2Send <- function(rv, pos){
   
   # Initialize vector to all NULL values
   data2send <- setNames(
-    lapply(rv$config$steps, function(x){NULL}),
-    nm = rv$config$steps)
+    lapply(rv$config@steps, function(x){NULL}),
+    nm = rv$config@steps)
   
   if (is.null(rv$dataIn)){ # Init of core engine
     
@@ -199,12 +199,12 @@ PrepareData2Send <- function(rv, pos){
     
     # The other processes are by default disabled.
     # If they have to be enabled, they will be by another function later
-    lapply(seq_len(length(rv$config$steps)), function(x){
+    lapply(seq_len(length(rv$config@steps)), function(x){
       rv$steps.enabled[x] <- x==1
     })
     
   } else{
-    current.step.name <- rv$config$steps[rv$current.pos]
+    current.step.name <- rv$config@steps[rv$current.pos]
     data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
   }
   

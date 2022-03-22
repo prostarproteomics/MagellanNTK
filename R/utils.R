@@ -4,8 +4,8 @@
 #' @description 
 #' Returns the date and time in timestamp UNIX format.
 #' 
-#' @param is.enabled xxx
 #' @param widget xxx
+#' @param condition xxx
 #' 
 #' @return NA
 #' 
@@ -14,11 +14,15 @@
 #' @export
 #'
 
-toggleWidget <- function(is.enabled, widget){
-  if (is.enabled)
+toggleWidget <- function(widget, condition){
+  tagList(
+    shinyjs::useShinyjs(),
+  
+  if (isTRUE(condition))
     widget
   else
     shinyjs::disabled(widget)
+  )
 }
 
 

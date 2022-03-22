@@ -46,7 +46,7 @@ level of navigation module.}
 A list of four items:
 * dataOut xxx
 * steps.enabled xxxxx
-* status A vector of `integer(1)` of the same length than the config$steps
+* status A vector of `integer(1)` of the same length than the config@steps
   vector
 * reset xxxx
 }

@@ -4,12 +4,12 @@
 \alias{toggleWidget}
 \title{xxx}
 \usage{
-toggleWidget(is.enabled, widget)
+toggleWidget(widget, condition)
 }
 \arguments{
-\item{is.enabled}{xxx}
-
 \item{widget}{xxx}
+
+\item{condition}{xxx}
 }
 \value{
 NA
