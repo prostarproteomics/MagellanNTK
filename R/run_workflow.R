@@ -29,7 +29,7 @@
 #' for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
 #'  source(file.path(dirpath, l), local=FALSE)$value
 #'
-#' run_workflow('Process1')
+#' run_workflow('Process1', verbose = TRUE)
 #' 
 #' run_workflow('PipelineA', layout = c('h', 'h'))
 #' }
@@ -46,6 +46,8 @@ run_workflow <- function(id,
   if (!Found_Mod_Funcs(id)){
     return(NULL)
   }
+  
+  options(shiny.fullstacktrace = verbose)
   
   
   ui <- fluidPage(

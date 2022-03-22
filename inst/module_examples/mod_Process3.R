@@ -318,9 +318,9 @@ mod_Process3_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       tagList(
-        toggleWidget(rv$steps.enabled['Save'], 
-                     actionButton(ns("Save_btn_validate"), "Save",
-                                  class = btn_success_color)
+        toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
+                                  class = btn_success_color),
+                     rv$steps.enabled['Save']
         ),
         if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
           mod_Save_Dataset_ui(ns('createQuickLink'))

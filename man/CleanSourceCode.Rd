@@ -2,38 +2,21 @@
 % Please edit documentation in R/check_funcs.R
 \name{CleanSourceCode}
 \alias{CleanSourceCode}
-\title{xxx}
+\title{Clean source code before syntax analysis
+xxx}
 \usage{
 CleanSourceCode(file = NULL)
 }
 \arguments{
 \item{file}{A vector in which each element is a line read from source code file}
-
-\item{config}{A list containing the rv$configuration of the current object.
-See xxx}
 }
 \value{
-A list of two items:
-* `passed`: A boolean that indicates if the config is correct or not.
-* `msg`: A `character(1)` as message.
-
 A string which contains the source code condensed
 }
 \description{
 xxx
-
-Check if the rv$config is correct
-
-xxx
 }
 \examples{
-conf <- list(mode = "process",
-steps = c("Step 1", "Step 2", "Save"),
-mandatory = c( TRUE, FALSE, TRUE),
-path_to_md_dir = system.file('module_examples/md/', package='Magellan')
-)
-CheckConfig(conf)
-
 \dontrun{
 file <-system.file("module_examples", "mod_Process1.R", package="Magellan")
 s <- CleanSourceCode(file)
@@ -41,7 +24,5 @@ s <- CleanSourceCode(file)
 
 }
 \author{
-Samuel Wieczorek
-
 Samuel Wieczorek
 }

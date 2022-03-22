@@ -10,8 +10,7 @@
 #' @export
 #' 
 Get_Code_Update_Config_Variable <- function(){
-
-  code <- "
+code <- "
 
   config@steps <- setNames(config@steps,
                           nm = gsub(' ', '', config@steps, fixed = TRUE))
@@ -272,7 +271,6 @@ code
 #' @export
 #' 
 Get_Worflow_Core_Code <- function(w.names){
-  #browser()
   core <- paste0(
     Get_Code_Declare_widgets(w.names),
     Get_Code_Update_Config_Variable(),
@@ -282,5 +280,6 @@ Get_Worflow_Core_Code <- function(w.names){
     Get_Code_for_General_observeEvents(),
     sep = "\n"
   )
+
   core
 }

@@ -244,7 +244,9 @@ mod_Process1_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-      
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = rnorm(1:5),
+                                          name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Magellan::Timestamp()
@@ -323,9 +325,9 @@ mod_Process1_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       tagList(
-        toggleWidget(rv$steps.enabled['Save'], 
-                     actionButton(ns("Save_btn_validate"), "Save",
-                                  class = btn_success_color)
+        toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
+                                  class = btn_success_color),
+                     rv$steps.enabled['Save']
                      ),
       if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
         mod_Save_Dataset_ui(ns('createQuickLink'))

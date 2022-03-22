@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -91,7 +91,7 @@
             <h3 data-toc-skip class="subtitle">A developer’s guideline</h3>
                         <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
             
-            <h4 data-toc-skip class="date">décembre 15, 2021</h4>
+            <h4 data-toc-skip class="date">mars 22, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/useMagellanForDevs.Rmd" class="external-link"><code>vignettes/useMagellanForDevs.Rmd</code></a></small>
       <div class="hidden name"><code>useMagellanForDevs.Rmd</code></div>
@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><div class="section level1">
-<h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h1>
+</script><div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>The code of <code>Magellan</code> has two main objectives:</p>
 <ul>
 <li>be generic to handle several different types of datasets,</li>
@@ -122,9 +122,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>It facilitates the work for writing process modules but has some contraints such as the naming conventions which are important. To allow writing less ‘dev’ code, the core of <code>Magellan</code> is mostly based on function names which are dynamically built from the module processes. So, respect the naming conventions is fundamental.</p>
 <p>The package <code>Magellan</code> is a generic package that offers a graphical workflow manager, based on Shiny modules. It is very generic and can handle different types of objects but they must be of type <code>list</code> (see ).</p>
 <p><code>Magellan</code> is intimely linked to the data analysis modules and vice-versa. So as to facilitate both the development of a new module and the maintenance, we have volontarly want to have a quite constraint code and Module template. It guarantees xxx</p>
-<div class="section level2">
-<h2 id="general-principle-of-work">General principle of work<a class="anchor" aria-label="anchor" href="#general-principle-of-work"></a>
-</h2>
+<div class="section level3">
+<h3 id="general-principle-of-work">General principle of work<a class="anchor" aria-label="anchor" href="#general-principle-of-work"></a>
+</h3>
 <p>Magellan est en fait un module Shiny qui fait l’interface entre l’application finale et le code des processus de traitements de données. Il ne peut être lancé seul. Pour pouvoir l’utiliser, il est nécessaire d’avoir des modules (au sens Shiny) contenant les traitements de données et c’est Magellan qui va travailler avec ce module (il met en forme les interfaces à présenter à l’utilisateur)</p>
 <p>Ces modules peuvent être écrits dans un script R ou faire partie d’un package. L’important est que les fonctions ui() et server() de ces modules fassent partie du même environnement que le package Magellan</p>
 <p>Le package Magellan gère principalement deux aspects :</p>
@@ -141,9 +141,9 @@ document.addEventListener("DOMContentLoaded", function() {
 </ul>
 <p>Ces différents aspects sont décrits dans le document utilisateur.</p>
 </div>
-<div class="section level2">
-<h2 id="global-architecture-how-magellan-works">Global architecture (How <code>Magellan</code> works)<a class="anchor" aria-label="anchor" href="#global-architecture-how-magellan-works"></a>
-</h2>
+<div class="section level3">
+<h3 id="global-architecture-how-magellan-works">Global architecture (How <code>Magellan</code> works)<a class="anchor" aria-label="anchor" href="#global-architecture-how-magellan-works"></a>
+</h3>
 <p><code>Magellan</code> cannot be run alone, it is always run with a package which contains the information about the steps to manage.</p>
 <div class="figure" style="text-align: center">
 <img src="figs/globalArch.png" alt="Global architecture of connectivity between Magellan, Shiny and packages containing the code for modules." width="100%"><p class="caption">
@@ -163,13 +163,13 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 <li><p>xxx</p></li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="companion-package">Companion package<a class="anchor" aria-label="anchor" href="#companion-package"></a>
-</h2>
-<p>Nous décrivons ici quelques aspects fondamentaux des fonctions ui() et server() pour les modules de traitements de données qui seront gérés par Magellan.</p>
 <div class="section level3">
-<h3 id="structure-of-a-magellan-compliant-module-process">Structure of a Magellan-compliant module process<a class="anchor" aria-label="anchor" href="#structure-of-a-magellan-compliant-module-process"></a>
+<h3 id="companion-package">Companion package<a class="anchor" aria-label="anchor" href="#companion-package"></a>
 </h3>
+<p>Nous décrivons ici quelques aspects fondamentaux des fonctions ui() et server() pour les modules de traitements de données qui seront gérés par Magellan.</p>
+<div class="section level4">
+<h4 id="structure-of-a-magellan-compliant-module-process">Structure of a Magellan-compliant module process<a class="anchor" aria-label="anchor" href="#structure-of-a-magellan-compliant-module-process"></a>
+</h4>
 <p>Comme tout module Shiny, il doit comporter deux fonctions : ui() et server()</p>
 <p>Ces fonctions doivent avoir des noms construits de la manière suivante : 4 chaînes de caractères séparées par un ‘_’:</p>
 <ul>
@@ -237,20 +237,20 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="structure-of-a-magellan-compliant-module-pipeline">Structure of a Magellan-compliant module pipeline<a class="anchor" aria-label="anchor" href="#structure-of-a-magellan-compliant-module-pipeline"></a>
-</h3>
+<div class="section level4">
+<h4 id="structure-of-a-magellan-compliant-module-pipeline">Structure of a Magellan-compliant module pipeline<a class="anchor" aria-label="anchor" href="#structure-of-a-magellan-compliant-module-pipeline"></a>
+</h4>
 </div>
-<div class="section level3">
-<h3 id="conventions-de-nommage">Conventions de nommage<a class="anchor" aria-label="anchor" href="#conventions-de-nommage"></a>
-</h3>
+<div class="section level4">
+<h4 id="conventions-de-nommage">Conventions de nommage<a class="anchor" aria-label="anchor" href="#conventions-de-nommage"></a>
+</h4>
 <p>ceci est un poitn très important pour le bon fonctionnement des deux packages. En effet, comme il a été précisé xxx, Magellan est un workflow manager générique qui gère des modules dont on lui envoie la configuration. Afin de respecter cette généricité, Magellan construit dynamiquement un certain nombre de fonctions et de variables à partir de la configuration des process et pipelines</p>
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="type-of-objects">Type of objects<a class="anchor" aria-label="anchor" href="#type-of-objects"></a>
-</h1>
+<div class="section level2">
+<h2 id="type-of-objects">Type of objects<a class="anchor" aria-label="anchor" href="#type-of-objects"></a>
+</h2>
 <p>it is suitable for objects of type list for which the fundamental requirments are:</p>
 <ul>
 <li><p>A list of items</p></li>
@@ -261,9 +261,9 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 </li>
 </ul>
 <p>However, two functions cannot be really generic: xxx and xxx(). They are very simple (essentially they are wrappers for existing functions) but necessary. These functions are defined as abstract in <code>Magellan</code>. For the examples, <code>Magellan</code> implements those functions for the simple class <code>list</code>. The dev who want to write its own process module have to write the code of these two functions for the class of its object.</p>
-<div class="section level2">
-<h2 id="the-instscripts-directory">The ‘inst/scripts’ directory<a class="anchor" aria-label="anchor" href="#the-instscripts-directory"></a>
-</h2>
+<div class="section level3">
+<h3 id="the-instscripts-directory">The ‘inst/scripts’ directory<a class="anchor" aria-label="anchor" href="#the-instscripts-directory"></a>
+</h3>
 <p>The ‘R’ directory contains source code files. The files prefixed by ‘mod_’ contain a shiny module.</p>
 <p>Among those files</p>
 <p>The ‘inst/scripts’ directory contain the following files:</p>
@@ -276,11 +276,11 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 <p>The directory ‘module_examples’ contain xxx</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="section"></h1>
 <div class="section level2">
-<h2 id="launch-a-workflow">Launch a workflow<a class="anchor" aria-label="anchor" href="#launch-a-workflow"></a>
-</h2>
+<h2 id="section"></h2>
+<div class="section level3">
+<h3 id="launch-a-workflow">Launch a workflow<a class="anchor" aria-label="anchor" href="#launch-a-workflow"></a>
+</h3>
 <p>As Magellan is a Shiny app, to launch the app, a few lines of code are necessary. Here, are th minimum code to launch a worklfow called Proc1 which belongs to a composed workflow called ‘PipeA’.</p>
 <p>Here is explained a minimal shiny app (code in ‘/inst/scripts/min_simple_workflow_app_example.R’). Here are the comments</p>
 <p>Launch the packages</p>
@@ -314,21 +314,21 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 <p>There is here a first example of the imortance of names convention. If we focus on the id of these functions, one can see that it is composed of two concatenated strings : the name of the parent and the name of the process. This id is splitted and xxxx. This string is precisely the name of the procs module source code file in the external package (but prefixed by ‘mod_’)</p>
 <p>A generic script example is here: ‘/inst/scripts/min_simple_workflow_app.R’</p>
 </div>
-<div class="section level2">
-<h2 id="naming-conventions-for-modules">Naming conventions for modules<a class="anchor" aria-label="anchor" href="#naming-conventions-for-modules"></a>
-</h2>
+<div class="section level3">
+<h3 id="naming-conventions-for-modules">Naming conventions for modules<a class="anchor" aria-label="anchor" href="#naming-conventions-for-modules"></a>
+</h3>
 <p>As <code>Magellan</code> heavily uses dynamically built function names (to be generic), the naming of scripts and variables is fundamental.</p>
 <p>A module is well-defined by its <code>config</code> variable which contains its name and the name of the parent workflow to which it belongs to. In this document, ‘mod_name’ will refer to the name of the module (i.e. Process1 as in example) and ‘parent_name’ to the name of its parent (i.e. PipelineA as in example).</p>
 <p>For more details on how to name files and variables in the process modules, please read the manual ‘xxx’</p>
 </div>
-<div class="section level2">
-<h2 id="requirments">Requirments<a class="anchor" aria-label="anchor" href="#requirments"></a>
-</h2>
+<div class="section level3">
+<h3 id="requirments">Requirments<a class="anchor" aria-label="anchor" href="#requirments"></a>
+</h3>
 <p>This package must have xxx. Two other articles are available that explain how to write a module for simple and composed workflows.</p>
 </div>
-<div class="section level2">
-<h2 id="specific-functions-to-write">Specific functions to write<a class="anchor" aria-label="anchor" href="#specific-functions-to-write"></a>
-</h2>
+<div class="section level3">
+<h3 id="specific-functions-to-write">Specific functions to write<a class="anchor" aria-label="anchor" href="#specific-functions-to-write"></a>
+</h3>
 <p>Whether the class of the object, it may be necessary to write the code for two functions that cannot be generic</p>
 <ul>
 <li>An append function named Add_Datasets_to_Object()</li>
@@ -338,17 +338,17 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 <p>The developer of shiny modules that will use <code>Magellan</code> can find in an exmaple of those functions that are implemented for the type <code>list</code> and for examples purpose.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="simple-workflow">Simple workflow<a class="anchor" aria-label="anchor" href="#simple-workflow"></a>
-</h1>
+<div class="section level2">
+<h2 id="simple-workflow">Simple workflow<a class="anchor" aria-label="anchor" href="#simple-workflow"></a>
+</h2>
 <p>This vignette explains how to create a new process in the <code>Magellan</code> framework. A process is a set of data processes applied to a dataset (ie an object of class QFeatures).</p>
 <p>We hope that the source code is well documented but we think it is a good idea to start with this article. Normally, there is no need to go deep in the source code to write your own process.</p>
 <p>The code of a module for <code>Magellan</code> is structured so as to have very few functions to write and develop your own module.</p>
 <p>Examples of processes are in the inst/scripts directory. This tutorial aims to explain step-by-step the construction of the process</p>
 <p>As a process in <code>Magellan</code> is a shiny module, it comes with two functions ui() and server().</p>
-<div class="section level2">
-<h2 id="nomenclature-of-ui-and-server-functions">Nomenclature of ui and server functions<a class="anchor" aria-label="anchor" href="#nomenclature-of-ui-and-server-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="nomenclature-of-ui-and-server-functions">Nomenclature of ui and server functions<a class="anchor" aria-label="anchor" href="#nomenclature-of-ui-and-server-functions"></a>
+</h3>
 <p>The name of these functions is very important because Magellan call those functions by building their name dynamically. C’est pour cela qu’il est primordial de respecter la nomenclature.</p>
 <p>Chacune des deux fonctions contient quatre mots-clés séparés par ‘_’:</p>
 <ul>
@@ -363,9 +363,9 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 </ul>
 <p>Par example, la fonction <code>mod_PipelineA_Process4_server()</code> est le nom du serveur pour le process 4 du pipeline A.</p>
 </div>
-<div class="section level2">
-<h2 id="timeline-styles">Timeline styles<a class="anchor" aria-label="anchor" href="#timeline-styles"></a>
-</h2>
+<div class="section level3">
+<h3 id="timeline-styles">Timeline styles<a class="anchor" aria-label="anchor" href="#timeline-styles"></a>
+</h3>
 <p>The timelines are coded as modules. They are not exported as only mod_navigation_server use them. However, it may be interesting to the developer to know a little about them if he want to customize or develop another timeline.</p>
 <p>The look &amp; feel if managed by the ui() function while the logics is managed by the module server() function. This server ensures that the different states (enabled/disabled, color and style, display of the cursor for the active step) of each item in the timeline works well</p>
 <p>Despite that hose information are documented in the reference manual of Magellan but it allows to better understand here how it works.</p>
@@ -414,7 +414,7 @@ Global architecture of connectivity between Magellan, Shiny and packages contain
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

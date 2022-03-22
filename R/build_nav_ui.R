@@ -62,6 +62,8 @@ Build_nav_v_ui <- function(ns){
 #' @return A shiny UI
 #' 
 #' @author Samuel Wieczorek
+#' 
+#' @export
 #'
 Build_nav_h_ui <- function(ns){
   

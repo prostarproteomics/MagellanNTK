@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -90,7 +90,7 @@
       <h1 data-toc-skip>Navigate with Magellan</h1>
                         <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
             
-            <h4 data-toc-skip class="date">décembre 15, 2021</h4>
+            <h4 data-toc-skip class="date">mars 22, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/Magellan.Rmd" class="external-link"><code>vignettes/Magellan.Rmd</code></a></small>
       <div class="hidden name"><code>Magellan.Rmd</code></div>
@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function() {
       links[i].target = '_blank';
 });
 </script><p>This tutorial concerns the use of <code>Magellan</code> at a end-user level. It describes how the interface works. briefly explains the structure/strategy of data managment within the different workflows and how the user interface works. It is not a technical document. However, the developers who want to write their own process modules or just better understand deeply how <code>Magellan</code> works, we advice beginning with this article before switching to more detailed articles.</p>
-<div class="section level1">
-<h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h1>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>As <code>Magellan</code> consists in a Shiny module, the best manner to launch and use Magellan is to integrate it into a Shiny App framework. This app does not to be complex but is is used for its ui() and server() functions.</p>
 <p><code>Magellan</code> is not a ready-to-use package because it only provides a deep framework to manage several steps in a workflow. So, it is necessary to write a minimum of R code so as to use it.</p>
 <p>The package <code>Magellan</code> is heavily based on Shiny modules and the processes/pipelines it manages are also built as Shiny modules. A module correspond to a single process or pipeline. However, <code>Magellan</code> is just the core program to manage the different steps and results and it does not contain any module of process nor pipeline. It contains only the modules which allow to navigate between steps of a process.</p>
@@ -127,9 +127,9 @@ document.addEventListener("DOMContentLoaded", function() {
 Process overview.
 </p>
 </div>
-<div class="section level2">
-<h2 id="hierarchical-levels-of-workflow-managers">Hierarchical levels of workflow managers<a class="anchor" aria-label="anchor" href="#hierarchical-levels-of-workflow-managers"></a>
-</h2>
+<div class="section level3">
+<h3 id="hierarchical-levels-of-workflow-managers">Hierarchical levels of workflow managers<a class="anchor" aria-label="anchor" href="#hierarchical-levels-of-workflow-managers"></a>
+</h3>
 <p><code>Magellan</code> proposes two types of workflow managers, depending of the nature of the steps.</p>
 <p>The basic brick of navigation consists of a unique workflow manager which can manage a process with simple steps. Each of these steps are a unique operation on the data.</p>
 <p>A more complex level consists of a workflow manager in which each step can integrate a workflow manager. This situation occurs for example when working with a pipeline. Thus, the whole structure of a <code>Magellan</code> implementation is a hierachical tree where leaves are basic bricks and nodes are of complex level type.</p>
@@ -142,19 +142,19 @@ Hierarchical strucure principle.
 <p>Two timelines (horizontal and vertical) are implemented in Magellan. For now, in order to make a suitable GUI, two levels can be used: the basic brick with a horizontal timeline and a first complex level with vertical timeline.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
-</h1>
+<div class="section level2">
+<h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
+</h2>
 <p>the package <code>Magellan</code> is has be used with processes/pipelines. These processes are Shiny modules which functions ui() and server() must be available (loaded in the R environment). They can be in individual R scripts of embedded in a R package</p>
 <p>A md file may also be accessible as for the Description step.</p>
 <p>Each process</p>
 </div>
-<div class="section level1">
-<h1 id="user-interface">User interface<a class="anchor" aria-label="anchor" href="#user-interface"></a>
-</h1>
 <div class="section level2">
-<h2 id="layouts">Layouts<a class="anchor" aria-label="anchor" href="#layouts"></a>
+<h2 id="user-interface">User interface<a class="anchor" aria-label="anchor" href="#user-interface"></a>
 </h2>
+<div class="section level3">
+<h3 id="layouts">Layouts<a class="anchor" aria-label="anchor" href="#layouts"></a>
+</h3>
 <p>The basic user interface of Magellan is divided into two main parts: a <strong>navigation bar</strong> and a <strong>panel</strong> which shows the content of the current step. As one can see in xxx, two layouts are implemented: a horizontal navigation bar or a vertical one.</p>
 <p>This layout is used by the process workflow.</p>
 <div class="figure" style="text-align: center">
@@ -169,9 +169,9 @@ Pipeline layouts.
 </p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="navigation-bar">Navigation bar<a class="anchor" aria-label="anchor" href="#navigation-bar"></a>
-</h2>
+<div class="section level3">
+<h3 id="navigation-bar">Navigation bar<a class="anchor" aria-label="anchor" href="#navigation-bar"></a>
+</h3>
 <p>The <strong>navigation bar</strong> which contains four items:</p>
 <ul>
 <li>A “previous” &gt;&gt; button to go back in the steps of the process,</li>
@@ -179,15 +179,15 @@ Pipeline layouts.
 <li>A timeline to vizualize the steps and other informations,</li>
 <li>A “Next” button to go further into the steps.</li>
 </ul>
-<div class="section level3">
-<h3 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
-</h3>
+<div class="section level4">
+<h4 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
+</h4>
 <p>The two buttons ‘Prev’ and ‘Next’ allow to go respectively forward or backward in the timeline. If the current step is the first one, than the ‘Prev’ button is disabled. If the current step is the last one, then the ‘Next’ button is disabled. In any other case, those buttons are enabled.</p>
 <p>The button ‘Reset’ allow to reset a process or step. Please refer to xxx for more details.</p>
 </div>
-<div class="section level3">
-<h3 id="timeline">Timeline<a class="anchor" aria-label="anchor" href="#timeline"></a>
-</h3>
+<div class="section level4">
+<h4 id="timeline">Timeline<a class="anchor" aria-label="anchor" href="#timeline"></a>
+</h4>
 <p>The timeline is composed of several marks (circles), one for each step of the process. The name of the step is written below the mark.</p>
 <p>A short line is showed under the step that is currently active in the server. That means that the UI showed under the timeline correspond to this step and all processes on the object will be related to this step.</p>
 <p>The steps are defined in the source code of the process, in the <code>config</code> variable. They have a property called ‘Mandatory’. That means that it must be validated by the user. The steps marked as non-mandatory are facultative.</p>
@@ -218,9 +218,9 @@ Pipeline layouts.
 <p>If the circle is empty, then the step is either skipped or non validated.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="screens-for-steps-steps-ui">Screens for steps (steps UI)<a class="anchor" aria-label="anchor" href="#screens-for-steps-steps-ui"></a>
-</h2>
+<div class="section level3">
+<h3 id="screens-for-steps-steps-ui">Screens for steps (steps UI)<a class="anchor" aria-label="anchor" href="#screens-for-steps-steps-ui"></a>
+</h3>
 <p>The first and last steps are particular in the sense that they are the input and output doors of the workflow, thus they are mandatory. Moreover, there name is fixed.</p>
 <p>The <strong>first step</strong> (called ‘Description’) contains the description of the process and its different steps. If an object has been sent to the process server, then the <code>Load</code> button is enabled. At the contrary, if a NULL object is sent, it stays disabled. That allows the user to view the different steps event if he does not want to run the process.</p>
 <p>Its look &amp; feel is standardized if the developer use common scripts in Magellan to create its own module.</p>
@@ -228,13 +228,13 @@ Pipeline layouts.
 <p>The <strong>last step</strong> (names ‘Save’) does not contain any treatment on the dataset. It only contatenate the result of the process (which lead to a dataset) and append to the dataset given in input. This new object is then the result of the module.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="process-workflow">Process workflow <a class="anchor" aria-label="anchor" href="#process-workflow"></a>
-</h1>
-<p>Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics. It also contains a button called <code>Perform</code> which is used to validate the step.</p>
 <div class="section level2">
-<h2 id="launch-the-module">Launch the module <a class="anchor" aria-label="anchor" href="#launch-the-module"></a>
+<h2 id="process-workflow">Process workflow <a class="anchor" aria-label="anchor" href="#process-workflow"></a>
 </h2>
+<p>Each step is built on the same basic UI. It contains graphical elements related to the process such as widgets (for parameters), different plots and graphics. It also contains a button called <code>Perform</code> which is used to validate the step.</p>
+<div class="section level3">
+<h3 id="launch-the-module">Launch the module <a class="anchor" aria-label="anchor" href="#launch-the-module"></a>
+</h3>
 <p>Thus, to use <code>Magellan</code> with a process module, it is necessary to load in memory the functions relatives to those modules (it can be in individual scripts or included in a package).</p>
 <p>Suppose we have a module called ‘process1’. We have to load the two functions mod_process1_ui() and mod_process1_server() (Magellan will call those functions). If there are not found, a warning appears and Magellan stops.</p>
 <p>In the example below, one launch Magellan with the process ‘Process1’ and an dataset called ‘feat1’, provided by Magellan.</p>
@@ -286,14 +286,14 @@ Pipeline layouts.
 </li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="navigate-through-steps">Navigate through steps <a class="anchor" aria-label="anchor" href="#navigate-through-steps"></a>
-</h2>
+<div class="section level3">
+<h3 id="navigate-through-steps">Navigate through steps <a class="anchor" aria-label="anchor" href="#navigate-through-steps"></a>
+</h3>
 <p>Thanks to the buttons ‘Next’ and ‘Prev’, the user can view the different steps without execute them.</p>
 </div>
-<div class="section level2">
-<h2 id="validate-a-step">Validate a step <a class="anchor" aria-label="anchor" href="#validate-a-step"></a>
-</h2>
+<div class="section level3">
+<h3 id="validate-a-step">Validate a step <a class="anchor" aria-label="anchor" href="#validate-a-step"></a>
+</h3>
 <p>The workflow manager is a sorted list in which the execution of different steps obey to a certain order. This order is defined in the configuration of the process and cannot be modified by the user.</p>
 <p>So, the steps are executed from the first one (left) to the last one, at the right of the timeline.</p>
 <p>By default, all steps are <code>undone</code>. At any moment, the validation of the current step (by clicking on its <code>Perform</code> button) has several effects:</p>
@@ -321,9 +321,9 @@ Process navigation UI.
 <strong>State 3</strong>: The step ‘Step3’ is now validated, thus the two last ones are enabled.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="reset-a-step">Reset a step <a class="anchor" aria-label="anchor" href="#reset-a-step"></a>
-</h2>
+<div class="section level3">
+<h3 id="reset-a-step">Reset a step <a class="anchor" aria-label="anchor" href="#reset-a-step"></a>
+</h3>
 <p>At this lower level of navigation (process), The button <code>Reset</code> is used to reset the current process. Obviously, reseting steps after the last validated one has no effect on the workflow.</p>
 <p>Rules of reseting:</p>
 <ul>
@@ -334,9 +334,9 @@ Process navigation UI.
 </ul>
 <p>Example Suppose there are four steps (named from 1 to 5). Steps 1, 2 are validated, step 3 is skipped and the current step is 4.</p>
 </div>
-<div class="section level2">
-<h2 id="save-the-process">Save the process <a class="anchor" aria-label="anchor" href="#save-the-process"></a>
-</h2>
+<div class="section level3">
+<h3 id="save-the-process">Save the process <a class="anchor" aria-label="anchor" href="#save-the-process"></a>
+</h3>
 <p>When the last step (‘Save’) is enabled (which is the case even if there are skipped steps), it is possible to finish the process.</p>
 <p>This step is simple as it contains only a ‘Save’ button. By clicking on it, the output variable of the process is instantiated with the result of the entire process. If this process has been launched from another one (i.e. pipeline), this output dataset is caught by this caller program.</p>
 <p>The effect of this action is to enable the steps that can be enabled</p>
@@ -348,14 +348,14 @@ Process navigation UI.
 </ul>
 </div>
 </div>
-<div class="section level1">
-<h1 id="pipeline-workflow">Pipeline workflow <a class="anchor" aria-label="anchor" href="#pipeline-workflow"></a>
-</h1>
+<div class="section level2">
+<h2 id="pipeline-workflow">Pipeline workflow <a class="anchor" aria-label="anchor" href="#pipeline-workflow"></a>
+</h2>
 <p>This section describes the behaviour of a complex workflow with two levels.</p>
 <p>Here, each step is itself a (simple or composed) workflow (see xxx)</p>
-<div class="section level2">
-<h2 id="launch-the-module-1">Launch the module <a class="anchor" aria-label="anchor" href="#launch-the-module-1"></a>
-</h2>
+<div class="section level3">
+<h3 id="launch-the-module-1">Launch the module <a class="anchor" aria-label="anchor" href="#launch-the-module-1"></a>
+</h3>
 <p>The same code can be used for a pipeline module. But, it is necessary to both have the fucntions for the pipeline module and the functions for each of its process</p>
 <p>For example, suppose that we use a pipeline ‘PipeA’ which uses two processes called ‘Proc1’ and ‘Proc2’. Then, before launching the app, the following functions may be loaded in R:</p>
 <ul>
@@ -369,28 +369,28 @@ Process navigation UI.
 <p>In the complex workflow, the managment of results from each step is different. Each steps’s result is stored in memory. This strategy consumes more memory but offer a more flexibility to xxx.</p>
 <p>However, there are some little differences and additional features when working with two or more levels: the ‘remote commands’.</p>
 </div>
-<div class="section level2">
-<h2 id="navigate-through-processes">Navigate through processes <a class="anchor" aria-label="anchor" href="#navigate-through-processes"></a>
-</h2>
+<div class="section level3">
+<h3 id="navigate-through-processes">Navigate through processes <a class="anchor" aria-label="anchor" href="#navigate-through-processes"></a>
+</h3>
 <p>The same rules of navigation as (xxx) apply here.</p>
 </div>
-<div class="section level2">
-<h2 id="validate-a-process">Validate a process <a class="anchor" aria-label="anchor" href="#validate-a-process"></a>
-</h2>
+<div class="section level3">
+<h3 id="validate-a-process">Validate a process <a class="anchor" aria-label="anchor" href="#validate-a-process"></a>
+</h3>
 <p>The validation here differs from the simple workflow. There is no specific ‘Save’ button: the button used to validate a workflow is implemented in the last step of a simple workflow. Its validation leads to automatically xxx</p>
 <p>In the latter case,</p>
 <p>Here, each time a steps is validated (with its own interface),</p>
 </div>
-<div class="section level2">
-<h2 id="resetting">Resetting <a class="anchor" aria-label="anchor" href="#resetting"></a>
-</h2>
 <div class="section level3">
-<h3 id="a-single-process">A single process<a class="anchor" aria-label="anchor" href="#a-single-process"></a>
+<h3 id="resetting">Resetting <a class="anchor" aria-label="anchor" href="#resetting"></a>
 </h3>
+<div class="section level4">
+<h4 id="a-single-process">A single process<a class="anchor" aria-label="anchor" href="#a-single-process"></a>
+</h4>
 </div>
-<div class="section level3">
-<h3 id="the-entire-pipeline">The entire pipeline<a class="anchor" aria-label="anchor" href="#the-entire-pipeline"></a>
-</h3>
+<div class="section level4">
+<h4 id="the-entire-pipeline">The entire pipeline<a class="anchor" aria-label="anchor" href="#the-entire-pipeline"></a>
+</h4>
 <p>As for any workflow in <code>Magellan</code>, a ‘Reset’ button allows to set the current step back to its default values. The effects of this action are the same as those described in section xxx for a single process. The difference here is that a process is a workflow itself, which means that resetting a step in a complex workflow also implies resetting a basic workflow. In such a case, it is like a ‘remote reset’ for the lower level workflow: it is reseted not by clicking on its own ‘Reset’ button but via the ‘Reset’ button of another workflow. However, the effects are the same.</p>
 <p>The other difference resides in the strategy implemented in <code>Magellan</code>. When reseting the current step, all further steps are also (and automatically) reseted. This guarantees that the relative order to execution of processes in the workflow is correct. This feature is possible with complex workflows because the module keeps in memory the datasets generated by each step, which is not the case with simple workflows (see section xxx)</p>
 <p>The ‘remote reset’ action come with the click on the Reset button on a higher level of workflow. Contrarly to the basic level, it does not reset all the workflow but only the current step. As for the simple workflow, this resets the entire interface by setting widgets to their default values. Moreover, the dataset in this step is emptied. Automatically, if there is a dataset ready to sent to this step, it is done.</p>
@@ -398,9 +398,9 @@ Process navigation UI.
 <p>The other effect is that it also resets all the underneath workflow: all its steps are reseted, widgets sets to their default values and it go to its start state.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="save-the-pipeline">Save the pipeline<a class="anchor" aria-label="anchor" href="#save-the-pipeline"></a>
-</h2>
+<div class="section level3">
+<h3 id="save-the-pipeline">Save the pipeline<a class="anchor" aria-label="anchor" href="#save-the-pipeline"></a>
+</h3>
 <p>xxxx</p>
 </div>
 </div>
@@ -423,7 +423,7 @@ Process navigation UI.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

@@ -46,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -91,7 +91,7 @@
             <h3 data-toc-skip class="subtitle">A developer’s guidelines</h3>
                         <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
             
-            <h4 data-toc-skip class="date">décembre 15, 2021</h4>
+            <h4 data-toc-skip class="date">mars 22, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/CreateComplexWorkflow.Rmd" class="external-link"><code>vignettes/CreateComplexWorkflow.Rmd</code></a></small>
       <div class="hidden name"><code>CreateComplexWorkflow.Rmd</code></div>
@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><div class="section level1">
-<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h1>
+</script><div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This vignette explains how to create a new pipeline in the Prostar framework. A pipeline is a set of data processes applied to a dataset (ie an object of class QFeatures).</p>
 <p>A pipeline can be associated with datasets of specific type. Such, the use of a certain dataset restraint the set of possible pipelines. For example, if the current dataset is a protein one, it can be processed only by a protein pipeline.</p>
 <p>It is divided in several parts:</p>
@@ -123,9 +123,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <li>xxx</li>
 </ol>
 </div>
-<div class="section level1">
-<h1 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
-</h1>
+<div class="section level2">
+<h2 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
+</h2>
 <p>This file (R/config.R) contains a list named def.pipeline in which each element is the definition of one pipeline implemented in Prostar. Here is a list with only one element:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pipeline.defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -136,18 +136,18 @@ document.addEventListener("DOMContentLoaded", function() {
              <span class="op">)</span></code></pre></div>
 <p>The name of each item (here <em>peptide</em>) is the name of the pipeline. It is important because it serves asa reference all along the code of Prostar. Each element is a vector a processes names with a specific nomenclature which has to be respected. Each process name begins with the keyword ‘module_’, followed by the name of the pipeline (here ‘Peptide’) and ends with the proper name of the process. This complete name is also the name of the file containing the code for the process. for example, the file ‘module_Peptide_Normalization.R’ contains the code for the normalization process over peptides.</p>
 </div>
-<div class="section level1">
-<h1 id="instanciation-of-a-pipeline">Instanciation of a pipeline<a class="anchor" aria-label="anchor" href="#instanciation-of-a-pipeline"></a>
-</h1>
+<div class="section level2">
+<h2 id="instanciation-of-a-pipeline">Instanciation of a pipeline<a class="anchor" aria-label="anchor" href="#instanciation-of-a-pipeline"></a>
+</h2>
 <p>A pipeline is choosen by the user when he loads a dataset (the UI proposes a liste a possible pipelines for the type of data).The type of pipeline used by the user is set in a variable in the metadata of the dataset. Thus, back to Prostar, it is easy to know which pipeline has to be activated.</p>
 <p>Once a dataset has been loaded in Prostar, subitems are created in the menu ‘Data processing’</p>
 <p>By default, when no dataset has been loaded yet, all the steps are disabled # Writing new process</p>
 <p>A process such as usable with Magellan is a R6 classes which contains: * the configuration of the process, * the list of screens with their severs (shiny)</p>
 <p>This class inherits from classes in Magellan: this is how the core engine is integrated in xxx.</p>
 </div>
-<div class="section level1">
-<h1 id="writing-a-new-pipeline">Writing a new pipeline<a class="anchor" aria-label="anchor" href="#writing-a-new-pipeline"></a>
-</h1>
+<div class="section level2">
+<h2 id="writing-a-new-pipeline">Writing a new pipeline<a class="anchor" aria-label="anchor" href="#writing-a-new-pipeline"></a>
+</h2>
 </div>
   </div>
 
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

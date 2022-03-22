@@ -431,6 +431,7 @@ mod_nav_server <- function(id,
      # * if the variable is NULL. xxxx
      # * if the variable contains a dataset. xxx
      observeEvent(dataIn(), ignoreNULL = FALSE, ignoreInit = FALSE,{
+       req(rv$config)
        isolate({
          # A new value on dataIn() means a new dataset sent to the process
          #browser()
@@ -504,7 +505,7 @@ mod_nav_server <- function(id,
      # Catch the time when the mode is defined
      #{ Then, launch observers and fucntions specific to 
      # processes nor pipelines
-     observeEvent(req(rv$config@mode), {
+     observeEvent(req(rv$config), {
        
         if (!(rv$config@mode %in% c('process', 'pipeline'))){
            warning("'mode' must be either 'process' or 'pipeline'.")
@@ -635,6 +636,11 @@ mod_nav_server <- function(id,
                 # load the dataset in work variable 'dataIn'
                 if (rv$current.pos==1)
                   rv$dataIn <- rv$temp.dataIn
+                # View intermediate datasets
+                else if (rv$current.pos > 1 && rv$current.pos < rv$length)
+                  rv$dataIn <- rv$proc$dataOut()$value
+                
+                # Manage the last dataset which is the real one returned by the process
                 else if (rv$current.pos == rv$length){
                     # Update the work variable of the nav_process with the dataset returned by the process
                     # Thus, the variable rv$temp.dataIn keeps trace of the original dataset sent to
