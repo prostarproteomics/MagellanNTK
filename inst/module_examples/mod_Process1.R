@@ -342,7 +342,7 @@ mod_Process1_server <- function(id,
                      rv$steps.enabled['Save']
                      ),
       if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
-        mod_Save_Dataset_ui(ns('createQuickLink'))
+        mod_dl_ui(ns('createQuickLink'))
       }
       )
       
@@ -357,9 +357,7 @@ mod_Process1_server <- function(id,
       dataOut$trigger <- Magellan::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      mod_Save_Dataset_server('createQuickLink', 
-                              dataIn = reactive({rv$dataIn})
-                              )
+      mod_dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

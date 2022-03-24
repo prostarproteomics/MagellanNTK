@@ -1,40 +1,59 @@
 #' @title mod_Load_Dataset
 #' 
 #' @description  A shiny Module.
+#' 
+#' 
+#' @examples 
+#' if(interactive()){
+#' data(ft_na)
+#' ui <- mod_dl_ui('dl')
+#' 
+#' server <- function(input, output, session) {
+#'   
+#'   mod_dl_server(id = 'dl',
+#'                 dataIn = reactive({ft_na})
+#'                 )
+#' }
+#' 
+#' shinyApp(ui=ui, server=server)
+#' 
+#' 
+#' }
+#' 
+#' 
+NULL
+
+
 #' @param id xxx
 #'
-#' @rdname mod_Save_Dataset
+#' @rdname mod_dl
 #' 
 #' @export
 #' 
-mod_Save_Dataset_ui <- function(id){
+mod_dl_ui <- function(id){
   ns <- NS(id)
-  uiOutput(ns('show_download_ui'))
+  downloadLink(ns('download'), 'Download dataset')
 }
 
+#' @param id xxx
 #' @param dataIn xxx
 #' 
 #' @return NA 
 #' 
-#' @rdname mod_Save_Dataset
+#' @rdname mod_dl
 #' 
 #' @export
 #' 
-mod_Save_Dataset_server <- function(id, 
-                                    dataIn = reactive({NULL})
-                                    ){
-  
-  
-  req(dataIn())
+mod_dl_server <- function(id, 
+                          dataIn = reactive({NULL})
+                          ){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
-    
-    output$show_download_ui <- renderUI({
-      downloadLink(ns('download'), 'Download dataset')
-    })
+
     
     
+    #req(dataIn())
     
     output$download <- downloadHandler(
       filename = function() {
@@ -42,6 +61,7 @@ mod_Save_Dataset_server <- function(id,
         paste0('foo.rds')
         },
       content = function(file) {
+        print('tutu')
         fname <- tempfile()
         saveRDS(dataIn(), file = fname)
         file.copy(fname, file)
