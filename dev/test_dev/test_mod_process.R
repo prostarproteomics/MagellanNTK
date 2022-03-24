@@ -73,15 +73,6 @@ mod_test_process_server <- function(id){
                                          is.skipped = reactive({rv$remoteSkipped})
                                          )
     
-    
-    
-    observeEvent(rv$dataOut$dataOut()$trigger, {
-      print('totototo')
-      print(names(rv$dataOut$dataOut()$value))
-      #browser()
-    })
-    
-    
   }, priority=1000)
   
   

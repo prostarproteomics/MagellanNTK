@@ -52,17 +52,12 @@ mod_dl_server <- function(id,
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-    
-    
-    #req(dataIn())
-    
     output$download <- downloadHandler(
       filename = function() {
         #paste0(input$nameExport, '.rds')
         paste0('foo.rds')
         },
       content = function(file) {
-        print('tutu')
         fname <- tempfile()
         saveRDS(dataIn(), file = fname)
         file.copy(fname, file)

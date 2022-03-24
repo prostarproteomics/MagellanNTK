@@ -206,12 +206,7 @@ mod_Process1_server <- function(id,
                            class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
     })
-    
-    observeEvent(rv.widgets$Step1_select1,{
-      
-      print(rv.widgets$Step1_select1)
-    })
-    
+
     # This part must be customized by the developer of a new module
     output$Step1_select1_ui <- renderUI({
       widget <- selectInput(ns('Step1_select1'),
