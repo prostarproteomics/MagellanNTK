@@ -1,8 +1,9 @@
-#' @title mod_Load_Dataset
+#' @title mod_dl
 #' 
 #' @description  A shiny Module.
 #' 
-#' 
+#' @name mod-dl
+
 #' @examples 
 #' if(interactive()){
 #' data(ft_na)
@@ -26,7 +27,7 @@ NULL
 
 #' @param id xxx
 #'
-#' @rdname mod_dl
+#' @rdname mod-dl
 #' 
 #' @export
 #' 
@@ -40,7 +41,7 @@ mod_dl_ui <- function(id){
 #' 
 #' @return NA 
 #' 
-#' @rdname mod_dl
+#' @rdname mod-dl
 #' 
 #' @export
 #' 
