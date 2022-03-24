@@ -26,6 +26,7 @@ Collate:
     app_server.R
     app_ui.R
     run_app.R
+    doc-data.R
     global.R
     mod_bsmodal.R
     mod_popover_for_help.R

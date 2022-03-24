@@ -4,10 +4,12 @@
 \alias{Get_AdditionalModule_Core_Code}
 \title{Code for declaring xxx}
 \usage{
-Get_AdditionalModule_Core_Code(w.names, rv.custom.names)
+Get_AdditionalModule_Core_Code(w.names, rv.custom.names = NULL)
 }
 \arguments{
 \item{w.names}{xxx}
+
+\item{rv.custom.names}{xxx}
 }
 \description{
 This function xxx

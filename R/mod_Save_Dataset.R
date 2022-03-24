@@ -31,7 +31,7 @@ mod_Save_Dataset_server <- function(id,
     ns <- session$ns
     
     output$show_download_ui <- renderUI({
-      downloadLink(ns('download'), 'Quick link')
+      downloadLink(ns('download'), 'Download dataset')
     })
     
     

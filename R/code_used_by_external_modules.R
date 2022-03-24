@@ -73,8 +73,7 @@ Get_Code_Declare_widgets <- function(widgets.names=NULL){
 #' To avoid confusion, the first string is the name of the step while the second is the name
 #' of the widget
 #' 
-#' @param widgets.names A `list` containing the names of the widgets in all
-#' steps of the module.
+#' @param rv.custom.names A `list` containing the names of the custom values.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -296,6 +295,7 @@ code
 #' # Generate dynamically the observeEvent function for each widget
 #' 
 #' @param w.names xxx
+#' @param rv.custom.names xxx
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -332,6 +332,7 @@ Get_Worflow_Core_Code <- function(w.names, rv.custom.names){
 #' # Generate dynamically the observeEvent function for each widget
 #' 
 #' @param w.names xxx
+#' @param rv.custom.names xxx
 #' 
 #' @author Samuel Wieczorek
 #' 

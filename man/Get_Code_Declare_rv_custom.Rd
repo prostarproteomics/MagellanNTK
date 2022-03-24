@@ -7,8 +7,7 @@
 Get_Code_Declare_rv_custom(rv.custom.names = NULL)
 }
 \arguments{
-\item{widgets.names}{A `list` containing the names of the widgets in all
-steps of the module.}
+\item{rv.custom.names}{A `list` containing the names of the custom values.}
 }
 \description{
 This function create the source code needed inside a module

@@ -53,7 +53,8 @@ run_workflow <- function(id,
   ui <- fluidPage(
     tagList(
       uiOutput('UI'),
-      uiOutput('debugInfos_ui')
+      uiOutput('debugInfos_ui'),
+      uiOutput('save_dataset_ui')
     )
   )
   
@@ -76,7 +77,11 @@ run_workflow <- function(id,
       mod_Debug_Infos_ui('debug_infos')
     })
     
-    
+    output$save_dataset_ui <- renderUI({
+      req(rv$dataOut)
+      req(rv$dataOut$dataOut()$value)
+      mod_Save_Dataset_ui('exemple')
+    })
     
     observeEvent(req(dataIn()), {
       rv$dataOut <- mod_nav_server(id = id,
@@ -85,6 +90,10 @@ run_workflow <- function(id,
                                    tl.layout = tl.layout
                                    )
       
+      mod_Save_Dataset_server(id = 'exemple', 
+                              dataIn = reactive({rv$dataOut$dataOut()$value}))
+      
+      
       mod_Debug_Infos_server(id = 'debug_infos',
                              title = 'Infos from shiny app',
                              rv.dataIn = reactive({dataIn()}),
@@ -92,12 +101,7 @@ run_workflow <- function(id,
       )
       })
     
-    observe( {
-      req(rv$dataOut)
-      rv$dataOut$dataOut()$value
-      mod_Save_Dataset_server(id = 'exemple', 
-                            dataIn = reactive({rv$dataOut$dataOut()$value}))
-    })
+    
 
   }
   
