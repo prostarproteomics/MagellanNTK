@@ -331,21 +331,22 @@ mod_Process1_server <- function(id,
        tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Save_btn_validate_ui'))
+        uiOutput(ns('Save_btn_validate_ui')),
+        uiOutput(ns('mod_dl_ui'))
       )
     })
     
+    output$mod_dl_ui <- renderUI({
+      req(config@mode == 'process')
+      req(rv$steps.status['Save'] == global$VALIDATED)
+      mod_dl_ui(ns('createQuickLink'))
+    })
+    
     output$Save_btn_validate_ui <- renderUI({
-      tagList(
-        toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
+      toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
                                   class = btn_success_color),
                      rv$steps.enabled['Save']
-                     ),
-      if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
-        mod_dl_ui(ns('createQuickLink'))
-      }
-      )
-      
+                     )
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
