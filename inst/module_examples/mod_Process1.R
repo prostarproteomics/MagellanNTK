@@ -86,6 +86,10 @@ mod_Process1_server <- function(id,
   )
   
   
+  rv.custom.default.values <- list(
+    mod_foo = NULL
+  )
+  
   ###-------------------------------------------------------------###
   ###                                                             ###
   ### ------------------- MODULE SERVER --------------------------###
@@ -96,10 +100,11 @@ mod_Process1_server <- function(id,
 
     #browser()
     eval(str2expression(Get_Worflow_Core_Code(
-      w.names = names(widgets.default.values)
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
     )))
     
-    rv.custom <- reactiveValues()
+    
     
     # >>>
     # >>> START ------------- Code for Description UI---------------
@@ -172,6 +177,7 @@ mod_Process1_server <- function(id,
         uiOutput(ns('Step1_select1_ui')),
         uiOutput(ns('Step1_select2_ui')),
         uiOutput(ns('Step1_select3_ui')),
+        mod_foo_ui(ns('foo')),
         # Insert validation button
         uiOutput(ns('Step1_btn_validate_ui')),
         
@@ -183,10 +189,16 @@ mod_Process1_server <- function(id,
 
     # >>> START: Definition of the widgets
     
-    output$Step1_btn1_ui <- renderUI({
-      
-      
-    })
+    
+    
+    
+    rv.custom$mod_foo <- mod_foo_server('foo',
+                                        obj = reactive({rv$dataIn}),
+                                        reset = reactive({NULL}),
+                                        is.enabled = reactive({rv$steps.enabled['Step1']})
+                                        )
+
+
     
     output$Step1_btn1_ui <- renderUI({
       widget <- actionButton(ns('Step1_btn1'),

@@ -1,3 +1,11 @@
+##' @title Config class definition
+##' 
+##' @description 
+##' 
+##' This class is used to store the configuration of any process
+##' used with Magellan. It contains a validity function to ensure
+##' that the format is correct.
+##' 
 ##' @export Config
 ##' @exportClass Config
 ##' @rdname config

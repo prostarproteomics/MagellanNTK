@@ -64,6 +64,45 @@ Get_Code_Declare_widgets <- function(widgets.names=NULL){
 
 
 
+#' @title Code for declaring rv.custom.default.values reactive variable
+#' 
+#' @description This function create the source code needed inside a module
+#' to declare the reactive variable called 'rv.custom.default.values'.
+#' # Declaration of the variables that will contain the values of the user
+#' variables.
+#' To avoid confusion, the first string is the name of the step while the second is the name
+#' of the widget
+#' 
+#' @param widgets.names A `list` containing the names of the widgets in all
+#' steps of the module.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' custom <- list(foo1 = list(), foo2 = 3)
+#' code <- Get_Code_Declare_rv_custom(names(custom))
+#' cat(code)
+#' }
+#' 
+Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL){
+  # If one is on a composed workflow which do not have explicit ui
+  if (is.null(rv.custom.names))
+    declare_rv_custom <- "rv.custom <- reactiveValues()\n\n"
+  else {
+    basis <- "w.name = rv.custom.default.values$w.name"
+    ls_list <- lapply(rv.custom.names,
+                      function(x) gsub('w.name', x, basis) )
+    declare_rv_custom <- paste0("rv.custom <- reactiveValues(\n",
+                                 paste0("\t", ls_list, sep="", collapse= ",\n"),
+                                 "\n)\n\n")
+  }
+  
+  declare_rv_custom
+}
+
 
 
 
@@ -270,16 +309,69 @@ code
 #' 
 #' @export
 #' 
-Get_Worflow_Core_Code <- function(w.names){
+Get_Worflow_Core_Code <- function(w.names, rv.custom.names){
   core <- paste0(
     Get_Code_Declare_widgets(w.names),
     Get_Code_Update_Config_Variable(),
     Get_Code_for_ObserveEvent_widgets(w.names),
     Get_Code_for_rv_reactiveValues(),
+    Get_Code_Declare_rv_custom(rv.custom.names),
     Get_Code_for_dataOut(),
     Get_Code_for_General_observeEvents(),
     sep = "\n"
   )
-
+  
   core
 }
+
+
+
+#' @title Code for declaring xxx
+#' 
+#' @description This function xxx
+#' # Generate dynamically the observeEvent function for each widget
+#' 
+#' @param w.names xxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' \dontrun{
+#' widgets <- paste0('widget', 1:3)
+#' steps <- paste0('step', 1:3)
+#' code <- SimpleWorflowCoreCode(widgets, steps)
+#' cat(code)
+#' }
+#' 
+#' @export
+#' 
+Get_AdditionalModule_Core_Code <- function(w.names, rv.custom.names = NULL){
+  core <- paste0(
+    Get_Code_Declare_widgets(w.names),
+    Get_Code_for_ObserveEvent_widgets(w.names),
+    Get_Code_for_rv_reactiveValues(),
+    Get_Code_Declare_rv_custom(rv.custom.names),
+    Get_Code_for_dataOut(),
+    Get_Code_for_AddMod_observeEvents(),
+    sep = "\n"
+  )
+  
+  core
+}
+
+
+Get_Code_for_AddMod_observeEvents  <- function(){
+  code <- "
+
+observeEvent(reset(), {
+      lapply(names(rv.widgets), function(x){
+        rv.widgets[[x]] <- widgets.default.values[[x]]
+      })
+})   
+      
+
+"
+  
+  code
+}
+
