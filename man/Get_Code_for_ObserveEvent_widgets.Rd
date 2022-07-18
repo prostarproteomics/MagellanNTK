@@ -10,16 +10,16 @@ Get_Code_for_ObserveEvent_widgets(widgets.names = NULL)
 \item{widgets.names}{A `list` containing the names of the widgets in all
 steps of the module.}
 }
+\value{
+NA
+}
 \description{
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 }
 \examples{
-\dontrun{
-widgets <- paste0('widget', 1:3)
-code <- Get_Code_for_ObserveEvent_widgets(widgets)
-cat(code)
-}
+widgets <- paste0("widget", 1:3)
+Get_Code_for_ObserveEvent_widgets(widgets)
 
 }
 \author{

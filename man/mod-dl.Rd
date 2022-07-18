@@ -8,9 +8,12 @@
 \usage{
 mod_dl_ui(id)
 
-mod_dl_server(id, dataIn = reactive({
-    NULL
-}))
+mod_dl_server(
+  id,
+  dataIn = reactive({
+     NULL
+ })
+)
 }
 \arguments{
 \item{id}{xxx}
@@ -24,21 +27,16 @@ NA
 A shiny Module.
 }
 \examples{
-if(interactive()){
-data(ft_na)
-ui <- mod_dl_ui('dl')
+if (interactive()) {
+    data(ft_na)
+    ui <- mod_dl_ui("dl")
 
-server <- function(input, output, session) {
-  
-  mod_dl_server(id = 'dl',
-                dataIn = reactive({ft_na})
-                )
+    server <- function(input, output, session) {
+        mod_dl_server(
+            id = "dl",
+            dataIn = reactive({ft_na})
+        )}
+    shinyApp(ui = ui, server = server)
 }
-
-shinyApp(ui=ui, server=server)
-
-
-}
-
 
 }

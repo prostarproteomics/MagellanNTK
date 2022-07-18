@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_save.R
 \name{Save_Object}
 \alias{Save_Object}
-\title{xxx}
+\title{Save an R object.}
 \usage{
 Save_Object(object, file)
 }
@@ -11,6 +11,15 @@ Save_Object(object, file)
 
 \item{file}{A `characte(1)` naming the file to save the object.}
 }
+\value{
+NA
+}
 \description{
-xxx
+This function saves an R object to a '.rda' file.
+}
+\examples{
+data(feat1)
+Save_Object(feat1, 'foo.rda')
+unlink('foo.rda')
+
 }

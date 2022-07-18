@@ -10,15 +10,33 @@ mod_Debug_Infos_ui(id)
 mod_Debug_Infos_server(
   id,
   title = NULL,
-  config = reactive({     NULL }),
-  rv.dataIn = reactive({     NULL }),
-  dataIn = reactive({     NULL }),
-  dataOut = reactive({     NULL }),
-  steps.enabled = reactive({     NULL }),
-  steps.status = reactive({     NULL }),
-  steps.skipped = reactive({     NULL }),
-  current.pos = reactive({     NULL }),
-  is.enabled = reactive({     NULL })
+  config = reactive({
+     NULL
+ }),
+  rv.dataIn = reactive({
+     NULL
+ }),
+  dataIn = reactive({
+     NULL
+ }),
+  dataOut = reactive({
+     NULL
+ }),
+  steps.enabled = reactive({
+     NULL
+ }),
+  steps.status = reactive({
+     NULL
+ }),
+  steps.skipped = reactive({
+     NULL
+ }),
+  current.pos = reactive({
+     NULL
+ }),
+  is.enabled = reactive({
+     NULL
+ })
 )
 }
 \arguments{
@@ -45,7 +63,7 @@ mod_Debug_Infos_server(
 \item{is.enabled}{A `logical(1)` xxxx}
 }
 \value{
-xxx
+NA
 }
 \description{
 A shiny Module.
@@ -53,15 +71,16 @@ A shiny Module.
 xxx
 }
 \examples{
-\dontrun{
-
-ui <- fluidPage(
-  mod_format_DT_ui('tbl')
-)
-server <- function(input, output){
-  mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
-}
-shinyApp(ui, server)
+if (interactive()) {
+    ui <- fluidPage(
+        mod_format_DT_ui("tbl")
+    )
+    server <- function(input, output) {
+        mod_format_DT_server(id = "tbl", table2show = reactive({
+            head(iris)
+        }))
+    }
+    shinyApp(ui, server)
 }
 
 }

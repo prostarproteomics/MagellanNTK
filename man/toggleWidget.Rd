@@ -17,6 +17,18 @@ NA
 \description{
 Returns the date and time in timestamp UNIX format.
 }
+\examples{
+if (interactive()) {
+    ui <- shiny::fluidPage(uiOutput('foo'))
+    
+    server <- function(input, output, session) {
+    wgt <- actionButton('foo_btn', 'foo')
+    output$foo <- renderUI({toggleWidget(wgt, FALSE)})
+         }
+    shiny::shinyApp(ui = ui, server = server)
+}
+
+}
 \author{
 Samuel Wieczorek
 }

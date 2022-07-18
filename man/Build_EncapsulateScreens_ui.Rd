@@ -19,3 +19,7 @@ A `renderUI` function
 \description{
 xxx
 }
+\examples{
+NULL
+
+}

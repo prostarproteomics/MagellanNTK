@@ -12,6 +12,10 @@ NA
 \description{
 Returns the date and time in timestamp UNIX format.
 }
+\examples{
+load_examples()
+
+}
 \author{
 Samuel Wieczorek
 }

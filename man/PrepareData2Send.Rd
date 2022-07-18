@@ -11,6 +11,13 @@ PrepareData2Send(rv, pos)
 
 \item{pos}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
+}
+\examples{
+NULL
+
 }

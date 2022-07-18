@@ -15,6 +15,10 @@ A shiny UI
 \description{
 This function displays the timeline UI with a horizontal layout
 }
+\examples{
+NULL
+
+}
 \author{
 Samuel Wieczorek
 }

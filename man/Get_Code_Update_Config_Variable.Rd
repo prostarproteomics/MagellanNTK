@@ -12,6 +12,11 @@ A `string` containing some R code
 \description{
 This function generates the necessary code to
 modify the variable 'config' (slots steps and mandatory). It adds
-a 'Description' step and a TRUE value at the beginning of the 'steps' and 'mandatory'
+a 'Description' step and a TRUE value at the beginning of the 'steps'
+and 'mandatory'
  list, erases all white spaces for the names of the steps.
+}
+\examples{
+Get_Code_Update_Config_Variable()
+
 }

@@ -13,10 +13,7 @@ A `string` containing some R code
 This function createxxx
 }
 \examples{
-\dontrun{
-code <- Get_Code_for_rv_reactiveValues()
-cat(code)
-}
+Get_Code_for_rv_reactiveValues()
 
 }
 \author{

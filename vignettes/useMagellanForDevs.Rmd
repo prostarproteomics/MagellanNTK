@@ -4,26 +4,26 @@ subtitle: "A developer's guideline"
 author: "Samuel Wieczorek"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
-  BiocStyle::html_document:
-    toc: true
-    highlight: tango
+    BiocStyle::html_document:
+        toc: true
+        highlight: tango
 number_sections: true
 theme: united
 keep_md: true
 papersize: a4
 vignette: >
-  %\VignetteIndexEntry{Use Magellan with external R package}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteIndexEntry{Use Magellan with external R package}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
-  markdown: 
-    wrap: 72
+    markdown: 
+        wrap: 72
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
-                      collapse = TRUE,
-                      comment = "#>")
+    collapse = TRUE,
+    comment = "#>")
 ```
 
 ```{r style, echo = FALSE, results = 'asis', include=TRUE}
@@ -34,61 +34,59 @@ BiocStyle::markdown()
 
 The code of `Magellan` has two main objectives:
 
--   be generic to handle several different types of datasets,
--   be sufficiently xxx to include most of the xxx so as to minimize the
-    code to write for process modules. Thus, process modules, in a
-    sense, only contains the ui elements for the process and the logics
-    of the modules.
+- be generic to handle several different types of datasets,
+- be sufficiently xxx to include most of the xxx so as to minimize the code to 
+write for process modules. Thus, process modules, in a sense, only contains 
+the ui elements for the process and the logics of the modules.
 
-It facilitates the work for writing process modules but has some
-contraints such as the naming conventions which are important. To allow
-writing less 'dev' code, the core of `Magellan` is mostly based on
-function names which are dynamically built from the module processes.
-So, respect the naming conventions is fundamental.
+It facilitates the work for writing process modules but has some contraints 
+such as the naming conventions which are important. To allow writing less 'dev'
+code, the core of `Magellan` is mostly based on function names which are 
+dynamically built from the module processes. So, respect the naming conventions 
+is fundamental.
 
-The package `Magellan` is a generic package that offers a graphical
-workflow manager, based on Shiny modules. It is very generic and can
-handle different types of objects but they must be of type `list` (see
-\ref{objecttypes}).
+The package `Magellan` is a generic package that offers a graphical workflow 
+manager, based on Shiny modules. It is very generic and can handle different 
+types of objects but they must be of type `list` (see \ref{objecttypes}).
 
-`Magellan` is intimely linked to the data analysis modules and
-vice-versa. So as to facilitate both the development of a new module and
-the maintenance, we have volontarly want to have a quite constraint code
-and Module template. It guarantees xxx
+`Magellan` is intimely linked to the data analysis modules and vice-versa. So 
+as to facilitate both the development of a new module and the maintenance, we 
+have volontarly want to have a quite constraint code and Module template. It 
+guarantees xxx
 
 ## General principle of work
 
-Magellan est en fait un module Shiny qui fait l'interface entre
-l'application finale et le code des processus de traitements de données.
-Il ne peut être lancé seul. Pour pouvoir l'utiliser, il est nécessaire
-d'avoir des modules (au sens Shiny) contenant les traitements de données
-et c'est Magellan qui va travailler avec ce module (il met en forme les
-interfaces à présenter à l'utilisateur)
+Magellan est en fait un module Shiny qui fait l'interface entre l'application 
+finale et le code des processus de traitements de données. Il ne peut être 
+lancé seul. Pour pouvoir l'utiliser, il est nécessaire d'avoir des modules 
+(au sens Shiny) contenant les traitements de données et c'est Magellan qui va 
+travailler avec ce module (il met en forme les interfaces à présenter à 
+l'utilisateur)
 
-Ces modules peuvent être écrits dans un script R ou faire partie d'un
-package. L'important est que les fonctions ui() et server() de ces
-modules fassent partie du même environnement que le package Magellan
+Ces modules peuvent être écrits dans un script R ou faire partie d'un package. 
+L'important est que les fonctions ui() et server() de ces modules fassent 
+partie du même environnement que le package Magellan
 
 Le package Magellan gère principalement deux aspects :
 
--   la navigation entre les différentes interfaces graphiques (soit des
-    étapes d'un processus de données, soit des différents processus)
-    (Avancer, Reculer, Reset)
+- la navigation entre les différentes interfaces graphiques (soit des étapes 
+d'un processus de données, soit des différents processus) (Avancer, Reculer, 
+Reset)
 
--   la gestion du dataset tout au long de l'exécution du workflow:
+- la gestion du dataset tout au long de l'exécution du workflow:
 
-    -   ajout des résultats de traitements
+    - ajout des résultats de traitements
 
-    -   suppréssion de résultats
+    - suppréssion de résultats
 
-    -   Reset de certains traitements ou reset global
+    - Reset de certains traitements ou reset global
 
 Ces différents aspects sont décrits dans le document utilisateur.
 
 ## Global architecture (How `Magellan` works)
 
-`Magellan` cannot be run alone, it is always run with a package which
-contains the information about the steps to manage.
+`Magellan` cannot be run alone, it is always run with a package which contains 
+the information about the steps to manage.
 
 ```{r 'globalArch', results='markup', fig.cap="Global architecture of connectivity between Magellan, Shiny and packages containing the code for modules.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/globalArch.png", error = FALSE)
@@ -97,22 +95,21 @@ knitr::include_graphics("./figs/globalArch.png", error = FALSE)
 The final shiny app is showed by Magellan, it is its functions that are
 called in the shiny app. Inside Magellan, three main operations are run:
 
--   Magellan needs to read the configuration of the module to adjust
-    some of its features (timelines, variables): those information are
-    stored in the code of the process. The first operation of Magellan
-    is to build the name of the source file for the module and to load
-    the source code. More specially, two infos are important:
+- Magellan needs to read the configuration of the module to adjust some of its 
+features (timelines, variables): those information are stored in the code of 
+the process. The first operation of Magellan is to build the name of the source 
+file for the module and to load the source code. More specially, two infos are 
+important:
 
-    -   the configuration of the process,
-    -   the list of UIs of the steps.
+    - the configuration of the process,
+    - the list of UIs of the steps.
 
--   This loading is accompanied by the insertion of some necessary code
-    in the module. Certain generic functions are stored in Magellan to
-    let the external package as light and easy to understand as
-    possible. While loading the source code, those functions are
-    inserted inside
+- This loading is accompanied by the insertion of some necessary code in the 
+module. Certain generic functions are stored in Magellan to let the external 
+package as light and easy to understand as possible. While loading the source 
+code, those functions are inserted inside
 
--   xxx
+- xxx
 
 ## Companion package
 
@@ -120,21 +117,20 @@ Nous décrivons ici quelques aspects fondamentaux des fonctions ui() et
 server() pour les modules de traitements de données qui seront gérés par
 Magellan.
 
-### Structure of a  Magellan-compliant module process
+### Structure of a Magellan-compliant module process
 
-Comme tout module Shiny, il doit comporter deux fonctions : ui() et
-server()
+Comme tout module Shiny, il doit comporter deux fonctions : ui() et server()
 
 Ces fonctions doivent avoir des noms construits de la manière suivante :
 4 chaînes de caractères séparées par un '\_':
 
--   xxx
+- xxx
 
--   xxxx
+- xxxx
 
--   xxxx
+- xxxx
 
--   xxxx
+- xxxx
 
 Dans l'exemple ci-dessous, il s'agit d'un module nommé 'Process1' et
 faisant partie d'un pipeline appelé 'PipelineA'.
@@ -149,58 +145,56 @@ mod_process_PipelineA_Process1_ui <- function(id){
 
 
 mod_process_PipeA_Proc1_server <- function(id,
-                                   nav.mode = 'process',
-                                   dataIn = reactive({NULL}),
-                                   steps.enabled = reactive({NULL}),
-                                   remoteReset = reactive({FALSE}),
-                                   current.pos = reactive({1})
-                                   ){
-  
-  # This list contains the basic configuration of the process
-  config <- list(
-    name = NULL,
-    parent = NULL,
-    steps = NULL,
-    mandatory = NULL
-  )
-  
-  # Define default selected values for widgets
-  # This is only for simple workflows
-  widgets.default.values <- list(
-    # Add your own code
-  )
-  
-  
-  ###-------------------------------------------------------------###
-  ###                                                             ###
-  ### ------------------- MODULE SERVER --------------------------###
-  ###                                                             ###
-  ###-------------------------------------------------------------###
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
+    nav.mode = 'process',
+    dataIn = reactive({NULL}),
+    steps.enabled = reactive({NULL}),
+    remoteReset = reactive({FALSE}),
+    current.pos = reactive({1})
+    ){
 
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    eval(str2expression(
-      SimpleWorflowCoreCode(
-        widgets = names(widgets.default.values),
-        steps = config$steps )
-      )
-      )
-    
-    # Add your UI stuff below
-    
-    
-    # Insert necessary code which is hosted by Magellan
-    # DO NOT MODIFY THIS LINE
-    eval(parse(text = Module_Return_Func()))
-  }
-  )
+    # This list contains the basic configuration of the process
+    config <- list(
+        name = NULL,
+        parent = NULL,
+        steps = NULL,
+        mandatory = NULL
+        )
+  
+    # Define default selected values for widgets
+    # This is only for simple workflows
+    widgets.default.values <- list(
+    # Add your own code
+    )
+
+    ###-------------------------------------------------------------###
+    ###                                                             ###
+    ### ------------------- MODULE SERVER --------------------------###
+    ###                                                             ###
+    ###-------------------------------------------------------------###
+    moduleServer(id, function(input, output, session) {
+        ns <- session$ns
+
+        # Insert necessary code which is hosted by Magellan
+        # DO NOT MODIFY THIS LINE
+        eval(str2expression(
+            SimpleWorflowCoreCode(
+            widgets = names(widgets.default.values),
+            steps = config$steps )
+            )
+        )
+
+        # Add your UI stuff below
+
+        # Insert necessary code which is hosted by Magellan
+        # DO NOT MODIFY THIS LINE
+        eval(parse(text = Module_Return_Func()))
+        }
+    )
 }
 
 ```
 
-### Structure of a  Magellan-compliant module pipeline
+### Structure of a Magellan-compliant module pipeline
 
 ### Conventions de nommage
 
@@ -216,22 +210,20 @@ la configuration des process et pipelines
 it is suitable for objects of type list for which the fundamental
 requirments are:
 
--   A list of items
+- A list of items
 
--   Each item is named and can be accessed either by its name or index
+- Each item is named and can be accessed either by its name or index
 
--   The exists an 'append' function and a 'Remove' function. The first
-    one adds an additional item at the end of the list (append
-    function). The last one can remove any of the item in the list (even
-    with a range) We hope that the source code of modules in `Magellan`
-    is sufficient to understand how it is structured. We give here
-    several additional tips for a better understanding.
+- The exists an 'append' function and a 'Remove' function. The first one adds 
+an additional item at the end of the list (append function). The last one can 
+remove any of the item in the list (even with a range) We hope that the source 
+code of modules in `Magellan` is sufficient to understand how it is structured. 
+We give here several additional tips for a better understanding.
 
-    `Magellan` can handle different types (classes) of objects but all
-    based on the type `list`. To manipulate such objects, it use most of
-    the R functions like `[]`, `[[]]`, etc... As it is generic, all
-    types of objects used by the modules must work with these basic
-    functions.
+ `Magellan` can handle different types (classes) of objects but all based on 
+ the type `list`. To manipulate such objects, it use most of the R functions 
+ like `[]`, `[[]]`, etc... As it is generic, all types of objects used by the 
+ modules must work with these basic functions.
 
 However, two functions cannot be really generic: xxx and xxx(). They are
 very simple (essentially they are wrappers for existing functions) but
@@ -249,10 +241,10 @@ Among those files
 
 The 'inst/scripts' directory contain the following files:
 
--   min_simple_workflow_app_example.R: xxx
--   min_simple_workflow_app.R: xxx
--   test_data.R: xxx
--   test_mod_Test_Process1.R: xxx
+- min_simple_workflow_app_example.R: xxx
+- min_simple_workflow_app.R: xxx
+- test_data.R: xxx
+- test_mod_Test_Process1.R: xxx
 
 The directory 'module_examples' contain xxx
 
@@ -265,8 +257,7 @@ necessary. Here, are th minimum code to launch a worklfow called Proc1
 which belongs to a composed workflow called 'PipeA'.
 
 Here is explained a minimal shiny app (code in
-'/inst/scripts/min_simple_workflow_app_example.R'). Here are the
-comments
+'/inst/scripts/min_simple_workflow_app_example.R'). Here are the comments
 
 Launch the packages
 
@@ -274,25 +265,25 @@ Launch the packages
 library(Magellan)
 
 f <- system.file("module_examples", 
-                 "example_module_PipelineA_Process1.R", 
-                 package="Magellan")
+    "example_module_PipelineA_Process1.R",
+    package="Magellan")
 source(file(f), local=TRUE)$value
 
 ui <- fluidPage(
-  mod_navigation_ui('PipelineA_Process1')
-  
+    mod_navigation_ui('PipelineA_Process1')
+
 server <- function(input, output){
-  data(feat1, package='Magellan')
-  rv <- reactiveValues(
-    dataIn = feat1,
-    dataOut = NULL
-  )
+    data(feat1, package='Magellan')
+    rv <- reactiveValues(
+        dataIn = feat1,
+        dataOut = NULL
+        )
   
-  observe({
-    rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
-                                        nav.mode = 'process',
-                                        dataIn = reactive({rv$dataIn})
-                                        )
+    observe({
+        rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+            nav.mode = 'process',
+            dataIn = reactive({rv$dataIn})
+            )
     }, priority=1000)
 }
 
@@ -338,8 +329,8 @@ explain how to write a module for simple and composed workflows.
 Whether the class of the object, it may be necessary to write the code
 for two functions that cannot be generic
 
--   An append function named Add_Datasets_to_Object()
--   A remove function named Keep_Datasets_from_Object()
+- An append function named Add_Datasets_to_Object()
+- A remove function named Keep_Datasets_from_Object()
 
 Those functions must be part of the external package to avoid too many
 dependancies for the package `Magellan`.
@@ -375,11 +366,10 @@ qu'il est primordial de respecter la nomenclature.
 
 Chacune des deux fonctions contient quatre mots-clés séparés par '\_':
 
--   `mod`:mot-clé fixe qui précise que la fonction est celle d'un
-    module,
--   `pipeline_name`: le nom du pipeline auquel le process appartient,
--   `process_name`: le nom du process lui-même,
--   `ui` ou `server` selon qu'il s'agit de la fonction ui ou server.
+- `mod`:mot-clé fixe qui précise que la fonction est celle d'un module,
+- `pipeline_name`: le nom du pipeline auquel le process appartient,
+- `process_name`: le nom du process lui-même,
+- `ui` ou `server` selon qu'il s'agit de la fonction ui ou server.
 
 Par example, la fonction `mod_PipelineA_Process4_server()` est le nom du
 serveur pour le process 4 du pipeline A.
@@ -403,16 +393,16 @@ The server() function is based on the same fundamental code:
 
 ```{r serverTL, eval=FALSE, echo=TRUE}
 mod_timeline_v_server <- function(id, 
-                               config, 
-                               status, 
-                               position, 
-                               enabled) {
+    config, 
+    status,
+    position,
+    enabled) {
 
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
+    moduleServer(id, function(input, output, session) {
+        ns <- session$ns
     
-    UpdateTags <- reactive({...})
-    output$show_v_TL <- renderUI({...})
+        UpdateTags <- reactive({...})
+        output$show_v_TL <- renderUI({...})
     })
 }
 ```
@@ -420,16 +410,22 @@ mod_timeline_v_server <- function(id,
 The parameters of the server are the same for both vertical and
 horizontal timelines:
 
--   id: the `id` of the server (same as the `id` of the ui() function),
--   config: A `list` (not a `reactiveList`) containing the same elements
-    as the process module.
--   status: A `reactive vector` which contain the status (validated,
-    skipped or undone) of each step of the process module. Its length is
-    equal to the number of steps.
--   position: A `reactive integer` that reflects the position of the
-    current (active) step.
--   enabled: A `reactive vector` of length the number of steps and which
-    indicate if the step is enabled or disabled.
+- id: the `id` of the server (same as the `id` of the ui() function),
+- config: A `list` (not a `reactiveList`) containing the same elements as the 
+process module.
+- status: A `reactive vector` which contain the status (validated, skipped or 
+undone) of each step of the process module. Its length is equal to the number 
+of steps.
+- position: A `reactive integer` that reflects the position of the current 
+(active) step.
+- enabled: A `reactive vector` of length the number of steps and which indicate 
+if the step is enabled or disabled.
 
-The reactive function `UpdateTags()` updates a vector containing the
-tags inserted in the css-style
+The reactive function `UpdateTags()` updates a vector containing the tags 
+inserted in the css-style.
+
+\section{Session information}\label{sec:sessionInfo}
+
+```{r}
+sessionInfo()
+```

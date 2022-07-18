@@ -3,7 +3,7 @@
 \docType{data}
 \name{redBtnClass}
 \alias{redBtnClass}
-\title{xxxx}
+\title{CSS class defining a red button}
 \format{
 An object of class \code{character} of length 1.
 }
@@ -11,12 +11,12 @@ An object of class \code{character} of length 1.
 redBtnClass
 }
 \description{
-xxx
+CSS class defining a red button
 }
 \section{Fields}{
 
 \describe{
-\item{\code{btn_style}}{xxxx}
+\item{\code{redBtnClass}}{xxxx}
 }}
 
 \keyword{datasets}

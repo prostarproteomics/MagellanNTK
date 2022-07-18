@@ -23,19 +23,22 @@ A shiny Module.
 xxx
 }
 \examples{
-\dontrun{
-library(shiny)
-library(shinyBS)
-ui <- fluidPage(
-  mod_popover_for_help_ui('Title')
-)
-server <- function(input, output){
-  mod_popover_for_help_server(id = 'Title',
-                              data = list(title = 'Test', 
-                                          content = 'Test')
-  )
-}
-shinyApp(ui, server)
+if (interactive()) {
+    library(shiny)
+    library(shinyBS)
+    ui <- fluidPage(
+        mod_popover_for_help_ui("Title")
+    )
+    server <- function(input, output) {
+        mod_popover_for_help_server(
+            id = "Title",
+            data = list(
+                title = "Test",
+                content = "Test"
+            )
+        )
+    }
+    shinyApp(ui, server)
 }
 
 }

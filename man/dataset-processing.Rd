@@ -32,8 +32,7 @@ logarithms are computed. Default is log2.}
 An processed object of the same class as `object`.
 }
 \description{
-This manual page describes manipulation methods using [list] objects. In the following
-functions, if `object` is of class `list`, and optional assay
+This manual page describes manipulation methods using [list] objects. In 
 index or name `i` can be specified to define the assay (by name of
 index) on which to operate.
 
@@ -42,11 +41,16 @@ The following functions are currently available:
 - `Keep_Datasets_from_Object(object, range)` keep datasets in object which
 are in range
 
-- `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the object (of type list)
+- `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the 
+object (of type list)
 
 - `Save(object, file)` stores the object to a .RData file
 }
 \details{
-The object must be of type list. Thetwo functions are implemented here for a simple list.
-For other dataset classes, their implementation must be part of the package which uses Magellan.
+The object must be of type list. Thetwo functions are implemented here for 
+of the package which uses Magellan.
+}
+\examples{
+NA
+
 }

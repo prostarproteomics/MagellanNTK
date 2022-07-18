@@ -3,7 +3,7 @@
 \docType{data}
 \name{btn_success_color}
 \alias{btn_success_color}
-\title{xxxx}
+\title{Css class defining the success state}
 \format{
 An object of class \code{character} of length 1.
 }
@@ -11,12 +11,12 @@ An object of class \code{character} of length 1.
 btn_success_color
 }
 \description{
-xxx
+Css class defining the success state
 }
 \section{Fields}{
 
 \describe{
-\item{\code{btn_style}}{xxxx}
+\item{\code{btn_success_color}}{xxxx}
 }}
 
 \keyword{datasets}

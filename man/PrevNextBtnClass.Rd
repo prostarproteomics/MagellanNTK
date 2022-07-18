@@ -3,7 +3,7 @@
 \docType{data}
 \name{PrevNextBtnClass}
 \alias{PrevNextBtnClass}
-\title{xxxx}
+\title{Css class defining the previous and next buttons}
 \format{
 An object of class \code{character} of length 1.
 }
@@ -11,12 +11,12 @@ An object of class \code{character} of length 1.
 PrevNextBtnClass
 }
 \description{
-xxx
+Css class defining the previous and next buttons
 }
 \section{Fields}{
 
 \describe{
-\item{\code{btn_style}}{xxxx}
+\item{\code{PrevNextBtnClass}}{xxxx}
 }}
 
 \keyword{datasets}

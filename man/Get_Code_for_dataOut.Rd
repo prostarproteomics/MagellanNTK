@@ -6,14 +6,14 @@
 \usage{
 Get_Code_for_dataOut()
 }
+\value{
+NA
+}
 \description{
 Returned value of the process
 }
 \examples{
-\dontrun{
-code <- Get_Code_for_dataOut()
-cat(code)
-}
+Get_Code_for_dataOut()
 
 }
 \author{

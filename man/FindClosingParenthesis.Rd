@@ -11,6 +11,9 @@ FindClosingParenthesis(text, openPos)
 
 \item{openPos}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
 }

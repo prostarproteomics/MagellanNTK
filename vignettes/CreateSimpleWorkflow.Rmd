@@ -45,5 +45,13 @@ knitr::opts_chunk$set(echo = TRUE,
 ### Steps
 
 
-Write the uiOutput() function for each widgets and the corresponding reactive({}) function with the definition of the widget (widget_#name# <- reactive({}))
+Write the uiOutput() function for each widgets and the corresponding 
+reactive({}) function with the definition of the widget 
+(widget_#name# <- reactive({}))
 
+
+\section{Session information}\label{sec:sessionInfo}
+
+```{r}
+sessionInfo()
+```

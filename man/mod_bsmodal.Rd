@@ -14,7 +14,8 @@ mod_bsmodal_server(id, title = NULL, width = NULL, uiContent = NULL)
 
 \item{title}{A `character(1)`}
 
-\item{width}{A `character(1)` indicating the size of the modal window. Can be "s" for small (the default), "m" for medium, or "l" for large.}
+\item{width}{A `character(1)` indicating the size of the modal window. Can 
+be "s" for small (the default), "m" for medium, or "l" for large.}
 
 \item{uiContent}{The content of the modal dialog.}
 }
@@ -22,22 +23,24 @@ mod_bsmodal_server(id, title = NULL, width = NULL, uiContent = NULL)
 A Shiny modal-dialog
 }
 \description{
-Displays of formatted modal-dialog with 'Cancel' and 'Ok' buttons.
+Displays of formatted modal-dialog with 'Cancel' and 
+'Ok' buttons.
 }
 \examples{
-if(interactive()) {
-library(shiny)
-library(shinyBS)
+if (interactive()) {
+    library(shiny)
+    library(shinyBS)
 
-ui <- fluidPage(
-  mod_bsmodal_ui('tbl')
-)
-server <- function(input, output){
-  mod_bsmodal_server(id = 'tbl',
-                     title = 'test',
-                     uiContent = p('test'))
-}
-shinyApp(ui, server)
+    ui <- fluidPage(
+        mod_bsmodal_ui("tbl")
+    )
+    server <- function(input, output) {
+        mod_bsmodal_server(
+            id = "tbl",
+            title = "test",
+            uiContent = p("test")
+        )}
+    shinyApp(ui, server)
 }
 
 }

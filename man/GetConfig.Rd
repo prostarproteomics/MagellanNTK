@@ -15,6 +15,10 @@ A list containing the configuration of the module
 \description{
 Analyze the source code to extract the config variable
 }
+\examples{
+NULL
+
+}
 \author{
 Samuel Wieczorek
 }

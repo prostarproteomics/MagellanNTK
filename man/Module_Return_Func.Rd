@@ -6,15 +6,15 @@
 \usage{
 Module_Return_Func()
 }
+\value{
+NA
+}
 \description{
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 }
 \examples{
-\dontrun{
-code <- Module_Return_Func()
-cat(code)
-}
+Module_Return_Func()
 
 }
 \author{

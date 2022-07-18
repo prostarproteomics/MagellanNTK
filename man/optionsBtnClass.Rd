@@ -3,7 +3,7 @@
 \docType{data}
 \name{optionsBtnClass}
 \alias{optionsBtnClass}
-\title{xxxx}
+\title{Css class defining the info state}
 \format{
 An object of class \code{character} of length 1.
 }
@@ -11,12 +11,12 @@ An object of class \code{character} of length 1.
 optionsBtnClass
 }
 \description{
-xxx
+Css class defining the info state
 }
 \section{Fields}{
 
 \describe{
-\item{\code{btn_style}}{xxxx}
+\item{\code{optionsBtnClass}}{xxxx}
 }}
 
 \keyword{datasets}

@@ -9,20 +9,20 @@ Get_Code_Declare_rv_custom(rv.custom.names = NULL)
 \arguments{
 \item{rv.custom.names}{A `list` containing the names of the custom values.}
 }
+\value{
+NA
+}
 \description{
 This function create the source code needed inside a module
 to declare the reactive variable called 'rv.custom.default.values'.
 # Declaration of the variables that will contain the values of the user
 variables.
-To avoid confusion, the first string is the name of the step while the second is the name
-of the widget
+To avoid confusion, the first string is the name of the step while the
+second is the name of the widget
 }
 \examples{
-\dontrun{
 custom <- list(foo1 = list(), foo2 = 3)
-code <- Get_Code_Declare_rv_custom(names(custom))
-cat(code)
-}
+Get_Code_Declare_rv_custom(names(custom))
 
 }
 \author{

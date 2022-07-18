@@ -6,14 +6,14 @@
 \usage{
 Get_Code_for_General_observeEvents()
 }
+\value{
+NA
+}
 \description{
 xxx
 }
 \examples{
-\dontrun{
-code <- Get_Code_for_observeEvent_stepsEnabled()
-cat(code)
-}
+Get_Code_for_General_observeEvents()
 
 }
 \author{

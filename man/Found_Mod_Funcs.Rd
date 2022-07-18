@@ -9,6 +9,13 @@ Found_Mod_Funcs(id)
 \arguments{
 \item{id}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
+}
+\examples{
+NULL
+
 }

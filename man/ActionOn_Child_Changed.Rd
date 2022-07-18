@@ -37,8 +37,15 @@ It can be either NULL (the process has been reseted) or contain
 a dataset (the process has been validated and returned the result
 of its calculations)}
 }
+\value{
+NA
+}
 \description{
 # A process has changed
+}
+\examples{
+NULL
+
 }
 \author{
 Samuel Wieczorek

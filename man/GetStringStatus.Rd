@@ -17,3 +17,7 @@ xxx
 \description{
 xxx
 }
+\examples{
+GetStringStatus(1)
+
+}

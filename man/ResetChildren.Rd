@@ -11,6 +11,13 @@ ResetChildren(range, resetChildren)
 
 \item{resetChildren}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
+}
+\examples{
+NULL
+
 }

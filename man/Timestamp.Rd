@@ -2,13 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{Timestamp}
 \alias{Timestamp}
-\title{xxx}
+\title{Timestamp in UNIX format.}
 \usage{
 Timestamp()
 }
 \value{
-NA
+A `integer()` which is xxx
 }
 \description{
 Returns the date and time in timestamp UNIX format.
+}
+\examples{
+Timestamp()
+
 }

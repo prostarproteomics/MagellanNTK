@@ -7,15 +7,20 @@
 NavPage(direction, current.pos, len)
 }
 \arguments{
-\item{direction}{xxx}
+\item{direction}{A `integer(1)` which is the direction of the xxx:
+forward ('1'), backwards ('-1').}
 
-\item{current.pos}{xxx}
+\item{current.pos}{A `integer(1)` which is the current position.}
 
-\item{len}{xxx}
+\item{len}{A `integer(1)` which is the number of steps in the process.}
 }
 \value{
-xxx
+A `integer(1)` which is the new current position.
 }
 \description{
 xxx
+}
+\examples{
+NavPage(1, 3, 5)
+
 }

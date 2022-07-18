@@ -9,26 +9,30 @@ run_workflow(id, verbose = FALSE, tl.layout = NULL)
 \arguments{
 \item{id}{xxx}
 
-\item{verbose}{A `boolean` that indicates whether to show some infos in the console
-and add the shiny module for debugging}
+\item{verbose}{A `boolean` that indicates whether to show some infos in the 
+console and add the shiny module for debugging}
 
 \item{tl.layout}{Additional parameters for mod_nav}
 }
+\value{
+NA
+}
 \description{
-This module contains the configuration informations for the corresponding pipeline.
-It is called by the nav_pipeline module of the package Magellan.
-This documentation is for developpers who want to create their own pipelines nor processes
-to be managed with `Magellan`.
+This module contains the configuration informations for the corresponding 
+pipeline. It is called by the nav_pipeline module of the package Magellan.
+This documentation is for developpers who want to create their own 
+pipelines nor processes to be managed with `Magellan`.
 }
 \examples{
-\dontrun{
-dirpath <- system.file('module_examples', package='Magellan')
-for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
- source(file.path(dirpath, l), local=FALSE)$value
+if (interactive()) {
+    dirpath <- system.file("module_examples", package = "Magellan")
+    for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)) {
+        source(file.path(dirpath, l), local = FALSE)$value
+    }
 
-run_workflow('Process1', verbose = TRUE)
+    run_workflow("Process1", verbose = TRUE)
 
-run_workflow('PipelineA', layout = c('h', 'h'))
+    run_workflow("PipelineA", layout = c("h", "h"))
 }
 
 }

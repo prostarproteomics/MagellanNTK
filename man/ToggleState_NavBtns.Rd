@@ -17,3 +17,15 @@ NA
 \description{
 xxx
 }
+\examples{
+library(shinyjs)
+if (interactive()) {
+    ui <- shiny::fluidPage()
+
+    server <- function(input, output, session) {
+         ToggleState_NavBtns(2, 4)
+         }
+    shiny::shinyApp(ui = ui, server = server)
+}
+
+}

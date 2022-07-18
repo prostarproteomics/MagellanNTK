@@ -9,6 +9,15 @@ Upload_Object(file)
 \arguments{
 \item{file}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
+}
+\examples{
+file <- system.file("extdata", "feat1.rda", package = "Magellan")
+Upload_Object(file)
+rm(feat1)
+
 }

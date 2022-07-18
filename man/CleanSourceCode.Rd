@@ -2,13 +2,13 @@
 % Please edit documentation in R/check_funcs.R
 \name{CleanSourceCode}
 \alias{CleanSourceCode}
-\title{Clean source code before syntax analysis
-xxx}
+\title{Clean source code before syntax analysis}
 \usage{
 CleanSourceCode(file = NULL)
 }
 \arguments{
-\item{file}{A vector in which each element is a line read from source code file}
+\item{file}{A vector in which each element is a line read from source
+code file}
 }
 \value{
 A string which contains the source code condensed
@@ -17,10 +17,8 @@ A string which contains the source code condensed
 xxx
 }
 \examples{
-\dontrun{
-file <-system.file("module_examples", "mod_Process1.R", package="Magellan")
-s <- CleanSourceCode(file)
-}
+file <- system.file("module_examples", "mod_Process1.R", package = "Magellan")
+CleanSourceCode(file)
 
 }
 \author{

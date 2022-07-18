@@ -15,3 +15,14 @@ NA
 \description{
 xxx
 }
+\examples{
+library(shinyjs)
+if (interactive()) {
+    ui <- shiny::fluidPage()
+    server <- function(input, output, session) {
+         ToggleState_ResetBtn(FALSE)
+         }
+    shiny::shinyApp(ui = ui, server = server)
+}
+
+}

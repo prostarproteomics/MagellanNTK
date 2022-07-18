@@ -3,7 +3,7 @@
 \docType{data}
 \name{default_pos}
 \alias{default_pos}
-\title{xxxx}
+\title{Describe tags for steps state}
 \format{
 An object of class \code{list} of length 3.
 }
@@ -11,12 +11,12 @@ An object of class \code{list} of length 3.
 default_pos
 }
 \description{
-xxx
+Describe tags for steps state
 }
 \section{Fields}{
 
 \describe{
-\item{\code{btn_style}}{xxxx}
+\item{\code{default_pos}}{xxxx}
 }}
 
 \keyword{datasets}

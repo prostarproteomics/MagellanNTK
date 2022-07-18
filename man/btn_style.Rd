@@ -3,7 +3,7 @@
 \docType{data}
 \name{btn_style}
 \alias{btn_style}
-\title{xxxx}
+\title{Css style defining general layout}
 \format{
 An object of class \code{character} of length 1.
 }
@@ -11,7 +11,7 @@ An object of class \code{character} of length 1.
 btn_style
 }
 \description{
-xxx
+Css style defining general layout
 }
 \section{Fields}{
 

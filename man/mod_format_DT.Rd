@@ -13,7 +13,9 @@ mod_format_DT_server(
   withBtns = NULL,
   showRownames = FALSE,
   dom = "Bt",
-  style = reactive({     NULL })
+  style = reactive({
+     NULL
+ })
 )
 }
 \arguments{
@@ -38,15 +40,16 @@ A shiny Module.
 xxx
 }
 \examples{
-\dontrun{
-
-ui <- fluidPage(
-  mod_format_DT_ui('tbl')
-)
-server <- function(input, output){
-  mod_format_DT_server(id = 'tbl',table2show = reactive({head(iris)}))
-}
-shinyApp(ui, server)
+if (interactive()) {
+    ui <- fluidPage(
+        mod_format_DT_ui("tbl")
+    )
+    server <- function(input, output) {
+        mod_format_DT_server(id = "tbl", table2show = reactive({
+            head(iris)
+        }))
+    }
+    shinyApp(ui, server)
 }
 
 }

@@ -10,19 +10,19 @@ Get_Code_Declare_widgets(widgets.names = NULL)
 \item{widgets.names}{A `list` containing the names of the widgets in all
 steps of the module.}
 }
+\value{
+NA
+}
 \description{
 This function create the source code needed inside a module
 to declare the reactive variable called 'widgets.default.values'.
 # Declaration of the variables that will contain the values of the widgets
-To avoid confusion, the first string is the name of the step while the second is the name
-of the widget
+To avoid confusion, the first string is the name of the step while the
+second is the name of the widget
 }
 \examples{
-\dontrun{
-widgets <- paste0('widget', 1:3)
-code <- Get_Code_Declare_widgets(widgets)
-cat(code)
-}
+widgets <- paste0("widget", 1:3)
+Get_Code_Declare_widgets(widgets)
 
 }
 \author{

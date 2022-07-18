@@ -11,6 +11,13 @@ GetValuesFromChildren(config, tmp.return)
 
 \item{tmp.return}{xxx}
 }
+\value{
+NA
+}
 \description{
 xxx
+}
+\examples{
+NA
+
 }

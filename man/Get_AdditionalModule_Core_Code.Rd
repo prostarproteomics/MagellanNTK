@@ -11,17 +11,16 @@ Get_AdditionalModule_Core_Code(w.names, rv.custom.names = NULL)
 
 \item{rv.custom.names}{xxx}
 }
+\value{
+NA
+}
 \description{
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 }
 \examples{
-\dontrun{
-widgets <- paste0('widget', 1:3)
-steps <- paste0('step', 1:3)
-code <- SimpleWorflowCoreCode(widgets, steps)
-cat(code)
-}
+widgets <- c('widget1', 'widget2')
+Get_AdditionalModule_Core_Code(widgets)
 
 }
 \author{

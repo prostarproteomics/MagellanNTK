@@ -10,8 +10,12 @@ run_app(...)
 \item{...}{A series of options to be used inside the app.}
 }
 \value{
-xxx
+NA
 }
 \description{
 Run the Shiny Application
+}
+\examples{
+NULL
+
 }
