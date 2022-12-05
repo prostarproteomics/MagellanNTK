@@ -3,41 +3,7 @@
 #' @description A shiny Module.
 #' 
 #' #'
-#' @examples
-#' if (interactive()) {
-#'     ui <- fluidPage(
-#'         actionButton("changePos", "Change position"),
-#'         mod_timeline_h_ui("TLh")
-#'     )
-#'
-#'     server <- function(input, output) {
-#'         rv <- reactiveValues(
-#'             status = c(0, 1, 0, 0),
-#'             current.pos = 1,
-#'             tl.tags.enabled = c(1, 1, 1, 1),
-#'             position = NULL
-#'         )
-#'         config <- list(
-#'             name = "Protein_Filtering",
-#'             steps = c("Description", "Step1", "Step2", "Step3"),
-#'             mandatory = c(TRUE, FALSE, TRUE, TRUE)
-#'         )
-#'         mod_timeline_h_server(
-#'             id = "TLh",
-#'             config = config,
-#'             status = reactive({
-#'                 rv$status
-#'             }),
-#'             position = reactive({
-#'                 rv$current.pos
-#'             }),
-#'             enabled = reactive({
-#'                 rv$tl.tags.enabled
-#'             })
-#'         )
-#'     }
-#'     shinyApp(ui, server)
-#' }
+#' @example examples/test_timeline_H.R
 #' 
 #' @name mod_timeline_h
 NULL

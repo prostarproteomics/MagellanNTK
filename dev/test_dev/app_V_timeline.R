@@ -22,7 +22,11 @@ ui <- fluidPage(
              actionButton('randDone_btn', 'rand done'),
              actionButton('randSkipped_btn', 'rand skipped'),
              actionButton('randDisabled_btn', 'rand disabled'),
-             shinyjs::inlineCSS(sass::sass(sass::sass_file('www/v_timeline.sass')))
+             shinyjs::inlineCSS(
+               sass::sass(
+                 sass::sass_file(
+                   system.file('app/www/sass/v_timeline.sass', package='Magellan')
+                 )))
            )
     ),
     column(width = 4,
@@ -71,18 +75,10 @@ server <- function(input, output){
   output$show_vTL <- renderUI({
     
     tags$div(class="box",
-             tags$div(class=rv$classForDiv[1],
-                      p('Filtration')
-             ),
-             tags$div(class=rv$classForDiv[2],
-                      p('Normalization')
-             ),
-             tags$div(class=rv$classForDiv[3],
-                      p('Imputation')
-             ),
-             tags$div(class=rv$classForDiv[4],
-                      p('Aggregation')
-             )
+             tags$div(class=rv$classForDiv[1],p('Filtration')),
+             tags$div(class=rv$classForDiv[2],p('Normalization')),
+             tags$div(class=rv$classForDiv[3], p('Imputation')),
+             tags$div(class=rv$classForDiv[4],p('Aggregation'))
     )
   })
 }

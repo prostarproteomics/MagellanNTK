@@ -1,6 +1,29 @@
 #' @title mod_Debug_Infos
 #'
 #' @description  A shiny Module.
+#' 
+#' @name mod_Debug_Infos
+#' 
+#' @examples 
+#' #'
+#' @examples
+#' if (interactive()) {
+#'     ui <- fluidPage(
+#'         mod_Debug_Infos_ui("tbl")
+#'     )
+#'     server <- function(input, output) {
+#'         mod_Debug_Infos_server(
+#'         id = "tbl", 
+#'         data = reactive({head(iris)
+#'         }))
+#'     }
+#'     shinyApp(ui, server)
+#' }
+#' 
+NULL
+
+
+
 #' @param id xxx
 #'
 #' @rdname mod_Debug_Infos
@@ -33,19 +56,6 @@ mod_Debug_Infos_ui <- function(id) {
 #'
 #' @export
 #' @return NA
-#'
-#' @examples
-#' if (interactive()) {
-#'     ui <- fluidPage(
-#'         mod_format_DT_ui("tbl")
-#'     )
-#'     server <- function(input, output) {
-#'         mod_format_DT_server(id = "tbl", table2show = reactive({
-#'             head(iris)
-#'         }))
-#'     }
-#'     shinyApp(ui, server)
-#' }
 #'
 #' @rdname mod_Debug_Infos
 #'

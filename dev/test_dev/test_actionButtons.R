@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
 library(shiny)
 library(shinyWidgets)
 library(shinyjs)
-library(R6)
-library(tibble)
 
 options(shiny.fullstacktrace = TRUE)
 

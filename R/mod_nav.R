@@ -1,11 +1,27 @@
-#' @title The ui() function of the module `mod_nav`
+#' @title The server() function of the module `mod_nav`
 #'
+#' @description The module navigation can be launched via a Shiny app. 
+#' This is the core module of Magellan
+#'
+#' 
+#' @name mod_nav
+#' 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' 
+#' @example examples/example_mov_nav.R
+#'
+NULL
+
+
+
+
+
 #' @param id A `character(1)` which defines the id of the module. 
 #' It is the same as for the server() function.
 #'
 #' @rdname mod_nav
-#'
-#' @author Samuel Wieczorek
 #'
 #' @export
 #'
@@ -25,10 +41,7 @@ mod_nav_ui <- function(id) {
 
 
 
-#' @title The server() function of the module `mod_nav`
-#'
-#' @description The module navigation can be launched via a Shiny app.
-#'
+
 #' @param id A `character(1)` which defines the id of the module. It is the same
 #' as for the ui() function.
 #'
@@ -64,27 +77,8 @@ mod_nav_ui <- function(id) {
 #' @export
 #'
 #' @rdname mod_nav
-#'
-#' @examples
-#' if (interactive()) {
-#'     library(shiny)
-#'     library(shinyBS)
-#'     ui <- fluidPage(
-#'         mod_nav_ui("Protein_Description")
-#'     )
-#'     server <- function(input, output) {
-#'         mod_nav_server(
-#'             id = "Protein_Description",
-#'             dataIn = reactive({
-#'                 feat1
-#'             })
-#'         )
-#'     }
-#'     shinyApp(ui, server)
-#' }
-#'
 #' @importFrom stats setNames
-#'
+#' 
 mod_nav_server <- function(id,
     dataIn = reactive({NULL}),
     is.enabled = reactive({TRUE}),

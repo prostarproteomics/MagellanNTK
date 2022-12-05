@@ -3,15 +3,7 @@
 #' @description  A shiny Module to load a dataset.
 #' @name mod_Load_Dataset
 #' 
-#' @examples
-#' if (interactive()) {
-#'     data(ft_na)
-#'     ui <- mod_Load_Dataset_ui("load")
-#'
-#'     server <- function(input, output, session) {
-#'         mod_Load_Dataset_server(id = "load")}
-#'     shinyApp(ui = ui, server = server)
-#' }
+#' @example examples/example_load_dataset.R
 NULL
 
 #' @param id xxx
@@ -20,12 +12,11 @@ NULL
 #' @export
 #'
 mod_Load_Dataset_ui <- function(id) {
-
 }
 
 
 #' @param id xxx
-#' @return NA
+#' @return xxxxx
 #'
 #' @rdname mod_Load_Dataset
 #'
@@ -35,7 +26,7 @@ mod_Load_Dataset_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-        rv <- reactiveValues(data = NULL)
+        rv <- reactiveValues(dataOut = NULL)
 
         modal <- function() {
             modalDialog(
@@ -56,14 +47,10 @@ mod_Load_Dataset_server <- function(id) {
 
         observeEvent(input$ok, {
             req(input$file)
-            # browser()
-            rv$data <- readRDS(input$file$datapath)
-            # rv$data <- load(input$file$datapath)
-            removeModal()
+            rv$dataOut <- readRDS(input$file$datapath)
+             removeModal()
         })
 
-        reactive({
-            rv$data
-        })
+        reactive({rv$dataOut})
     })
 }

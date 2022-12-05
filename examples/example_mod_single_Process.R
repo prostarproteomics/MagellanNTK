@@ -62,7 +62,7 @@ server <- function(input, output){
   observe({
     rv$dataOut <- mod_nav_server(id = 'Process1',
                                  dataIn = reactive({rv$dataIn}),
-                                 layout = c('h'),
+                                 tl.layout = c('h'),
                                  verbose = verbose
                                  )
   })
