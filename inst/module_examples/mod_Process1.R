@@ -14,7 +14,10 @@
 #' 
 #' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
 #' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
-#' 
+#'
+NULL
+
+
 #' @param id xxx
 #' 
 #' @rdname example_module_process1

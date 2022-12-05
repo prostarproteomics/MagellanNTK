@@ -7,13 +7,11 @@ library(QFeatures)
 
 options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/dev/test_dev')
 
-dirpath <- '../../R'
+dirpath <- system.file('module_examples', package='Magellan')
 for (l in list.files(path = dirpath, pattern = ".R"))
   source(file.path(dirpath, l), local=TRUE)$value
 #--------------------------------------------
-source(file.path('example_modules', 'mod_PipelineA_Description.R'), local=TRUE)$value
 
 
 mod_test_process_ui <- function(id){
@@ -33,21 +31,20 @@ mod_test_process_ui <- function(id){
 mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    data(feat1, package='Magellan')
     rv <- reactiveValues(
-      dataIn = feat1,
+      dataIn = Build_example_dataset(),
       dataOut = NULL
     )
     
     observe({
-      rv$dataOut <- mod_nav_process_server(id = 'PipelineA_Description',
+      rv$dataOut <- mod_nav_server(id = 'PipelineA_Description',
                                            dataIn = reactive({rv$dataIn})
                                            )
     }, priority=1000)
     
     
     output$UI <- renderUI({
-      mod_nav_process_ui(ns('PipelineA_Description'))
+      mod_nav_ui(ns('PipelineA_Description'))
     })
     
     

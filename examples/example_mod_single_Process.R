@@ -46,6 +46,7 @@ server <- function(input, output){
     dataOut = NULL
   )
   
+  output$UI <- renderUI({mod_nav_ui('Process1')})
   
   output$debugInfos_ui <- renderUI({
     req(verbose)
@@ -66,9 +67,6 @@ server <- function(input, output){
                                  verbose = verbose
                                  )
   })
-  
-  
-  output$UI <- renderUI({mod_nav_ui('Process1')})
 }
 
 

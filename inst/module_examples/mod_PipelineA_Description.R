@@ -15,7 +15,7 @@ mod_PipelineA_Description_server <- function(id,
                                              
 ){
   
-  config <- list(
+  config <- Config(
     mode = 'process',
     
     name = 'Description',

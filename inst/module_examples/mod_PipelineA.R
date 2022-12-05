@@ -54,7 +54,7 @@ mod_PipelineA_server <- function(id,
                                  verbose = FALSE
                                  ){
 
-  config <- list(
+  config <- Config(
     mode = 'pipeline',
     
     # List of all steps of the process
