@@ -1,18 +1,18 @@
 
+#' @export
 mod_PipelineA_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
-
+#' @export
 mod_PipelineA_Description_server <- function(id,
-                                             dataIn = reactive({NULL}),
-                                             steps.enabled = reactive({NULL}),
-                                             remoteReset = reactive({FALSE}),
-                                             steps.status = reactive({NULL}),
-                                             current.pos = reactive({1}),
-                                             verbose = FALSE
-                                             
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1}),
+  verbose = FALSE
 ){
   
   config <- Config(
@@ -48,6 +48,7 @@ mod_PipelineA_Description_server <- function(id,
     )))
     
     rv.custom <- reactiveValues()
+    rv.custom.default.values <- list()
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
@@ -77,8 +78,8 @@ mod_PipelineA_Description_server <- function(id,
     
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
-                             "Start",
-                             class = btn_success_color)
+        "Start",
+        class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
     })
     
@@ -89,9 +90,6 @@ mod_PipelineA_Description_server <- function(id,
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
-    
-    
-    
     
     
     # Insert necessary code which is hosted by Magellan

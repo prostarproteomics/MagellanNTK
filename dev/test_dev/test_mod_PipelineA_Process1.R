@@ -55,11 +55,11 @@ mod_test_navigation_process_server <- function(id){
     observe({
       
       rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
-                                          nav.mode = 'process',
-                                          dataIn = reactive({rv$dataIn}),
-                                          remoteReset = reactive({input$simReset}),
-                                          is.skipped = reactive({input$simSkipped%%2 != 0}),
-                                          is.enabled = reactive({input$simEnabled%%2 == 0})
+        nav.mode = 'process',
+        dataIn = reactive({rv$dataIn}),
+        remoteReset = reactive({input$simReset}),
+        is.skipped = reactive({input$simSkipped%%2 != 0}),
+        is.enabled = reactive({input$simEnabled%%2 == 0})
       )
       
       

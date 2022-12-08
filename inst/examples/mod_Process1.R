@@ -15,6 +15,7 @@
 #' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
 #' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
 #'
+#' @name example_module_process1
 NULL
 
 
@@ -55,13 +56,13 @@ mod_Process1_ui <- function(id){
 #' @export
 #' 
 mod_Process1_server <- function(id,
-                                dataIn = reactive({NULL}),
-                                steps.enabled = reactive({NULL}),
-                                remoteReset = reactive({FALSE}),
-                                steps.status = reactive({NULL}),
-                                current.pos = reactive({1}),
-                                verbose = FALSE
-                                ){
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1}),
+  verbose = FALSE
+  ){
   
   # This list contains the basic configuration of the process
   config <- Config(

@@ -14,18 +14,11 @@ mod_Load_Dataset_server(id)
 \item{id}{xxx}
 }
 \value{
-NA
+xxxxx
 }
 \description{
 A shiny Module to load a dataset.
 }
 \examples{
-if (interactive()) {
-    data(ft_na)
-    ui <- mod_Load_Dataset_ui("load")
 
-    server <- function(input, output, session) {
-        mod_Load_Dataset_server(id = "load")}
-    shinyApp(ui = ui, server = server)
-}
 }

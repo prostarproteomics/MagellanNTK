@@ -3,7 +3,7 @@
 #' @description A shiny Module.
 #' 
 #' #'
-#' @example examples/test_timeline_H.R
+#' @example inst/examples/test_timeline_H.R
 #' 
 #' @name mod_timeline_h
 NULL

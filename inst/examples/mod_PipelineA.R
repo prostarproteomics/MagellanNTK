@@ -46,13 +46,13 @@ mod_PipelineA_ui <- function(id){
 #' @export
 #'
 mod_PipelineA_server <- function(id,
-                                 dataIn = reactive({NULL}),
-                                 steps.enabled = reactive({NULL}),
-                                 remoteReset = reactive({FALSE}),
-                                 steps.status = reactive({NULL}),
-                                 current.pos = reactive({1}),
-                                 verbose = FALSE
-                                 ){
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1}),
+  verbose = FALSE
+  ){
 
   config <- Config(
     mode = 'pipeline',
@@ -81,7 +81,9 @@ mod_PipelineA_server <- function(id,
     
     
     eval(str2expression(Get_Worflow_Core_Code(
-      w.names = names(widgets.default.values)
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
+      
     )))
     
     rv.custom <- reactiveValues()

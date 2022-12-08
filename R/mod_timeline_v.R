@@ -4,7 +4,7 @@
 #' 
 #' @name mod_timeline_v
 #' 
-#' @example examples/test_timeline_v.R
+#' @example inst/examples/test_timeline_v.R
 #' 
 NULL
 

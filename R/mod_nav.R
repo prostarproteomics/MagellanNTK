@@ -10,7 +10,8 @@
 #' @author Samuel Wieczorek
 #' 
 #' 
-#' @example examples/example_mov_nav.R
+#' @example inst/examples/example_mod_single_Process.R
+#' @example inst/examples/example_mod_Pipeline.R
 #'
 NULL
 
@@ -68,8 +69,8 @@ mod_nav_ui <- function(id) {
 #' @param verbose xxx
 #'
 #' @return A list of four items:
-#' * dataOut xxx
-#' * steps.enabled xxxxx
+#' * dataOut A dataset of the same class of the parameter dataIn
+#' * steps.enabled A vector of `boolean` of the same length than config@steps
 #' * status A vector of `integer(1)` of the same length than the config@steps
 #'   vector
 #' * reset xxxx
@@ -87,7 +88,6 @@ mod_nav_server <- function(id,
     tl.layout = NULL,
     verbose = FALSE) {
 
-    # tl.layout <- tl.layout
     options(shiny.fullstacktrace = verbose)
 
 
@@ -99,8 +99,6 @@ mod_nav_server <- function(id,
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-
-
         # Reactive values that will be used to output the current dataset when
         # the last step is validated
         dataOut <- reactiveValues(
@@ -109,15 +107,12 @@ mod_nav_server <- function(id,
         )
 
         rv <- reactiveValues(
-            # @field proc contains the return value of the process module that 
-            # has been called
+            # Contains the return value of the process module that has been called
             proc = NULL,
-
-            # mode = NULL,
 
             tl.layout = NULL,
 
-            # @field status A boolan vector which contains the status 
+            # @field status A boolean vector which contains the status 
             # (validated, skipped or undone) of the steps
             steps.status = NULL,
 
@@ -143,13 +138,17 @@ mod_nav_server <- function(id,
             # child process must be reseted, the corresponding element is 
             # incremented in order to modify its value. Thus, it can be 
             # catched by Shiny observers
-            # ONLY USED WITH PIPELINE
+            # ---ONLY USED WITH PIPELINE---
             resetChildren = NULL,
 
             # @field current.pos Stores the current cursor position in the 
             # timeline and indicates which of the process' steps is active
             current.pos = 1,
+            
+            
             length = NULL,
+            
+            
             config = NULL,
 
             # A vector of boolean where each element indicates if the 
@@ -175,40 +174,33 @@ mod_nav_server <- function(id,
         # process and pipeline modules
         observeEvent(id,
             {
-                # The function of the module server (and ui) are supposed to 
+                # The functions of the module server (and ui) are supposed to 
                 # be already loaded. Check if it is the case. If not, show a 
                 # message and abort
                 if (!Found_Mod_Funcs(id)) {
                     return(NULL)
                 }
 
+                # When the server starts, the default position is 1
+                # Not necessary ?
                 rv$current.pos <- 1
 
 
-                # Call the server module of the pipeline which name is the 
-                # parameter 'id'
-                # This will give access to its config
+                # Call the server module of the process/pipeline which name is 
+                # the parameter 'id'. 
+                # The name of the server function is prefixed by 'mod_' and 
+                # suffixed by '_server'. This will give access to its config
                 rv$proc <- do.call(
                     paste0("mod_", id, "_server"),
                     list(
                         id = id,
-                        dataIn = reactive({
-                            rv$temp.dataIn
-                        }),
-                        steps.enabled = reactive({
-                            rv$steps.enabled
-                        }),
-                        remoteReset = reactive({
-                            input$rstBtn + remoteReset()
-                        }),
-                        steps.status = reactive({
-                            rv$steps.status
-                        }),
-                        current.pos = reactive({
-                            rv$current.pos
-                        })
+                        dataIn = reactive({rv$temp.dataIn}),
+                        steps.enabled = reactive({rv$steps.enabled}),
+                        remoteReset = reactive({input$rstBtn + remoteReset()}),
+                        steps.status = reactive({rv$steps.status}),
+                        current.pos = reactive({rv$current.pos})
+                        )
                     )
-                )
 
                 # Update the reactive value config with the config of the 
                 # pipeline
@@ -243,6 +235,7 @@ mod_nav_server <- function(id,
                 rv$currentStepName <- reactive({
                     names(rv$config@steps)[rv$current.pos]
                 })
+                
                 rv$tl.layout <- tl.layout
 
                 if (is.null(rv$tl.layout)) {
@@ -252,23 +245,19 @@ mod_nav_server <- function(id,
                     )
                 }
 
+                # Launch the server timeline for this process/pipeline
                 do.call(
                     paste0("mod_timeline_", rv$tl.layout[1], "_server"),
                     list(
                         id = paste0("timeline", rv$tl.layout[1]),
                         config = rv$config,
-                        status = reactive({
-                            rv$steps.status
-                        }),
-                        enabled = reactive({
-                            rv$steps.enabled
-                        }),
-                        position = reactive({
-                            rv$current.pos
-                        })
+                        status = reactive({rv$steps.status}),
+                        enabled = reactive({rv$steps.enabled}),
+                        position = reactive({rv$current.pos})
+                        )
                     )
-                )
 
+                # Launch the UI of the timeline
                 output$show_TL <- renderUI({
                     do.call(
                         paste0("mod_timeline_", rv$tl.layout[1], "_ui"),
@@ -280,10 +269,6 @@ mod_nav_server <- function(id,
         )
 
 
-
-
-
-
         # Specific to pipeline module
         # Used to store the return values (lists) of child processes
         tmp.return <- reactiveValues()
@@ -293,6 +278,7 @@ mod_nav_server <- function(id,
             removeModal()
         })
 
+        # Update the current position after a click  on the 'Previous' button
         observeEvent(input$prevBtn, ignoreInit = TRUE, {
             rv$current.pos <- NavPage(
                 direction = -1,
@@ -301,6 +287,7 @@ mod_nav_server <- function(id,
             )
         })
 
+        # Update the current position after a click on the 'Next' button
         observeEvent(input$nextBtn, ignoreInit = TRUE, {
             rv$current.pos <- NavPage(
                 direction = 1,
@@ -312,11 +299,10 @@ mod_nav_server <- function(id,
 
 
 
-        # @title
-        # Disable an entire process
-        # @description
-        # The parameter is.enabled() is updated by the caller and tells the 
+
+        # The parameter 'is.enabled()' is updated by the caller and tells the 
         # process if it is enabled or disabled (remote action from the caller)
+        # This enables/disables an entire process/pipeline
         observeEvent(is.enabled(), ignoreNULL = TRUE, ignoreInit = TRUE, {
             if (isTRUE(is.enabled())) {
                 rv$steps.enabled <- Update_State_Screens(
@@ -333,10 +319,10 @@ mod_nav_server <- function(id,
 
 
         # Catch new status event
+        # See https://github.com/daattali/shinyjs/issues/166
+        # https://github.com/daattali/shinyjs/issues/25
         observeEvent(rv$steps.status, ignoreInit = TRUE, {
-            # https://github.com/daattali/shinyjs/issues/166
-            # https://github.com/daattali/shinyjs/issues/25
-
+            
             rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)
 
             rv$steps.enabled <- Update_State_Screens(
@@ -349,7 +335,8 @@ mod_nav_server <- function(id,
                 # Set current position to the last one
                 rv$current.pos <- rv$length
 
-                # Send result
+                # If the last step is validated, it is time to send result by
+                # updating the 'dataOut' reactiveValue.
                 dataOut$trigger <- Timestamp()
                 dataOut$value <- rv$dataIn
             }

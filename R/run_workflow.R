@@ -34,7 +34,7 @@
 #'
 #'     run_workflow("Process1", verbose = TRUE)
 #'
-#'     run_workflow("PipelineA", layout = c("h", "h"))
+#'     run_workflow("PipelineA", tl.layout = c("h", "h"))
 #' }
 #'
 run_workflow <- function(id,
