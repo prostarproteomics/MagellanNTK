@@ -147,7 +147,7 @@ vec2code <- function(ls_list, is.char = FALSE) {
 get_process_config_code <- function(config) {
     code <- "
     # This list contains the basic configuration of the process
-    config <- list(
+    config <- Config(
     # Define the type of module
     mode = 'process',
 
@@ -288,7 +288,7 @@ get_pipeline_header_server_func <- function(name) {
 get_pipeline_config_code <- function(config) {
     code <- "
     # This list contains the basic configuration of the process
-    config <- list(
+    config <- Config(
     # Define the type of module
     mode = 'process',
 

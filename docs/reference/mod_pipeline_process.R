@@ -10,7 +10,7 @@ mod_pipeline_process_server <- function(id,
 		){
 
 	# This list contains the basic configuration of the process
-	config <- list(
+	config <- Config(
 		# Name of the process
 		name = 'process',
 		# Name of the pipeline it belongs to
@@ -24,9 +24,9 @@ mod_pipeline_process_server <- function(id,
 	# # Define default selected values for widgets
 	widgets.default.values <- list(
 		# The following lines are given as example. Our advice is to use the 
-		same nomenclature for the variables of widgets:
-		two strings separated by '_', the first one is the name of the step
-		 while the secondone is the nameof the widget
+		#same nomenclature for the variables of widgets:
+		#two strings separated by '_', the first one is the name of the step
+		# while the secondone is the nameof the widget
 		# Step1_select1 = 1,
 		# Step1_select2 = NULL,
 		# Step1_select3 = 1,
@@ -78,7 +78,7 @@ mod_pipeline_process_server <- function(id,
 		observeEvent(steps.enabled(), ignoreNULL = TRUE, {
 		if (is.null(steps.enabled()))
 			rv$steps.enabled <- setNames(rep(FALSE, rv$length), 
-	                                  rv$config$steps)
+	                                  rv$config@steps)
 		  else
 	    rv$steps.enabled <- steps.enabled()
 		})
@@ -93,7 +93,7 @@ mod_pipeline_process_server <- function(id,
 	  ###### ------------------- Code for Description (step 0) -------------------------    #####
 	  output$Description <- renderUI({
 	  tagList(
-	    includeMarkdown(paste0('md/', paste0(config$parent, '_', config$name, '.md'))),
+	    includeMarkdown(paste0('md/', paste0(config@parent, '_', config@name, '.md'))),
 	    uiOutput(ns('datasetDescription')),
 	    uiOutput(ns('validationBtn_ui'))
 	  )
@@ -110,12 +110,12 @@ mod_pipeline_process_server <- function(id,
 	output$validationBtn_ui <- renderUI({
 	  if (isTRUE(rv$steps.enabled['Description'])  )
 	    actionButton(ns('btn_validate_Description'),
-	                 paste0('Start ', config$name),
+	                 paste0('Start ', config@name),
 	                 class = btn_success_color)
 	  else
 	    shinyjs::disabled(
 	      actionButton(ns('btn_validate_Description'),
-	                   paste0('Start ', config$name),
+	                   paste0('Start ', config@name),
 	                   class = btn_success_color)
 	    )
 	})
@@ -123,16 +123,18 @@ mod_pipeline_process_server <- function(id,
 	# Return value of module
 	# DO NOT MODIFY THIS PART
 	list(config = reactive({
-	  config$ll.UI <- setNames(lapply(config$steps,
-	                                  function(x){
-	                                    do.call('uiOutput', list(ns(x)))
-	                                  }),
-	                           paste0('screen_', config$steps)
-				  )
-			  config
+	  config@ll.UI <- setNames(
+	    lapply(config@steps,
+	      function(x){
+	        do.call('uiOutput', list(ns(x)))
+	        }),
+	    paste0('screen_', config@steps)
+	    )
+	  config
 			}),
 		dataOut = reactive({dataOut})
 	#steps.status = reactive({rv$steps.status})
 	)
 	}
 	)
+}

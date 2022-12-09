@@ -31,7 +31,8 @@ mod_PipelineA_Description_server <- function(id,
   # Define default selected values for widgets
   # By default, this list is empty for the Description module
   # but it can be customized
-  widgets.default.values <- list()
+  widgets.default.values <- NULL
+  rv.custom.default.values <- NULL
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -43,17 +44,23 @@ mod_PipelineA_Description_server <- function(id,
     
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
-    eval(str2expression(Get_Worflow_Core_Code(
-      w.names = names(widgets.default.values)
-    )))
+    eval(
+      str2expression(
+        Get_Worflow_Core_Code(
+      w.names = names(widgets.default.values),
+          rv.custom.names = names(rv.custom.default.values)
+          
+          )
+        )
+      )
     
-    rv.custom <- reactiveValues()
-    rv.custom.default.values <- list()
+    #rv.custom <- reactiveValues()
+    #rv.custom.default.values <- list()
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       name <- strsplit(id, split='_')[[1]][1]
-      file <- paste0(config$path_to_md_dir, '/', name, '.md')
+      file <- paste0(config@path_to_md_dir, '/', name, '.md')
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

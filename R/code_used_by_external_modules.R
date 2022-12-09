@@ -15,7 +15,6 @@
 #'
 Get_Code_Update_Config_Variable <- function() {
     code <- "
-
     config@steps <- setNames(config@steps,
         nm = gsub(' ', '', config@steps, fixed = TRUE))
 
@@ -93,6 +92,7 @@ Get_Code_Declare_widgets <- function(widgets.names = NULL) {
 #'
 Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL) {
     # If one is on a composed workflow which do not have explicit ui
+
     if (is.null(rv.custom.names)) {
         declare_rv_custom <- "rv.custom <- reactiveValues()\n\n"
     } else {
@@ -100,7 +100,7 @@ Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL) {
         ls_list <- lapply(
             rv.custom.names,
             function(x) gsub("w.name", x, basis)
-        )
+          )
         declare_rv_custom <- paste0(
             "rv.custom <- reactiveValues(\n",
             paste0("\t", ls_list, sep = "", collapse = ",\n"),
@@ -310,7 +310,10 @@ dataOut = reactive({dataOut})
 #'
 #' @return NA
 #'
-Get_Worflow_Core_Code <- function(w.names, rv.custom.names) {
+Get_Worflow_Core_Code <- function(
+    w.names = NULL,
+    rv.custom.names = NULL) {
+  #browser()
     core <- paste0(
         Get_Code_Declare_widgets(w.names),
         Get_Code_Update_Config_Variable(),
@@ -345,7 +348,9 @@ Get_Worflow_Core_Code <- function(w.names, rv.custom.names) {
 #'
 #' @return NA
 #'
-Get_AdditionalModule_Core_Code <- function(w.names, rv.custom.names = NULL) {
+Get_AdditionalModule_Core_Code <- function(
+  w.names = NULL, 
+  rv.custom.names = NULL) {
     core <- paste0(
         Get_Code_Declare_widgets(w.names),
         Get_Code_for_ObserveEvent_widgets(w.names),

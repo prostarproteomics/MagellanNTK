@@ -1,6 +1,10 @@
+library(shiny)
+library(Magellan)
+
+
 example_mod_Pipeline <- function(verbose = FALSE){
-#----------------------------------------------------------------------
-ui <- fluidPage(
+
+  ui <- fluidPage(
   tagList(
     uiOutput('UI'),
     uiOutput('debugInfos_ui')
@@ -25,7 +29,8 @@ server <- function(input, output){
     mod_Debug_Infos_ui('debug_infos')
   })
   
-  mod_Debug_Infos_server(id = 'debug_infos',
+  mod_Debug_Infos_server(
+    id = 'debug_infos',
     title = 'Infos from shiny app',
     rv.dataIn = reactive({rv$dataIn}),
     dataOut = reactive({rv$dataOut$dataOut()}))

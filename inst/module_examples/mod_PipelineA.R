@@ -56,7 +56,7 @@ mod_PipelineA_server <- function(id,
 
   config <- Config(
     mode = 'pipeline',
-    
+    name = 'PipelineA',
     # List of all steps of the process
     # Here, each step is a workflow
     steps = c('PipelineA_Description', 'Process1', 'Process2', 'Process3'),
@@ -69,7 +69,8 @@ mod_PipelineA_server <- function(id,
   
   # Contrary to the simple workflow, there is no widget in this module
   # because all the widgets are provided by the simple workflows.
-  widgets.default.values <- list()
+  widgets.default.values <- NULL
+  rv.custom.default.values <- NULL
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -79,12 +80,15 @@ mod_PipelineA_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    
-    eval(str2expression(Get_Worflow_Core_Code(
+    eval(
+      str2expression(
+        Get_Worflow_Core_Code(
       w.names = names(widgets.default.values),
-      rv.custom.names = names(rv.custom.default.values)
-      
-    )))
+          rv.custom.names = names(rv.custom.default.values)
+          
+          )
+        )
+      )
     
     rv.custom <- reactiveValues()
     

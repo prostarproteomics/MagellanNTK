@@ -6,7 +6,7 @@ library(tibble)
 
 options(shiny.fullstacktrace = TRUE)
 
-config <- list(
+config <- Config(
   name = "test_TL_verticale",
   steps = c('step1', 'step2', 'step3', 'step4'),
   mandatory = c(TRUE, FALSE, FALSE, TRUE)

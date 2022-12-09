@@ -17,13 +17,13 @@
 #' 
 #' @param id xxx
 #' 
-#' @rdname example_module_Process3
+#' @rdname example_module_Process2
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #'
-mod_Process3_ui <- function(id){
+mod_Process2_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -45,13 +45,13 @@ mod_Process3_ui <- function(id){
 #' 
 #' @param current.pos xxx
 #'
-#' @rdname example_module_Process3
+#' @rdname example_module_Process2
 #' 
 #' @importFrom stats setNames rnorm
 #' 
 #' @export
 #' 
-mod_Process3_server <- function(id,
+mod_Process2_server <- function(id,
                                 dataIn = reactive({NULL}),
                                 steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
@@ -61,7 +61,7 @@ mod_Process3_server <- function(id,
 ){
   
   # This list contains the basic configuration of the process
-  config <- list(
+  config <- Config(
     # Define the type of module
     mode = 'process',
     
@@ -86,6 +86,7 @@ mod_Process3_server <- function(id,
     Step2_select2 = 1
   )
   
+  rv.custom.default.values <- list()
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -96,7 +97,8 @@ mod_Process3_server <- function(id,
     ns <- session$ns
     
     eval(str2expression(Get_Worflow_Core_Code(
-      w.names = names(widgets.default.values)
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
     )))
     
     
@@ -107,7 +109,7 @@ mod_Process3_server <- function(id,
     
     
     output$Description <- renderUI({
-      file <- paste0(config$path_to_md_dir, '/', id, '.md')
+      file <- paste0(config@path_to_md_dir, '/', id, '.md')
       
       tagList(
         # In this example, the md file is found in the module_examples directory
@@ -318,11 +320,12 @@ mod_Process3_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       tagList(
-        toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
+        toggleWidget( 
+                     actionButton(ns("Save_btn_validate"), "Save",
                                   class = btn_success_color),
                      rv$steps.enabled['Save']
         ),
-        if (config$mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
+        if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
           mod_Save_Dataset_ui(ns('createQuickLink'))
         }
       )

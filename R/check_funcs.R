@@ -166,7 +166,7 @@ GetConfig <- function(s) {
     mandatory <- ""
 
 
-    config <- list(
+    config <- Config(
         mode = mode,
         steps = steps,
         mandatory = mandatory

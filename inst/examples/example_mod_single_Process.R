@@ -1,3 +1,6 @@
+library(shiny)
+library(Magellan)
+
 example_mod_Process <- function(verbose = FALSE){
   require(shiny)
   ui <- fluidPage(
