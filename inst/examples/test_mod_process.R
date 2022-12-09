@@ -4,6 +4,7 @@ test_mod_process <- function(){
 library(shinyjs)
 library(QFeatures)
 library(DaparToolshed)
+  library(Magellan)
 
 
 options(shiny.fullstacktrace = TRUE)

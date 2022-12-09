@@ -82,3 +82,12 @@ btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 #' @field actionBtnClass xxxx
 #' @export
 actionBtnClass <- "btn-primary"
+
+
+GlobalSettings <- list(
+    tl_v_next_icon = icon('arrow-down'),
+    tl_v_prev_icon = icon('arrow-up'),
+    tl_h_next_icon = icon('arrow-right'),
+    tl_h_prev_icon = icon('arrow-left')
+)
+

@@ -88,7 +88,6 @@ mod_format_DT_server <- function(id,
     observe({
       req(data())
       DT::replaceData(proxy, data(), resetPaging = FALSE)
-      print(hideCols())
     })
     
     observe({
