@@ -1,12 +1,12 @@
 
-    mod_Process1_ui <- function(id){
+    mod_ProcessToto_ui <- function(id){
     ns <- NS(id)
     }
 
     
 
 
-  mod_Process1_server <- function(id,
+  mod_ProcessToto_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -20,7 +20,7 @@
     config <- Config(
     # Define the type of module
     mode = 'process',
-    name = Process1,
+
     # List of all steps of the process
     steps = c('Step 1', 'Step 2', 'Save'),
 

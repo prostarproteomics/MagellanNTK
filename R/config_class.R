@@ -24,7 +24,7 @@ Config <- setClass("Config",
         mode = character(0),
         steps = character(0),
         mandatory = character(0),
-        path_to_md_dir = character(0),
+        path_to_md_dir = '',
         ll.UI = list()
     ),
     validity = function(object) {

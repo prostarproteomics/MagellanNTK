@@ -102,7 +102,6 @@ mod_Process1_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    #browser()
     # Insert necessary code which is hosted by Magellan
     # DO NOT MODIFY THIS LINE
     eval(
@@ -146,7 +145,7 @@ mod_Process1_server <- function(id,
     })
     
     output$datasetDescription_ui <- renderUI({
-      # Insert your own code to vizualise some information
+      # Insert your own code to visualize some information
       # about your dataset. It will appear once the 'Start' button
       # has been clicked
       
