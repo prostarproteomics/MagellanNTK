@@ -21,28 +21,29 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
   # Example 1
+  # # Show raw table
   mod_format_DT_server("dt_demo_nocolor",
     data = reactive({data_na$array1})
   )
 
   # Example 2
-  .style <- list(
+  # Colorize NA values 
+  .hc_style2 <- list(
     cols = colnames(data_na$array1),
     vals = colnames(data_na$array1),
     unique = c(NA),
     pal = 'lightgrey'
   )
+  
+  .full_style2 <- data_na$array1
+  .full_style2[] <- 'white'
+  .full_style2[is.na(data_na$array1)] <- 'orange'
+  
   mod_format_DT_server("dt_demo_NA_colored",
     data = reactive({data_na$array1}),
     withDLBtns = TRUE,
-    style = reactive({
-      list(
-        cols = colnames(data_na$array1),
-        vals = colnames(data_na$array1),
-        unique = c(NA),
-        pal = 'lightgrey'
-      )
-    })
+    hc_style = reactive({.hc_style2}),
+    full_style = reactive({.full_style2})
   )
 
 
@@ -50,21 +51,29 @@ server <- function(input, output, session) {
   # # Example 3
   # # Compute values, store them in virtual columns and
   # # compute colors based on these virtual values
-  # #
+  # # Colorize cells wether their value is greater of lower than 10
   virtual_cols <- data_na$array1 < 10
   colnames(virtual_cols) <- paste0('virt_', colnames(data_na$array1))
   df <- cbind(data_na$array1, virtual_cols)
 
-  .style <- list(
+  .hc_style3 <- list(
     cols = colnames(df)[1:(ncol(df)/2)],
     vals = colnames(df)[(1+(ncol(df) / 2)):ncol(df)],
     unique = c(0,1),
     pal = c('orange', 'lightblue')
   )
 
+  .full_style3 <- data_na$array1
+  .full_style3[] <- 'white'
+  .full_style3[data_na$array1 < 10] <- 'lightblue'
+  .full_style3[data_na$array1 >= 10] <- 'orange'
+
+
   mod_format_DT_server("dt_demo_virtual_cols",
     data = reactive({df}),
-    style = reactive({.style}),
+    withDLBtns = TRUE,
+    hc_style = reactive({.hc_style3}),
+    full_style = reactive({.full_style3}),
     hideCols = reactive({(1+((ncol(df)) / 2)):(ncol(df))})
   )
 }

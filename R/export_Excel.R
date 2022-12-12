@@ -59,7 +59,8 @@ write.excel <- function(df,
     rowNames = rownames,
     colNames = colnames
     )
-  
+  print(style)
+  print(df)
   if(!is.null(style)){
     if (sum(dim(style) == dim(df))==2){
    for (i in 1:nrow(df)){

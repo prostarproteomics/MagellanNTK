@@ -47,8 +47,7 @@ mod_download_btns_ui <- function(id) {
 #' @param id internal
 #' @param df.data internal
 #' @param name internal
-#' @param color xxx
-#' @param df.tags xxxx
+#' @param style xxx
 #' 
 #' @export
 #' 
@@ -60,9 +59,7 @@ mod_download_btns_ui <- function(id) {
 mod_download_btns_server <- function(id, 
   df.data, 
   name, 
-  colors, 
-  df.tags
-  ) {
+  style = NULL) {
   moduleServer(
     id,
     function(input, output, session) {
@@ -86,8 +83,7 @@ mod_download_btns_server <- function(id,
           fname <- paste("temp", Sys.Date(), ".xlsx", sep = "")
           write.excel(
             df = df.data(),
-            colors = colors(),
-            tags = df.tags(),
+            style = style(),
             filename = fname
           )
           

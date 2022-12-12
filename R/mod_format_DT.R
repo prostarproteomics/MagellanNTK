@@ -74,7 +74,8 @@ mod_format_DT_server <- function(id,
   withDLBtns = FALSE,
   showRownames = FALSE,
   dom = 'Bt',
-  style = reactive({NULL}),
+  hc_style = reactive({NULL}),
+  full_style = reactive({NULL}),
   filename = "Prostar_export",
   hideCols = reactive({NULL})
   ){
@@ -97,13 +98,11 @@ mod_format_DT_server <- function(id,
     
     mod_download_btns_server(
       id = "DL_btns",
-      df.data = reactive({data()}),
+      df.data = reactive({data()[,-hideCols()]}),
       name = reactive({filename}),
-      colors = reactive({NULL}),
-      df.tags = reactive({NULL})
-    )
-    
-    
+      style = reactive({full_style()})
+      )
+  
     
     output$StaticDataTable <- DT::renderDataTable(server=TRUE,{
       
@@ -127,12 +126,12 @@ mod_format_DT_server <- function(id,
           )
         )
 
-        if (!is.null(style())){
+        if (!is.null(hc_style())){
           dt <- dt %>%
             DT::formatStyle(
-              columns = style()$cols,
-              valueColumns = style()$vals,
-              backgroundColor = DT::styleEqual(style()$unique, style()$pal)
+              columns = hc_style()$cols,
+              valueColumns = hc_style()$vals,
+              backgroundColor = DT::styleEqual(hc_style()$unique, hc_style()$pal)
             )
         }
       #})
