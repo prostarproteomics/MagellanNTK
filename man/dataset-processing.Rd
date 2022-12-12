@@ -26,14 +26,14 @@
 \item{dataset}{`character(1)` providing the base with respect to which
 logarithms are computed. Default is log2.}
 
-\item{name}{A `character(1)` naming the new assay name.}
+\item{name}{A `character(1)` naming the new array name.}
 }
 \value{
 An processed object of the same class as `object`.
 }
 \description{
 This manual page describes manipulation methods using [list] objects. In 
-index or name `i` can be specified to define the assay (by name of
+index or name `i` can be specified to define the array (by name of
 index) on which to operate.
 
 The following functions are currently available:

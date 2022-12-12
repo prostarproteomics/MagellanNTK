@@ -1,4 +1,6 @@
-conf.process <- Config(
+if(interactive()){
+  
+  conf.process <- Config(
   name = 'ProcessX',
   mode = "process",
   steps = c('Description', "Step 1", "Step 2", "Save"),
@@ -22,3 +24,5 @@ conf.pipeline <- Config(
 )
 createModuleTemplate(conf.pipeline)
 run_workflow("PipelineA", verbose = TRUE)
+
+}

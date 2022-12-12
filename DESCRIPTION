@@ -19,14 +19,15 @@ Imports:
     DT,
     shiny,
     htmlwidgets,
+    shinyWidgets,
     shinyBS,
     shinyjs,
-    utils,
     sass,
     shinyjqui,
     stringi,
     stats,
-    utils
+    utils,
+    openxlsx
 Collate: 
     AllGenerics.R
     config_class.R
@@ -58,7 +59,7 @@ Collate:
     mod_Load_Dataset.R
     load_save.R
     run_workflow.R
-biocViews: Software, Proteomics, MassSpectrometry, WorkflowStep
+biocViews: Software, WorkflowStep
 Encoding: UTF-8
 RoxygenNote: 7.2.2
 URL: https://github.com/prostarproteomics/Magellan

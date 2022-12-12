@@ -22,7 +22,8 @@ xxxxx
 A shiny Module to load a dataset.
 }
 \examples{
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyBS)
 library(Magellan)
 
@@ -40,13 +41,12 @@ server <- function(input, output, session) {
 
   observe({
     mod_Save_Dataset_server(id = 'exemple', 
-                        data = reactive({feat1}))
+                        data = reactive({data1}))
     
   })
-  
-  
-  
+
 }
 
 shinyApp(ui=ui, server=server)
+}
 }

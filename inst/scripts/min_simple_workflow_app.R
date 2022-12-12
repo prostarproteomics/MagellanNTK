@@ -14,7 +14,7 @@ ui <- fluidPage(
 
 
 server <- function(input, output){
-  data(feat1, package='Magellan')
+  data(data1, package='Magellan')
   
   # Load a dataset (i.e. with data())
   # data(xxx)

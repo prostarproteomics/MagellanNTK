@@ -1,4 +1,5 @@
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyWidgets)
 library(shinyjs)
 
@@ -47,13 +48,14 @@ server <- function(input, output){
   
   
   mod_timeline_h_server(id = 'TLh',
-                        config = config,
-                        status = reactive({rv$status}),
-                        position = reactive({rv$current.pos}),
-                        enabled = reactive({rv$tl.tags.enabled})
+    config = config,
+    status = reactive({rv$status}),
+    position = reactive({rv$current.pos}),
+    enabled = reactive({rv$tl.tags.enabled})
   )
   
 }
 
 
 shinyApp(ui, server)
+}

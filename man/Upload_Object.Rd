@@ -15,9 +15,3 @@ NA
 \description{
 xxx
 }
-\examples{
-file <- system.file("extdata", "feat1.rda", package = "Magellan")
-Upload_Object(file)
-rm(feat1)
-
-}

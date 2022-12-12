@@ -39,7 +39,7 @@ mod_test_pipeline_server <- function(id){
     ns <- session$ns
     
     rv <- reactiveValues(
-      dataIn = QFeatures::feat1,
+      dataIn = Magellan::data1,
       dataOut = NULL
     )
     

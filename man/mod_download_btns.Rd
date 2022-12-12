@@ -8,7 +8,7 @@
 \usage{
 mod_download_btns_ui(id)
 
-mod_download_btns_server(id, df.data, name, colors, df.tags)
+mod_download_btns_server(id, df.data, name, style = NULL)
 }
 \arguments{
 \item{id}{internal}
@@ -17,20 +17,22 @@ mod_download_btns_server(id, df.data, name, colors, df.tags)
 
 \item{name}{internal}
 
-\item{df.tags}{xxxx}
+\item{style}{xxx}
 
 \item{input}{internal}
 
 \item{output}{internal}
 
 \item{session}{internal}
-
-\item{color}{xxx}
 }
 \description{
 A shiny Module.
 }
 \examples{
-
+if(interactive()){
+  
+  
+  
+}
 }
 \keyword{internal}

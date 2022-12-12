@@ -65,7 +65,8 @@ The module navigation can be launched via a Shiny app.
 This is the core module of Magellan
 }
 \examples{
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(Magellan)
 
 example_mod_Process <- function(verbose = FALSE){
@@ -117,10 +118,12 @@ shinyApp(ui, server)
 
 
 example_mod_Process()
+
+}
 library(shiny)
 library(Magellan)
 
-
+if(interactive()){
 example_mod_Pipeline <- function(verbose = FALSE){
 
   ui <- fluidPage(
@@ -168,6 +171,7 @@ shinyApp(ui, server)
 }
 
 example_mod_Pipeline()
+}
 }
 \author{
 Samuel Wieczorek

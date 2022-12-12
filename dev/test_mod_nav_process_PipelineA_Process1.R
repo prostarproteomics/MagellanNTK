@@ -1,23 +1,27 @@
 library(highcharter)
 library(shinyjs)
+library(DT)
 library(tibble)
+library(QFeatures)
 library(crayon)
-
+library(Magellan)
 
 options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/inst/scripts')
-
-source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), 
-       local=TRUE)$value
-
+setwd('~/GitHub/Magellan/dev/test_dev')
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
   source(file.path(dirpath, l), local=TRUE)$value
 
+dirpath <- 'example_modules'
+for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+  source(file.path(dirpath, l), local=TRUE)$value
 
-mod_test_navigation_process_ui <- function(id){
+#--------------------------------------------
+
+
+mod_test_process_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
@@ -35,6 +39,7 @@ mod_test_navigation_process_ui <- function(id){
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
+                h3('Valler'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -42,25 +47,24 @@ mod_test_navigation_process_ui <- function(id){
 }
 
 
-mod_test_navigation_process_server <- function(id){
+mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
-    data(feat1, package='Magellan')
+     
     rv <- reactiveValues(
-      dataIn = feat1,
+      dataIn = Magellan::data1,
       dataOut = NULL
     )
     
     observe({
+      source(file.path('example_modules', 'mod_PipelineA_Process1.R'), local=TRUE)$value
       
-      rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
-        nav.mode = 'process',
-        dataIn = reactive({rv$dataIn}),
-        remoteReset = reactive({input$simReset}),
-        is.skipped = reactive({input$simSkipped%%2 != 0}),
-        is.enabled = reactive({input$simEnabled%%2 == 0})
-      )
+      rv$dataOut <- mod_nav_process_server(id = 'PipelineA_Process1',
+                                           dataIn = reactive({rv$dataIn}),
+                                           remoteReset = reactive({input$simReset}),
+                                           is.skipped = reactive({input$simSkipped%%2 != 0}),
+                                           is.enabled = reactive({input$simEnabled%%2 == 0})
+                                           )
       
       
       observeEvent(rv$dataOut$dataOut()$trigger, {
@@ -70,7 +74,7 @@ mod_test_navigation_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_navigation_ui(ns('PipelineA_Process1'))
+      mod_nav_process_ui(ns('PipelineA_Process1'))
     })
     
     
@@ -103,13 +107,16 @@ mod_test_navigation_process_server <- function(id){
 
 #----------------------------------------------------------------------
 ui <- fluidPage(
-  mod_test_navigation_process_ui('test_mod_process')
+  mod_test_process_ui('test_mod_process')
 )
 
 
 #----------------------------------------------------------------------
 server <- function(input, output){
-  mod_test_navigation_process_server('test_mod_process')
+  mod_test_process_server('test_mod_process')
 }
 shinyApp(ui, server)
 
+
+# shinyApp(ui = mod_test_process_ui('test_mod_process'),
+#          server = mod_test_process_server('test_mod_process'))

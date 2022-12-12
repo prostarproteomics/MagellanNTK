@@ -33,11 +33,11 @@ NA
 A shiny Module.
 }
 \examples{
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyWidgets)
 library(shinyjs)
-library(R6)
-library(tibble)
+
 
 options(shiny.fullstacktrace = TRUE)
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
@@ -75,10 +75,10 @@ server <- function(input, output){
   
   
   mod_timeline_v_server(id = 'TLv',
-                        config = config,
-                        status = reactive({rv$status}),
-                        position = reactive({rv$current.pos}),
-                        enabled = reactive({rv$tl.tags.enabled})
+    config = config,
+    status = reactive({rv$status}),
+    position = reactive({rv$current.pos}),
+    enabled = reactive({rv$tl.tags.enabled})
   )
   
   observeEvent(input$nextpos,{
@@ -90,14 +90,11 @@ server <- function(input, output){
     if (rv$current.pos != 1)
       rv$current.pos <- rv$current.pos - 1
   })
-  
-  
-  
-  
 }
 
 
 shinyApp(ui, server)
+}
 }
 \author{
 Samuel Wieczorek

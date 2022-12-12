@@ -24,7 +24,9 @@ The 'Description' step is generic and creates a *.md file to be filled by
 th developer.
 }
 \examples{
-conf.process <- Config(
+if(interactive()){
+  
+  conf.process <- Config(
   name = 'ProcessX',
   mode = "process",
   steps = c('Description', "Step 1", "Step 2", "Save"),
@@ -48,6 +50,8 @@ conf.pipeline <- Config(
 )
 createModuleTemplate(conf.pipeline)
 run_workflow("PipelineA", verbose = TRUE)
+
+}
 }
 \author{
 Samuel Wieczorek

@@ -1,7 +1,7 @@
 library(shiny)
 library(Magellan)
 
-
+if(interactive()){
 example_mod_Pipeline <- function(verbose = FALSE){
 
   ui <- fluidPage(
@@ -49,3 +49,4 @@ shinyApp(ui, server)
 }
 
 example_mod_Pipeline()
+}

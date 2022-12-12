@@ -1,9 +1,9 @@
-test_mod_process <- function(){
+if(interactive()){
+  
+  test_mod_process <- function(){
   
   library(shiny)
 library(shinyjs)
-library(QFeatures)
-library(DaparToolshed)
   library(Magellan)
 
 
@@ -46,7 +46,7 @@ mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     rv <- reactiveValues(
-      dataIn = QFeatures::feat1,
+      dataIn = data1,
       remoteReset = FALSE,
       remoteSkipped = FALSE,
       remoteEnabled = TRUE
@@ -127,4 +127,6 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
+  }
+  
 }

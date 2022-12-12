@@ -1,14 +1,12 @@
-library(shiny)
-library(shinyWidgets)
+if(interactive()){
+  library(shiny)
 library(shinyjs)
-library(R6)
-library(tibble)
-
 options(shiny.fullstacktrace = TRUE)
 
 config <- Config(
   name = "test_TL_verticale",
-  steps = c('step1', 'step2', 'step3', 'step4'),
+  #mode = 'process',
+  steps = c('Description', 'step2', 'step3', 'Save'),
   mandatory = c(TRUE, FALSE, FALSE, TRUE)
 )
 
@@ -85,3 +83,4 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
+}

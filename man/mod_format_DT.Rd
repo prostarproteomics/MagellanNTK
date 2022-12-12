@@ -14,7 +14,10 @@ mod_format_DT_server(
   withDLBtns = FALSE,
   showRownames = FALSE,
   dom = "Bt",
-  style = reactive({
+  hc_style = reactive({
+     NULL
+ }),
+  full_style = reactive({
      NULL
  }),
   filename = "Prostar_export",
@@ -30,12 +33,6 @@ mod_format_DT_server(
 
 \item{dom}{xxx}
 
-\item{style}{A list of four items:
-* cols: a vector of colnames of columns to show,
-* vals: a vector of colnames of columns that contain values,
-* unique: unique(conds),
-* pal: RColorBrewer::brewer.pal(3, "Dark2")[seq_len(2)]}
-
 \item{filename}{xxx}
 
 \item{input}{internal}
@@ -45,6 +42,12 @@ mod_format_DT_server(
 \item{session}{internal}
 
 \item{withBtns}{xxx}
+
+\item{style}{A list of four items:
+* cols: a vector of colnames of columns to show,
+* vals: a vector of colnames of columns that contain values,
+* unique: unique(conds),
+* pal: RColorBrewer::brewer.pal(3, "Dark2")[seq_len(2)]}
 }
 \description{
 A shiny Module.
@@ -52,14 +55,13 @@ A shiny Module.
 \examples{
 
 if (interactive()){
-library(SummarizedExperiment)
 library(shinyjqui)
 library(DT)
 library(shinyjs)
 library(shiny)
 library(Magellan)
 
-data(ft_na, package='DaparViz')
+data(data_na)
 
 ui <- fluidPage(
   tagList(
@@ -74,28 +76,29 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
   # Example 1
+  # # Show raw table
   mod_format_DT_server("dt_demo_nocolor",
-    data = reactive({assay(ft_na, 1)})
+    data = reactive({data_na$array1})
   )
 
   # Example 2
-  .style <- list(
-    cols = colnames(assay(ft_na,1)),
-    vals = colnames(assay(ft_na,1)),
+  # Colorize NA values 
+  .hc_style2 <- list(
+    cols = colnames(data_na$array1),
+    vals = colnames(data_na$array1),
     unique = c(NA),
     pal = 'lightgrey'
   )
+  
+  .full_style2 <- data_na$array1
+  .full_style2[] <- 'white'
+  .full_style2[is.na(data_na$array1)] <- 'orange'
+  
   mod_format_DT_server("dt_demo_NA_colored",
-    data = reactive({assay(ft_na, 1)}),
+    data = reactive({data_na$array1}),
     withDLBtns = TRUE,
-    style = reactive({
-      list(
-        cols = colnames(assay(ft_na,1)),
-        vals = colnames(assay(ft_na,1)),
-        unique = c(NA),
-        pal = 'lightgrey'
-      )
-    })
+    hc_style = reactive({.hc_style2}),
+    full_style = reactive({.full_style2})
   )
 
 
@@ -103,21 +106,29 @@ server <- function(input, output, session) {
   # # Example 3
   # # Compute values, store them in virtual columns and
   # # compute colors based on these virtual values
-  # #
-  virtual_cols <- assay(ft_na, 1) < 10
-  colnames(virtual_cols) <- paste0('virt_', colnames(assay(ft_na, 1)))
-  df <- cbind(assay(ft_na, 1), virtual_cols)
+  # # Colorize cells wether their value is greater of lower than 10
+  virtual_cols <- data_na$array1 < 10
+  colnames(virtual_cols) <- paste0('virt_', colnames(data_na$array1))
+  df <- cbind(data_na$array1, virtual_cols)
 
-  .style <- list(
+  .hc_style3 <- list(
     cols = colnames(df)[1:(ncol(df)/2)],
     vals = colnames(df)[(1+(ncol(df) / 2)):ncol(df)],
     unique = c(0,1),
     pal = c('orange', 'lightblue')
   )
 
+  .full_style3 <- data_na$array1
+  .full_style3[] <- 'white'
+  .full_style3[data_na$array1 < 10] <- 'lightblue'
+  .full_style3[data_na$array1 >= 10] <- 'orange'
+
+
   mod_format_DT_server("dt_demo_virtual_cols",
     data = reactive({df}),
-    style = reactive({.style}),
+    withDLBtns = TRUE,
+    hc_style = reactive({.hc_style3}),
+    full_style = reactive({.full_style3}),
     hideCols = reactive({(1+((ncol(df)) / 2)):(ncol(df))})
   )
 }

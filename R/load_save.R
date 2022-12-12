@@ -12,8 +12,8 @@
 #' @return NA
 #' 
 #' @examples
-#' data(feat1)
-#' Save_Object(feat1, 'foo.rda')
+#' data(data1)
+#' Save_Object(data1, 'foo.rda')
 #' unlink('foo.rda')
 #'
 Save_Object <- function(object, file) {
@@ -38,10 +38,6 @@ Save_Object <- function(object, file) {
 #'
 #' @return NA
 #' 
-#' @examples
-#' file <- system.file("extdata", "feat1.rda", package = "Magellan")
-#' Upload_Object(file)
-#' rm(feat1)
 #'
 Upload_Object <- function(file) {
     if (missing(file)) {

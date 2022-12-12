@@ -51,7 +51,7 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
   
-  obj <- feat1
+  obj <- data1
   
   
   rv <- reactiveValues(

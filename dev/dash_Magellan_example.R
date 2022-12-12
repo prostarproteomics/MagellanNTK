@@ -1,7 +1,6 @@
 library(shiny)
 library(shinydashboard)
-library(R6)
-library(tibble)
+
 library(Magellan)
 options(shiny.fullstacktrace = TRUE)
 
@@ -75,7 +74,7 @@ server <- function(session, input, output) {
   
   observeEvent(input$send, {
     updateTabItems(session, 'tabs', 'screen2')
-    shinyjs::delay(100, rv$dataIn <- feat1)
+    shinyjs::delay(100, rv$dataIn <- data1)
     
   })
   

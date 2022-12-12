@@ -85,9 +85,9 @@ actionBtnClass <- "btn-primary"
 
 
 GlobalSettings <- list(
-    tl_v_next_icon = icon('arrow-down'),
-    tl_v_prev_icon = icon('arrow-up'),
-    tl_h_next_icon = icon('arrow-right'),
-    tl_h_prev_icon = icon('arrow-left')
+    tl_v_next_icon = shiny::icon('arrow-down'),
+    tl_v_prev_icon = shiny::icon('arrow-up'),
+    tl_h_next_icon = shiny::icon('arrow-right'),
+    tl_h_prev_icon = shiny::icon('arrow-left')
 )
 

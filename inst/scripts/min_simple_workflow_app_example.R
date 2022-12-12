@@ -9,9 +9,9 @@ ui <- fluidPage(
 
 
 server <- function(input, output){
-  data(feat1, package='Magellan')
+  data(data1, package='Magellan')
   rv <- reactiveValues(
-    dataIn = feat1,
+    dataIn = data1,
     dataOut = NULL
   )
   

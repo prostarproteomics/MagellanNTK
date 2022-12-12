@@ -1,4 +1,5 @@
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(Magellan)
 
 example_mod_Process <- function(verbose = FALSE){
@@ -50,3 +51,5 @@ shinyApp(ui, server)
 
 
 example_mod_Process()
+
+}

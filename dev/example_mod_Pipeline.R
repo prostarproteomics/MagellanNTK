@@ -34,7 +34,7 @@ server <- function(input, output){
     source(file.path(dirpath, l), local=FALSE)$value
   
   rv <- reactiveValues(
-    dataIn = Magellan::feat1,
+    dataIn = Magellan::data1,
     dataOut = NULL
   )
   

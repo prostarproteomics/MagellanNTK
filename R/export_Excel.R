@@ -1,14 +1,15 @@
 
 
 #' @title This function exports a single data.frame to a Excel file.
+#' 
+#' @description xxx
 #'
 #' @param df A data.frame
-#'
 #' @param style xxx
-#'
 #' @param tabname xxx
-#'
-#' @param filename A character string for the name of the Excel file.
+#' @param filename A character string for the name of the Excel 
+#' @param colnames A `logical(0)` xxx
+#' @param rownames A `logical(0)` xxx
 #'
 #' @return A Excel file (.xlsx)
 #'
@@ -59,24 +60,23 @@ write.excel <- function(df,
     rowNames = rownames,
     colNames = colnames
     )
-  print(style)
-  print(df)
+
   if(!is.null(style)){
     if (sum(dim(style) == dim(df))==2){
-   for (i in 1:nrow(df)){
-     for(j in 1:ncol(df)){
-       openxlsx::addStyle(wb,
-         sheet = 1,
-         cols = j + isTRUE(rownames),
-         rows = i + isTRUE(colnames),
-         style = openxlsx::createStyle(fgFill = style[i,j])
-       )
-     }
-   }
-    } else {
-    warning('Malformed style data.frame. Cannot use it.')
+      for (i in 1:nrow(df)){
+        for(j in 1:ncol(df)){
+          openxlsx::addStyle(wb,
+            sheet = 1,
+            cols = j + isTRUE(rownames),
+            rows = i + isTRUE(colnames),
+            style = openxlsx::createStyle(fgFill = style[i,j])
+          )
+        }
+        }
+      } else {
+        warning('Malformed style data.frame. Cannot use it.')
+      }
     }
-  }
   openxlsx::saveWorkbook(wb, fname, overwrite = TRUE)
 }
 

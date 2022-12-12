@@ -37,7 +37,7 @@ mod_test_navigation_pipeline_server <- function(id){
     ns <- session$ns
     
     rv <- reactiveValues(
-      dataIn = feat1,
+      dataIn = data1,
       dataOut = NULL
     )
     

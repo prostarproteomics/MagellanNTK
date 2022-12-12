@@ -27,7 +27,7 @@ mod_test_process_server <- function(id){
     ns <- session$ns
      
     rv <- reactiveValues(
-      dataIn = QFeatures::feat1,
+      dataIn = Magellan::data1,
       dataOut = NULL,
       remoteReset = FALSE,
       remoteSkipped = FALSE,

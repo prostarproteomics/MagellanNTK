@@ -25,10 +25,10 @@ Config <- setClass("Config",
     ),
     prototype(
         name = character(0),
-        mode = character(0),
-        steps = character(0),
-        mandatory = character(0),
-        path_to_md_dir = '',
+        mode = 'process',
+        steps = c('Description', 'Save'),
+        mandatory = c(TRUE, TRUE),
+        path_to_md_dir = '.',
         ll.UI = list()
     ),
     
