@@ -25,7 +25,8 @@ Imports:
     sass,
     shinyjqui,
     stringi,
-    stats
+    stats,
+    utils
 Collate: 
     AllGenerics.R
     config_class.R
@@ -33,7 +34,6 @@ Collate:
     app_server.R
     app_ui.R
     run_app.R
-    examples_dataset.R
     doc-data.R
     global.R
     mod_bsmodal.R
@@ -42,6 +42,7 @@ Collate:
     mod_format_DT.R
     utils.R
     check_funcs.R
+    export_Excel.R
     mod_timeline_h.R
     mod_timeline_v.R
     code_used_by_external_modules.R

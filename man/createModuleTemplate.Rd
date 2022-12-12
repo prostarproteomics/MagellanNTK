@@ -4,36 +4,50 @@
 \alias{createModuleTemplate}
 \title{Create process template code}
 \usage{
-createModuleTemplate(name = NULL, config = NULL)
+createModuleTemplate(config = NULL, path = ".")
 }
 \arguments{
-\item{name}{xxx}
+\item{config}{An instance of the class `Config`.}
 
-\item{config}{xxx}
+\item{path}{xxx}
 }
 \value{
 NA
 }
 \description{
-xxx
+This function creates the source code of an empty module 
+(i.e. a module without any widgets). This module contains the minimal
+skeleton to work. The developer can then insert its own code for widgets
+and data processing functions.
+
+The 'Description' step is generic and creates a *.md file to be filled by
+th developer.
 }
 \examples{
-conf.process <- list(
-    mode = "process",
-    steps = c("Step 1", "Step 2", "Save"),
-    mandatory = c(TRUE, FALSE, TRUE),
-    path_to_md_dir = NULL
-)
-createModuleTemplate("Process1", conf.process)
+conf.process <- Config(
+  name = 'ProcessX',
+  mode = "process",
+  steps = c('Description', "Step 1", "Step 2", "Save"),
+  mandatory = c(TRUE, TRUE, FALSE, TRUE),
+  path_to_md_dir = '.'
+  )
 
-conf.pipeline <- list(
-    mode = "pipeline",
-    steps = c("Process 1", "Process 2", "Process 3"),
-    mandatory = c(TRUE, FALSE, TRUE),
-    path_to_md_dir = system.file("module_examples/md/", package = "Magellan")
-)
-createModuleTemplate("PipelineA", conf.pipeline)
 
+file <- createModuleTemplate(conf.process)
+source(file)
+run_workflow("ProcessX", verbose = TRUE)
+unlink(file)
+  
+  
+conf.pipeline <- Config(
+  mode = "pipeline",
+  name = 'PipelineA',
+  steps = c('Description', "Process 1", "Process 2", "Process 3"),
+  mandatory = c(TRUE, TRUE, FALSE, TRUE),
+  path_to_md_dir = system.file("module_examples/md/", package = "Magellan")
+)
+createModuleTemplate(conf.pipeline)
+run_workflow("PipelineA", verbose = TRUE)
 }
 \author{
 Samuel Wieczorek

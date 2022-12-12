@@ -4,7 +4,7 @@
 \alias{Get_AdditionalModule_Core_Code}
 \title{Code for declaring xxx}
 \usage{
-Get_AdditionalModule_Core_Code(w.names, rv.custom.names = NULL)
+Get_AdditionalModule_Core_Code(w.names = NULL, rv.custom.names = NULL)
 }
 \arguments{
 \item{w.names}{xxx}

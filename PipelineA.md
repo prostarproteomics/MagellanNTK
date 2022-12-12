@@ -1,6 +1,6 @@
 
   ## Overview
   
-  This page describes the workflow '#name#'.
+  This page describes the workflow 'PipelineA'.
   
   

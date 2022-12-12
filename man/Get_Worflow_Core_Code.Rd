@@ -4,7 +4,7 @@
 \alias{Get_Worflow_Core_Code}
 \title{Code for declaring xxx}
 \usage{
-Get_Worflow_Core_Code(w.names, rv.custom.names)
+Get_Worflow_Core_Code(w.names = NULL, rv.custom.names = NULL)
 }
 \arguments{
 \item{w.names}{xxx}

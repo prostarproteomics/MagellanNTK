@@ -4,9 +4,12 @@
 #' (i.e. a module without any widgets). This module contains the minimal
 #' skeleton to work. The developer can then insert its own code for widgets
 #' and data processing functions.
+#' 
+#' The 'Description' step is generic and creates a *.md file to be filled by
+#' th developer.
 #'
-#' @param name A `character(0)`
 #' @param config An instance of the class `Config`.
+#' @param path xxx
 #'
 #' @example inst/examples/example_create_mod_template.R
 #'
@@ -19,7 +22,7 @@
 #'
 #' @return NA
 #'
-createModuleTemplate <- function(config = NULL) {
+createModuleTemplate <- function(config = NULL, path='.') {
 
     # Check config integrity
     # check <- CheckConfig(config)
@@ -28,7 +31,7 @@ createModuleTemplate <- function(config = NULL) {
 
 
     # Create template module file
-    mod.filename <- paste0("mod_", config@name, ".R")
+    mod.filename <- paste0(path, '/', "mod_", config@name, ".R")
     if (file.exists(mod.filename)) {
         file.remove(mod.filename)
       }
@@ -63,13 +66,15 @@ createModuleTemplate <- function(config = NULL) {
     ###
     ### Create the Description file
     ###
-    desc.filename <- paste0(config@name, ".md")
+    desc.filename <- paste0(path, '/', config@name, ".md")
     if (file.exists(desc.filename)) {
       file.remove(desc.filename)
     }
     con <- file(desc.filename, open = "a")
     writeLines(Code_for_Description_file(config@name), con)
     close(con)
+    
+    return(mod.filename)
 }
 
 

@@ -1,13 +1,12 @@
 
 if (interactive()){
-library(SummarizedExperiment)
 library(shinyjqui)
 library(DT)
 library(shinyjs)
 library(shiny)
 library(Magellan)
 
-data(ft_na, package='DaparViz')
+data(data_na)
 
 ui <- fluidPage(
   tagList(
@@ -23,23 +22,23 @@ server <- function(input, output, session) {
 
   # Example 1
   mod_format_DT_server("dt_demo_nocolor",
-    data = reactive({assay(ft_na, 1)})
+    data = reactive({data_na$array1})
   )
 
   # Example 2
   .style <- list(
-    cols = colnames(assay(ft_na,1)),
-    vals = colnames(assay(ft_na,1)),
+    cols = colnames(data_na$array1),
+    vals = colnames(data_na$array1),
     unique = c(NA),
     pal = 'lightgrey'
   )
   mod_format_DT_server("dt_demo_NA_colored",
-    data = reactive({assay(ft_na, 1)}),
+    data = reactive({data_na$array1}),
     withDLBtns = TRUE,
     style = reactive({
       list(
-        cols = colnames(assay(ft_na,1)),
-        vals = colnames(assay(ft_na,1)),
+        cols = colnames(data_na$array1),
+        vals = colnames(data_na$array1),
         unique = c(NA),
         pal = 'lightgrey'
       )
@@ -52,9 +51,9 @@ server <- function(input, output, session) {
   # # Compute values, store them in virtual columns and
   # # compute colors based on these virtual values
   # #
-  virtual_cols <- assay(ft_na, 1) < 10
-  colnames(virtual_cols) <- paste0('virt_', colnames(assay(ft_na, 1)))
-  df <- cbind(assay(ft_na, 1), virtual_cols)
+  virtual_cols <- data_na$array1 < 10
+  colnames(virtual_cols) <- paste0('virt_', colnames(data_na$array1))
+  df <- cbind(data_na$array1, virtual_cols)
 
   .style <- list(
     cols = colnames(df)[1:(ncol(df)/2)],

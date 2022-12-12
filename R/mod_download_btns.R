@@ -66,12 +66,13 @@ mod_download_btns_server <- function(id,
   moduleServer(
     id,
     function(input, output, session) {
+      
       output$download_as_csv_btn <- downloadHandler(
         filename = function() {
           paste(name(), "-", Sys.Date(), ".csv", sep = "")
         },
         content = function(file) {
-          write.table(df.data(), file, sep = ";", row.names = FALSE)
+          utils::write.table(df.data(), file, sep = ";", row.names = FALSE)
         }
       )
       

@@ -5,8 +5,12 @@ conf.process <- Config(
   mandatory = c(TRUE, TRUE, FALSE, TRUE),
   path_to_md_dir = '.'
   )
-createModuleTemplate(conf.process)
+
+
+file <- createModuleTemplate(conf.process)
+source(file)
 run_workflow("ProcessX", verbose = TRUE)
+unlink(file)
   
   
 conf.pipeline <- Config(

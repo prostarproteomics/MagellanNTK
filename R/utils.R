@@ -111,8 +111,8 @@ Timestamp <- function() {
 #'
 #' @description
 #' This manual page describes manipulation methods using [list] objects. In 
-# 'the following functions, if `object` is of class `list`, and optional assay
-#' index or name `i` can be specified to define the assay (by name of
+# 'the following functions, if `object` is of class `list`, and optional array
+#' index or name `i` can be specified to define the array (by name of
 #' index) on which to operate.
 #'
 #' The following functions are currently available:
@@ -137,7 +137,7 @@ Timestamp <- function() {
 #' @param dataset `character(1)` providing the base with respect to which
 #'     logarithms are computed. Default is log2.
 #'
-#' @param name A `character(1)` naming the new assay name.
+#' @param name A `character(1)` naming the new array name.
 #'
 #' @return An processed object of the same class as `object`.
 #'
@@ -173,7 +173,7 @@ setMethod(
     "list",
     function(object, range) {
         if (missing(range)) {
-            stop("Provide range of assays to be processed")
+            stop("Provide range of array to be processed")
         }
         if (is.null(object)) {
             return()
@@ -189,7 +189,7 @@ setMethod(
 #           "QFeatures",
 #           function(object, range) {
 #             if (missing(range))
-#               stop("Provide range of assays to be processed")
+#               stop("Provide range of array to be processed")
 #
 #             if (is.numeric(range)) range <- names(object)[[range]]
 #

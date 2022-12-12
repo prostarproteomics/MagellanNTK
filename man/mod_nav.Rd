@@ -54,8 +54,8 @@ level of navigation module.}
 }
 \value{
 A list of four items:
-* dataOut xxx
-* steps.enabled xxxxx
+* dataOut A dataset of the same class of the parameter dataIn
+* steps.enabled A vector of `boolean` of the same length than config@steps
 * status A vector of `integer(1)` of the same length than the config@steps
   vector
 * reset xxxx
@@ -65,25 +65,9 @@ The module navigation can be launched via a Shiny app.
 This is the core module of Magellan
 }
 \examples{
+library(shiny)
+library(Magellan)
 
-
-#' @title Shiny example module `Process`
-#'
-#' @description
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan.
-#' This documentation is for developpers who want to create their own pipelines nor processes
-#' to be managed with `Magellan`.
-#' 
-#' @param verbose A `boolean` that indicates whether to show some infos in the console
-#' and add the shiny module for debugging
-#'
-#' @rdname example_mod_pipeline
-#'
-#' @author Samuel Wieczorek
-#' 
-#' @importFrom utils data
-#' 
 example_mod_Process <- function(verbose = FALSE){
   require(shiny)
   ui <- fluidPage(
@@ -93,8 +77,6 @@ example_mod_Process <- function(verbose = FALSE){
   )
 )
 
-
-#----------------------------------------------------------------------
 server <- function(input, output){
   
   dirpath <- system.file('examples', package='Magellan')
@@ -110,7 +92,6 @@ server <- function(input, output){
   
   output$debugInfos_ui <- renderUI({
     req(verbose)
-    # Just for example purpose
     mod_Debug_Infos_ui('debug_infos')
   })
   
@@ -136,35 +117,19 @@ shinyApp(ui, server)
 
 
 example_mod_Process()
-#' @title Shiny example module `Pipeline A`
-#'
-#' @description
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan.
-#' This documentation is for developpers who want to create their own pipelines nor processes
-#' to be managed with `Magellan`.
-#' 
-#' @param verbose A `boolean` that indicates whether to show some infos in the console
-#' and add the shiny module for debugging
-#'
-#' @rdname example_mod_pipeline
-#'
-#' @author Samuel Wieczorek
-#' 
-#' @importFrom utils data
-#' 
-#' @export
-#' 
+library(shiny)
+library(Magellan)
+
+
 example_mod_Pipeline <- function(verbose = FALSE){
-#----------------------------------------------------------------------
-ui <- fluidPage(
+
+  ui <- fluidPage(
   tagList(
     uiOutput('UI'),
     uiOutput('debugInfos_ui')
   )
 )
 
-#----------------------------------------------------------------------
 server <- function(input, output){
 
   dirpath <- system.file('module_examples', package='Magellan')
@@ -176,32 +141,33 @@ server <- function(input, output){
     dataOut = NULL
   )
   
+  output$UI <- renderUI({mod_nav_ui('PipelineA')})
+  
+  output$debugInfos_ui <- renderUI({
+    req(verbose)
+    mod_Debug_Infos_ui('debug_infos')
+  })
+  
+  mod_Debug_Infos_server(
+    id = 'debug_infos',
+    title = 'Infos from shiny app',
+    rv.dataIn = reactive({rv$dataIn}),
+    dataOut = reactive({rv$dataOut$dataOut()}))
+  
   observe({
      rv$dataOut <- mod_nav_server(id = 'PipelineA',
        dataIn = reactive({rv$dataIn}),
        tl.layout = c('v', 'h'),
        verbose = verbose
        )
-    
-    output$UI <- renderUI({mod_nav_ui('PipelineA')})
   })
-  
-  output$debugInfos_ui <- renderUI({
-    req(verbose)
-    mod_Debug_Infos_ui('debug_infos_app')
-  })
-  
-  
-  mod_Debug_Infos_server(id = 'debug_infos_app',
-    title = 'Infos from shiny app',
-    rv.dataIn = reactive({rv$dataIn}),
-    dataOut = reactive({rv$dataOut$dataOut()}))
+
 }
-
-
 
 shinyApp(ui, server)
 }
+
+example_mod_Pipeline()
 }
 \author{
 Samuel Wieczorek
