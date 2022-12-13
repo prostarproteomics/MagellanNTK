@@ -1,7 +1,7 @@
 #' @title The server() function of the module `mod_nav`
 #'
 #' @description The module navigation can be launched via a Shiny app. 
-#' This is the core module of Magellan
+#' This is the core module of MagellanNTK
 #'
 #' 
 #' @name mod_nav

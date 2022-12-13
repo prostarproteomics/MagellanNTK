@@ -2,12 +2,12 @@ library(shiny)
 library(shinyjs)
 library(QFeatures)
 library(crayon)
-library(Magellan)
+library(MagellanNTK)
 
 
 options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/dev/test_dev')
+setwd('~/GitHub/MagellanNTK/dev/test_dev')
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
@@ -39,7 +39,7 @@ mod_test_pipeline_server <- function(id){
     ns <- session$ns
     
     rv <- reactiveValues(
-      dataIn = Magellan::data1,
+      dataIn = MagellanNTK::data1,
       dataOut = NULL
     )
     

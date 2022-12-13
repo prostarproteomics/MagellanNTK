@@ -1,4 +1,4 @@
-library(Magellan)
+library(MagellanNTK)
 
 # Load here the package containing the ui of steps
 # library(foo)
@@ -14,7 +14,7 @@ ui <- fluidPage(
 
 
 server <- function(input, output){
-  data(data1, package='Magellan')
+  data(data1, package='MagellanNTK')
   
   # Load a dataset (i.e. with data())
   # data(xxx)

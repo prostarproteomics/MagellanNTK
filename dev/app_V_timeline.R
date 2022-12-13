@@ -23,7 +23,7 @@ ui <- fluidPage(
              shinyjs::inlineCSS(
                sass::sass(
                  sass::sass_file(
-                   system.file('app/www/sass/v_timeline.sass', package='Magellan')
+                   system.file('app/www/sass/v_timeline.sass', package='MagellanNTK')
                  )))
            )
     ),

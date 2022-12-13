@@ -45,7 +45,7 @@ Found_Mod_Funcs <- function(id) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' file <- system.file("extdata/module_examples", "mod_Process1.R", package = "Magellan")
+#' file <- system.file("extdata/module_examples", "mod_Process1.R", package = "MagellanNTK")
 #' CleanSourceCode(file)
 #' 
 #' @export
@@ -195,7 +195,7 @@ GetConfig <- function(s) {
 #'
 #' @examples
 #' f <- system.file("extdata/module_examples", "example_module_PipelineA_Process1.R",
-#'     package = "Magellan"
+#'     package = "MagellanNTK"
 #' )
 #' CheckProcessCode(f)
 #'

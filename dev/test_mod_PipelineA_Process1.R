@@ -6,7 +6,7 @@ library(crayon)
 
 options(shiny.fullstacktrace = TRUE)
 
-setwd('~/GitHub/Magellan/inst/scripts')
+setwd('~/GitHub/MagellanNTK/inst/scripts')
 
 source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), 
        local=TRUE)$value
@@ -46,7 +46,7 @@ mod_test_navigation_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    data(data1, package='Magellan')
+    data(data1, package='MagellanNTK')
     rv <- reactiveValues(
       dataIn = data1,
       dataOut = NULL

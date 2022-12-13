@@ -4,7 +4,7 @@ library(shinyjs)
 library(crayon)
 
 options(shiny.fullstacktrace = TRUE)
-setwd('~/GitHub/Magellan/dev/test_dev')
+setwd('~/GitHub/MagellanNTK/dev/test_dev')
 
 dirpath <- '../../R'
 for (l in list.files(path = dirpath, pattern = ".R"))

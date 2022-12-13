@@ -2,9 +2,9 @@
 #'
 #' @description
 #' This module contains the configuration information for the corresponding 
-#' pipeline. It is called by the nav_pipeline module of the package Magellan.
+#' pipeline. It is called by the nav_pipeline module of the package MagellanNTK
 #' This documentation is for developers who want to create their own 
-#' pipelines nor processes to be managed with `Magellan`.
+#' pipelines nor processes to be managed with `MagellanNTK`.
 #'
 #' @param id xxx
 #' @param verbose A `boolean` that indicates whether to show some infos in the 

@@ -2,14 +2,14 @@
 #'
 #' @description
 #' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan
+#' It is called by the nav_pipeline module of the package MagellanNTK
 #' 
 #' The name of the server and ui functions are formatted with keywords separated by '_', as follows:
 #' * first string `mod`: indicates that it is a Shiny module
 #' * `pipeline name` is the name of the pipeline to which the process belongs
 #' * `process name` is the name of the process itself
 #' 
-#' This convention is important because Magellan call the different
+#' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
 #' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
@@ -71,7 +71,7 @@ mod_Process2_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   
@@ -149,7 +149,7 @@ mod_Process2_server <- function(id,
     
     observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
-      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$trigger <- MagellanNTK::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
@@ -165,7 +165,7 @@ mod_Process2_server <- function(id,
       wellPanel(
         # uiOutput for all widgets in this UI
         # This part is mandatory
-        # The renderUI() function of each widget is managed by Magellan
+        # The renderUI() function of each widget is managed by MagellanNTK
         # The dev only have to define a reactive() function for each
         # widget he want to insert
         # Be aware of the naming convention for ids in uiOutput()
@@ -244,7 +244,7 @@ mod_Process2_server <- function(id,
       
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$trigger <- MagellanNTK::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- global$VALIDATED
     })
@@ -301,7 +301,7 @@ mod_Process2_server <- function(id,
       
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$trigger <- MagellanNTK::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step2'] <- global$VALIDATED
     })
@@ -338,7 +338,7 @@ mod_Process2_server <- function(id,
                                           name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$trigger <- MagellanNTK::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
       mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
@@ -348,7 +348,7 @@ mod_Process2_server <- function(id,
     
     
     
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
   }

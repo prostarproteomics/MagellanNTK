@@ -103,7 +103,7 @@ mod_pipeline_process_server <- function(id,
 	observeEvent(input$btn_validate_Description, ignoreInit = TRUE, ignoreNULL = TRUE, {
 	  rv$dataIn <- dataIn()
 	  rv$steps.status['Description'] <- global$VALIDATED
-	  dataOut$trigger <- Magellan::Timestamp()
+	  dataOut$trigger <- MagellanNTK::Timestamp()
 	  dataOut$value <- rv$dataIn
 	})
 

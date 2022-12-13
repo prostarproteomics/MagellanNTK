@@ -1,5 +1,5 @@
 
-#' @name data1
+#' @name datasets
 #' @title data1 dataset
 #' @description xxx
 #' @aliases data1
@@ -13,7 +13,7 @@
 NULL
 
 
-#' @name data_na
+#' @name datasets
 #' @title data_na dataset
 #' @description xxx
 #' @aliases data_na

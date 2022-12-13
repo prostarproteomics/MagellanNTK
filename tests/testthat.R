@@ -1,4 +1,4 @@
 library("testthat")
-library("Magellan")
+library("MagellanNTK")
 
-test_check("Magellan")
+test_check("MagellanNTK")

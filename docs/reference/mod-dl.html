@@ -48,7 +48,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>mod_dl</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/R/mod_dl.R" class="external-link"><code>R/mod_dl.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/mod_dl.R" class="external-link"><code>R/mod_dl.R</code></a></small>
     <div class="hidden name"><code>mod-dl.Rd</code></div>
     </div>
 
@@ -72,44 +72,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mod_dl_ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-
-<span class="fu">mod_dl_server</span><span class="op">(</span><span class="va">id</span>, dataIn <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span>
-    <span class="cn">NULL</span>
-<span class="op">}</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_dl_ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">mod_dl_server</span><span class="op">(</span></span>
+<span>  <span class="va">id</span>,</span>
+<span>  dataIn <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span></span>
+<span>     <span class="cn">NULL</span></span>
+<span> <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>id</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>dataIn</dt>
 <dd><p>xxx</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>NA</p>
+    
+
+<p>NA</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ft_na</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">mod_dl_ui</span><span class="op">(</span><span class="st">'dl'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  </span>
-<span class="r-in">  <span class="fu">mod_dl_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">'dl'</span>,</span>
-<span class="r-in">                dataIn <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span><span class="va">ft_na</span><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">                <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">shinyApp</span><span class="op">(</span>ui<span class="op">=</span><span class="va">ui</span>, server<span class="op">=</span><span class="va">server</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ft_na</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">mod_dl_ui</span><span class="op">(</span><span class="st">"dl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu">mod_dl_server</span><span class="op">(</span></span></span>
+<span class="r-in"><span>            id <span class="op">=</span> <span class="st">"dl"</span>,</span></span>
+<span class="r-in"><span>            dataIn <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span><span class="va">ft_na</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span><span class="op">}</span></span></span>
+<span class="r-in"><span>    <span class="fu">shinyApp</span><span class="op">(</span>ui <span class="op">=</span> <span class="va">ui</span>, server <span class="op">=</span> <span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -124,7 +127,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

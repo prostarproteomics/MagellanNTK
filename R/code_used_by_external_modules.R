@@ -6,9 +6,30 @@
 #' and 'mandatory'
 #'  list, erases all white spaces for the names of the steps.
 #'
+#' @name insertCodeForExternalModules
+#' 
+NULL
+
+
+
+
+
+
+
+
+#' @title R code to update the 'config' variable of a process module
+#'
+#' @description This function generates the necessary code to
+#' modify the variable 'config' (slots steps and mandatory). It adds
+#' a 'Description' step and a TRUE value at the beginning of the 'steps'
+#' and 'mandatory'
+#'  list, erases all white spaces for the names of the steps.
+#'
 #' @return A `string` containing some R code
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #' 
 #' @examples
 #' Get_Code_Update_Config_Variable()
@@ -42,6 +63,8 @@ Get_Code_Update_Config_Variable <- function() {
 #' @return NA
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' widgets <- paste0("widget", 1:3)
@@ -85,6 +108,8 @@ Get_Code_Declare_widgets <- function(widgets.names = NULL) {
 #' @return NA
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' custom <- list(foo1 = list(), foo2 = 3)
@@ -125,6 +150,8 @@ Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' widgets <- paste0("widget", 1:3)
@@ -160,6 +187,8 @@ Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' Get_Code_for_rv_reactiveValues()
@@ -194,6 +223,8 @@ Get_Code_for_rv_reactiveValues <- function() {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' Get_Code_for_dataOut()
@@ -218,6 +249,8 @@ Get_Code_for_dataOut <- function() {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @examples
 #' Get_Code_for_General_observeEvents()
@@ -267,6 +300,8 @@ observeEvent(remoteReset(), {
 #' Module_Return_Func()
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @return NA
 #'
@@ -307,6 +342,8 @@ dataOut = reactive({dataOut})
 #' Get_Worflow_Core_Code(widgets, names(custom))
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @return NA
 #'
@@ -345,6 +382,8 @@ Get_Worflow_Core_Code <- function(
 #' Get_AdditionalModule_Core_Code(widgets)
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @return NA
 #'
@@ -376,6 +415,8 @@ Get_AdditionalModule_Core_Code <- function(
 #' Get_Code_for_AddMod_observeEvents()
 #'
 #' @export
+#' 
+#' @rdname insertCodeForExternalModules
 #'
 #' @return NA
 #'

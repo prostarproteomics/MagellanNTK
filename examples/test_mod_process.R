@@ -4,7 +4,7 @@ if(interactive()){
   
   library(shiny)
 library(shinyjs)
-  library(Magellan)
+  library(MagellanNTK)
 
 
 options(shiny.fullstacktrace = TRUE)

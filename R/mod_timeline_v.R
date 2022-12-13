@@ -24,7 +24,7 @@ mod_timeline_v_ui <- function(id) {
 
     # fpath <- system.file("app/www/sass",
     #                     "v_timeline.sass",
-    #                     package="Magellan")
+    #                     package="MagellanNTK")
     div(
         shinyjs::useShinyjs(),
         # shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),

@@ -69,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,12 +88,14 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Writing a simple workflow</h1>
-            <h3 data-toc-skip class="subtitle">A developer’s guidelines</h3>
-                        <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
+            <h3 data-toc-skip class="subtitle">A developer’s
+guidelines</h3>
+                        <h4 data-toc-skip class="author">Samuel
+Wieczorek</h4>
             
-            <h4 data-toc-skip class="date">mars 24, 2022</h4>
+            <h4 data-toc-skip class="date">décembre 13, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/CreateSimpleWorkflow.Rmd" class="external-link"><code>vignettes/CreateSimpleWorkflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/vignettes/CreateSimpleWorkflow.Rmd" class="external-link"><code>vignettes/CreateSimpleWorkflow.Rmd</code></a></small>
       <div class="hidden name"><code>CreateSimpleWorkflow.Rmd</code></div>
 
     </div>
@@ -132,7 +134,41 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="section level4">
 <h4 id="steps">Steps<a class="anchor" aria-label="anchor" href="#steps"></a>
 </h4>
-<p>Write the uiOutput() function for each widgets and the corresponding reactive({}) function with the definition of the widget (widget_#name# &lt;- reactive({}))</p>
+<p>Write the uiOutput() function for each widgets and the corresponding
+reactive({}) function with the definition of the widget (widget_#name#
+&lt;- reactive({}))</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.2.2 (2022-10-31 ucrt)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: Windows 10 x64 (build 19042)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt; [1] LC_COLLATE=French_France.utf8  LC_CTYPE=French_France.utf8   </span></span>
+<span><span class="co">#&gt; [3] LC_MONETARY=French_France.utf8 LC_NUMERIC=C                  </span></span>
+<span><span class="co">#&gt; [5] LC_TIME=French_France.utf8    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] BiocStyle_2.26.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] rstudioapi_0.14     knitr_1.41          magrittr_2.0.3     </span></span>
+<span><span class="co">#&gt;  [4] R6_2.5.1            ragg_1.2.4          rlang_1.0.6        </span></span>
+<span><span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.5.0       tools_4.2.2        </span></span>
+<span><span class="co">#&gt; [10] xfun_0.35           cli_3.4.1           jquerylib_0.1.4    </span></span>
+<span><span class="co">#&gt; [13] systemfonts_1.0.4   htmltools_0.5.3     yaml_2.3.6         </span></span>
+<span><span class="co">#&gt; [16] digest_0.6.30       rprojroot_2.0.3     lifecycle_1.0.3    </span></span>
+<span><span class="co">#&gt; [19] pkgdown_2.0.6       bookdown_0.30       textshaping_0.3.6  </span></span>
+<span><span class="co">#&gt; [22] purrr_0.3.5         BiocManager_1.30.19 vctrs_0.5.1        </span></span>
+<span><span class="co">#&gt; [25] sass_0.4.4          fs_1.5.2            memoise_2.0.1      </span></span>
+<span><span class="co">#&gt; [28] glue_1.6.2          cachem_1.0.6        evaluate_0.18      </span></span>
+<span><span class="co">#&gt; [31] rmarkdown_2.18      stringi_1.7.8       compiler_4.2.2     </span></span>
+<span><span class="co">#&gt; [34] bslib_0.4.1         desc_1.4.2          jsonlite_1.8.3</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -155,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

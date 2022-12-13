@@ -28,15 +28,10 @@ mod_download_btns_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
-    downloadButton(ns("download_as_Excel_btn"), "Excel",
-      class = actionBtnClass
-    )
-    ,downloadButton(ns("download_as_csv_btn"), "csv",
-      class = actionBtnClass
-    )
-    ,downloadButton(ns("download_raw_data_btn"), "raw",
-      class = actionBtnClass
-    )
+    shinyjs::useShinyjs(),
+    uiOutput(ns('dl_xl')),
+    uiOutput(ns('dl_csv')),
+    uiOutput(ns('dl_raw'))
   )
 }
 
@@ -47,6 +42,8 @@ mod_download_btns_ui <- function(id) {
 #' 
 #' @param id internal
 #' @param df.data internal
+#' @param extension Available values are `csv` (default), `RData` and `Excel`.
+#' @param widget.type Available values are `Button` and `Link` (default).
 #' @param name internal
 #' @param style xxx
 #' 
@@ -58,41 +55,94 @@ mod_download_btns_ui <- function(id) {
 #' @importFrom htmlwidgets JS    
 #' 
 mod_download_btns_server <- function(id, 
-  df.data, 
+  df.data,
+  extension = reactive({'csv'}),
+  widget.type = reactive({'Link'}),
   name, 
-  style = reactive({NULL})) {
+  excel.style = reactive({NULL})) {
   moduleServer(
-    id,
-    function(input, output, session) {
+    id, function(input, output, session) {
+      ns <- session$ns
       
-      output$download_as_csv_btn <- downloadHandler(
+      rv <- reactiveValues(
+        UI_type = NULL
+      )
+      
+      GetType <- reactive({
+        if(length(extension()) != length(widget.type())){
+          warning("Widget.type is not correctly configured. As one cannot decide, 
+            all values are set to default ('Link')")
+          rv$UI_type <- rep('Link', length(extension()))
+        } else {
+          rv$UI_type <- widget.type()
+        }
+        
+        rv$UI_type
+      })
+      
+      output$dl_csv <- renderUI({
+        req('csv' %in% extension())
+        type <- GetType()[which(extension() == 'csv')]
+        do.call(paste0('download', type),
+          list(
+            ns("downloadDatacsv"), 
+            "csv",
+            class = if (type=='Button') actionBtnClass else ''
+          )
+          )
+      })
+      
+      
+      output$dl_xl <- renderUI({
+        req('Excel' %in% extension())
+        type <- GetType()[which(extension() == 'Excel')]
+        do.call(paste0('download', type),
+          list(
+            ns("downloadDataExcel"), 
+            "Excel",
+            class = if (type=='Button') actionBtnClass else ''
+          )
+        )
+      })
+      
+      output$dl_raw <- renderUI({
+        req('RData' %in% extension())
+        type <- GetType()[which(extension() == 'RData')]
+        do.call(paste0('download', type),
+          list(
+            ns("downloadDataRData"), 
+            "RData",
+            class = if (type=='Button') actionBtnClass else ''
+          )
+        )
+      })
+      
+      output$downloadDatacsv <- downloadHandler(
         filename = function() {
           paste(name(), "-", Sys.Date(), ".csv", sep = "")
         },
-        content = function(file) {
-          utils::write.table(df.data(), file, sep = ";", row.names = FALSE)
-        }
-      )
-
-      output$download_raw_data_btn <- downloadHandler(
-        filename = function() {
-          paste ("data-", Sys.Date(), ".RData", sep = "")
-        },
-        content = function(file) {
-          saveRDS(df.data(), file=file)
+        content = function(fname) {
+          utils::write.table(df.data(), fname, sep = ";", row.names = FALSE)
         }
       )
       
-      output$download_as_Excel_btn <- downloadHandler(
+      output$downloadDataRData <- downloadHandler(
+        filename = function() {
+          paste ("data-", Sys.Date(), ".RData", sep = "")
+        },
+        content = function(fname) {
+          saveRDS(df.data(), file=fname)
+        }
+      )
+      
+      output$downloadDataExcel <- downloadHandler(
         filename = function() {
           paste(name(), "-", Sys.Date(), ".xlsx", sep = "")
         },
-        content = function(file) {
-          #fname <- paste("temp", Sys.Date(), ".xlsx", sep = "")
-          write.excel(df = df.data(), style = style(), filename = file)
-         # file.rename(fname, file)
+        content = function(fname) {
+          write.excel(df = df.data(), style = excel.style(), filename = fname)
         }
       )
-    }
+  }
   )
 }

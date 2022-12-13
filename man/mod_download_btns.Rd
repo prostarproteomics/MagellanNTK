@@ -8,31 +8,69 @@
 \usage{
 mod_download_btns_ui(id)
 
-mod_download_btns_server(id, df.data, name, style = NULL)
+mod_download_btns_server(
+  id,
+  df.data,
+  extension = reactive({
+     "csv"
+ }),
+  widget.type = reactive({
+     "Link"
+ }),
+  name,
+  excel.style = reactive({
+     NULL
+ })
+)
 }
 \arguments{
 \item{id}{internal}
 
 \item{df.data}{internal}
 
-\item{name}{internal}
+\item{extension}{Available values are `csv` (default), `RData` and `Excel`.}
 
-\item{style}{xxx}
+\item{widget.type}{Available values are `Button` and `Link` (default).}
+
+\item{name}{internal}
 
 \item{input}{internal}
 
 \item{output}{internal}
 
 \item{session}{internal}
+
+\item{style}{xxx}
 }
 \description{
 A shiny Module.
 }
 \examples{
-if(interactive()){
+
+if (interactive()){
+  library(shinyjqui)
+  library(DT)
+  library(shinyjs)
+  library(shiny)
+  options(shiny.fullstacktrace = TRUE)
+  data(data_na)
   
+  ui <- fluidPage(
+    mod_download_btns_ui("dl")
+  )
   
+  server <- function(input, output, session) {
+    
+    mod_download_btns_server(
+      id = "dl",
+      df.data = reactive({data_na$array1}),
+      name = reactive({'foo'}),
+      extension = reactive({c('Excel', 'csv', 'RData')}),
+      widget.type = reactive({c('Link', 'Button', 'Link')})
+    )
+  }
   
+  shinyApp(ui, server)
 }
 }
 \keyword{internal}

@@ -16,7 +16,9 @@ if (interactive()){
     mod_download_btns_server(
       id = "dl",
       df.data = reactive({data_na$array1}),
-      name = reactive({'foo'})
+      name = reactive({'foo'}),
+      extension = reactive({c('Excel', 'csv', 'RData')}),
+      widget.type = reactive({c('Link', 'Button', 'Link')})
     )
   }
   

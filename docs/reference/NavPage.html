@@ -48,7 +48,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>xxx</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/R/general_nav_funcs.R" class="external-link"><code>R/general_nav_funcs.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/general_nav_funcs.R" class="external-link"><code>R/general_nav_funcs.R</code></a></small>
     <div class="hidden name"><code>NavPage.Rd</code></div>
     </div>
 
@@ -72,23 +72,38 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">NavPage</span><span class="op">(</span><span class="va">direction</span>, <span class="va">current.pos</span>, <span class="va">len</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NavPage</span><span class="op">(</span><span class="va">direction</span>, <span class="va">current.pos</span>, <span class="va">len</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>direction</dt>
-<dd><p>xxx</p></dd>
+<dd><p>A `integer(1)` which is the direction of the xxx:
+forward ('1'), backwards ('-1').</p></dd>
+
+
 <dt>current.pos</dt>
-<dd><p>xxx</p></dd>
+<dd><p>A `integer(1)` which is the current position.</p></dd>
+
+
 <dt>len</dt>
-<dd><p>xxx</p></dd>
+<dd><p>A `integer(1)` which is the number of steps in the process.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>xxx</p>
+    
+
+<p>A `integer(1)` which is the new current position.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">NavPage</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -101,7 +116,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

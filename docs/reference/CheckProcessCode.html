@@ -48,7 +48,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check source code of a module process</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/R/check_funcs.R" class="external-link"><code>R/check_funcs.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/check_funcs.R" class="external-link"><code>R/check_funcs.R</code></a></small>
     <div class="hidden name"><code>CheckProcessCode.Rd</code></div>
     </div>
 
@@ -72,17 +72,20 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">CheckProcessCode</span><span class="op">(</span>sourcefile <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">CheckProcessCode</span><span class="op">(</span>sourcefile <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sourcefile</dt>
 <dd><p>xxx</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of two items:
+    
+
+<p>A list of two items:
 * `passed`: A boolean that indicates if the config is correct or not.
 * `msg`: A `character(1)` as message.</p>
     </div>
@@ -99,10 +102,11 @@ xxxx</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"module_examples"</span>, <span class="st">"example_module_PipelineA_Process1.R"</span>, </span>
-<span class="r-in">package<span class="op">=</span><span class="st">"Magellan"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">CheckProcessCode</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/module_examples"</span>, <span class="st">"example_module_PipelineA_Process1.R"</span>,</span></span>
+<span class="r-in"><span>    package <span class="op">=</span> <span class="st">"Magellan"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">CheckProcessCode</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -117,7 +121,7 @@ xxxx</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

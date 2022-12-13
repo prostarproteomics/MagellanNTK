@@ -1,6 +1,6 @@
 if(interactive()){
   library(shiny)
-library(Magellan)
+library(MagellanNTK)
 
 example_mod_Process <- function(verbose = FALSE){
   require(shiny)
@@ -13,7 +13,7 @@ example_mod_Process <- function(verbose = FALSE){
 
 server <- function(input, output){
   
-  dirpath <- system.file('examples', package='Magellan')
+  dirpath <- system.file('examples', package='MagellanNTK')
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   

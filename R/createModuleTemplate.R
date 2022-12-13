@@ -211,11 +211,11 @@ get_process_module_server_header <- function() {
     moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     #eval(str2expression(Get_Code_Update_Config()))
 
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(
       str2expression(
@@ -310,7 +310,7 @@ output$Description_btn_validate_ui <- renderUI({
 
 observeEvent(input$Description_btn_validate, {
   rv$dataIn <- dataIn()
-  dataOut$trigger <- Magellan::Timestamp()
+  dataOut$trigger <- MagellanNTK::Timestamp()
   dataOut$value <- rv$dataIn
   rv$steps.status['Description'] <- global$VALIDATED
 })
@@ -329,7 +329,7 @@ code
 #' @noRd
 get_process_output_func <- function() {
     code <- "
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
     }
@@ -433,7 +433,7 @@ get_pipeline_module_server <- function() {
     #eval(parse(text = Get_Code_for_module_Description(config@name)),
     #    envir = .GlobalEnv)
 
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
     }

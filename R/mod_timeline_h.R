@@ -22,7 +22,7 @@ mod_timeline_h_ui <- function(id) {
     ns <- NS(id)
     fpath <- system.file("app/www/sass",
         "h_timeline.sass",
-        package = "Magellan"
+        package = "MagellanNTK"
     )
     tagList(
         shinyjs::useShinyjs(),

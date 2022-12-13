@@ -49,7 +49,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -64,7 +64,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Code for declaring xxx</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/R/code_used_by_external_modules.R" class="external-link"><code>R/code_used_by_external_modules.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/code_used_by_external_modules.R" class="external-link"><code>R/code_used_by_external_modules.R</code></a></small>
     <div class="hidden name"><code>Get_AdditionalModule_Core_Code.Rd</code></div>
     </div>
 
@@ -74,16 +74,25 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Get_AdditionalModule_Core_Code</span><span class="op">(</span><span class="va">w.names</span>, rv.custom.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Get_AdditionalModule_Core_Code</span><span class="op">(</span>w.names <span class="op">=</span> <span class="cn">NULL</span>, rv.custom.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>w.names</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>rv.custom.names</dt>
 <dd><p>xxx</p></dd>
+
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>NA</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
     <p>Samuel Wieczorek</p>
@@ -91,13 +100,10 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">widgets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'widget'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">steps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'step'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">code</span> <span class="op">&lt;-</span> <span class="fu">SimpleWorflowCoreCode</span><span class="op">(</span><span class="va">widgets</span>, <span class="va">steps</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">code</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">widgets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'widget1'</span>, <span class="st">'widget2'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Get_AdditionalModule_Core_Code</span><span class="op">(</span><span class="va">widgets</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rv.widgets &lt;- reactiveValues(\n\twidget1 = widgets.default.values$widget1,\n\twidget2 = widgets.default.values$widget2\n)\n\nobserveEvent(input$widget1, {\n    rv.widgets$widget1 &lt;- input$widget1})\nobserveEvent(input$widget2, {\n    rv.widgets$widget2 &lt;- input$widget2})\n\n\nrv &lt;- reactiveValues(\n    # Stores the object given in input of the process\n    dataIn = NULL,\n    # A vector of boolean indicating the status (UNDONE, SKIPPED or VALIDATED)\n    # of the steps\n    steps.status = NULL,\n    # xxx\n    reset = NULL,\n    # A vector of boolean indicating if the steps are enabled or disabled\n    steps.enabled = NULL\n  )\n\n    rv.custom &lt;- reactiveValues()\n\ndataOut &lt;- reactiveValues(\n                trigger = NULL,\n                value = NULL\n                )\n\n\n\nobserveEvent(reset(), {\n    lapply(names(rv.widgets), function(x){\n        rv.widgets[[x]] &lt;- widgets.default.values[[x]]\n    })\n})\n\n\n\n"</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -112,7 +118,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

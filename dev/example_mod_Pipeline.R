@@ -2,9 +2,9 @@
 #'
 #' @description
 #' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan.
+#' It is called by the nav_pipeline module of the package MagellanNTK
 #' This documentation is for developpers who want to create their own pipelines nor processes
-#' to be managed with `Magellan`.
+#' to be managed with `MagellanNTK`.
 #' 
 #' @param verbose A `boolean` that indicates whether to show some infos in the console
 #' and add the shiny module for debugging
@@ -29,12 +29,12 @@ ui <- fluidPage(
 #----------------------------------------------------------------------
 server <- function(input, output){
 
-  dirpath <- system.file('extdata/module_examples', package='Magellan')
+  dirpath <- system.file('extdata/module_examples', package='MagellanNTK')
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   
   rv <- reactiveValues(
-    dataIn = Magellan::data1,
+    dataIn = MagellanNTK::data1,
     dataOut = NULL
   )
   

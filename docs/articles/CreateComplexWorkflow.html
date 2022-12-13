@@ -69,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,12 +88,14 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Create a composed workflow</h1>
-            <h3 data-toc-skip class="subtitle">A developer’s guidelines</h3>
-                        <h4 data-toc-skip class="author">Samuel Wieczorek</h4>
+            <h3 data-toc-skip class="subtitle">A developer’s
+guidelines</h3>
+                        <h4 data-toc-skip class="author">Samuel
+Wieczorek</h4>
             
-            <h4 data-toc-skip class="date">mars 24, 2022</h4>
+            <h4 data-toc-skip class="date">décembre 13, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/vignettes/CreateComplexWorkflow.Rmd" class="external-link"><code>vignettes/CreateComplexWorkflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/vignettes/CreateComplexWorkflow.Rmd" class="external-link"><code>vignettes/CreateComplexWorkflow.Rmd</code></a></small>
       <div class="hidden name"><code>CreateComplexWorkflow.Rmd</code></div>
 
     </div>
@@ -114,8 +116,13 @@ document.addEventListener("DOMContentLoaded", function() {
 </script><div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette explains how to create a new pipeline in the Prostar framework. A pipeline is a set of data processes applied to a dataset (ie an object of class QFeatures).</p>
-<p>A pipeline can be associated with datasets of specific type. Such, the use of a certain dataset restraint the set of possible pipelines. For example, if the current dataset is a protein one, it can be processed only by a protein pipeline.</p>
+<p>This vignette explains how to create a new pipeline in the Prostar
+framework. A pipeline is a set of data processes applied to a dataset
+(ie an object of class QFeatures).</p>
+<p>A pipeline can be associated with datasets of specific type. Such,
+the use of a certain dataset restraint the set of possible pipelines.
+For example, if the current dataset is a protein one, it can be
+processed only by a protein pipeline.</p>
 <p>It is divided in several parts:</p>
 <ol style="list-style-type: decimal">
 <li>Configuration file</li>
@@ -126,28 +133,79 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="section level2">
 <h2 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
 </h2>
-<p>This file (R/config.R) contains a list named def.pipeline in which each element is the definition of one pipeline implemented in Prostar. Here is a list with only one element:</p>
+<p>This file (R/config.R) contains a list named def.pipeline in which
+each element is the definition of one pipeline implemented in Prostar.
+Here is a list with only one element:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pipeline.defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  peptide<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'module_Peptide_Filtering'</span>,
-             <span class="st">'module_Peptide_Normalization'</span>,
-             <span class="st">'module_Peptide_Imputation'</span>,
-             <span class="st">'module_Peptide_HypothesisTest'</span><span class="op">)</span>
-             <span class="op">)</span></code></pre></div>
-<p>The name of each item (here <em>peptide</em>) is the name of the pipeline. It is important because it serves asa reference all along the code of Prostar. Each element is a vector a processes names with a specific nomenclature which has to be respected. Each process name begins with the keyword ‘module_’, followed by the name of the pipeline (here ‘Peptide’) and ends with the proper name of the process. This complete name is also the name of the file containing the code for the process. for example, the file ‘module_Peptide_Normalization.R’ contains the code for the normalization process over peptides.</p>
+<code class="sourceCode R"><span><span class="va">pipeline.defs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  peptide<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'module_Peptide_Filtering'</span>,</span>
+<span>             <span class="st">'module_Peptide_Normalization'</span>,</span>
+<span>             <span class="st">'module_Peptide_Imputation'</span>,</span>
+<span>             <span class="st">'module_Peptide_HypothesisTest'</span><span class="op">)</span></span>
+<span>             <span class="op">)</span></span></code></pre></div>
+<p>The name of each item (here <em>peptide</em>) is the name of the
+pipeline. It is important because it serves asa reference all along the
+code of Prostar. Each element is a vector a processes names with a
+specific nomenclature which has to be respected. Each process name
+begins with the keyword ‘module_’, followed by the name of the pipeline
+(here ‘Peptide’) and ends with the proper name of the process. This
+complete name is also the name of the file containing the code for the
+process. for example, the file ‘module_Peptide_Normalization.R’ contains
+the code for the normalization process over peptides.</p>
 </div>
 <div class="section level2">
 <h2 id="instanciation-of-a-pipeline">Instanciation of a pipeline<a class="anchor" aria-label="anchor" href="#instanciation-of-a-pipeline"></a>
 </h2>
-<p>A pipeline is choosen by the user when he loads a dataset (the UI proposes a liste a possible pipelines for the type of data).The type of pipeline used by the user is set in a variable in the metadata of the dataset. Thus, back to Prostar, it is easy to know which pipeline has to be activated.</p>
-<p>Once a dataset has been loaded in Prostar, subitems are created in the menu ‘Data processing’</p>
-<p>By default, when no dataset has been loaded yet, all the steps are disabled # Writing new process</p>
-<p>A process such as usable with Magellan is a R6 classes which contains: * the configuration of the process, * the list of screens with their severs (shiny)</p>
-<p>This class inherits from classes in Magellan: this is how the core engine is integrated in xxx.</p>
+<p>A pipeline is choosen by the user when he loads a dataset (the UI
+proposes a list a possible pipelines for the type of data).The type of
+pipeline used by the user is set in a variable in the metadata of the
+dataset. Thus, back to Prostar, it is easy to know which pipeline has to
+be activated.</p>
+<p>Once a dataset has been loaded in Prostar, subitems are created in
+the menu ‘Data processing’</p>
+<p>By default, when no dataset has been loaded yet, all the steps are
+disabled # Writing new process</p>
+<p>A process such as usable with Magellan is a R6 classes which
+contains: * the configuration of the process, * the list of screens with
+their severs (shiny)</p>
+<p>This class inherits from classes in Magellan: this is how the core
+engine is integrated in xxx.</p>
 </div>
 <div class="section level2">
 <h2 id="writing-a-new-pipeline">Writing a new pipeline<a class="anchor" aria-label="anchor" href="#writing-a-new-pipeline"></a>
 </h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.2.2 (2022-10-31 ucrt)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: Windows 10 x64 (build 19042)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt; [1] LC_COLLATE=French_France.utf8  LC_CTYPE=French_France.utf8   </span></span>
+<span><span class="co">#&gt; [3] LC_MONETARY=French_France.utf8 LC_NUMERIC=C                  </span></span>
+<span><span class="co">#&gt; [5] LC_TIME=French_France.utf8    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] BiocStyle_2.26.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] rstudioapi_0.14     knitr_1.41          magrittr_2.0.3     </span></span>
+<span><span class="co">#&gt;  [4] R6_2.5.1            ragg_1.2.4          rlang_1.0.6        </span></span>
+<span><span class="co">#&gt;  [7] fastmap_1.1.0       stringr_1.5.0       tools_4.2.2        </span></span>
+<span><span class="co">#&gt; [10] xfun_0.35           cli_3.4.1           jquerylib_0.1.4    </span></span>
+<span><span class="co">#&gt; [13] systemfonts_1.0.4   htmltools_0.5.3     yaml_2.3.6         </span></span>
+<span><span class="co">#&gt; [16] digest_0.6.30       rprojroot_2.0.3     lifecycle_1.0.3    </span></span>
+<span><span class="co">#&gt; [19] pkgdown_2.0.6       bookdown_0.30       textshaping_0.3.6  </span></span>
+<span><span class="co">#&gt; [22] purrr_0.3.5         BiocManager_1.30.19 vctrs_0.5.1        </span></span>
+<span><span class="co">#&gt; [25] sass_0.4.4          fs_1.5.2            memoise_2.0.1      </span></span>
+<span><span class="co">#&gt; [28] glue_1.6.2          cachem_1.0.6        evaluate_0.18      </span></span>
+<span><span class="co">#&gt; [31] rmarkdown_2.18      stringi_1.7.8       compiler_4.2.2     </span></span>
+<span><span class="co">#&gt; [34] bslib_0.4.1         desc_1.4.2          jsonlite_1.8.3</span></span></code></pre></div>
 </div>
   </div>
 
@@ -168,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

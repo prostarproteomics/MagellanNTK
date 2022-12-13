@@ -25,7 +25,7 @@ mod_test_process_ui <- function(id){
 
 mod_test_process_server <- function(id){
   
-  dirpath <- system.file('examples', package='Magellan')
+  dirpath <- system.file('examples', package='MagellanNTK')
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   

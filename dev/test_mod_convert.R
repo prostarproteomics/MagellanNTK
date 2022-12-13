@@ -1,6 +1,6 @@
 library(shiny)
 library(shinyjs)
-library(Magellan)
+library(MagellanNTK)
 library(DaparToolshed)
 #library(QFeatures)
 
@@ -27,7 +27,7 @@ mod_test_process_server <- function(id){
     ns <- session$ns
      
     rv <- reactiveValues(
-      dataIn = Magellan::data1,
+      dataIn = MagellanNTK::data1,
       dataOut = NULL,
       remoteReset = FALSE,
       remoteSkipped = FALSE,

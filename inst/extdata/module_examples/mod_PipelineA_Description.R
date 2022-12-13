@@ -25,7 +25,7 @@ mod_PipelineA_Description_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   # Define default selected values for widgets
@@ -42,7 +42,7 @@ mod_PipelineA_Description_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(
       str2expression(
@@ -93,13 +93,13 @@ mod_PipelineA_Description_server <- function(id,
     
     observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
-      dataOut$trigger <- Magellan::Timestamp()
+      dataOut$trigger <- MagellanNTK::Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
     
     
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
     

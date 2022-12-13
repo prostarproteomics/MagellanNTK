@@ -11,7 +11,7 @@ app_ui <- function(request) {
 
         # List the first level UI elements here
         fluidPage(
-            h1("Magellan"),
+            h1("MagellanNTK"),
             tagList(
                 actionButton("send", "Send dataset"),
                 uiOutput("showUI")
@@ -37,7 +37,7 @@ golem_add_external_resources <- function() {
         favicon(),
         bundle_resources(
             path = app_sys("app/www"),
-            app_title = "Magellan"
+            app_title = "MagellanNTK"
         )
         # Add here other external resources
         # for example, you can add shinyalert::useShinyalert()

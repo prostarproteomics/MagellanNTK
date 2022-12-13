@@ -1,10 +1,10 @@
 #' @title Shiny example module `Pipeline A`
 #'
 #' @description
-#' This module contains the configuration informations for the corresponding pipeline.
-#' It is called by the nav_pipeline module of the package Magellan.
+#' This module contains the configuration information for the corresponding pipeline.
+#' It is called by the nav_pipeline module of the package MagellanNTK
 #' This documentation is for developpers who want to create their own pipelines nor processes
-#' to be managed with `Magellan`.
+#' to be managed with `MagellanNTK`.
 #' 
 #' @param id xxx
 #'
@@ -63,7 +63,7 @@ mod_PipelineA_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, FALSE, TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   
@@ -92,7 +92,7 @@ mod_PipelineA_server <- function(id,
     
     rv.custom <- reactiveValues()
     
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
     }

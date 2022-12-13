@@ -25,28 +25,25 @@ A shiny Module to load a dataset.
 if(interactive()){
   library(shiny)
 library(shinyBS)
-library(Magellan)
 
 
 options(shiny.fullstacktrace = TRUE)
 
 #### test modal ####
 ui <- fluidPage(
-  #actionButton('show', 'Show'),
-  mod_Save_Dataset_ui(id = 'exemple')
+   mod_Save_Dataset_ui(id = 'example')
 )
 
 
 server <- function(input, output, session) {
 
+  data(data1)
   observe({
-    mod_Save_Dataset_server(id = 'exemple', 
-                        data = reactive({data1}))
-    
+    mod_Save_Dataset_server(id = 'example', data = reactive({data1}))
   })
 
 }
 
-shinyApp(ui=ui, server=server)
+shinyApp(ui, server)
 }
 }

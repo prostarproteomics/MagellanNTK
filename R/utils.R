@@ -54,7 +54,7 @@ toggleWidget <- function(widget, condition) {
 #' load_examples()
 #'
 load_examples <- function() {
-    dirpath <- system.file("extdata/module_examples", package = "Magellan")
+    dirpath <- system.file("extdata/module_examples", package = "MagellanNTK")
     for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)) {
         name <- unlist(strsplit(l, split = ".", fixed = TRUE))[1]
         name <- substr(name, 5, 1000000L)
@@ -128,7 +128,7 @@ Timestamp <- function() {
 #' @details
 #' The object must be of type list. Thetwo functions are implemented here for 
 # 'a simple list. For other dataset classes, their implementation must be part 
-#' of the package which uses Magellan.
+#' of the package which uses MagellanNTK
 #'
 #' @param object An object of class `list`.
 #'

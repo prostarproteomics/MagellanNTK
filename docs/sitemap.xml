@@ -79,6 +79,9 @@
     <loc>/reference/Build_nav_v_ui.html</loc>
   </url>
   <url>
+    <loc>/reference/Build_nav_X_ui.html</loc>
+  </url>
+  <url>
     <loc>/reference/Build_SkippedInfoPanel.html</loc>
   </url>
   <url>
@@ -103,10 +106,19 @@
     <loc>/reference/createProcessTemplateForExpert.html</loc>
   </url>
   <url>
+    <loc>/reference/data1.html</loc>
+  </url>
+  <url>
     <loc>/reference/dataModal.html</loc>
   </url>
   <url>
     <loc>/reference/dataset-processing.html</loc>
+  </url>
+  <url>
+    <loc>/reference/datasets.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_na.html</loc>
   </url>
   <url>
     <loc>/reference/default_pos.html</loc>
@@ -131,6 +143,9 @@
   </url>
   <url>
     <loc>/reference/example_mod_pipeline.html</loc>
+  </url>
+  <url>
+    <loc>/reference/example_mod_workflow.html</loc>
   </url>
   <url>
     <loc>/reference/feat1.html</loc>
@@ -184,6 +199,9 @@
     <loc>/reference/Get_Code_Declare_widgetsDefaultValues.html</loc>
   </url>
   <url>
+    <loc>/reference/Get_Code_for_AddMod_observeEvents.html</loc>
+  </url>
+  <url>
     <loc>/reference/Get_Code_for_dataOut.html</loc>
   </url>
   <url>
@@ -217,6 +235,9 @@
     <loc>/reference/insertCode.html</loc>
   </url>
   <url>
+    <loc>/reference/insertCodeForExternalModules.html</loc>
+  </url>
+  <url>
     <loc>/reference/Keep_Items_from_Dataset.html</loc>
   </url>
   <url>
@@ -239,6 +260,9 @@
   </url>
   <url>
     <loc>/reference/mod_Debug_Infos.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mod_download_btns.html</loc>
   </url>
   <url>
     <loc>/reference/mod_format_DT.html</loc>
@@ -344,5 +368,8 @@
   </url>
   <url>
     <loc>/reference/Upload_Object.html</loc>
+  </url>
+  <url>
+    <loc>/reference/write.excel.html</loc>
   </url>
 </urlset>

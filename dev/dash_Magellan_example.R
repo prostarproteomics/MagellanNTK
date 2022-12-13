@@ -1,7 +1,7 @@
 library(shiny)
 library(shinydashboard)
 
-library(Magellan)
+library(MagellanNTK)
 options(shiny.fullstacktrace = TRUE)
 
 #------------------------ Class TimelineDraw --------------------------------------

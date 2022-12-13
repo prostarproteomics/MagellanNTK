@@ -1,5 +1,5 @@
 if (interactive()) {
-    dirpath <- system.file("extdata/module_examples", package = "Magellan")
+    dirpath <- system.file("extdata/module_examples", package = "MagellanNTK")
     for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)) {
         source(file.path(dirpath, l), local = FALSE)$value
     }

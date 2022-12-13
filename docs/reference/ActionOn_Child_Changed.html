@@ -48,7 +48,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/samWieczorek/Magellan/" class="external-link">
+  <a href="https://github.com/prostarproteomics/Magellan/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>xxx</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samWieczorek/Magellan/blob/HEAD/R/pipeline_funcs.R" class="external-link"><code>R/pipeline_funcs.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/pipeline_funcs.R" class="external-link"><code>R/pipeline_funcs.R</code></a></small>
     <div class="hidden name"><code>ActionOn_Child_Changed.Rd</code></div>
     </div>
 
@@ -72,47 +72,75 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ActionOn_Child_Changed</span><span class="op">(</span>
-  <span class="va">temp.dataIn</span>,
-  <span class="va">dataIn</span>,
-  <span class="va">steps.status</span>,
-  <span class="va">steps</span>,
-  <span class="va">steps.enabled</span>,
-  <span class="va">steps.skipped</span>,
-  <span class="va">processHasChanged</span>,
-  <span class="va">newValue</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ActionOn_Child_Changed</span><span class="op">(</span></span>
+<span>  <span class="va">temp.dataIn</span>,</span>
+<span>  <span class="va">dataIn</span>,</span>
+<span>  <span class="va">steps.status</span>,</span>
+<span>  <span class="va">steps</span>,</span>
+<span>  <span class="va">steps.enabled</span>,</span>
+<span>  <span class="va">steps.skipped</span>,</span>
+<span>  <span class="va">processHasChanged</span>,</span>
+<span>  <span class="va">newValue</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>temp.dataIn</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>dataIn</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>steps.status</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>steps</dt>
 <dd><p>A vector of names which are the names of the steps
 in the process</p></dd>
+
+
 <dt>steps.enabled</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>steps.skipped</dt>
 <dd><p>xxx</p></dd>
+
+
 <dt>processHasChanged</dt>
 <dd><p>A character(1) which is the name of the process
 which has changed its return value.</p></dd>
+
+
 <dt>newValue</dt>
 <dd><p>The new value given by the step which has changed.
 It can be either NULL (the process has been reseted) or contain
 a dataset (the process has been validated and returned the result
 of its calculations)</p></dd>
+
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>NA</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
     <p>Samuel Wieczorek</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="cn">NULL</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -125,7 +153,7 @@ of its calculations)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

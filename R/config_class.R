@@ -3,7 +3,7 @@
 ##' @description
 ##'
 ##' This class is used to store the configuration of any process
-##' used with Magellan. It contains a validity function to ensure
+##' used with MagellanNTK It contains a validity function to ensure
 ##' that the format is correct.
 ##' 
 ##' Validity:
