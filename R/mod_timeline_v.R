@@ -1,10 +1,10 @@
-#' @title Module timeline functions
+#' @title Vertical timeline module
 #'
 #' @description A shiny Module.
 #' 
 #' @name mod_timeline_v
 #' 
-#' @example inst/examples/test_timeline_v.R
+#' @example examples/test_timeline_v.R
 #' 
 NULL
 

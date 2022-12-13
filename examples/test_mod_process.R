@@ -1,18 +1,13 @@
-library(shiny)
+if(interactive()){
+  
+  test_mod_process <- function(){
+  
+  library(shiny)
 library(shinyjs)
-library(QFeatures)
-library(DaparToolshed)
+  library(Magellan)
 
 
 options(shiny.fullstacktrace = TRUE)
-
-setwd('~/GitHub/Magellan/dev/test_dev')
-
-dirpath <- '../../R'
-for (l in list.files(path = dirpath, pattern = ".R"))
-  source(file.path(dirpath, l), local=TRUE)$value
-
-
 
 
 #' @importFrom stats setNames
@@ -51,7 +46,7 @@ mod_test_process_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     rv <- reactiveValues(
-      dataIn = QFeatures::feat1,
+      dataIn = data1,
       remoteReset = FALSE,
       remoteSkipped = FALSE,
       remoteEnabled = TRUE
@@ -67,11 +62,11 @@ mod_test_process_server <- function(id){
     basename <- paste0(input$choosePipeline, '_', input$chooseProcess)
 
     rv$dataOut <- mod_nav_process_server(id = basename,
-                                         dataIn = reactive({rv$dataIn}),
-                                         is.enabled = reactive({rv$remoteEnabled}),
-                                         remoteReset = reactive({rv$remoteReset}),
-                                         is.skipped = reactive({rv$remoteSkipped})
-                                         )
+      dataIn = reactive({rv$dataIn}),
+      is.enabled = reactive({rv$remoteEnabled}),
+      remoteReset = reactive({rv$remoteReset}),
+      is.skipped = reactive({rv$remoteSkipped})
+      )
     
   }, priority=1000)
   
@@ -132,3 +127,6 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
+  }
+  
+}

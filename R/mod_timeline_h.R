@@ -1,9 +1,8 @@
-#' timeline UI Function
+#' @title Horizontal timeline module
 #'
 #' @description A shiny Module.
 #' 
-#' #'
-#' @example inst/examples/test_timeline_H.R
+#' @example examples/test_timeline_H.R
 #' 
 #' @name mod_timeline_h
 NULL

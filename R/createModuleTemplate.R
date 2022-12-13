@@ -11,8 +11,7 @@
 #' @param config An instance of the class `Config`.
 #' @param path xxx
 #'
-#' @example inst/examples/example_create_mod_template.R
-#'
+#' @example examples/example_create_mod_template.R
 #'
 #' @author Samuel Wieczorek
 #'
@@ -274,7 +273,7 @@ output$Description <- renderUI({
   file <- paste0(config@path_to_md_dir, '/', id, '.md')
   
   tagList(
-    # In this example, the md file is found in the module_examples directory
+    # In this example, the md file is found in the extdata/module_examples directory
     # but with a real app, it should be provided by the package which
     # contains the UI for the different steps of the process module.
     # system.file(xxx)

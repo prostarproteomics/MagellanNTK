@@ -17,13 +17,13 @@
 #' 
 #' @param id xxx
 #' 
-#' @rdname example_module_Process3
+#' @rdname example_module_Process2
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #'
-mod_Process3_ui <- function(id){
+mod_Process2_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -45,13 +45,13 @@ mod_Process3_ui <- function(id){
 #' 
 #' @param current.pos xxx
 #'
-#' @rdname example_module_Process3
+#' @rdname example_module_Process2
 #' 
 #' @importFrom stats setNames rnorm
 #' 
 #' @export
 #' 
-mod_Process3_server <- function(id,
+mod_Process2_server <- function(id,
                                 dataIn = reactive({NULL}),
                                 steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
@@ -71,7 +71,7 @@ mod_Process3_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
     
-    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
   )
   
   
@@ -112,7 +112,7 @@ mod_Process3_server <- function(id,
       file <- paste0(config@path_to_md_dir, '/', id, '.md')
       
       tagList(
-        # In this example, the md file is found in the module_examples directory
+        # In this example, the md file is found in the extdata/module_examples directory
         # but with a real app, it should be provided by the package which
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
@@ -320,7 +320,8 @@ mod_Process3_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       tagList(
-        toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
+        toggleWidget( 
+                     actionButton(ns("Save_btn_validate"), "Save",
                                   class = btn_success_color),
                      rv$steps.enabled['Save']
         ),

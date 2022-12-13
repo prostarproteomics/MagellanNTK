@@ -45,7 +45,7 @@ Found_Mod_Funcs <- function(id) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' file <- system.file("module_examples", "mod_Process1.R", package = "Magellan")
+#' file <- system.file("extdata/module_examples", "mod_Process1.R", package = "Magellan")
 #' CleanSourceCode(file)
 #' 
 #' @export
@@ -194,7 +194,7 @@ GetConfig <- function(s) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' f <- system.file("module_examples", "example_module_PipelineA_Process1.R",
+#' f <- system.file("extdata/module_examples", "example_module_PipelineA_Process1.R",
 #'     package = "Magellan"
 #' )
 #' CheckProcessCode(f)

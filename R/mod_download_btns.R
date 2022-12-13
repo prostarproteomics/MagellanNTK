@@ -7,9 +7,7 @@
 #'
 #' @keywords internal
 #' 
-#' 
-#' 
-#' @example inst/examples/test_mod_download_btns.R
+#' @example examples/test_mod_download_btns.R
 #' 
 NULL
 
@@ -32,8 +30,11 @@ mod_download_btns_ui <- function(id) {
   tagList(
     downloadButton(ns("download_as_Excel_btn"), "Excel",
       class = actionBtnClass
-    ),
-    downloadButton(ns("download_as_csv_btn"), "csv",
+    )
+    ,downloadButton(ns("download_as_csv_btn"), "csv",
+      class = actionBtnClass
+    )
+    ,downloadButton(ns("download_raw_data_btn"), "raw",
       class = actionBtnClass
     )
   )
@@ -59,7 +60,7 @@ mod_download_btns_ui <- function(id) {
 mod_download_btns_server <- function(id, 
   df.data, 
   name, 
-  style = NULL) {
+  style = reactive({NULL})) {
   moduleServer(
     id,
     function(input, output, session) {
@@ -72,22 +73,24 @@ mod_download_btns_server <- function(id,
           utils::write.table(df.data(), file, sep = ";", row.names = FALSE)
         }
       )
-      
-      
+
+      output$download_raw_data_btn <- downloadHandler(
+        filename = function() {
+          paste ("data-", Sys.Date(), ".RData", sep = "")
+        },
+        content = function(file) {
+          saveRDS(df.data(), file=file)
+        }
+      )
       
       output$download_as_Excel_btn <- downloadHandler(
         filename = function() {
           paste(name(), "-", Sys.Date(), ".xlsx", sep = "")
         },
         content = function(file) {
-          fname <- paste("temp", Sys.Date(), ".xlsx", sep = "")
-          write.excel(
-            df = df.data(),
-            style = style(),
-            filename = fname
-          )
-          
-          file.rename(fname, file)
+          #fname <- paste("temp", Sys.Date(), ".xlsx", sep = "")
+          write.excel(df = df.data(), style = style(), filename = file)
+         # file.rename(fname, file)
         }
       )
     }

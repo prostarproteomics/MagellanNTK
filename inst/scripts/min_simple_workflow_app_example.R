@@ -1,6 +1,6 @@
 library(Magellan)
 
-f <- system.file("module_examples", "mod_Process1.R", package="Magellan")
+f <- system.file("module_examples", "extdata/mod_Process1.R", package="Magellan")
 source(file(f), local=TRUE)$value
 
 ui <- fluidPage(

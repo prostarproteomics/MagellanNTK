@@ -1,20 +1,17 @@
-
-
 #' @title Shiny example module `Process`
 #'
 #' @description
-#' This module contains the configuration informations for the corresponding 
+#' This module contains the configuration information for the corresponding 
 #' pipeline. It is called by the nav_pipeline module of the package Magellan.
-#' This documentation is for developpers who want to create their own 
+#' This documentation is for developers who want to create their own 
 #' pipelines nor processes to be managed with `Magellan`.
 #'
 #' @param id xxx
 #' @param verbose A `boolean` that indicates whether to show some infos in the 
 #' console and add the shiny module for debugging
-#'
 #' @param tl.layout Additional parameters for mod_nav
 #'
-#' @rdname example_mod_pipeline
+#' @rdname example_mod_workflow
 #'
 #' @author Samuel Wieczorek
 #'
@@ -25,17 +22,7 @@
 #'
 #' @return NA
 #'
-#' @examples
-#' if (interactive()) {
-#'     dirpath <- system.file("module_examples", package = "Magellan")
-#'     for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)) {
-#'         source(file.path(dirpath, l), local = FALSE)$value
-#'     }
-#'
-#'     run_workflow("Process1", verbose = TRUE)
-#'
-#'     run_workflow("PipelineA", tl.layout = c("h", "h"))
-#' }
+#' @example examples/example_run_workflow.R
 #'
 run_workflow <- function(id,
     verbose = FALSE,

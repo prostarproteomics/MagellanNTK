@@ -4,8 +4,7 @@ library(shinyjqui)
 library(DT)
 library(shinyjs)
 library(shiny)
-library(Magellan)
-
+  options(shiny.fullstacktrace = TRUE)
 data(data_na)
 
 ui <- fluidPage(

@@ -1,4 +1,5 @@
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyWidgets)
 library(shinyjs)
 
@@ -31,7 +32,7 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
   )
   
   
@@ -47,13 +48,14 @@ server <- function(input, output){
   
   
   mod_timeline_h_server(id = 'TLh',
-                        config = config,
-                        status = reactive({rv$status}),
-                        position = reactive({rv$current.pos}),
-                        enabled = reactive({rv$tl.tags.enabled})
+    config = config,
+    status = reactive({rv$status}),
+    position = reactive({rv$current.pos}),
+    enabled = reactive({rv$tl.tags.enabled})
   )
   
 }
 
 
 shinyApp(ui, server)
+}

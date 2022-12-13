@@ -1,4 +1,5 @@
-library(highcharter)
+if(interactive()){
+  library(highcharter)
 library(shinyjs)
 library(DT)
 library(tibble)
@@ -6,12 +7,6 @@ library(QFeatures)
 
 
 options(shiny.fullstacktrace = TRUE)
-
-
-dirpath <- system.file('module_examples', package='Magellan')
-for (l in list.files(path = dirpath, pattern = ".R"))
-  source(file.path(dirpath, l), local=TRUE)$value
-#--------------------------------------------
 
 
 mod_test_process_ui <- function(id){
@@ -29,6 +24,12 @@ mod_test_process_ui <- function(id){
 
 
 mod_test_process_server <- function(id){
+  
+  dirpath <- system.file('examples', package='Magellan')
+  for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+    source(file.path(dirpath, l), local=FALSE)$value
+  
+  
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     rv <- reactiveValues(
@@ -38,8 +39,8 @@ mod_test_process_server <- function(id){
     
     observe({
       rv$dataOut <- mod_nav_server(id = 'PipelineA_Description',
-                                           dataIn = reactive({rv$dataIn})
-                                           )
+        dataIn = reactive({rv$dataIn})
+        )
     }, priority=1000)
     
     
@@ -91,7 +92,4 @@ server <- function(input, output){
   mod_test_process_server('test_mod_process')
 }
 shinyApp(ui, server)
-
-
-# shinyApp(ui = mod_test_process_ui('test_mod_process'),
-#          server = mod_test_process_server('test_mod_process'))
+}

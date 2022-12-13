@@ -2,14 +2,10 @@
 #' 
 #' @description  A shiny Module.
 #' 
-#' 
 #' @name mod_format_DT
 #'
 #' @keywords internal
-#' 
-#' 
-#' 
-#' @example inst/examples/test_mod_format_DT.R
+#' @example examples/test_mod_format_DT.R
 #' 
 NULL
 

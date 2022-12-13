@@ -6,17 +6,12 @@
 #' 
 #' @name mod_nav
 #' 
-#' 
 #' @author Samuel Wieczorek
 #' 
-#' 
-#' @example inst/examples/example_mod_single_Process.R
-#' @example inst/examples/example_mod_Pipeline.R
+#' @example examples/example_mod_single_Process.R
+#' @example examples/example_mod_Pipeline.R
 #'
 NULL
-
-
-
 
 
 #' @param id A `character(1)` which defines the id of the module. 

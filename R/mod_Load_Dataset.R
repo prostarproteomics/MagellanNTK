@@ -3,7 +3,7 @@
 #' @description  A shiny Module to load a dataset.
 #' @name mod_Load_Dataset
 #' 
-#' @example inst/examples/test_mod_load_dataset.R
+#' @example examples/test_mod_load_dataset.R
 NULL
 
 #' @param id xxx

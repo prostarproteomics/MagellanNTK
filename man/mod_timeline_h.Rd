@@ -4,7 +4,7 @@
 \alias{mod_timeline_h}
 \alias{mod_timeline_h_ui}
 \alias{mod_timeline_h_server}
-\title{timeline UI Function}
+\title{Horizontal timeline module}
 \usage{
 mod_timeline_h_ui(id)
 
@@ -33,8 +33,6 @@ NA
 }
 \description{
 A shiny Module.
-
-#'
 }
 \examples{
 if(interactive()){
@@ -71,7 +69,7 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
   )
   
   

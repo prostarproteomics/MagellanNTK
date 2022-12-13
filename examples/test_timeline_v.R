@@ -1,8 +1,8 @@
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyWidgets)
 library(shinyjs)
-library(R6)
-library(tibble)
+
 
 options(shiny.fullstacktrace = TRUE)
 btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
@@ -34,16 +34,16 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_dir = system.file('module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
   )
   
   
   
   mod_timeline_v_server(id = 'TLv',
-                        config = config,
-                        status = reactive({rv$status}),
-                        position = reactive({rv$current.pos}),
-                        enabled = reactive({rv$tl.tags.enabled})
+    config = config,
+    status = reactive({rv$status}),
+    position = reactive({rv$current.pos}),
+    enabled = reactive({rv$tl.tags.enabled})
   )
   
   observeEvent(input$nextpos,{
@@ -55,11 +55,8 @@ server <- function(input, output){
     if (rv$current.pos != 1)
       rv$current.pos <- rv$current.pos - 1
   })
-  
-  
-  
-  
 }
 
 
 shinyApp(ui, server)
+}

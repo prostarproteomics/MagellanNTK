@@ -3,7 +3,7 @@
 #' @description  A shiny Module to load a dataset.
 #' @name mod_Save_Dataset
 #' 
-#' @example inst/examples/test_mod_save_dataset.R
+#' @example examples/test_mod_save_dataset.R
 NULL
 
 #' @param id xxx
@@ -12,6 +12,8 @@ NULL
 #' @export
 #'
 mod_Save_Dataset_ui <- function(id) {
+  ns <- NS(id)
+  downloadLink(ns('downloadData'), 'Download')
 }
 
 
@@ -28,12 +30,19 @@ mod_Save_Dataset_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    rv <- reactiveValues(
-      dataIn = NULL,
-      dataOut = NULL)
-    
-    observe(data(), {
-      saveRDS(data(), file = 'temp.RData')
-    })
+    # rv <- reactiveValues(
+    #   dataIn = NULL,
+    #   dataOut = NULL)
+    # 
+    output$downloadData <- downloadHandler(
+      filename = function() {
+        #paste('data-', input$files, "-", Sys.Date(), '.pdf', sep='')
+        'temp.RData'
+      },
+      content = function(file) {
+        #file.copy(paste0(input$files, ".pdf"), file)
+        saveRDS(data(), file = 'temp.RData')
+      }
+    )
   })
 }

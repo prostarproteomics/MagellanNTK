@@ -18,14 +18,14 @@ console and add the shiny module for debugging}
 NA
 }
 \description{
-This module contains the configuration informations for the corresponding 
+This module contains the configuration information for the corresponding 
 pipeline. It is called by the nav_pipeline module of the package Magellan.
-This documentation is for developpers who want to create their own 
+This documentation is for developers who want to create their own 
 pipelines nor processes to be managed with `Magellan`.
 }
 \examples{
 if (interactive()) {
-    dirpath <- system.file("module_examples", package = "Magellan")
+    dirpath <- system.file("extdata/module_examples", package = "Magellan")
     for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE)) {
         source(file.path(dirpath, l), local = FALSE)$value
     }
@@ -34,7 +34,6 @@ if (interactive()) {
 
     run_workflow("PipelineA", tl.layout = c("h", "h"))
 }
-
 }
 \author{
 Samuel Wieczorek

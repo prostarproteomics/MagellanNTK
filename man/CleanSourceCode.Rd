@@ -17,7 +17,7 @@ A string which contains the source code condensed
 xxx
 }
 \examples{
-file <- system.file("module_examples", "mod_Process1.R", package = "Magellan")
+file <- system.file("extdata/module_examples", "mod_Process1.R", package = "Magellan")
 CleanSourceCode(file)
 
 }
