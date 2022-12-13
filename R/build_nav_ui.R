@@ -33,12 +33,12 @@ Build_nav_v_ui <- function(ns) {
                             shinyjs::disabled(
                                 actionButton(ns("prevBtn"),
                                     GlobalSettings$tl_v_prev_icon,
-                                    class = PrevNextBtnClass,
+                                    class = GlobalSettings$PrevNextBtnClass,
                                     style = "padding:4px; font-size:80%"
                                 )
                             ),
                             actionButton(ns("rstBtn"), "Reset",
-                                class = redBtnClass,
+                                class = GlobalSettings$redBtnClass,
                                 style = "padding:4px; font-size:80%"
                             )
                         ),
@@ -46,7 +46,7 @@ Build_nav_v_ui <- function(ns) {
                             style = btn_style,
                             actionButton(ns("nextBtn"), 
                                 GlobalSettings$tl_v_next_icon,
-                                class = PrevNextBtnClass,
+                                class = GlobalSettings$PrevNextBtnClass,
                                 style = "padding:4px; font-size:80%"
                             )
                         ),
@@ -81,12 +81,12 @@ Build_nav_h_ui <- function(ns) {
             column(width = 1, shinyjs::disabled(
                 actionButton(ns("prevBtn"),
                     GlobalSettings$tl_h_prev_icon,
-                    class = PrevNextBtnClass,
+                    class = GlobalSettings$PrevNextBtnClass,
                     style = "font-size:80%"
                 )
             )),
             column(width = 1, actionButton(ns("rstBtn"), "Reset",
-                class = redBtnClass,
+                class = GlobalSettings$redBtnClass,
                 style = "font-size:80%"
             )),
             column(width = 9, uiOutput(ns("show_TL"))),
@@ -94,7 +94,7 @@ Build_nav_h_ui <- function(ns) {
                 width = 1,
                 actionButton(ns("nextBtn"),
                     GlobalSettings$tl_h_next_icon,
-                    class = PrevNextBtnClass,
+                    class = GlobalSettings$PrevNextBtnClass,
                     style = "font-size:80%"
                 )
             )

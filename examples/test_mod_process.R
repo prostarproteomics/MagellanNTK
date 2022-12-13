@@ -3,7 +3,7 @@ if(interactive()){
   test_mod_process <- function(){
   
   library(shiny)
-library(shinyjs)
+  library(shinyjs)
   library(MagellanNTK)
 
 
@@ -18,12 +18,12 @@ mod_test_process_ui <- function(id){
     fluidRow(
       column(width=2,
              selectInput(ns('choosePipeline'), 'Choose pipeline',
-                         choices = setNames(nm=c('', 'Protein')),
+                         choices = setNames(nm=c('', 'PipelineA')),
                          width = '200')
              ),
       column(width=2,
              selectInput(ns('chooseProcess'), 'Choose process', 
-                         choices = setNames(nm=c('', 'Description', 'Normalization')),
+                         choices = setNames(nm=c('', 'Description', 'Process1')),
                          width = '200')
              ),
       column(width=2, actionButton(ns('simReset'), 'Remote reset')),

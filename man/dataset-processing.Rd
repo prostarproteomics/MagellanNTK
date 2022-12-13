@@ -48,7 +48,7 @@ object (of type list)
 }
 \details{
 The object must be of type list. Thetwo functions are implemented here for 
-of the package which uses Magellan.
+of the package which uses MagellanNTK
 }
 \examples{
 NA

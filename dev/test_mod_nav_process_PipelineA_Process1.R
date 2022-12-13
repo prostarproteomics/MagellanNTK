@@ -39,7 +39,6 @@ mod_test_process_ui <- function(id){
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )

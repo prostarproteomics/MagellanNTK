@@ -53,7 +53,7 @@
     #eval(parse(text = Get_Code_for_module_Description(config@name)),
     #    envir = .GlobalEnv)
 
-    # Insert necessary code which is hosted by Magellan
+    # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
     }

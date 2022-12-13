@@ -35,19 +35,15 @@ A shiny Module.
 \examples{
 if(interactive()){
   library(shiny)
-library(shinyWidgets)
-library(shinyjs)
+  library(shinyWidgets)
+  library(shinyjs)
 
-
-options(shiny.fullstacktrace = TRUE)
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
-#------------------------ Class TimelineDraw --------------------------------------
-#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+  options(shiny.fullstacktrace = TRUE)
+  
 
 ui <- fluidPage(
-  actionButton("prevpos", "<<"),
-  actionButton("nextpos", ">>"),
+  actionButton("prevpos", GlobalSettings$tl_v_prev_icon),
+  actionButton("nextpos", GlobalSettings$tl_v_next_icon),
   mod_timeline_v_ui('TLv')
 )
 
@@ -69,7 +65,7 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='Magellan')
+    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   

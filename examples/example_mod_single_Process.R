@@ -13,12 +13,13 @@ example_mod_Process <- function(verbose = FALSE){
 
 server <- function(input, output){
   
-  dirpath <- system.file('examples', package='MagellanNTK')
+  dirpath <- system.file('extdata/module_examples', package='MagellanNTK')
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   
+  data(data1)
   rv <- reactiveValues(
-    dataIn = Build_example_dataset(),
+    dataIn = data1,
     dataOut = NULL
   )
   

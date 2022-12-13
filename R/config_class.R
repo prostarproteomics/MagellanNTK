@@ -20,7 +20,7 @@ Config <- setClass("Config",
         mode = "character",
         steps = "vector",
         mandatory = "vector",
-        path_to_md_dir = "character",
+        path_to_md_file = "character",
         ll.UI = "list"
     ),
     prototype(
@@ -28,60 +28,77 @@ Config <- setClass("Config",
         mode = 'process',
         steps = c('Description', 'Save'),
         mandatory = c(TRUE, TRUE),
-        path_to_md_dir = '.',
+        path_to_md_file = '.',
         ll.UI = list()
     ),
     
     
     validity = function(object) {
         passed <- TRUE
+        
+        nSteps <- length(object@steps)
+        
+        #
+        # General conditions
+        #
         if (length(object@name) != 1){
             warning('xxxx')
             passed <- FALSE
         }
         
         if (length(object@mode) != 1){
-            warning('xxxx')
+            warning("'mode' must contain only one string")
             passed <- FALSE
-        }
-        
-        if (length(object@steps) <= 1){
-            warning("The number of steps ('Description' step included) must be greater or equal to 2.")
+        } else if (!(object@mode %in% c('process', 'pipeline'))){
+            warning("'mode' must be one of the following: 'process', 'pipeline'")
             passed <- FALSE
-        }
+            }
+
         
-        if (length(object@mandatory) != length(object@steps)){
+        if (length(object@mandatory) != nSteps){
             warning("'steps' and 'mandatory' must have the same length.")
             passed <- FALSE
         }
 
-        if (length(object@path_to_md_dir) != 1){
+        if (length(object@path_to_md_file) != 1){
             warning('xxxx')
             passed <- FALSE
         }
         
-        if (object@steps[1] != 'Description'){
-            warning('xxxx')
+        if ((object@steps[1] != 'Description') || (object@mandatory[1] != TRUE)){
+            warning("The first step of a workflow must be 'Description' and it is mandatory.")
             passed <- FALSE
         }
-        
-        if (object@mandatory[1] != TRUE){
-            warning('xxxx')
-            passed <- FALSE
-        }
-        
 
-    if (object@mode == 'process'){
-        if (object@steps[length(object@steps)] != 'Save'){
-            warning("In a process workflow, the last step must be called 'Save'")
-            passed <- FALSE
-        }
+        #
+        # Mode-specific conditions
+        #
+        switch (object@mode,
         
-        if (object@mandatory[length(object@steps)] != TRUE){
-            warning('In a process workflow, the last step is mandatory.')
-            passed <- FALSE
+        process = {
+            if (nSteps == 1){
+                if (object@steps != 'Description'){
+                warning("The only case where a process can contain only one step is
+                        when it is the Description of a pipeline of higher level")
+                passed <- FALSE
+                }
+            } else if (nSteps < 3){
+                warning("The number of steps ('Description' and 'Save' steps included) must be greater or equal to 3.")
+                passed <- FALSE
+            } else{
+                if ((object@steps[nSteps] != 'Save') || (object@mandatory[nSteps] != TRUE)){
+                    warning("In a process workflow, the last step must be called 'Save'. It is a mandatory step.")
+                    passed <- FALSE
+                    }
+                }
+                },
+        pipeline = {
+            if (object@steps[nSteps] == 'Save'){
+                warning("In a pipeline workflow, the last step cannot be 'Save'.")
+                passed <- FALSE
+            }
         }
-    }
+    )
 
     return(passed)
     }

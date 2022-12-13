@@ -262,7 +262,7 @@ Here is explained a minimal shiny app (code in
 Launch the packages
 
 ```{r minshinyappexample_launchpackages,attr.source = ".numberLines", eval = FALSE}
-library(Magellan)
+library(MagellanNTK)
 
 f <- system.file("module_examples", 
     "example_module_PipelineA_Process1.R",

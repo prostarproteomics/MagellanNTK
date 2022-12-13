@@ -17,8 +17,10 @@ server <- function(input, output){
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   
+  data(data1)
+  
   rv <- reactiveValues(
-    dataIn = Build_example_dataset(),
+    dataIn = data1,
     dataOut = NULL
   )
   

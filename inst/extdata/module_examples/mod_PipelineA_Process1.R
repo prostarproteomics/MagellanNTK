@@ -74,7 +74,7 @@ mod_Process1_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    path_to_md_file = system.file('extdata/module_examples/md/PipelineA_Process1.md', package='MagellanNTK')
   )
   
   
@@ -121,7 +121,7 @@ mod_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
-      file <- paste0(config@path_to_md_dir, '/', id, '.md')
+      #file <- paste0(config@path_to_md_dir, '/', id, '.md')
       
       tagList(
         # In this example, the md file is found in the extdata/module_examples directory
@@ -129,8 +129,8 @@ mod_Process1_server <- function(id,
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
         
-        if (file.exists(file))
-          includeMarkdown(file)
+        if (file.exists(config@path_to_md_file))
+          includeMarkdown(config@path_to_md_file)
         else
           p('No Description available'),
         
@@ -154,7 +154,7 @@ mod_Process1_server <- function(id,
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
                              "Start",
-                             class = btn_success_color)
+                             class = GlobalSettings$btn_success_color)
      toggleWidget(widget, rv$steps.enabled['Description'])
     })
     
@@ -202,17 +202,17 @@ mod_Process1_server <- function(id,
     
     
     rv.custom$mod_foo <- mod_foo_server('foo',
-                                        obj = reactive({rv$dataIn}),
-                                        reset = reactive({NULL}),
-                                        is.enabled = reactive({rv$steps.enabled['Step1']})
-                                        )
+      obj = reactive({rv$dataIn}),
+      reset = reactive({NULL}),
+      is.enabled = reactive({rv$steps.enabled['Step1']})
+    )
 
 
     
     output$Step1_btn1_ui <- renderUI({
       widget <- actionButton(ns('Step1_btn1'),
                            'Step1_btn1',
-                           class = btn_success_color)
+                           class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
     })
 
@@ -251,7 +251,7 @@ mod_Process1_server <- function(id,
     output$Step1_btn_validate_ui <- renderUI({
     widget <-  actionButton(ns("Step1_btn_validate"),
                    "Perform",
-                   class = btn_success_color)
+                   class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
       
     })
@@ -313,7 +313,7 @@ mod_Process1_server <- function(id,
     output$Step2_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Step2_btn_validate"),
                      "Perform",
-                     class = btn_success_color)
+                     class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step2'] )
     })
     
@@ -348,7 +348,7 @@ mod_Process1_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       toggleWidget(actionButton(ns("Save_btn_validate"), "Save",
-                                  class = btn_success_color),
+                                  class = GlobalSettings$btn_success_color),
                      rv$steps.enabled['Save']
                      )
     })

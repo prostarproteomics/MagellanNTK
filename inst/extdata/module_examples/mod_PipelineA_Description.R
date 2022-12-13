@@ -25,7 +25,7 @@ mod_PipelineA_Description_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    path_to_md_file = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   # Define default selected values for widgets
@@ -60,7 +60,7 @@ mod_PipelineA_Description_server <- function(id,
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       name <- strsplit(id, split='_')[[1]][1]
-      file <- paste0(config@path_to_md_dir, '/', name, '.md')
+      file <- paste0(config@path_to_md_file, '/', name, '.md')
       tagList(
         if (file.exists(file))
           includeMarkdown(file)
@@ -86,7 +86,7 @@ mod_PipelineA_Description_server <- function(id,
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
         "Start",
-        class = btn_success_color)
+        class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
     })
     

@@ -111,12 +111,12 @@ mod_pipeline_process_server <- function(id,
 	  if (isTRUE(rv$steps.enabled['Description'])  )
 	    actionButton(ns('btn_validate_Description'),
 	                 paste0('Start ', config@name),
-	                 class = btn_success_color)
+	                 class = GlobalSettings$btn_success_color)
 	  else
 	    shinyjs::disabled(
 	      actionButton(ns('btn_validate_Description'),
 	                   paste0('Start ', config@name),
-	                   class = btn_success_color)
+	                   class = GlobalSettings$btn_success_color)
 	    )
 	})
 

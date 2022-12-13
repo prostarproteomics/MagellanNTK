@@ -15,7 +15,6 @@ mod_test_process_ui <- function(id){
     uiOutput(ns('UI')),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
                 uiOutput(ns('show_Debug_Infos'))
               )
     )
@@ -25,15 +24,16 @@ mod_test_process_ui <- function(id){
 
 mod_test_process_server <- function(id){
   
-  dirpath <- system.file('examples', package='MagellanNTK')
+  dirpath <- system.file('extdata/module_examples', package='MagellanNTK')
   for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
     source(file.path(dirpath, l), local=FALSE)$value
   
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    data(data1)
     rv <- reactiveValues(
-      dataIn = Build_example_dataset(),
+      dataIn = data1,
       dataOut = NULL
     )
     

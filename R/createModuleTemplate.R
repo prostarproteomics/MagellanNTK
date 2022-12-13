@@ -169,16 +169,16 @@ get_process_config_code <- function(config) {
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = #mandatory#,
 
-    path_to_md_dir = '#path_to_md_dir#'
+    path_to_md_file = '#path_to_md_file#'
     )
     "
     code <- gsub("#name#", config@name, code)
     code <- gsub("#steps#", vec2code(config@steps, TRUE), code)
     code <- gsub("#mandatory#", vec2code(config@mandatory, FALSE), code)
-    if (is.null(config@path_to_md_dir) || config@path_to_md_dir == '') {
-        config@path_to_md_dir <- "\'\'"
+    if (is.null(config@path_to_md_file) || config@path_to_md_file == '') {
+        config@path_to_md_file <- "\'\'"
     }
-    code <- gsub("#path_to_md_dir#", config@path_to_md_dir, code)
+    code <- gsub("#path_to_md_file#", config@path_to_md_file, code)
     code
 }
 
@@ -270,7 +270,7 @@ Insert_Description_Step_code <- function(){
 
 
 output$Description <- renderUI({
-  file <- paste0(config@path_to_md_dir, '/', id, '.md')
+  file <- paste0(config@path_to_md_file, '/', id, '.md')
   
   tagList(
     # In this example, the md file is found in the extdata/module_examples directory
@@ -303,7 +303,7 @@ output$datasetDescription_ui <- renderUI({
 output$Description_btn_validate_ui <- renderUI({
   widget <- actionButton(ns('Description_btn_validate'),
     'Start',
-    class = btn_success_color)
+    class = GlobalSettings$btn_success_color)
   toggleWidget(widget, rv$steps.enabled['Description'])
 })
 

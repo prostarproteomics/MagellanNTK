@@ -1,3 +1,4 @@
+#' @export
 #' @importFrom utils globalVariables
 utils::globalVariables(
     c(
@@ -30,33 +31,36 @@ utils::globalVariables(
     )
 )
 
+#' @title xxx
+#' @description xxx
+#' @export
 global <- list(
     VALIDATED = 1,
     SKIPPED = -1,
     UNDONE = 0
 )
 
+#' @title xxx
+#' @description xxx
+#' @export
 default_pos <- list(
     VALIDATED = 1,
     SKIPPED = 1,
     UNDONE = 1
 )
 
-redBtnClass <- "btn-danger"
 
-PrevNextBtnClass <- "btn-info"
-
-btn_success_color <- "btn-success"
-
-optionsBtnClass <- "info"
-
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
-
-actionBtnClass <- "btn-primary"
-
+#' @title xxx
+#' @description xxx
+#' @export
 GlobalSettings <- list(
     tl_v_next_icon = shiny::icon('arrow-down'),
     tl_v_prev_icon = shiny::icon('arrow-up'),
     tl_h_next_icon = shiny::icon('arrow-right'),
-    tl_h_prev_icon = shiny::icon('arrow-left')
+    tl_h_prev_icon = shiny::icon('arrow-left'),
+    actionBtnClass = "btn-primary",
+    optionsBtnClass = "info",
+    redBtnClass = "btn-danger",
+    PrevNextBtnClass = "btn-info",
+    btn_success_color = "btn-success"
 )

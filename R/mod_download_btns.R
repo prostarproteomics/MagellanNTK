@@ -45,7 +45,7 @@ mod_download_btns_ui <- function(id) {
 #' @param extension Available values are `csv` (default), `RData` and `Excel`.
 #' @param widget.type Available values are `Button` and `Link` (default).
 #' @param name internal
-#' @param style xxx
+#' @param excel.style xxx
 #' 
 #' @export
 #' 
@@ -87,7 +87,7 @@ mod_download_btns_server <- function(id,
           list(
             ns("downloadDatacsv"), 
             "csv",
-            class = if (type=='Button') actionBtnClass else ''
+            class = if (type=='Button') GlobalSettings$actionBtnClass else ''
           )
           )
       })
@@ -100,7 +100,7 @@ mod_download_btns_server <- function(id,
           list(
             ns("downloadDataExcel"), 
             "Excel",
-            class = if (type=='Button') actionBtnClass else ''
+            class = if (type=='Button') GlobalSettings$actionBtnClass else ''
           )
         )
       })
@@ -112,7 +112,7 @@ mod_download_btns_server <- function(id,
           list(
             ns("downloadDataRData"), 
             "RData",
-            class = if (type=='Button') actionBtnClass else ''
+            class = if (type=='Button') GlobalSettings$actionBtnClass else ''
           )
         )
       })

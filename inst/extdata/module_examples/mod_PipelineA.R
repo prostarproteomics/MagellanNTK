@@ -59,11 +59,11 @@ mod_PipelineA_server <- function(id,
     name = 'PipelineA',
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('PipelineA_Description', 'Process1', 'Process2', 'Process3'),
+    steps = c('Description', 'Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, FALSE, TRUE),
     
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
   )
   
   
@@ -91,6 +91,49 @@ mod_PipelineA_server <- function(id,
       )
     
     rv.custom <- reactiveValues()
+    
+    ###### ------------------- Code for Description (step 0) -------------------------    #####
+    output$Description <- renderUI({
+      name <- strsplit(id, split='_')[[1]][1]
+      file <- paste0(config@path_to_md_file, '/', name, '.md')
+      tagList(
+        if (file.exists(file))
+          includeMarkdown(file)
+        else
+          p('No Description available'),
+        
+        uiOutput(ns('datasetDescription_ui')),
+        
+        # Insert validation button
+        uiOutput(ns('Description_btn_validate_ui'))
+      )
+    })
+    
+    
+    
+    output$datasetDescription_ui <- renderUI({
+      # Insert your own code to vizualise some information
+      # about your dataset. It will appear once the 'Start' button
+      # has been clicked
+      
+    })
+    
+    output$Description_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Description_btn_validate"),
+        "Start",
+        class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Description'])
+    })
+    
+    
+    observeEvent(input$Description_btn_validate, {
+      rv$dataIn <- dataIn()
+      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Description'] <- global$VALIDATED
+    })
+    
+    
     
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE

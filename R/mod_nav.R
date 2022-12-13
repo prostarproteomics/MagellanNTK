@@ -566,8 +566,8 @@ mod_nav_server <- function(id,
                     # Before continuing the initialization, check if all 
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
-
-                    for (i in names(rv$config@steps)) {
+                    ll.funcs <- names(rv$config@steps)[-which(names(rv$config@steps) == 'Description')]
+                    for (i in ll.funcs) {
                         if (!Found_Mod_Funcs(i)) {
                             return(NULL)
                         }

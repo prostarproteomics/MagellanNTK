@@ -96,7 +96,7 @@ mod_format_DT_server <- function(id,
       id = "DL_btns",
       df.data = reactive({data()[,-hideCols()]}),
       name = reactive({filename}),
-      style = reactive({full_style()})
+      excel.style = reactive({full_style()})
       )
   
     

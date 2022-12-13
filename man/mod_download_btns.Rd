@@ -34,13 +34,13 @@ mod_download_btns_server(
 
 \item{name}{internal}
 
+\item{excel.style}{xxx}
+
 \item{input}{internal}
 
 \item{output}{internal}
 
 \item{session}{internal}
-
-\item{style}{xxx}
 }
 \description{
 A shiny Module.

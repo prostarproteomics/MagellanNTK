@@ -30,7 +30,6 @@ mod_test_pipeline_ui <- function(id){
     uiOutput('UI'),
     wellPanel(title = 'foo',
               tagList(
-                h3('Valler'),
                 uiOutput('show_Debug_Infos')
               )
     )

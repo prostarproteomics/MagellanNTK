@@ -24,7 +24,7 @@ xxxx
 }
 \examples{
 f <- system.file("extdata/module_examples", "example_module_PipelineA_Process1.R",
-    package = "Magellan"
+    package = "MagellanNTK"
 )
 CheckProcessCode(f)
 
