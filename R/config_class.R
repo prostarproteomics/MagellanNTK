@@ -35,14 +35,12 @@ Config <- setClass("Config",
     
     validity = function(object) {
         passed <- TRUE
-        
         nSteps <- length(object@steps)
-        
         #
         # General conditions
         #
         if (length(object@name) != 1){
-            warning('xxxx')
+            warning(paste0("The slot 'name' must contain one string. Current value is: ", object@name))
             passed <- FALSE
         }
         
@@ -61,7 +59,7 @@ Config <- setClass("Config",
         }
 
         if (length(object@path_to_md_file) != 1){
-            warning('xxxx')
+            warning(paste0("The slot 'path_to_md_file' must contain one string. Current value is: ", object@path_to_md_file))
             passed <- FALSE
         }
         

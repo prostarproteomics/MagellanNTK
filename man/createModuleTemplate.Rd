@@ -31,7 +31,7 @@ if(interactive()){
   mode = "process",
   steps = c('Description', "Step 1", "Step 2", "Save"),
   mandatory = c(TRUE, TRUE, FALSE, TRUE),
-  path_to_md_dir = '.'
+    path_to_md_file = '.'
   )
 
 
@@ -46,7 +46,7 @@ conf.pipeline <- Config(
   name = 'PipelineA',
   steps = c('Description', "Process 1", "Process 2", "Process 3"),
   mandatory = c(TRUE, TRUE, FALSE, TRUE),
-  path_to_md_dir = system.file("extdata/module_examples/md/", package = "MagellanNTK")
+  path_to_md_file = system.file("extdata/module_examples/md/", package = "MagellanNTK")
 )
 createModuleTemplate(conf.pipeline)
 run_workflow("PipelineA", verbose = TRUE)

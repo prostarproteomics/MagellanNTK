@@ -19,6 +19,3 @@ xxxxx
 \description{
 A shiny Module to load a dataset.
 }
-\examples{
-
-}

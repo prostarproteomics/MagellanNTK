@@ -4,7 +4,6 @@ library(shinyjs)
 library(MagellanNTK)
 
 options(shiny.fullstacktrace = TRUE)
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 
 ui <- fillPage(

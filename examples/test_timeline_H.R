@@ -4,7 +4,6 @@ library(shinyWidgets)
 library(shinyjs)
 
 options(shiny.fullstacktrace = TRUE)
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
 
 #------------------------ Class TimelineDraw --------------------------------------
 #source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value

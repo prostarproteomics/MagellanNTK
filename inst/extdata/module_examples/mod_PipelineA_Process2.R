@@ -65,6 +65,7 @@ mod_Process2_server <- function(id,
     # Define the type of module
     mode = 'process',
     
+    name = 'Process2',
     
     # List of all steps of the process
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),

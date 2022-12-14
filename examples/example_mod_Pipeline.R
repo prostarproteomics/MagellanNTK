@@ -1,5 +1,4 @@
 library(shiny)
-library(MagellanNTK)
 
 if(interactive()){
 example_mod_Pipeline <- function(verbose = FALSE){
@@ -50,5 +49,5 @@ server <- function(input, output){
 shinyApp(ui, server)
 }
 
-example_mod_Pipeline()
+example_mod_Pipeline(verbose=TRUE)
 }

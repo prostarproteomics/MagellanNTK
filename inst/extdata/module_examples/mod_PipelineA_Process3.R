@@ -65,6 +65,7 @@ mod_Process3_server <- function(id,
     # Define the type of module
     mode = 'process',
     
+    name = 'Process3',
     
     # List of all steps of the process
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
@@ -116,8 +117,8 @@ mod_Process3_server <- function(id,
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
         
-        if (file.exists(path_to_md_file))
-          includeMarkdown(path_to_md_file)
+        if (file.exists(config@path_to_md_file))
+          includeMarkdown(config@path_to_md_file)
         else
           p('No Description available'),
         

@@ -29,7 +29,7 @@ Build_nav_v_ui <- function(ns) {
                     div(
                         style = "padding: 10px",
                         div(
-                            style = btn_style,
+                            style = GlobalSettings$btn_style,
                             shinyjs::disabled(
                                 actionButton(ns("prevBtn"),
                                     GlobalSettings$tl_v_prev_icon,
@@ -43,7 +43,7 @@ Build_nav_v_ui <- function(ns) {
                             )
                         ),
                         div(
-                            style = btn_style,
+                            style = GlobalSettings$btn_style,
                             actionButton(ns("nextBtn"), 
                                 GlobalSettings$tl_v_next_icon,
                                 class = GlobalSettings$PrevNextBtnClass,

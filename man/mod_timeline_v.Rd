@@ -65,7 +65,7 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Description', 'Step 1', 'Step 2', 'Save'),
     mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_dir = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    path_to_md_file = system.file('extdata/module_examples/md/', package='MagellanNTK')
   )
   
   

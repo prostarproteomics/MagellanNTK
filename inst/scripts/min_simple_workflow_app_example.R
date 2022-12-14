@@ -1,6 +1,6 @@
 library(MagellanNTK)
 
-f <- system.file("module_examples", "extdata/mod_Process1.R", package="MagellanNTK")
+f <- system.file("module_examples", "extdata/mod_PipelineA_Process1.R", package="MagellanNTK")
 source(file(f), local=TRUE)$value
 
 ui <- fluidPage(
@@ -17,8 +17,8 @@ server <- function(input, output){
   
   observe({
     rv$dataOut <- mod_nav_server(id = 'Process1',
-                                 dataIn = reactive({rv$dataIn})
-                                 )
+      dataIn = reactive({rv$dataIn})
+      )
     }, priority=1000)
 }
 

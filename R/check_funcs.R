@@ -45,12 +45,17 @@ Found_Mod_Funcs <- function(id) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' file <- system.file("extdata/module_examples", "mod_Process1.R", package = "MagellanNTK")
+#' file <- system.file("extdata/module_examples", "mod_PipelineA_Process1.R", package = "MagellanNTK")
 #' CleanSourceCode(file)
 #' 
 #' @export
 #'
 CleanSourceCode <- function(file = NULL) {
+    if (is.null(file) || file == ''){
+        warning (paste0("Argument 'file' is incorrect (current value is '", file, "')."))
+        return(NULL)
+    }
+    
     source <- readLines(file)
 
     source <- unlist(lapply(source, function(x) gsub(" ", "", x)))

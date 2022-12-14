@@ -92,6 +92,78 @@ mod_PipelineA_server <- function(id,
     
     rv.custom <- reactiveValues()
     
+    
+    # Insert necessary code which is hosted by MagellanNTK
+    # DO NOT MODIFY THIS LINE
+    eval(parse(text = Module_Return_Func()))
+    }
+  )
+}
+
+
+
+###
+###
+###
+
+#' @export
+mod_Description_ui <- function(id){
+  ns <- NS(id)
+}
+
+
+#' @export
+mod_Description_server <- function(id,
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1}),
+  verbose = FALSE
+){
+  
+  config <- Config(
+    mode = 'process',
+    
+    name = 'Description',
+    
+    # List of all steps of the process
+    steps = c('Description'),
+    # A vector of boolean indicating if the steps are mandatory or not.
+    mandatory = c(TRUE),
+    
+    path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
+  )
+  
+  # Define default selected values for widgets
+  # By default, this list is empty for the Description module
+  # but it can be customized
+  widgets.default.values <- NULL
+  rv.custom.default.values <- NULL
+  
+  ###-------------------------------------------------------------###
+  ###                                                             ###
+  ### ------------------- MODULE SERVER --------------------------###
+  ###                                                             ###
+  ###-------------------------------------------------------------###
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Insert necessary code which is hosted by MagellanNTK
+    # DO NOT MODIFY THIS LINE
+    eval(
+      str2expression(
+        Get_Worflow_Core_Code(
+          w.names = names(widgets.default.values),
+          rv.custom.names = names(rv.custom.default.values)
+          
+        )
+      )
+    )
+    
+    #rv.custom <- reactiveValues()
+    #rv.custom.default.values <- list()
+    
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       name <- strsplit(id, split='_')[[1]][1]
@@ -134,10 +206,10 @@ mod_PipelineA_server <- function(id,
     })
     
     
-    
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
-    }
+    
+  }
   )
 }
