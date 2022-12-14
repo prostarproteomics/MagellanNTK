@@ -64,9 +64,7 @@ run_workflow <- function(id,
 
             mod_dl_server(
                 id = "saveDataset",
-                dataIn = reactive({
-                    dataOut()$dataOut()$value
-                })
+                dataIn = reactive({dataOut()$dataOut()$value})
             )
         })
 
@@ -74,21 +72,15 @@ run_workflow <- function(id,
             dataOut(mod_nav_server(
                 id = id,
                 verbose = verbose,
-                dataIn = reactive({
-                    dataIn()
-                }),
+                dataIn = reactive({dataIn()}),
                 tl.layout = tl.layout
-            ))
+                ))
 
             mod_Debug_Infos_server(
                 id = "debug_infos",
                 title = "Infos from shiny app",
-                rv.dataIn = reactive({
-                    dataIn()
-                }),
-                dataOut = reactive({
-                    dataOut()$dataOut()$value
-                })
+                rv.dataIn = reactive({dataIn()}),
+                dataOut = reactive({dataOut()$dataOut()$value})
             )
         })
     }

@@ -165,12 +165,23 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #' }
 #'
 ToggleState_Screens <- function(cond,
-                                range,
-                                is.enabled,
-                                rv) {
+    range,
+    is.enabled,
+    rv) {
+    
+    #browser()
+    #print(rv$steps.status[range])
     if (isTRUE(is.enabled)) {
-        rv$steps.enabled[range] <- cond && 
-            !(rv$steps.status[range] == global$SKIPPED)
+        #browser()
+        #rv$steps.enabled[range] <- rep(cond, length(range)) && 
+        #    !(rv$steps.status[range] == global$SKIPPED)
+        rv$steps.enabled[range] <- unlist(
+            lapply(
+                range,
+                function(x) 
+                    cond && !(rv$steps.status[x] == global$SKIPPED)
+                )
+            )
     }
 
     return(rv$steps.enabled)

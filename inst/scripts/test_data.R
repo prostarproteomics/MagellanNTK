@@ -38,5 +38,6 @@ for (i in 1:8)
 save(data1, file='data1.rda', compress = "xz", compression_level = 9)
 save(data_na, file='data_na.rda', compress = "xz", compression_level = 9)
 
-print(data1)
-print(data_na)
+saveRDS(data1, file='data1.RData')
+saveRDS(data_na, file='data_na.RData')
+

@@ -30,10 +30,7 @@ mod_Load_Dataset_server <- function(id) {
 
         modal <- function() {
             modalDialog(
-                fileInput(ns("file"), "Open file",
-                    multiple = FALSE,
-                    accept = ".rds"
-                ),
+                fileInput(ns("file"), "Open file", multiple = FALSE),
                 footer = tagList(
                     modalButton("Cancel"),
                     actionButton(ns("ok"), "OK")
@@ -47,8 +44,10 @@ mod_Load_Dataset_server <- function(id) {
 
         observeEvent(input$ok, {
             req(input$file)
+
+            ext <- unlist(strsplit(input$file$name, '.', fixed=TRUE))[2]
             rv$dataOut <- readRDS(input$file$datapath)
-             removeModal()
+            removeModal()
         })
 
         reactive({rv$dataOut})

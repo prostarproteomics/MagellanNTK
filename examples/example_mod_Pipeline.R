@@ -49,5 +49,5 @@ server <- function(input, output){
 shinyApp(ui, server)
 }
 
-example_mod_Pipeline(verbose=TRUE)
+example_mod_Pipeline(verbose=F)
 }
