@@ -52,12 +52,12 @@ mod_PipelineA_Process3_ui <- function(id){
 #' @export
 #' 
 mod_PipelineA_Process3_server <- function(id,
-                                dataIn = reactive({NULL}),
-                                steps.enabled = reactive({NULL}),
-                                remoteReset = reactive({FALSE}),
-                                steps.status = reactive({NULL}),
-                                current.pos = reactive({1}),
-                                verbose = FALSE
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1}),
+  verbose = FALSE
 ){
   
   # This list contains the basic configuration of the process
@@ -68,9 +68,9 @@ mod_PipelineA_Process3_server <- function(id,
     name = 'Process3',
     
     # List of all steps of the process
-    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
+    steps = c('Step 1', 'Step 2'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, TRUE, TRUE),
+    mandatory = c(FALSE, TRUE),
     
     path_to_md_file = system.file('extdata/module_examples/md/PipelineA_Process3.md', package='MagellanNTK')
   )

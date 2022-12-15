@@ -27,6 +27,18 @@
 #' path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
 #' )
 #' 
+#' @slot name xxx
+#' @slot parent xxx
+#' @slot mode xxx
+#' @slot steps xxx
+#' @slot mandatory xxx
+#' @slot path_to_md_file xxx
+#' @slot path xxx
+#' @slot ll.UI xxx
+#' @slot steps.source.file xxx
+#' 
+#' @usage xxx
+#' 
 #' 
 Config <- setClass("Config",
     representation(
@@ -53,7 +65,8 @@ Config <- setClass("Config",
     #     steps.source.file = c()
     # ),
 
-    
+    #' @param object xxx
+    #' 
     validity = function(object) {
         print('Test validity')
         passed <- TRUE
@@ -131,10 +144,18 @@ Config <- setClass("Config",
 )
 
 #' @title Initialization method for the class `Config`
-#' @rdname config_class
+#' @rdname config
 #' 
 setMethod("initialize" ,
     "Config" ,
+    #' @param .Object xxx
+    #' @param name xxx
+    #' @param parent xxx
+    #' @param mode xxx
+    #' @param steps xxx
+    #' @param mandatory xxx
+    #' @param path_to_md_file xxx
+    #' @param path xxx
     function(.Object, name, 
         parent, 
         mode,
@@ -142,7 +163,6 @@ setMethod("initialize" ,
         mandatory, 
         path_to_md_file,
         path){
-        cat('Initialize object')
         
         .Object@name <- name
         .Object@parent <- parent 
@@ -176,37 +196,37 @@ setMethod("initialize" ,
         .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
         
         
-        
-        #Load source files
-        if (is.null(.Object@path)){
-            warning("The parameter 'path' is NULL. Abort.")
-            return (NULL)
-        }
-        
-        
-        
-        fname <- paste0(.Object@path, 'mod_', .Object@module.name, '.R')
-        if (file.exists(fname)){
-            source(fname, local=FALSE)$value
-            if (!Found_Mod_Funcs(.Object@module.name)) {
-                warning('xxxx')
-                return(NULL)
-                }
-            }
-        
-        if (.Object@mode == 'pipeline'){
-            for (f in .Object@steps.source.file){
-                fname <- paste0(.Object@path, 'mod_', f)
-                if (file.exists(fname)){
-                    source(fname, local=FALSE)$value
-                    fname <- unlist(strsplit(f, '.R'))
-                    if (!Found_Mod_Funcs(fname)) {
-                        warning('xxxx')
-                        return(NULL)
-                    }
-                }
-            }
-        }
+        # 
+        # #Load source files
+        # if (is.null(.Object@path)){
+        #     warning("The parameter 'path' is NULL. Abort.")
+        #     return (NULL)
+        # }
+        # 
+        # 
+        # 
+        # fname <- paste0(.Object@path, 'mod_', .Object@module.name, '.R')
+        # if (file.exists(fname)){
+        #     source(fname, local=FALSE)$value
+        #     if (!Found_Mod_Funcs(.Object@module.name)) {
+        #         warning('xxxx')
+        #         return(NULL)
+        #         }
+        #     }
+        # 
+        # if (.Object@mode == 'pipeline'){
+        #     for (f in .Object@steps.source.file){
+        #         fname <- paste0(.Object@path, 'mod_', f)
+        #         if (file.exists(fname)){
+        #             source(fname, local=FALSE)$value
+        #             fname <- unlist(strsplit(f, '.R'))
+        #             if (!Found_Mod_Funcs(fname)) {
+        #                 warning('xxxx')
+        #                 return(NULL)
+        #             }
+        #         }
+        #     }
+        # }
 
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
@@ -218,7 +238,14 @@ setMethod("initialize" ,
 #' 
 #' @description Wrapper function to the constructor of the class
 #' 
-#' @rdname config_class
+#' @rdname config
+#' 
+#' @param parent xxx
+#' @param mode xxx
+#' @param steps xxx
+#' @param mandatory xxx
+#' @param path_to_md_file xxx
+#' @param path xxx
 #' 
 Config <- function(name, 
     parent = '', 

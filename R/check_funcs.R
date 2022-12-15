@@ -47,6 +47,8 @@ Found_Mod_Funcs <- function(id) {
 #' @examples
 #' file <- system.file("extdata/module_examples", "mod_PipelineA_Process1.R", package = "MagellanNTK")
 #' CleanSourceCode(file)
+#' 
+#' @export
 #'
 CleanSourceCode <- function(file = NULL) {
     if (is.null(file) || file == ''){
@@ -88,6 +90,8 @@ CleanSourceCode <- function(file = NULL) {
 #' FindClosingParenthesis(text, posParam)
 #'
 #' @return A `integer`
+#' 
+#' @export
 #'
 FindClosingParenthesis <- function(text, openPos) {
     closePos <- openPos
@@ -122,6 +126,8 @@ FindClosingParenthesis <- function(text, openPos) {
 #' NULL
 #'
 #' @importFrom stringi stri_locate
+#' 
+#' @export
 #'
 GetConfig <- function(s) {
     config <- NULL

@@ -74,9 +74,9 @@ mod_PipelineB_Process1_server <- function(id,
     # Define the type of module
     mode = 'process',
      # List of all steps of the process
-    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
+    steps = c('Step 1', 'Step 2'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, TRUE, TRUE),
+    mandatory = c(FALSE, TRUE),
     
     path_to_md_file = system.file('extdata/module_examples/md/PipelineB_Process1.md', package='MagellanNTK')
   )

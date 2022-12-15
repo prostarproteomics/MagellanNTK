@@ -4,11 +4,11 @@ if (interactive()) {
     #     source(file.path(dirpath, l), local = FALSE)$value
     # }
 
-    files <- system.file("extdata/module_examples", package = "MagellanNTK")
+    path <- system.file("extdata/module_examples", package = "MagellanNTK")
     
-    run_workflow("PipelineA_Process1", dirpath = files, verbose = TRUE)
+    run_workflow("PipelineA_Process1", path = path, verbose = TRUE)
 
-    run_workflow("PipelineA",  dirpath = files, tl.layout = c("h", "h"))
+    run_workflow("PipelineA",  path = path, tl.layout = c("h", "h"))
     
-    run_workflow("PipelineA", dirpath = files, tl.layout = c("v", "h"))
+    run_workflow("PipelineA", path = path, tl.layout = c("v", "h"))
 }

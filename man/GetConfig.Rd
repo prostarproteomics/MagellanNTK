@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_funcs.R
 \name{GetConfig}
 \alias{GetConfig}
-\title{xxx}
+\title{Get config variable from workflow source code}
 \usage{
 GetConfig(s)
 }

@@ -24,5 +24,4 @@ if (interactive()) {
          }
     shiny::shinyApp(ui = ui, server = server)
 }
-
 }

@@ -9,10 +9,10 @@ FindClosingParenthesis(text, openPos)
 \arguments{
 \item{text}{xxx}
 
-\item{openPos}{xxx}
+\item{openPos}{A `integer`}
 }
 \value{
-NA
+A `integer`
 }
 \description{
 xxx

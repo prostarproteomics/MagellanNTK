@@ -4,7 +4,7 @@
 \alias{run_workflow}
 \title{Shiny example module `Process`}
 \usage{
-run_workflow(id, verbose = FALSE, tl.layout = NULL, dirpath = NULL)
+run_workflow(id, verbose = FALSE, tl.layout = NULL, path = NULL)
 }
 \arguments{
 \item{id}{xxx}
@@ -13,6 +13,9 @@ run_workflow(id, verbose = FALSE, tl.layout = NULL, dirpath = NULL)
 console and add the shiny module for debugging}
 
 \item{tl.layout}{Additional parameters for mod_nav}
+
+\item{path}{The path to the directory where are the source code files 
+for processes and pipelines}
 }
 \value{
 NA
@@ -30,13 +33,13 @@ if (interactive()) {
     #     source(file.path(dirpath, l), local = FALSE)$value
     # }
 
-    files <- system.file("extdata/module_examples", package = "MagellanNTK")
+    path <- system.file("extdata/module_examples", package = "MagellanNTK")
     
-    run_workflow("PipelineA_Process1", dirpath = files, verbose = TRUE)
+    run_workflow("PipelineA_Process1", path = path, verbose = TRUE)
 
-    run_workflow("PipelineA",  dirpath = files, tl.layout = c("h", "h"))
+    run_workflow("PipelineA",  path = path, tl.layout = c("h", "h"))
     
-    run_workflow("PipelineA", dirpath = files, tl.layout = c("v", "h"))
+    run_workflow("PipelineA", path = path, tl.layout = c("v", "h"))
 }
 }
 \author{

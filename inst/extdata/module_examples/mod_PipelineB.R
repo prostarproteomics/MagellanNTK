@@ -59,9 +59,9 @@ mod_PipelineB_server <- function(id,
     name = 'PipelineB',
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('Description', 'PipelineB_Process1', 'PipelineB_Process2', 'PipelineB_Process3'),
+    steps = c('Process1', 'Process2', 'Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE, FALSE, FALSE, TRUE),
+    mandatory = c(FALSE, FALSE),
     
     path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
   )

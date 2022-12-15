@@ -10,6 +10,8 @@
 #' @param config xxx
 #'
 #' @return A `wellPanel`
+#' 
+#' @export
 #'
 Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
     req(steps.status[current.pos] == global$SKIPPED)
@@ -47,6 +49,8 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 #' @return A `renderUI` function
 #'
 #' @examples NULL
+#' 
+#' @export
 #'
 Build_EncapsulateScreens_ui <- function(ns,
                                         id,
@@ -90,6 +94,8 @@ Build_EncapsulateScreens_ui <- function(ns,
 #' @return A `integer(1)`
 #' 
 #' @examples NULL
+#' 
+#' @export
 #'
 GetMaxValidated_BeforePos <- function(pos = NULL,
     rv) {
@@ -120,6 +126,8 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
 #' @return A `integer(1)`
 #' 
 #' @examples NULL
+#' 
+#' @export
 #'
 GetMaxValidated_AllSteps <- function(steps.status) {
     val <- 0
@@ -192,6 +200,8 @@ ToggleState_Screens <- function(cond,
 #' @return xxx
 #' @examples
 #' GetStringStatus(1)
+#' 
+#' @export
 #'
 GetStringStatus <- function(i, title.style = FALSE) {
     txt <- names(which(global == i))
@@ -219,6 +229,8 @@ GetStringStatus <- function(i, title.style = FALSE) {
 #' @return A `integer(1)` which is the new current position.
 #' @examples
 #' NavPage(1, 3, 5)
+#' 
+#' @export
 #'
 NavPage <- function(direction, current.pos, len) {
     newval <- current.pos + direction
@@ -241,6 +253,8 @@ NavPage <- function(direction, current.pos, len) {
 #' @return A tag div for ui
 #' 
 #' @examples NULL
+#' 
+#' @export
 #'
 dataModal <- function(ns, mode) {
     # Used to show an explanation for the reset feature whether the navigation 
@@ -273,6 +287,8 @@ dataModal <- function(ns, mode) {
 #' @return xxx
 #' 
 #' @examples NULL
+#' 
+#' @export
 #'
 Discover_Skipped_Steps <- function(steps.status) {
     for (i in seq_len(length(steps.status))) {
@@ -298,6 +314,8 @@ Discover_Skipped_Steps <- function(steps.status) {
 #' @return xxx
 #' @examples 
 #' NULL
+#' 
+#' @export
 #'
 All_Skipped_tag <- function(steps.status, tag) {
     steps.status <- setNames(rep(tag, length(steps.status)), steps.status)
@@ -315,6 +333,8 @@ All_Skipped_tag <- function(steps.status, tag) {
 #' @return xxx
 #' 
 #' @examples NULL
+#' 
+#' @export
 #'
 GetFirstMandatoryNotValidated <- function(range,rv) {
     res <- NULL
@@ -438,6 +458,8 @@ Update_State_Screens <- function(is.skipped,
 #'          }
 #'     shiny::shinyApp(ui = ui, server = server)
 #' }
+#' 
+#' @export
 #'
 ToggleState_NavBtns <- function(current.pos, nSteps) {
 
@@ -466,6 +488,7 @@ ToggleState_NavBtns <- function(current.pos, nSteps) {
 #'          }
 #'     shiny::shinyApp(ui = ui, server = server)
 #' }
+#' @export
 #'
 ToggleState_ResetBtn <- function(cond) {
     shinyjs::toggleState("rstBtn", condition = cond)
