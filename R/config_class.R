@@ -36,6 +36,7 @@ Config <- setClass("Config",
         steps = "vector",
         mandatory = "vector",
         path_to_md_file = "character",
+        path = 'character',
         ll.UI = "list",
         module.name = 'character',
         steps.source.file = 'vector'
@@ -54,6 +55,7 @@ Config <- setClass("Config",
 
     
     validity = function(object) {
+        print('Test validity')
         passed <- TRUE
         nSteps <- length(object@steps)
         #
@@ -138,7 +140,8 @@ setMethod("initialize" ,
         mode,
         steps, 
         mandatory, 
-        path_to_md_file){
+        path_to_md_file,
+        path){
         cat('Initialize object')
         
         .Object@name <- name
@@ -147,7 +150,10 @@ setMethod("initialize" ,
         .Object@steps <- steps
         .Object@mandatory <- mandatory 
         .Object@path_to_md_file <- path_to_md_file
+        .Object@path<- paste0(path, '/')
         .Object@module.name <- ''
+        
+        
         
         # Build the expected name of the module
         switch(.Object@mode,
@@ -160,7 +166,7 @@ setMethod("initialize" ,
             pipeline = {
                 # This is the higher level of a workflow
                 .Object@module.name <- .Object@name
-                .Object@steps.source.file <- paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
+                .Object@steps.source.file <- paste0(.Object@name, '_', gsub(' ', '',.Object@steps), '.R')
                 .Object@steps <- c('Description', .Object@steps)
                 .Object@mandatory <- c(TRUE, .Object@mandatory)
                 }
@@ -169,6 +175,39 @@ setMethod("initialize" ,
         .Object@steps <- setNames(.Object@steps, nm = names(.Object@steps))
         .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
         
+        
+        
+        #Load source files
+        if (is.null(.Object@path)){
+            warning("The parameter 'path' is NULL. Abort.")
+            return (NULL)
+        }
+        
+        
+        
+        fname <- paste0(.Object@path, 'mod_', .Object@module.name, '.R')
+        if (file.exists(fname)){
+            source(fname, local=FALSE)$value
+            if (!Found_Mod_Funcs(.Object@module.name)) {
+                warning('xxxx')
+                return(NULL)
+                }
+            }
+        
+        if (.Object@mode == 'pipeline'){
+            for (f in .Object@steps.source.file){
+                fname <- paste0(.Object@path, 'mod_', f)
+                if (file.exists(fname)){
+                    source(fname, local=FALSE)$value
+                    fname <- unlist(strsplit(f, '.R'))
+                    if (!Found_Mod_Funcs(fname)) {
+                        warning('xxxx')
+                        return(NULL)
+                    }
+                }
+            }
+        }
+
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
         return(.Object )
@@ -186,7 +225,8 @@ Config <- function(name,
     mode,
     steps, 
     mandatory, 
-    path_to_md_file = NULL){
+    path_to_md_file = NULL,
+    path = NULL){
     
     new(Class ="Config",
         name = name, 
@@ -194,6 +234,7 @@ Config <- function(name,
         mode = mode,
         steps = steps, 
         mandatory = mandatory, 
-        path_to_md_file = path_to_md_file
+        path_to_md_file = path_to_md_file,
+        path = path
     )
 }
