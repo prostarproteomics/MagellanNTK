@@ -2,20 +2,21 @@
 % Please edit documentation in R/general_nav_funcs.R
 \name{GetMaxValidated_BeforePos}
 \alias{GetMaxValidated_BeforePos}
-\title{xxx}
+\title{Get the last validated step before current position.}
 \usage{
 GetMaxValidated_BeforePos(pos = NULL, rv)
 }
 \arguments{
-\item{pos}{xxx}
+\item{pos}{A `integer(1)` which is the indice of the active position.}
 
-\item{rv}{xxx}
+\item{rv}{A `list()` which stores reactiveValues()}
 }
 \value{
-xxx
+A `integer(1)`
 }
 \description{
-xxx
+This function returns the indice of the last validated step before
+the current step.
 }
 \examples{
 NULL

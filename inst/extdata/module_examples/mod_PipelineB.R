@@ -1,4 +1,4 @@
-#' @title Shiny example module `Pipeline A`
+#' @title Shiny example module `Pipeline B`
 #'
 #' @description
 #' This module contains the configuration information for the corresponding pipeline.
@@ -14,7 +14,7 @@
 #' 
 #' @export
 #' 
-mod_PipelineA_ui <- function(id){
+mod_PipelineB_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -38,14 +38,14 @@ mod_PipelineA_ui <- function(id){
 #' 
 #' @param current.pos xxx
 #' 
-#' @rdname example_mod_pipelineA
+#' @rdname example_mod_pipelineB
 #'
 #' @import shiny
 #' @importFrom stats setNames
 #' 
 #' @export
 #'
-mod_PipelineA_server <- function(id,
+mod_PipelineB_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -56,10 +56,10 @@ mod_PipelineA_server <- function(id,
 
   config <- Config(
     mode = 'pipeline',
-    name = 'PipelineA',
+    name = 'PipelineB',
     # List of all steps of the process
     # Here, each step is a workflow
-    steps = c('Description', 'PipelineA_Process1', 'PipelineA_Process2', 'PipelineA_Process3'),
+    steps = c('Description', 'PipelineB_Process1', 'PipelineB_Process2', 'PipelineB_Process3'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE, FALSE, FALSE, TRUE),
     

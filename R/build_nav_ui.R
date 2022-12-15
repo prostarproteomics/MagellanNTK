@@ -19,6 +19,8 @@ NULL
 
 
 #' @rdname Build_nav_X_ui
+#' 
+#' @export
 #'
 Build_nav_v_ui <- function(ns) {
     tagList(
@@ -72,6 +74,8 @@ Build_nav_v_ui <- function(ns) {
 
 
 #' @rdname Build_nav_X_ui
+#' 
+#' @export
 #'
 Build_nav_h_ui <- function(ns) {
     tagList(

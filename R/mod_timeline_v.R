@@ -1,22 +1,13 @@
-#' @title Vertical timeline module
-#'
-#' @description A shiny Module.
-#' 
-#' @name mod_timeline_v
-#' 
-#' @example examples/test_timeline_v.R
-#' 
-NULL
 
 #'
 #' @param id The `id` of the server
 #'
 #' @importFrom shiny NS tagList
 #'
-#' @rdname mod_timeline_v
+#' @rdname mod_timelines
 #'
 #' @author Samuel Wieczorek
-#'
+#' 
 #' @export
 #'
 mod_timeline_v_ui <- function(id) {
@@ -47,10 +38,10 @@ mod_timeline_v_ui <- function(id) {
 #' @return NA
 #'
 #'
-#' @rdname mod_timeline_v
+#' @rdname mod_timelines
 #'
 #' @author Samuel Wieczorek
-#'
+#' 
 #' @export
 #'
 mod_timeline_v_server <- function(id,

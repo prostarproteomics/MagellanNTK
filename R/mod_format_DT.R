@@ -28,7 +28,7 @@ mod_format_DT_ui <- function(id){
     useShinyjs(),
     shinyjs::hidden(
       div(id = ns("dl_div"),
-        mod_download_btns_ui(ns("DL_btns"))
+        mod_dl_ui(ns("DL_btns"))
       )
     ),
     fluidRow(
@@ -92,9 +92,9 @@ mod_format_DT_server <- function(id,
     })
     
     
-    mod_download_btns_server(
+    mod_dl_server(
       id = "DL_btns",
-      df.data = reactive({data()[,-hideCols()]}),
+      dataIn = reactive({data()[,-hideCols()]}),
       name = reactive({filename}),
       excel.style = reactive({full_style()})
       )

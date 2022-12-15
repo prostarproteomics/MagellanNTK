@@ -1,6 +1,7 @@
-#' @title mod_Debug_Infos
+#' @title Module debugging
 #'
-#' @description  A shiny Module.
+#' @description  A shiny Module which shows the values of the datasets variables
+#' along the different processes of a process nor pipeline.
 #' 
 #' @name mod_Debug_Infos
 #' 
@@ -27,7 +28,7 @@ NULL
 #' @param id xxx
 #'
 #' @rdname mod_Debug_Infos
-#'
+#' 
 #' @export
 #'
 mod_Debug_Infos_ui <- function(id) {
@@ -35,34 +36,27 @@ mod_Debug_Infos_ui <- function(id) {
     uiOutput(ns("show_Debug_Infos"))
 }
 
-# Module Server
-#' @title xxx
-#'
-#' @description xxx
-#'
-#'
+
 #' @param id xxx
-#'
-#' @param title xxx
-#' @param config A `list`
+#' @param title The title of the Panel which contains the debugging tables
+#' @param config An instance of the class `Config`
 #' @param rv.dataIn xxx
-#' @param dataIn An instance of the class `QFeatures`
-#' @param dataOut An instance of the class `QFeatures`
+#' @param dataIn A `list()` of data.frames
+#' @param dataOut A `list()` of data.frames
 #' @param steps.enabled A `logical()` xxxx
 #' @param steps.status A `logical()` xxxx
 #' @param steps.skipped A `logical()` xxxx
-#' @param current.pos A `integer(1)` xxxx
+#' @param current.pos A `integer(1)` which is the indice of the active step.
 #' @param is.enabled A `logical(1)` xxxx
 #'
-#' @export
 #' @return NA
+#' 
+#' @export
 #'
 #' @rdname mod_Debug_Infos
 #'
 #' @importFrom DT renderDT DTOutput formatStyle %>% styleEqual
 #' @importFrom S4Vectors DataFrame
-#'
-#' @export
 #'
 mod_Debug_Infos_server <- function(id,
     title = NULL,

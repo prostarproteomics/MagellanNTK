@@ -8,8 +8,6 @@
 #' The 'Description' step is generic and creates a *.md file to be filled by
 #' th developer.
 #'
-#' @param config An instance of the class `Config`.
-#' @param path xxx
 #'
 #' @example examples/example_create_mod_template.R
 #'
@@ -17,9 +15,18 @@
 #'
 #' @importFrom stringi stri_locate_all stri_locate
 #'
-#' @export
-#'
+#' @name createTemplate
+#' 
+#' @param config An instance of the class `Config`.
+#' @param path xxx
+#' @param name xxx
+#' 
+NULL
+
+
 #' @return NA
+#' @export
+#' @rdname createTemplate
 #'
 createModuleTemplate <- function(config = NULL, path='.') {
 
@@ -78,7 +85,8 @@ createModuleTemplate <- function(config = NULL, path='.') {
 }
 
 
-#' @noRd
+
+#' @rdname createTemplate
 #' 
 Code_for_Description_file <- function(name){
   
@@ -93,7 +101,7 @@ code
 }
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_process_ui_function <- function(name) {
     code <- "
@@ -106,7 +114,7 @@ get_process_ui_function <- function(name) {
     gsub("#name#", name, code)
 }
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_process_header_server_func <- function(name) {
     code <- "
@@ -125,7 +133,13 @@ get_process_header_server_func <- function(name) {
 
 
 
-#' @noRd
+#' @title Convert vector to a source code string
+#' @param ls_list A vector
+#' @param is.char A `bolean(1)` to indicate whether the items are
+#' strings or not. In this case, they will be quoted in the result
+#' 
+#' @return A string
+#' @rdname createTemplate
 #'
 vec2code <- function(ls_list, is.char = FALSE) {
     if (is.char) {
@@ -155,7 +169,7 @@ vec2code <- function(ls_list, is.char = FALSE) {
 }
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_process_config_code <- function(config) {
     code <- "
@@ -184,7 +198,7 @@ get_process_config_code <- function(config) {
 }
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_process_code_for_default_value_widgets <- function() {
     code <- "
@@ -198,7 +212,7 @@ get_process_code_for_default_value_widgets <- function() {
 }
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_process_module_server_header <- function() {
     code <- "
@@ -232,7 +246,7 @@ get_process_module_server_header <- function() {
     code
 }
 
-#' @noRd
+#' @rdname createTemplate
 get_process_renderUI_for_steps <- function(steps) {
     code <- NULL
 
@@ -259,7 +273,7 @@ get_process_renderUI_for_steps <- function(steps) {
 
 #' @title xxx
 #' @description This function inserts the necessary code for the 'Description' step
-#' @noRd
+#' @rdname createTemplate
 #' 
 Insert_Description_Step_code_for_Process <- function(){
 
@@ -311,7 +325,7 @@ output$Description_btn_validate_ui <- renderUI({
 
 observeEvent(input$Description_btn_validate, {
   rv$dataIn <- dataIn()
-  dataOut$trigger <- MagellanNTK::Timestamp()
+  dataOut$trigger <- Timestamp()
   dataOut$value <- rv$dataIn
   rv$steps.status['Description'] <- global$VALIDATED
 })
@@ -328,8 +342,9 @@ code
 
 
 #' @title xxx
-#' @description This function inserts the necessary code for the 'Description' step
-#' @noRd
+#' @description This function inserts the necessary code for the 
+#' Description' step
+#' @rdname createTemplate
 #' 
 Insert_Description_Step_code_for_Pipeline <- function(){
   
@@ -433,7 +448,7 @@ mod_Description_server <- function(id,
     
     observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
@@ -458,7 +473,7 @@ mod_Description_server <- function(id,
 
 
 
-#' @noRd
+#' @rdname createTemplate
 get_process_output_func <- function() {
     code <- "
     # Insert necessary code which is hosted by MagellanNTK
@@ -480,7 +495,7 @@ get_process_output_func <- function() {
 ###
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_pipeline_ui_function <- function(name) {
     code <- "
@@ -493,7 +508,7 @@ get_pipeline_ui_function <- function(name) {
     gsub("#name#", name, code)
 }
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_pipeline_header_server_func <- function(name) {
     code <- "
@@ -510,7 +525,7 @@ get_pipeline_header_server_func <- function(name) {
 }
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_pipeline_config_code <- function(config) {
     code <- "
@@ -536,7 +551,7 @@ get_pipeline_config_code <- function(config) {
 
 
 
-#' @noRd
+#' @rdname createTemplate
 #'
 get_pipeline_module_server <- function() {
     code <- "

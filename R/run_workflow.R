@@ -10,6 +10,8 @@
 #' @param verbose A `boolean` that indicates whether to show some infos in the 
 #' console and add the shiny module for debugging
 #' @param tl.layout Additional parameters for mod_nav
+#' @param dirpath The path to the directory where are the source code files 
+#' for processes and pipelines
 #'
 #' @rdname example_mod_workflow
 #'
@@ -26,15 +28,28 @@
 #'
 run_workflow <- function(id,
     verbose = FALSE,
-    tl.layout = NULL) {
+    tl.layout = NULL,
+    dirpath = NULL) {
     if (missing(id)) {
         warning("'id' is required.")
         return(NULL)
     }
-    if (!Found_Mod_Funcs(id)) {
-        return(NULL)
-    }
+    
+    
 
+    if (is.null(dirpath)){
+        warning('xxxx')
+        return (NULL)
+    } else {
+        # Load source code files for processes
+        for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
+            source(file.path(dirpath, l), local=FALSE)$value
+        if (!Found_Mod_Funcs(id)) {
+            return(NULL)
+        }
+    }
+    
+    
     options(shiny.fullstacktrace = verbose)
 
 
@@ -66,6 +81,7 @@ run_workflow <- function(id,
                 id = "saveDataset",
                 dataIn = reactive({dataOut()$dataOut()$value})
             )
+ 
         })
 
         observeEvent(req(dataIn()), {

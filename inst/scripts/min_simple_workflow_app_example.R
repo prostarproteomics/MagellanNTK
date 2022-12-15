@@ -1,7 +1,7 @@
 library(MagellanNTK)
 
-f <- system.file("module_examples", "extdata/mod_PipelineA_Process1.R", package="MagellanNTK")
-source(file(f), local=TRUE)$value
+f <- system.file("extdata", "module_examples/mod_PipelineA_Process1.R", package="MagellanNTK")
+source(f, local=TRUE)$value
 
 ui <- fluidPage(
   mod_nav_ui('Process1')

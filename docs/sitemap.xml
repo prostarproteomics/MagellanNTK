@@ -31,6 +31,9 @@
     <loc>/articles/Magellan.html</loc>
   </url>
   <url>
+    <loc>/articles/MagellanNTK.html</loc>
+  </url>
+  <url>
     <loc>/articles/Prostar_workflow_tutorial.html</loc>
   </url>
   <url>
@@ -40,6 +43,9 @@
     <loc>/articles/useMagellanForDevs.html</loc>
   </url>
   <url>
+    <loc>/articles/useMagellanNTKForDevs.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -47,6 +53,12 @@
   </url>
   <url>
     <loc>/news/index.html</loc>
+  </url>
+  <url>
+    <loc>/PipelineA.html</loc>
+  </url>
+  <url>
+    <loc>/ProcessX.html</loc>
   </url>
   <url>
     <loc>/reference/actionBtnClass.html</loc>
@@ -227,6 +239,9 @@
   </url>
   <url>
     <loc>/reference/global.html</loc>
+  </url>
+  <url>
+    <loc>/reference/GlobalSettings.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>

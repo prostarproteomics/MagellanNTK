@@ -1,22 +1,21 @@
-#' @title Horizontal timeline module
+#' @title Timelines modules
 #'
-#' @description A shiny Module.
+#' @description Shiny Modules to manage timelines.
 #' 
 #' @example examples/test_timeline_H.R
+#' @example examples/test_timeline_v.R
 #' 
-#' @name mod_timeline_h
+#' @name mod_timelines
 NULL
 
 
 #'
-#' @rdname mod_timeline_h
+#' @rdname mod_timelines
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom sass sass sass_file
-#'
-#' @export
-#'
 #' @return NA
+#' @export
 #'
 mod_timeline_h_ui <- function(id) {
     ns <- NS(id)
@@ -47,8 +46,8 @@ mod_timeline_h_ui <- function(id) {
 #'
 #' @return NA
 #'
-#' @rdname mod_timeline_h
-#'
+#' @rdname mod_timelines
+#' 
 #' @export
 #'
 mod_timeline_h_server <- function(id,
@@ -95,10 +94,3 @@ mod_timeline_h_server <- function(id,
         })
     })
 }
-
-
-## To be copied in the UI
-# mod_timeline_ui("timeline_ui_1")
-
-## To be copied in the server
-# callModule(mod_timeline_server, "timeline_ui_1")

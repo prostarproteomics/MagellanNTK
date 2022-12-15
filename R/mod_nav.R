@@ -8,8 +8,8 @@
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @example examples/example_mod_single_Process.R
-#' @example examples/example_mod_Pipeline.R
+#' @example examples/example_mod_nav_single_Process.R
+#' @example examples/example_mod_nav_single_Pipeline.R
 #'
 NULL
 
@@ -202,10 +202,14 @@ mod_nav_server <- function(id,
                 rv$config <- rv$proc$config()
 
                 rv$length <- length(rv$config@steps)
-
-                rv$config@mandatory <- setNames(rv$config@mandatory,
-                    nm = names(rv$config@steps)
-                )
+                
+                # rv$config@steps <- setNames(rv$config@mandatory,
+                #     nm = paste0(rv$config@parent,'_', names(rv$config@steps))
+                # )
+                
+                # rv$config@mandatory <- setNames(rv$config@mandatory,
+                #     nm = names(rv$config@steps)
+                # )
                 rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
                     nm = names(rv$config@steps)
                 )
@@ -487,7 +491,8 @@ mod_nav_server <- function(id,
                     # datasets to its children
                     if (rv$config@mode == "pipeline") {
                         if (is.null(rv$dataIn)) {
-                            res <- PrepareData2Send(rv = rv, pos = rv$current.pos)
+                            res <- PrepareData2Send(rv = rv, pos = rv$current.pos
+                                , verbose=verbose)
                             rv$child.data2send <- res$data2send
                             rv$steps.enabled <- res$steps.enabled
                             }
@@ -536,7 +541,7 @@ mod_nav_server <- function(id,
 
             if (rv$config@mode == "pipeline") {
                 # Specific to pipeline code
-                res <- PrepareData2Send(rv = rv, pos = NULL)
+                res <- PrepareData2Send(rv = rv, pos = NULL, verbose=verbose)
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled
 
@@ -566,8 +571,8 @@ mod_nav_server <- function(id,
                     # Before continuing the initialization, check if all 
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
-                    ll.funcs <- names(rv$config@steps)[-which(names(rv$config@steps) == 'Description')]
-                    for (i in ll.funcs) {
+                    #browser()
+                    for (i in names(rv$config@steps)) {
                         if (!Found_Mod_Funcs(i)) {
                             return(NULL)
                         }

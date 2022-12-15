@@ -12,8 +12,21 @@ that the format is correct.
 
 Validity:
 * The first step must be called 'Description', it is a mandatory step. Thus, 
-the first tiem of the mandaotry vector is TRUE.
+the first item of the mandatory vector is TRUE.
+To be continued...
 }
 \examples{
-NULL
+config <- Config(
+mode = 'pipeline',
+name = 'PipelineA',
+# List of all steps of the process
+# Here, each step is a workflow
+steps = c('Description', 'Process1', 'Process2', 'Process3'),
+# A vector of boolean indicating if the steps are mandatory or not.
+mandatory = c(TRUE, FALSE, FALSE, TRUE),
+
+path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
+)
+
+
 }

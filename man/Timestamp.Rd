@@ -7,7 +7,7 @@
 Timestamp()
 }
 \value{
-A `integer()` which is xxx
+A `integer()`.
 }
 \description{
 Returns the date and time in timestamp UNIX format.

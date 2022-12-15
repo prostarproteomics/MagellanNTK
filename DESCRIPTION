@@ -14,8 +14,6 @@ Depends: R (>= 4.2.0)
 Imports: 
     S4Vectors,
     methods,
-    config,
-    golem,
     DT,
     shiny,
     htmlwidgets,
@@ -31,10 +29,6 @@ Imports:
 Collate: 
     AllGenerics.R
     config_class.R
-    app_config.R
-    app_server.R
-    app_ui.R
-    run_app.R
     doc-data.R
     global.R
     mod_bsmodal.R
@@ -49,13 +43,12 @@ Collate:
     code_used_by_external_modules.R
     mod_Debug_Infos.R
     mod_nav.R
+    mod_dl.R
     mod_Save_dataset.R
-    mod_download_btns.R
     general_nav_funcs.R
     pipeline_funcs.R
     process_funcs.R
     build_nav_ui.R
-    mod_dl.R
     mod_Load_Dataset.R
     load_save.R
     run_workflow.R

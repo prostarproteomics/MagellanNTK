@@ -12,8 +12,8 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
-#' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+#' In this example, `mod_PipelineB_Process2_ui()` and `mod_PipelineB_Process2_server()` define
+#' the code for the process `Process2` which is part of the pipeline called `PipelineB`.
 #' 
 #' @param id xxx
 #' 
@@ -23,7 +23,7 @@
 #' 
 #' @export
 #'
-mod_PipelineA_Process2_ui <- function(id){
+mod_PipelineB_Process2_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -51,7 +51,7 @@ mod_PipelineA_Process2_ui <- function(id){
 #' 
 #' @export
 #' 
-mod_PipelineA_Process2_server <- function(id,
+mod_PipelineB_Process2_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),

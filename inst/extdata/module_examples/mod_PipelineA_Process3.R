@@ -23,7 +23,7 @@
 #' 
 #' @export
 #'
-mod_Process3_ui <- function(id){
+mod_PipelineA_Process3_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -51,7 +51,7 @@ mod_Process3_ui <- function(id){
 #' 
 #' @export
 #' 
-mod_Process3_server <- function(id,
+mod_PipelineA_Process3_server <- function(id,
                                 dataIn = reactive({NULL}),
                                 steps.enabled = reactive({NULL}),
                                 remoteReset = reactive({FALSE}),
@@ -149,7 +149,7 @@ mod_Process3_server <- function(id,
     
     observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
@@ -244,7 +244,7 @@ mod_Process3_server <- function(id,
       
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- global$VALIDATED
     })
@@ -301,7 +301,7 @@ mod_Process3_server <- function(id,
       
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step2'] <- global$VALIDATED
     })
@@ -337,7 +337,7 @@ mod_Process3_server <- function(id,
                                           name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
       mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))

@@ -203,6 +203,7 @@ Update_Data2send_Vector <- function(rv) {
 #'
 #' @param rv xxxx
 #' @param pos xxx
+#' @param verbose xxx
 #'
 #' @export
 #'
@@ -210,7 +211,7 @@ Update_Data2send_Vector <- function(rv) {
 #' 
 #' @examples NULL
 #'
-PrepareData2Send <- function(rv, pos) {
+PrepareData2Send <- function(rv, pos, verbose=FALSE) {
     # Returns NULL to all modules except the one pointed by the current position
     # Initialization of the pipeline : one send dataIn() to the
     # first module

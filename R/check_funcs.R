@@ -8,10 +8,10 @@
 #'
 #' @return NA
 #'
-#' @export
-#'
 #' @examples
 #' NULL
+#' 
+#' @export
 #'
 Found_Mod_Funcs <- function(id) {
     server.func <- paste0("mod_", id, "_server")
@@ -47,8 +47,6 @@ Found_Mod_Funcs <- function(id) {
 #' @examples
 #' file <- system.file("extdata/module_examples", "mod_PipelineA_Process1.R", package = "MagellanNTK")
 #' CleanSourceCode(file)
-#' 
-#' @export
 #'
 CleanSourceCode <- function(file = NULL) {
     if (is.null(file) || file == ''){
@@ -82,16 +80,14 @@ CleanSourceCode <- function(file = NULL) {
 #' @title xxx
 #'
 #' @param text xxx
-#' @param openPos xxx
+#' @param openPos A `integer`
 #'
 #' @examples
 #' text <- "myfunc <- function(a, b){ return (a+b)}"
 #' posParam <- 19
 #' FindClosingParenthesis(text, posParam)
 #'
-#' @export
-#'
-#' @return NA
+#' @return A `integer`
 #'
 FindClosingParenthesis <- function(text, openPos) {
     closePos <- openPos
@@ -112,7 +108,7 @@ FindClosingParenthesis <- function(text, openPos) {
 
 
 
-#' @title xxx
+#' @title Get config variable from workflow source code
 #'
 #' @description Analyze the source code to extract the config variable
 #'
@@ -194,7 +190,6 @@ GetConfig <- function(s) {
 #' * `passed`: A boolean that indicates if the config is correct or not.
 #' * `msg`: A `character(1)` as message.
 #'
-#' @export
 #'
 #' @author Samuel Wieczorek
 #'
@@ -203,6 +198,8 @@ GetConfig <- function(s) {
 #'     package = "MagellanNTK"
 #' )
 #' CheckProcessCode(f)
+#' 
+#' @export
 #'
 CheckProcessCode <- function(sourcefile = NULL) {
     s.code <- readLines(file(sourcefile))

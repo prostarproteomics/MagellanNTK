@@ -2,20 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{toggleWidget}
 \alias{toggleWidget}
-\title{xxx}
+\title{Hide/show a widget w.r.t a condition.}
 \usage{
 toggleWidget(widget, condition)
 }
 \arguments{
-\item{widget}{xxx}
+\item{widget}{A `Shiny` widget}
 
-\item{condition}{xxx}
+\item{condition}{A `logical(1)` to hide/show the widget.}
 }
 \value{
 NA
 }
 \description{
-Returns the date and time in timestamp UNIX format.
+Wrapper for the toggleWidget function of the package `shinyjs`
 }
 \examples{
 if (interactive()) {
@@ -25,7 +25,7 @@ if (interactive()) {
     wgt <- actionButton('foo_btn', 'foo')
     output$foo <- renderUI({toggleWidget(wgt, FALSE)})
          }
-    shiny::shinyApp(ui = ui, server = server)
+    shiny::shinyApp(ui, server)
 }
 
 }

@@ -4,7 +4,7 @@
 \alias{mod_Debug_Infos}
 \alias{mod_Debug_Infos_ui}
 \alias{mod_Debug_Infos_server}
-\title{mod_Debug_Infos}
+\title{Module debugging}
 \usage{
 mod_Debug_Infos_ui(id)
 
@@ -43,15 +43,15 @@ mod_Debug_Infos_server(
 \arguments{
 \item{id}{xxx}
 
-\item{title}{xxx}
+\item{title}{The title of the Panel which contains the debugging tables}
 
-\item{config}{A `list`}
+\item{config}{An instance of the class `Config`}
 
 \item{rv.dataIn}{xxx}
 
-\item{dataIn}{An instance of the class `QFeatures`}
+\item{dataIn}{A `list()` of data.frames}
 
-\item{dataOut}{An instance of the class `QFeatures`}
+\item{dataOut}{A `list()` of data.frames}
 
 \item{steps.enabled}{A `logical()` xxxx}
 
@@ -59,7 +59,7 @@ mod_Debug_Infos_server(
 
 \item{steps.skipped}{A `logical()` xxxx}
 
-\item{current.pos}{A `integer(1)` xxxx}
+\item{current.pos}{A `integer(1)` which is the indice of the active step.}
 
 \item{is.enabled}{A `logical(1)` xxxx}
 }
@@ -67,9 +67,8 @@ mod_Debug_Infos_server(
 NA
 }
 \description{
-A shiny Module.
-
-xxx
+A shiny Module which shows the values of the datasets variables
+along the different processes of a process nor pipeline.
 }
 \examples{
 #'

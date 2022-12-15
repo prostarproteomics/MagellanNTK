@@ -46,8 +46,6 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 #'
 #' @return A `renderUI` function
 #'
-#' @export
-#' 
 #' @examples NULL
 #'
 Build_EncapsulateScreens_ui <- function(ns,
@@ -81,16 +79,15 @@ Build_EncapsulateScreens_ui <- function(ns,
 
 
 
-#' @title xxx
+#' @title Get the last validated step before current position.
 #'
-#' @description xxx
+#' @description This function returns the indice of the last validated step before
+#' the current step.
 #'
-#' @param pos xxx
-#' @param rv xxx
+#' @param pos A `integer(1)` which is the indice of the active position.
+#' @param rv A `list()` which stores reactiveValues()
 #'
-#' @return xxx
-#'
-#' @export
+#' @return A `integer(1)`
 #' 
 #' @examples NULL
 #'
@@ -108,8 +105,6 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
             ind.max <- max(ind)
         }
     }
-
-
     return(ind.max)
 }
 
@@ -119,11 +114,10 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
 #'
 #' @description xxx
 #'
-#' @param steps.status xxx
+#' @param steps.status A vector of strings where each item is the status of a step.
+#' The length of this vector is the same of the number of steps.
 #'
-#' @return xxx
-#'
-#' @export
+#' @return A `integer(1)`
 #' 
 #' @examples NULL
 #'
@@ -149,9 +143,6 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #' @param rv xxx
 #'
 #' @return xxx
-#'
-#' @export
-#' 
 #' @examples
 #' library(shinyjs)
 #' if (interactive()) {
@@ -164,6 +155,8 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #'     shiny::shinyApp(ui = ui, server = server)
 #' }
 #'
+#' @export
+#' 
 ToggleState_Screens <- function(cond,
     range,
     is.enabled,
@@ -190,16 +183,13 @@ ToggleState_Screens <- function(cond,
 
 #' @title Status to string
 #'
-#' @description xxx
+#' @description Converts status code (intefer) into a readable string.
 #'
 #' @param i xxx
 #'
 #' @param title.style xxx
 #'
 #' @return xxx
-#'
-#' @export
-#' 
 #' @examples
 #' GetStringStatus(1)
 #'
@@ -227,9 +217,6 @@ GetStringStatus <- function(i, title.style = FALSE) {
 #' @param len A `integer(1)` which is the number of steps in the process.
 #'
 #' @return A `integer(1)` which is the new current position.
-#'
-#' @export
-#' 
 #' @examples
 #' NavPage(1, 3, 5)
 #'
@@ -252,8 +239,6 @@ NavPage <- function(direction, current.pos, len) {
 #' @param mode xxx
 #'
 #' @return A tag div for ui
-#'
-#' @export
 #' 
 #' @examples NULL
 #'
@@ -286,8 +271,6 @@ dataModal <- function(ns, mode) {
 #' @param steps.status xxx
 #'
 #' @return xxx
-#'
-#' @export
 #' 
 #' @examples NULL
 #'
@@ -313,9 +296,6 @@ Discover_Skipped_Steps <- function(steps.status) {
 #' @param tag xxx
 #'
 #' @return xxx
-#'
-#' @export
-#' 
 #' @examples 
 #' NULL
 #'
@@ -333,8 +313,6 @@ All_Skipped_tag <- function(steps.status, tag) {
 #' @param rv xxx
 #'
 #' @return xxx
-#'
-#' @export
 #' 
 #' @examples NULL
 #'
@@ -367,13 +345,12 @@ GetFirstMandatoryNotValidated <- function(range,rv) {
 #' @param is.skipped xxx
 #' @param is.enabled xxx
 #' @param rv xxx
-#'
-#' @export
-#'
 #' @return NA
 #' 
 #' @examples
 #' NA
+#'
+#' @export
 #'
 Update_State_Screens <- function(is.skipped,
     is.enabled,
@@ -450,8 +427,6 @@ Update_State_Screens <- function(is.skipped,
 #' @param nSteps xxx
 #'
 #' @return NA
-#'
-#' @export
 #' 
 #' @examples
 #' library(shinyjs)
@@ -481,8 +456,6 @@ ToggleState_NavBtns <- function(current.pos, nSteps) {
 #' @param cond xxx
 #'
 #' @return NA
-#'
-#' @export
 #' 
 #' @examples
 #' library(shinyjs)

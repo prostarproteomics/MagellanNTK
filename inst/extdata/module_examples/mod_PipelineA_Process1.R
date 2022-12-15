@@ -27,7 +27,7 @@ NULL
 #' 
 #' @export
 #'
-mod_Process1_ui <- function(id){
+mod_PipelineA_Process1_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -55,7 +55,7 @@ mod_Process1_ui <- function(id){
 #' 
 #' @export
 #' 
-mod_Process1_server <- function(id,
+mod_PipelineA_Process1_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -67,6 +67,10 @@ mod_Process1_server <- function(id,
   # This list contains the basic configuration of the process
   config <- Config(
     name = 'Process1',
+    
+    # The name of the parent module, if exists
+    parent = 'PipelineA',
+    
     # Define the type of module
     mode = 'process',
      # List of all steps of the process
@@ -77,6 +81,8 @@ mod_Process1_server <- function(id,
     path_to_md_file = system.file('extdata/module_examples/md/PipelineA_Process1.md', package='MagellanNTK')
   )
   
+  f <- system.file("extdata", "module_examples/mod_foo.R", package="MagellanNTK")
+  source(f, local=TRUE)$value
   
   # Define default selected values for widgets
   # This is only for simple workflows
@@ -161,7 +167,7 @@ mod_Process1_server <- function(id,
     
     observeEvent(input$Description_btn_validate, {
       rv$dataIn <- dataIn()
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- global$VALIDATED
     })
@@ -265,7 +271,7 @@ mod_Process1_server <- function(id,
                                           name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- global$VALIDATED
     })
@@ -322,7 +328,7 @@ mod_Process1_server <- function(id,
       
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step2'] <- global$VALIDATED
     })
@@ -359,10 +365,11 @@ mod_Process1_server <- function(id,
                                           name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- MagellanNTK::Timestamp()
+      dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      mod_dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      mod_dl_server('createQuickLink', 
+        dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

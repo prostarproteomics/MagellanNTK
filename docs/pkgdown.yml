@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   CreateComplexWorkflow: CreateComplexWorkflow.html
   CreateSimpleWorkflow: CreateSimpleWorkflow.html
-  Magellan: Magellan.html
-  useMagellanForDevs: useMagellanForDevs.html
-last_built: 2022-12-13T09:56Z
+  MagellanNTK: MagellanNTK.html
+  useMagellanNTKForDevs: useMagellanNTKForDevs.html
+last_built: 2022-12-14T09:58Z
 

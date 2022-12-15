@@ -7,10 +7,11 @@
 GetMaxValidated_AllSteps(steps.status)
 }
 \arguments{
-\item{steps.status}{xxx}
+\item{steps.status}{A vector of strings where each item is the status of a step.
+The length of this vector is the same of the number of steps.}
 }
 \value{
-xxx
+A `integer(1)`
 }
 \description{
 xxx

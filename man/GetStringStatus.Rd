@@ -15,7 +15,7 @@ GetStringStatus(i, title.style = FALSE)
 xxx
 }
 \description{
-xxx
+Converts status code (intefer) into a readable string.
 }
 \examples{
 GetStringStatus(1)

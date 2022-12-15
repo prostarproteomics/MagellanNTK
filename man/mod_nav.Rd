@@ -90,7 +90,7 @@ server <- function(input, output){
     dataOut = NULL
   )
   
-  output$UI <- renderUI({mod_nav_ui('Process1')})
+  output$UI <- renderUI({mod_nav_ui('PipelineA_Process1')})
   
   output$debugInfos_ui <- renderUI({
     req(verbose)
@@ -104,7 +104,7 @@ server <- function(input, output){
   )
   
   observe({
-    rv$dataOut <- mod_nav_server(id = 'Process1',
+    rv$dataOut <- mod_nav_server(id = 'PipelineA_Process1',
       dataIn = reactive({rv$dataIn}),
       tl.layout = c('h'),
       verbose = verbose
@@ -172,7 +172,7 @@ server <- function(input, output){
 shinyApp(ui, server)
 }
 
-example_mod_Pipeline(verbose=TRUE)
+example_mod_Pipeline(verbose=F)
 }
 }
 \author{
