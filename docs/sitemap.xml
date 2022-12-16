@@ -118,6 +118,9 @@
     <loc>/reference/createProcessTemplateForExpert.html</loc>
   </url>
   <url>
+    <loc>/reference/createTemplate.html</loc>
+  </url>
+  <url>
     <loc>/reference/data1.html</loc>
   </url>
   <url>
@@ -277,6 +280,9 @@
     <loc>/reference/mod_Debug_Infos.html</loc>
   </url>
   <url>
+    <loc>/reference/mod_dl.html</loc>
+  </url>
+  <url>
     <loc>/reference/mod_download_btns.html</loc>
   </url>
   <url>
@@ -320,6 +326,9 @@
   </url>
   <url>
     <loc>/reference/mod_Save_Dataset.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mod_timelines.html</loc>
   </url>
   <url>
     <loc>/reference/mod_timeline_h.html</loc>

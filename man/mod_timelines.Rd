@@ -74,9 +74,10 @@ server <- function(input, output){
   config <- Config(
     name = 'Process1',
     mode = 'process',
-    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
-    mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_file = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    parent = '',
+    steps = c('Step 1', 'Step 2'),
+    mandatory = c(FALSE, TRUE),
+    path = system.file('extdata/module_examples', package='MagellanNTK')
   )
   
   
@@ -133,9 +134,10 @@ server <- function(input, output){
   config <- Config(
     name = 'Process1',
     mode = 'process',
-    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
-    mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path_to_md_file = system.file('extdata/module_examples/md/', package='MagellanNTK')
+    parent = '',
+    steps = c('Step 1', 'Step 2'),
+    mandatory = c(FALSE, TRUE),
+    path = system.file('extdata/module_examples', package='MagellanNTK')
   )
   
   

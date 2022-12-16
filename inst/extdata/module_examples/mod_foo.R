@@ -82,23 +82,23 @@ mod_foo_server <- function(id,
     
     output$widget1_ui <- renderUI({
       widget <- selectInput(ns('widget1'), 'widget1', choices = 1:3)
-      Magellan::toggleWidget(widget, is.enabled())
+      MagellanNTK::toggleWidget(widget, is.enabled())
     })
     
     output$widget2_ui <- renderUI({
       widget <- selectInput(ns('widget2'), 'widget2', choices = 1:3)
-      Magellan::toggleWidget(widget, is.enabled())
+      MagellanNTK::toggleWidget(widget, is.enabled())
     })
     
     output$widget3_ui <- renderUI({
       widget <- selectInput(ns('widget3'), 'widget3', choices = 1:3)
-      Magellan::toggleWidget(widget, is.enabled())
+      MagellanNTK::toggleWidget(widget, is.enabled())
     })
     
     
     output$valid_btn_ui <- renderUI({
       widget <- actionButton(ns("valid_btn"), "Validate")
-      Magellan::toggleWidget(widget, is.enabled())
+      MagellanNTK::toggleWidget(widget, is.enabled())
     })
     
     

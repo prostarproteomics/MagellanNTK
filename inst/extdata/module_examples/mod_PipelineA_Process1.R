@@ -78,7 +78,7 @@ mod_PipelineA_Process1_server <- function(id,
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(FALSE, TRUE),
     
-    path_to_md_file = system.file('extdata/module_examples/md/PipelineA_Process1.md', package='MagellanNTK')
+    path = system.file('extdata/module_examples', package='MagellanNTK')
   )
   
   f <- system.file("extdata", "module_examples/mod_foo.R", package="MagellanNTK")
@@ -127,7 +127,7 @@ mod_PipelineA_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
-      #file <- paste0(config@path_to_md_dir, '/', id, '.md')
+      file <- paste0(config@path, '/md/', id, '.md')
       
       tagList(
         # In this example, the md file is found in the extdata/module_examples directory
@@ -135,8 +135,8 @@ mod_PipelineA_Process1_server <- function(id,
         # contains the UI for the different steps of the process module.
         # system.file(xxx)
         
-        if (file.exists(config@path_to_md_file))
-          includeMarkdown(config@path_to_md_file)
+        if (file.exists(file))
+          includeMarkdown(file)
         else
           p('No Description available'),
         

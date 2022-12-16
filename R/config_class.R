@@ -14,25 +14,13 @@
 #' @export Config
 #' @exportClass Config
 #' @rdname config
-#' @examples
-#' config <- Config(
-#' mode = 'pipeline',
-#' name = 'PipelineA',
-#' # List of all steps of the process
-#' # Here, each step is a workflow
-#' steps = c('Description', 'Process1', 'Process2', 'Process3'),
-#' # A vector of boolean indicating if the steps are mandatory or not.
-#' mandatory = c(TRUE, FALSE, FALSE, TRUE),
-#' 
-#' path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
-#' )
+#' @example examples/example_config_class.R
 #' 
 #' @slot name xxx
 #' @slot parent xxx
 #' @slot mode xxx
 #' @slot steps xxx
 #' @slot mandatory xxx
-#' @slot path_to_md_file xxx
 #' @slot path xxx
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
@@ -47,7 +35,6 @@ Config <- setClass("Config",
         mode = "character",
         steps = "vector",
         mandatory = "vector",
-        path_to_md_file = "character",
         path = 'character',
         ll.UI = "list",
         module.name = 'character',
@@ -99,8 +86,8 @@ Config <- setClass("Config",
             passed <- FALSE
         }
 
-        if (length(object@path_to_md_file) != 1){
-            warning(paste0("The slot 'path_to_md_file' must contain one string. Current value is: ", object@path_to_md_file))
+        if (length(object@path) != 1){
+            warning(paste0("The slot 'path' must contain one string. Current value is: ", object@path))
             passed <- FALSE
         }
         
@@ -154,14 +141,12 @@ setMethod("initialize" ,
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
-    #' @param path_to_md_file xxx
     #' @param path xxx
     function(.Object, name, 
         parent, 
         mode,
         steps, 
         mandatory, 
-        path_to_md_file,
         path){
         
         .Object@name <- name
@@ -169,7 +154,6 @@ setMethod("initialize" ,
         .Object@mode <- mode
         .Object@steps <- steps
         .Object@mandatory <- mandatory 
-        .Object@path_to_md_file <- path_to_md_file
         .Object@path<- paste0(path, '/')
         .Object@module.name <- ''
         
@@ -195,39 +179,6 @@ setMethod("initialize" ,
         .Object@steps <- setNames(.Object@steps, nm = names(.Object@steps))
         .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
         
-        
-        # 
-        # #Load source files
-        # if (is.null(.Object@path)){
-        #     warning("The parameter 'path' is NULL. Abort.")
-        #     return (NULL)
-        # }
-        # 
-        # 
-        # 
-        # fname <- paste0(.Object@path, 'mod_', .Object@module.name, '.R')
-        # if (file.exists(fname)){
-        #     source(fname, local=FALSE)$value
-        #     if (!Found_Mod_Funcs(.Object@module.name)) {
-        #         warning('xxxx')
-        #         return(NULL)
-        #         }
-        #     }
-        # 
-        # if (.Object@mode == 'pipeline'){
-        #     for (f in .Object@steps.source.file){
-        #         fname <- paste0(.Object@path, 'mod_', f)
-        #         if (file.exists(fname)){
-        #             source(fname, local=FALSE)$value
-        #             fname <- unlist(strsplit(f, '.R'))
-        #             if (!Found_Mod_Funcs(fname)) {
-        #                 warning('xxxx')
-        #                 return(NULL)
-        #             }
-        #         }
-        #     }
-        # }
-
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
         return(.Object )
@@ -244,7 +195,6 @@ setMethod("initialize" ,
 #' @param mode xxx
 #' @param steps xxx
 #' @param mandatory xxx
-#' @param path_to_md_file xxx
 #' @param path xxx
 #' 
 Config <- function(name, 
@@ -252,7 +202,6 @@ Config <- function(name,
     mode,
     steps, 
     mandatory, 
-    path_to_md_file = NULL,
     path = NULL){
     
     new(Class ="Config",
@@ -261,7 +210,6 @@ Config <- function(name,
         mode = mode,
         steps = steps, 
         mandatory = mandatory, 
-        path_to_md_file = path_to_md_file,
         path = path
     )
 }

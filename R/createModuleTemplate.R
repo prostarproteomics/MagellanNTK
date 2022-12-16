@@ -178,22 +178,23 @@ get_process_config_code <- function(config) {
     # Define the type of module
     mode = 'process',
     name = '#name#',
+    parent = '#parent#',
     # List of all steps of the process
     steps = #steps#,
 
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = #mandatory#,
 
-    path_to_md_file = '#path_to_md_file#'
+    path = '#path#'
     )
     "
     code <- gsub("#name#", config@name, code)
     code <- gsub("#steps#", vec2code(config@steps, TRUE), code)
     code <- gsub("#mandatory#", vec2code(config@mandatory, FALSE), code)
-    if (is.null(config@path_to_md_file) || config@path_to_md_file == '') {
-        config@path_to_md_file <- "\'\'"
+    if (is.null(config@path) || config@path == '') {
+        config@path <- "\'\'"
     }
-    code <- gsub("#path_to_md_file#", config@path_to_md_file, code)
+    code <- gsub("#path#", config@path, code)
     code
 }
 
@@ -288,7 +289,7 @@ Insert_Description_Step_code_for_Process <- function(){
 
 
 output$Description <- renderUI({
-  file <- paste0(config@path_to_md_file, '/', id, '.md')
+  file <- paste0(config@path, '/md/', id, '.md')
   
   tagList(
     # In this example, the md file is found in the extdata/module_examples directory
@@ -377,13 +378,13 @@ mod_Description_server <- function(id,
     mode = 'process',
     
     name = 'Description',
-    
+    parent = '',
     # List of all steps of the process
     steps = c('Description'),
     # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(TRUE),
     
-    path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
+    path = system.file('extdata/module_examples', package='MagellanNTK')
   )
   
   # Define default selected values for widgets
@@ -418,7 +419,7 @@ mod_Description_server <- function(id,
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       name <- strsplit(id, split='_')[[1]][1]
-      file <- paste0(config@path_to_md_file, '/', name, '.md')
+      file <- paste0(config@path, '/md/', name, '.md')
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

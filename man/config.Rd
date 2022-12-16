@@ -7,26 +7,9 @@
 \usage{
 xxx
 
-\S4method{initialize}{Config}(
-  .Object,
-  name,
-  parent,
-  mode,
-  steps,
-  mandatory,
-  path_to_md_file,
-  path
-)
+\S4method{initialize}{Config}(.Object, name, parent, mode, steps, mandatory, path)
 
-Config(
-  name,
-  parent = "",
-  mode,
-  steps,
-  mandatory,
-  path_to_md_file = NULL,
-  path = NULL
-)
+Config(name, parent = "", mode, steps, mandatory, path = NULL)
 }
 \arguments{
 \item{name}{xxx}
@@ -38,8 +21,6 @@ Config(
 \item{steps}{xxx}
 
 \item{mandatory}{xxx}
-
-\item{path_to_md_file}{xxx}
 
 \item{path}{xxx}
 
@@ -72,8 +53,6 @@ Wrapper function to the constructor of the class
 
 \item{\code{mandatory}}{xxx}
 
-\item{\code{path_to_md_file}}{xxx}
-
 \item{\code{path}}{xxx}
 
 \item{\code{ll.UI}}{xxx}
@@ -82,16 +61,22 @@ Wrapper function to the constructor of the class
 }}
 
 \examples{
-config <- Config(
-mode = 'pipeline',
-name = 'PipelineA',
-# List of all steps of the process
-# Here, each step is a workflow
-steps = c('Description', 'Process1', 'Process2', 'Process3'),
-# A vector of boolean indicating if the steps are mandatory or not.
-mandatory = c(TRUE, FALSE, FALSE, TRUE),
+config.proc <- Config(
+  name = 'Process1',
+  parent = 'PipelineA',
+  mode = 'process',
+  steps = c('Step 1', 'Step 2'),
+  mandatory = c(TRUE, FALSE),
+  path = system.file('extdata/module_examples/', package='MagellanNTK')
+  )
 
-path_to_md_file = system.file('extdata/module_examples/md/PipelineA.md', package='MagellanNTK')
-)
 
+
+config.pipe <- Config(
+  name = 'PipelineA',
+  mode = 'pipeline',
+  steps = c('Process 1', 'Process 2'),
+  mandatory = c(TRUE, FALSE),
+  path = system.file('extdata/module_examples/', package='MagellanNTK')
+  )
 }

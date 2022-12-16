@@ -8,14 +8,14 @@ if (interactive()){
   data(data_na)
   
   ui <- fluidPage(
-    mod_download_btns_ui("dl")
+    mod_dl_ui("dl")
   )
   
   server <- function(input, output, session) {
     
-    mod_download_btns_server(
+    mod_dl_server(
       id = "dl",
-      df.data = reactive({data_na$array1}),
+      dataIn = reactive({data_na$array1}),
       name = reactive({'foo'}),
       extension = reactive({c('Excel', 'csv', 'RData')}),
       widget.type = reactive({c('Link', 'Button', 'Link')})
