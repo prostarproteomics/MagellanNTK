@@ -348,10 +348,12 @@ dataOut = reactive({dataOut})
 #' @return NA
 #'
 Get_Worflow_Core_Code <- function(
+    name = NULL,
     w.names = NULL,
     rv.custom.names = NULL) {
-  #browser()
+
     core <- paste0(
+        Insert_Call_to_Config(name),
         Get_Code_Declare_widgets(w.names),
         Get_Code_Update_Config_Variable(),
         Get_Code_for_ObserveEvent_widgets(w.names),
@@ -366,6 +368,17 @@ Get_Worflow_Core_Code <- function(
 }
 
 
+#' @export
+Insert_Call_to_Config <- function(name){
+  code <- "
+
+config <- #name#_conf()
+
+"
+  code <- gsub('#name#', name, code)
+  code
+  
+}
 
 #' @title Code for declaring xxx
 #'
@@ -388,16 +401,16 @@ Get_Worflow_Core_Code <- function(
 #' @return NA
 #'
 Get_AdditionalModule_Core_Code <- function(
-  w.names = NULL, 
-  rv.custom.names = NULL) {
+    w.names = NULL, 
+    rv.custom.names = NULL) {
     core <- paste0(
-        Get_Code_Declare_widgets(w.names),
-        Get_Code_for_ObserveEvent_widgets(w.names),
-        Get_Code_for_rv_reactiveValues(),
-        Get_Code_Declare_rv_custom(rv.custom.names),
-        Get_Code_for_dataOut(),
-        Get_Code_for_AddMod_observeEvents(),
-        sep = "\n"
+      Get_Code_Declare_widgets(w.names),
+      Get_Code_for_ObserveEvent_widgets(w.names),
+      Get_Code_for_rv_reactiveValues(),
+      Get_Code_Declare_rv_custom(rv.custom.names),
+      Get_Code_for_dataOut(),
+      Get_Code_for_AddMod_observeEvents(),
+      sep = "\n"
     )
 
     core

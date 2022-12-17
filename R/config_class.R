@@ -21,7 +21,6 @@
 #' @slot mode xxx
 #' @slot steps xxx
 #' @slot mandatory xxx
-#' @slot path xxx
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
 #' 
@@ -35,27 +34,14 @@ Config <- setClass("Config",
         mode = "character",
         steps = "vector",
         mandatory = "vector",
-        path = 'character',
         ll.UI = "list",
         module.name = 'character',
         steps.source.file = 'vector'
     ),
-    # prototype(
-    #     name = character(0),
-    #     parent = '',
-    #     mode = 'process',
-    #     steps = c('Description', 'Save'),
-    #     mandatory = c(TRUE, TRUE),
-    #     path_to_md_file = '.',
-    #     ll.UI = list(),
-    #     module.name = character(0),
-    #     steps.source.file = c()
-    # ),
 
     #' @param object xxx
     #' 
     validity = function(object) {
-        print('Test validity')
         passed <- TRUE
         nSteps <- length(object@steps)
         #
@@ -86,10 +72,6 @@ Config <- setClass("Config",
             passed <- FALSE
         }
 
-        if (length(object@path) != 1){
-            warning(paste0("The slot 'path' must contain one string. Current value is: ", object@path))
-            passed <- FALSE
-        }
         
         if ((object@steps[1] != 'Description') || (object@mandatory[1] != TRUE)){
             warning("The first step of a workflow must be 'Description' and it is mandatory.")
@@ -141,20 +123,18 @@ setMethod("initialize" ,
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
-    #' @param path xxx
-    function(.Object, name, 
+    function(.Object, 
+        name, 
         parent, 
         mode,
         steps, 
-        mandatory, 
-        path){
+        mandatory){
         
         .Object@name <- name
         .Object@parent <- parent 
         .Object@mode <- mode
         .Object@steps <- steps
         .Object@mandatory <- mandatory 
-        .Object@path<- paste0(path, '/')
         .Object@module.name <- ''
         
         
@@ -195,21 +175,17 @@ setMethod("initialize" ,
 #' @param mode xxx
 #' @param steps xxx
 #' @param mandatory xxx
-#' @param path xxx
 #' 
 Config <- function(name, 
     parent = '', 
     mode,
     steps, 
-    mandatory, 
-    path = NULL){
+    mandatory){
     
     new(Class ="Config",
         name = name, 
         parent = parent, 
         mode = mode,
         steps = steps, 
-        mandatory = mandatory, 
-        path = path
-    )
+        mandatory = mandatory)
 }

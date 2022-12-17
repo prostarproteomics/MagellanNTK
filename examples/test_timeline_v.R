@@ -30,8 +30,7 @@ server <- function(input, output){
     mode = 'process',
     parent = '',
     steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE),
-    path = system.file('extdata/module_examples', package='MagellanNTK')
+    mandatory = c(FALSE, TRUE)
   )
   
   

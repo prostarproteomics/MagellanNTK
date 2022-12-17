@@ -9,7 +9,7 @@
 #' th developer.
 #'
 #'
-#' @example examples/example_create_mod_template.R
+#' @example examples/example_create_template.R
 #'
 #' @author Samuel Wieczorek
 #'
@@ -37,7 +37,7 @@ createModuleTemplate <- function(config = NULL, path='.') {
 
 
     # Create template module file
-    mod.filename <- paste0(path, '/', "mod_", config@name, ".R")
+    mod.filename <- paste0(path, '/', config@name, ".R")
     if (file.exists(mod.filename)) {
         file.remove(mod.filename)
       }
@@ -105,7 +105,7 @@ code
 #'
 get_process_ui_function <- function(name) {
     code <- "
-    mod_#name#_ui <- function(id){
+    #name#_ui <- function(id){
     ns <- NS(id)
     }
 
@@ -119,7 +119,7 @@ get_process_ui_function <- function(name) {
 get_process_header_server_func <- function(name) {
     code <- "
 
-  mod_#name#_server <- function(id,
+  #name#_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -359,13 +359,13 @@ Insert_Description_Step_code_for_Pipeline <- function(){
 ###
 
 #' @export
-mod_Description_ui <- function(id){
+Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 #' @export
-mod_Description_server <- function(id,
+Description_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -503,7 +503,7 @@ get_process_output_func <- function() {
 #'
 get_pipeline_ui_function <- function(name) {
     code <- "
-    mod_#name#_ui <- function(id){
+    #name#_ui <- function(id){
     ns <- NS(id)
     }
 
@@ -517,7 +517,7 @@ get_pipeline_ui_function <- function(name) {
 get_pipeline_header_server_func <- function(name) {
     code <- "
 
-    mod_#name#_server <- function(id,
+    #name#_server <- function(id,
         dataIn = reactive({NULL}),
         steps.enabled = reactive({NULL}),
         remoteReset = reactive({FALSE}),

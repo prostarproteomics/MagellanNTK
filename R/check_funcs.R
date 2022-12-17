@@ -14,21 +14,29 @@
 #' @export
 #'
 Found_Mod_Funcs <- function(id) {
-    server.func <- paste0("mod_", id, "_server")
+    
+    config.func <- paste0(id, "_conf")
+    config.exists <- exists(config.func, envir = .GlobalEnv, mode = "function")
+    
+    server.func <- paste0(id, "_server")
     server.exists <- exists(server.func, envir = .GlobalEnv, mode = "function")
 
-    ui.func <- paste0("mod_", id, "_ui")
+    ui.func <- paste0(id, "_ui")
     ui.exists <- exists(ui.func, envir = .GlobalEnv, mode = "function")
 
     if (!server.exists) {
-        warning(paste0("Cannot found ", server.func, "()"))
+        warning(paste0("Cannot find ", server.func, "()"))
     }
 
     if (!ui.exists) {
-        warning(paste0("Cannot found ", ui.func, "()"))
+        warning(paste0("Cannot find ", ui.func, "()"))
+    }
+    
+    if (!config.exists) {
+        warning(paste0("Cannot finnd ", config.exists, "()"))
     }
 
-    return(server.exists && ui.exists)
+    return(server.exists && ui.exists && config.exists)
 }
 
 

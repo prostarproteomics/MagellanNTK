@@ -9,11 +9,11 @@
 #' @param id xxx
 #' @param verbose A `boolean` that indicates whether to show some infos in the 
 #' console and add the shiny module for debugging
-#' @param tl.layout Additional parameters for mod_nav
+#' @param tl.layout Additional parameters for nav
 #' @param path The path to the directory where are the source code files 
 #' for processes and pipelines
 #'
-#' @rdname example_mod_workflow
+#' @rdname example_workflow
 #'
 #' @author Samuel Wieczorek
 #'
@@ -55,7 +55,7 @@ run_workflow <- function(id,
 
     ui <- fluidPage(
         tagList(
-            mod_nav_ui(id),
+            nav_ui(id),
             uiOutput("debugInfos_ui")
         )
     )
@@ -65,19 +65,19 @@ run_workflow <- function(id,
     server <- function(input, output) {
         dataOut <- reactiveVal()
 
-        dataIn <- mod_Load_Dataset_server("exemple")
+        dataIn <- Load_Dataset_server("exemple")
 
         output$debugInfos_ui <- renderUI({
             req(verbose)
-            mod_Debug_Infos_ui("debug_infos")
+            Debug_Infos_ui("debug_infos")
         })
 
         output$save_dataset_ui <- renderUI({
             req(dataOut())
             req(dataOut()$dataOut()$value)
-            mod_dl_ui("saveDataset")
+            dl_ui("saveDataset")
 
-            mod_dl_server(
+            dl_server(
                 id = "saveDataset",
                 dataIn = reactive({dataOut()$dataOut()$value})
             )
@@ -85,14 +85,14 @@ run_workflow <- function(id,
         })
 
         observeEvent(req(dataIn()), {
-            dataOut(mod_nav_server(
+            dataOut(nav_server(
                 id = id,
                 verbose = verbose,
                 dataIn = reactive({dataIn()}),
                 tl.layout = tl.layout
                 ))
 
-            mod_Debug_Infos_server(
+            Debug_Infos_server(
                 id = "debug_infos",
                 title = "Infos from shiny app",
                 rv.dataIn = reactive({dataIn()}),
