@@ -31,9 +31,7 @@ PipelineA_Process3_conf <- function(){
     # List of all steps of the process
     steps = c('Step 1', 'Step 2'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
+    mandatory = c(FALSE, TRUE)
   )
 }
 
@@ -79,7 +77,8 @@ PipelineA_Process3_server <- function(id,
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
-  verbose = FALSE
+  verbose = FALSE,
+  path = NULL
 ){
   
   # Define default selected values for widgets

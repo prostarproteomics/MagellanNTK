@@ -1,13 +1,10 @@
 library(shiny)
 
 if(interactive()){
-example_mod_Pipeline <- function(
-    wf.name = 'PipelineA', 
-    verbose = FALSE){
 
-  
-  LoadCode(wf.name)
-  
+  path <- system.file('extdata/module_examples', package='MagellanNTK')
+  wf.name <- 'PipelineA'
+  verbose <- TRUE
   
   ui <- fluidPage(
   tagList(
@@ -19,10 +16,6 @@ example_mod_Pipeline <- function(
 server <- function(input, output){
 
   
-  path <- system.file('extdata/module_examples', package='MagellanNTK')
-  for (l in list.files(path = path, pattern = ".R", recursive = TRUE))
-    source(file.path(path, l), local=FALSE)$value
-  
   data(data1)
   
   rv <- reactiveValues(
@@ -30,31 +23,31 @@ server <- function(input, output){
     dataOut = NULL
   )
   
-  output$UI <- renderUI({mod_nav_ui(wf.name)})
+  output$UI <- renderUI({nav_ui(wf.name)})
   
   output$debugInfos_ui <- renderUI({
     req(verbose)
-    mod_Debug_Infos_ui('debug_infos')
+    Debug_Infos_ui('debug_infos')
   })
   
-  mod_Debug_Infos_server(
+  Debug_Infos_server(
     id = 'debug_infos',
     title = 'Infos from shiny app',
     rv.dataIn = reactive({rv$dataIn}),
     dataOut = reactive({rv$dataOut$dataOut()}))
   
   observe({
-     rv$dataOut <- mod_nav_server(id = wf.name,
+     rv$dataOut <- nav_server(
+       id = wf.name,
        dataIn = reactive({rv$dataIn}),
        tl.layout = c('v', 'h'),
-       verbose = verbose
+       verbose = verbose,
+       path = path
        )
   })
 
 }
 
 shinyApp(ui, server)
-}
 
-example_mod_Pipeline(verbose=F)
 }

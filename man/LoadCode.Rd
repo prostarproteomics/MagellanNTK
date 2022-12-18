@@ -20,8 +20,8 @@ that contains the md files corresponding to the workflows.}
 This function xx
 }
 \examples{
-name <- 'PipelineA_Process1'
-path <- system.file('extdata/module_examples', package='MagellanNTK')
+.name <- 'PipelineA_Process1'
+.path <- system.file('extdata/module_examples', package='MagellanNTK')
 
-LoadCode(name, path)
+LoadCode(name = .name, path = .path)
 }

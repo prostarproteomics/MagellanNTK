@@ -138,26 +138,40 @@ setMethod("initialize" ,
         .Object@module.name <- ''
         
         
+        if (parent == '' || is.null(parent))
+          .Object@module.name <- .Object@name
+        else
+          .Object@module.name <- paste0(.Object@parent, '_', .Object@name)
+        
         
         # Build the expected name of the module
-        switch(.Object@mode,
+        if (.Object@steps != ''){
+          switch(.Object@mode,
             process = {
                 # This is a process part of a workflow
-                .Object@module.name <- paste0(.Object@parent, '_', .Object@name)
-                .Object@steps <- c('Description', .Object@steps, 'Save')
-                .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
+                
+                  
+                  .Object@steps <- c('Description', .Object@steps, 'Save')
+                  .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
+                  .Object@steps <- setNames(.Object@steps, 
+                                            nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
+                  )
+                  .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
                 }, 
             pipeline = {
                 # This is the higher level of a workflow
-                .Object@module.name <- .Object@name
-                .Object@steps.source.file <- paste0(.Object@name, '_', gsub(' ', '',.Object@steps), '.R')
                 .Object@steps <- c('Description', .Object@steps)
                 .Object@mandatory <- c(TRUE, .Object@mandatory)
+                .Object@steps <- setNames(.Object@steps, 
+                                          nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
+                )
+                .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
+                .Object@steps.source.file <- paste0(.Object@name, '_', gsub(' ', '',.Object@steps), '.R')
+                
                 }
             )
+        }
         
-        .Object@steps <- setNames(.Object@steps, nm = names(.Object@steps))
-        .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
         
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
@@ -179,8 +193,8 @@ setMethod("initialize" ,
 Config <- function(name, 
     parent = '', 
     mode,
-    steps, 
-    mandatory){
+    steps = '', 
+    mandatory = ''){
     
     new(Class ="Config",
         name = name, 

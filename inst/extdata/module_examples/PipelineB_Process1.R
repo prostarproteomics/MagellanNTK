@@ -84,7 +84,8 @@ PipelineB_Process1_server <- function(id,
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
-  verbose = FALSE
+  verbose = FALSE,
+  path = NULL
   ){
 
   

@@ -25,21 +25,34 @@ LoadCode <- function(name, path, recursive = FALSE){
   fifo <- c()
   
   # Load the code for name module
-  fname <- paste0(path, '/', name, '.R')
-  fifo <- push_fifo(fifo, fname)
+  fifo <- push_fifo(fifo, name)
+  
   while (length(fifo) > 0){
-
-    if (file.exists(fname)){
-      source(fname, local=FALSE)$value
-      if (!Found_Mod_Funcs(name))
+    pull <- pull_fifo(fifo)
+    fifo <- pull$fifo
+    filename <- paste0(path, '/', pull$value, '.R')
+    
+    # Source file if exists and check
+    if (file.exists(filename)){
+      source(filename, local=FALSE)$value
+      if (!Found_Mod_Funcs(pull$value))
         return(NULL)
-      fifo <- pull_fifo(fifo)$fifo
-      if(isTRUE(recursive)){
-        tmp.config <- do.call(paste0(name, '_conf'), list())
-        for (i in tmp.config@steps.source.file)
+      
+      #Get the config of current module
+      tmp.config <- do.call(paste0(pull$value, '_conf'), list())
+       
+      if (tmp.config@mode == 'pipeline'){
+        #Parse the children of the current workflow
+        ll.steps <- names(tmp.config@steps)
+        # for (pattern in c('Description', 'Save'))
+        #   if (pattern %in% ll.steps)
+        #     ll.steps <- ll.steps[-which(ll.steps==pattern)]
+        # 
+        ll.steps <- paste0(name, '_', ll.steps)
+        for (i in ll.steps)
           fifo <- push_fifo(fifo, i)
+        }
       }
-    }
   }
 
 }
@@ -77,7 +90,7 @@ pull_fifo <- function(fifo){
   
   res <- list(
     fifo = fifo[-1],
-    value = fifo[length(fifo)]
+    value = fifo[1]
     )
   
   return(res)

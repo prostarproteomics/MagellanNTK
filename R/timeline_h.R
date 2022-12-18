@@ -58,23 +58,26 @@ timeline_h_server <- function(id,
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
+        
         UpdateTags <- reactive({
-            tl_status <- rep("undone", length(config@steps))
-            tl_status[which(config@mandatory)] <- "mandatory"
-            tl_status[which(unlist(status()) == global$VALIDATED)] <- "completed"
-            tl_status[which(unlist(status()) == global$SKIPPED)] <- "skipped"
-
-            for (i in seq_len(length(enabled()))) {
-                if (!enabled()[i]) {
-                    tl_status[i] <- paste0(tl_status[i], "Disabled")
-                }
+          req(config@steps != '')
+          tl_status <- rep("undone", length(config@steps))
+          tl_status[which(config@mandatory)] <- "mandatory"
+          tl_status[which(unlist(status()) == global$VALIDATED)] <- "completed"
+          tl_status[which(unlist(status()) == global$SKIPPED)] <- "skipped"
+          for (i in seq_len(length(enabled()))) {
+            if (!enabled()[i]) {
+              tl_status[i] <- paste0(tl_status[i], "Disabled")
             }
-
-            tl_status[position()] <- paste0(tl_status[position()], " active")
-            tl_status
+            }
+          
+          tl_status[position()] <- paste0(tl_status[position()], " active")
+          tl_status
         })
 
         output$show_h_TL <- renderUI({
+          req(config@steps != '')
+          
             tags$div(
                 class = "timeline",
                 id = "timeline",

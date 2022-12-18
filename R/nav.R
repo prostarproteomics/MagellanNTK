@@ -103,19 +103,19 @@ nav_server <- function(id,
 
             tl.layout = NULL,
 
-            # @field status A boolean vector which contains the status 
+            # steps.status A boolean vector which contains the status 
             # (validated, skipped or undone) of the steps
             steps.status = NULL,
 
-            # @field dataIn Contains the dataset passed by argument to the 
+            # dataIn Contains the dataset passed by argument to the 
             # module server
             dataIn = NULL,
 
-            # @field temp.dataIn This variable is used to serves as a tampon 
+            # temp.dataIn This variable is used to serves as a tampon 
             # between the input of the module and the functions.
             temp.dataIn = NULL,
 
-            # @field steps.enabled Contains the value of the parameter 
+            # steps.enabled Contains the value of the parameter 
             # 'is.enabled'
             steps.enabled = NULL,
 
@@ -132,7 +132,7 @@ nav_server <- function(id,
             # ---ONLY USED WITH PIPELINE---
             resetChildren = NULL,
 
-            # @field current.pos Stores the current cursor position in the 
+            # current.pos Stores the current cursor position in the 
             # timeline and indicates which of the process' steps is active
             current.pos = 1,
             
@@ -169,7 +169,7 @@ nav_server <- function(id,
                 # be already loaded. Check if it is the case. If not, show a 
                 # message and abort
 
-                LoadCode(name = id, path = path)
+                LoadCode(name = id, path = path, recursive=TRUE)
 
 
                 # When the server starts, the default position is 1
@@ -185,19 +185,20 @@ nav_server <- function(id,
                     paste0(id, "_server"),
                     list(
                         id = id,
-                        path = path,
                         dataIn = reactive({rv$temp.dataIn}),
                         steps.enabled = reactive({rv$steps.enabled}),
                         remoteReset = reactive({input$rstBtn + remoteReset()}),
                         steps.status = reactive({rv$steps.status}),
-                        current.pos = reactive({rv$current.pos})
+                        current.pos = reactive({rv$current.pos}),
+                        path = path
                         )
                     )
 
                 # Update the reactive value config with the config of the 
                 # pipeline
-                rv$config <- rv$proc$config()
-
+                #rv$config <- rv$proc$config()
+                rv$config <- do.call(paste0(id, '_conf'), list())
+                
                 rv$length <- length(rv$config@steps)
                 
                 # rv$config@steps <- setNames(rv$config@mandatory,
@@ -242,6 +243,7 @@ nav_server <- function(id,
                 }
 
                 # Launch the server timeline for this process/pipeline
+                
                 do.call(
                     paste0("timeline_", rv$tl.layout[1], "_server"),
                     list(
@@ -569,11 +571,11 @@ nav_server <- function(id,
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
                     #browser()
-                    for (i in names(rv$config@steps)) {
-                        if (!Found_Mod_Funcs(i)) {
-                            return(NULL)
-                        }
-                    }
+                    # for (i in names(rv$config@steps)) {
+                    #     if (!Found_Mod_Funcs(i)) {
+                    #         return(NULL)
+                    #     }
+                    # }
 
 
                     rv$steps.skipped <- setNames(rep(FALSE, rv$length),
@@ -604,7 +606,9 @@ nav_server <- function(id,
                             is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                             remoteReset = reactive({rv$resetChildren[x]}),
                             is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                            tl.layout = rv$tl.layout[-1],verbose = verbose)
+                            tl.layout = rv$tl.layout[-1],verbose = verbose,
+                            path = path
+                        )
                         })
 
 

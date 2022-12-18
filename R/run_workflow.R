@@ -30,26 +30,26 @@ run_workflow <- function(id,
     verbose = FALSE,
     tl.layout = NULL,
     path = NULL) {
+  
     if (missing(id)) {
         warning("'id' is required.")
         return(NULL)
     }
     
-    
 
-    if (is.null(path)){
-        warning('xxxx')
-        return (NULL)
-    } else {
-        # Load source code files for processes
-        for (l in list.files(path = path, pattern = ".R", recursive = TRUE))
-            source(file.path(path, l), local=FALSE)$value
-        if (!Found_Mod_Funcs(id)) {
-            return(NULL)
-        }
-    }
-    
-    
+    # if (is.null(path)){
+    #     warning('xxxx')
+    #     return (NULL)
+    # } else {
+    #     # Load source code files for processes
+    #     for (l in list.files(path = path, pattern = ".R", recursive = TRUE))
+    #         source(file.path(path, l), local=FALSE)$value
+    #     if (!Found_Mod_Funcs(id)) {
+    #         return(NULL)
+    #     }
+    # }
+    # 
+    # 
     options(shiny.fullstacktrace = verbose)
 
 
@@ -101,5 +101,5 @@ run_workflow <- function(id,
         })
     }
 
-    shinyApp(ui = ui, server = server)
+    shinyApp(ui, server)
 }

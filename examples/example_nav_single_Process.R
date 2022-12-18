@@ -1,15 +1,10 @@
 if(interactive()){
   library(shiny)
-library(MagellanNTK)
-
-example_Process <- function(verbose = FALSE){
   
   path <- system.file('extdata/module_examples', package='MagellanNTK')
   name <- 'PipelineA_Process1'
-  # LoadCode(name=.name, path=.path, TRUE)
-  # 
-  
-  require(shiny)
+  verbose <- TRUE
+
   ui <- fluidPage(
   tagList(
     uiOutput('UI'),
@@ -52,9 +47,5 @@ server <- function(input, output){
 
 shinyApp(ui, server)
 
-}
-
-
-example_Process(verbose=TRUE)
 
 }
