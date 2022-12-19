@@ -19,9 +19,9 @@ options(shiny.fullstacktrace = TRUE)
 
 
 config <- Config(
-  name = 'Process1',
+  name = 'Description',
   mode = 'process',
-  parent = '',
+  parent = 'PipelineA',
   steps = '',
   mandatory = ''
 )
@@ -59,7 +59,7 @@ server <- function(input, output){
       rv$current.pos <- rv$current.pos - 1
   })
   
-  print(config)
+
   timeline_h_server(id = 'TLh',
     config = config,
     status = reactive({rv$status}),

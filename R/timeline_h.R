@@ -61,6 +61,7 @@ timeline_h_server <- function(id,
         
         UpdateTags <- reactive({
           req(config@steps != '')
+          browser()
           tl_status <- rep("undone", length(config@steps))
           tl_status[which(config@mandatory)] <- "mandatory"
           tl_status[which(unlist(status()) == global$VALIDATED)] <- "completed"

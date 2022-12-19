@@ -1,4 +1,5 @@
-config.proc <- Config(
+# Example of a generic process
+generic.proc <- Config(
   name = 'Process1',
   parent = 'PipelineA',
   mode = 'process',
@@ -7,28 +8,25 @@ config.proc <- Config(
   )
 
 
-
-config.pipe <- Config(
+# Example of a generic pipeline
+generic.pipe <- Config(
   name = 'PipelineA',
   mode = 'pipeline',
   steps = c('Process 1', 'Process 2'),
   mandatory = c(TRUE, FALSE)
   )
 
-
-conf <- Config(
+# Example of a root pipeline
+root.pipe <- Config(
   mode = 'pipeline',
   name = 'PipelineA',
   parent = '',
-  # List of all steps of the process
-  # Here, each step is a workflow
   steps = c('Process1', 'Process2', 'Process3'),
-  # A vector of boolean indicating if the steps are mandatory or not.
   mandatory = c(FALSE, FALSE, TRUE)
 )
 
 
-conf.desription <- Config(
+description.process <- Config(
   name = 'Description',
   parent = 'PipelineA',
   mode = 'process',
@@ -37,3 +35,7 @@ conf.desription <- Config(
 )
 
 
+generic.proc
+generic.pipe
+root.pipe
+description.process
