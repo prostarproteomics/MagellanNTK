@@ -9,7 +9,7 @@ if(interactive()){
 ui <- fluidPage(
   actionButton("prevpos", GlobalSettings$tl_v_prev_icon),
   actionButton("nextpos", GlobalSettings$tl_v_next_icon),
-  mod_timeline_v_ui('TLv')
+  timeline_v_ui('TLv')
 )
 
 
@@ -28,14 +28,13 @@ server <- function(input, output){
   config <- Config(
     name = 'Process1',
     mode = 'process',
-    parent = '',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(FALSE, TRUE)
   )
   
   
   
-  mod_timeline_v_server(id = 'TLv',
+  timeline_v_server(id = 'TLv',
     config = config,
     status = reactive({rv$status}),
     position = reactive({rv$current.pos}),

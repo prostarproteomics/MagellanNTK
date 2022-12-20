@@ -7,16 +7,9 @@
 #' 
 PipelineA_Description_conf <- function(){
   Config(
-    name = 'Description',
-    
-    # The name of the parent module, if exists
-    parent = 'PipelineA',
-    
-    # Define the type of module
+    name = 'PipelineA_Description',
     mode = 'process',
-    # List of all steps of the process
     steps = '',
-    # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = ''
   )
 }
@@ -31,13 +24,13 @@ PipelineA_Description_ui <- function(id){
 
 #' @export
 PipelineA_Description_server <- function(id,
-                                         dataIn = reactive({NULL}),
-                                         steps.enabled = reactive({NULL}),
-                                         remoteReset = reactive({FALSE}),
-                                         steps.status = reactive({NULL}),
-                                         current.pos = reactive({1}),
-                                         verbose = FALSE,
-                                         path = NULL
+    dataIn = reactive({NULL}),
+    steps.enabled = reactive({NULL}),
+    remoteReset = reactive({FALSE}),
+    steps.status = reactive({NULL}),
+    current.pos = reactive({1}),
+    verbose = FALSE,
+    path = NULL
 ){
   
   
@@ -74,6 +67,7 @@ PipelineA_Description_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
+      print(path)
       file <- paste0(path, '/md/', name, '.md')
       tagList(
         if (file.exists(file))

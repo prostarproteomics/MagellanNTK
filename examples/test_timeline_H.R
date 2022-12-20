@@ -5,23 +5,10 @@ library(shinyjs)
 
 options(shiny.fullstacktrace = TRUE)
 
-#------------------------ Class TimelineDraw --------------------------------------
-#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
-
-
-# config <- Config(
-#   name = 'Process1',
-#   mode = 'process',
-#   parent = '',
-#   steps = c('Step 1', 'Step 2'),
-#   mandatory = c(FALSE, TRUE)
-# )
-
 
 config <- Config(
-  name = 'Description',
+  name = 'PipelineA_Description',
   mode = 'process',
-  parent = 'PipelineA',
   steps = '',
   mandatory = ''
 )

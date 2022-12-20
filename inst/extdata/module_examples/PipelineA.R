@@ -15,11 +15,7 @@ PipelineA_conf <- function(){
 Config(
   mode = 'pipeline',
   name = 'PipelineA',
-  parent = '',
-  # List of all steps of the process
-  # Here, each step is a workflow
   steps = c('Process1', 'Process2', 'Process3'),
-  # A vector of boolean indicating if the steps are mandatory or not.
   mandatory = c(FALSE, FALSE, TRUE)
 )
 }

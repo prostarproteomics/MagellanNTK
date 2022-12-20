@@ -15,15 +15,9 @@ PipelineB_conf <- function(){
   Config(
     mode = 'pipeline',
     name = 'PipelineB',
-    parent = '',
-    # List of all steps of the process
-    # Here, each step is a workflow
     steps = c('Process1', 'Process2', 'Process3'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, FALSE, TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(FALSE, FALSE, TRUE)
+    )
 }
 
 
@@ -79,15 +73,9 @@ PipelineB_server <- function(id,
   config <- Config(
     mode = 'pipeline',
     name = 'PipelineB',
-    parent = '',
-    # List of all steps of the process
-    # Here, each step is a workflow
     steps = c('Process1', 'Process2', 'Process3'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, FALSE),
-    
-    path= system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(FALSE, FALSE)
+    )
   
   
   # Contrary to the simple workflow, there is no widget in this module
@@ -148,16 +136,10 @@ Description_server <- function(id,
   
   config <- Config(
     mode = 'process',
-    
     name = 'Description',
-    parent = '',
-    # List of all steps of the process
     steps = c('Description'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(TRUE)
+    )
   
   # Define default selected values for widgets
   # By default, this list is empty for the Description module

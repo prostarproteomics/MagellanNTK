@@ -21,16 +21,9 @@
 #' 
 PipelineA_Process2_conf <- function(){
   Config(
-    name = 'Process2',
-    
-    # The name of the parent module, if exists
-    parent = 'PipelineA',
-    
-    # Define the type of module
+    name = 'PipelineA_Process2',
     mode = 'process',
-    # List of all steps of the process
     steps = c('Step 1', 'Step 2'),
-    # A vector of boolean indicating if the steps are mandatory or not.
     mandatory = c(FALSE, TRUE)
   )
 }

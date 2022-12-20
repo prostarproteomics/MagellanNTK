@@ -9,11 +9,11 @@ data(data_na)
 
 ui <- fluidPage(
   tagList(
-    mod_format_DT_ui("dt_demo_nocolor"),
+    format_DT_ui("dt_demo_nocolor"),
     br(),br(),br(),
-    mod_format_DT_ui("dt_demo_NA_colored"),
+    format_DT_ui("dt_demo_NA_colored"),
     br(),br(),br(),
-    mod_format_DT_ui("dt_demo_virtual_cols")
+    format_DT_ui("dt_demo_virtual_cols")
   )
 )
 
@@ -21,7 +21,7 @@ server <- function(input, output, session) {
 
   # Example 1
   # # Show raw table
-  mod_format_DT_server("dt_demo_nocolor",
+  format_DT_server("dt_demo_nocolor",
     data = reactive({data_na$array1})
   )
 
@@ -38,7 +38,7 @@ server <- function(input, output, session) {
   .full_style2[] <- 'white'
   .full_style2[is.na(data_na$array1)] <- 'orange'
   
-  mod_format_DT_server("dt_demo_NA_colored",
+  format_DT_server("dt_demo_NA_colored",
     data = reactive({data_na$array1}),
     withDLBtns = TRUE,
     hc_style = reactive({.hc_style2}),
@@ -68,7 +68,7 @@ server <- function(input, output, session) {
   .full_style3[data_na$array1 >= 10] <- 'orange'
 
 
-  mod_format_DT_server("dt_demo_virtual_cols",
+  format_DT_server("dt_demo_virtual_cols",
     data = reactive({df}),
     withDLBtns = TRUE,
     hc_style = reactive({.hc_style3}),

@@ -23,18 +23,11 @@ NULL
 #' 
 PipelineA_Process1_conf <- function(){
   Config(
-  name = 'Process1',
-  
-  # The name of the parent module, if exists
-  parent = 'PipelineA',
-  
-  # Define the type of module
+  name = 'PipelineA_Process1',
   mode = 'process',
-  # List of all steps of the process
   steps = c('Step 1', 'Step 2'),
-  # A vector of boolean indicating if the steps are mandatory or not.
   mandatory = c(FALSE, TRUE)
-    )
+  )
 }
 
 
@@ -80,24 +73,7 @@ PipelineA_Process1_server <- function(id,
   path = NULL
   ){
   
-  # # This list contains the basic configuration of the process
-  # config <- Config(
-  #   name = 'Process1',
-  #   
-  #   # The name of the parent module, if exists
-  #   parent = 'PipelineA',
-  #   
-  #   # Define the type of module
-  #   mode = 'process',
-  #    # List of all steps of the process
-  #   steps = c('Step 1', 'Step 2'),
-  #   # A vector of boolean indicating if the steps are mandatory or not.
-  #   mandatory = c(FALSE, TRUE),
-  #   
-  #   path = system.file('extdata/module_examples', package='MagellanNTK')
-  # )
   
-  # f <- system.file("extdata", "module_examples/foo.R", package="MagellanNTK")
   source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
@@ -124,7 +100,6 @@ PipelineA_Process1_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    #config <- PipelineA_Process1_conf()
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(
@@ -137,7 +112,7 @@ PipelineA_Process1_server <- function(id,
         )
       )
     
-    
+    #browser()
     
     # >>>
     # >>> START ------------- Code for Description UI---------------
@@ -145,13 +120,14 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
+      print(path)
       file <- paste0(path, '/md/', id, '.md')
-      
+      print(file)
       tagList(
-        # In this example, the md file is found in the extdata/module_examples directory
-        # but with a real app, it should be provided by the package which
-        # contains the UI for the different steps of the process module.
-        # system.file(xxx)
+        ### In this example, the md file is found in the extdata/module_examples 
+        ### directory but with a real app, it should be provided by the package 
+        ### which contains the UI for the different steps of the process module.
+        ### system.file(xxx)
         
         if (file.exists(file))
           includeMarkdown(file)

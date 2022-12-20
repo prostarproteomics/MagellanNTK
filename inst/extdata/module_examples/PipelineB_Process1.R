@@ -24,20 +24,11 @@ NULL
 #' 
 PipelineB_Process1_conf <- function(){
   Config(
-    name = 'Process1',
-    
-    # The name of the parent module, if exists
-    parent = 'PipelineB',
-    
-    # Define the type of module
+    name = 'PipelineB_Process1',
     mode = 'process',
-    # List of all steps of the process
     steps = c('Step 1', 'Step 2'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(FALSE, TRUE)
+    )
 }
 
 

@@ -65,21 +65,23 @@ timeline_v_server <- function(id,
         ns <- session$ns
 
         UpdateTags <- reactive({
-            tl_status <- rep("undone", length(config@steps))
+          req(config@steps != '')
+          
+          tl_status <- rep("undone", length(config@steps))
             
-            .ind1 <- which(unlist(status()) == global$VALIDATED)
-            tl_status[which(config@mandatory)] <- "mandatory"
-            tl_status[.ind1] <- "completed"
-            tl_status[which(unlist(status()) == global$SKIPPED)] <- "skipped"
+          .ind1 <- which(unlist(status()) == global$VALIDATED)
+          tl_status[which(config@mandatory)] <- "mandatory"
+          tl_status[.ind1] <- "completed"
+          tl_status[which(unlist(status()) == global$SKIPPED)] <- "skipped"
 
-            for (i in seq_len(length(enabled()))) {
-                if (!enabled()[i]) {
-                    tl_status[i] <- paste0(tl_status[i], "Disabled")
-                }
-            }
+          for (i in seq_len(length(enabled()))) {
+              if (!enabled()[i]) {
+                  tl_status[i] <- paste0(tl_status[i], "Disabled")
+              }
+          }
 
-            tl_status[position()] <- paste0(tl_status[position()], " active")
-            tl_status
+          tl_status[position()] <- paste0(tl_status[position()], " active")
+          tl_status
         })
 
 
@@ -189,6 +191,8 @@ timeline_v_server <- function(id,
         })
 
         output$show_v_TL <- renderUI({
+          req(config@steps != '')
+          
             tags$div(
                 style = "width: 150px;",
                 lapply(seq_len(length(config@steps)), function(x) {

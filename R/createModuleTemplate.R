@@ -178,14 +178,11 @@ get_process_config_code <- function(config) {
     # Define the type of module
     mode = 'process',
     name = '#name#',
-    parent = '#parent#',
     # List of all steps of the process
     steps = #steps#,
 
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = #mandatory#,
-
-    path = '#path#'
+    mandatory = #mandatory#
     )
     "
     code <- gsub("#name#", config@name, code)
@@ -194,7 +191,6 @@ get_process_config_code <- function(config) {
     if (is.null(config@path) || config@path == '') {
         config@path <- "\'\'"
     }
-    code <- gsub("#path#", config@path, code)
     code
 }
 
@@ -378,14 +374,11 @@ Description_server <- function(id,
     mode = 'process',
     
     name = 'Description',
-    parent = '',
     # List of all steps of the process
     steps = c('Description'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(TRUE)
+    )
   
   # Define default selected values for widgets
   # By default, this list is empty for the Description module

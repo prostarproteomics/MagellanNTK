@@ -156,13 +156,12 @@ is.DescriptionProcess <- function(.Object){
 init.GenericProcess <- function(.Object){
 
   # A process has a parent
-  .Object@module.name <- paste0(.Object@parent, '_', .Object@name)
   
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   .Object@steps <- setNames(.Object@steps, 
                             nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
-                            )
+  )
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
   return(.Object)
@@ -173,8 +172,6 @@ init.RootPipeline <- function(.Object){
   
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
-  .Object@module.name <- .Object@name
-  
   
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
@@ -188,9 +185,7 @@ init.RootPipeline <- function(.Object){
   # the description step is a module itself and must be loaded in memory
   # as well as the other steps
   .Object@steps.source.file <- paste0(names(.Object@steps), '.R')
-  
-  
-  
+
   return(.Object)
 }
 
@@ -201,10 +196,6 @@ init.GenericPipeline <- function(.Object){
   
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
-  if (.Object@parent == '' )
-    .Object@module.name <- .Object@name
-  else
-    .Object@module.name <- paste0(.Object@parent, '_', .Object@name)
   
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
@@ -226,14 +217,26 @@ init.GenericPipeline <- function(.Object){
 
 init.DescriptionProcess <- function(.Object){
   # A process has a parent
-  .Object@module.name <- paste0(.Object@parent, '_', .Object@name)
+  #.Object@module.name <- paste0(.Object@parent, '_', .Object@name)
   
   
   return(.Object)
 }
 
 
-
+# setMethod("show", 'Config', 
+#           function(.Object){
+#             cat(crayon::green('\t ------- Config -------\n'))
+#             cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
+#               cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
+#               cat(crayon::green('\tsteps: '))
+#               cat(crayon::green(.Object@steps))
+#               cat(crayon::green('\n'))
+#               cat(crayon::green('\tmandatory: '))
+#               cat(crayon::green(.Object@mandatory))
+#               cat(crayon::green('\n'))
+#               }
+# )
 
 #' @title Initialization method for the class `Config`
 #' @rdname config
@@ -242,24 +245,30 @@ setMethod("initialize" ,
     "Config" ,
     #' @param .Object xxx
     #' @param name xxx
-    #' @param parent xxx
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
     function(.Object, 
         name, 
-        parent, 
         mode,
         steps, 
         mandatory){
         
         # Basic init of slots
-        .Object@name <- name
-        .Object@parent <- parent 
+      
+      .Object@module.name <- name
+      
+        tmp <- unlist(strsplit(name, '_'))
+        if (length(tmp) == 2){
+          .Object@name <- tmp[2]
+          .Object@parent <- tmp[1]
+        } else {
+          .Object@name <- tmp[1]
+        }
+         
         .Object@mode <- mode
         .Object@steps <- steps
         .Object@mandatory <- mandatory 
-        .Object@module.name <- ''
         
         
         if (is.GenericProcess(.Object))
@@ -291,14 +300,12 @@ setMethod("initialize" ,
 #' @param mandatory xxx
 #' 
 Config <- function(name, 
-    parent = '', 
     mode,
     steps = '', 
     mandatory = ''){
     
     new(Class ="Config",
-        name = name, 
-        parent = parent, 
+        name = name,
         mode = mode,
         steps = steps, 
         mandatory = mandatory)

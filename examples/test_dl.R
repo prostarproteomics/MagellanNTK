@@ -8,12 +8,12 @@ if (interactive()){
   data(data_na)
   
   ui <- fluidPage(
-    mod_dl_ui("dl")
+    dl_ui("dl")
   )
   
   server <- function(input, output, session) {
     
-    mod_dl_server(
+    dl_server(
       id = "dl",
       dataIn = reactive({data_na$array1}),
       name = reactive({'foo'}),

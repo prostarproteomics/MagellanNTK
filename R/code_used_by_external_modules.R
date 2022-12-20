@@ -337,9 +337,10 @@ dataOut = reactive({dataOut})
 #' @author Samuel Wieczorek
 #'
 #' @examples
+#' id <- 'PipelineA_Process1'
 #' widgets <- c('widget1', 'widget2')
 #' custom <- list(foo1 = list(), foo2 = 3)
-#' Get_Worflow_Core_Code(widgets, names(custom))
+#' Get_Worflow_Core_Code(id, widgets, names(custom))
 #'
 #' @export
 #' 
@@ -355,7 +356,7 @@ Get_Worflow_Core_Code <- function(
     core <- paste0(
         Insert_Call_to_Config(name),
         Get_Code_Declare_widgets(w.names),
-        Get_Code_Update_Config_Variable(),
+        #Get_Code_Update_Config_Variable(),
         Get_Code_for_ObserveEvent_widgets(w.names),
         Get_Code_for_rv_reactiveValues(),
         Get_Code_Declare_rv_custom(rv.custom.names),

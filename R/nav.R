@@ -165,7 +165,10 @@ nav_server <- function(id,
         # process and pipeline modules
         observeEvent(id,
             {
-                # The functions of the module server (and ui) are supposed to 
+                if(verbose)
+                  cat(crayon::blue(paste0('\t--- ', 'verbose = ', verbose, '\n')))
+              
+              # The functions of the module server (and ui) are supposed to 
                 # be already loaded. Check if it is the case. If not, show a 
                 # message and abort
 
@@ -177,10 +180,13 @@ nav_server <- function(id,
                 rv$current.pos <- 1
 
 
-                # Call the server module of the process/pipeline which name is 
-                # the parameter 'id'. 
-                # The name of the server function is prefixed by 'mod_' and 
-                # suffixed by '_server'. This will give access to its config
+                ### Call the server module of the process/pipeline which name is 
+                ### the parameter 'id'. 
+                ### The name of the server function is prefixed by 'mod_' and 
+                ### suffixed by '_server'. This will give access to its config
+                if(verbose)
+                  cat(crayon::blue(paste0('Call ', paste0(id, "_server()"), '\n')))
+                
                 rv$proc <- do.call(
                     paste0(id, "_server"),
                     list(
@@ -196,18 +202,17 @@ nav_server <- function(id,
 
                 # Update the reactive value config with the config of the 
                 # pipeline
-                #rv$config <- rv$proc$config()
+                # rv$config <- rv$proc$config()
+                
                 rv$config <- do.call(paste0(id, '_conf'), list())
+                
+                if(verbose){
+                  cat(crayon::blue(paste0('Call ', paste0(id, "_conf()"), '\n')))
+                  show(rv$config)
+                }
                 
                 rv$length <- length(rv$config@steps)
                 
-                # rv$config@steps <- setNames(rv$config@mandatory,
-                #     nm = paste0(rv$config@parent,'_', names(rv$config@steps))
-                # )
-                
-                # rv$config@mandatory <- setNames(rv$config@mandatory,
-                #     nm = names(rv$config@steps)
-                # )
                 rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
                     nm = names(rv$config@steps)
                 )
@@ -224,10 +229,9 @@ nav_server <- function(id,
 
                 rv$child.data2send <- setNames(lapply(
                     as.list(names(rv$config@steps)),
-                    function(x) NULL
-                ),
-                nm = names(rv$config@steps)
-                )
+                    function(x) NULL),
+                    nm = names(rv$config@steps)
+                    )
 
                 rv$currentStepName <- reactive({
                     names(rv$config@steps)[rv$current.pos]
@@ -272,9 +276,7 @@ nav_server <- function(id,
         tmp.return <- reactiveValues()
 
 
-        observeEvent(input$closeModal, {
-            removeModal()
-        })
+        observeEvent(input$closeModal, {removeModal()})
 
         # Update the current position after a click  on the 'Previous' button
         observeEvent(input$prevBtn, ignoreInit = TRUE, {
@@ -379,7 +381,6 @@ nav_server <- function(id,
                     nm = names(rv$config@steps)
                 )
 
-                # browser()
                 # If the current module is a pipeline type (node and not
                 # leaf), then sent to its children the information that
                 # they must reset themself
@@ -393,7 +394,6 @@ nav_server <- function(id,
                         rv$resetChildren[seq_len(rv$length)]
                 }
 
-                # browser()
                 # Return the NULL value as dataset
                 dataOut$trigger <- Timestamp()
                 dataOut$value <- rv$dataIn
@@ -446,7 +446,7 @@ nav_server <- function(id,
         # This function uses the UI definition to:
         # 1 - initialize the UI (only the first screen is shown),
         # 2 - encapsulate the UI in a div (used to hide all screens at a time 
-        # before showing the one corresponding to the current position)
+        #     before showing the one corresponding to the current position)
         output$EncapsulateScreens_ui <- renderUI({
             Build_EncapsulateScreens_ui(
                 ns = ns,
@@ -460,9 +460,10 @@ nav_server <- function(id,
         # Note for devs: apparently, the renderUI() cannot be stored in the 
         # function 'Build..'
         output$nav_mod_ui <- renderUI({
-            # Wait until the tl.layout variable is instantiated
-            req(rv$tl.layout)
-            # browser()
+          req(rv$tl.layout)
+          if(verbose)
+            cat(crayon::blue('Entering output$nav_mod_ui <- renderUI({...})\n'))
+          
             do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
         })
 
@@ -474,13 +475,11 @@ nav_server <- function(id,
         # 1 - if the variable is NULL. xxxx
         # 2 - if the variable contains a dataset. xxx
         observeEvent(dataIn(), 
-            ignoreNULL = FALSE, 
-            ignoreInit = FALSE, {
+            ignoreNULL = FALSE, ignoreInit = FALSE, {
                 req(rv$config)
                 isolate({
                     # A new value on dataIn() means a new dataset sent to the 
                     # process
-                    # browser()
                     rv$current.pos <- 1
 
                     # Get the new dataset in a temporary variable
@@ -556,27 +555,20 @@ nav_server <- function(id,
 
 
         # Catch the moment when the mode is defined
+        ### Normally, it is during the initialization of the module
+        ### on a ObserveEvent for the id
         # Then, launch observers and functions specific to
         # processes nor pipelines
         observeEvent(req(rv$config), {
-            if (!(rv$config@mode %in% c("process", "pipeline"))) {
-                warning("'mode' must be either 'process' or 'pipeline'.")
-                return(NULL)
-            }
-
+            if(verbose)
+              cat(crayon::yellow('Entering observeEvent(req(rv$config), {...})\n'))
+          
             switch(rv$config@mode,
                 default = {},
                 pipeline = {
                     # Before continuing the initialization, check if all 
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
-                    #browser()
-                    # for (i in names(rv$config@steps)) {
-                    #     if (!Found_Mod_Funcs(i)) {
-                    #         return(NULL)
-                    #     }
-                    # }
-
 
                     rv$steps.skipped <- setNames(rep(FALSE, rv$length),
                         nm = names(rv$config@steps)
@@ -591,28 +583,38 @@ nav_server <- function(id,
                     # code in the files for pipelines and processes. This is 
                     # useful when other devs will develop other pipelines and 
                     # processes. Thus, it will be easier.
+                    
                     rv$config@ll.UI <- setNames(lapply(
                         names(rv$config@steps),
-                        function(x) {nav_ui(ns(x))}
+                        function(x) {
+                          if(verbose)
+                            cat(paste0("Launch: ", 'nav_ui(', ns(x), ')\n'))
+
+                          nav_ui(ns(x))
+                          }
                         ),
                     nm = paste0(names(rv$config@steps))
                     )
 
-                    # Launch the server for each step of the pipeline
+                    ###
+                    ### Launch the server for each step of the pipeline
+                    ### 
+                    
                     lapply(names(rv$config@steps), function(x) {
+                      if(verbose)
+                        print(paste0('Launch nav_server("', x, '")\n'))
+                      
                         tmp.return[[x]] <- nav_server(
                             id = x,
                             dataIn = reactive({rv$child.data2send[[x]]}),
                             is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                             remoteReset = reactive({rv$resetChildren[x]}),
                             is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                            tl.layout = rv$tl.layout[-1],verbose = verbose,
+                            tl.layout = rv$tl.layout[-1],
+                            verbose = verbose,
                             path = path
                         )
                         })
-
-
-
 
 
                     ActionOn_Data_Trigger <- function() {
