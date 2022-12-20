@@ -81,7 +81,8 @@ mod_nav_server <- function(id,
     remoteReset = reactive({FALSE}),
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
-    verbose = FALSE) {
+    verbose = FALSE,
+    path = NULL) {
 
     options(shiny.fullstacktrace = verbose)
 
@@ -169,12 +170,11 @@ mod_nav_server <- function(id,
         # process and pipeline modules
         observeEvent(id,
             {
-                # The functions of the module server (and ui) are supposed to 
-                # be already loaded. Check if it is the case. If not, show a 
-                # message and abort
-                if (!Found_Mod_Funcs(id)) {
-                    return(NULL)
-                }
+              if(verbose)
+                cat(crayon::blue(paste0('\t--- ', 'verbose = ', verbose, '\n')))
+              
+              LoadCode(name = id, path = path, recursive=TRUE)
+              
 
                 # When the server starts, the default position is 1
                 # Not necessary ?
@@ -185,6 +185,9 @@ mod_nav_server <- function(id,
                 # the parameter 'id'. 
                 # The name of the server function is prefixed by 'mod_' and 
                 # suffixed by '_server'. This will give access to its config
+                if(verbose)
+                  cat(crayon::blue(paste0('Call ', paste0(id, "_server()"), '\n')))
+                
                 rv$proc <- do.call(
                     paste0("mod_", id, "_server"),
                     list(
@@ -193,23 +196,20 @@ mod_nav_server <- function(id,
                         steps.enabled = reactive({rv$steps.enabled}),
                         remoteReset = reactive({input$rstBtn + remoteReset()}),
                         steps.status = reactive({rv$steps.status}),
-                        current.pos = reactive({rv$current.pos})
+                        current.pos = reactive({rv$current.pos}),
+                        path = path
                         )
                     )
 
                 # Update the reactive value config with the config of the 
                 # pipeline
-                rv$config <- rv$proc$config()
+                #rv$config <- rv$proc$config()
+                rv$config <- do.call(paste0(id, '_conf'), list())
+                
 
                 rv$length <- length(rv$config@steps)
                 
-                # rv$config@steps <- setNames(rv$config@mandatory,
-                #     nm = paste0(rv$config@parent,'_', names(rv$config@steps))
-                # )
                 
-                # rv$config@mandatory <- setNames(rv$config@mandatory,
-                #     nm = names(rv$config@steps)
-                # )
                 rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
                     nm = names(rv$config@steps)
                 )
@@ -461,10 +461,11 @@ mod_nav_server <- function(id,
         # Note for devs: apparently, the renderUI() cannot be stored in the 
         # function 'Build..'
         output$nav_mod_ui <- renderUI({
-            # Wait until the tl.layout variable is instantiated
             req(rv$tl.layout)
-            # browser()
-            do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
+          if(verbose)
+            cat(crayon::blue('Entering output$nav_mod_ui <- renderUI({...})\n'))
+          
+          do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
         })
 
 
@@ -560,10 +561,8 @@ mod_nav_server <- function(id,
         # Then, launch observers and functions specific to
         # processes nor pipelines
         observeEvent(req(rv$config), {
-            if (!(rv$config@mode %in% c("process", "pipeline"))) {
-                warning("'mode' must be either 'process' or 'pipeline'.")
-                return(NULL)
-            }
+          if(verbose)
+            cat(crayon::yellow('Entering observeEvent(req(rv$config), {...})\n'))
 
             switch(rv$config@mode,
                 default = {},
@@ -572,11 +571,11 @@ mod_nav_server <- function(id,
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
                     #browser()
-                    for (i in names(rv$config@steps)) {
-                        if (!Found_Mod_Funcs(i)) {
-                            return(NULL)
-                        }
-                    }
+                    # for (i in names(rv$config@steps)) {
+                    #     if (!Found_Mod_Funcs(i)) {
+                    #         return(NULL)
+                    #     }
+                    # }
 
 
                     rv$steps.skipped <- setNames(rep(FALSE, rv$length),

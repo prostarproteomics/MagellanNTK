@@ -74,11 +74,9 @@ server <- function(input, output){
   config <- Config(
     name = 'Process1',
     mode = 'process',
-    parent = '',
     steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE),
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(FALSE, TRUE)
+    )
   
   
   observeEvent(input$nextpos,{
@@ -131,14 +129,11 @@ server <- function(input, output){
   )
   
   
-  config <- Config(
-    name = 'Process1',
-    mode = 'process',
-    parent = '',
-    steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE),
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+  #conf <- gen.proc()
+  #conf <- desc.proc()
+  conf <- gen.pipe()
+  #conf <- root.pipe()
+  
   
   
   

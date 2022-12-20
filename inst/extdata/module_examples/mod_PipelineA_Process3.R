@@ -12,9 +12,22 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `mod_PipelineA_ProcessA_ui()` and `mod_PipelineA_ProcessA_server()` define
+#' In this example, `PipelineA_ProcessA_ui()` and `PipelineA_ProcessA_server()` define
 #' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+
+
+#' @rdname example_module_process3
+#' @export
 #' 
+PipelineA_Process3_conf <- function(){
+  Config(
+    name = 'PipelineA_Process3',
+    mode = 'process',
+    steps = c('Step 1', 'Step 2'),
+    mandatory = c(FALSE, TRUE)
+  )
+}
+
 #' @param id xxx
 #' 
 #' @rdname example_module_Process3
@@ -23,7 +36,7 @@
 #' 
 #' @export
 #'
-mod_PipelineA_Process3_ui <- function(id){
+PipelineA_Process3_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -51,30 +64,15 @@ mod_PipelineA_Process3_ui <- function(id){
 #' 
 #' @export
 #' 
-mod_PipelineA_Process3_server <- function(id,
-  dataIn = reactive({NULL}),
-  steps.enabled = reactive({NULL}),
-  remoteReset = reactive({FALSE}),
-  steps.status = reactive({NULL}),
-  current.pos = reactive({1}),
-  verbose = FALSE
+PipelineA_Process3_server <- function(id,
+                                      dataIn = reactive({NULL}),
+                                      steps.enabled = reactive({NULL}),
+                                      remoteReset = reactive({FALSE}),
+                                      steps.status = reactive({NULL}),
+                                      current.pos = reactive({1}),
+                                      verbose = FALSE,
+                                      path = NULL
 ){
-  
-  # This list contains the basic configuration of the process
-  config <- Config(
-    # Define the type of module
-    mode = 'process',
-    
-    name = 'Process3',
-    parent = 'PipelineA',
-    # List of all steps of the process
-    steps = c('Step 1', 'Step 2'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(FALSE, TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
-  
   
   # Define default selected values for widgets
   # This is only for simple workflows
@@ -98,6 +96,7 @@ mod_PipelineA_Process3_server <- function(id,
     ns <- session$ns
     
     eval(str2expression(Get_Worflow_Core_Code(
+      name = id,
       w.names = names(widgets.default.values),
       rv.custom.names = names(rv.custom.default.values)
     )))
@@ -326,7 +325,7 @@ mod_PipelineA_Process3_server <- function(id,
                      rv$steps.enabled['Save']
         ),
         if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
-          mod_Save_Dataset_ui(ns('createQuickLink'))
+          Save_Dataset_ui(ns('createQuickLink'))
         }
       )
       
@@ -341,7 +340,7 @@ mod_PipelineA_Process3_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      mod_Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

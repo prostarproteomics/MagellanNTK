@@ -7,14 +7,12 @@
 \usage{
 xxx
 
-\S4method{initialize}{Config}(.Object, name, parent, mode, steps, mandatory, path)
+\S4method{initialize}{Config}(.Object, name, mode, steps, mandatory)
 
-Config(name, parent = "", mode, steps, mandatory, path = NULL)
+Config(name, mode, steps = "", mandatory = "")
 }
 \arguments{
 \item{name}{xxx}
-
-\item{parent}{xxx}
 
 \item{mode}{xxx}
 
@@ -22,11 +20,13 @@ Config(name, parent = "", mode, steps, mandatory, path = NULL)
 
 \item{mandatory}{xxx}
 
-\item{path}{xxx}
-
 \item{.Object}{xxx}
 
 \item{object}{xxx}
+
+\item{parent}{xxx}
+
+\item{path}{xxx}
 }
 \description{
 This class is used to store the configuration of any process
@@ -37,6 +37,15 @@ Validity:
 * The first step must be called 'Description', it is a mandatory step. Thus, 
 the first item of the mandatory vector is TRUE.
 To be continued...
+
+
+## Initialization
+ ### Generic process
+ 
+ A generic process
+ * Generic pipeline : xxxx
+ * Description pipeline: This case is for a process -called 'Description' which is 
+ the first process module of a pipeline
 
 Wrapper function to the constructor of the class
 }
@@ -60,23 +69,3 @@ Wrapper function to the constructor of the class
 \item{\code{steps.source.file}}{xxx}
 }}
 
-\examples{
-config.proc <- Config(
-  name = 'Process1',
-  parent = 'PipelineA',
-  mode = 'process',
-  steps = c('Step 1', 'Step 2'),
-  mandatory = c(TRUE, FALSE),
-  path = system.file('extdata/module_examples/', package='MagellanNTK')
-  )
-
-
-
-config.pipe <- Config(
-  name = 'PipelineA',
-  mode = 'pipeline',
-  steps = c('Process 1', 'Process 2'),
-  mandatory = c(TRUE, FALSE),
-  path = system.file('extdata/module_examples/', package='MagellanNTK')
-  )
-}

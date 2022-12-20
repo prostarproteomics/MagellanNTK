@@ -62,18 +62,11 @@ mod_PipelineB_Process2_server <- function(id,
   
   # This list contains the basic configuration of the process
   config <- Config(
-    # Define the type of module
     mode = 'process',
-    
-    name = 'Process2',
-    parent = 'PipelineB',
-    # List of all steps of the process
+    name = 'PipelineB_Process2',
     steps = c('Step 1', 'Step 2'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c( FALSE, TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c( FALSE, TRUE)
+    )
   
   
   # Define default selected values for widgets

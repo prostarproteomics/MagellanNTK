@@ -25,14 +25,11 @@ server <- function(input, output){
   )
   
   
-  config <- Config(
-    name = 'Process1',
-    mode = 'process',
-    parent = '',
-    steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE),
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+  #config <- gen.proc()
+  config <- desc.proc()
+  #config <- gen.pipe()
+  #config <- root.pipe()
+  
   
   
   

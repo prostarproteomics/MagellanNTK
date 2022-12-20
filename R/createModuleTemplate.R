@@ -173,28 +173,17 @@ vec2code <- function(ls_list, is.char = FALSE) {
 #'
 get_process_config_code <- function(config) {
     code <- "
-    # This list contains the basic configuration of the process
     config <- Config(
-    # Define the type of module
     mode = 'process',
     name = '#name#',
-    parent = '#parent#',
-    # List of all steps of the process
     steps = #steps#,
-
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = #mandatory#,
-
-    path = '#path#'
+    mandatory = #mandatory#
     )
     "
     code <- gsub("#name#", config@name, code)
     code <- gsub("#steps#", vec2code(config@steps, TRUE), code)
     code <- gsub("#mandatory#", vec2code(config@mandatory, FALSE), code)
-    if (is.null(config@path) || config@path == '') {
-        config@path <- "\'\'"
-    }
-    code <- gsub("#path#", config@path, code)
+
     code
 }
 
@@ -382,10 +371,7 @@ mod_Description_server <- function(id,
     # List of all steps of the process
     steps = c('Description'),
     # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE),
-    
-    path = system.file('extdata/module_examples', package='MagellanNTK')
-  )
+    mandatory = c(TRUE))
   
   # Define default selected values for widgets
   # By default, this list is empty for the Description module

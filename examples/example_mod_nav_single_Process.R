@@ -2,7 +2,9 @@ if(interactive()){
   library(shiny)
 library(MagellanNTK)
 
-example_mod_Process <- function(verbose = FALSE){
+verbose = TRUE
+
+
   require(shiny)
   ui <- fluidPage(
   tagList(
@@ -12,10 +14,6 @@ example_mod_Process <- function(verbose = FALSE){
 )
 
 server <- function(input, output){
-  
-  dirpath <- system.file('extdata/module_examples', package='MagellanNTK')
-  for (l in list.files(path = dirpath, pattern = ".R", recursive = TRUE))
-    source(file.path(dirpath, l), local=FALSE)$value
   
   data(data1)
   rv <- reactiveValues(
@@ -47,10 +45,5 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
-
-}
-
-
-example_mod_Process()
 
 }

@@ -65,6 +65,8 @@ mod_timeline_v_server <- function(id,
         ns <- session$ns
 
         UpdateTags <- reactive({
+          req(config@steps != '')
+          
             tl_status <- rep("undone", length(config@steps))
             
             .ind1 <- which(unlist(status()) == global$VALIDATED)
@@ -159,6 +161,7 @@ mod_timeline_v_server <- function(id,
 
 
         GetStyle <- reactive({
+          req(config@steps != '')
             tl_status <- rep(undone(), length(config@steps))
             tl_status[which(enabled() == 1)] <- undoneDisabled()
             
@@ -189,6 +192,7 @@ mod_timeline_v_server <- function(id,
         })
 
         output$show_v_TL <- renderUI({
+          req(config@steps != '')
             tags$div(
                 style = "width: 150px;",
                 lapply(seq_len(length(config@steps)), function(x) {
