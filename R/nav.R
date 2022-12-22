@@ -25,7 +25,12 @@ nav_ui <- function(id) {
     ns <- NS(id)
     tagList(
         shinyjs::useShinyjs(),
+        
+        # Contains the UI for the timeline, the direction buttons
+        # and the workflows modules
         uiOutput(ns("nav_mod_ui")),
+        
+        # Contains the UI for the debug module
         uiOutput(ns("debug_infos_ui"))
     )
 }
@@ -202,9 +207,8 @@ nav_server <- function(id,
 
                 # Update the reactive value config with the config of the 
                 # pipeline
-                # rv$config <- rv$proc$config()
+                rv$config <- rv$proc$config()
                 
-                rv$config <- do.call(paste0(id, '_conf'), list())
                 
                 if(verbose){
                   cat(crayon::blue(paste0('Call ', paste0(id, "_conf()"), '\n')))
@@ -422,7 +426,9 @@ nav_server <- function(id,
             )
         })
 
-        # Show the debug infos is requested
+        # Show the debug infos if requested (verbose mode)
+        # This function is not directly implemented in the main UI of nav_ui
+        # because it is hide/show w.r.t. the value of verbose
         output$debug_infos_ui <- renderUI({
             req(verbose)
             Debug_Infos_ui(ns("debug_infos"))
@@ -448,11 +454,35 @@ nav_server <- function(id,
         # 2 - encapsulate the UI in a div (used to hide all screens at a time 
         #     before showing the one corresponding to the current position)
         output$EncapsulateScreens_ui <- renderUI({
-            Build_EncapsulateScreens_ui(
-                ns = ns,
-                id = id,
-                config = rv$config
+            # Build_EncapsulateScreens_ui(
+            #     ns = ns,
+            #     id = id,
+            #     config = rv$config
+            # )
+          len <- length(rv$config@ll.UI)
+          renderUI({
+            tagList(
+              lapply(seq_len(len), function(i) {
+                if (i == 1) {
+                  div(
+                    id = ns(names(rv$config@steps)[i]),
+                    class = paste0("page_", id),
+                    rv$config@ll.UI[[i]]
+                  )
+                } else {
+                  shinyjs::hidden(
+                    div(
+                      id = ns(names(rv$config@steps)[i]),
+                      class = paste0("page_", id),
+                      rv$config@ll.UI[[i]]
+                    )
+                  )
+                }
+              })
             )
+          })
+          
+          
         })
 
 
@@ -464,7 +494,8 @@ nav_server <- function(id,
           if(verbose)
             cat(crayon::blue('Entering output$nav_mod_ui <- renderUI({...})\n'))
           
-            do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
+            #do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
+            DisplayWholeUI(ns, rv$tl.layout[1])
         })
 
 

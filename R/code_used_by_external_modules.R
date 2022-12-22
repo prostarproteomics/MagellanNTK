@@ -308,15 +308,7 @@ observeEvent(remoteReset(), {
 Module_Return_Func <- function() {
     code <- "# Return value of module
 # DO NOT MODIFY THIS PART
-list(config = reactive({
-    config@ll.UI <- setNames(lapply(names(config@steps),
-                                  function(x){
-                                    do.call(\"uiOutput\", list(ns(x)))
-                                  }),
-                           paste0(\"screen_\", names(config@steps))
-    )
-    config
-    }),
+list(config = reactive({config}),
 dataOut = reactive({dataOut})
 )
 
@@ -374,6 +366,14 @@ Insert_Call_to_Config <- function(name){
   code <- "
 
 config <- #name#_conf()
+config@ll.UI <- setNames(
+      lapply(
+        names(config@steps),
+        function(x){
+          do.call(\"uiOutput\", list(ns(x)))
+        }
+      ), nm = paste0(\"screen_\", names(config@steps))
+    )
 
 "
   code <- gsub('#name#', name, code)

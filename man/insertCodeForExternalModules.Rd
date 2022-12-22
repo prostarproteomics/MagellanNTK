@@ -135,9 +135,10 @@ Get_Code_for_General_observeEvents()
 
 Module_Return_Func()
 
+id <- 'PipelineA_Process1'
 widgets <- c('widget1', 'widget2')
 custom <- list(foo1 = list(), foo2 = 3)
-Get_Worflow_Core_Code(widgets, names(custom))
+Get_Worflow_Core_Code(id, widgets, names(custom))
 
 widgets <- c('widget1', 'widget2')
 Get_AdditionalModule_Core_Code(widgets)

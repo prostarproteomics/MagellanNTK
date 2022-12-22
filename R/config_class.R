@@ -113,6 +113,11 @@ Config <- setClass("Config",
 )
 
 
+
+###
+### Check functions
+###
+
 is.GenericProcess <- function(.Object){
   passed <- TRUE
   
@@ -151,7 +156,9 @@ is.DescriptionProcess <- function(.Object){
 }
 
 
-
+###
+### Initialization functions
+###
 
 init.GenericProcess <- function(.Object){
 
@@ -159,9 +166,13 @@ init.GenericProcess <- function(.Object){
   
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
-  .Object@steps <- setNames(.Object@steps, 
-                            nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
-  )
+  
+  # .Object@steps <- setNames(.Object@steps, 
+  #                           nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps, fixed=TRUE))
+  # )
+  
+  .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
   return(.Object)
@@ -175,9 +186,14 @@ init.RootPipeline <- function(.Object){
   
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
-  .Object@steps <- setNames(.Object@steps, 
-                            nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
-  )
+  
+  # .Object@steps <- setNames(.Object@steps, 
+  #                           nm = paste0(.Object@name, '_', 
+  #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
+  
+  .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  
+  
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
   
@@ -199,9 +215,14 @@ init.GenericPipeline <- function(.Object){
   
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
-  .Object@steps <- setNames(.Object@steps, 
-                            nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps))
-  )
+  
+  # .Object@steps <- setNames(.Object@steps, 
+  #                           nm = paste0(.Object@name, '_', 
+  #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
+  # )
+  
+  .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
   # This line comes after the other ones because in the case of a pipeline, 
@@ -224,19 +245,34 @@ init.DescriptionProcess <- function(.Object){
 }
 
 
-# setMethod("show", 'Config', 
-#           function(.Object){
-#             cat(crayon::green('\t ------- Config -------\n'))
-#             cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
-#               cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
-#               cat(crayon::green('\tsteps: '))
-#               cat(crayon::green(.Object@steps))
-#               cat(crayon::green('\n'))
-#               cat(crayon::green('\tmandatory: '))
-#               cat(crayon::green(.Object@mandatory))
-#               cat(crayon::green('\n'))
-#               }
-# )
+
+setMethod("show", 'Config',
+          function(.Object){
+            cat(crayon::green('\t ------- Config -------\n'))
+            cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
+              cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
+              
+              cat(crayon::green('\tnames(steps): '))
+              cat(crayon::green(names(.Object@steps)))
+              cat(crayon::green('\n'))
+
+              cat(crayon::green('\tsteps: '))
+              cat(crayon::green(.Object@steps))
+              cat(crayon::green('\n'))
+              
+              cat(crayon::green('\tmandatory: '))
+              cat(crayon::green(.Object@mandatory))
+              cat(crayon::green('\n'))
+              
+              cat(crayon::green('\tnames(ll.UI): '))
+              cat(crayon::green(names(.Object@ll.UI)))
+              cat(crayon::green('\n'))
+              
+              cat(crayon::green('\tll.UI: '))
+              cat(crayon::green(.Object@ll.UI))
+              cat(crayon::green('\n'))
+              }
+)
 
 #' @title Initialization method for the class `Config`
 #' @rdname config

@@ -84,7 +84,6 @@ if(interactive()){
 
 server <- function(input, output){
   
-  
   data(data1)
   rv <- reactiveValues(
     dataIn = data1,
@@ -105,6 +104,7 @@ server <- function(input, output){
   )
   
   observe({
+    print(paste0('path: ', path))
     rv$dataOut <- nav_server(id = name,
       dataIn = reactive({rv$dataIn}),
       tl.layout = c('h'),
@@ -119,6 +119,7 @@ shinyApp(ui, server)
 
 
 }
+
 library(shiny)
 
 if(interactive()){

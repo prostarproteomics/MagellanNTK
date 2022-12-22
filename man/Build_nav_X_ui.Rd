@@ -2,10 +2,13 @@
 % Please edit documentation in R/build_nav_ui.R
 \name{Build_nav_X_ui}
 \alias{Build_nav_X_ui}
+\alias{DisplayWholeUI}
 \alias{Build_nav_v_ui}
 \alias{Build_nav_h_ui}
 \title{Timeline UI}
 \usage{
+DisplayWholeUI(ns, layout = "h")
+
 Build_nav_v_ui(ns)
 
 Build_nav_h_ui(ns)

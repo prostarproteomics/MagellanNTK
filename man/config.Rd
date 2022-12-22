@@ -7,14 +7,12 @@
 \usage{
 xxx
 
-\S4method{initialize}{Config}(.Object, name, parent, mode, steps, mandatory)
+\S4method{initialize}{Config}(.Object, name, mode, steps, mandatory)
 
-Config(name, parent = "", mode, steps, mandatory)
+Config(name, mode, steps = "", mandatory = "")
 }
 \arguments{
 \item{name}{xxx}
-
-\item{parent}{xxx}
 
 \item{mode}{xxx}
 
@@ -25,6 +23,8 @@ Config(name, parent = "", mode, steps, mandatory)
 \item{.Object}{xxx}
 
 \item{object}{xxx}
+
+\item{parent}{xxx}
 }
 \description{
 This class is used to store the configuration of any process
@@ -35,6 +35,14 @@ Validity:
 * The first step must be called 'Description', it is a mandatory step. Thus, 
 the first item of the mandatory vector is TRUE.
 To be continued...
+
+## Initialization
+ ### Generic process
+ 
+ A generic process
+ * Generic pipeline : xxxx
+ * Description pipeline: This case is for a process -called 'Description' which is 
+ the first process module of a pipeline
 
 Wrapper function to the constructor of the class
 }
@@ -57,20 +65,43 @@ Wrapper function to the constructor of the class
 }}
 
 \examples{
-config.proc <- Config(
-  name = 'Process1',
-  parent = 'PipelineA',
+# Example of a generic process
+generic.proc <- Config(
+  name = 'PipelineA_Process1',
   mode = 'process',
   steps = c('Step 1', 'Step 2'),
   mandatory = c(TRUE, FALSE)
   )
 
 
-
-config.pipe <- Config(
-  name = 'PipelineA',
+# Example of a generic pipeline
+generic.pipe <- Config(
+  name = 'Pipe1_PipelineA',
   mode = 'pipeline',
   steps = c('Process 1', 'Process 2'),
   mandatory = c(TRUE, FALSE)
   )
+
+# Example of a root pipeline (process has no parent)
+root.pipe <- Config(
+  mode = 'pipeline',
+  name = 'PipelineA',
+  steps = c('Process1', 'Process2', 'Process3'),
+  mandatory = c(FALSE, FALSE, TRUE)
+)
+
+
+# Example of a description module (process has no steps)
+description.process <- Config(
+  name = 'PipelineA_Description',
+  mode = 'process',
+  steps = '',
+  mandatory = ''
+)
+
+
+generic.proc
+generic.pipe
+root.pipe
+description.process
 }

@@ -74,6 +74,7 @@ PipelineA_Process1_server <- function(id,
   ){
   
   
+  
   source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
@@ -112,7 +113,7 @@ PipelineA_Process1_server <- function(id,
         )
       )
     
-    #browser()
+    
     
     # >>>
     # >>> START ------------- Code for Description UI---------------
