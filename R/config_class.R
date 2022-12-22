@@ -43,7 +43,7 @@ Config <- setClass("Config",
         steps = "vector",
         mandatory = "vector",
         ll.UI = "list",
-        module.name = 'character',
+        full.name = 'character',
         steps.source.file = 'vector'
     ),
 
@@ -150,7 +150,7 @@ is.DescriptionProcess <- function(.Object){
   passed <- passed && (.Object@mode == 'process')
   passed <- passed && (.Object@parent != '')
   passed <- passed && (.Object@steps == '' && .Object@mandatory == '')
-  passed <- passed && (.Object@name == 'Description')
+  passed <- passed && grepl('Description', .Object@name)
   
   return(passed)
 }
@@ -167,7 +167,7 @@ init.GenericProcess <- function(.Object){
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
-  # .Object@steps <- setNames(.Object@steps, 
+  # .Object@steps <- setNames(.Object@steps,
   #                           nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   
@@ -187,8 +187,8 @@ init.RootPipeline <- function(.Object){
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
-  # .Object@steps <- setNames(.Object@steps, 
-  #                           nm = paste0(.Object@name, '_', 
+  # .Object@steps <- setNames(.Object@steps,
+  #                           nm = paste0(.Object@name, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
   
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -216,8 +216,8 @@ init.GenericPipeline <- function(.Object){
   .Object@steps <- c('Description', .Object@steps)
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
-  # .Object@steps <- setNames(.Object@steps, 
-  #                           nm = paste0(.Object@name, '_', 
+  # .Object@steps <- setNames(.Object@steps,
+  #                           nm = paste0(.Object@name, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   
@@ -235,11 +235,24 @@ init.GenericPipeline <- function(.Object){
 }
 
 
-
+#' @description A Description process has only one step called 'Description'
+#' 
 init.DescriptionProcess <- function(.Object){
   # A process has a parent
-  #.Object@module.name <- paste0(.Object@parent, '_', .Object@name)
+  .Object@steps <- c('Description')
+  .Object@mandatory <- c(TRUE)
+  # .Object@steps <- setNames(.Object@steps,
+  #                           nm = paste0(.Object@parent, '_',
+  #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
+  # )
+  .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
   
+  .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
+  
+  # This line comes after the other ones because in the case of a pipeline, 
+  # the description step is a module itself and must be loaded in memory
+  # as well as the other steps
+  .Object@steps.source.file <- paste0(names(.Object@steps), '.R')
   
   return(.Object)
 }
@@ -292,7 +305,7 @@ setMethod("initialize" ,
         
         # Basic init of slots
       
-      .Object@module.name <- name
+      .Object@full.name <- name
       
         tmp <- unlist(strsplit(name, '_'))
         if (length(tmp) == 2){

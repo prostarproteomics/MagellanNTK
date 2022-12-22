@@ -113,7 +113,9 @@ PipelineA_Process1_server <- function(id,
         )
       )
     
-    
+    observe({
+      rv$config
+    })
     
     # >>>
     # >>> START ------------- Code for Description UI---------------

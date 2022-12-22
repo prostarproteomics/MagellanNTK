@@ -3,6 +3,7 @@ if(interactive()){
   
   path <- system.file('extdata/module_examples', package='MagellanNTK')
   name <- 'PipelineA_Process1'
+  name <- 'PipelineA_Description'
   verbose <- TRUE
 
   ui <- fluidPage(

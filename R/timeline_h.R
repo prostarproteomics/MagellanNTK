@@ -77,7 +77,6 @@ timeline_h_server <- function(id,
         })
 
         output$show_h_TL <- renderUI({
-          #browser()
           req(config@steps != '')
           
             tags$div(

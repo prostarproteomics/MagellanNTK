@@ -350,9 +350,7 @@ nav_server <- function(id,
         # @description
         # The parameter is.skipped() is set by the caller and tells the process
         # if it is skipped or not (remote action from the caller)
-        observeEvent(is.skipped(), 
-            ignoreNULL = FALSE, 
-            ignoreInit = TRUE, {
+        observeEvent(is.skipped(), ignoreNULL = FALSE,  ignoreInit = TRUE, {
             if (isTRUE(is.skipped())) {
                 rv$steps.status <- All_Skipped_tag(rv$steps.status, global$SKIPPED)
             } else {
@@ -371,8 +369,7 @@ nav_server <- function(id,
         # the local module or in the module parent UI (in this case,
         # it is called a 'remoteReset')
         observeEvent(c(remoteReset(), req(input$modal_ok)),
-            ignoreInit = FALSE,
-            ignoreNULL = TRUE,
+            ignoreInit = FALSE, ignoreNULL = TRUE,
             {
                 rv$dataIn <- NULL
                 # The cursor is set to the first step

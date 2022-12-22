@@ -65,7 +65,7 @@ timeline_v_server <- function(id,
         ns <- session$ns
 
         UpdateTags <- reactive({
-          req(config@steps != '')
+          req(config@steps != '' && config@steps != 'Description')
           
           tl_status <- rep("undone", length(config@steps))
             
@@ -191,7 +191,7 @@ timeline_v_server <- function(id,
         })
 
         output$show_v_TL <- renderUI({
-          req(config@steps != '')
+          req(config@steps != '' && config@steps != 'Description')
           
             tags$div(
                 style = "width: 150px;",
