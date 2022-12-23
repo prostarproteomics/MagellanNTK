@@ -168,8 +168,8 @@ init.GenericProcess <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@name, '_', gsub(' ', '',.Object@steps, fixed=TRUE))
-  # )
+  #                           nm = paste0(.Object@full.name, '_', 
+  #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
   
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
   
@@ -188,7 +188,7 @@ init.RootPipeline <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@name, '_',
+  #                           nm = paste0(.Object@full.name, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
   
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -217,7 +217,7 @@ init.GenericPipeline <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@name, '_',
+  #                           nm = paste0(.Object@full.name, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   
@@ -242,7 +242,7 @@ init.DescriptionProcess <- function(.Object){
   .Object@steps <- c('Description')
   .Object@mandatory <- c(TRUE)
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@parent, '_',
+  #                           nm = paste0(.Object@full.name, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -263,7 +263,11 @@ setMethod("show", 'Config',
           function(.Object){
             cat(crayon::green('\t ------- Config -------\n'))
             cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
-              cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
+            cat(crayon::green(paste0('\tfull.name: ', .Object@full.name, '\n')))
+            
+            cat(crayon::green(paste0('\tparent: ', .Object@parent, '\n')))
+            
+            cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
               
               cat(crayon::green('\tnames(steps): '))
               cat(crayon::green(names(.Object@steps)))

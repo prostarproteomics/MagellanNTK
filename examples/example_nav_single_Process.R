@@ -1,11 +1,24 @@
 if(interactive()){
   library(shiny)
   
-  path <- system.file('extdata/module_examples', package='MagellanNTK')
-  name <- 'PipelineA_Process1'
-  name <- 'PipelineA_Description'
   verbose <- TRUE
-
+  
+  path <- system.file('extdata/module_examples', package='MagellanNTK')
+  
+  
+  # Uncomment and Change this for a process workflow
+  # name <- 'PipelineA_Process1'
+  # name <- 'PipelineA_Description'
+  # layout <- c('h')
+  
+  
+  # Uncomment and Change this for a pipeline workflow
+  name <- 'PipelineA'
+  layout <- c('v', 'h')
+  
+  
+  
+  
   ui <- fluidPage(
   tagList(
     uiOutput('UI'),
@@ -35,10 +48,9 @@ server <- function(input, output){
   )
   
   observe({
-    print(paste0('path: ', path))
     rv$dataOut <- nav_server(id = name,
       dataIn = reactive({rv$dataIn}),
-      tl.layout = c('h'),
+      tl.layout = layout,
       verbose = verbose,
       path = path
       )

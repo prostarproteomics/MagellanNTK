@@ -451,11 +451,6 @@ nav_server <- function(id,
         # 2 - encapsulate the UI in a div (used to hide all screens at a time 
         #     before showing the one corresponding to the current position)
         output$EncapsulateScreens_ui <- renderUI({
-            # Build_EncapsulateScreens_ui(
-            #     ns = ns,
-            #     id = id,
-            #     config = rv$config
-            # )
           len <- length(rv$config@ll.UI)
           renderUI({
             tagList(
@@ -506,42 +501,42 @@ nav_server <- function(id,
             ignoreNULL = FALSE, ignoreInit = FALSE, {
                 req(rv$config)
                 isolate({
-                    # A new value on dataIn() means a new dataset sent to the 
-                    # process
-                    rv$current.pos <- 1
+                  # A new value on dataIn() means a new dataset sent to the 
+                  # process
+                  rv$current.pos <- 1
 
-                    # Get the new dataset in a temporary variable
-                    rv$temp.dataIn <- dataIn()
+                  # Get the new dataset in a temporary variable
+                  rv$temp.dataIn <- dataIn()
 
-                    # The mode pipeline is a node and has to send
-                    # datasets to its children
-                    if (rv$config@mode == "pipeline") {
-                        if (is.null(rv$dataIn)) {
-                            res <- PrepareData2Send(rv = rv, pos = rv$current.pos
-                                , verbose=verbose)
-                            rv$child.data2send <- res$data2send
-                            rv$steps.enabled <- res$steps.enabled
-                            }
+                  # The mode pipeline is a node and has to send
+                  # datasets to its children
+                  if (rv$config@mode == "pipeline") {
+                      if (is.null(rv$dataIn)) {
+                          res <- PrepareData2Send(rv = rv, pos = rv$current.pos
+                              , verbose=verbose)
+                          rv$child.data2send <- res$data2send
+                          rv$steps.enabled <- res$steps.enabled
+                          }
+                      }
+
+                  if (is.null(dataIn())) {
+                      # The process has been reseted or is not concerned
+                      # Disable all screens of the process
+                      rv$steps.enabled <- ToggleState_Screens(
+                          cond = FALSE,
+                          range = seq_len(rv$length),
+                          is.enabled = is.enabled,
+                          rv = rv
+                          )
+                      } else {
+                          # A new dataset has been loaded
+                          # # Update the different screens in the process
+                          rv$steps.enabled <- Update_State_Screens(
+                              is.skipped = is.skipped(),
+                              is.enabled = is.enabled(),
+                              rv = rv
+                          )
                         }
-
-                    if (is.null(dataIn())) {
-                        # The process has been reseted or is not concerned
-                        # Disable all screens of the process
-                        rv$steps.enabled <- ToggleState_Screens(
-                            cond = FALSE,
-                            range = seq_len(rv$length),
-                            is.enabled = is.enabled,
-                            rv = rv
-                            )
-                        } else {
-                            # A new dataset has been loaded
-                            # # Update the different screens in the process
-                            rv$steps.enabled <- Update_State_Screens(
-                                is.skipped = is.skipped(),
-                                is.enabled = is.enabled(),
-                                rv = rv
-                            )
-                            }
 
                     # Update the initial length of the dataset with the length
                     # of the one that has been received
@@ -616,9 +611,9 @@ nav_server <- function(id,
                         names(rv$config@steps),
                         function(x) {
                           if(verbose)
-                            cat(paste0("Launch: ", 'nav_ui(', ns(x), ')\n'))
+                            cat(paste0("Launch: ", 'nav_ui(', ns(paste0(id, '_', x)), ')\n'))
 
-                          nav_ui(ns(x))
+                          nav_ui(ns(paste0(id, '_', x)))
                           }
                         ),
                     nm = paste0(names(rv$config@steps))
@@ -630,10 +625,10 @@ nav_server <- function(id,
                     
                     lapply(names(rv$config@steps), function(x) {
                       if(verbose)
-                        print(paste0('Launch nav_server("', x, '")\n'))
+                        print(paste0('Launch nav_server("', paste0(id, '_', x), '")\n'))
                       
                         tmp.return[[x]] <- nav_server(
-                            id = x,
+                            id = paste0(id, '_', x),
                             dataIn = reactive({rv$child.data2send[[x]]}),
                             is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                             remoteReset = reactive({rv$resetChildren[x]}),
