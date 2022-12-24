@@ -5,9 +5,9 @@
 
 #' @export
 #' 
-PipelineA_Description_conf <- function(){
+PipelineB_Description_conf <- function(){
   Config(
-    fullname = 'PipelineA_Description',
+    fullname = 'PipelineB_Description',
     mode = 'process',
     steps = '',
     mandatory = ''
@@ -17,13 +17,13 @@ PipelineA_Description_conf <- function(){
 
 
 #' @export
-PipelineA_Description_ui <- function(id){
+PipelineB_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 #' @export
-PipelineA_Description_server <- function(id,
+PipelineB_Description_server <- function(id,
     dataIn = reactive({NULL}),
     steps.enabled = reactive({NULL}),
     remoteReset = reactive({FALSE}),
@@ -67,7 +67,6 @@ PipelineA_Description_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      print(path)
       file <- paste0(path, '/md/', name, '.md')
       tagList(
         if (file.exists(file))

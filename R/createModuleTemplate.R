@@ -17,7 +17,7 @@
 #'
 #' @name createTemplate
 #' 
-#' @param config An instance of the class `Config`.
+#' @param ll.config A `list()` of 4 items
 #' @param path xxx
 #' @param name xxx
 #' 
@@ -29,57 +29,48 @@ NULL
 #' @rdname createTemplate
 #'
 createModuleTemplate <- function(config = NULL, path='.') {
+  if (class(config) != 'list')
+    stop("'config' is not a `list`. Abort.")
+  
+  config$steps <- gsub(' ', '', config$steps)
+  
+  # Create template module file
+  mod.filename <- paste0(path, '/', config$fullname, ".R")
+  if (file.exists(mod.filename)) {
+    file.remove(mod.filename)
+    }
+  con <- file(mod.filename, open = "a")
 
-    # Check config integrity
-    # check <- CheckConfig(config)
-    # if (!check$passed)
-    #  stop(paste0("Errors in 'config'", paste0(check$msg, collapse=' ')))
+  # Write code to file
+  write_config_func(con, config)
+  write_ui_func(con, config$fullname)
+  write_header_server_func(con, config$fullname)
+  write_module_server_header(con)
+  
+  if(config$mode == 'process'){
+    write_process_code_for_default_value_widgets(con)
+    write_process_renderUI_for_steps(con, config, path)
+  }
+  
+  if(config$mode == 'pipeline'){
+    write_Insert_Description_Step_code_for_Pipeline(con)
+    }
 
-
-    # Create template module file
-    mod.filename <- paste0(path, '/', config@name, ".R")
-    if (file.exists(mod.filename)) {
-        file.remove(mod.filename)
-      }
-    con <- file(mod.filename, open = "a")
-
-
-    switch(config@mode,
-        process = {
-            config@steps <- setNames(config@steps, nm = gsub(" ", "", config@steps))
-            # Write different parts of the module functions
-            writeLines(get_process_ui_function(config@name), con)
-            writeLines(get_process_header_server_func(config@name), con)
-            writeLines(get_process_config_code(config), con)
-            writeLines(get_process_code_for_default_value_widgets(), con)
-            writeLines(get_process_module_server_header(), con)
-            writeLines(get_process_renderUI_for_steps(config@steps), con)
-            writeLines(get_process_output_func(), con)
-            },
-        pipeline = {
-            config@steps <- setNames(config@steps, nm = gsub(" ", "", config@steps))
-            # Write different parts of the module functions
-            writeLines(get_pipeline_ui_function(config@name), con)
-            writeLines(get_pipeline_header_server_func(config@name), con)
-            writeLines(get_pipeline_config_code(config), con)
-            writeLines(get_pipeline_module_server(), con)
-            writeLines(Insert_Description_Step_code_for_Pipeline(), con)
-        }
-    )
-
-
-    close(con)
+  write_process_output_func(con)
+  
+  close(con)
     
     ###
     ### Create the Description file
     ###
-    desc.filename <- paste0(path, '/', config@name, ".md")
+    desc.filename <- paste0(path, '/', config$fullname, ".md")
     if (file.exists(desc.filename)) {
       file.remove(desc.filename)
     }
-    con <- file(desc.filename, open = "a")
-    writeLines(Code_for_Description_file(config@name), con)
-    close(con)
+    con.desc <- file(desc.filename, open = "a")
+    
+    write_Code_for_Description_file(config$fullname, con.desc)
+    close(con.desc)
     
     return(mod.filename)
 }
@@ -88,7 +79,7 @@ createModuleTemplate <- function(config = NULL, path='.') {
 
 #' @rdname createTemplate
 #' 
-Code_for_Description_file <- function(name){
+write_Code_for_Description_file <- function(con, name){
   
   code <- "
   ## Overview
@@ -96,108 +87,71 @@ Code_for_Description_file <- function(name){
   This page describes the workflow '#name#'.
   
   "
-  code <- gsub("#name#", name, code)
-code
+  writeLines(gsub("#name#", name, code), con)
 }
 
 
 #' @rdname createTemplate
 #'
-get_process_ui_function <- function(name) {
+write_ui_func <- function(con, name) {
     code <- "
     #name#_ui <- function(id){
     ns <- NS(id)
     }
 
     "
-
-    gsub("#name#", name, code)
+    writeLines(gsub("#name#", name, code), con)
 }
 
 #' @rdname createTemplate
 #'
-get_process_header_server_func <- function(name) {
+write_header_server_func <- function(con, name) {
     code <- "
 
   #name#_server <- function(id,
-  dataIn = reactive({NULL}),
-  steps.enabled = reactive({NULL}),
-  remoteReset = reactive({FALSE}),
-  steps.status = reactive({NULL}),
-  current.pos = reactive({1}),
-  verbose = FALSE
-  ){
+    dataIn = reactive({NULL}),
+    steps.enabled = reactive({NULL}),
+    remoteReset = reactive({FALSE}),
+    steps.status = reactive({NULL}),
+    current.pos = reactive({1}),
+    verbose = FALSE,
+    path = path
+    ){
     "
-    gsub("#name#", name, code)
+    
+    code <- gsub("#name#", name, code)
+    writeLines(code, con)
 }
 
 
 
-#' @title Convert vector to a source code string
-#' @param ls_list A vector
-#' @param is.char A `bolean(1)` to indicate whether the items are
-#' strings or not. In this case, they will be quoted in the result
-#' 
-#' @return A string
-#' @rdname createTemplate
-#'
-vec2code <- function(ls_list, is.char = FALSE) {
-    if (is.char) {
-        coll <- "', '"
-    } else {
-        coll <- ", "
-    }
-
-    # create string
-    if (is.char) {
-        st_string_from_list <- paste0(
-            "c('",
-            paste0(ls_list, sep = "", collapse = coll)
-        )
-    } else {
-        st_string_from_list <- paste0(
-            "c(",
-            paste0(ls_list, sep = "", collapse = coll)
-        )
-    }
-
-    if (is.char) {
-        paste0(st_string_from_list, "')")
-    } else {
-        paste0(st_string_from_list, ")")
-    }
-}
 
 
 #' @rdname createTemplate
 #'
-get_process_config_code <- function(config) {
+write_config_func <- function(con, config) {
     code <- "
-    # This list contains the basic configuration of the process
-    config <- Config(
-    # Define the type of module
-    mode = 'process',
-    name = '#name#',
-    # List of all steps of the process
-    steps = #steps#,
-
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = #mandatory#
-    )
+    #fullname#_conf <- function(){
+      Config(
+        mode = '#mode#',
+        fullname = '#fullname#',
+        steps = #steps#,
+        mandatory = #mandatory#
+        )
+      }
     "
-    code <- gsub("#name#", config@name, code)
-    code <- gsub("#steps#", vec2code(config@steps, TRUE), code)
-    code <- gsub("#mandatory#", vec2code(config@mandatory, FALSE), code)
-    if (is.null(config@path) || config@path == '') {
-        config@path <- "\'\'"
-    }
-    code
+    code <- gsub("#mode#", config$mode, code)
+    code <- gsub("#fullname#", config$fullname, code)
+    code <- gsub("#steps#", vec2code(config$steps, TRUE), code)
+    code <- gsub("#mandatory#", vec2code(config$mandatory, FALSE), code)
+    
+    writeLines(code, con)
 }
 
 
 #' @rdname createTemplate
 #'
-get_process_code_for_default_value_widgets <- function() {
+write_process_code_for_default_value_widgets <- function(con) {
     code <- "
     # Define default selected values for widgets
     # This is only for simple workflows
@@ -205,13 +159,13 @@ get_process_code_for_default_value_widgets <- function() {
     rv.custom.default.values <- list()
     "
 
-    code
+    writeLines(code, con)
 }
 
 
 #' @rdname createTemplate
 #'
-get_process_module_server_header <- function() {
+write_module_server_header <- function(con) {
     code <- "
 
 
@@ -225,36 +179,41 @@ get_process_module_server_header <- function() {
 
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    #eval(str2expression(Get_Code_Update_Config()))
-
-    # Insert necessary code which is hosted by MagellanNTK
-    # DO NOT MODIFY THIS LINE
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
-      w.names = names(widgets.default.values),
-      rv.custom.names = names(rv.custom.default.values)
-          )
+    core.code <- Get_Worflow_Core_Code(
+        name = id,
+        w.names = names(widgets.default.values),
+        rv.custom.names = names(rv.custom.default.values)
         )
-      )
+          
+    eval(str2expression(core.code))
 
     "
 
-    code
+    writeLines(code, con)
 }
 
 #' @rdname createTemplate
 #' 
 #' @param steps xxx
 #' 
-get_process_renderUI_for_steps <- function(steps) {
+write_process_renderUI_for_steps <- function(con, ll.config, path) {
     code <- NULL
 
-    for (i in names(steps)) {
+    tmp.config <- Config(fullname = ll.config$fullname,
+                         mode = ll.config$mode,
+                         steps = ll.config$steps,
+                         mandatory = ll.config$mandatory)
+    
+    for (i in tmp.config@steps) {
       if (i == 'Description'){
         code <- paste0(
           code,
-          Insert_Description_Step_code_for_Process()
+          write_Insert_Description_Step_code_for_Process(con, path)
+        )
+      } else if (i == 'Save'){
+        code <- paste0(
+          code,
+          write_Insert_Save_Step_code_for_Process(con)
         )
       } else {
         code <- paste0(
@@ -267,7 +226,10 @@ get_process_renderUI_for_steps <- function(steps) {
         code <- gsub("#step#", i, code)
     }
 
-    code
+    
+    #remove tmp.config
+    
+    writeLines(code, con)
 }
 
 
@@ -275,7 +237,7 @@ get_process_renderUI_for_steps <- function(steps) {
 #' @description This function inserts the necessary code for the 'Description' step
 #' @rdname createTemplate
 #' 
-Insert_Description_Step_code_for_Process <- function(){
+write_Insert_Description_Step_code_for_Process <- function(con, path){
 
   
   code <- "
@@ -285,7 +247,7 @@ Insert_Description_Step_code_for_Process <- function(){
 
 
 output$Description <- renderUI({
-  file <- paste0(config@path, '/md/', id, '.md')
+  file <- paste0(#path#, '/md/', id, '.md')
   
   tagList(
     # In this example, the md file is found in the extdata/module_examples directory
@@ -333,10 +295,62 @@ observeEvent(input$Description_btn_validate, {
 
 "
 
+  code <- gsub('#path#', path, code)
+writeLines(code, con)
+}
+
+
+#' @title xxx
+#' @description This function inserts the necessary code for the 'Description' step
+#' @rdname createTemplate
+#' 
+write_Insert_Save_Step_code_for_Process <- function(con){
+  
+  
+  code <- "
+# >>> START ------------- Code for step 3 UI---------------
+    output$Save <- renderUI({
+       tagList(
+        # Insert validation button
+        # This line is necessary. DO NOT MODIFY
+        uiOutput(ns('Save_btn_validate_ui')),
+        uiOutput(ns('dl_ui'))
+      )
+    })
+    
+    output$dl_ui <- renderUI({
+      req(config@mode == 'process')
+      req(rv$steps.status['Save'] == global$VALIDATED)
+      dl_ui(ns('createQuickLink'))
+    })
+    
+    output$Save_btn_validate_ui <- renderUI({
+      toggleWidget(actionButton(ns('Save_btn_validate'), 'Save',
+                                  class = GlobalSettings$btn_success_color),
+                     rv$steps.enabled['Save']
+                     )
+    })
+    observeEvent(input$Save_btn_validate, {
+      # Do some stuff
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = rnorm(1:5),
+                                          name = id)
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Save'] <- global$VALIDATED
+      dl_server('createQuickLink', 
+        dataIn = reactive({rv$dataIn}))
+      
+    })
+    # <<< END ------------- Code for step 3 UI---------------
 
 
 
-code
+"
+  
+  writeLines(code, con)
 }
 
 
@@ -346,7 +360,7 @@ code
 #' Description' step
 #' @rdname createTemplate
 #' 
-Insert_Description_Step_code_for_Pipeline <- function(){
+write_Insert_Description_Step_code_for_Pipeline <- function(con){
   
   
   code <- "
@@ -354,6 +368,16 @@ Insert_Description_Step_code_for_Pipeline <- function(){
 ###
 ###
 
+#' @export
+Description_conf <- function(){
+Config(
+    mode = 'process',
+    fullname = 'Description',
+    steps = c('Description'),
+    mandatory = c(TRUE)
+    )
+}
+    
 #' @export
 Description_ui <- function(id){
   ns <- NS(id)
@@ -370,15 +394,7 @@ Description_server <- function(id,
   verbose = FALSE
 ){
   
-  config <- Config(
-    mode = 'process',
-    
-    name = 'Description',
-    # List of all steps of the process
-    steps = c('Description'),
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = c(TRUE)
-    )
+  
   
   # Define default selected values for widgets
   # By default, this list is empty for the Description module
@@ -399,6 +415,7 @@ Description_server <- function(id,
     eval(
       str2expression(
         Get_Worflow_Core_Code(
+        name = id,
           w.names = names(widgets.default.values),
           rv.custom.names = names(rv.custom.default.values)
           
@@ -408,47 +425,6 @@ Description_server <- function(id,
     
     #rv.custom <- reactiveValues()
     #rv.custom.default.values <- list()
-    
-    ###### ------------------- Code for Description (step 0) -------------------------    #####
-    output$Description <- renderUI({
-      name <- strsplit(id, split='_')[[1]][1]
-      file <- paste0(config@path, '/md/', name, '.md')
-      tagList(
-        if (file.exists(file))
-          includeMarkdown(file)
-        else
-          p('No Description available'),
-        
-        uiOutput(ns('datasetDescription_ui')),
-        
-        # Insert validation button
-        uiOutput(ns('Description_btn_validate_ui'))
-      )
-    })
-    
-    
-    
-    output$datasetDescription_ui <- renderUI({
-      # Insert your own code to vizualise some information
-      # about your dataset. It will appear once the 'Start' button
-      # has been clicked
-      
-    })
-    
-    output$Description_btn_validate_ui <- renderUI({
-      widget <- actionButton(ns('Description_btn_validate'),
-        'Start',
-        class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Description'])
-    })
-    
-    
-    observeEvent(input$Description_btn_validate, {
-      rv$dataIn <- dataIn()
-      dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
-    })
     
     
     # Insert necessary code which is hosted by MagellanNTK
@@ -462,16 +438,13 @@ Description_server <- function(id,
 
 "
   
-  
-  
-  
-  code
+  writeLines(code, con)
 }
 
 
 
 #' @rdname createTemplate
-get_process_output_func <- function() {
+write_process_output_func <- function(con) {
     code <- "
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
@@ -481,76 +454,16 @@ get_process_output_func <- function() {
 }
 
     "
-    code
+writeLines(code, con)
 }
 
-
-###
-###
-### Functions specific to pipelines
-###
-###
-
-
-#' @rdname createTemplate
-#'
-get_pipeline_ui_function <- function(name) {
-    code <- "
-    #name#_ui <- function(id){
-    ns <- NS(id)
-    }
-
-    "
-
-    gsub("#name#", name, code)
-}
-
-#' @rdname createTemplate
-#'
-get_pipeline_header_server_func <- function(name) {
-    code <- "
-
-    #name#_server <- function(id,
-        dataIn = reactive({NULL}),
-        steps.enabled = reactive({NULL}),
-        remoteReset = reactive({FALSE}),
-        steps.status = reactive({NULL}),
-        current.pos = reactive({1})
-        ){
-    "
-    gsub("#name#", name, code)
-}
-
-
-#' @rdname createTemplate
-#'
-get_pipeline_config_code <- function(config) {
-    code <- "
-    # This list contains the basic configuration of the process
-    config <- Config(
-    # Define the type of module
-    mode = 'process',
-    name = '#name#',
-    # List of all steps of the process
-    steps = #steps#,
-
-    # A vector of boolean indicating if the steps are mandatory or not.
-    mandatory = #mandatory#
-    )
-    "
-
-    code <- gsub("#name#", vec2code(config@name, TRUE), code)
-    code <- gsub("#steps#", vec2code(config@steps, TRUE), code)
-    code <- gsub("#mandatory#", vec2code(config@mandatory, FALSE), code)
-    code
-}
 
 
 
 
 #' @rdname createTemplate
 #'
-get_pipeline_module_server <- function() {
+write_pipeline_module_server <- function(con) {
     code <- "
 
 
@@ -562,21 +475,14 @@ get_pipeline_module_server <- function() {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
+    core.code <- Get_Worflow_Core_Code(
+      name = id,
       w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-          
-          )
-        )
+      rv.custom.names = names(rv.custom.default.values)
       )
+    eval(str2expression(core.code))
 
-        # Insert code for the description renderUI()
-    #eval(parse(text = Get_Code_for_module_Description(config@name)),
-    #    envir = .GlobalEnv)
-
+      
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
     eval(parse(text = Module_Return_Func()))
@@ -586,5 +492,45 @@ get_pipeline_module_server <- function() {
 
     "
 
-    code
+    writeLines(code, con)
+}
+
+
+
+### Utility functions
+
+
+#' @title Convert vector to a source code string
+#' @param ls_list A vector
+#' @param is.char A `bolean(1)` to indicate whether the items are
+#' strings or not. In this case, they will be quoted in the result
+#' 
+#' @return A string
+#' @rdname createTemplate
+#'
+vec2code <- function(ls_list, is.char = FALSE) {
+  if (is.char) {
+    coll <- "', '"
+  } else {
+    coll <- ", "
+  }
+  
+  # create string
+  if (is.char) {
+    st_string_from_list <- paste0(
+      "c('",
+      paste0(ls_list, sep = "", collapse = coll)
+    )
+  } else {
+    st_string_from_list <- paste0(
+      "c(",
+      paste0(ls_list, sep = "", collapse = coll)
+    )
+  }
+  
+  if (is.char) {
+    paste0(st_string_from_list, "')")
+  } else {
+    paste0(st_string_from_list, ")")
+  }
 }

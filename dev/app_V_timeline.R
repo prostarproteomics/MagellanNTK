@@ -4,9 +4,9 @@ library(shinyjs)
 options(shiny.fullstacktrace = TRUE)
 
 config <- Config(
-  name = "test_TL_verticale",
+  full.name = "testTL_verticale",
   #mode = 'process',
-  steps = c('Description', 'step2', 'step3', 'Save'),
+  steps = c('step2', 'step3'),
   mandatory = c(TRUE, FALSE, FALSE, TRUE)
 )
 

@@ -19,9 +19,9 @@
 #' @rdname example_module_process2
 #' @export
 #' 
-PipelineB_Process1_conf <- function(){
+PipelineB_Process2_conf <- function(){
   Config(
-    name = 'Process1',
+    fullname = 'PipelineB_Process2',
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(FALSE, TRUE)
@@ -31,7 +31,7 @@ PipelineB_Process1_conf <- function(){
 
 #' @param id xxx
 #' 
-#' @rdname example_module_Process2
+#' @rdname example_PipelineB_Process2
 #' 
 #' @author Samuel Wieczorek
 #' 

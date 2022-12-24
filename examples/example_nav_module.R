@@ -7,14 +7,14 @@ if(interactive()){
   
   
   # Uncomment and Change this for a process workflow
-  # name <- 'PipelineA_Process1'
-  # name <- 'PipelineA_Description'
-  # layout <- c('h')
+   name <- 'PipelineA_Process1'
+   #name <- 'PipelineA_Description'
+   layout <- c('h')
   
   
   # Uncomment and Change this for a pipeline workflow
-  name <- 'PipelineA'
-  layout <- c('v', 'h')
+  #name <- 'PipelineA'
+  #layout <- c('v', 'h')
   
   
   

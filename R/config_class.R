@@ -24,6 +24,7 @@
 #' @rdname config
 #' @example examples/example_config_class.R
 #' 
+#' @slot fullname xxxx
 #' @slot name xxx
 #' @slot parent xxx
 #' @slot mode xxx
@@ -37,14 +38,14 @@
 #' 
 Config <- setClass("Config",
     representation(
-        name = "character",
-        parent = "character",
-        mode = "character",
-        steps = "vector",
-        mandatory = "vector",
-        ll.UI = "list",
-        full.name = 'character',
-        steps.source.file = 'vector'
+      fullname = "character",
+      name = "character",
+      parent = "character",
+      mode = "character",
+      steps = "vector",
+      mandatory = "vector",
+      ll.UI = "list",
+      steps.source.file = 'vector'
     ),
 
     #' @param object xxx
@@ -168,7 +169,7 @@ init.GenericProcess <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@full.name, '_', 
+  #                           nm = paste0(.Object@fullname, '_', 
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
   
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -188,7 +189,7 @@ init.RootPipeline <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@full.name, '_',
+  #                           nm = paste0(.Object@fullname, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
   
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -217,7 +218,7 @@ init.GenericPipeline <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory)
   
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@full.name, '_',
+  #                           nm = paste0(.Object@fullname, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   
@@ -242,7 +243,7 @@ init.DescriptionProcess <- function(.Object){
   .Object@steps <- c('Description')
   .Object@mandatory <- c(TRUE)
   # .Object@steps <- setNames(.Object@steps,
-  #                           nm = paste0(.Object@full.name, '_',
+  #                           nm = paste0(.Object@fullname, '_',
   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
   # )
   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
@@ -262,11 +263,9 @@ init.DescriptionProcess <- function(.Object){
 setMethod("show", 'Config',
           function(.Object){
             cat(crayon::green('\t ------- Config -------\n'))
+            cat(crayon::green(paste0('\tfullname: ', .Object@fullname, '\n')))
             cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
-            cat(crayon::green(paste0('\tfull.name: ', .Object@full.name, '\n')))
-            
             cat(crayon::green(paste0('\tparent: ', .Object@parent, '\n')))
-            
             cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
               
               cat(crayon::green('\tnames(steps): '))
@@ -297,21 +296,21 @@ setMethod("show", 'Config',
 setMethod("initialize" ,
     "Config" ,
     #' @param .Object xxx
-    #' @param name xxx
+    #' @param fullname xxx
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
     function(.Object, 
-        name, 
+             fullname, 
         mode,
         steps, 
         mandatory){
         
         # Basic init of slots
       
-      .Object@full.name <- name
+      .Object@fullname <- fullname
       
-        tmp <- unlist(strsplit(name, '_'))
+        tmp <- unlist(strsplit(fullname, '_'))
         if (length(tmp) == 2){
           .Object@name <- tmp[2]
           .Object@parent <- tmp[1]
@@ -347,18 +346,18 @@ setMethod("initialize" ,
 #' 
 #' @rdname config
 #' 
-#' @param parent xxx
+#' @param fullname xxx
 #' @param mode xxx
 #' @param steps xxx
 #' @param mandatory xxx
 #' 
-Config <- function(name, 
+Config <- function(fullname, 
     mode,
     steps = '', 
     mandatory = ''){
     
     new(Class ="Config",
-        name = name,
+        fullname = fullname,
         mode = mode,
         steps = steps, 
         mandatory = mandatory)

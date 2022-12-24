@@ -7,12 +7,12 @@
 \usage{
 xxx
 
-\S4method{initialize}{Config}(.Object, name, mode, steps, mandatory)
+\S4method{initialize}{Config}(.Object, full.name, mode, steps, mandatory)
 
-Config(name, mode, steps = "", mandatory = "")
+Config(full.name, mode, steps = "", mandatory = "")
 }
 \arguments{
-\item{name}{xxx}
+\item{full.name}{xxx}
 
 \item{mode}{xxx}
 
@@ -23,8 +23,6 @@ Config(name, mode, steps = "", mandatory = "")
 \item{.Object}{xxx}
 
 \item{object}{xxx}
-
-\item{parent}{xxx}
 }
 \description{
 This class is used to store the configuration of any process
@@ -49,6 +47,8 @@ Wrapper function to the constructor of the class
 \section{Slots}{
 
 \describe{
+\item{\code{full.name}}{xxxx}
+
 \item{\code{name}}{xxx}
 
 \item{\code{parent}}{xxx}
@@ -67,7 +67,7 @@ Wrapper function to the constructor of the class
 \examples{
 # Example of a generic process
 generic.proc <- Config(
-  name = 'PipelineA_Process1',
+  full.name = 'PipelineA_Process1',
   mode = 'process',
   steps = c('Step 1', 'Step 2'),
   mandatory = c(TRUE, FALSE)
@@ -76,7 +76,7 @@ generic.proc <- Config(
 
 # Example of a generic pipeline
 generic.pipe <- Config(
-  name = 'Pipe1_PipelineA',
+  full.name = 'Pipe1_PipelineA',
   mode = 'pipeline',
   steps = c('Process 1', 'Process 2'),
   mandatory = c(TRUE, FALSE)
@@ -85,7 +85,7 @@ generic.pipe <- Config(
 # Example of a root pipeline (process has no parent)
 root.pipe <- Config(
   mode = 'pipeline',
-  name = 'PipelineA',
+  full.name = 'PipelineA',
   steps = c('Process1', 'Process2', 'Process3'),
   mandatory = c(FALSE, FALSE, TRUE)
 )
@@ -93,7 +93,7 @@ root.pipe <- Config(
 
 # Example of a description module (process has no steps)
 description.process <- Config(
-  name = 'PipelineA_Description',
+  full.name = 'PipelineA_Description',
   mode = 'process',
   steps = '',
   mandatory = ''

@@ -3,54 +3,54 @@
 \name{createTemplate}
 \alias{createTemplate}
 \alias{createModuleTemplate}
-\alias{Code_for_Description_file}
-\alias{get_process_ui_function}
-\alias{get_process_header_server_func}
+\alias{write_Code_for_Description_file}
+\alias{write_process_ui_function}
+\alias{write_process_header_server_func}
 \alias{vec2code}
-\alias{get_process_config_code}
-\alias{get_process_code_for_default_value_widgets}
-\alias{get_process_module_server_header}
-\alias{get_process_renderUI_for_steps}
-\alias{Insert_Description_Step_code_for_Process}
-\alias{Insert_Description_Step_code_for_Pipeline}
-\alias{get_process_output_func}
-\alias{get_pipeline_ui_function}
-\alias{get_pipeline_header_server_func}
-\alias{get_pipeline_config_code}
-\alias{get_pipeline_module_server}
+\alias{write_get_process_config_code}
+\alias{write_process_code_for_default_value_widgets}
+\alias{write_process_module_server_header}
+\alias{write_process_renderUI_for_steps}
+\alias{write_Insert_Description_Step_code_for_Process}
+\alias{write_Insert_Description_Step_code_for_Pipeline}
+\alias{write_process_output_func}
+\alias{write_pipeline_ui_function}
+\alias{write_pipeline_header_server_func}
+\alias{write_pipeline_config_code}
+\alias{write_pipeline_module_server}
 \title{Create process template code}
 \usage{
 createModuleTemplate(config = NULL, path = ".")
 
-Code_for_Description_file(name)
+write_Code_for_Description_file(con, name)
 
-get_process_ui_function(name)
+write_process_ui_function(con, name)
 
-get_process_header_server_func(name)
+write_process_header_server_func(con, name)
 
 vec2code(ls_list, is.char = FALSE)
 
-get_process_config_code(config)
+write_get_process_config_code(con, config)
 
-get_process_code_for_default_value_widgets()
+write_process_code_for_default_value_widgets(con)
 
-get_process_module_server_header()
+write_process_module_server_header(con)
 
-get_process_renderUI_for_steps(steps)
+write_process_renderUI_for_steps(con, steps)
 
-Insert_Description_Step_code_for_Process()
+write_Insert_Description_Step_code_for_Process(con)
 
-Insert_Description_Step_code_for_Pipeline()
+write_Insert_Description_Step_code_for_Pipeline(con)
 
-get_process_output_func()
+write_process_output_func(con)
 
-get_pipeline_ui_function(name)
+write_pipeline_ui_function(con, name)
 
-get_pipeline_header_server_func(name)
+write_pipeline_header_server_func(con, name)
 
-get_pipeline_config_code(config)
+write_pipeline_config_code(con, config)
 
-get_pipeline_module_server()
+write_pipeline_module_server(con)
 }
 \arguments{
 \item{config}{An instance of the class `Config`.}
@@ -89,10 +89,10 @@ Description' step
 if(interactive()){
   
   conf.process <- Config(
-  name = 'ProcessX',
-  mode = "process",
-  steps = c("Step 1", "Step 2"),
-  mandatory = c(TRUE, FALSE)
+    full.name = 'PipeA_ProcessX',
+    mode = "process",
+    steps = c("Step 1", "Step 2"),
+    mandatory = c(TRUE, FALSE)
     )
 
 
@@ -104,7 +104,7 @@ unlink(file)
   
 conf.pipeline <- Config(
   mode = "pipeline",
-  name = 'PipelineA',
+  full.name = 'PipelineA',
   steps = c("Process 1", "Process 2", "Process 3"),
   mandatory = c(TRUE, FALSE, TRUE)
   )

@@ -24,7 +24,7 @@ NULL
 #' 
 PipelineB_Process1_conf <- function(){
   Config(
-    name = 'PipelineB_Process1',
+    fullname = 'PipelineB_Process1',
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(FALSE, TRUE)

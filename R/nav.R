@@ -8,8 +8,7 @@
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @example examples/example_nav_single_Process.R
-#' @example examples/example_nav_single_Pipeline.R
+#' @example examples/example_nav_module.R
 #'
 NULL
 
