@@ -81,7 +81,7 @@ nav_server <- function(id,
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
     verbose = FALSE,
-    path = path) {
+    path = NULL) {
 
     options(shiny.fullstacktrace = verbose)
 

@@ -109,15 +109,13 @@ PipelineB_Process1_server <- function(id,
 
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
-          name = id,
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-          )
-        )
-      )
+    core.code <- Get_Worflow_Core_Code(
+      name = id,
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
+    )
+    
+    eval(str2expression(core.code))
     
     
     

@@ -132,7 +132,7 @@ server <- function(input, output){
   
   
   config <- Config(
-    full.name = 'Process1',
+    fullname = 'Process1',
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(FALSE, TRUE)

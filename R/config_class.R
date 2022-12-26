@@ -56,6 +56,11 @@ Config <- setClass("Config",
         #
         # General conditions
         #
+        if (length(object@fullname) != 1){
+          warning(paste0("The slot 'fullname' must contain one string. Current value is: ", object@name))
+          passed <- FALSE
+        } 
+        
         if (length(object@name) != 1){
             warning(paste0("The slot 'name' must contain one string. Current value is: ", object@name))
             passed <- FALSE
@@ -236,8 +241,6 @@ init.GenericPipeline <- function(.Object){
 }
 
 
-#' @description A Description process has only one step called 'Description'
-#' 
 init.DescriptionProcess <- function(.Object){
   # A process has a parent
   .Object@steps <- c('Description')
@@ -300,11 +303,11 @@ setMethod("initialize" ,
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
-    function(.Object, 
-             fullname, 
-        mode,
-        steps, 
-        mandatory){
+    function(.Object,
+             fullname,
+             mode,
+             steps,
+             mandatory){
         
         # Basic init of slots
       
@@ -351,8 +354,8 @@ setMethod("initialize" ,
 #' @param steps xxx
 #' @param mandatory xxx
 #' 
-Config <- function(fullname, 
-    mode,
+Config <- function(fullname = '', 
+    mode = '',
     steps = '', 
     mandatory = ''){
     

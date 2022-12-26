@@ -16,6 +16,27 @@
 #' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
 #'
 #' @name example_module_process1
+#' 
+#' @param id xxx
+#' @param dataIn The dataset
+#' @param steps.enabled A vector of boolean which has the same length of the steps
+#' of the pipeline. This information is used to enable/disable the widgets. It is not
+#' a communication variable between the caller and this module, thus there is no
+#' corresponding output variable
+#' @param remoteReset It is a remote command to reset the module. A boolean that
+#' indicates is the pipeline has been reseted by a program of higher level
+#' Basically, it is the program which has called this module
+#' @param steps.status xxx
+#' @param current.pos xxx
+#' @param path xxx
+#' 
+#' 
+#' 
+#' 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' 
 NULL
 
 #' @rdname example_module_process1
@@ -31,11 +52,7 @@ PipelineA_Process1_conf <- function(){
 }
 
 
-#' @param id xxx
-#' 
 #' @rdname example_module_process1
-#' 
-#' @author Samuel Wieczorek
 #' 
 #' @export
 #'
@@ -44,19 +61,7 @@ PipelineA_Process1_ui <- function(id){
 }
 
 
-#' @param id xxx
-#' @param dataIn The dataset
-#' @param steps.enabled A vector of boolean which has the same length of the steps
-#' of the pipeline. This information is used to enable/disable the widgets. It is not
-#' a communication variable between the caller and this module, thus there is no
-#' corresponding output variable
-#' @param remoteReset It is a remote command to reset the module. A boolean that
-#' indicates is the pipeline has been reseted by a program of higher level
-#' Basically, it is the program which has called this module
-#' @param steps.status xxx
-#' @param current.pos xxx
-#' @param path xxx
-#' 
+
 #' @rdname example_module_process1
 #' 
 #' @importFrom stats setNames rnorm
@@ -103,19 +108,14 @@ PipelineA_Process1_server <- function(id,
 
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
-          name = id,
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-          )
-        )
-      )
+    core.code <- Get_Worflow_Core_Code(
+      name = id,
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
+    )
     
-    observe({
-      rv$config
-    })
+    eval(str2expression(core.code))
+    
     
     # >>>
     # >>> START ------------- Code for Description UI---------------

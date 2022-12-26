@@ -1,5 +1,7 @@
 if(interactive()){
   
+  path <- system.file(".", package = "MagellanNTK")
+  
   ll.process <- list(
     fullname = 'PipeA_ProcessX',
     mode = "process",
@@ -10,7 +12,11 @@ if(interactive()){
 
 file <- createModuleTemplate(ll.process)
 source(file)
-run_workflow("ProcessX", verbose = TRUE)
+data("data_na")
+run_workflow("PipeA_ProcessX", 
+             dataIn = data_na, 
+             path = path, 
+             verbose = TRUE)
 unlink(file)
   
   

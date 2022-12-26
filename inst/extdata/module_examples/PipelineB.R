@@ -87,15 +87,13 @@ PipelineB_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
-          name = id,
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-        )
-      )
+    core.code <- Get_Worflow_Core_Code(
+      name = id,
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
     )
+    
+    eval(str2expression(core.code))
     
     rv.custom <- reactiveValues()
     

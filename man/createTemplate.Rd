@@ -4,60 +4,51 @@
 \alias{createTemplate}
 \alias{createModuleTemplate}
 \alias{write_Code_for_Description_file}
-\alias{write_process_ui_function}
-\alias{write_process_header_server_func}
-\alias{vec2code}
-\alias{write_get_process_config_code}
+\alias{write_ui_func}
+\alias{write_header_server_func}
+\alias{write_config_func}
 \alias{write_process_code_for_default_value_widgets}
-\alias{write_process_module_server_header}
+\alias{write_module_server_header}
 \alias{write_process_renderUI_for_steps}
 \alias{write_Insert_Description_Step_code_for_Process}
-\alias{write_Insert_Description_Step_code_for_Pipeline}
-\alias{write_process_output_func}
-\alias{write_pipeline_ui_function}
-\alias{write_pipeline_header_server_func}
-\alias{write_pipeline_config_code}
-\alias{write_pipeline_module_server}
+\alias{write_Insert_Save_Step_code_for_Process}
+\alias{create_Description_md_file}
+\alias{write_output_func}
+\alias{vec2code}
 \title{Create process template code}
 \usage{
 createModuleTemplate(config = NULL, path = ".")
 
 write_Code_for_Description_file(con, name)
 
-write_process_ui_function(con, name)
+write_ui_func(con, name)
 
-write_process_header_server_func(con, name)
+write_header_server_func(con, name)
 
-vec2code(ls_list, is.char = FALSE)
-
-write_get_process_config_code(con, config)
+write_config_func(con, config)
 
 write_process_code_for_default_value_widgets(con)
 
-write_process_module_server_header(con)
+write_module_server_header(con)
 
-write_process_renderUI_for_steps(con, steps)
+write_process_renderUI_for_steps(con, ll.config, path)
 
-write_Insert_Description_Step_code_for_Process(con)
+write_Insert_Description_Step_code_for_Process(con, path)
 
-write_Insert_Description_Step_code_for_Pipeline(con)
+write_Insert_Save_Step_code_for_Process(con)
 
-write_process_output_func(con)
+create_Description_md_file(con)
 
-write_pipeline_ui_function(con, name)
+write_output_func(con)
 
-write_pipeline_header_server_func(con, name)
-
-write_pipeline_config_code(con, config)
-
-write_pipeline_module_server(con)
+vec2code(ls_list, is.char = FALSE)
 }
 \arguments{
-\item{config}{An instance of the class `Config`.}
-
 \item{path}{xxx}
 
 \item{name}{xxx}
+
+\item{ll.config}{A `list()` of 4 items}
 
 \item{ls_list}{A vector}
 
@@ -82,33 +73,41 @@ th developer.
 
 This function inserts the necessary code for the 'Description' step
 
+This function inserts the necessary code for the 'Description' step
+
 This function inserts the necessary code for the 
 Description' step
+
+
+}
+\details{
+
 }
 \examples{
 if(interactive()){
   
-  conf.process <- Config(
-    full.name = 'PipeA_ProcessX',
+  ll.process <- list(
+    fullname = 'PipeA_ProcessX',
     mode = "process",
     steps = c("Step 1", "Step 2"),
     mandatory = c(TRUE, FALSE)
     )
 
 
-file <- createModuleTemplate(conf.process)
+file <- createModuleTemplate(ll.process)
 source(file)
-run_workflow("ProcessX", verbose = TRUE)
+data("data_na")
+run_workflow("ProcessX", dataIn = data_na, verbose = TRUE)
 unlink(file)
   
   
-conf.pipeline <- Config(
+ll.pipeline <- list(
   mode = "pipeline",
-  full.name = 'PipelineA',
+  fullname = 'PipelineA',
   steps = c("Process 1", "Process 2", "Process 3"),
   mandatory = c(TRUE, FALSE, TRUE)
   )
-createModuleTemplate(conf.pipeline)
+createModuleTemplate(ll.pipeline)
 run_workflow("PipelineA", verbose = TRUE)
 
 }

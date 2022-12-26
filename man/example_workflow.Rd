@@ -4,7 +4,7 @@
 \alias{run_workflow}
 \title{Shiny example module `Process`}
 \usage{
-run_workflow(id, verbose = FALSE, tl.layout = NULL, path = NULL)
+run_workflow(id, dataIn = NULL, verbose = FALSE, tl.layout = NULL, path = NULL)
 }
 \arguments{
 \item{id}{xxx}

@@ -95,11 +95,13 @@ PipelineA_Process3_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    eval(str2expression(Get_Worflow_Core_Code(
+    core.code <- Get_Worflow_Core_Code(
       name = id,
       w.names = names(widgets.default.values),
       rv.custom.names = names(rv.custom.default.values)
-    )))
+    )
+    
+    eval(str2expression(core.code))
     
     
     

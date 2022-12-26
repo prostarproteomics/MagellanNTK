@@ -27,30 +27,15 @@
 #' @example examples/example_run_workflow.R
 #'
 run_workflow <- function(id,
-    verbose = FALSE,
-    tl.layout = NULL,
-    path = NULL) {
+                         dataIn = NULL,
+                         verbose = FALSE,
+                         tl.layout = NULL,
+                         path = NULL) {
   
-    if (missing(id)) {
-        warning("'id' is required.")
-        return(NULL)
-    }
+    if (missing(id))
+        stop("'id' is required.")
     
-
-    # if (is.null(path)){
-    #     warning('xxxx')
-    #     return (NULL)
-    # } else {
-    #     # Load source code files for processes
-    #     for (l in list.files(path = path, pattern = ".R", recursive = TRUE))
-    #         source(file.path(path, l), local=FALSE)$value
-    #     if (!Found_Mod_Funcs(id)) {
-    #         return(NULL)
-    #     }
-    # }
-    # 
-    # 
-    options(shiny.fullstacktrace = verbose)
+  options(shiny.fullstacktrace = verbose)
 
 
     ui <- fluidPage(
@@ -65,7 +50,8 @@ run_workflow <- function(id,
     server <- function(input, output) {
         dataOut <- reactiveVal()
 
-        dataIn <- Load_Dataset_server("exemple")
+        if (is.null(dataIn))
+          dataIn <- Load_Dataset_server("exemple")
 
         output$debugInfos_ui <- renderUI({
             req(verbose)
@@ -84,18 +70,19 @@ run_workflow <- function(id,
  
         })
 
-        observeEvent(req(dataIn()), {
+        observeEvent(req(dataIn), {
             dataOut(nav_server(
                 id = id,
                 verbose = verbose,
-                dataIn = reactive({dataIn()}),
-                tl.layout = tl.layout
+                dataIn = reactive({dataIn}),
+                tl.layout = tl.layout,
+                path = path
                 ))
 
             Debug_Infos_server(
                 id = "debug_infos",
                 title = "Infos from shiny app",
-                rv.dataIn = reactive({dataIn()}),
+                rv.dataIn = reactive({dataIn}),
                 dataOut = reactive({dataOut()$dataOut()$value})
             )
         })
