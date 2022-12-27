@@ -86,7 +86,7 @@ createModuleTemplate <- function(config = NULL, path='.') {
 
 
 
-#' @rdname example_template
+#' @rdname createTemplate
 #' 
 write_general_comment <- function(con, name){
   
@@ -150,7 +150,6 @@ write_Code_for_Description_file <- function(con, name){
 #'
 write_ui_func <- function(con, name) {
 code <- "
-#' @rdname module_#name#
 #' @export
 #' 
 #name#_ui <- function(id){
@@ -165,7 +164,6 @@ code <- "
 #'
 write_header_server_func <- function(con, name) {
 code <- "
-#' @rdname module_#name#
 #' @export
 #' 
  #name#_server <- function(id,
@@ -199,7 +197,6 @@ code <- "
 #'
 write_config_func <- function(con, config) {
 code <- "
-#' @rdname module_#fullname#
 #' @export
 #' 
 #fullname#_conf <- function(){
@@ -268,10 +265,7 @@ moduleServer(id, function(input, output, session) {
 writeLines(code, con)
 }
 
-#' @rdname createTemplate
-#' 
-#' @param steps xxx
-#' 
+#' @export
 write_process_renderUI_for_steps <- function(con, ll.config, path) {
     code <- NULL
 
@@ -294,20 +288,77 @@ write_process_renderUI_for_steps <- function(con, ll.config, path) {
         write_Insert_Save_Step_code_for_Process(con)
       )
     } else {
-      code <- paste0(code,
-"
-  output$#step# <- renderUI({ })
-
-")
+      code <- paste0(code, write_stepUI_template(i))
       }
 code <- gsub("#step#", i, code)
 }
 
-    
 #remove tmp.config
 rm(tmp.config)
 writeLines(code, con)
 }
+
+  
+#' @rdname createTemplate
+#' @export
+#' 
+write_stepUI_template <- function(step.name){
+    
+code <- "
+output$#step.name# <- renderUI({
+
+wellPanel(
+        # uiOutput for all widgets in this UI
+        # This part is mandatory
+        # The renderUI() function of each widget is managed by MagellanNTK
+        # The dev only have to define a reactive() function for each
+        # widget he want to insert
+        # Be aware of the naming convention for ids in uiOutput()
+        # For more details, please refer to the dev document.
+        
+        # Insert validation button
+        uiOutput(ns('#step.name#_btn_validate_ui')),
+        
+        # Additional code
+            
+        )
+    })
+
+
+output$#step.name#_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('#step.name#_btn_validate'),
+                   'Perform',
+                   class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['#step.name#'] )
+      
+    })
+    # >>> END: Definition of the widgets
+    
+    
+    observeEvent(input$#step.name#_btn_validate, {
+      # Do some stuff
+      
+      # Here, you to hase use a function to add an item to the
+      # dataset
+      # rv$dataIn <- Add_Datasets_to_Object(
+      #                object = rv$dataIn,
+      #                dataset = rnorm(1:5),
+      #                name = paste0('temp_',id)
+      #                )
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['#step.name#'] <- global$VALIDATED
+    })
+  
+
+"
+
+code <- gsub('#step.name#', step.name, code)
+code
+  }
+
 
 
 #' @title xxx

@@ -36,7 +36,6 @@ NULL
 
   
 
-#' @rdname module_PipeA_ProcessX
 #' @export
 #' 
 PipeA_ProcessX_conf <- function(){
@@ -50,7 +49,6 @@ PipeA_ProcessX_conf <- function(){
 
 
 
-#' @rdname module_PipeA_ProcessX
 #' @export
 #' 
 PipeA_ProcessX_ui <- function(id){
@@ -59,7 +57,6 @@ PipeA_ProcessX_ui <- function(id){
 
 
 
-#' @rdname module_PipeA_ProcessX
 #' @export
 #' 
  PipeA_ProcessX_server <- function(id,
@@ -206,10 +203,102 @@ moduleServer(id, function(input, output, session) {
 
 
 
-  output$Step1 <- renderUI({ })
+output$Step1 <- renderUI({
+
+wellPanel(
+        # uiOutput for all widgets in this UI
+        # This part is mandatory
+        # The renderUI() function of each widget is managed by MagellanNTK
+        # The dev only have to define a reactive() function for each
+        # widget he want to insert
+        # Be aware of the naming convention for ids in uiOutput()
+        # For more details, please refer to the dev document.
+        
+        # Insert validation button
+        uiOutput(ns('Step1_btn_validate_ui')),
+        
+        # Additional code
+            
+        )
+    })
 
 
-  output$Step2 <- renderUI({ })
+output$Step1_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('Step1_btn_validate'),
+                   'Perform',
+                   class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Step1'] )
+      
+    })
+    # >>> END: Definition of the widgets
+    
+    
+    observeEvent(input$Step1_btn_validate, {
+      # Do some stuff
+      
+      # Here, you to hase use a function to add an item to the
+      # dataset
+      # rv$dataIn <- Add_Datasets_to_Object(
+      #                object = rv$dataIn,
+      #                dataset = rnorm(1:5),
+      #                name = paste0('temp_',id)
+      #                )
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step1'] <- global$VALIDATED
+    })
+  
+
+
+output$Step2 <- renderUI({
+
+wellPanel(
+        # uiOutput for all widgets in this UI
+        # This part is mandatory
+        # The renderUI() function of each widget is managed by MagellanNTK
+        # The dev only have to define a reactive() function for each
+        # widget he want to insert
+        # Be aware of the naming convention for ids in uiOutput()
+        # For more details, please refer to the dev document.
+        
+        # Insert validation button
+        uiOutput(ns('Step2_btn_validate_ui')),
+        
+        # Additional code
+            
+        )
+    })
+
+
+output$Step2_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('Step2_btn_validate'),
+                   'Perform',
+                   class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Step2'] )
+      
+    })
+    # >>> END: Definition of the widgets
+    
+    
+    observeEvent(input$Step2_btn_validate, {
+      # Do some stuff
+      
+      # Here, you to hase use a function to add an item to the
+      # dataset
+      # rv$dataIn <- Add_Datasets_to_Object(
+      #                object = rv$dataIn,
+      #                dataset = rnorm(1:5),
+      #                name = paste0('temp_',id)
+      #                )
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step2'] <- global$VALIDATED
+    })
+  
 
 
 

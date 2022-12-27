@@ -3,13 +3,15 @@
 \name{createTemplate}
 \alias{createTemplate}
 \alias{createModuleTemplate}
+\alias{module_#name#}
+\alias{write_general_comment}
 \alias{write_Code_for_Description_file}
 \alias{write_ui_func}
 \alias{write_header_server_func}
 \alias{write_config_func}
 \alias{write_process_code_for_default_value_widgets}
 \alias{write_module_server_header}
-\alias{write_process_renderUI_for_steps}
+\alias{write_stepUI_template}
 \alias{write_Insert_Description_Step_code_for_Process}
 \alias{write_Insert_Save_Step_code_for_Process}
 \alias{create_Description_md_file}
@@ -18,6 +20,8 @@
 \title{Create process template code}
 \usage{
 createModuleTemplate(config = NULL, path = ".")
+
+write_general_comment(con, name)
 
 write_Code_for_Description_file(con, name)
 
@@ -31,7 +35,7 @@ write_process_code_for_default_value_widgets(con)
 
 write_module_server_header(con)
 
-write_process_renderUI_for_steps(con, ll.config, path)
+write_stepUI_template(step.name)
 
 write_Insert_Description_Step_code_for_Process(con, path)
 
@@ -48,14 +52,29 @@ vec2code(ls_list, is.char = FALSE)
 
 \item{name}{xxx}
 
-\item{ll.config}{A `list()` of 4 items}
-
 \item{ls_list}{A vector}
 
 \item{is.char}{A `bolean(1)` to indicate whether the items are
 strings or not. In this case, they will be quoted in the result}
 
-\item{steps}{xxx}
+\item{ll.config}{A `list()` of 4 items}
+
+\item{id}{xxx}
+
+\item{dataIn}{The dataset}
+
+\item{steps.enabled}{A vector of boolean which has the same length of the steps
+of the pipeline. This information is used to enable/disable the widgets. It is not
+a communication variable between the caller and this module, thus there is no
+corresponding output variable}
+
+\item{remoteReset}{It is a remote command to reset the module. A boolean that
+indicates is the pipeline has been reseted by a program of higher level
+Basically, it is the program which has called this module}
+
+\item{steps.status}{xxx}
+
+\item{current.pos}{xxx}
 }
 \value{
 NA
@@ -71,20 +90,31 @@ and data processing functions.
 The 'Description' step is generic and creates a *.md file to be filled by
 th developer.
 
+This module contains the configuration informations for the corresponding pipeline.
+It is called by the nav_pipeline module of the package MagellanNTK
+
+The name of the server and ui functions are formatted with keywords separated by '_', as follows:
+* first string `mod`: indicates that it is a Shiny module
+* `pipeline name` is the name of the pipeline to which the process belongs
+* `process name` is the name of the process itself
+
+This convention is important because MagellanNTK call the different
+server and ui functions by building dynamically their name.
+
+In this example, `#name#_ui()` and `#name#_server()` define
+the code for the process `xxx` which is part of the pipeline called `xxx`.
+
 This function inserts the necessary code for the 'Description' step
 
 This function inserts the necessary code for the 'Description' step
 
 This function inserts the necessary code for the 
 Description' step
-
-
-}
-\details{
-
 }
 \examples{
 if(interactive()){
+  
+  path <- system.file(".", package = "MagellanNTK")
   
   ll.process <- list(
     fullname = 'PipeA_ProcessX',
@@ -97,7 +127,10 @@ if(interactive()){
 file <- createModuleTemplate(ll.process)
 source(file)
 data("data_na")
-run_workflow("ProcessX", dataIn = data_na, verbose = TRUE)
+run_workflow("PipeA_ProcessX", 
+             dataIn = data_na, 
+             path = path, 
+             verbose = TRUE)
 unlink(file)
   
   

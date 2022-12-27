@@ -24,7 +24,7 @@ nav_server(
  }),
   tl.layout = NULL,
   verbose = FALSE,
-  path = path
+  path = NULL
 )
 }
 \arguments{
