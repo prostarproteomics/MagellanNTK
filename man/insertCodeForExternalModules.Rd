@@ -10,7 +10,7 @@
 \alias{Get_Code_for_dataOut}
 \alias{Get_Code_for_General_observeEvents}
 \alias{Module_Return_Func}
-\alias{Get_Worflow_Core_Code}
+\alias{Get_Workflow_Core_Code}
 \alias{Get_AdditionalModule_Core_Code}
 \alias{Get_Code_for_AddMod_observeEvents}
 \title{R code to update the 'config' variable of a process module}
@@ -31,7 +31,12 @@ Get_Code_for_General_observeEvents()
 
 Module_Return_Func()
 
-Get_Worflow_Core_Code(name = NULL, w.names = NULL, rv.custom.names = NULL)
+Get_Workflow_Core_Code(
+  mode = NULL,
+  name = NULL,
+  w.names = NULL,
+  rv.custom.names = NULL
+)
 
 Get_AdditionalModule_Core_Code(w.names = NULL, rv.custom.names = NULL)
 
@@ -138,7 +143,7 @@ Module_Return_Func()
 id <- 'PipelineA_Process1'
 widgets <- c('widget1', 'widget2')
 custom <- list(foo1 = list(), foo2 = 3)
-Get_Worflow_Core_Code(id, widgets, names(custom))
+Get_Workflow_Core_Code('process', id, widgets, names(custom))
 
 widgets <- c('widget1', 'widget2')
 Get_AdditionalModule_Core_Code(widgets)

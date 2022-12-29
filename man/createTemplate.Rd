@@ -5,7 +5,6 @@
 \alias{createModuleTemplate}
 \alias{module_#name#}
 \alias{write_general_comment}
-\alias{write_Code_for_Description_file}
 \alias{write_ui_func}
 \alias{write_header_server_func}
 \alias{write_config_func}
@@ -14,16 +13,14 @@
 \alias{write_stepUI_template}
 \alias{write_Insert_Description_Step_code_for_Process}
 \alias{write_Insert_Save_Step_code_for_Process}
-\alias{create_Description_md_file}
+\alias{Create_Pipeline_Description_source_file}
 \alias{write_output_func}
 \alias{vec2code}
 \title{Create process template code}
 \usage{
-createModuleTemplate(config = NULL, path = ".")
+createModuleTemplate(config = NULL, path = NULL)
 
 write_general_comment(con, name)
-
-write_Code_for_Description_file(con, name)
 
 write_ui_func(con, name)
 
@@ -33,7 +30,7 @@ write_config_func(con, config)
 
 write_process_code_for_default_value_widgets(con)
 
-write_module_server_header(con)
+write_module_server_header(con, mode)
 
 write_stepUI_template(step.name)
 
@@ -41,7 +38,7 @@ write_Insert_Description_Step_code_for_Process(con, path)
 
 write_Insert_Save_Step_code_for_Process(con)
 
-create_Description_md_file(con)
+Create_Pipeline_Description_source_file(fullname, path)
 
 write_output_func(con)
 
@@ -114,8 +111,11 @@ Description' step
 \examples{
 if(interactive()){
   
-  path <- system.file(".", package = "MagellanNTK")
   
+  ### 
+  ### Full example for a process workflow
+  ###
+   
   ll.process <- list(
     fullname = 'PipeA_ProcessX',
     mode = "process",
@@ -124,24 +124,73 @@ if(interactive()){
     )
 
 
-file <- createModuleTemplate(ll.process)
-source(file)
+files <- createModuleTemplate(ll.process, path = tempdir())
+source(file.path(tempdir(), files$code), local=TRUE)
 data("data_na")
 run_workflow("PipeA_ProcessX", 
              dataIn = data_na, 
-             path = path, 
+             path = tempdir(), 
              verbose = TRUE)
 unlink(file)
   
   
-ll.pipeline <- list(
+
+### 
+### Full example for a pipeline workflow
+###
+
+ll.proc1 <- list(
+  fullname = 'PipeA_Proc1',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+ll.proc2 <- list(
+  fullname = 'PipeA_Proc2',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+ll.proc3 <- list(
+  fullname = 'PipeA_Proc3',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+
+files.proc1 <- createModuleTemplate(ll.proc1, path = tempdir())
+files.proc2 <- createModuleTemplate(ll.proc2, path = tempdir())
+files.proc3 <- createModuleTemplate(ll.proc3, path = tempdir())
+
+source(file.path(tempdir(), files.proc1$code), local=TRUE)
+source(file.path(tempdir(), files.proc2$code), local=TRUE)
+source(file.path(tempdir(), files.proc3$code), local=TRUE)
+
+
+# Create the pipeline workflow
+ll.pipe <- list(
   mode = "pipeline",
-  fullname = 'PipelineA',
-  steps = c("Process 1", "Process 2", "Process 3"),
+  fullname = 'PipeA',
+  steps = c("Proc 1", "Proc 2", "Proc 3"),
   mandatory = c(TRUE, FALSE, TRUE)
   )
-createModuleTemplate(ll.pipeline)
-run_workflow("PipelineA", verbose = TRUE)
+files.pipeA <- createModuleTemplate(ll.pipe, path = tempdir())
+#source(file.pipeA)
+source(file.path(path, files.pipeA$code), local=TRUE)$value
+source(file.path(path, files.pipeA$desc), local=TRUE)$value
+data(data_na)
+run_workflow("PipeA",
+             dataIn = data_na, 
+             path = path, 
+             verbose = TRUE)
+
+unlink(file.proc1)
+unlink(file.proc2)
+unlink(file.proc3)
+unlink(file.pipeA)
 
 }
 }

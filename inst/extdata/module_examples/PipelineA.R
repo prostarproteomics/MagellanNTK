@@ -15,7 +15,7 @@ PipelineA_conf <- function(){
 Config(
   mode = 'pipeline',
   fullname = 'PipelineA',
-  steps = c('Process1', 'Process2', 'Process3'),
+  steps = c('Process 1', 'Process 2', 'Process 3'),
   mandatory = c(FALSE, FALSE, TRUE)
 )
 }
@@ -87,16 +87,13 @@ PipelineA_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    core.code <- Get_Worflow_Core_Code(
+    core.code <- Get_Workflow_Core_Code(
       name = id,
       w.names = names(widgets.default.values),
       rv.custom.names = names(rv.custom.default.values)
     )
     
     eval(str2expression(core.code))
-    
-    rv.custom <- reactiveValues()
-    
     
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE

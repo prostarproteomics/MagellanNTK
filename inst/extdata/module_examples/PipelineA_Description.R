@@ -8,10 +8,8 @@
 PipelineA_Description_conf <- function(){
   Config(
     fullname = 'PipelineA_Description',
-    mode = 'process',
-    steps = '',
-    mandatory = ''
-  )
+    mode = 'process'
+    )
 }
 
 
@@ -51,24 +49,19 @@ PipelineA_Description_server <- function(id,
     
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    eval(
-      str2expression(
-        Get_Worflow_Core_Code(
-          name = id,
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-          
-        )
-      )
+    core.code <- Get_Workflow_Core_Code(
+      mode = 'process',
+      name = id,
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
     )
     
-    #rv.custom <- reactiveValues()
-    #rv.custom.default.values <- list()
+    eval(str2expression(core.code))
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      print(path)
-      file <- paste0(path, '/md/', name, '.md')
+      md.file <- paste0(id, '.md')
+      file <- file.path(path, 'md', md.file)
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

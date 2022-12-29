@@ -115,13 +115,15 @@ ActionOn_Child_Changed <- function(temp.dataIn,
 #' 
 #' @examples NA
 #'
-GetValuesFromChildren <- function(config,
-    tmp.return) {
+GetValuesFromChildren <- function(config, tmp.return) {
+  
+  names_steps <- names(config@steps)
+  
     # Get the trigger values for each steps of the module
-    return.trigger.values <- setNames(lapply(config@steps, function(x) {
+    return.trigger.values <- setNames(lapply(names_steps, function(x) {
         tmp.return[[x]]$dataOut()$trigger
     }),
-    nm = config@steps
+    nm = names_steps
     )
 
     # Replace NULL values by NA
@@ -130,10 +132,10 @@ GetValuesFromChildren <- function(config,
 
 
     # Get the values returned by each step of the modules
-    return.values <- setNames(lapply(config@steps, function(x) {
-        tmp.return[[x]]$dataOut()$value
-    }),
-    nm = config@steps
+    return.values <- setNames(lapply(names_steps, 
+                                     function(x) {
+        tmp.return[[x]]$dataOut()$value}),
+    nm = names_steps
     )
 
 
@@ -222,10 +224,9 @@ PrepareData2Send <- function(rv, pos, verbose=FALSE) {
 
     # Initialize vector to all NULL values
     data2send <- setNames(
-        lapply(rv$config@steps, function(x) {
-            NULL
-        }),
-        nm = rv$config@steps
+        lapply(names(rv$config@steps), 
+               function(x) {NULL}),
+        nm = names(rv$config@steps)
     )
 
     if (is.null(rv$dataIn)) { # Init of core engine

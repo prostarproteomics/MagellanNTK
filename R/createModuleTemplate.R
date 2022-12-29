@@ -28,14 +28,21 @@ NULL
 #' @export
 #' @rdname createTemplate
 #'
-createModuleTemplate <- function(config = NULL, path='.') {
+createModuleTemplate <- function(config = NULL, path=NULL) {
   if (class(config) != 'list')
     stop("'config' is not a `list`. Abort.")
   
-  names(config$steps) <- gsub(' ', '', config$steps)
+  if(is.null(path))
+    stop('path is not configured.')
   
+  # Return values
+  value <- NULL
+  
+  names(config$steps) <- gsub(' ', '', config$steps)
+ 
   # Create template module file
-  mod.filename <- paste0(path, '/', config$fullname, ".R")
+  mod.filename <- file.path(path, paste0(config$fullname, ".R"))
+  value <- c(value, paste0(config$fullname, ".R"))
   if (file.exists(mod.filename)) {
     file.remove(mod.filename)
     }
@@ -47,41 +54,26 @@ createModuleTemplate <- function(config = NULL, path='.') {
   write_ui_func(con, config$fullname)
   write_header_server_func(con, config$fullname)
   
-  if(config$mode == 'process')
+  #if(config$mode == 'process')
     write_process_code_for_default_value_widgets(con)
   
   
-  write_module_server_header(con)
+  write_module_server_header(con, config$mode)
   
   if(config$mode == 'process'){
      write_process_renderUI_for_steps(con, config, path)
   }
   
-  if(config$mode == 'pipeline'){
-    create_Description_md_file(con)
-    }
-
   write_output_func(con)
-  
   close(con)
     
-    ###
-    ### Create the Description file
-    ###
-    desc.dir <- paste0(path, '/md')
-    if (!dir.exists(desc.dir)) 
-      dir.create(desc.dir)          
-                       
-    desc.filename <- paste0(desc.dir, '/', config$fullname, ".md")
-    if (file.exists(desc.filename)) {
-      file.remove(desc.filename)
-    }
-    con.desc <- file(desc.filename, open = "a")
-    
-    write_Code_for_Description_file(config$fullname, con.desc)
-    close(con.desc)
-    
-    return(mod.filename)
+  
+  if(config$mode == 'pipeline'){
+    value <- c(value, Create_Pipeline_Description_source_file(config$fullname, path))
+    value <- c(value, Create_Pipeline_Description_md_file(path, config$fullname))
+  }
+  
+  return(value)
 }
 
 
@@ -132,17 +124,38 @@ NULL
   
 }
 
-#' @rdname createTemplate
-#' 
-write_Code_for_Description_file <- function(con, name){
-  
-  code <- "
+
+
+
+Create_Pipeline_Description_md_file <- function(path, fullname){
+###
+### Create the Description md file
+###
+desc.dir <- file.path(path, 'md')
+if (!dir.exists(desc.dir)) 
+  dir.create(desc.dir)          
+
+md.file <- paste0(fullname, ".md")
+desc.filename <- file.path(desc.dir, md.file)
+if (file.exists(desc.filename)) {
+  file.remove(desc.filename)
+}
+con.desc <- file(desc.filename, open = "a")
+
+
+code <- "
   ## Overview
   
   This page describes the workflow '#name#'.
   
   "
-  writeLines(gsub("#name#", name, code), con)
+writeLines(gsub("#name#", fullname, code), con.desc)
+
+
+close(con.desc)
+
+return(md.file)
+
 }
 
 
@@ -173,7 +186,7 @@ code <- "
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
   verbose = FALSE,
-  path = path
+  path = NULL
   ){
   
   # Here, you can source other .R files which contains
@@ -201,8 +214,8 @@ code <- "
 #' 
 #fullname#_conf <- function(){
   Config(
-    mode = '#mode#',
     fullname = '#fullname#',
+    mode = '#mode#',
     steps = #steps#,
     mandatory = #mandatory#
     )
@@ -224,13 +237,8 @@ write_process_code_for_default_value_widgets <- function(con) {
 code <- "
   # Define default selected values for widgets
   # This is only for simple workflows
-  widgets.default.values <- list( 
-    # Here, you write the name of each widget which will be 
-    # used in the module
-    # As refered in xxx, each widget name must be prefixed
-    # by the name of the steps it belongs to
-  )
-  rv.custom.default.values <- list()
+  widgets.default.values <- NULL
+  rv.custom.default.values <- NULL
   
 "
 
@@ -240,7 +248,7 @@ writeLines(code, con)
 
 #' @rdname createTemplate
 #'
-write_module_server_header <- function(con) {
+write_module_server_header <- function(con, mode) {
 code <- "
 ###-------------------------------------------------------------###
 ###                                                             ###
@@ -252,7 +260,8 @@ moduleServer(id, function(input, output, session) {
 
   # Insert necessary code which is hosted by MagellanNTK
   # DO NOT MODIFY THIS LINE
-  core.code <- Get_Worflow_Core_Code(
+  core.code <- Get_Workflow_Core_Code(
+    mode = '#mode#',
     name = id,
     w.names = names(widgets.default.values),
     rv.custom.names = names(rv.custom.default.values)
@@ -261,7 +270,7 @@ moduleServer(id, function(input, output, session) {
   eval(str2expression(core.code))
 
 "
-
+code <- gsub("#mode#", mode, code)
 writeLines(code, con)
 }
 
@@ -373,7 +382,8 @@ code <- "
   # >>> 
 
   output$Description <- renderUI({
-    file <- paste0(path, '/md/', id, '.md')
+    md.file <- paste0(id, '.md')
+    file <- file.path(path, 'md', md.file)
   
     tagList(
       # In this example, the md file is found in the extdata/module_examples directory
@@ -483,7 +493,17 @@ writeLines(code, con)
 #' Description' step
 #' @rdname createTemplate
 #' 
-create_Description_md_file <- function(con){
+Create_Pipeline_Description_source_file <- function(fullname, path){
+
+  mod.filename <- file.path(path, paste0(fullname, "_Description.R"))
+  
+  if (file.exists(mod.filename)) {
+    file.remove(mod.filename)
+  }
+  con.desc <- file(mod.filename, open = "a")
+  
+  
+  
 code <- "
 ###
 ###
@@ -491,31 +511,30 @@ code <- "
 
 #' @export
 #'
-Description_conf <- function(){
+#fullname#_Description_conf <- function(){
   Config(
     mode = 'process',
-    fullname = 'Description',
-    steps = c('Description'),
-    mandatory = c(TRUE)
+    fullname = '#fullname#_Description'
     )
 }
     
 #' @export
 #'
-Description_ui <- function(id){
+#fullname#_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 #' @export
 #'
-Description_server <- function(id,
+#fullname#_Description_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
-  verbose = FALSE
+  verbose = FALSE,
+  path = NULL
 ){
   
   
@@ -535,7 +554,8 @@ Description_server <- function(id,
     
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    core.code <-Get_Worflow_Core_Code(
+    core.code <- Get_Workflow_Core_Code(
+        mode = 'process',
         name = id,
         w.names = names(widgets.default.values),
         rv.custom.names = names(rv.custom.default.values)
@@ -543,19 +563,16 @@ Description_server <- function(id,
         
     eval(str2expression(core.code))
     
-    
-    # Insert necessary code which is hosted by MagellanNTK
-    # DO NOT MODIFY THIS LINE
-    eval(parse(text = Module_Return_Func()))
-    
-    }
-  )
-}
-
 
 "
+code <- gsub('#fullname#', fullname, code)
   
-  writeLines(code, con)
+  writeLines(code, con.desc)
+  
+  write_Insert_Description_Step_code_for_Process(con.desc, path)
+  write_output_func(con.desc)
+  close(con.desc)
+  return(paste0(fullname, "_Description.R"))
 }
 
 

@@ -621,10 +621,10 @@ nav_server <- function(id,
                     ###
                     ### Launch the server for each step of the pipeline
                     ### 
-                    
+                    #browser()
                     lapply(names(rv$config@steps), function(x) {
                       if(verbose)
-                        print(paste0('Launch nav_server("', paste0(id, '_', x), '")\n'))
+                        cat(paste0("Launch nav_server(", id, "_", x, ")\n"))
                       
                         tmp.return[[x]] <- nav_server(
                             id = paste0(id, '_', x),
@@ -642,6 +642,7 @@ nav_server <- function(id,
                     ActionOn_Data_Trigger <- function() {
                         processHasChanged <- newValue <- NULL
 
+                        
                         # Get the values returned by all children (steps) of 
                         # the module
                         values.children <- GetValuesFromChildren(

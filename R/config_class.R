@@ -50,67 +50,52 @@ Config <- setClass("Config",
 
     #' @param object xxx
     #' 
-    validity = function(object) {
+    validity <- function(object) {
         passed <- TRUE
         nSteps <- length(object@steps)
         #
         # General conditions
         #
-        if (length(object@fullname) != 1){
+        if (length(object@fullname) != 1 && object@fullname != ''){
           warning(paste0("The slot 'fullname' must contain one string. Current value is: ", object@name))
           passed <- FALSE
         } 
         
-        if (length(object@name) != 1){
-            warning(paste0("The slot 'name' must contain one string. Current value is: ", object@name))
-            passed <- FALSE
-        } 
+        # if (length(object@name) != 1){
+        #     warning(paste0("The slot 'name' must contain one string. Current value is: ", object@name))
+        #     passed <- FALSE
+        # } 
         
         
         
         # Check if mode exists and is an available keyword
-        if (length(object@mode) != 1){
-            warning("'mode' must contain only one string")
-            passed <- FALSE
-        } else if (!(object@mode %in% c('process', 'pipeline'))){
+        if (!(object@mode %in% c('process', 'pipeline'))){
             warning("The 'mode' must be one of the following: 'process', 'pipeline'")
             passed <- FALSE
         }
         
         
         # Check if process has a parent
-        if (object@mode == 'process' && object@parent == ''){
-            warning("A process workflow must have a parent process.")
-            passed <- FALSE
-        }
-        
-        # Check if mandatory ans steps vectors have the same lenght
-        if (length(object@mandatory) != nSteps){
-            warning("'steps' and 'mandatory' must have the same length.")
-            passed <- FALSE
-        }
+        # if (object@mode == 'process' && object@parent == ''){
+        #     warning("A process workflow must have a parent process.")
+        #     passed <- FALSE
+        # }
 
-        
-        if ((object@steps[1] != 'Description') || (object@mandatory[1] != TRUE)){
-            warning("The first step of a workflow must be 'Description' and it is mandatory.")
-            passed <- FALSE
-        }
-        
         # Check validity for Description module
-        if (object@name == 'Description'){
-          if (object@steps != '' || object@mandatory != ''){
-            warning("A 'Description' module does not have no steps nor mandatory info.")
-            passed <- FALSE
-          }
-          if (object@mode != 'process'){
-            warning("A 'Description' module is a process and has a 'pipeline' module as parent.")
-            passed <- FALSE
-          }
-          if (object@parent == ''){
-            warning("A 'Description' module is a process and thus has a 'pipeline' module as parent. 'Parent' cannot be empty.")
-            passed <- FALSE
-          }
-          }
+        # if (object@name == 'Description'){
+        #   if (object@steps != '' || object@mandatory != ''){
+        #     warning("A 'Description' module does not have no steps nor mandatory info.")
+        #     passed <- FALSE
+        #   }
+        #   if (object@mode != 'process'){
+        #     warning("A 'Description' module is a process and has a 'pipeline' module as parent.")
+        #     passed <- FALSE
+        #   }
+        #   if (object@parent == ''){
+        #     warning("A 'Description' module is a process and thus has a 'pipeline' module as parent. 'Parent' cannot be empty.")
+        #     passed <- FALSE
+        #   }
+        #   }
           
 
 
@@ -125,7 +110,7 @@ Config <- setClass("Config",
 ###
 
 is.GenericProcess <- function(.Object){
-  passed <- TRUE
+  passed <- validity(.Object)
   
   passed <- passed && (.Object@mode == 'process')
   passed <- passed && (.Object@parent != '')
@@ -135,7 +120,7 @@ is.GenericProcess <- function(.Object){
 }
 
 is.GenericPipeline <- function(.Object){
-  passed <- TRUE
+  passed <- validity(.Object)
   passed <- passed && (.Object@mode == 'pipeline')
   passed <- passed && (length(.Object@steps) >= 1 && .Object@name != 'Description')
   
@@ -143,7 +128,7 @@ is.GenericPipeline <- function(.Object){
 }
 
 is.RootPipeline <- function(.Object){
-  passed <- TRUE
+  passed <- validity(.Object)
   passed <- passed && is.GenericPipeline(.Object)
   passed <- passed && .Object@parent == ''
   
@@ -152,7 +137,7 @@ is.RootPipeline <- function(.Object){
 
 
 is.DescriptionProcess <- function(.Object){
-  passed <- TRUE
+  passed <- validity(.Object)
   passed <- passed && (.Object@mode == 'process')
   passed <- passed && (.Object@parent != '')
   passed <- passed && (.Object@steps == '' && .Object@mandatory == '')
@@ -311,6 +296,7 @@ setMethod("initialize" ,
         
         # Basic init of slots
       
+      
       .Object@fullname <- fullname
       
         tmp <- unlist(strsplit(fullname, '_'))
@@ -326,20 +312,23 @@ setMethod("initialize" ,
         .Object@mandatory <- mandatory 
         
         
+        
+        
         if (is.GenericProcess(.Object))
           .Object <- init.GenericProcess(.Object)
         else if (is.GenericPipeline(.Object))
           .Object <- init.GenericPipeline(.Object)
         else if (is.DescriptionProcess(.Object))
           .Object <- init.DescriptionProcess(.Object)
-        
         else if (is.RootPipeline(.Object))
           .Object <- init.RootPipeline(.Object)
+        else 
+          .Object <- NULL
 
         
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
-        return(.Object )
+        return(.Object)
     }
 )
 

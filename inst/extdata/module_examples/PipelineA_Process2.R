@@ -96,7 +96,8 @@ PipelineA_Process2_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    core.code <- Get_Worflow_Core_Code(
+    core.code <- Get_Workflow_Core_Code(
+      mode = 'process',
       name = id,
       w.names = names(widgets.default.values),
       rv.custom.names = names(rv.custom.default.values)

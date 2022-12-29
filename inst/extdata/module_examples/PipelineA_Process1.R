@@ -108,7 +108,8 @@ PipelineA_Process1_server <- function(id,
 
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    core.code <- Get_Worflow_Core_Code(
+    core.code <- Get_Workflow_Core_Code(
+      mode = 'process',
       name = id,
       w.names = names(widgets.default.values),
       rv.custom.names = names(rv.custom.default.values)
@@ -123,9 +124,9 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
-      print(path)
-      file <- paste0(path, '/md/', id, '.md')
-      print(file)
+      md.file <- paste0(id, '.md')
+      file <- file.path(path, 'md', md.file)
+      
       tagList(
         ### In this example, the md file is found in the extdata/module_examples 
         ### directory but with a real app, it should be provided by the package 
@@ -333,7 +334,7 @@ PipelineA_Process1_server <- function(id,
     # <<< END ------------- Code for step 2 UI---------------
 
     
-    # >>> START ------------- Code for step 3 UI---------------
+    # >>> START ------------- Code for step 'Save' UI---------------
     output$Save <- renderUI({
        tagList(
         # Insert validation button
@@ -365,8 +366,7 @@ PipelineA_Process1_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      dl_server('createQuickLink', 
-        dataIn = reactive({rv$dataIn}))
+      dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

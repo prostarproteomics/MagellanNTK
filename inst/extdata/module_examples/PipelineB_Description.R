@@ -53,7 +53,8 @@ PipelineB_Description_server <- function(id,
     # DO NOT MODIFY THIS LINE
     eval(
       str2expression(
-        Get_Worflow_Core_Code(
+        Get_Workflow_Core_Code(
+          mode = 'process',
           name = id,
           w.names = names(widgets.default.values),
           rv.custom.names = names(rv.custom.default.values)
