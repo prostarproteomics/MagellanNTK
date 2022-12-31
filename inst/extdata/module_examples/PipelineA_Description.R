@@ -62,6 +62,7 @@ PipelineA_Description_server <- function(id,
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
       file <- file.path(path, 'md', md.file)
+      browser()
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

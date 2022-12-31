@@ -58,9 +58,17 @@ files.proc1 <- createModuleTemplate(ll.proc1, path = path)
 files.proc2 <- createModuleTemplate(ll.proc2, path = path)
 files.proc3 <- createModuleTemplate(ll.proc3, path = path)
 
-source(file.path(path, files.proc1), local=FALSE)
-source(file.path(path, files.proc2), local=FALSE)
-source(file.path(path, files.proc3), local=FALSE)
+
+lapply(files.proc1[which(grepl('.R', files.proc1))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+
+lapply(files.proc2[which(grepl('.R', files.proc2))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+lapply(files.proc3[which(grepl('.R', files.proc3))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
 
 
 # Create the pipeline workflow
@@ -81,9 +89,7 @@ lapply(R.files,
 data(data_na)
 run_workflow("PipeA", dataIn = data_na, path = path, verbose = TRUE)
 
-unlink(files.proc1)
-unlink(files.proc2)
-unlink(files.proc3)
-unlink(files.pipeA)
+unlink(c(files.proc1, files.proc2, files.proc3, files.pipeA))
+
 
 }

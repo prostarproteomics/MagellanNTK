@@ -68,10 +68,26 @@ createModuleTemplate <- function(config = NULL, path=NULL) {
   close(con)
     
   
-  if(config$mode == 'pipeline'){
+  
+  # Create description files:
+  # * source code for Description step of a pipeline,
+  # * md files
+  #
+  
+  if(config$mode == 'pipeline')
     value <- c(value, Create_Pipeline_Description_source_file(config$fullname, path))
-    value <- c(value, Create_Pipeline_Description_md_file(path, config$fullname))
-  }
+
+  
+  if (config$mode == 'pipeline')
+    # In this particularly case, on add the prefix '_Description' to the name of the
+    # process. Here, it is considered as an independant step of the pipeline and
+    # all steps names are built on the same pattern : the name of the workflow
+    # suffixed with the name of the step
+    value <- c(value, Create_md_file(path, paste0(config$fullname, '_Description')))
+  else
+    # Here, one can directly use the fullname because it refers to an internal step, 
+    # not to a process
+    value <- c(value, Create_md_file(path, config$fullname))
   
   return(value)
 }
@@ -127,10 +143,12 @@ NULL
 
 
 
-Create_Pipeline_Description_md_file <- function(path, fullname){
+Create_md_file <- function(path, fullname){
 ###
 ### Create the Description md file
 ###
+  
+  
 desc.dir <- file.path(path, 'md')
 if (!dir.exists(desc.dir)) 
   dir.create(desc.dir)          
@@ -186,7 +204,7 @@ code <- "
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
   verbose = FALSE,
-  path = NULL
+  path = path
   ){
   
   # Here, you can source other .R files which contains
@@ -534,7 +552,7 @@ code <- "
   steps.status = reactive({NULL}),
   current.pos = reactive({1}),
   verbose = FALSE,
-  path = NULL
+  path = path
 ){
   
   
