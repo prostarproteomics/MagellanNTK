@@ -3,58 +3,48 @@
 \name{createTemplate}
 \alias{createTemplate}
 \alias{createModuleTemplate}
-\alias{Code_for_Description_file}
-\alias{get_process_ui_function}
-\alias{get_process_header_server_func}
+\alias{module_#name#}
+\alias{write_general_comment}
+\alias{write_ui_func}
+\alias{write_header_server_func}
+\alias{write_config_func}
+\alias{write_process_code_for_default_value_widgets}
+\alias{write_module_server_header}
+\alias{write_stepUI_template}
+\alias{write_Insert_Description_Step_code_for_Process}
+\alias{write_Insert_Save_Step_code_for_Process}
+\alias{Create_Pipeline_Description_source_file}
+\alias{write_output_func}
 \alias{vec2code}
-\alias{get_process_config_code}
-\alias{get_process_code_for_default_value_widgets}
-\alias{get_process_module_server_header}
-\alias{get_process_renderUI_for_steps}
-\alias{Insert_Description_Step_code_for_Process}
-\alias{Insert_Description_Step_code_for_Pipeline}
-\alias{get_process_output_func}
-\alias{get_pipeline_ui_function}
-\alias{get_pipeline_header_server_func}
-\alias{get_pipeline_config_code}
-\alias{get_pipeline_module_server}
 \title{Create process template code}
 \usage{
-createModuleTemplate(config = NULL, path = ".")
+createModuleTemplate(config = NULL, path = NULL)
 
-Code_for_Description_file(name)
+write_general_comment(con, name)
 
-get_process_ui_function(name)
+write_ui_func(con, name)
 
-get_process_header_server_func(name)
+write_header_server_func(con, name)
+
+write_config_func(con, config)
+
+write_process_code_for_default_value_widgets(con)
+
+write_module_server_header(con, mode)
+
+write_stepUI_template(step.name)
+
+write_Insert_Description_Step_code_for_Process(con, path)
+
+write_Insert_Save_Step_code_for_Process(con)
+
+Create_Pipeline_Description_source_file(fullname, path)
+
+write_output_func(con)
 
 vec2code(ls_list, is.char = FALSE)
-
-get_process_config_code(config)
-
-get_process_code_for_default_value_widgets()
-
-get_process_module_server_header()
-
-get_process_renderUI_for_steps(steps)
-
-Insert_Description_Step_code_for_Process()
-
-Insert_Description_Step_code_for_Pipeline()
-
-get_process_output_func()
-
-get_pipeline_ui_function(name)
-
-get_pipeline_header_server_func(name)
-
-get_pipeline_config_code(config)
-
-get_pipeline_module_server()
 }
 \arguments{
-\item{config}{An instance of the class `Config`.}
-
 \item{path}{xxx}
 
 \item{name}{xxx}
@@ -64,7 +54,24 @@ get_pipeline_module_server()
 \item{is.char}{A `bolean(1)` to indicate whether the items are
 strings or not. In this case, they will be quoted in the result}
 
-\item{steps}{xxx}
+\item{ll.config}{A `list()` of 4 items}
+
+\item{id}{xxx}
+
+\item{dataIn}{The dataset}
+
+\item{steps.enabled}{A vector of boolean which has the same length of the steps
+of the pipeline. This information is used to enable/disable the widgets. It is not
+a communication variable between the caller and this module, thus there is no
+corresponding output variable}
+
+\item{remoteReset}{It is a remote command to reset the module. A boolean that
+indicates is the pipeline has been reseted by a program of higher level
+Basically, it is the program which has called this module}
+
+\item{steps.status}{xxx}
+
+\item{current.pos}{xxx}
 }
 \value{
 NA
@@ -80,6 +87,22 @@ and data processing functions.
 The 'Description' step is generic and creates a *.md file to be filled by
 th developer.
 
+This module contains the configuration informations for the corresponding pipeline.
+It is called by the nav_pipeline module of the package MagellanNTK
+
+The name of the server and ui functions are formatted with keywords separated by '_', as follows:
+* first string `mod`: indicates that it is a Shiny module
+* `pipeline name` is the name of the pipeline to which the process belongs
+* `process name` is the name of the process itself
+
+This convention is important because MagellanNTK call the different
+server and ui functions by building dynamically their name.
+
+In this example, `#name#_ui()` and `#name#_server()` define
+the code for the process `xxx` which is part of the pipeline called `xxx`.
+
+This function inserts the necessary code for the 'Description' step
+
 This function inserts the necessary code for the 'Description' step
 
 This function inserts the necessary code for the 
@@ -88,28 +111,97 @@ Description' step
 \examples{
 if(interactive()){
   
-  conf.process <- Config(
-  name = 'ProcessX',
-  mode = "process",
-  steps = c("Step 1", "Step 2"),
-  mandatory = c(TRUE, FALSE)
-  )
+  
+  ### 
+  ### Full example for a process workflow
+  ###
+   path <- tempdir()
+   path <- system.file(package='MagellanNTK')
+   
+  ll.process <- list(
+    fullname = 'PipeA_ProcessX',
+    mode = "process",
+    steps = c("Step 1", "Step 2"),
+    mandatory = c(TRUE, FALSE)
+    )
 
 
-file <- createModuleTemplate(conf.process)
-source(file)
-run_workflow("ProcessX", verbose = TRUE)
+files <- createModuleTemplate(ll.process, path = path)
+source(file.path(path, files), local=TRUE)
+data("data_na")
+run_workflow("PipeA_ProcessX", 
+             dataIn = data_na, 
+             path = path, 
+             verbose = TRUE)
 unlink(file)
   
   
-conf.pipeline <- Config(
+
+### 
+### Full example for a pipeline workflow
+###
+path <- tempdir()
+path <- system.file(package='MagellanNTK')
+
+ll.proc1 <- list(
+  fullname = 'PipeA_Proc1',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+ll.proc2 <- list(
+  fullname = 'PipeA_Proc2',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+ll.proc3 <- list(
+  fullname = 'PipeA_Proc3',
+  mode = "process",
+  steps = c("Step 1", "Step 2"),
+  mandatory = c(TRUE, FALSE)
+)
+
+
+files.proc1 <- createModuleTemplate(ll.proc1, path = path)
+files.proc2 <- createModuleTemplate(ll.proc2, path = path)
+files.proc3 <- createModuleTemplate(ll.proc3, path = path)
+
+
+lapply(files.proc1[which(grepl('.R', files.proc1))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+
+lapply(files.proc2[which(grepl('.R', files.proc2))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+lapply(files.proc3[which(grepl('.R', files.proc3))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+
+
+# Create the pipeline workflow
+ll.pipe <- list(
   mode = "pipeline",
-  name = 'PipelineA',
-  steps = c("Process 1", "Process 2", "Process 3"),
+  fullname = 'PipeA',
+  steps = c("Proc 1", "Proc 2", "Proc 3"),
   mandatory = c(TRUE, FALSE, TRUE)
   )
-createModuleTemplate(conf.pipeline)
-run_workflow("PipelineA", verbose = TRUE)
+files.pipeA <- createModuleTemplate(ll.pipe, path = path)
+
+R.files <- files.pipeA[which(grepl('.R', files.pipeA))]
+lapply(R.files, 
+       function(f) 
+         source(file.path(path, f), local=FALSE)
+       )
+
+data(data_na)
+run_workflow("PipeA", dataIn = data_na, path = path, verbose = TRUE)
+
+unlink(c(files.proc1, files.proc2, files.proc3, files.pipeA))
+
 
 }
 }

@@ -15,13 +15,13 @@
 #' @export
 #' 
 
-LoadCode <- function(name, path=NULL, recursive = FALSE){
+LoadCode <- function(name, path, recursive = FALSE){
   #Load source files
   if (is.null(path)){
     warning("The parameter 'path' is NULL. Abort.")
     return (NULL)
   }
-  
+
   fifo <- c()
   
   # Load the code for name module
@@ -40,7 +40,7 @@ LoadCode <- function(name, path=NULL, recursive = FALSE){
       
       #Get the config of current module
       tmp.config <- do.call(paste0(pull$value, '_conf'), list())
-      
+       
       if (tmp.config@mode == 'pipeline'){
         #Parse the children of the current workflow
         ll.steps <- names(tmp.config@steps)
@@ -51,10 +51,10 @@ LoadCode <- function(name, path=NULL, recursive = FALSE){
         ll.steps <- paste0(name, '_', ll.steps)
         for (i in ll.steps)
           fifo <- push_fifo(fifo, i)
+        }
       }
-    }
   }
-  
+
 }
 
 #' @title Push item in a FIFO
@@ -85,13 +85,14 @@ push_fifo <- function(fifo, value){
 pull_fifo <- function(fifo){
   if (length(fifo)==0){
     warning('Nothing to pull: fifo is empty')
-    return(fifo)
+  return(fifo)
   }
   
   res <- list(
     fifo = fifo[-1],
     value = fifo[1]
-  )
+    )
   
   return(res)
 }
+

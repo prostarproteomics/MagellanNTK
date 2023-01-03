@@ -38,46 +38,52 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 
 
 
-#' @title xxx
-#'
-#' @description xxx
-#'
-#' @param ns xxx
-#' @param id xxx
-#' @param config xxx
-#'
-#' @return A `renderUI` function
-#'
-#' @examples NULL
-#' 
-#' @export
-#'
-Build_EncapsulateScreens_ui <- function(ns,
-                                        id,
-                                        config) {
-    len <- length(config@ll.UI)
-    renderUI({
-        tagList(
-            lapply(seq_len(len), function(i) {
-                if (i == 1) {
-                    div(
-                        id = ns(names(config@steps)[i]),
-                        class = paste0("page_", id),
-                        config@ll.UI[[i]]
-                    )
-                } else {
-                    shinyjs::hidden(
-                        div(
-                            id = ns(names(config@steps)[i]),
-                            class = paste0("page_", id),
-                            config@ll.UI[[i]]
-                        )
-                    )
-                }
-            })
-        )
-    })
-}
+#' #' @title xxx
+#' #'
+#' #' @description Encapsulates each UI steps in a <div> tag so as to be able
+#' #' to manage hide/show commands applied on the div itself rether than on the
+#' #' ui.
+#' #'
+#' #' @param ns xxx
+#' #' @param id xxx
+#' #' @param config xxx
+#' #'
+#' #' @return A `renderUI` function
+#' #'
+#' #' @examples NULL
+#' #' 
+#' #' @export
+#' #'
+#' Build_EncapsulateScreens_ui <- function(ns, id, config) {
+#'     len <- length(config@ll.UI)
+#'     if(verbose){
+#'       cat ('Entering Build_EncapsulateScreens_ui()')
+#'       show(config)
+#'     }
+#'       
+#'     
+#'     renderUI({
+#'         tagList(
+#'             lapply(seq_len(len), function(i) {
+#'                 if (i == 1) {
+#'                     div(
+#'                         id = ns(names(config@steps)[i]),
+#'                         class = paste0("page_", id),
+#'                         config@ll.UI[[i]]
+#'                     )
+#'                 } else {
+#'                     shinyjs::hidden(
+#'                         div(
+#'                             id = ns(names(config@steps)[i]),
+#'                             class = paste0("page_", id),
+#'                             config@ll.UI[[i]]
+#'                         )
+#'                     )
+#'                 }
+#'             })
+#'         )
+#'     })
+#' }
 
 
 

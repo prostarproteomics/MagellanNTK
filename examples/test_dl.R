@@ -1,0 +1,26 @@
+
+if (interactive()){
+  library(shinyjqui)
+  library(DT)
+  library(shinyjs)
+  library(shiny)
+  options(shiny.fullstacktrace = TRUE)
+  data(data_na)
+  
+  ui <- fluidPage(
+    dl_ui("dl")
+  )
+  
+  server <- function(input, output, session) {
+    
+    dl_server(
+      id = "dl",
+      dataIn = reactive({data_na$array1}),
+      name = reactive({'foo'}),
+      extension = reactive({c('Excel', 'csv', 'RData')}),
+      widget.type = reactive({c('Link', 'Button', 'Link')})
+    )
+  }
+  
+  shinyApp(ui, server)
+}

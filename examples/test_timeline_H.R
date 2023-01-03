@@ -5,13 +5,20 @@ library(shinyjs)
 
 options(shiny.fullstacktrace = TRUE)
 
-#------------------------ Class TimelineDraw --------------------------------------
-#source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value
+
+config <- Config(
+  name = 'PipelineA_Description',
+  mode = 'process',
+  steps = '',
+  mandatory = ''
+)
+
+
 
 ui <- fluidPage(
   actionButton("prevpos", GlobalSettings$tl_h_prev_icon),
   actionButton("nextpos", GlobalSettings$tl_h_next_icon),
-  mod_timeline_h_ui('TLh')
+  timeline_h_ui('TLh')
   )
 
 
@@ -26,10 +33,7 @@ server <- function(input, output){
     position = NULL
   )
   
-  #config <- gen.proc()
-  config <- desc.proc()
-  #config <- gen.pipe()
-  #config <- root.pipe()
+  
   
   
   observeEvent(input$nextpos,{
@@ -42,8 +46,8 @@ server <- function(input, output){
       rv$current.pos <- rv$current.pos - 1
   })
   
-  
-  mod_timeline_h_server(id = 'TLh',
+
+  timeline_h_server(id = 'TLh',
     config = config,
     status = reactive({rv$status}),
     position = reactive({rv$current.pos}),

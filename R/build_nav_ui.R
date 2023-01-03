@@ -18,6 +18,17 @@
 NULL
 
 
+
+#' @rdname Build_nav_X_ui
+#' 
+#' @export
+#'
+DisplayWholeUI <- function(ns, layout='h'){
+  
+  do.call(paste0("Build_nav_", layout, "_ui"), list(ns))
+
+}
+
 #' @rdname Build_nav_X_ui
 #' 
 #' @export
@@ -25,8 +36,7 @@ NULL
 Build_nav_v_ui <- function(ns) {
     tagList(
         fluidRow(
-            column(
-                width = 2,
+            column(width = 2,
                 wellPanel(
                     div(
                         style = "padding: 10px",
@@ -56,8 +66,7 @@ Build_nav_v_ui <- function(ns) {
                     )
                 )
             ),
-            column(
-                width = 10,
+            column(width = 10,
                 style = " padding-left: 20px;",
                 wellPanel(
                     div(
@@ -89,13 +98,13 @@ Build_nav_h_ui <- function(ns) {
                     style = "font-size:80%"
                 )
             )),
-            column(width = 1, actionButton(ns("rstBtn"), "Reset",
-                class = GlobalSettings$redBtnClass,
-                style = "font-size:80%"
-            )),
+            column(width = 1, 
+                   actionButton(ns("rstBtn"), "Reset",
+                                class = GlobalSettings$redBtnClass,
+                                style = "font-size:80%")
+                   ),
             column(width = 9, uiOutput(ns("show_TL"))),
-            column(
-                width = 1,
+            column(width = 1,
                 actionButton(ns("nextBtn"),
                     GlobalSettings$tl_h_next_icon,
                     class = GlobalSettings$PrevNextBtnClass,

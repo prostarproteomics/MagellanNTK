@@ -31,27 +31,26 @@ Collate:
     config_class.R
     doc-data.R
     global.R
-    mod_bsmodal.R
-    mod_popover_for_help.R
+    bsmodal.R
+    popover_for_help.R
     createModuleTemplate.R
-    mod_format_DT.R
+    format_DT.R
     utils.R
     load_code.R
     check_funcs.R
     export_Excel.R
-    mod_timeline_h.R
-    mod_timeline_v.R
-    example_config_class.R
+    timeline_h.R
+    timeline_v.R
     code_used_by_external_modules.R
-    mod_Debug_Infos.R
-    mod_nav.R
-    mod_dl.R
-    mod_Save_dataset.R
+    Debug_Infos.R
+    nav.R
+    dl.R
+    Save_dataset.R
     general_nav_funcs.R
     pipeline_funcs.R
     process_funcs.R
     build_nav_ui.R
-    mod_Load_Dataset.R
+    Load_Dataset.R
     load_save.R
     run_workflow.R
 biocViews: Software, WorkflowStep
