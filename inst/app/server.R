@@ -5,6 +5,11 @@ require(compiler)
 enableJIT(3)
 
 
+library(shinydashboard)
+library(shinyjs)
+library(MagellanNTK)
+
+
 #' The application server-side
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
@@ -23,6 +28,7 @@ shinyServer(
   
   
   rv.core <- reactiveValues(
+    path = NULL,
     pipeline = NULL,
     pipeline.name = NULL,
     dataIn = NULL,
@@ -38,8 +44,82 @@ shinyServer(
   
   #rv.core$pipeline.name <- mod_choose_pipeline_server('pipe', package = 'MSPipelines')
   
-  
-  
+ 
+    rv.core$path <- Load_Workflow_server("open_wf")
+    rv.core$current.obj <- Load_Dataset_server("open_file", path = reactive({rv.core$path()}))
+    
+    
+    output$describe_wf <- renderUI({
+      req(rv.core$path())
+      mod_insert_md_ui("description_wf")
+      mod_insert_md_server("description_wf", "http://www.prostar-proteomics.org/md/presentation.md")
+    })
+    
+    
+    ###
+    ### Run_workflow part
+    ###
+    observeEvent(req(rv.core$path()),{
+      #req(rv.core$current.obj(), rv.core$path())
+      verbose <- TRUE
+      #browser()
+      path <- file.path(rv.core$path(), 'R')
+      
+      path <- system.file("extdata/module_examples", package = "MagellanNTK")
+      data(data_na)
+      rv.core$current.obj <- data_na
+      
+    dataOut <- reactiveVal(NULL)
+    
+    output$debugInfos_ui <- renderUI({
+      req(verbose)
+      Debug_Infos_ui("debug_infos")
+    })
+    
+    output$save_dataset_ui <- renderUI({
+      req(dataOut())
+      req(dataOut()$dataOut()$value)
+      dl_ui("saveDataset")
+
+      dl_server(
+        id = "saveDataset",
+        dataIn = reactive({dataOut()$dataOut()$value})
+      )
+
+    })
+    
+    observeEvent(req(rv.core$current.obj), {
+      dataOut(nav_server(
+        id = 'PipelineA',
+        verbose = verbose,
+        dataIn = reactive({rv.core$current.obj}),
+        tl.layout = c("v", "h"),
+        path = path
+      ))
+      
+      Debug_Infos_server(
+        id = "debug_infos",
+        title = "Infos from shiny app",
+        rv.dataIn = reactive({data_na}),
+        dataOut = reactive({dataOut()$dataOut()$value})
+      )
+    })
+   
+    
+    ###
+    ### End of run_workflow part
+    ###
+    ###
+    })
+    
+    mod_insert_md_server("homepage", "http://www.prostar-proteomics.org/md/presentation.md")
+    mod_insert_md_server("faq", "http://www.prostar-proteomics.org/md/FAQ.md")
+    mod_insert_md_server("links", "http://www.prostar-proteomics.org/md/links.md")
+    
+    
+    
+    
+    
   
   #
   # Code for convert tool
@@ -65,14 +145,12 @@ shinyServer(
   # })
   
   
-  #rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
-  
-  
+  # rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
   # observeEvent(rv.core$tmp_dataManager$openFile(),{
-  #   rv.core$current.obj <- rv.core$tmp_dataManager$openFile()$dataset
-  #   rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-  # })
-  # 
+  #    rv.core$current.obj <- rv.core$tmp_dataManager$openFile()$dataset
+  #    rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
+  #  })
+   
   # observeEvent(rv.core$result_convert(),{
   #   #browser()
   #   rv.core$dataIn <- rv.core$result_convert()
@@ -159,14 +237,6 @@ shinyServer(
   #mod_insert_md_server("links_MD", URL_links)
   #mod_insert_md_server("FAQ_MD", URL_FAQ)
   #mod_bug_report_server("bug_report")
-  
-  
-  
-  # --------------------------------------------------------------
-  # Once the server part is loaded, hide the loading page 
-  # and show th main content
-  shinyjs::hide(id = "loading_page", anim = FALSE)
-  shinyjs::show("main_page", anim = TRUE, animType = "fade")
-  
+
     }
 )

@@ -39,6 +39,7 @@ Collate:
     bsmodal.R
     popover_for_help.R
     createModuleTemplate.R
+    Load_Dataset_modal.R
     format_DT.R
     utils.R
     check_funcs.R

@@ -11,7 +11,7 @@ if (interactive()){
   
   server <- function(input, output, session) {
     data(data_na)
-    Load_Dataset_server("demo")
+    Load_Dataset_server("demo", path = reactive({NULL}))
   }
   
   shinyApp(ui, server)

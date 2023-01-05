@@ -208,25 +208,25 @@ nav_server <- function(id,
                 # pipeline
                 rv$config <- rv$proc$config()
                 
-                
+                #browser()
                 if(verbose){
                   cat(crayon::blue(paste0('Call ', paste0(id, "_conf()"), '\n')))
-                  show(rv$config)
+                  rv$config
                 }
                 
-                rv$length <- length(rv$config@steps)
+                n <- length(rv$config@steps)
                 
-                rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
+                rv$steps.status <- setNames(rep(global$UNDONE, n),
                     nm = names(rv$config@steps)
                 )
 
-                rv$steps.enabled <- setNames(rep(FALSE, rv$length),
+                rv$steps.enabled <- setNames(rep(FALSE, n),
                     nm = names(rv$config@steps)
                 )
-                rv$steps.skipped <- setNames(rep(FALSE, rv$length),
+                rv$steps.skipped <- setNames(rep(FALSE, n),
                     nm = names(rv$config@steps)
                 )
-                rv$resetChildren <- setNames(rep(0, rv$length),
+                rv$resetChildren <- setNames(rep(0, n),
                     nm = names(rv$config@steps)
                 )
 
@@ -286,7 +286,7 @@ nav_server <- function(id,
             rv$current.pos <- NavPage(
                 direction = -1,
                 current.pos = rv$current.pos,
-                len = rv$length
+                len = length(rv$config@steps)
             )
         })
 
@@ -295,7 +295,7 @@ nav_server <- function(id,
             rv$current.pos <- NavPage(
                 direction = 1,
                 current.pos = rv$current.pos,
-                len = rv$length
+                len = length(rv$config@steps)
             )
         })
 
@@ -314,7 +314,7 @@ nav_server <- function(id,
                     rv = rv
                 )
             } else {
-                rv$steps.enabled <- setNames(rep(is.enabled(), rv$length),
+                rv$steps.enabled <- setNames(rep(is.enabled(), length(rv$config@steps)),
                     nm = names(rv$config@steps)
                 )
             }
@@ -334,9 +334,9 @@ nav_server <- function(id,
                 rv = rv
             )
 
-            if (rv$steps.status[rv$length] == global$VALIDATED) {
+            if (rv$steps.status[length(rv$config@steps)] == global$VALIDATED) {
                 # Set current position to the last one
-                rv$current.pos <- rv$length
+                rv$current.pos <- length(rv$config@steps)
 
                 # If the last step is validated, it is time to send result by
                 # updating the 'dataOut' reactiveValue.
@@ -390,8 +390,8 @@ nav_server <- function(id,
                 # by the observeEvent function. It works like an actionButton
                 # widget
                 if (rv$config@mode == "pipeline") {
-                    rv$resetChildren[seq_len(rv$length)] <- 1 +
-                        rv$resetChildren[seq_len(rv$length)]
+                    rv$resetChildren[seq_len(length(rv$config@steps))] <- 1 +
+                        rv$resetChildren[seq_len(length(rv$config@steps))]
                 }
 
                 # Return the NULL value as dataset
@@ -523,7 +523,7 @@ nav_server <- function(id,
                       # Disable all screens of the process
                       rv$steps.enabled <- ToggleState_Screens(
                           cond = FALSE,
-                          range = seq_len(rv$length),
+                          range = seq_len(length(rv$config@steps)),
                           is.enabled = is.enabled,
                           rv = rv
                           )
@@ -554,7 +554,7 @@ nav_server <- function(id,
         observeEvent(rv$current.pos, ignoreInit = TRUE, {
             ToggleState_NavBtns(
                 current.pos = rv$current.pos,
-                nSteps = rv$length
+                nSteps = length(rv$config@steps)
             )
             shinyjs::hide(selector = paste0(".page_", id))
             shinyjs::show(names(rv$config@steps)[rv$current.pos])
@@ -592,10 +592,10 @@ nav_server <- function(id,
                     # modules functions (the steps contained in the slot
                     # `rv$config@steps` are found in the Global environment
 
-                    rv$steps.skipped <- setNames(rep(FALSE, rv$length),
+                    rv$steps.skipped <- setNames(rep(FALSE, length(rv$config@steps)),
                         nm = names(rv$config@steps)
                     )
-                    rv$resetChildren <- setNames(rep(0, rv$length),
+                    rv$resetChildren <- setNames(rep(0, length(rv$config@steps)),
                         nm = names(rv$config@steps)
                     )
 
@@ -661,7 +661,7 @@ nav_server <- function(id,
                         if (is.null(return.values)) {
                             # The entire pipeline has been reseted
                             rv$dataIn <- NULL
-                            rv$steps.status[seq_len(rv$length)] <- global$UNDONE
+                            rv$steps.status[seq_len(length(rv$config@steps))] <- global$UNDONE
                         } else {
                             .cd <- max(triggerValues, na.rm = TRUE) == triggerValues
                             # ind.process.has.changed <- which(.cd)
@@ -739,12 +739,12 @@ nav_server <- function(id,
                             if (rv$current.pos == 1) {
                                 rv$dataIn <- rv$temp.dataIn
                             } # View intermediate datasets
-                            else if (rv$current.pos > 1 && rv$current.pos < rv$length) {
+                            else if (rv$current.pos > 1 && rv$current.pos < length(rv$config@steps)) {
                                 rv$dataIn <- rv$proc$dataOut()$value
                             } 
                             # Manage the last dataset which is the real one 
                             # returned by the process
-                            else if (rv$current.pos == rv$length) {
+                            else if (rv$current.pos == length(rv$config@steps)) {
                                 # Update the work variable of the nav_process 
                                 # with the dataset returned by the process
                                 # Thus, the variable rv$temp.dataIn keeps 
@@ -771,7 +771,7 @@ nav_server <- function(id,
                         ignoreInit = TRUE, {
                         pos <- strsplit(rv$position, "_")[[1]][1]
                         if (pos == "last") {
-                            rv$current.pos <- rv$length
+                            rv$current.pos <- length(rv$config@steps)
                         } else if (is.numeric(pos)) {
                             rv$current.pos <- rv$position
                         }

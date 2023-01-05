@@ -12,6 +12,8 @@ NULL
 #' @export
 #'
 Load_Dataset_ui <- function(id) {
+  ns <- NS(id)
+  uiOutput(ns("file_ui"))
 }
 
 
@@ -22,34 +24,27 @@ Load_Dataset_ui <- function(id) {
 #'
 #' @export
 #'
-Load_Dataset_server <- function(id) {
-    moduleServer(id, function(input, output, session) {
-        ns <- session$ns
-
-        rv <- reactiveValues(dataOut = NULL)
-
-        modal <- function() {
-            modalDialog(
-                fileInput(ns("file"), "Open file", multiple = FALSE),
-                footer = tagList(
-                    modalButton("Cancel"),
-                    actionButton(ns("ok"), "OK")
-                )
-            )
-        }
-
-        observe({showModal(modal())})
-
-        observeEvent(input$Cancel, {removeModal()})
-
-        observeEvent(input$ok, {
-            req(input$file)
-
-            ext <- unlist(strsplit(input$file$name, '.', fixed=TRUE))[2]
-            rv$dataOut <- readRDS(input$file$datapath)
-            removeModal()
-        })
-
-        reactive({rv$dataOut})
+Load_Dataset_server <- function(id, path = reactive({NULL})) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    rv <- reactiveValues(dataOut = NULL)
+    
+    
+    output$file_ui <- renderUI({
+      req(path())
+      print('toto')
+      print(path())
+      fileInput(ns("file"), "Open file", multiple = FALSE)
     })
+    
+    observe({
+      req(input$file)
+      
+      ext <- unlist(strsplit(input$file$name, '.', fixed=TRUE))[2]
+      rv$dataOut <- readRDS(input$file$datapath)
+    })
+    
+    reactive({rv$dataOut})
+  })
 }

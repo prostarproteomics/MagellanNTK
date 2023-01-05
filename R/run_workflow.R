@@ -27,10 +27,10 @@
 #' @example examples/example_run_workflow.R
 #'
 run_workflow <- function(id,
-                         dataIn = NULL,
-                         verbose = FALSE,
-                         tl.layout = NULL,
-                         path = NULL) {
+  dataIn = NULL,
+  verbose = FALSE,
+  tl.layout = NULL,
+  path = NULL) {
   
     if (missing(id))
         stop("'id' is required.")
