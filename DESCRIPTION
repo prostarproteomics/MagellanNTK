@@ -29,8 +29,12 @@ Imports:
 Collate: 
     AllGenerics.R
     config_class.R
+    mod_homepage.R
+    mod_insert_md.R
+    mod_loading_page.R
     doc-data.R
     global.R
+    load_workflow.R
     load_code.R
     bsmodal.R
     popover_for_help.R

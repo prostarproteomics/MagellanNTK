@@ -7,10 +7,10 @@ options(shiny.fullstacktrace = TRUE)
 
 
 config <- Config(
-  name = 'PipelineA_Description',
+  fullname = 'PipelineA_test',
   mode = 'process',
-  steps = '',
-  mandatory = ''
+  steps = c('Step 1', 'Step 2', 'Step 3'),
+  mandatory = c(TRUE, FALSE, FALSE)
 )
 
 

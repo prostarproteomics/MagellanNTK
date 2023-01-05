@@ -26,7 +26,7 @@ server <- function(input, output){
   
   
   config <- Config(
-    fullname = 'Process1',
+    fullname = 'PipeA_Process1',
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(FALSE, TRUE)

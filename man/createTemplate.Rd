@@ -115,6 +115,8 @@ if(interactive()){
   ### 
   ### Full example for a process workflow
   ###
+   path <- tempdir()
+   path <- system.file(package='MagellanNTK')
    
   ll.process <- list(
     fullname = 'PipeA_ProcessX',
@@ -124,12 +126,12 @@ if(interactive()){
     )
 
 
-files <- createModuleTemplate(ll.process, path = tempdir())
-source(file.path(tempdir(), files$code), local=TRUE)
+files <- createModuleTemplate(ll.process, path = path)
+source(file.path(path, files), local=TRUE)
 data("data_na")
 run_workflow("PipeA_ProcessX", 
              dataIn = data_na, 
-             path = tempdir(), 
+             path = path, 
              verbose = TRUE)
 unlink(file)
   
@@ -138,6 +140,8 @@ unlink(file)
 ### 
 ### Full example for a pipeline workflow
 ###
+path <- tempdir()
+path <- system.file(package='MagellanNTK')
 
 ll.proc1 <- list(
   fullname = 'PipeA_Proc1',
@@ -161,13 +165,21 @@ ll.proc3 <- list(
 )
 
 
-files.proc1 <- createModuleTemplate(ll.proc1, path = tempdir())
-files.proc2 <- createModuleTemplate(ll.proc2, path = tempdir())
-files.proc3 <- createModuleTemplate(ll.proc3, path = tempdir())
+files.proc1 <- createModuleTemplate(ll.proc1, path = path)
+files.proc2 <- createModuleTemplate(ll.proc2, path = path)
+files.proc3 <- createModuleTemplate(ll.proc3, path = path)
 
-source(file.path(tempdir(), files.proc1$code), local=TRUE)
-source(file.path(tempdir(), files.proc2$code), local=TRUE)
-source(file.path(tempdir(), files.proc3$code), local=TRUE)
+
+lapply(files.proc1[which(grepl('.R', files.proc1))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+
+lapply(files.proc2[which(grepl('.R', files.proc2))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
+lapply(files.proc3[which(grepl('.R', files.proc3))], 
+       function(f) 
+         source(file.path(path, f), local=FALSE))
 
 
 # Create the pipeline workflow
@@ -177,20 +189,19 @@ ll.pipe <- list(
   steps = c("Proc 1", "Proc 2", "Proc 3"),
   mandatory = c(TRUE, FALSE, TRUE)
   )
-files.pipeA <- createModuleTemplate(ll.pipe, path = tempdir())
-#source(file.pipeA)
-source(file.path(path, files.pipeA$code), local=TRUE)$value
-source(file.path(path, files.pipeA$desc), local=TRUE)$value
-data(data_na)
-run_workflow("PipeA",
-             dataIn = data_na, 
-             path = path, 
-             verbose = TRUE)
+files.pipeA <- createModuleTemplate(ll.pipe, path = path)
 
-unlink(file.proc1)
-unlink(file.proc2)
-unlink(file.proc3)
-unlink(file.pipeA)
+R.files <- files.pipeA[which(grepl('.R', files.pipeA))]
+lapply(R.files, 
+       function(f) 
+         source(file.path(path, f), local=FALSE)
+       )
+
+data(data_na)
+run_workflow("PipeA", dataIn = data_na, path = path, verbose = TRUE)
+
+unlink(c(files.proc1, files.proc2, files.proc3, files.pipeA))
+
 
 }
 }
