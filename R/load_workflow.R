@@ -14,10 +14,13 @@ NULL
 Load_Workflow_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    h3('Load workflow'),
     textInput(ns("root"), "Please enter your project folder root:", value=''),
     shinyFiles::shinyDirButton(id = ns('sheets_dir'), label = "Folder select", title = "Sheets Folder Selector"),
     verbatimTextOutput(ns("sheets_dir")),
-    uiOutput(ns('checkDirs'))
+    uiOutput(ns('chooseWorkflowUI')),
+    uiOutput(ns('checkDirs')),
+    disabled(actionButton(ns('start'), 'Start'))
   )
 }
 
@@ -33,10 +36,11 @@ Load_Workflow_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    rv <- reactiveValues(folder = NULL)
+    rv <- reactiveValues(
+      folder = NULL,
+      workflow = NULL)
     
     Theroots <- reactive({
-      print('reactive...')
       root <- input$root
       #req(root, dir.exists(root))
       
@@ -56,7 +60,42 @@ Load_Workflow_server <- function(id) {
     output$sheets_dir <- renderPrint({
       req(rv$folder)
       rv$folder
+      rv$workflow
     })
+    
+    
+    GetWorkflowNames <- reactive({
+      req(rv$folder)
+      lst <- list.files(path.md)
+      path.md <- file.path(rv$folder, 'md')
+      lst <- lst[-which(grepl( 'Description', lst))]
+      lst <- gsub('.md', '', lst)
+      lst
+    })
+    
+    output$chooseWorkflowUI <- renderUI({
+      req(rv$folder)
+      selectInput(ns('chooseWorkflow'),
+                  'Choose workflow',
+                  choices = GetWorkflowNames()
+                  )
+    })
+    
+    observe({rv$workflow <- input$chooseWorkflow})
+    
+    observeEvent(req(rv$workflow), {
+      # The functions of the module server (and ui) are supposed to 
+      # be already loaded. Check if it is the case. If not, show a 
+      # message and abort
+      
+      # LoadWorkflowCode(name = rv$workflow, 
+      #          path = file.path(rv$folder, 'R'), 
+      #          recursive = TRUE
+      #          )
+     
+    })
+    
+    
     
     
     output$checkDirs <- renderUI({

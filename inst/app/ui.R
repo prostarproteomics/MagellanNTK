@@ -13,11 +13,11 @@ dashboardPage(
       useShinyjs(),
       sidebarMenu(
         # Menus and submenus in sidebar
-        br(),
-        menuItem("Home", tabName = "Home", selected = TRUE),
+        #br(),
+        #menuItem("Home", tabName = "Home", selected = TRUE),
+        #hr(),
+        menuItem("Workflow", tabName = "open_workflow", icon = icon("cogs")),
         hr(),
-        
-        
         menuItem("Data Manager",
           icon = icon("folder"),
           startExpanded = FALSE,
@@ -27,12 +27,7 @@ dashboardPage(
           menuSubItem("Export results", tabName = "export")
         ),
         hr(),
-        menuItem("Workflow", tabName = "pipeline", icon = icon("cogs"),
-          menuSubItem("Open WF", tabName = "openWF"),
-          menuSubItem("Description WF", tabName = "descriptionWF"),
-          menuSubItem("Run workflow", tabName = "run_workflow")
-        ),
-        hr(),
+        
         menuItem("Plots", tabName = "daparviz", icon = icon("cogs")),
         hr(),
         menuItem("Help",
@@ -56,7 +51,7 @@ dashboardPage(
           tabItem(tabName = "openFile", Load_Dataset_ui("open_file")),
           
           tabItem(tabName = "convert", uiOutput('show_convert')),
-          tabItem(tabName = "openWF", Load_Workflow_ui("open_wf")),
+          tabItem(tabName = "open_workflow", Load_Workflow_ui("open_wf")),
           tabItem(tabName = "descriptionWF", uiOutput('describe_wf')),
           tabItem(tabName = "run_workflow", 
             tagList(

@@ -176,7 +176,7 @@ nav_server <- function(id,
                 # be already loaded. Check if it is the case. If not, show a 
                 # message and abort
 
-                LoadCode(name = id, path = path, recursive=TRUE)
+                #LoadCode(name = id, path = path, recursive=TRUE)
 
 
                 # When the server starts, the default position is 1
