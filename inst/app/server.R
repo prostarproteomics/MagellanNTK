@@ -25,11 +25,11 @@ shinyServer(
   observeEvent(input$ReloadApp, {js$resetApp()})
   #observeEvent(input$ReloadApp, { js$reset()})
       
-  
+  tmp <- reactiveVal()
   
   rv.core <- reactiveValues(
     path = NULL,
-    pipeline = NULL,
+    workflow = NULL,
     pipeline.name = NULL,
     dataIn = NULL,
     result_convert = NULL,
@@ -44,13 +44,45 @@ shinyServer(
   
   #rv.core$pipeline.name <- mod_choose_pipeline_server('pipe', package = 'MSPipelines')
   
+  messageData <- data.frame(
+    text = c(
+      "Sales are steady this month.",
+      "How do I register?",
+      "The new server is ready."
+    ),
+    status = c('success', 'success', 'warning'),
+    stringsAsFactors = FALSE
+  )
+  
+  output$messageMenu <- renderMenu({
+    msgs <- apply(messageData, 1, function(row) {
+      notificationItem(text = row[["text"]], 
+                       status = row[["status"]]
+                       )
+    })
+    
+    # This is equivalent to calling:
+    #   dropdownMenu(type="messages", msgs[[1]], msgs[[2]], ...)
+    dropdownMenu(type = "notifications", .list = msgs)
+  })
+  
+  
+  
  
-    rv.core$path <- Load_Workflow_server("open_wf")
-    rv.core$current.obj <- Load_Dataset_server("open_file", path = reactive({rv.core$path()}))
+    tmp <- Load_Workflow_server("open_wf")
+    
+    observe({
+      rv.core$path <- tmp()$folder
+      rv.core$workflow <- tmp()$workflow
+    })
+    
+    
+    rv.core$current.obj <- Load_Dataset_server("open_file", 
+                                               path = reactive({rv.core$path}))
     
     
     output$describe_wf <- renderUI({
-      req(rv.core$path())
+      req(rv.core$path)
       mod_insert_md_ui("description_wf")
       mod_insert_md_server("description_wf", "http://www.prostar-proteomics.org/md/presentation.md")
     })
@@ -59,11 +91,11 @@ shinyServer(
     ###
     ### Run_workflow part
     ###
-    observeEvent(req(rv.core$path()),{
+    observeEvent(req(rv.core$path),{
       #req(rv.core$current.obj(), rv.core$path())
       verbose <- TRUE
       #browser()
-      path <- file.path(rv.core$path(), 'R')
+      path <- file.path(rv.core$path, 'R')
       
       path <- system.file("extdata/module_examples", package = "MagellanNTK")
       data(data_na)
@@ -90,7 +122,7 @@ shinyServer(
     
     observeEvent(req(rv.core$current.obj), {
       dataOut(nav_server(
-        id = 'PipelineA',
+        id = rv.core$workflow,
         verbose = verbose,
         dataIn = reactive({rv.core$current.obj}),
         tl.layout = c("v", "h"),
@@ -103,6 +135,15 @@ shinyServer(
         rv.dataIn = reactive({data_na}),
         dataOut = reactive({dataOut()$dataOut()$value})
       )
+      
+      mod_plots_server('plots', object = reactive({rv.core$current.obj}))
+      
+      bsmodal_server(
+        id = "tbl",
+        title = "test",
+        uiContent = mod_plots_ui('plots')
+      )
+      
     })
    
     
@@ -112,14 +153,48 @@ shinyServer(
     ###
     })
     
+    
+    output$run_workflowUI <- renderUI({
+      rv.core$workflow
+      tagList(
+        nav_ui(rv.core$workflow),
+        uiOutput("debugInfos_ui")
+      )
+    })
+    
+    
+    
+    
+    
     mod_insert_md_server("homepage", "http://www.prostar-proteomics.org/md/presentation.md")
     mod_insert_md_server("faq", "http://www.prostar-proteomics.org/md/FAQ.md")
     mod_insert_md_server("links", "http://www.prostar-proteomics.org/md/links.md")
     
+    mod_bug_report_server('bug_report')
     
     
+    output$tab_plots_ui <- renderUI({
+      rv.core$current.obj
+      tagList(
+      uiOutput("chooseDataset_ui"),
+      mod_plots_ui('plots')
+    )
+    })
     
-    
+    output$chooseDataset_ui <- renderUI({
+      req(rv.core$current.obj)
+      if (length(names(rv.core$current.obj)) == 0) {
+        choices <- list(" " = character(0))
+      } else {
+        choices <- names(rv.core$current.obj)
+      }
+      
+      selectInput("chooseDataset", "Dataset",
+                  choices = choices,
+                  selected = names(rv.core$current.obj)[length(rv.core$current.obj)],
+                  width = 200
+      )
+    })
   
   #
   # Code for convert tool

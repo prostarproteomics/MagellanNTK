@@ -18,7 +18,7 @@
 #'
 #' @param path A `character(1)`
 #' 
-#' @value A `boolean(1)`
+#' @return A `boolean(1)`
 #' 
 #' @export
 #' 

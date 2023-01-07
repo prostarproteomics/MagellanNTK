@@ -35,6 +35,7 @@ Collate:
     doc-data.R
     global.R
     load_workflow.R
+    mod_shinyTree.R
     load_code.R
     bsmodal.R
     popover_for_help.R
