@@ -16,15 +16,15 @@ Load_Workflow_ui <- function(id) {
   tagList(
     useShinyjs(),
     h3('Load workflow'),
-    textInput(ns("root"), 
-              "Please enter your workflow folder:"),
+    uiOutput(ns('folder_ui')),
     shinyFiles::shinyDirButton(id = ns('sheets_dir'), 
                                label = "Folder select", 
                                title = "Sheets Folder Selector"),
     verbatimTextOutput(ns("sheets_dir")),
     uiOutput(ns('chooseWorkflowUI')),
     #mod_shinyTree_ui(ns("tree")),
-    uiOutput(ns('checkDirs')),
+    #uiOutput(ns('checkDirs')),
+    uiOutput(ns('wf_summary')),
     disabled(actionButton(ns('start'), 'Start'))
   )
 }
@@ -37,7 +37,7 @@ Load_Workflow_ui <- function(id) {
 #'
 #' @export
 #'
-Load_Workflow_server <- function(id) {
+Load_Workflow_server <- function(id, path=reactive({NULL})) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -65,6 +65,18 @@ Load_Workflow_server <- function(id) {
       }
     })
     
+    
+    output$folder_ui <- renderUI({
+      textInput(ns("root"), 
+                "Please enter your workflow folder:",
+                value = path()
+      )
+    })
+    
+   
+    
+    
+    
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)
       rv$folder <- parseDirPath(roots = Theroots(), input$sheets_dir)
@@ -91,8 +103,23 @@ Load_Workflow_server <- function(id) {
       req(rv$folder)
       selectInput(ns('select_wf'),
                   'Choose workflow',
-                  choices = GetWorkflowNames()
-                  )
+                  choices = GetWorkflowNames(),
+                  width = '150px')
+    })
+    
+    
+    output$wf_summary <- renderUI({
+      rv$folder
+       file <- file.path(rv$folder, rv$workflow, 'md', 'summary.md')
+       box(
+         title = "Inputs", 
+         status = "warning", 
+         solidHeader = TRUE,
+         mod_insert_md_ui(ns('summary'))
+      )
+      
+      mod_insert_md_server('summary', file)
+
     })
     
    observe({rv$workflow <- input$select_wf})

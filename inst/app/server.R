@@ -77,9 +77,9 @@ shinyServer(
     })
     
     
-    rv.core$current.obj <- Load_Dataset_server("open_file", 
+    rv.core$current.obj <- mod_openfile_server("open_file", 
                                                path = reactive({rv.core$path}))
-    
+    mod_export_server("convert")
     
     output$describe_wf <- renderUI({
       req(rv.core$path)
@@ -92,9 +92,7 @@ shinyServer(
     ### Run_workflow part
     ###
     observeEvent(req(rv.core$path),{
-      #req(rv.core$current.obj(), rv.core$path())
       verbose <- TRUE
-      #browser()
       path <- file.path(rv.core$path, 'R')
       
       path <- system.file("extdata/module_examples", package = "MagellanNTK")
@@ -137,12 +135,8 @@ shinyServer(
       )
       
       mod_plots_server('plots', object = reactive({rv.core$current.obj}))
+      mod_export_server('export', object = reactive({rv.core$current.obj}))
       
-      bsmodal_server(
-        id = "tbl",
-        title = "test",
-        uiContent = mod_plots_ui('plots')
-      )
       
     })
    
@@ -177,6 +171,7 @@ shinyServer(
       rv.core$current.obj
       tagList(
       uiOutput("chooseDataset_ui"),
+      #do.call(paste0(rv$workflow))
       mod_plots_ui('plots')
     )
     })

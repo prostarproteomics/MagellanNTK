@@ -1,18 +1,18 @@
 
-if (interactive()){
+#if (interactive()){
 
   library(shiny)
   options(shiny.fullstacktrace = TRUE)
   
   
   ui <- fluidPage(
-    Load_Dataset_ui("demo")
+    mod_openfile_ui("demo")
   )
   
   server <- function(input, output, session) {
     data(data_na)
-    Load_Dataset_server("demo", path = reactive({NULL}))
+    mod_openfile_server("demo", path = reactive({NULL}))
   }
   
   shinyApp(ui, server)
-}
+#}

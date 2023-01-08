@@ -5,7 +5,7 @@
   library(shinyTree)
   options(shiny.fullstacktrace = TRUE)
   
-  
+  path <- '/home/samuel/Github/MagellanNTK/inst/Workflow_examples'
   ui <- fluidPage(
     tagList(
       Load_Workflow_ui("demo"),
@@ -16,10 +16,9 @@
   server <- function(input, output) {
     rv <- reactiveVal()
     
-    rv <- Load_Workflow_server("demo")
+    rv <- Load_Workflow_server("demo", path=reactive({NULL}))
     
     output$show <- renderUI({
-      browser()
       tagList(
         h3(rv()$folder),
         h3(rv()$workflow)

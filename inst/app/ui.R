@@ -26,8 +26,7 @@ dashboardPage(
           icon = icon("folder"),
           startExpanded = FALSE,
           menuSubItem("Open dataset", tabName = "openFile"),
-          menuSubItem("Convert Data", tabName = "convert"),
-          #menuSubItem("Demo dataset", tabName = "demoData"),
+          menuSubItem("Convert Data", tabName = "convertData"),
           menuSubItem("Export results", tabName = "export")
         ),
         hr(),
@@ -51,26 +50,16 @@ dashboardPage(
         # body content
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
-          
-          tabItem(tabName = "openFile", Load_Dataset_ui("open_file")),
+          tabItem(tabName = "open_workflow", Load_Workflow_ui("open_wf")),
+          tabItem(tabName = "openFile", mod_openfile_ui('openwf')),
+          tabItem(tabName = "convertData", mod_convert_ui('convert')),
+          tabItem(tabName = "tab_plots",  mod_plots_ui('plots')),
+          tabItem(tabName = "tab_export",  mod_export_ui('export')),
           
           tabItem(tabName = "convert", uiOutput('show_convert')),
-          tabItem(tabName = "open_workflow", Load_Workflow_ui("open_wf")),
           tabItem(tabName = "run_workflow", uiOutput('run_workflowUI')),
           
           
-          
-          #tabItem(tabName = "demoData", mod_open_demoDataset_ui('demo_data')),
-          
-          tabItem(tabName = "tab_plots",
-                  tagList(
-                    uiOutput('tab_plots_ui')
-                    
-                  )
-          ),
-          
-          
-          tabItem(tabName = "export", h3("Export")), # export module not yet
           #tabItem(tabName = "globalSettings", h3('Global settings'),
           #   mod_settings_ui('global_settings')),
           # tabItem(tabName = "releaseNotes", h3('Release notes'),
@@ -79,13 +68,8 @@ dashboardPage(
           #   mod_check_updates_ui('check_updates')),
           tabItem(tabName = "usefulLinks", mod_insert_md_ui('links')),
           tabItem(tabName = "faq", mod_insert_md_ui('faq')),
-          tabItem(tabName = "bugReport", mod_bug_report_ui("bug_report")),
-          tabItem(tabName = "pipeline", 
-            h3('Pipeline')
-            #uiOutput('show_pipeline')
-          )
+          tabItem(tabName = "bugReport", mod_bug_report_ui("bug_report"))
         )
-        # uiOutput('show_pipeline')
       )
     )
 )
