@@ -33,7 +33,7 @@ shinyServer(
     pipeline.name = NULL,
     dataIn = NULL,
     result_convert = NULL,
-    result_openDemoDataset = NULL,
+    result_openfile = NULL,
     
     # Current QFeatures object in Prostar
     current.obj = NULL,
@@ -42,9 +42,7 @@ shinyServer(
     current.pipeline = NULL
   )
   
-  #rv.core$pipeline.name <- mod_choose_pipeline_server('pipe', package = 'MSPipelines')
-  
-  messageData <- data.frame(
+  notificationeData <- data.frame(
     text = c(
       "Sales are steady this month.",
       "How do I register?",
@@ -55,108 +53,135 @@ shinyServer(
   )
   
   output$messageMenu <- renderMenu({
-    msgs <- apply(messageData, 1, function(row) {
-      notificationItem(text = row[["text"]], 
-                       status = row[["status"]]
-                       )
+    msgs <- apply(notificationeData, 1, function(row) {
+      notificationItem(text = row[["text"]], status = row[["status"]])
     })
     
-    # This is equivalent to calling:
-    #   dropdownMenu(type="messages", msgs[[1]], msgs[[2]], ...)
     dropdownMenu(type = "notifications", .list = msgs)
   })
   
   
   
  
-    tmp <- Load_Workflow_server("open_wf")
+    tmp <- mod_load_workflow_server("openwf")
     
-    observe({
-      rv.core$path <- tmp()$folder
-      rv.core$workflow <- tmp()$workflow
-    })
-    
-    
-    rv.core$current.obj <- mod_openfile_server("open_file", 
-                                               path = reactive({rv.core$path}))
-    mod_export_server("convert")
-    
-    output$describe_wf <- renderUI({
-      req(rv.core$path)
-      mod_insert_md_ui("description_wf")
-      mod_insert_md_server("description_wf", "http://www.prostar-proteomics.org/md/presentation.md")
-    })
-    
-    
-    ###
-    ### Run_workflow part
-    ###
-    observeEvent(req(rv.core$path),{
+    observeEvent(req(tmp$folder(), tmp$workflow()), ignoreNULL = FALSE, {
+      rv.core$path <- tmp$folder()
+      rv.core$workflow <- tmp$workflow()
+      
       verbose <- TRUE
       path <- file.path(rv.core$path, 'R')
       
       path <- system.file("extdata/module_examples", package = "MagellanNTK")
       data(data_na)
       rv.core$current.obj <- data_na
-      
-    dataOut <- reactiveVal(NULL)
-    
-    output$debugInfos_ui <- renderUI({
-      req(verbose)
-      Debug_Infos_ui("debug_infos")
+      tl.layout <- c('v', 'h')
+      #isolate({
+      mod_run_workflow_server(id = rv.core$workflow,
+                              dataIn = reactive({rv.core$current.obj}),
+                              verbose = verbose,
+                              tl.layout = tl.layout)
     })
     
-    output$save_dataset_ui <- renderUI({
-      req(dataOut())
-      req(dataOut()$dataOut()$value)
-      dl_ui("saveDataset")
-
-      dl_server(
-        id = "saveDataset",
-        dataIn = reactive({dataOut()$dataOut()$value})
-      )
-
-    })
-    
-    observeEvent(req(rv.core$current.obj), {
-      dataOut(nav_server(
-        id = rv.core$workflow,
-        verbose = verbose,
-        dataIn = reactive({rv.core$current.obj}),
-        tl.layout = c("v", "h"),
-        path = path
-      ))
-      
-      Debug_Infos_server(
-        id = "debug_infos",
-        title = "Infos from shiny app",
-        rv.dataIn = reactive({data_na}),
-        dataOut = reactive({dataOut()$dataOut()$value})
-      )
-      
-      mod_plots_server('plots', object = reactive({rv.core$current.obj}))
-      mod_export_server('export', object = reactive({rv.core$current.obj}))
-      
-      
-    })
    
     
-    ###
-    ### End of run_workflow part
-    ###
-    ###
+   
+    
+    output$openFileUI <- renderUI({
+      req(rv.core$workflow)
+      type <- 'default_openfile'
+      if (module.exists('custom_openfile')) 
+        type <- 'custom_openfile'
+
+      
+      rv.core$result_openfile <- do.call(
+         paste0(type, '_server'), 
+         list(id = 'openfile'))()
+         
+      do.call(paste0(type, '_ui'), list(id = 'openfile'))
     })
+    
+    
+    output$exportUI <- renderUI({
+      req(rv.core$current.obj)
+      type <- 'default_export'
+      if (module.exists('custom_export')) 
+        type <- 'custom_export'
+
+      do.call(
+        paste0(type, '_server'), 
+        list(id = 'exportdataset', object = reactive({rv.core$current.obj})))
+      
+      do.call(paste0(type, '_ui'), list(id = 'exportdataset'))
+      
+    })
+    
+    output$convertUI <- renderUI({
+      
+      type <- 'default_convert'
+      if (module.exists('custom_convert')) 
+        type <- 'custom_convert' 
+
+      
+      rv.core$result_convert <- do.call(
+        paste0(type, '_server'), 
+        list(id = 'convertdataset'))()
+      
+      do.call(paste0(type, '_ui'), list(id = 'convertdataset'))
+
+    })
+    
+    output$plotsUI <- renderUI({
+      req(rv.core$current.obj)
+      type <- 'default_plots'
+      if (module.exists('custom_plots')) 
+        type <- 'custom_plots'
+      
+      do.call(
+        paste0(type, '_server'), 
+        list(id = 'plotdataset', object = reactive({rv.core$current.obj}) )
+        )
+      
+      do.call(paste0(type, '_ui'), 
+              list(id = 'plotdataset'))
+      
+    })
+    
     
     
     output$run_workflowUI <- renderUI({
-      rv.core$workflow
-      tagList(
-        nav_ui(rv.core$workflow),
-        uiOutput("debugInfos_ui")
-      )
+      #req(rv.core$workflow)
+      #req(rv.core$current.obj)
+      #rv.core$workflow
+      #rv.core$current.obj
+      #browser()
+      if (is.null(rv.core$workflow) ){
+        h3('There is no workflow for the moment')
+      } else {
+        
+          mod_run_workflow_ui(id =rv.core$workflow)
+         # })
+        }
+      
+      
+      # observe({
+      #   req(rv.core$workflow)
+      #   verbose <- TRUE
+      #   path <- file.path(rv.core$path, 'R')
+      #   
+      #   path <- system.file("extdata/module_examples", package = "MagellanNTK")
+      #   data(data_na)
+      #   rv.core$current.obj <- data_na
+      #   tl.layout <- c('v', 'h')
+      #   #isolate({
+      #   mod_run_workflow_server(id = rv.core$workflow,
+      #                           dataIn = reactive({rv.core$current.obj}),
+      #                           verbose = verbose,
+      #                           tl.layout = tl.layout)
+      # })
+      
+
     })
-    
-    
     
     
     
@@ -166,96 +191,20 @@ shinyServer(
     
     mod_bug_report_server('bug_report')
     
-    
-    output$tab_plots_ui <- renderUI({
-      rv.core$current.obj
-      tagList(
-      uiOutput("chooseDataset_ui"),
-      #do.call(paste0(rv$workflow))
-      mod_plots_ui('plots')
-    )
+ 
+  
+    observeEvent(rv.core$result_openfile,{
+      rv.core$current.obj <- rv.core$result_openfile
+      #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
     })
     
-    output$chooseDataset_ui <- renderUI({
-      req(rv.core$current.obj)
-      if (length(names(rv.core$current.obj)) == 0) {
-        choices <- list(" " = character(0))
-      } else {
-        choices <- names(rv.core$current.obj)
-      }
-      
-      selectInput("chooseDataset", "Dataset",
-                  choices = choices,
-                  selected = names(rv.core$current.obj)[length(rv.core$current.obj)],
-                  width = 200
-      )
-    })
-  
-  #
-  # Code for convert tool
-  #
-  # convert = Convert$new('convertTool')
-  # ## Get the return values of modules in charge of loading datasets
-  # observe({
-  #   rv.core$result_convert <- convert$server(dataIn = reactive({rv.core$current.obj}))
-  #   })
-  # shinyjs::delay(1000, rv.core$current.obj <- NA)
-  # 
+  observeEvent(rv.core$result_convert, ignoreNULL = TRUE, {
+    rv.core$current.obj <- rv.core$result_convert
+    #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
+  })
   
   
-  #
-  # Code for open demo dataset
-  #
-  #rv.core$result_openDemoDataset <- mod_open_demoDataset_server('demo_data')
-  
-  #observeEvent(rv.core$result_openDemoDataset(),{
-  #   rv.core$current.obj <- rv.core$result_openDemoDataset()
-  #   #rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-  #   print('rv.core$current.obj has changed')
-  # })
-  
-  
-  # rv.core$result_openFile <- mod_open_dataset_server('moduleOpenDataset')
-  # observeEvent(rv.core$tmp_dataManager$openFile(),{
-  #    rv.core$current.obj <- rv.core$tmp_dataManager$openFile()$dataset
-  #    rv.core$current.pipeline <- rv.core$tmp_dataManager$openFile()$pipeline
-  #  })
-   
-  # observeEvent(rv.core$result_convert(),{
-  #   #browser()
-  #   rv.core$dataIn <- rv.core$result_convert()
-  #   #   rv.core$current.pipeline <- rv.core$tmp_dataManager$convert()$pipeline
-  # })
-  
-  # observe({
-  #   #shinyjs::toggle('div_demoDataset', condition = !is.null(rv.core$pipeline.name()) && rv.core$pipeline.name() != 'None')
-  #   shinyjs::toggle('load_dataset_btn', condition = !is.null(rv.core$result_openDemoDataset()))
-  # })
-  # 
   observeEvent(input$browser,{browser()})
-  
-  # observe({
-  #   req(rv.core$pipeline.name() != 'None')
-  #   print("Launch Magellan")
-  #   obj <- base::get(rv.core$pipeline.name())
-  #   rv.core$pipeline <- do.call(obj$new, list('App'))
-  #   rv.core$pipeline$server(dataIn = reactive({rv.core$dataIn}))
-  # })
-  
-  # observeEvent(input$load_dataset_btn, {
-  #   #browser()
-  #   print(names(rv.core$result_openDemoDataset()))
-  #   updateTabItems(session, "sb", "pipeline")
-  #   shinyjs::delay(100, rv.core$dataIn <- rv.core$result_openDemoDataset())
-  # })
-  
-  
-  
-  
-  #output$show_convert <- renderUI({
-  #  req(convert)
-  #  convert$ui()
-  #})
   
   
   # https://github.com/daattali/shinyjs/issues/74

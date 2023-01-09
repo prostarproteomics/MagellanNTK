@@ -1,0 +1,79 @@
+#' @title A shiny module to run a workflow
+#'
+#' @description  xxxxx
+#' @name run_workflow
+#' 
+#' @example examples/test_run_workflow.R
+NULL
+
+#' @param id xxx
+#' @rdname run_workflow
+#'
+#' @export
+#'
+mod_run_workflow_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    nav_ui(ns(id)),
+    uiOutput(ns("debugPanelUI"))
+  )
+}
+
+
+#' @param id xxx
+#' @return xxxxx
+#'
+#' @rdname run_workflow
+#'
+#' @export
+#'
+mod_run_workflow_server <- function(id, 
+                                    dataIn = reactive({NULL}),
+                                    verbose = FALSE,
+                                    tl.layout = NULL,
+                                    path = NULL
+                                    ) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    dataOut <- reactiveVal()
+    
+    
+    output$debugPanelUI <- renderUI({
+      req(verbose)
+      Debug_Infos_ui(ns("debug_infos"))
+    })
+    
+    output$save_dataset_ui <- renderUI({
+      req(dataOut())
+      req(dataOut()$dataOut()$value)
+      dl_ui("saveDataset")
+      
+      dl_server(
+        id = "saveDataset",
+        dataIn = reactive({dataOut()$dataOut()$value})
+      )
+      
+    })
+    
+    observeEvent(req(dataIn()), {
+      #browser()
+      dataOut(nav_server(
+        id = id,
+        verbose = verbose,
+        dataIn = reactive({dataIn()}),
+        tl.layout = tl.layout,
+        path = path
+      ))
+      
+      Debug_Infos_server(
+        id = "debug_infos",
+        title = "Infos from shiny app",
+        rv.dataIn = reactive({dataIn()}),
+        dataOut = reactive({dataOut()$dataOut()$value})
+      )
+    })
+    
+    return(dataOut())
+    
+  })
+}

@@ -15,7 +15,7 @@ NULL
 #' @rdname default_plugin
 #' @export
 #' 
-mod_openfile_ui <- function(id){
+default_openfile_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3('Default open file plugin')
@@ -26,9 +26,16 @@ mod_openfile_ui <- function(id){
 #' @rdname default_plugin
 #' @export
 #' 
-mod_openfile_server <- function(id,  path = reactive({NULL})){
+default_openfile_server <- function(id,  path = reactive({NULL})){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    
+    rv <- reactiveValues(
+      dataOut = NULL
+    )
+    
+    
+    return(reactive({rv$dataOut}))
   })
 }
 
@@ -40,7 +47,7 @@ mod_openfile_server <- function(id,  path = reactive({NULL})){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_plots_ui <- function(id){
+default_plots_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3('Default plot plugin')
@@ -50,11 +57,9 @@ mod_plots_ui <- function(id){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_plots_server <- function(id, object){
+default_plots_server <- function(id, object){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
-    
     
   })
 }
@@ -69,7 +74,7 @@ mod_plots_server <- function(id, object){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_export_ui <- function(id){
+default_export_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3('This is the default export plugin')
@@ -79,7 +84,7 @@ mod_export_ui <- function(id){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_export_server <- function(id, object){
+default_export_server <- function(id, object){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -99,7 +104,7 @@ mod_export_server <- function(id, object){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_convert_ui <- function(id){
+default_convert_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3('This is the default convert plugin')
@@ -109,10 +114,16 @@ mod_convert_ui <- function(id){
 #' @export
 #' @rdname default_plugin
 #' 
-mod_convert_server <- function(id, object){
+default_convert_server <- function(id){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    rv <- reactiveValues(
+      dataOut = NULL
+    )
+    
+    
+    return(reactive({rv$dataOut}))
     
     
   })

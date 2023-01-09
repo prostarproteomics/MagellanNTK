@@ -80,7 +80,7 @@ PipelineA_Process1_server <- function(id,
   
   
   
-  source(paste0(path, '/foo.R'), local=TRUE)$value
+  #source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
   # This is only for simple workflows

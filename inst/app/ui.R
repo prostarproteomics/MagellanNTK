@@ -18,16 +18,16 @@ dashboardPage(
         #br(),
         #menuItem("Home", tabName = "Home", selected = TRUE),
         #hr(),
-        menuItem("Workflow", tabName = "open_workflow", icon = icon("cogs")),
+        menuItem("Workflow", tabName = "tab_load_workflow", icon = icon("cogs")),
         hr(),
         menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
         
         menuItem("Data Manager",
           icon = icon("folder"),
           startExpanded = FALSE,
-          menuSubItem("Open dataset", tabName = "openFile"),
-          menuSubItem("Convert Data", tabName = "convertData"),
-          menuSubItem("Export results", tabName = "export")
+          menuSubItem("Open dataset", tabName = "tab_openfile"),
+          menuSubItem("Convert Data", tabName = "tab_convertData"),
+          menuSubItem("Export results", tabName = "tab_export")
         ),
         hr(),
         
@@ -50,13 +50,12 @@ dashboardPage(
         # body content
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
-          tabItem(tabName = "open_workflow", Load_Workflow_ui("open_wf")),
-          tabItem(tabName = "openFile", mod_openfile_ui('openwf')),
-          tabItem(tabName = "convertData", mod_convert_ui('convert')),
-          tabItem(tabName = "tab_plots",  mod_plots_ui('plots')),
-          tabItem(tabName = "tab_export",  mod_export_ui('export')),
+          tabItem(tabName = "tab_load_workflow", mod_load_workflow_ui("openwf")),
+          tabItem(tabName = "tab_openfile", uiOutput('openFileUI')),
+          tabItem(tabName = "tab_convertData", uiOutput('convertUI')),
+          tabItem(tabName = "tab_plots", uiOutput('plotsUI')),
+          tabItem(tabName = "tab_export", uiOutput('exportUI')),
           
-          tabItem(tabName = "convert", uiOutput('show_convert')),
           tabItem(tabName = "run_workflow", uiOutput('run_workflowUI')),
           
           

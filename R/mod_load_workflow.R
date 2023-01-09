@@ -11,7 +11,7 @@ NULL
 #'
 #' @export
 #'
-Load_Workflow_ui <- function(id) {
+mod_load_workflow_ui <- function(id) {
   ns <- NS(id)
   tagList(
     useShinyjs(),
@@ -37,7 +37,7 @@ Load_Workflow_ui <- function(id) {
 #'
 #' @export
 #'
-Load_Workflow_server <- function(id, path=reactive({NULL})) {
+mod_load_workflow_server <- function(id, path=reactive({NULL})) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -122,27 +122,10 @@ Load_Workflow_server <- function(id, path=reactive({NULL})) {
 
     })
     
-   observe({rv$workflow <- input$select_wf})
-    
-    observe({
-      req(rv$workflow)
-      # The functions of the module server (and ui) are supposed to 
-      # be already loaded. Check if it is the case. If not, show a 
-      # message and abort
-      # LoadCode(name = rv$workflow,
-      #          path = file.path(rv$folder, rv$workflow, 'R'),
-      #          recursive = TRUE
-      #          )
-      
-      lst.code <- list.files(file.path(rv$folder, rv$workflow, 'R'))
-      lapply(lst.code, 
-             function(x)
-               source(file.path(rv$folder, rv$workflow, 'R', x), local=FALSE)
-        )
+   observeEvent(req(input$select_wf), ignoreInit = TRUE, {
+     rv$workflow <- input$select_wf
      toggleState('start', condition = TRUE)
-    })
-    
-    
+     })
     
     
     output$checkDirs <- renderUI({
@@ -152,7 +135,7 @@ Load_Workflow_server <- function(id, path=reactive({NULL})) {
         system.file("app/www/images/Problem.png", package="MagellanNTK"), 
         '\", height="24"></img>')
       
-      print(txt)
+      
       tagList(
         h3('md directory '), 
         HTML(txt),
@@ -166,12 +149,23 @@ Load_Workflow_server <- function(id, path=reactive({NULL})) {
     })
     
     observeEvent(input$start, {
+      
+      # Loading source files
+      lst.code <- list.files(file.path(rv$folder, rv$workflow, 'R'))
+      lapply(lst.code, 
+             function(x)
+               source(file.path(rv$folder, rv$workflow, 'R', x), local=FALSE)
+      )
+      
       dataOut$folder <- rv$folder
       dataOut$workflow <- rv$workflow
     })
     
     
-     reactive({dataOut})
-    
+     return(
+       list(folder = reactive({dataOut$folder}),
+            workflow = reactive({dataOut$workflow})
+            )
+     )    
   })
 }

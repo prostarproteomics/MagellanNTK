@@ -34,7 +34,8 @@ Collate:
     mod_loading_page.R
     doc-data.R
     global.R
-    load_workflow.R
+    mod_load_workflow.R
+    mod_run_workflow.R
     mod_shinyTree.R
     load_code.R
     bsmodal.R
@@ -49,7 +50,7 @@ Collate:
     timeline_h.R
     timeline_v.R
     code_used_by_external_modules.R
-    Debug_Infos.R
+    mod_Debug_Infos.R
     nav.R
     dl.R
     Save_dataset.R

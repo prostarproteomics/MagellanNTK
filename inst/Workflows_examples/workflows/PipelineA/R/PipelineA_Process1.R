@@ -80,7 +80,7 @@ PipelineA_Process1_server <- function(id,
   
   
   
-  source(paste0(path, '/foo.R'), local=TRUE)$value
+  #source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
   # This is only for simple workflows
@@ -125,7 +125,7 @@ PipelineA_Process1_server <- function(id,
     
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      file <- file.path(path, 'md', md.file)
+      file <- file.path('md', md.file)
       
       tagList(
         ### In this example, the md file is found in the extdata/module_examples 
@@ -276,7 +276,8 @@ PipelineA_Process1_server <- function(id,
     
     
     output$showPlot <- renderPlot({
-      plot(as.matrix(dataIn()[[1]]))
+      browser()
+      plot(as.matrix(rv$dataIn[[1]][,1]))
     })
     # <<< END ------------- Code for step 1 UI---------------
     

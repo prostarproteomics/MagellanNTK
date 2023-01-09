@@ -80,9 +80,9 @@ PipelineB_Process1_server <- function(id,
   ){
 
   
-  f <- system.file("extdata", "module_examples/mod_foo.R", package="MagellanNTK")
-  source(f, local=TRUE)$value
-  
+  # f <- system.file("extdata", "module_examples/mod_foo.R", package="MagellanNTK")
+  # source(f, local=TRUE)$value
+  # 
   # Define default selected values for widgets
   # This is only for simple workflows
   widgets.default.values <- list(

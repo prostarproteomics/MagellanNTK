@@ -79,11 +79,6 @@ Debug_Infos_server <- function(id,
         output$show_Debug_Infos <- renderUI({
             wellPanel(
                 h3(title),
-                # div(DT::DTOutput(ns('show_steps_infos')),
-                #     style = "font-size: 100%; width: 30%"),
-                # div(DT::DTOutput(ns('show_varContent')),
-                #     style = "font-size: 100%; width: 30%"),
-                #
                 uiOutput(ns("show_is_enabled")),
                 fluidRow(
                     column(width = 4, DT::DTOutput(ns("show_steps_infos"))),

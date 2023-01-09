@@ -23,7 +23,7 @@ readFile <- function(name, path){
 
 
 #' @export
-mod_openfile_ui <- function(id){
+custom_openfile_ui <- function(id){
   ns <- NS(id)
   tagList(
     fileInput(ns('filename'), "Select file")
@@ -31,7 +31,7 @@ mod_openfile_ui <- function(id){
 }
 
 #' @export
-mod_openfile_server <- function(id, path = reactive({NULL})){
+custom_openfile_server <- function(id, path = reactive({NULL})){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
   

@@ -1,4 +1,19 @@
 
+
+#' @export
+#'
+module.exists <- function(base_name){
+  server.exists <- exists(paste0(base_name, '_server'), envir = .GlobalEnv, mode = "function")
+  ui.exists <- exists(paste0(base_name, '_ui'), envir = .GlobalEnv, mode = "function")
+  
+  return(server.exists && ui.exists)
+}
+
+
+
+
+
+
 #' @title
 #' Basic check workflow directory
 #'

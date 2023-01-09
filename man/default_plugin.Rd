@@ -2,36 +2,36 @@
 % Please edit documentation in R/mod_default_plugins.R
 \name{default_plugin}
 \alias{default_plugin}
-\alias{mod_openfile_ui}
-\alias{mod_openfile_server}
-\alias{mod_plots_ui}
-\alias{mod_plots_server}
-\alias{mod_export_ui}
-\alias{mod_export_server}
-\alias{mod_convert_ui}
-\alias{mod_convert_server}
+\alias{default_openfile_ui}
+\alias{default_openfile_server}
+\alias{default_plots_ui}
+\alias{default_plots_server}
+\alias{default_export_ui}
+\alias{default_export_server}
+\alias{default_convert_ui}
+\alias{default_convert_server}
 \title{xxxx}
 \usage{
-mod_openfile_ui(id)
+default_openfile_ui(id)
 
-mod_openfile_server(
+default_openfile_server(
   id,
   path = reactive({
      NULL
  })
 )
 
-mod_plots_ui(id)
+default_plots_ui(id)
 
-mod_plots_server(id, object)
+default_plots_server(id, object)
 
-mod_export_ui(id)
+default_export_ui(id)
 
-mod_export_server(id, object)
+default_export_server(id, object)
 
-mod_convert_ui(id)
+default_convert_ui(id)
 
-mod_convert_server(id, object)
+default_convert_server(id)
 }
 \arguments{
 \item{id}{xxxx}

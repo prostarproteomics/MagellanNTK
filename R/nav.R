@@ -172,13 +172,6 @@ nav_server <- function(id,
                 if(verbose)
                   cat(crayon::blue(paste0('\t--- ', 'verbose = ', verbose, '\n')))
               
-              # The functions of the module server (and ui) are supposed to 
-                # be already loaded. Check if it is the case. If not, show a 
-                # message and abort
-
-                #LoadCode(name = id, path = path, recursive=TRUE)
-
-
                 # When the server starts, the default position is 1
                 # Not necessary ?
                 rv$current.pos <- 1
