@@ -240,7 +240,7 @@ PrepareData2Send <- function(rv, pos, verbose=FALSE) {
             rv$steps.enabled[x] <- x == 1
         })
     } else {
-        current.step.name <- rv$config@steps[rv$current.pos]
+        current.step.name <- names(rv$config@steps)[rv$current.pos]
         data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
     }
 

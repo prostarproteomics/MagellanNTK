@@ -276,7 +276,6 @@ PipelineA_Process1_server <- function(id,
     
     
     output$showPlot <- renderPlot({
-      browser()
       plot(as.matrix(rv$dataIn[[1]][,1]))
     })
     # <<< END ------------- Code for step 1 UI---------------
