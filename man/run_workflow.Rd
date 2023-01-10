@@ -10,7 +10,9 @@ mod_run_workflow_ui(id)
 
 mod_run_workflow_server(
   id,
-  dataIn = NULL,
+  dataIn = reactive({
+     NULL
+ }),
   verbose = FALSE,
   tl.layout = NULL,
   path = NULL

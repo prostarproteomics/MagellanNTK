@@ -1,0 +1,1 @@
+# FAQ for MagellanNTK package

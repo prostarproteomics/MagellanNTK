@@ -122,7 +122,7 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
 
     })
     
-   observeEvent(req(input$select_wf), ignoreInit = TRUE, {
+   observeEvent(req(input$select_wf), {
      rv$workflow <- input$select_wf
      toggleState('start', condition = TRUE)
      })

@@ -43,16 +43,16 @@ Collate:
     popover_for_help.R
     createModuleTemplate.R
     mod_bug_report.R
-    format_DT.R
+    mod_format_DT.R
     utils.R
     check_funcs.R
     export_Excel.R
     timeline_h.R
     timeline_v.R
     code_used_by_external_modules.R
-    mod_Debug_Infos.R
+    mod_debug_infos.R
     nav.R
-    dl.R
+    mod_dl.R
     Save_dataset.R
     general_nav_funcs.R
     pipeline_funcs.R

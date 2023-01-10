@@ -43,7 +43,7 @@ NA
 Shiny Modules to manage timelines.
 }
 \examples{
-if(interactive()){
+#if(interactive()){
   library(shiny)
 library(shinyWidgets)
 library(shinyjs)
@@ -103,7 +103,7 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
-}
+#}
 if(interactive()){
   library(shiny)
   library(shinyWidgets)

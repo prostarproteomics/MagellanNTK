@@ -18,8 +18,12 @@ dashboardPage(
         #br(),
         #menuItem("Home", tabName = "Home", selected = TRUE),
         #hr(),
-        menuItem("Workflow", tabName = "tab_load_workflow", icon = icon("cogs")),
-        hr(),
+        menuItem("Workflow", 
+                 menuSubItem("Open", tabName = "tab_load_workflow"),
+                 menuSubItem("FAQ", tabName = "tab_wf_faq"),
+                 menuSubItem("Useful links", tabName = "tab_wf_links")
+                 ),
+        
         menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
         
         menuItem("Data Manager",
@@ -29,14 +33,14 @@ dashboardPage(
           menuSubItem("Convert Data", tabName = "tab_convertData"),
           menuSubItem("Export results", tabName = "tab_export")
         ),
-        hr(),
+        
         
         menuItem("Plots", tabName = "tab_plots", icon = icon("cogs")),
-        hr(),
-        menuItem("Help",
+        
+        menuItem("Help for MagellanNTK",
           icon = icon("question-circle"),
-          menuSubItem("Useful Links", tabName = "usefulLinks"),
-          menuSubItem("FAQ", tabName = "faq"),
+          menuSubItem("About", tabName = "tab_about"),
+          menuSubItem("FAQ", tabName = "tab_faq"),
           menuSubItem("Bug Report", tabName = "bugReport")
           #menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
           #menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
@@ -51,6 +55,9 @@ dashboardPage(
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
           tabItem(tabName = "tab_load_workflow", mod_load_workflow_ui("openwf")),
+          tabItem(tabName = "tab_wf_links", mod_insert_md_ui('wf_links')),
+          tabItem(tabName = "tab_wf_faq", mod_insert_md_ui('wf_faq')),
+          
           tabItem(tabName = "tab_openfile", uiOutput('openFileUI')),
           tabItem(tabName = "tab_convertData", uiOutput('convertUI')),
           tabItem(tabName = "tab_plots", uiOutput('plotsUI')),
@@ -65,8 +72,8 @@ dashboardPage(
           #   mod_release_notes_ui('rl')),
           # tabItem(tabName = "checkUpdates", h3('Check for updates'),
           #   mod_check_updates_ui('check_updates')),
-          tabItem(tabName = "usefulLinks", mod_insert_md_ui('links')),
-          tabItem(tabName = "faq", mod_insert_md_ui('faq')),
+          tabItem(tabName = "tab_about", mod_insert_md_ui('magellan_about')),
+          tabItem(tabName = "tab_faq", mod_insert_md_ui('magellan_faq')),
           tabItem(tabName = "bugReport", mod_bug_report_ui("bug_report"))
         )
       )

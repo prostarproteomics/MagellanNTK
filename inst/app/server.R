@@ -186,9 +186,17 @@ shinyServer(
     
     
     mod_insert_md_server("homepage", "http://www.prostar-proteomics.org/md/presentation.md")
-    mod_insert_md_server("faq", "http://www.prostar-proteomics.org/md/FAQ.md")
-    mod_insert_md_server("links", "http://www.prostar-proteomics.org/md/links.md")
+    mod_insert_md_server("wf_faq", "http://www.prostar-proteomics.org/md/FAQ.md")
+    mod_insert_md_server("wf_links", "http://www.prostar-proteomics.org/md/links.md")
     
+    
+    ###
+    ### Help menu
+    ###
+    mod_insert_md_server("magellan_faq", 
+                         file.path(system.file('app/md', package='MagellanNTK'), 'magellan_faq.md'))
+    mod_insert_md_server("magellan_about", 
+                         file.path(system.file('app/md', package='MagellanNTK'), 'magellan_about.md'))
     mod_bug_report_server('bug_report')
     
  
