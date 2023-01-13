@@ -21,8 +21,6 @@ mod_load_workflow_ui <- function(id) {
                                label = "Folder select", 
                                title = "Sheets Folder Selector"),
     verbatimTextOutput(ns("sheets_dir")),
-    uiOutput(ns('chooseWorkflowUI')),
-    #mod_shinyTree_ui(ns("tree")),
     #uiOutput(ns('checkDirs')),
     uiOutput(ns('wf_summary')),
     disabled(actionButton(ns('start'), 'Start'))
@@ -80,6 +78,13 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)
       rv$folder <- parseDirPath(roots = Theroots(), input$sheets_dir)
+      #browser()
+      if (length(rv$folder) > 0){
+          rv$workflow <- unlist(input$sheets_dir$path)[length(unlist(input$sheets_dir$path))]
+          toggleState('start', condition = TRUE)
+          
+      }
+        #browser()
       #rv$is.valid <- CheckWorkflowDir(rv$folder)
     })
     
@@ -90,27 +95,27 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     # })
     
     
-    GetWorkflowNames <- reactive({
-      req(rv$folder)
-      lst <- list.files(rv$folder)
-      #path.md <- file.path(rv$folder, 'md')
-      #lst <- lst[-which(grepl( 'Description', lst))]
-      #lst <- gsub('.md', '', lst)
-      lst
-    })
+    # GetWorkflowNames <- reactive({
+    #   req(rv$folder)
+    #   lst <- list.files(rv$folder)
+    #   #path.md <- file.path(rv$folder, 'md')
+    #   #lst <- lst[-which(grepl( 'Description', lst))]
+    #   #lst <- gsub('.md', '', lst)
+    #   lst
+    # })
 
-    output$chooseWorkflowUI <- renderUI({
-      req(rv$folder)
-      selectInput(ns('select_wf'),
-                  'Choose workflow',
-                  choices = GetWorkflowNames(),
-                  width = '150px')
-    })
-    
+    # output$chooseWorkflowUI <- renderUI({
+    #   req(rv$folder)
+    #   selectInput(ns('select_wf'),
+    #               'Choose workflow',
+    #               choices = GetWorkflowNames(),
+    #               width = '150px')
+    # })
+    # 
     
     output$wf_summary <- renderUI({
-      rv$folder
-       file <- file.path(rv$folder, rv$workflow, 'md', 'summary.md')
+      req(rv$folder)
+       file <- file.path(rv$folder, 'md', 'summary.md')
        box(
          title = "Inputs", 
          status = "warning", 
@@ -122,11 +127,7 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
 
     })
     
-   observeEvent(req(input$select_wf), {
-     rv$workflow <- input$select_wf
-     toggleState('start', condition = TRUE)
-     })
-    
+   
     
     output$checkDirs <- renderUI({
       req(rv$folder)
@@ -151,10 +152,10 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     observeEvent(input$start, {
       
       # Loading source files
-      lst.code <- list.files(file.path(rv$folder, rv$workflow, 'R'))
+      lst.code <- list.files(file.path(rv$folder, 'R'))
       lapply(lst.code, 
              function(x)
-               source(file.path(rv$folder, rv$workflow, 'R', x), local=FALSE)
+               source(file.path(rv$folder, 'R', x), local=FALSE)
       )
       
       dataOut$folder <- rv$folder

@@ -6,22 +6,24 @@
   options(shiny.fullstacktrace = TRUE)
   
   path <- '/home/samuel/Github/MagellanNTK/inst/Workflow_examples'
-  ui <- fluidPage(
-    tagList(
-      Load_Workflow_ui("demo"),
-    uiOutput('show')
+  ui <- dashboardPage(
+    dashboardHeader(title="MagellanNTK"),
+    dashboardSidebar(),
+    dashboardBody(
+      mod_load_workflow_ui("demo"),
+      uiOutput('show')
     )
   )
   
   server <- function(input, output) {
-    rv <- reactiveVal()
     
-    rv <- Load_Workflow_server("demo", path=reactive({NULL}))
+    tmp <- mod_load_workflow_server("demo")
     
     output$show <- renderUI({
+      req(tmp$folder())
       tagList(
-        h3(rv()$folder),
-        h3(rv()$workflow)
+        h3(tmp$folder()),
+        h3(tmp$workflow())
       )
       
     })
