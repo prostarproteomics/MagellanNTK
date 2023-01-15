@@ -7,21 +7,28 @@
   
   
   # Uncomment and Change this for a process workflow
-   name <- 'PipelineA_Process1'
+  # name <- 'PipelineA_Process1'
    #name <- 'PipelineA_Description'
-   layout <- c('h')
+  # layout <- c('h')
   
   
   # Uncomment and Change this for a pipeline workflow
-  #name <- 'PipelineA'
-  #layout <- c('v', 'h')
+  name <- 'PipelineA'
+  layout <- c('v', 'h')
   
   
   
   
   ui <- fluidPage(
   tagList(
-    selectInput('chooseDataset', 'Choose dataset', choices = c('None', 'data1', 'data_na')),
+    fluidRow(
+      column(width=2, actionButton('simReset', 'Remote reset',  class='info')),
+      column(width=2, actionButton('simEnabled', 'Remote enable/disable', class='info')),
+      column(width=2, actionButton('simSkipped', 'Remote is.skipped', class='info')),
+      column(width=2, selectInput('chooseDataset', 'Choose dataset', 
+                                  choices = c('None', 'data1', 'data_na')))
+    ),
+    hr(),
     uiOutput('UI'),
     uiOutput('debugInfos_ui')
   )
@@ -61,6 +68,9 @@ server <- function(input, output){
   observe({
     rv$dataOut <- nav_server(id = name,
                              dataIn = reactive({rv$dataIn}),
+                             remoteReset = reactive({input$simReset}),
+                             is.skipped = reactive({input$simSkipped%%2 != 0}),
+                             is.enabled = reactive({input$simEnabled%%2 == 0}),
                              tl.layout = layout,
                              verbose = verbose,
                              path = path
