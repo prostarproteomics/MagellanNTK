@@ -12,18 +12,17 @@ library(MagellanNTK)
 
 #' The application server-side
 #' 
-#' @param input,output,session Internal parameters for {shiny}. 
+#' @param input,output,session  Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinyjs
 #' 
 #' @noRd
-shinyServer( 
+server <- shinyServer( 
 
-    function( input, output, session ) {
+    function( input, output, session) {
    
   observeEvent(input$ReloadApp, {js$resetApp()})
-  #observeEvent(input$ReloadApp, { js$reset()})
       
   tmp <- reactiveVal()
   
@@ -61,20 +60,23 @@ shinyServer(
   })
   
   
-  
+  GetTitle <- reactive({
+    h3('toto')
+  })
  
-    tmp <- mod_load_workflow_server("openwf")
+    tmp.workflow <- mod_load_workflow_server("openwf")
     
-    observeEvent(req(tmp$folder(), tmp$workflow()), ignoreNULL = FALSE, {
-      rv.core$path <- tmp$folder()
-      rv.core$workflow <- tmp$workflow()
+    observeEvent(req(tmp.workflow$workflow()),{
+      
+      rv.core$path <- tmp.workflow$folder()
+      rv.core$workflow <- tmp.workflow$workflow()
       
       verbose <- TRUE
       path <- file.path(rv.core$path, 'R')
-      
-      path <- system.file("extdata/module_examples", package = "MagellanNTK")
-      data(data_na)
-      rv.core$current.obj <- data_na
+      print(paste0('mode_dev = ', mode_dev))
+      #path <- system.file("extdata/module_examples", package = "MagellanNTK")
+      #data(data_na)
+      #rv.core$current.obj <- data_na
       tl.layout <- c('v', 'h')
       #isolate({
       mod_run_workflow_server(id = rv.core$workflow,
@@ -85,23 +87,40 @@ shinyServer(
     
    
     
-   
     
-    output$openFileUI <- renderUI({
+    
+    
+    ###
+    ### Openfile
+    ###
+    
+    GetModuleType <- reactive({
       req(rv.core$workflow)
       type <- 'default_openfile'
       if (module.exists('custom_openfile')) 
         type <- 'custom_openfile'
+      type
+    })
+    
+     
+    output$openFileUI <- renderUI({
+      req(rv.core$workflow)
 
-      
-      rv.core$result_openfile <- do.call(
-         paste0(type, '_server'), 
-         list(id = 'openfile'))()
-         
-      do.call(paste0(type, '_ui'), list(id = 'openfile'))
+      rv.core$result_openfile <- do.call(paste0(GetModuleType(), '_server'), list(id = 'openfile'))
+      do.call(paste0(GetModuleType(), '_ui'), list(id = 'openfile'))
     })
     
     
+    observe({
+      req(rv.core$result_openfile)
+      rv.core$current.obj <- rv.core$result_openfile$data()
+      rv.core$current.obj.name <- rv.core$result_openfile$name()
+      
+    })
+    
+    ###
+    ### Export file
+    ###
     output$exportUI <- renderUI({
       req(rv.core$current.obj)
       type <- 'default_export'
@@ -150,11 +169,8 @@ shinyServer(
     
     
     output$run_workflowUI <- renderUI({
-      #req(rv.core$workflow)
-      #req(rv.core$current.obj)
-      #rv.core$workflow
-      #rv.core$current.obj
-      #browser()
+      rv.core$workflow
+      
       if (is.null(rv.core$workflow) ){
         h3('There is no workflow for the moment')
       } else {

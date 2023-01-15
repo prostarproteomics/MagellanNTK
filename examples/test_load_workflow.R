@@ -10,20 +10,36 @@
     dashboardHeader(title="MagellanNTK"),
     dashboardSidebar(),
     dashboardBody(
-      mod_load_workflow_ui("demo"),
+      uiOutput("openFileUI"),
       uiOutput('show')
     )
   )
   
   server <- function(input, output) {
     
+    rv <- reactiveValues(
+      workflow = NULL,
+      folder = NULL
+    )
+    
     tmp <- mod_load_workflow_server("demo")
     
+    observe({
+      rv$workflow <- tmp$workflow()
+      rv$folder <- tmp$folder()
+      
+    })
+    
+    output$openFileUI <- renderUI({
+      tmp <- mod_load_workflow_server("demo")
+      
+      mod_load_workflow_ui("demo")
+    })
+    
     output$show <- renderUI({
-      req(tmp$folder())
       tagList(
-        h3(tmp$folder()),
-        h3(tmp$workflow())
+        h3(rv$folder),
+        h3(rv$workflow)
       )
       
     })

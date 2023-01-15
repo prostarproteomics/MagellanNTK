@@ -172,9 +172,9 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #' @export
 #' 
 ToggleState_Screens <- function(cond,
-    range,
-    is.enabled,
-    rv) {
+                                range,
+                                is.enabled,
+                                rv) {
     
     #browser()
     #print(rv$steps.status[range])
@@ -183,9 +183,7 @@ ToggleState_Screens <- function(cond,
         #rv$steps.enabled[range] <- rep(cond, length(range)) && 
         #    !(rv$steps.status[range] == global$SKIPPED)
         rv$steps.enabled[range] <- unlist(
-            lapply(
-                range,
-                function(x) 
+            lapply(range,function(x) 
                     cond && !(rv$steps.status[x] == global$SKIPPED)
                 )
             )
@@ -379,28 +377,24 @@ GetFirstMandatoryNotValidated <- function(range,rv) {
 #' @export
 #'
 Update_State_Screens <- function(is.skipped,
-    is.enabled,
-    rv) {
+                                 is.enabled,
+                                 rv) {
     len <- length(rv$steps.status)
 
     if (isTRUE(is.skipped)) {
-        steps.enabled <- ToggleState_Screens(
-            cond = FALSE,
-            range = seq_len(len),
-            is.enabled = is.enabled,
-            rv = rv
-        )
+        steps.enabled <- ToggleState_Screens(cond = FALSE,
+                                             range = seq_len(len),
+                                             is.enabled = is.enabled,
+                                             rv = rv)
     } else {
 
         # Ensure that all steps before the last validated one are disabled
         ind.max <- GetMaxValidated_AllSteps(rv$steps.status)
         if (ind.max > 0) {
-            steps.enabled <- ToggleState_Screens(
-                cond = FALSE,
-                range = seq_len(ind.max),
-                is.enabled = is.enabled,
-                rv = rv
-            )
+            steps.enabled <- ToggleState_Screens(cond = FALSE,
+                                                 range = seq_len(ind.max),
+                                                 is.enabled = is.enabled,
+                                                 rv = rv)
         }
 
         if (ind.max < len) {

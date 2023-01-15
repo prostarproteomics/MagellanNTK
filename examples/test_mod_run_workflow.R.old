@@ -1,0 +1,66 @@
+path <- system.file("extdata/module_examples", package = "MagellanNTK")
+data(data_na)
+data(data1)
+tl.layout <- c("v", "h")
+verbose = FALSE
+
+
+options(shiny.fullstacktrace = verbose)
+
+
+ui <- fluidPage(
+  tagList(
+    selectInput('chooseDataset', 'Choose dataset', choices = c('None', 'data1', 'data_na')),
+    mod_run_workflow_ui('PipelineA'),
+    uiOutput("debugInfos_ui")
+  )
+)
+
+
+#----------------------------------------------------------------------
+server <- function(input, output) {
+  dataOut <- reactiveVal()
+  
+  # if (is.null(dataIn))
+  #   dataIn <- Load_Dataset_server("exemple")
+  
+  rv <- reactiveValues(
+    dataIn = NULL
+  )
+  
+  
+  
+  observeEvent(input$chooseDataset, { 
+    if (input$chooseDataset == 'None') rv$dataIn <- NULL
+    else if (input$chooseDataset == 'data1') rv$dataIn <- data1
+    else if (input$chooseDataset == 'data_na') rv$dataIn <- data_na
+  })
+  
+  output$debugInfos_ui <- renderUI({
+    req(verbose)
+    Debug_Infos_ui("debug_infos")
+  })
+  
+  
+  observe({
+    # observe({
+    dataOut(
+      mod_run_workflow_server(
+      id = 'PipelineA',
+      verbose = verbose,
+      dataIn = reactive({rv$dataIn}),
+      tl.layout = tl.layout,
+      path = path
+    ))
+    
+    Debug_Infos_server(
+      id = "debug_infos",
+      title = "Infos from shiny app",
+      rv.dataIn = reactive({rv$dataIn}),
+      dataOut = reactive({dataOut()$dataOut()$value})
+    )
+  })
+}
+
+shinyApp(ui, server)
+

@@ -3,14 +3,34 @@ library(shinyjs)
 library(shinyFiles)
 
 
-shinyUI(
+
+header_img <- div(
+  img(src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", height="45px"),
+  div(
+    class = "my-title",
+    h4('Title'), h5('Subtitle'),
+    tags$style(".my-title :is(h4, h5){color: white; font-weight: bold;}")
+  ),
+  style = "display: flex;"
+)
+
+header <-  htmltools::tagQuery(dashboardHeader(title = ""))
+header <- header$
+  addAttrs(style = "position: relative")$ # add some styles to the header 
+  find(".navbar.navbar-static-top")$ # find the header right side
+  append(header_img)$ # inject our img
+  allTags()
+
+
+
+ui <- shinyUI(
 dashboardPage(
     
-    dashboardHeader(title="MagellanNTK",
-                    dropdownMenuOutput("messageMenu")
-                    ),
-    
-    
+    # dashboardHeader(title = '',
+    #                 dropdownMenuOutput("messageMenu")
+    #                 ),
+    # 
+    header,
     dashboardSidebar(
       useShinyjs(),
       sidebarMenu(
@@ -29,9 +49,8 @@ dashboardPage(
         menuItem("Data Manager",
           icon = icon("folder"),
           startExpanded = FALSE,
-          menuSubItem("Open dataset", tabName = "tab_openfile"),
-          menuSubItem("Convert Data", tabName = "tab_convertData"),
-          menuSubItem("Export results", tabName = "tab_export")
+          menuSubItem("Open file", tabName = "tab_openfile"),
+           menuSubItem("Export results", tabName = "tab_export")
         ),
         
         

@@ -43,34 +43,32 @@ mod_run_workflow_server <- function(id,
       Debug_Infos_ui(ns("debug_infos"))
     })
     
-    output$save_dataset_ui <- renderUI({
-      req(dataOut())
-      req(dataOut()$dataOut()$value)
-      dl_ui("saveDataset")
-      
-      dl_server(
-        id = "saveDataset",
-        dataIn = reactive({dataOut()$dataOut()$value})
-      )
-      
-    })
+    # output$save_dataset_ui <- renderUI({
+    #   req(dataOut())
+    #   req(dataOut()$dataOut()$value)
+    #   dl_ui("saveDataset")
+    #   
+    #   dl_server(
+    #     id = "saveDataset",
+    #     dataIn = reactive({dataOut()$dataOut()$value})
+    #   )
+    #   
+    # })
     
     observeEvent(req(dataIn()), {
       #browser()
-      dataOut(nav_server(
-        id = id,
-        verbose = verbose,
-        dataIn = reactive({dataIn()}),
-        tl.layout = tl.layout,
-        path = path
-      ))
+      dataOut(nav_server(id = id,
+                         verbose = verbose,
+                         dataIn = reactive({dataIn()}),
+                         tl.layout = tl.layout,
+                         path = path)
+              )
       
-      Debug_Infos_server(
-        id = "debug_infos",
-        title = "Infos from shiny app",
-        rv.dataIn = reactive({dataIn()}),
-        dataOut = reactive({dataOut()$dataOut()$value})
-      )
+      Debug_Infos_server(id = "debug_infos",
+                         title = "Infos from shiny app",
+                         rv.dataIn = reactive({dataIn()}),
+                         dataOut = reactive({dataOut()$dataOut()$value})
+                         )
     })
     
     return(dataOut())

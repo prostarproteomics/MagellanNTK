@@ -72,17 +72,6 @@ along the different processes of a process nor pipeline.
 }
 \examples{
 #'
-if (interactive()) {
-    ui <- fluidPage(
-        Debug_Infos_ui("tbl")
-    )
-    server <- function(input, output) {
-        Debug_Infos_server(
-        id = "tbl", 
-        data = reactive({head(iris)
-        }))
-    }
-    shinyApp(ui, server)
-}
+examples/test_mod_debug_infos.R
 
 }

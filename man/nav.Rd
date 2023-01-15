@@ -68,7 +68,7 @@ The module navigation can be launched via a Shiny app.
 This is the core module of MagellanNTK
 }
 \examples{
-if(interactive()){
+#if(interactive()){
   library(shiny)
   
   verbose <- TRUE
@@ -91,6 +91,7 @@ if(interactive()){
   
   ui <- fluidPage(
   tagList(
+    selectInput('chooseDataset', 'Choose dataset', choices = c('None', 'data1', 'data_na')),
     uiOutput('UI'),
     uiOutput('debugInfos_ui')
   )
@@ -99,11 +100,18 @@ if(interactive()){
 server <- function(input, output){
   
   data(data1)
+  data(data_na)
   rv <- reactiveValues(
-    dataIn = data1,
+    dataIn = NULL,
     dataOut = NULL
   )
   
+  
+  observeEvent(input$chooseDataset, { 
+    if (input$chooseDataset == 'None') rv$dataIn <- NULL
+    else if (input$chooseDataset == 'data1') rv$dataIn <- data1
+    else if (input$chooseDataset == 'data_na') rv$dataIn <- data_na
+  })
   output$UI <- renderUI({nav_ui(name)})
   
   output$debugInfos_ui <- renderUI({
@@ -131,7 +139,7 @@ server <- function(input, output){
 shinyApp(ui, server)
 
 
-}
+#}
 
 }
 \author{

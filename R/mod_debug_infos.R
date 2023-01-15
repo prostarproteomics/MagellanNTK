@@ -7,19 +7,7 @@
 #' 
 #' @examples 
 #' #'
-#' @examples
-#' if (interactive()) {
-#'     ui <- fluidPage(
-#'         Debug_Infos_ui("tbl")
-#'     )
-#'     server <- function(input, output) {
-#'         Debug_Infos_server(
-#'         id = "tbl", 
-#'         data = reactive({head(iris)
-#'         }))
-#'     }
-#'     shinyApp(ui, server)
-#' }
+#' @examples examples/test_mod_debug_infos.R
 #' 
 NULL
 
@@ -33,7 +21,14 @@ NULL
 #'
 Debug_Infos_ui <- function(id) {
     ns <- NS(id)
-    uiOutput(ns("show_Debug_Infos"))
+    wellPanel(
+      uiOutput(ns('title')),
+    uiOutput(ns("show_is_enabled")),
+      fluidRow(
+        column(width = 4, DT::DTOutput(ns("show_steps_infos"))),
+        column(width = 4, DT::DTOutput(ns("show_varContent")))
+      )
+    )
 }
 
 
@@ -73,48 +68,59 @@ Debug_Infos_server <- function(id,
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-        # The following functions are only there for dev and debugging reasons
-        # They will not be part of the final code
-
-        output$show_Debug_Infos <- renderUI({
-            wellPanel(
-                h3(title),
-                uiOutput(ns("show_is_enabled")),
-                fluidRow(
-                    column(width = 4, DT::DTOutput(ns("show_steps_infos"))),
-                    column(width = 4, DT::DTOutput(ns("show_varContent")))
-                )
-            )
+        output$title <- renderUI({
+          title <- 'Title'
+          if (!is.null(title))
+            title <- title
+          
+          h3(title)
         })
-
-
-
+        
+        
         output$show_is_enabled <- renderUI({
-            p(paste0("is.enabled() = ", as.numeric(is.enabled())))
+          txt <- 'NA'
+          if (!is.null(is.enabled()))
+            txt <- as.numeric(is.enabled())
+          
+          p(paste0("is.enabled() = ", txt))
         })
 
 
         GetVariableContent <- reactive({
+          
+          dataIn <- 'NA'
+          rv.dataIn <- 'NA'
+          dataOut <- 'NA'
+          
+          if(!is.null(rv.dataIn())){
+            dataIn <- names(dataIn())
+            rv.dataIn <- names(rv.dataIn())
+            dataOut <- names(dataOut()$value)
+          }
+            
             VC <- data.frame(
-                paste0(names(dataIn()), collapse = "<br>"),
-                paste0(names(rv.dataIn()), collapse = "<br>"),
-                paste0(names(dataOut()$value), collapse = "<br>")
+                paste0(dataIn, collapse = "<br>"),
+                paste0(rv.dataIn, collapse = "<br>"),
+                paste0(dataOut, collapse = "<br>")
             )
             colnames(VC) <- c(
                 '<span style="color:red">dataIn()</span>',
                 '<span style="color:red">rv$dataIn</span>',
                 '<span style="color:red">dataOut()$value</span>'
             )
-
+            
             VC
         })
 
 
         GetData <- reactive({
-            req(c(steps.enabled(), steps.status(), steps.skipped()))
+          df <- NULL
+          # It is not necessary th test the value NLUU/not NULL of all variables
+            # because if a dataset is loaded, then all these variables are not
+            # NULL. Thus, one test only one of these variables
+          if (!is.null(steps.status())){
 
-            # browser()
-            df <- DataFrame(
+           df <- data.frame(
                 status = unlist(lapply(steps.status(), function(x) {
                     paste0(GetStringStatus(x, TRUE), " (", x, ")")
                 })),
@@ -128,11 +134,15 @@ Debug_Infos_server <- function(id,
                 )
             )
             rownames(df) <- names(steps.status())
+          }
+          
+          
             df
         })
 
         output$show_steps_infos <- DT::renderDT({
-            df <- as.data.frame(GetData())
+          req(GetData())
+          df <- as.data.frame(GetData())
             DT::datatable(df,
                 escape = FALSE,
                 rownames = TRUE,
@@ -160,8 +170,9 @@ Debug_Infos_server <- function(id,
 
 
         output$show_varContent <- DT::renderDT({
-            df <- GetVariableContent()
-            DT::datatable(df,
+            req(GetVariableContent())
+          
+          DT::datatable(GetVariableContent(),
                 escape = FALSE,
                 rownames = FALSE,
                 class = "compact",

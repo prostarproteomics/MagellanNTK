@@ -15,15 +15,17 @@ mod_load_workflow_ui <- function(id) {
   ns <- NS(id)
   tagList(
     useShinyjs(),
-    h3('Load workflow'),
-    uiOutput(ns('folder_ui')),
-    shinyFiles::shinyDirButton(id = ns('sheets_dir'), 
+    fluidRow(
+      column(width=4, uiOutput(ns('folder_ui'))),
+      column(width=4, shinyFiles::shinyDirButton(id = ns('sheets_dir'), 
                                label = "Folder select", 
-                               title = "Sheets Folder Selector"),
-    verbatimTextOutput(ns("sheets_dir")),
+                               title = "Sheets Folder Selector")
+             ),
+    #verbatimTextOutput(ns("sheets_dir"))),
+    column(width=4, disabled(actionButton(ns('load'), 'Load', class = 'btn-primary')))
+    ),
     #uiOutput(ns('checkDirs')),
-    uiOutput(ns('wf_summary')),
-    disabled(actionButton(ns('start'), 'Start'))
+    uiOutput(ns('wf_summary'))
   )
 }
 
@@ -73,15 +75,13 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
    
     
-    
-    
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)
       rv$folder <- parseDirPath(roots = Theroots(), input$sheets_dir)
       #browser()
       if (length(rv$folder) > 0){
           rv$workflow <- unlist(input$sheets_dir$path)[length(unlist(input$sheets_dir$path))]
-          toggleState('start', condition = TRUE)
+          toggleState('load', condition = TRUE)
           
       }
         #browser()
@@ -116,18 +116,19 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     output$wf_summary <- renderUI({
       req(rv$folder)
        file <- file.path(rv$folder, 'md', 'summary.md')
+       mod_insert_md_server('summary', file)
+       
        box(
-         title = "Inputs", 
-         status = "warning", 
+         title = "Inputs",
+         status = "warning",
          solidHeader = TRUE,
          mod_insert_md_ui(ns('summary'))
       )
-      
-      mod_insert_md_server('summary', file)
 
+      
     })
     
-   
+
     
     output$checkDirs <- renderUI({
       req(rv$folder)
@@ -149,7 +150,7 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
       
     })
     
-    observeEvent(input$start, {
+    observeEvent(input$load, {
       
       # Loading source files
       lst.code <- list.files(file.path(rv$folder, 'R'))

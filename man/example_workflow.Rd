@@ -28,9 +28,10 @@ pipelines nor processes to be managed with `MagellanNTK`.
 }
 \examples{
 if (interactive()) {
-    path <- system.file("extdata/module_examples", package = "MagellanNTK")
-    data(data_na)
-    run_workflow("PipelineA_Process1", dataIn = data_na, path = path, verbose = TRUE)
+  data(data_na)
+  
+  path <- system.file("extdata/module_examples", package = "MagellanNTK")
+    run_workflow("PipelineA_Process1", dataIn = NULL, path = path, verbose = TRUE)
 
     run_workflow("PipelineA", dataIn = data_na, path = path, tl.layout = c("v", "h"),verbose = TRUE)
     

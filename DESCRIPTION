@@ -35,7 +35,6 @@ Collate:
     doc-data.R
     global.R
     mod_load_workflow.R
-    mod_run_workflow.R
     mod_shinyTree.R
     load_code.R
     bsmodal.R
@@ -53,6 +52,8 @@ Collate:
     mod_debug_infos.R
     nav.R
     mod_dl.R
+    app.R
+    launch_app.R
     Save_dataset.R
     general_nav_funcs.R
     pipeline_funcs.R

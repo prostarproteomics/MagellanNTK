@@ -50,9 +50,7 @@ run_workflow <- function(id,
     server <- function(input, output) {
         dataOut <- reactiveVal()
 
-        if (is.null(dataIn))
-          dataIn <- Load_Dataset_server("exemple")
-
+        
         output$debugInfos_ui <- renderUI({
             req(verbose)
             Debug_Infos_ui("debug_infos")
@@ -70,7 +68,7 @@ run_workflow <- function(id,
  
         })
 
-        observeEvent(req(dataIn), {
+        observeEvent(dataIn, {
             dataOut(nav_server(
                 id = id,
                 verbose = verbose,
