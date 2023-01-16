@@ -72,8 +72,8 @@ Get_Code_Update_Config_Variable <- function() {
 #'
 Get_Code_Declare_widgets <- function(widgets.names = NULL) {
     # If one is on a composed workflow which do not have explicit ui
-    # browser()
-    if (is.null(widgets.names)) {
+  declare_rv_widgets <- NULL
+  if (is.null(widgets.names)) {
         declare_rv_widgets <- "rv.widgets <- reactiveValues()\n\n"
     } else {
         basis <- "w.name = widgets.default.values$w.name"
@@ -308,15 +308,7 @@ observeEvent(remoteReset(), {
 Module_Return_Func <- function() {
     code <- "# Return value of module
 # DO NOT MODIFY THIS PART
-list(config = reactive({
-    config@ll.UI <- setNames(lapply(names(config@steps),
-                                  function(x){
-                                    do.call(\"uiOutput\", list(ns(x)))
-                                  }),
-                           paste0(\"screen_\", names(config@steps))
-    )
-    config
-    }),
+list(config = reactive({config}),
 dataOut = reactive({dataOut})
 )
 
@@ -337,9 +329,10 @@ dataOut = reactive({dataOut})
 #' @author Samuel Wieczorek
 #'
 #' @examples
+#' id <- 'PipelineA_Process1'
 #' widgets <- c('widget1', 'widget2')
 #' custom <- list(foo1 = list(), foo2 = 3)
-#' Get_Worflow_Core_Code(widgets, names(custom))
+#' Get_Workflow_Core_Code('process', id, widgets, names(custom))
 #'
 #' @export
 #' 
@@ -347,25 +340,66 @@ dataOut = reactive({dataOut})
 #'
 #' @return NA
 #'
-Get_Worflow_Core_Code <- function(
+Get_Workflow_Core_Code <- function(
+    mode = NULL,
+    name = NULL,
     w.names = NULL,
     rv.custom.names = NULL) {
+
   #browser()
-    core <- paste0(
-        Get_Code_Declare_widgets(w.names),
-        #Get_Code_Update_Config_Variable(),
-        Get_Code_for_ObserveEvent_widgets(w.names),
-        Get_Code_for_rv_reactiveValues(),
-        Get_Code_Declare_rv_custom(rv.custom.names),
-        Get_Code_for_dataOut(),
-        Get_Code_for_General_observeEvents(),
-        sep = "\n"
-    )
+  core <- paste0(
+    Insert_Call_to_Config(name),
+    Get_Code_Declare_widgets(w.names),
+    #Get_Code_Update_Config_Variable(),
+    Get_Code_for_ObserveEvent_widgets(w.names),
+    Get_Code_for_rv_reactiveValues(),
+    Get_Code_Declare_rv_custom(rv.custom.names),
+    Get_Code_for_dataOut(),
+    Get_Code_for_General_observeEvents(),
+    sep = "\n"
+  )
+  
+    # 
+    # core <- Insert_Call_to_Config(name)
+    # core <- paste0(core, Get_Code_Declare_widgets(w.names))
+    # 
+    # if (mode == 'process'){
+    #     core <- paste0(core,
+    #       Get_Code_for_ObserveEvent_widgets(w.names),
+    #       sep = '\n')
+    # }
+    # 
+    # core <- paste0(core,
+    #                Get_Code_Declare_rv_custom(rv.custom.names),
+    #                Get_Code_for_rv_reactiveValues(),
+    #                Get_Code_for_dataOut(),
+    #                Get_Code_for_General_observeEvents(),
+    #                sep = "\n"
+    #                )
 
     core
 }
 
 
+#' @export
+Insert_Call_to_Config <- function(name){
+  code <- "
+
+config <- #name#_conf()
+config@ll.UI <- setNames(
+      lapply(
+        names(config@steps),
+        function(x){
+          do.call(\"uiOutput\", list(ns(x)))
+        }
+      ), nm = paste0(\"screen_\", names(config@steps))
+    )
+
+"
+  code <- gsub('#name#', name, code)
+  code
+  
+}
 
 #' @title Code for declaring xxx
 #'
@@ -388,16 +422,16 @@ Get_Worflow_Core_Code <- function(
 #' @return NA
 #'
 Get_AdditionalModule_Core_Code <- function(
-  w.names = NULL, 
-  rv.custom.names = NULL) {
+    w.names = NULL, 
+    rv.custom.names = NULL) {
     core <- paste0(
-        Get_Code_Declare_widgets(w.names),
-        Get_Code_for_ObserveEvent_widgets(w.names),
-        Get_Code_for_rv_reactiveValues(),
-        Get_Code_Declare_rv_custom(rv.custom.names),
-        Get_Code_for_dataOut(),
-        Get_Code_for_AddMod_observeEvents(),
-        sep = "\n"
+      Get_Code_Declare_widgets(w.names),
+      Get_Code_for_ObserveEvent_widgets(w.names),
+      Get_Code_for_rv_reactiveValues(),
+      Get_Code_Declare_rv_custom(rv.custom.names),
+      Get_Code_for_dataOut(),
+      Get_Code_for_AddMod_observeEvents(),
+      sep = "\n"
     )
 
     core

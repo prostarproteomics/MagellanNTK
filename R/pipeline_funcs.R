@@ -32,20 +32,21 @@
 #' NULL
 #'
 ActionOn_Child_Changed <- function(temp.dataIn,
-    dataIn,
-    steps.status,
-    steps,
-    steps.enabled,
-    steps.skipped,
-    processHasChanged,
-    newValue) {
+                                   dataIn,
+                                   steps.status,
+                                   steps,
+                                   steps.enabled,
+                                   steps.skipped,
+                                   processHasChanged,
+                                   newValue) {
     # Indice of the dataset in the object
     # If the original length is not 1, then this indice is different
     # than the above one
-    ind.processHasChanged <- which(steps == processHasChanged)
+    ind.processHasChanged <- which(names(steps) == processHasChanged)
 
     len <- length(steps)
 
+    #browser()
     if (is.null(newValue)) {
         # A process has been reseted
 
@@ -71,16 +72,16 @@ ActionOn_Child_Changed <- function(temp.dataIn,
             dataIn <- temp.dataIn
         } else {
             name.last.validated <- steps[ind.last.validated]
-            dataIn.ind.last.validated <- which(
-                names(dataIn) == name.last.validated)
+            dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
             dataIn <- Keep_Datasets_from_Object(
                 object = dataIn,
                 range = seq_len(dataIn.ind.last.validated)
             )
         }
     } else {
-        # A process has been validated
-        steps.status[processHasChanged] <- global$VALIDATED
+       
+      # A process has been validated
+        steps.status[ind.processHasChanged] <- global$VALIDATED
 
         if (ind.processHasChanged < len) {
             steps.status[(1 + ind.processHasChanged):len] <- global$UNDONE
@@ -115,13 +116,14 @@ ActionOn_Child_Changed <- function(temp.dataIn,
 #' 
 #' @examples NA
 #'
-GetValuesFromChildren <- function(config,
-    tmp.return) {
+GetValuesFromChildren <- function(config, tmp.return) {
+  
+  stepsnames <- names(config@steps)
+  
     # Get the trigger values for each steps of the module
-    return.trigger.values <- setNames(lapply(config@steps, function(x) {
+    return.trigger.values <- setNames(lapply(stepsnames, function(x) {
         tmp.return[[x]]$dataOut()$trigger
-    }),
-    nm = config@steps
+    }), nm = stepsnames
     )
 
     # Replace NULL values by NA
@@ -130,11 +132,9 @@ GetValuesFromChildren <- function(config,
 
 
     # Get the values returned by each step of the modules
-    return.values <- setNames(lapply(config@steps, function(x) {
-        tmp.return[[x]]$dataOut()$value
-    }),
-    nm = config@steps
-    )
+    return.values <- setNames(lapply(stepsnames, 
+                                     function(x) {tmp.return[[x]]$dataOut()$value}),
+                              nm = stepsnames)
 
 
     list(
@@ -157,10 +157,7 @@ GetValuesFromChildren <- function(config,
 #' @examples NULL
 #'
 ResetChildren <- function(range, resetChildren) {
-    if (verbose) {
-        cat("ResetChildren()\n\n")
-    }
-
+    
     resetChildren[range] <- 1 + resetChildren[range]
 
     return(resetChildren)
@@ -203,7 +200,6 @@ Update_Data2send_Vector <- function(rv) {
 #'
 #' @param rv xxxx
 #' @param pos xxx
-#' @param verbose xxx
 #'
 #' @export
 #'
@@ -211,42 +207,36 @@ Update_Data2send_Vector <- function(rv) {
 #' 
 #' @examples NULL
 #'
-PrepareData2Send <- function(rv, pos, verbose=FALSE) {
+PrepareData2Send <- function(rv, pos) {
     # Returns NULL to all modules except the one pointed by the current position
     # Initialization of the pipeline : one send dataIn() to the
     # first module
 
     # The dataset to send is contained in the variable 'rv$dataIn'
 
-
-
+    stepsnames <- names(rv$config@steps)
+    nsteps <- length(rv$config@steps)
     # Initialize vector to all NULL values
-    data2send <- setNames(
-        lapply(rv$config@steps, function(x) {
-            NULL
-        }),
-        nm = rv$config@steps
-    )
+    data2send <- setNames(lapply(stepsnames, function(x) {NULL}), nm = stepsnames)
 
     if (is.null(rv$dataIn)) { # Init of core engine
 
         # Only the first process will receive the data
-        data2send[[1]] <- rv$temp.dataIn
+        if (!is.null(rv$temp.dataIn))
+          data2send[[1]] <- rv$temp.dataIn
 
         # The other processes are by default disabled.
         # If they have to be enabled, they will be by another function later
-        lapply(seq_len(length(rv$config@steps)), function(x) {
-            rv$steps.enabled[x] <- x == 1
-        })
+        lapply(seq_len(nsteps), function(x) {rv$steps.enabled[x] <- x == 1})
     } else {
-        current.step.name <- rv$config@steps[rv$current.pos]
+        current.step.name <- stepsnames[rv$current.pos]
         data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
     }
 
-    if (verbose) {
-        cat("<----------------- Data sent to children ------------------> \n")
+    if (dev_mode) {
+        cat(crayon::blue("<----------------- Data sent to children ------------------> \n"))
         print(data2send)
-        cat("<----------------------------------------------------> \n")
+        cat(crayon::blue("<----------------------------------------------------> \n"))
     }
 
     return(

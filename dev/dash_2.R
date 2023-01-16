@@ -4,9 +4,9 @@ library(shinyWidgets)
 library(shinyjs)
 library(tibble)
 
-options(shiny.fullstacktrace = TRUE)
+options(shiny.fullstacktrace = dev.mode)
 
-verbose <- TRUE
+
 #------------------------ Class TimelineDraw -----------------------------------
 source(file.path('.', 'mod_timeline_v.R'), local=TRUE)$value
 source(file.path('.', 'mod_timeline_h.R'), local=TRUE)$value

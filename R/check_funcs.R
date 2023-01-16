@@ -14,21 +14,29 @@
 #' @export
 #'
 Found_Mod_Funcs <- function(id) {
-    server.func <- paste0("mod_", id, "_server")
+    
+    config.func <- paste0(id, "_conf")
+    config.exists <- exists(config.func, envir = .GlobalEnv, mode = "function")
+    
+    server.func <- paste0(id, "_server")
     server.exists <- exists(server.func, envir = .GlobalEnv, mode = "function")
 
-    ui.func <- paste0("mod_", id, "_ui")
+    ui.func <- paste0(id, "_ui")
     ui.exists <- exists(ui.func, envir = .GlobalEnv, mode = "function")
 
     if (!server.exists) {
-        warning(paste0("Cannot found ", server.func, "()"))
+        warning(paste0("Cannot find ", server.func, "()"))
     }
 
     if (!ui.exists) {
-        warning(paste0("Cannot found ", ui.func, "()"))
+        warning(paste0("Cannot find ", ui.func, "()"))
+    }
+    
+    if (!config.exists) {
+        warning(paste0("Cannot finnd ", config.exists, "()"))
     }
 
-    return(server.exists && ui.exists)
+    return(server.exists && ui.exists && config.exists)
 }
 
 
@@ -110,77 +118,6 @@ FindClosingParenthesis <- function(text, openPos) {
 
 
 
-
-
-#' @title Get config variable from workflow source code
-#'
-#' @description Analyze the source code to extract the config variable
-#'
-#' @param s The complete source code of the process module
-#'
-#' @return A list containing the configuration of the module
-#'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' NULL
-#'
-#' @importFrom stringi stri_locate
-#' 
-#' @export
-#'
-GetConfig <- function(s) {
-    config <- NULL
-
-    keyword <- "config<-list("
-    len <- nchar(keyword)
-    start.index <- stri_locate(pattern = keyword, s, fixed = TRUE)[1]
-    end.index <- FindClosingParenthesis(s, start.index + len)
-
-    config.string <- substr(s, start.index, end.index)
-
-    # Get mode value
-    keyword <- "mode="
-    len <- nchar(keyword)
-    mode.start <- stri_locate(pattern = keyword, config.string, fixed = TRUE)[1]
-    tmp <- substr(config.string, mode.start + len, nchar(config.string))
-    end_g <- stri_locate_all(
-        pattern = substr(tmp, 1, 1),
-        tmp,
-        fixed = TRUE
-    )[[1]][2, 1]
-
-    mode <- substr(tmp, 2, end_g - 1)
-
-
-    # Get steps values
-
-    steps.start <- stri_locate(
-        pattern = "steps=",
-        config.string,
-        fixed = TRUE
-    )[1]
-
-
-    steps <- ""
-    # Get mandatory slot values
-    mandatory.start <- stri_locate(
-        pattern = "mandatory=",
-        config.string,
-        fixed = TRUE
-    )[1]
-
-    mandatory <- ""
-
-
-    config <- Config(
-        mode = mode,
-        steps = steps,
-        mandatory = mandatory
-    )
-
-    return(config)
-}
 
 #' @title Check source code of a module process
 #'

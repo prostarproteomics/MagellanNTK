@@ -2,19 +2,19 @@
 #'
 #' @description  A shiny Module.
 #'
-#' @name mod_dl
-#' @example examples/test_mod_dl.R
+#' @name dl
+#' @example examples/test_dl.R
 #'
 NULL
 
 
 #' @param id xxx
 #'
-#' @rdname mod_dl
+#' @rdname dl
 #'
 #' @export
 #'
-mod_dl_ui <- function(id) {
+dl_ui <- function(id) {
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
@@ -24,7 +24,7 @@ mod_dl_ui <- function(id) {
   )
 }
 
-#' @rdname mod_dl
+#' @rdname dl
 #' 
 #' @param id internal
 #' @param dataIn internal
@@ -37,7 +37,7 @@ mod_dl_ui <- function(id) {
 #'
 #' @export
 #'
-mod_dl_server <- function(id,
+dl_server <- function(id,
   dataIn = reactive({NULL}),
   extension = reactive({'csv'}),
   widget.type = reactive({'Link'}),

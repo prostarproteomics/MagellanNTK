@@ -4,7 +4,7 @@
 \alias{LoadCode}
 \title{Load workflows functions}
 \usage{
-LoadCode(name, path = NULL, recursive = FALSE)
+LoadCode(name, path, recursive = FALSE)
 }
 \arguments{
 \item{name}{A `character()` to indicate the name of the workflow. It can be

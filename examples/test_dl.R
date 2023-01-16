@@ -4,8 +4,6 @@ if (interactive()){
   library(DT)
   library(shinyjs)
   library(shiny)
-  
-  
   options(shiny.fullstacktrace = TRUE)
   data(data_na)
   

@@ -7,13 +7,11 @@
 #' pipelines nor processes to be managed with `MagellanNTK`.
 #'
 #' @param id xxx
-#' @param verbose A `boolean` that indicates whether to show some infos in the 
-#' console and add the shiny module for debugging
-#' @param tl.layout Additional parameters for mod_nav
+#' @param tl.layout Additional parameters for nav
 #' @param path The path to the directory where are the source code files 
 #' for processes and pipelines
 #'
-#' @rdname example_mod_workflow
+#' @rdname example_workflow
 #'
 #' @author Samuel Wieczorek
 #'
@@ -27,35 +25,19 @@
 #' @example examples/example_run_workflow.R
 #'
 run_workflow <- function(id,
-    verbose = FALSE,
-    tl.layout = NULL,
-    path = NULL) {
-    if (missing(id)) {
-        warning("'id' is required.")
-        return(NULL)
-    }
+  dataIn = NULL,
+  tl.layout = NULL,
+  path = NULL) {
+  
+    if (missing(id))
+        stop("'id' is required.")
     
-    
-
-    if (is.null(path)){
-        warning('xxxx')
-        return (NULL)
-    } else {
-        # Load source code files for processes
-        for (l in list.files(path = path, pattern = ".R", recursive = TRUE))
-            source(file.path(path, l), local=FALSE)$value
-        if (!Found_Mod_Funcs(id)) {
-            return(NULL)
-        }
-    }
-    
-    
-    options(shiny.fullstacktrace = verbose)
+  options(shiny.fullstacktrace = dev_mode)
 
 
     ui <- fluidPage(
         tagList(
-            mod_nav_ui(id),
+            nav_ui(id),
             uiOutput("debugInfos_ui")
         )
     )
@@ -65,41 +47,40 @@ run_workflow <- function(id,
     server <- function(input, output) {
         dataOut <- reactiveVal()
 
-        dataIn <- mod_Load_Dataset_server("exemple")
-
+        
         output$debugInfos_ui <- renderUI({
-            req(verbose)
-            mod_Debug_Infos_ui("debug_infos")
+            req(dev_mode)
+            Debug_Infos_ui("debug_infos")
         })
 
         output$save_dataset_ui <- renderUI({
             req(dataOut())
             req(dataOut()$dataOut()$value)
-            mod_dl_ui("saveDataset")
+            dl_ui("saveDataset")
 
-            mod_dl_server(
+            dl_server(
                 id = "saveDataset",
                 dataIn = reactive({dataOut()$dataOut()$value})
             )
  
         })
 
-        observeEvent(req(dataIn()), {
-            dataOut(mod_nav_server(
+        observeEvent(dataIn, {
+            dataOut(nav_server(
                 id = id,
-                verbose = verbose,
-                dataIn = reactive({dataIn()}),
-                tl.layout = tl.layout
+                dataIn = reactive({dataIn}),
+                tl.layout = tl.layout,
+                path = path
                 ))
 
-            mod_Debug_Infos_server(
+            Debug_Infos_server(
                 id = "debug_infos",
                 title = "Infos from shiny app",
-                rv.dataIn = reactive({dataIn()}),
+                rv.dataIn = reactive({dataIn}),
                 dataOut = reactive({dataOut()$dataOut()$value})
             )
         })
     }
 
-    shinyApp(ui = ui, server = server)
+    shinyApp(ui, server)
 }

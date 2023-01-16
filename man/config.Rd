@@ -7,12 +7,12 @@
 \usage{
 xxx
 
-\S4method{initialize}{Config}(.Object, name, mode, steps, mandatory)
+\S4method{initialize}{Config}(.Object, fullname, mode, steps, mandatory)
 
-Config(name, mode, steps = "", mandatory = "")
+Config(fullname = "", mode = "", steps = "", mandatory = "")
 }
 \arguments{
-\item{name}{xxx}
+\item{fullname}{xxx}
 
 \item{mode}{xxx}
 
@@ -23,10 +23,6 @@ Config(name, mode, steps = "", mandatory = "")
 \item{.Object}{xxx}
 
 \item{object}{xxx}
-
-\item{parent}{xxx}
-
-\item{path}{xxx}
 }
 \description{
 This class is used to store the configuration of any process
@@ -37,7 +33,6 @@ Validity:
 * The first step must be called 'Description', it is a mandatory step. Thus, 
 the first item of the mandatory vector is TRUE.
 To be continued...
-
 
 ## Initialization
  ### Generic process
@@ -52,6 +47,8 @@ Wrapper function to the constructor of the class
 \section{Slots}{
 
 \describe{
+\item{\code{fullname}}{xxxx}
+
 \item{\code{name}}{xxx}
 
 \item{\code{parent}}{xxx}
@@ -62,10 +59,49 @@ Wrapper function to the constructor of the class
 
 \item{\code{mandatory}}{xxx}
 
-\item{\code{path}}{xxx}
-
 \item{\code{ll.UI}}{xxx}
 
 \item{\code{steps.source.file}}{xxx}
 }}
 
+\examples{
+# Example of a generic process
+generic.proc <- Config(
+  fullname = 'PipelineA_Process1',
+  mode = 'process',
+  steps = c('Step 1', 'Step 2'),
+  mandatory = c(TRUE, FALSE)
+  )
+
+
+# Example of a generic pipeline
+generic.pipe <- Config(
+  fullname = 'Pipe1_PipelineA',
+  mode = 'pipeline',
+  steps = c('Process 1', 'Process 2'),
+  mandatory = c(TRUE, FALSE)
+  )
+
+# Example of a root pipeline (process has no parent)
+root.pipe <- Config(
+  mode = 'pipeline',
+  fullname = 'PipelineA',
+  steps = c('Process1', 'Process2', 'Process3'),
+  mandatory = c(FALSE, FALSE, TRUE)
+)
+
+
+# Example of a description module (process has no steps)
+description.process <- Config(
+  fullname = 'PipelineA_Description',
+  mode = 'process',
+  steps = '',
+  mandatory = ''
+)
+
+
+generic.proc
+generic.pipe
+root.pipe
+description.process
+}

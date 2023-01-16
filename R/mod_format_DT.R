@@ -1,11 +1,11 @@
-#' @title   mod_format_DT_ui and mod_format_DT_server
+#' @title   format_DT_ui and format_DT_server
 #' 
 #' @description  A shiny Module.
 #' 
-#' @name mod_format_DT
+#' @name format_DT
 #'
 #' @keywords internal
-#' @example examples/test_mod_format_DT.R
+#' @example examples/test_format_DT.R
 #' 
 NULL
 
@@ -16,19 +16,19 @@ NULL
 #' @param output internal
 #' @param session internal
 #'
-#' @rdname mod_format_DT
+#' @rdname format_DT
 #' @export
 #'  
 #' @importFrom shiny NS tagList 
 #' @importFrom DT dataTableOutput
 #' 
-mod_format_DT_ui <- function(id){
+format_DT_ui <- function(id){
   ns <- NS(id)
   tagList(
     useShinyjs(),
     shinyjs::hidden(
       div(id = ns("dl_div"),
-        mod_dl_ui(ns("DL_btns"))
+        dl_ui(ns("DL_btns"))
       )
     ),
     fluidRow(
@@ -43,7 +43,7 @@ mod_format_DT_ui <- function(id){
 
 # Module Server
 
-#' @rdname mod_format_DT
+#' @rdname format_DT
 #' 
 #' @param input internal
 #' @param output internal
@@ -65,7 +65,7 @@ mod_format_DT_ui <- function(id){
 #' @import DT
 #' @importFrom htmlwidgets JS    
 #' 
-mod_format_DT_server <- function(id,
+format_DT_server <- function(id,
   data,
   withDLBtns = FALSE,
   showRownames = FALSE,
@@ -91,8 +91,7 @@ mod_format_DT_server <- function(id,
       shinyjs::toggle("dl_div", condition = isTRUE(withDLBtns))
     })
     
-    
-    mod_dl_server(
+    dl_server(
       id = "DL_btns",
       dataIn = reactive({data()[,-hideCols()]}),
       name = reactive({filename}),

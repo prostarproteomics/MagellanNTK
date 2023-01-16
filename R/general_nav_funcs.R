@@ -38,46 +38,52 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 
 
 
-#' @title xxx
-#'
-#' @description xxx
-#'
-#' @param ns xxx
-#' @param id xxx
-#' @param config xxx
-#'
-#' @return A `renderUI` function
-#'
-#' @examples NULL
-#' 
-#' @export
-#'
-Build_EncapsulateScreens_ui <- function(ns,
-                                        id,
-                                        config) {
-    len <- length(config@ll.UI)
-    renderUI({
-        tagList(
-            lapply(seq_len(len), function(i) {
-                if (i == 1) {
-                    div(
-                        id = ns(names(config@steps)[i]),
-                        class = paste0("page_", id),
-                        config@ll.UI[[i]]
-                    )
-                } else {
-                    shinyjs::hidden(
-                        div(
-                            id = ns(names(config@steps)[i]),
-                            class = paste0("page_", id),
-                            config@ll.UI[[i]]
-                        )
-                    )
-                }
-            })
-        )
-    })
-}
+#' #' @title xxx
+#' #'
+#' #' @description Encapsulates each UI steps in a <div> tag so as to be able
+#' #' to manage hide/show commands applied on the div itself rether than on the
+#' #' ui.
+#' #'
+#' #' @param ns xxx
+#' #' @param id xxx
+#' #' @param config xxx
+#' #'
+#' #' @return A `renderUI` function
+#' #'
+#' #' @examples NULL
+#' #' 
+#' #' @export
+#' #'
+#' Build_EncapsulateScreens_ui <- function(ns, id, config) {
+#'     len <- length(config@ll.UI)
+#'     if(dev_mode){
+#'       cat ('Entering Build_EncapsulateScreens_ui()')
+#'       show(config)
+#'     }
+#'       
+#'     
+#'     renderUI({
+#'         tagList(
+#'             lapply(seq_len(len), function(i) {
+#'                 if (i == 1) {
+#'                     div(
+#'                         id = ns(names(config@steps)[i]),
+#'                         class = paste0("page_", id),
+#'                         config@ll.UI[[i]]
+#'                     )
+#'                 } else {
+#'                     shinyjs::hidden(
+#'                         div(
+#'                             id = ns(names(config@steps)[i]),
+#'                             class = paste0("page_", id),
+#'                             config@ll.UI[[i]]
+#'                         )
+#'                     )
+#'                 }
+#'             })
+#'         )
+#'     })
+#' }
 
 
 
@@ -166,9 +172,9 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #' @export
 #' 
 ToggleState_Screens <- function(cond,
-    range,
-    is.enabled,
-    rv) {
+                                range,
+                                is.enabled,
+                                rv) {
     
     #browser()
     #print(rv$steps.status[range])
@@ -177,9 +183,7 @@ ToggleState_Screens <- function(cond,
         #rv$steps.enabled[range] <- rep(cond, length(range)) && 
         #    !(rv$steps.status[range] == global$SKIPPED)
         rv$steps.enabled[range] <- unlist(
-            lapply(
-                range,
-                function(x) 
+            lapply(range,function(x) 
                     cond && !(rv$steps.status[x] == global$SKIPPED)
                 )
             )
@@ -373,28 +377,24 @@ GetFirstMandatoryNotValidated <- function(range,rv) {
 #' @export
 #'
 Update_State_Screens <- function(is.skipped,
-    is.enabled,
-    rv) {
+                                 is.enabled,
+                                 rv) {
     len <- length(rv$steps.status)
 
     if (isTRUE(is.skipped)) {
-        steps.enabled <- ToggleState_Screens(
-            cond = FALSE,
-            range = seq_len(len),
-            is.enabled = is.enabled,
-            rv = rv
-        )
+        steps.enabled <- ToggleState_Screens(cond = FALSE,
+                                             range = seq_len(len),
+                                             is.enabled = is.enabled,
+                                             rv = rv)
     } else {
 
         # Ensure that all steps before the last validated one are disabled
         ind.max <- GetMaxValidated_AllSteps(rv$steps.status)
         if (ind.max > 0) {
-            steps.enabled <- ToggleState_Screens(
-                cond = FALSE,
-                range = seq_len(ind.max),
-                is.enabled = is.enabled,
-                rv = rv
-            )
+            steps.enabled <- ToggleState_Screens(cond = FALSE,
+                                                 range = seq_len(ind.max),
+                                                 is.enabled = is.enabled,
+                                                 rv = rv)
         }
 
         if (ind.max < len) {

@@ -4,14 +4,12 @@
 \alias{PrepareData2Send}
 \title{xxxx}
 \usage{
-PrepareData2Send(rv, pos, verbose = FALSE)
+PrepareData2Send(rv, pos)
 }
 \arguments{
 \item{rv}{xxxx}
 
 \item{pos}{xxx}
-
-\item{verbose}{xxx}
 }
 \value{
 NA

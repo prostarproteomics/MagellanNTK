@@ -4,13 +4,10 @@
 \alias{run_workflow}
 \title{Shiny example module `Process`}
 \usage{
-run_workflow(id, verbose = FALSE, tl.layout = NULL, path = NULL)
+run_workflow(id, dataIn = NULL, tl.layout = NULL, path = NULL)
 }
 \arguments{
 \item{id}{xxx}
-
-\item{verbose}{A `boolean` that indicates whether to show some infos in the 
-console and add the shiny module for debugging}
 
 \item{tl.layout}{Additional parameters for nav}
 
@@ -29,10 +26,10 @@ pipelines nor processes to be managed with `MagellanNTK`.
 \examples{
 if (interactive()) {
     path <- system.file("extdata/module_examples", package = "MagellanNTK")
-    
-    run_workflow("PipelineA_Process1", path = path, verbose = TRUE)
+    data(data_na)
+    run_workflow("PipelineA_Process1", path = path)
 
-    run_workflow("PipelineA",  path = path, tl.layout = c("h", "h"))
+    run_workflow("PipelineA", dataIn = data_na, path = path, tl.layout = c("h", "h"))
     
     run_workflow("PipelineB", path = path, tl.layout = c("v", "h"))
 }
