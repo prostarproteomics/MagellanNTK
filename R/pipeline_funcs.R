@@ -32,20 +32,21 @@
 #' NULL
 #'
 ActionOn_Child_Changed <- function(temp.dataIn,
-    dataIn,
-    steps.status,
-    steps,
-    steps.enabled,
-    steps.skipped,
-    processHasChanged,
-    newValue) {
+                                   dataIn,
+                                   steps.status,
+                                   steps,
+                                   steps.enabled,
+                                   steps.skipped,
+                                   processHasChanged,
+                                   newValue) {
     # Indice of the dataset in the object
     # If the original length is not 1, then this indice is different
     # than the above one
-    ind.processHasChanged <- which(steps == processHasChanged)
+    ind.processHasChanged <- which(names(steps) == processHasChanged)
 
     len <- length(steps)
 
+    #browser()
     if (is.null(newValue)) {
         # A process has been reseted
 
@@ -78,8 +79,9 @@ ActionOn_Child_Changed <- function(temp.dataIn,
             )
         }
     } else {
-        # A process has been validated
-        steps.status[processHasChanged] <- global$VALIDATED
+       
+      # A process has been validated
+        steps.status[ind.processHasChanged] <- global$VALIDATED
 
         if (ind.processHasChanged < len) {
             steps.status[(1 + ind.processHasChanged):len] <- global$UNDONE

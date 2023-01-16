@@ -333,12 +333,21 @@ nav_server <- function(id,
                              rv$dataIn <- NULL
                              rv$steps.status[seq_len(length(rv$config@steps))] <- global$UNDONE
                            } else {
+                             
                              .cd <- max(triggerValues, na.rm = TRUE) == triggerValues
                              # ind.process.has.changed <- which(.cd)
                              processHasChanged <- GetStepsNames()[which(.cd)]
                              
                              # Get the new value
                              newValue <- tmp.return[[processHasChanged]]$dataOut()$value
+                             
+                             
+                             if (verbose) {
+                               cat(crayon::blue("---------- New children data status ---\n"))
+                               print(newValue)
+                               cat(crayon::blue("------------------------------------------\n"))
+                             }
+                             
                              
                              ret <- ActionOn_Child_Changed(
                                temp.dataIn = rv$temp.dataIn,
