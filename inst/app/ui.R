@@ -4,33 +4,42 @@ library(shinyFiles)
 
 
 
-header_img <- div(
-  img(src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", height="45px"),
-  div(
-    class = "my-title",
-    h4('Title'), h5('Subtitle'),
-    tags$style(".my-title :is(h4, h5){color: white; font-weight: bold;}")
-  ),
-  style = "display: flex;"
-)
+# header_img <- div(
+#   img(src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png", height="45px"),
+#   div(
+#     class = "my-title",
+#     h4('Title'), h5('Subtitle'),
+#     tags$style(".my-title :is(h4, h5){color: white; font-weight: bold;}")
+#   ),
+#   style = "display: flex;"
+# )
 
-header <-  htmltools::tagQuery(dashboardHeader(title = ""))
-header <- header$
-  addAttrs(style = "position: relative")$ # add some styles to the header 
-  find(".navbar.navbar-static-top")$ # find the header right side
-  append(header_img)$ # inject our img
-  allTags()
+# header <-  htmltools::tagQuery(dashboardHeader(title = ""))
+# header <- header$
+#   addAttrs(style = "position: relative")$ # add some styles to the header 
+#   find(".navbar.navbar-static-top")$ # find the header right side
+#   append(header_img)$ # inject our img
+#   allTags()
 
 
 
 ui <- shinyUI(
 dashboardPage(
     
-    # dashboardHeader(title = '',
-    #                 dropdownMenuOutput("messageMenu")
-    #                 ),
-    # 
-    header,
+    dashboardHeader(
+      leftUi = tagList(
+        uiOutput('title'),
+        shinyjs::hidden(actionButton('browser', 'browser()'))
+        ),
+      #tagList(
+        #tags$a(href="http://www.prostar-proteomics.org/", img(src="logo.png", title="Prostar website", height="17px")),
+        #tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"),
+        dropdownMenuOutput("messageMenu")
+       # )
+      ),
+
+  #uiOutput('header'),
+  #header,
     dashboardSidebar(
       useShinyjs(),
       sidebarMenu(
@@ -54,7 +63,7 @@ dashboardPage(
         ),
         
         
-        menuItem("Plots", tabName = "tab_plots", icon = icon("cogs")),
+        menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs")),
         
         menuItem("Help for MagellanNTK",
           icon = icon("question-circle"),
@@ -70,6 +79,7 @@ dashboardPage(
     
     dashboardBody(
       useShinyjs(),
+      
         # body content
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
@@ -79,7 +89,7 @@ dashboardPage(
           
           tabItem(tabName = "tab_openfile", uiOutput('openFileUI')),
           tabItem(tabName = "tab_convertData", uiOutput('convertUI')),
-          tabItem(tabName = "tab_plots", uiOutput('plotsUI')),
+          tabItem(tabName = "tab_EDA", uiOutput('EDAUI')),
           tabItem(tabName = "tab_export", uiOutput('exportUI')),
           
           tabItem(tabName = "run_workflow", uiOutput('run_workflowUI')),

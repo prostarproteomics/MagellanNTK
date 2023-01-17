@@ -4,7 +4,16 @@
       library(shinyBS)
 
       ui <- fluidPage(
-          bsmodal_ui("tbl")
+          tagList(
+            absolutePanel(
+              h3('toto'), 
+              bsmodal_ui("tbl"),
+              top = '10px', left = NULL, right = '10px', bottom = NULL,
+              width = NULL, height = NULL,
+              draggable = TRUE, fixed = FALSE,
+              cursor = c("auto", "move", "default", "inherit"))
+            
+          )
       )
       server <- function(input, output) {
           bsmodal_server(

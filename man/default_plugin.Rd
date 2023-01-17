@@ -4,12 +4,10 @@
 \alias{default_plugin}
 \alias{default_openfile_ui}
 \alias{default_openfile_server}
-\alias{default_plots_ui}
-\alias{default_plots_server}
+\alias{default_EDA_ui}
+\alias{default_EDA_server}
 \alias{default_export_ui}
 \alias{default_export_server}
-\alias{default_convert_ui}
-\alias{default_convert_server}
 \title{xxxx}
 \usage{
 default_openfile_ui(id)
@@ -21,17 +19,13 @@ default_openfile_server(
  })
 )
 
-default_plots_ui(id)
+default_EDA_ui(id)
 
-default_plots_server(id, object)
+default_EDA_server(id, object)
 
 default_export_ui(id)
 
 default_export_server(id, object)
-
-default_convert_ui(id)
-
-default_convert_server(id)
 }
 \arguments{
 \item{id}{xxxx}

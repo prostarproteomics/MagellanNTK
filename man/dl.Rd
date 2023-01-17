@@ -53,11 +53,6 @@ if (interactive()){
   library(DT)
   library(shinyjs)
   library(shiny)
-<<<<<<< HEAD
-  
-  
-=======
->>>>>>> dbb7637417654a1dfea02455d39699736f57ce63
   options(shiny.fullstacktrace = TRUE)
   data(data_na)
   

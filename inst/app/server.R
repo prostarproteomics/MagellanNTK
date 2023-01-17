@@ -1,12 +1,16 @@
 options(shiny.maxRequestSize=300*1024^2) 
 options(encoding = "UTF-8")
+options(shiny.fullstacktrace = TRUE)
+
 require(compiler)
 enableJIT(3)
 
 
 library(shinydashboard)
 library(shinyjs)
-library(MagellanNTK)
+
+dev_mode <<- TRUE
+
 
 
 #' The application server-side
@@ -20,7 +24,6 @@ library(MagellanNTK)
 server <- shinyServer( 
 
     function( input, output, session) {
-      options(shiny.fullstacktrace = dev_mode)
       
   observeEvent(input$ReloadApp, {js$resetApp()})
       
@@ -78,7 +81,7 @@ server <- shinyServer(
       #rv.core$current.obj <- data_na
       tl.layout <- c('v', 'h')
       #isolate({
-      mod_run_workflow_server(id = rv.core$workflow,
+      nav_server(id = rv.core$workflow,
                               dataIn = reactive({rv.core$current.obj}),
                               tl.layout = tl.layout)
     })
@@ -133,38 +136,71 @@ server <- shinyServer(
       
     })
     
-    output$convertUI <- renderUI({
-      
-      type <- 'default_convert'
-      if (module.exists('custom_convert')) 
-        type <- 'custom_convert' 
 
-      
-      rv.core$result_convert <- do.call(
-        paste0(type, '_server'), 
-        list(id = 'convertdataset'))()
-      
-      do.call(paste0(type, '_ui'), list(id = 'convertdataset'))
-
-    })
+    # 
+    # output$EDA_AbsolutePanel <- renderUI({
+    #   req(rv.core$current.obj)
+    #   type <- 'default_EDA'
+    #   if (module.exists('custom_EDA')) 
+    #     type <- 'custom_EDA'
+    #   
+    #   do.call(
+    #     paste0(type, '_server'), 
+    #     list(id = 'plotdataset', object = reactive({rv.core$current.obj}) )
+    #   )
+    #   
+    #   
+    #   
+    #   bsmodal_server(
+    #     id = "tbl",
+    #     title = "test",
+    #     uiContent = do.call(paste0(type, '_ui'), list(id = 'plotdataset'))
+    #   )
+    #   
+    #   
+    #   absolutePanel(style='z-index: 1000;',
+    #     tagList(
+    #       h3('EDA'), 
+    #       bsmodal_ui("tbl")
+    #       ),
+    #     top = '10px', left = NULL, right = '10px', bottom = NULL,
+    #     width = NULL, height = NULL,
+    #     draggable = TRUE, fixed = FALSE,
+    #     cursor = c("auto", "move", "default", "inherit"))
+    # 
+    # })
+    # 
     
-    output$plotsUI <- renderUI({
+    
+    
+    
+    
+    output$EDAUI <- renderUI({
       req(rv.core$current.obj)
-      type <- 'default_plots'
-      if (module.exists('custom_plots')) 
-        type <- 'custom_plots'
+      type <- 'default_EDA'
+      if (module.exists('custom_EDA')) 
+        type <- 'custom_EDA'
       
       do.call(
         paste0(type, '_server'), 
         list(id = 'plotdataset', object = reactive({rv.core$current.obj}) )
         )
       
-      do.call(paste0(type, '_ui'), 
-              list(id = 'plotdataset'))
+       do.call(paste0(type, '_ui'), list(id = 'plotdataset'))
+
+    })
+    
+    output$title <- renderUI({
+      req(rv.core$workflow)
       
+      h3(rv.core$workflow)
     })
     
     
+    observe({
+      req(dev_mode)
+      shinyjs::toggle('browser', condition = dev_mode)
+    })
     
     output$run_workflowUI <- renderUI({
       rv.core$workflow
@@ -172,8 +208,29 @@ server <- shinyServer(
       if (is.null(rv.core$workflow) ){
         h3('There is no workflow for the moment')
       } else {
+        type <- 'default_EDA'
+        if (module.exists('custom_EDA')) 
+          type <- 'custom_EDA'
         
-          mod_run_workflow_ui(id =rv.core$workflow)
+        do.call(
+          paste0(type, '_server'), 
+          list(id = 'plotdataset', object = reactive({rv.core$current.obj}) )
+        )
+        
+        
+        
+        apModal_server(id = "tbl",
+          title = "test",
+          uiContent = do.call(paste0(type, '_ui'), list(id = 'plotdataset'))
+        )
+        
+        
+        
+        
+          tagList(
+            apModal_ui("tbl"),
+            nav_ui(id =rv.core$workflow)
+          )
          # })
         }
       

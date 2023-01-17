@@ -1,18 +1,16 @@
 
 #' @export
-custom_plots_ui <- function(id){
+custom_EDA_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3('Custom plot plugin'),
+    h3('Custom EDA plugin'),
     uiOutput(ns('chooseArrayUI')),
     plotOutput(ns('test'))
   )
 }
 
 #' @export
-custom_plots_server <- function(id, 
-                                object = reactive({NULL})
-                                ){
+custom_EDA_server <- function(id, object = reactive({NULL})){
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -26,7 +24,7 @@ custom_plots_server <- function(id,
       
       selectInput(ns("chooseArray"), "Array",
                   choices = choices,
-                  selected = names(rv.core$current.obj)[length(object())],
+                  selected = names(object())[length(object())],
                   width = 200
       )
                   

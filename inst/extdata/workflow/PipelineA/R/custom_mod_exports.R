@@ -20,7 +20,7 @@ mod_export_ui <- function(id){
 }
 
 #' @export
-#' @rdname default_plots_plugin
+#' @rdname default_export_plugin
 #' 
 mod_export_server <- function(id, object){
   moduleServer(id, function(input, output, session) {
