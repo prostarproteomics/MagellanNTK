@@ -40,7 +40,6 @@ Collate:
     bsmodal.R
     mod_default_plugins.R
     popover_for_help.R
-    createModuleTemplate.R
     mod_bug_report.R
     mod_format_DT.R
     utils.R
@@ -56,6 +55,7 @@ Collate:
     Save_dataset.R
     general_nav_funcs.R
     pipeline_funcs.R
+    mod_apModal.R
     process_funcs.R
     build_nav_ui.R
     load_save.R

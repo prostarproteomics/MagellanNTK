@@ -44,7 +44,8 @@ server <- shinyServer(
     current.pipeline = NULL
   )
   
-  notificationeData <- data.frame(
+  GetNotifications <- reactive({
+    notificationData <- data.frame(
     text = c(
       "Sales are steady this month.",
       "How do I register?",
@@ -53,9 +54,13 @@ server <- shinyServer(
     status = c('success', 'success', 'warning'),
     stringsAsFactors = FALSE
   )
+    notificationData
+  })
+  
+  
   
   output$messageMenu <- renderMenu({
-    msgs <- apply(notificationeData, 1, function(row) {
+    msgs <- apply(GetNotifications(), 1, function(row) {
       notificationItem(text = row[["text"]], status = row[["status"]])
     })
     
@@ -63,12 +68,12 @@ server <- shinyServer(
   })
   
   
-  GetTitle <- reactive({
-    h3('toto')
-  })
  
     tmp.workflow <- mod_load_workflow_server("openwf")
     
+    ###
+    ### Launch the workflow server function
+    ###
     observeEvent(req(tmp.workflow$workflow()),{
       
       rv.core$path <- tmp.workflow$folder()
@@ -82,8 +87,8 @@ server <- shinyServer(
       tl.layout <- c('v', 'h')
       #isolate({
       nav_server(id = rv.core$workflow,
-                              dataIn = reactive({rv.core$current.obj}),
-                              tl.layout = tl.layout)
+                 dataIn = reactive({rv.core$current.obj}),
+                 tl.layout = tl.layout)
     })
     
    

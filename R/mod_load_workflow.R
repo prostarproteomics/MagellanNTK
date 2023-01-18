@@ -24,7 +24,7 @@ mod_load_workflow_ui <- function(id) {
     #verbatimTextOutput(ns("sheets_dir"))),
     column(width=4, disabled(actionButton(ns('load'), 'Load', class = 'btn-primary')))
     ),
-    #uiOutput(ns('checkDirs')),
+    uiOutput(ns('pluginsUI')),
     uiOutput(ns('wf_summary'))
   )
 }
@@ -74,6 +74,27 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     })
     
    
+    
+    GetAvailablePlugins <- reactive({
+      plugins <- list()
+      for (pkg in installed.packages()[,'Package']){
+        path <- system.file('workflows', package=pkg)
+        tmp <- list.files(path, recursive=FALSE)
+        if (length(tmp) > 0){
+          plugins[[pkg]] <- tmp
+        }
+      }
+      
+      plugins
+    })
+    
+    
+    
+    output$pluginsUI <- renderUI({
+      
+      selectInput(ns('plugins', 'Choose a workflow'), choices = unname(unlist(GetAvailablePlugins())))
+    })
+    
     
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)

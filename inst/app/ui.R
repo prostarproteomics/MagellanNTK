@@ -1,4 +1,5 @@
 library(shinydashboard)
+library(shinydashboardPlus)
 library(shinyjs)
 library(shinyFiles)
 
@@ -23,19 +24,91 @@ library(shinyFiles)
 
 
 
-ui <- shinyUI(
-dashboardPage(
-    
-    dashboardHeader(
-      leftUi = tagList(
-        uiOutput('title'),
-        shinyjs::hidden(actionButton('browser', 'browser()'))
+ui <- dashboardPage(
+  
+  header = shinydashboard::dashboardHeader(
+      
+      tags$li(class='dropdown', 
+              uiOutput('title')
+              ),
+      
+      
+        # 
+        #   dropdownButton(
+        #     label = "Controls",
+        #     icon = icon("sliders-h"),
+        #     status = "primary",
+        #     circle = FALSE,
+        #     sliderInput(
+        #       inputId = "n",
+        #       label = "Number of observations",
+        #       min = 10, max = 100, value = 30
+        #     ),
+        #     prettyToggle(
+        #       inputId = "na",
+        #       label_on = "NAs kept",
+        #       label_off = "NAs removed",
+        #       icon_on = icon("check"),
+        #       icon_off = icon("trash")
+        #     )
+        # ),
+      
+      tags$li(class='dropdown', 
+        dropdownButton(
+        label = "Settings",
+        icon = icon("gear"),
+        status = "primary",
+        circle = FALSE,
+        sliderInput(
+          inputId = "n",
+          label = "Number of observations",
+          min = 10, max = 100, value = 30
         ),
-      #tagList(
-        #tags$a(href="http://www.prostar-proteomics.org/", img(src="logo.png", title="Prostar website", height="17px")),
-        #tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"),
+        prettyToggle(
+          inputId = "na",
+          label_on = "NAs kept",
+          label_off = "NAs removed",
+          icon_on = icon("check"),
+          icon_off = icon("trash")
+        )
+)
+      ),
+      dropdownMenu(
+        type = "messages", 
+        badgeStatus = "success",
+        messageItem(from = "Support Team", message = "This is the content of a message.", time = "5 mins"),
+        messageItem(from = "Support Team", message = "This is the content of another message.", time = "2 hours"),
+        messageItem(from = "New User", message = "Can I get some help?", time = "Today")
+      ),
+      # tagList(
+      #   tags$li(uiOutput('title')),
+      #   tags$li(shinyjs::hidden(actionButton('browser', 'browser()')))
+      #   ),
+      
+    # dropdownButton(
+    #     label = "Controls",
+    #     icon = icon("gear"),
+    #     status = "primary",
+    #     circle = FALSE,
+    #     sliderInput(
+    #       inputId = "n",
+    #       label = "Number of observations",
+    #       min = 10, max = 100, value = 30
+    #     ),
+    #     prettyToggle(
+    #       inputId = "na",
+    #       label_on = "NAs kept",
+    #       label_off = "NAs removed",
+    #       icon_on = icon("check"),
+    #       icon_off = icon("trash")
+    #     )
+    #   ),
+    
+tags$li(class='dropdown', 
+      tags$li(tags$a(href="http://www.prostar-proteomics.org/", 
+                     img(src="logo.png", title="Prostar website", height="17px")))),
+tags$li(class='dropdown',      tags$li(tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"))),
         dropdownMenuOutput("messageMenu")
-       # )
       ),
 
   #uiOutput('header'),
@@ -107,4 +180,3 @@ dashboardPage(
         )
       )
     )
-)
