@@ -28,10 +28,8 @@ ui <- dashboardPage(
   
   header = shinydashboard::dashboardHeader(
       
-      tags$li(class='dropdown', 
-              uiOutput('title')
-              ),
-      
+      tags$li(class='dropdown', uiOutput('title')),
+      tags$li(class='dropdown', hidden(actionButton('browser', 'browser()'))),
       
         # 
         #   dropdownButton(
@@ -65,11 +63,11 @@ ui <- dashboardPage(
           min = 10, max = 100, value = 30
         ),
         prettyToggle(
-          inputId = "na",
-          label_on = "NAs kept",
-          label_off = "NAs removed",
+          inputId = "devmode",
+          label_on = "Switch to user mode",
+          label_off = "Switch to dev mode",
           icon_on = icon("check"),
-          icon_off = icon("trash")
+          icon_off = icon("check")
         )
 )
       ),
@@ -107,7 +105,11 @@ ui <- dashboardPage(
 tags$li(class='dropdown', 
       tags$li(tags$a(href="http://www.prostar-proteomics.org/", 
                      img(src="logo.png", title="Prostar website", height="17px")))),
-tags$li(class='dropdown',      tags$li(tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"))),
+hidden(
+  tags$li(id = 'githubLink',
+        class='dropdown',
+        tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"))
+  ),
         dropdownMenuOutput("messageMenu")
       ),
 
@@ -138,7 +140,9 @@ tags$li(class='dropdown',      tags$li(tags$a(href="https://github.com/prostarpr
         
         menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs")),
         
-        menuItem("Help for MagellanNTK",
+        hidden(
+          div(id = 'Help_menu',
+              menuItem("Help for MagellanNTK",
           icon = icon("question-circle"),
           menuSubItem("About", tabName = "tab_about"),
           menuSubItem("FAQ", tabName = "tab_faq"),
@@ -147,6 +151,8 @@ tags$li(class='dropdown',      tags$li(tags$a(href="https://github.com/prostarpr
           #menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
           #menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
         )
+      )
+      )
       )
      ), 
     

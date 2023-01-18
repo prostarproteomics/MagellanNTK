@@ -92,7 +92,8 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
     output$pluginsUI <- renderUI({
       
-      selectInput(ns('plugins', 'Choose a workflow'), choices = unname(unlist(GetAvailablePlugins())))
+      selectInput(ns('plugins'), 'Choose a workflow', choices = unname(unlist(GetAvailablePlugins())))
+    
     })
     
     

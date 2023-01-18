@@ -9,7 +9,7 @@ enableJIT(3)
 library(shinydashboard)
 library(shinyjs)
 
-dev_mode <<- TRUE
+dev_mode <<- FALSE
 
 
 
@@ -202,9 +202,20 @@ server <- shinyServer(
     })
     
     
+    # Use a differente observer to catch the event to be able to
+    # bypass the parameter dev_mode
+    observeEvent(input$devmode, {
+      shinyjs::toggle('browser', condition = input$devmode)
+      shinyjs::toggle('Help_menu', condition = input$devmode)
+      shinyjs::toggle('githubLink', condition = input$devmode)
+      
+      
+    })
+    
     observe({
       req(dev_mode)
       shinyjs::toggle('browser', condition = dev_mode)
+      shinyjs::toggle('Help_menu', condition = dev_mode)
     })
     
     output$run_workflowUI <- renderUI({
