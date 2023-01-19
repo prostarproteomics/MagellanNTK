@@ -78,10 +78,11 @@ server <- shinyServer(
       
       rv.core$path <- tmp.workflow$folder()
       rv.core$workflow <- tmp.workflow$workflow()
+      rv.core$package <- tmp.workflow$package()
       
       path <- file.path(rv.core$path, 'R')
       tl.layout <- c('v', 'h')
-      #isolate({
+      
       nav_server(id = rv.core$workflow,
                  dataIn = reactive({rv.core$current.obj}),
                  tl.layout = tl.layout)

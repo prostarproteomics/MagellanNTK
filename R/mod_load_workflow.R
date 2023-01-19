@@ -198,8 +198,10 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
     observeEvent(req(input$plugins),{
       
-      rv$package <- NULL
-      rv$workflow <- input$plugins
+      tmp <- strsplit(input$plugins, split=' (', fixed=TRUE)
+      rv$workflow <- unlist(tmp)[1]
+      rv$package <- gsub(')', '', unlist(tmp)[2])
+      
       toggleState('loadPlugin', condition = TRUE)
 
     })
@@ -207,9 +209,6 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     observeEvent(input$loadPlugin, {
      
       # Loading source files
-      tmp <- strsplit(input$plugins, split=' (', fixed=TRUE)
-      rv$workflow <- unlist(tmp)[1]
-      rv$package <- gsub(')', '', unlist(tmp)[2])
       
       library(rv$package, character.only = TRUE)
       
@@ -226,8 +225,16 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
     
     output$wf_summary <- renderUI({
-      req(rv$folder)
+      req(rv$workflow)
+      
+
+      if (!is.null(rv$folder) && length(rv$folder) == 1){
        file <- file.path(rv$folder, 'md', 'summary.md')
+      } else if (!is.null(rv$package) && length(rv$package) == 1){
+         file <- file.path(system.file('workflows', package = rv$package), 
+                           rv$workflow, 'md', 'summary.md')
+      }
+       
        mod_insert_md_server('summary', file)
        
        box(

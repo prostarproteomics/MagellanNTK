@@ -1,5 +1,7 @@
+library(shiny)
 library(shinydashboard)
-library(shinydashboardPlus)
+library(shinyWidgets)
+library(dashboardthemes)
 library(shinyjs)
 library(shinyFiles)
 
@@ -57,19 +59,18 @@ ui <- dashboardPage(
         icon = icon("gear"),
         status = "primary",
         circle = FALSE,
-        sliderInput(
-          inputId = "n",
-          label = "Number of observations",
-          min = 10, max = 100, value = 30
-        ),
-        prettyToggle(
+        checkboxInput(
           inputId = "devmode",
-          label_on = "Switch to user mode",
-          label_off = "Switch to dev mode",
-          icon_on = icon("check"),
-          icon_off = icon("check")
+          label = "dev mode",
+          value = FALSE)
+        # prettyToggle(
+        #   inputId = "devmode",
+        #   label_on = "Switch to user mode",
+        #   label_off = "Switch to dev mode",
+        #   icon_on = icon("check"),
+        #   icon_off = icon("check")
+        # )
         )
-)
       ),
       dropdownMenu(
         type = "messages", 
