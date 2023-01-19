@@ -30,28 +30,14 @@ ui <- dashboardPage(
   
   header = shinydashboard::dashboardHeader(
       
-      tags$li(class='dropdown', uiOutput('title')),
+      #tags$li(class='dropdown', uiOutput('title')),
+
+      tags$li(class='dropdown', uiOutput('menuTitle')
+              
+      ),
       tags$li(class='dropdown', hidden(actionButton('browser', 'browser()'))),
       
-        # 
-        #   dropdownButton(
-        #     label = "Controls",
-        #     icon = icon("sliders-h"),
-        #     status = "primary",
-        #     circle = FALSE,
-        #     sliderInput(
-        #       inputId = "n",
-        #       label = "Number of observations",
-        #       min = 10, max = 100, value = 30
-        #     ),
-        #     prettyToggle(
-        #       inputId = "na",
-        #       label_on = "NAs kept",
-        #       label_off = "NAs removed",
-        #       icon_on = icon("check"),
-        #       icon_off = icon("trash")
-        #     )
-        # ),
+        
       
       tags$li(class='dropdown', 
         dropdownButton(
@@ -104,12 +90,13 @@ ui <- dashboardPage(
     #   ),
     
 tags$li(class='dropdown', 
-      tags$li(tags$a(href="http://www.prostar-proteomics.org/", 
+      tags$li(tags$a(href="http://www.prostar-proteomics.org/", target="_blank",
                      img(src="logo.png", title="Prostar website", height="17px")))),
 hidden(
   tags$li(id = 'githubLink',
         class='dropdown',
-        tags$a(href="https://github.com/prostarproteomics/MagellanNTK", icon("github"),  title="GitHub"))
+        tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
+               target="_blank", icon("github"),  title="GitHub"))
   ),
         dropdownMenuOutput("messageMenu")
       ),
@@ -123,22 +110,10 @@ hidden(
         #br(),
         #menuItem("Home", tabName = "Home", selected = TRUE),
         #hr(),
-        menuItem("Workflow", 
-                 menuSubItem("Open", tabName = "tab_load_workflow"),
-                 menuSubItem("FAQ", tabName = "tab_wf_faq"),
-                 menuSubItem("Useful links", tabName = "tab_wf_links")
-                 ),
-        
+        menuItem("Open workflow", tabName = "tab_load_workflow"),
         menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
-        
-        menuItem("Data Manager",
-          icon = icon("folder"),
-          startExpanded = FALSE,
-          menuSubItem("Open file", tabName = "tab_openfile"),
-           menuSubItem("Export results", tabName = "tab_export")
-        ),
-        
-        
+        menuItem("Open file", tabName = "tab_openfile"),
+        menuItem("Export results", tabName = "tab_export"),
         menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs")),
         
         hidden(

@@ -192,10 +192,24 @@ server <- shinyServer(
 
     })
     
-    output$title <- renderUI({
+    # output$title <- renderUI({
+    #   req(rv.core$workflow)
+    #   
+    #   h3(rv.core$workflow)
+    # })
+    
+    output$menuTitle <- renderUI({
       req(rv.core$workflow)
-      
-      h3(rv.core$workflow)
+    dropdownButton(
+      label = rv.core$workflow,
+      icon = icon("sliders-h"),
+      status = "primary",
+      circle = FALSE,
+      tags$a(href="http://www.prostar-proteomics.org/", target="_blank",
+             img(src="logo.png", title="Prostar website", height="17px")),
+    tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
+           target="_blank", icon("github"), title = 'Github')
+    )
     })
     
     
