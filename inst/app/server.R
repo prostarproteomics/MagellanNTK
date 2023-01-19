@@ -198,17 +198,24 @@ server <- shinyServer(
     #   h3(rv.core$workflow)
     # })
     
+    
+    
+    
     output$menuTitle <- renderUI({
       req(rv.core$workflow)
+      
+      mod_insert_md_server('faq', file.path(system.file('workflows', package = rv.core$package), 
+                                             rv.core$workflow, 'md', 'faq.md'))
+      bsmodal_server(id = "faqmodal", title = "test", uiContent = mod_insert_md_ui('faq'))
+      
     dropdownButton(
       label = rv.core$workflow,
       icon = icon("sliders-h"),
       status = "primary",
       circle = FALSE,
-      tags$a(href="http://www.prostar-proteomics.org/", target="_blank",
-             img(src="logo.png", title="Prostar website", height="17px")),
-    tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
-           target="_blank", icon("github"), title = 'Github')
+      bsmodal_ui('faqmodal'), 
+      tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
+           target="_blank", icon("github"), title = 'Links')
     )
     })
     
@@ -280,10 +287,36 @@ server <- shinyServer(
     })
     
     
+    output$wf_links_UI <- renderUI({
+      req(rv.core$workflow)
+      
+      if (!is.null(rv.core$folder) && length(rv.core$folder) == 1){
+        file <- file.path(rv.core$folder, 'md', 'links.md')
+      } else if (!is.null(rv.core$package) && length(rv.core$package) == 1){
+        file <- file.path(system.file('workflows', package = rv.core$package), 
+                          rv.core$workflow, 'md', 'links.md')
+      }
+      mod_insert_md_server("wf_links", file)
+      tagList(
+      mod_insert_md_ui('wf_links')
+      )
+    })
+    
+    output$wf_faq_UI <- renderUI({
+      req(rv.core$workflow)
+      if (!is.null(rv.core$folder) && length(rv.core$folder) == 1){
+        file <- file.path(rv.core$folder, 'md', 'faq.md')
+      } else if (!is.null(rv.core$package) && length(rv.core$package) == 1){
+        file <- file.path(system.file('workflows', package = rv.core$package), 
+                          rv.core$workflow, 'md', 'faq.md')
+      }
+      mod_insert_md_server("wf_faq", file)
+      mod_insert_md_ui('wf_faq')
+    })
     
     mod_insert_md_server("homepage", "http://www.prostar-proteomics.org/md/presentation.md")
-    mod_insert_md_server("wf_faq", "http://www.prostar-proteomics.org/md/FAQ.md")
-    mod_insert_md_server("wf_links", "http://www.prostar-proteomics.org/md/links.md")
+ 
+    
     
     
     ###

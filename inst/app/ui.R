@@ -110,10 +110,14 @@ hidden(
         #br(),
         #menuItem("Home", tabName = "Home", selected = TRUE),
         #hr(),
-        menuItem("Open workflow", tabName = "tab_load_workflow"),
-        menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
+        menuItem("Workflow", 
+                 menuSubItem('Open', tabName = "tab_load_workflow"),
+                 menuSubItem('FAQ', tabName = "tab_wf_faq"),
+                 menuSubItem('Links', tabName = "tab_wf_links")
+        ),
         menuItem("Open file", tabName = "tab_openfile"),
-        menuItem("Export results", tabName = "tab_export"),
+        menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
+        menuItem("Export to", tabName = "tab_export"),
         menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs")),
         
         hidden(
@@ -139,8 +143,8 @@ hidden(
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
           tabItem(tabName = "tab_load_workflow", mod_load_workflow_ui("openwf")),
-          tabItem(tabName = "tab_wf_links", mod_insert_md_ui('wf_links')),
-          tabItem(tabName = "tab_wf_faq", mod_insert_md_ui('wf_faq')),
+          tabItem(tabName = "tab_wf_links", uiOutput('wf_links_UI')),
+          tabItem(tabName = "tab_wf_faq", uiOutput('wf_faq_UI')),
           
           tabItem(tabName = "tab_openfile", uiOutput('openFileUI')),
           tabItem(tabName = "tab_convertData", uiOutput('convertUI')),

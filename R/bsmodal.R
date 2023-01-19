@@ -73,6 +73,7 @@ bsmodal_server <- function(id,
             tagList(
                 tags$head(tags$style(paste0(".modal-dialog { 
                     width:", width, " }"))),
+                tags$head(tags$style(".modal-dialog {z-index: 1000;}")),
                 tags$head(
                     tags$style("#test .modal-dialog {
                         width: fit-content !important;}")),
@@ -82,6 +83,7 @@ bsmodal_server <- function(id,
                 ),
                 # div(id = 'test',
                 shinyBS::bsModal(ns("window"),
+                                 
                     title = title,
                     trigger = ns("openModalBtn"),
                     uiContent

@@ -5,13 +5,7 @@
 
       ui <- fluidPage(
           tagList(
-            absolutePanel(
-              h3('toto'), 
-              bsmodal_ui("tbl"),
-              top = '10px', left = NULL, right = '10px', bottom = NULL,
-              width = NULL, height = NULL,
-              draggable = TRUE, fixed = FALSE,
-              cursor = c("auto", "move", "default", "inherit"))
+            bsmodal_ui("tbl")
             
           )
       )
