@@ -80,10 +80,6 @@ server <- shinyServer(
       rv.core$workflow <- tmp.workflow$workflow()
       
       path <- file.path(rv.core$path, 'R')
-      print(paste0('dev_mode = ', dev_mode))
-      #path <- system.file("extdata/module_examples", package = "MagellanNTK")
-      #data(data_na)
-      #rv.core$current.obj <- data_na
       tl.layout <- c('v', 'h')
       #isolate({
       nav_server(id = rv.core$workflow,

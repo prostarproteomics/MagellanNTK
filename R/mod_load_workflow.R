@@ -15,16 +15,30 @@ mod_load_workflow_ui <- function(id) {
   ns <- NS(id)
   tagList(
     useShinyjs(),
-    fluidRow(
-      column(width=4, uiOutput(ns('folder_ui'))),
-      column(width=4, shinyFiles::shinyDirButton(id = ns('sheets_dir'), 
+    radioButtons(ns('chooseLoad'), 'Open', choices = c('directory', 'plugin'), selected = character(0)),
+    hidden(
+      div(id = ns('directory'),
+        fluidRow(
+      column(width=4, 
+             uiOutput(ns('folder_ui'))),
+      column(width=4, 
+             shinyFiles::shinyDirButton(id = ns('sheets_dir'), 
                                label = "Folder select", 
                                title = "Sheets Folder Selector")
              ),
     #verbatimTextOutput(ns("sheets_dir"))),
-    column(width=4, disabled(actionButton(ns('load'), 'Load', class = 'btn-primary')))
+    column(width=4, 
+           disabled(actionButton(ns('load'), 'Load directory', class = 'btn-primary')))
+    )
+      )
     ),
-    uiOutput(ns('pluginsUI')),
+    hidden(
+      div(id = ns('plugin'), 
+          uiOutput(ns('pluginsUI')),
+          disabled(actionButton(ns('loadPlugin'), 'Load plugin', class = 'btn-primary'))
+          )
+
+      ),
     uiOutput(ns('wf_summary'))
   )
 }
@@ -43,16 +57,30 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
     dataOut <- reactiveValues(
       folder = NULL,
-      workflow = NULL
+      workflow = NULL,
+      package = NULL
       )
     
     
     rv <- reactiveValues(
       folder = NULL,
       workflow = NULL,
+      package = NULL,
       is.valid = FALSE
       )
     
+    
+    observeEvent(input$chooseLoad, {
+      toggle('directory', condition = input$chooseLoad == 'directory')
+      toggle('plugin', condition = input$chooseLoad == 'plugin')
+    })
+    
+    
+    ###
+    ###
+    ### Load from a directory
+    ###
+    ###
     Theroots <- reactive({
       root <- input$root
       #req(root, dir.exists(root))
@@ -75,27 +103,6 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     
    
     
-    GetAvailablePlugins <- reactive({
-      plugins <- list()
-      for (pkg in installed.packages()[,'Package']){
-        path <- system.file('workflows', package=pkg)
-        tmp <- list.files(path, recursive=FALSE)
-        if (length(tmp) > 0){
-          plugins[[pkg]] <- tmp
-        }
-      }
-      
-      plugins
-    })
-    
-    
-    
-    output$pluginsUI <- renderUI({
-      
-      selectInput(ns('plugins'), 'Choose a workflow', choices = unname(unlist(GetAvailablePlugins())))
-    
-    })
-    
     
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)
@@ -108,6 +115,21 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
       }
         #browser()
       #rv$is.valid <- CheckWorkflowDir(rv$folder)
+    })
+    
+    
+    # Source files once the Load button has been clicked
+    observeEvent(input$load, {
+      
+      # Loading source files
+      lst.code <- list.files(file.path(rv$folder, 'R'))
+      lapply(lst.code, 
+             function(x)
+               source(file.path(rv$folder, 'R', x), local=FALSE)
+      )
+      
+      dataOut$folder <- rv$folder
+      dataOut$workflow <- rv$workflow
     })
     
     # output$sheets_dir <- renderPrint({
@@ -134,6 +156,74 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
     #               width = '150px')
     # })
     # 
+    
+    
+    
+    ###
+    ###
+    ### Load a plugin already installed
+    ###
+    ###
+    
+    
+    
+    GetAvailablePlugins <- reactive({
+      plugins <- pkgs <- NULL
+      for (pkg in installed.packages()[,'Package']){
+        path <- system.file('workflows', package=pkg)
+        tmp <- list.files(path, recursive=FALSE)
+        if (length(tmp) > 0){
+          pkgs <- c(pkgs, rep(pkg, length(tmp)))
+          plugins <- c(plugins, tmp)
+        }
+      }
+      
+      list(
+        pkgs = pkgs,
+        plugins = plugins
+      )
+    })
+    
+    
+    
+    output$pluginsUI <- renderUI({
+      
+      #.choices <- setNames(GetAvailablePlugins()$plugins,
+      #                     nm = paste0(GetAvailablePlugins()$plugins, ' (', GetAvailablePlugins()$pkgs, ')'))
+      .choices <- paste0(GetAvailablePlugins()$plugins, ' (', GetAvailablePlugins()$pkgs, ')')
+      selectInput(ns('plugins'), 'Choose a workflow', 
+                  choices = .choices)
+      
+    })
+    
+    observeEvent(req(input$plugins),{
+      
+      rv$package <- NULL
+      rv$workflow <- input$plugins
+      toggleState('loadPlugin', condition = TRUE)
+
+    })
+    
+    observeEvent(input$loadPlugin, {
+     
+      # Loading source files
+      tmp <- strsplit(input$plugins, split=' (', fixed=TRUE)
+      rv$workflow <- unlist(tmp)[1]
+      rv$package <- gsub(')', '', unlist(tmp)[2])
+      
+      library(rv$package, character.only = TRUE)
+      
+      dataOut$package <- rv$package
+      dataOut$workflow <- rv$workflow
+    })
+    
+    
+    ###
+    ###
+    ### Communs functions
+    ###
+    ###
+    
     
     output$wf_summary <- renderUI({
       req(rv$folder)
@@ -172,23 +262,13 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
       
     })
     
-    observeEvent(input$load, {
-      
-      # Loading source files
-      lst.code <- list.files(file.path(rv$folder, 'R'))
-      lapply(lst.code, 
-             function(x)
-               source(file.path(rv$folder, 'R', x), local=FALSE)
-      )
-      
-      dataOut$folder <- rv$folder
-      dataOut$workflow <- rv$workflow
-    })
+    
     
     
      return(
        list(folder = reactive({dataOut$folder}),
-            workflow = reactive({dataOut$workflow})
+            workflow = reactive({dataOut$workflow}),
+            package = reactive({dataOut$package})
             )
      )    
   })
