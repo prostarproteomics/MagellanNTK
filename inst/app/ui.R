@@ -26,33 +26,17 @@ library(shinyFiles)
 
 
 
-ui <- dashboardPage(
+ui <- shinydashboardPlus::dashboardPage(
   
-  header = shinydashboard::dashboardHeader(
+  header = shinydashboardPlus::dashboardHeader(
       
       #tags$li(class='dropdown', uiOutput('title')),
 
-      tags$li(class='dropdown', uiOutput('menuTitle')),
+      leftUi = tagList(
+        tags$li(class='dropdown', uiOutput('menuTitle'))
+        ),
       
-        
-      
-      tags$li(class='dropdown', 
-        dropdownButton(
-        label = "Settings",
-        icon = icon("gear"),
-        status = "primary",
-        circle = FALSE,
-        checkboxInput(inputId = "devmode", label = "dev mode", value = FALSE),
-        hidden(actionButton('browser', 'browser()'))
-        # prettyToggle(
-        #   inputId = "devmode",
-        #   label_on = "Switch to user mode",
-        #   label_off = "Switch to dev mode",
-        #   icon_on = icon("check"),
-        #   icon_off = icon("check")
-        # )
-        )
-      ),
+
       # dropdownMenu(
       #   type = "messages", 
       #   badgeStatus = "success",
@@ -83,20 +67,13 @@ ui <- dashboardPage(
     #       icon_off = icon("trash")
     #     )
     #   ),
-    
 
-hidden(
-  tags$li(id = 'githubLink',
-        class='dropdown',
-        tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
-               target="_blank", icon("github"),  title="GitHub"))
-  ),
         dropdownMenuOutput("messageMenu")
       ),
 
   #uiOutput('header'),
   #header,
-    dashboardSidebar(
+  shinydashboardPlus::dashboardSidebar(
       useShinyjs(),
       sidebarMenu(
         # Menus and submenus in sidebar
@@ -129,13 +106,50 @@ hidden(
       )
      ), 
     
+
+
+controlbar = shinydashboardPlus::dashboardControlbar(
+  skin = "dark",
+  controlbarMenu(
+    controlbarItem(
+      title = "Dev mode",
+      icon = icon("desktop"),
+      active = TRUE,
+      checkboxInput(inputId = "devmode", label = "dev mode", value = FALSE),
+      hidden(actionLink('browser', 'browser()')),
+      hidden(
+        tags$li(id = 'githubLink',
+                class='dropdown',
+                tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
+                       target="_blank", icon("github"),  title="GitHub"))
+      )
+      
+    ),
+    controlbarItem(
+      icon = icon("paint-brush"),
+      title = "Tab 2",
+      numericInput(
+        inputId = "inputsidebar2", 
+        label = "Observations:", 
+        value = 10, 
+        min = 1, 
+        max = 100
+      )
+    )
+  )
+),
+
+
     dashboardBody(
       useShinyjs(),
       
         # body content
         tabItems(
           tabItem(tabName = "Home", class="active", h3('home')),
-          tabItem(tabName = "tab_load_workflow", mod_load_workflow_ui("openwf")),
+          tabItem(tabName = "tab_load_workflow", 
+                  fluidRow(
+                    box(mod_load_workflow_ui("openwf"))
+                  )),
           tabItem(tabName = "tab_wf_links", uiOutput('wf_links_UI')),
           tabItem(tabName = "tab_wf_faq", uiOutput('wf_faq_UI')),
           

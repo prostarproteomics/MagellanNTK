@@ -21,7 +21,7 @@ dev_mode <<- FALSE
 #' @import shinyjs
 #' 
 #' @noRd
-server <- shinyServer( 
+server <- 
 
     function( input, output, session) {
       
@@ -37,7 +37,7 @@ server <- shinyServer(
     result_convert = NULL,
     result_openfile = NULL,
     
-    # Current QFeatures object in Prostar
+    # Current object in MagellanNTK
     current.obj = NULL,
     
     # pipeline choosen by the user for its dataset
@@ -405,4 +405,3 @@ server <- shinyServer(
   #mod_bug_report_server("bug_report")
 
     }
-)

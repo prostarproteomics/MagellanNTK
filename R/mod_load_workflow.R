@@ -34,8 +34,14 @@ mod_load_workflow_ui <- function(id) {
     ),
     hidden(
       div(id = ns('plugin'), 
-          uiOutput(ns('pluginsUI')),
-          disabled(actionButton(ns('loadPlugin'), 'Load plugin', class = 'btn-primary'))
+          fluidRow(
+            column(width=8, 
+                   uiOutput(ns('pluginsUI'))),
+            column(width=4, 
+                   disabled(actionButton(ns('loadPlugin'), 'Load plugin', class = 'btn-primary'))
+            )
+          )
+          
           )
 
       ),
