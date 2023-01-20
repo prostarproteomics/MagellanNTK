@@ -200,6 +200,7 @@ Update_Data2send_Vector <- function(rv) {
 #'
 #' @param rv xxxx
 #' @param pos xxx
+#' @param mode xxx
 #'
 #' @export
 #'
@@ -207,7 +208,7 @@ Update_Data2send_Vector <- function(rv) {
 #' 
 #' @examples NULL
 #'
-PrepareData2Send <- function(rv, pos) {
+PrepareData2Send <- function(rv, pos, mode) {
     # Returns NULL to all modules except the one pointed by the current position
     # Initialization of the pipeline : one send dataIn() to the
     # first module
@@ -233,7 +234,7 @@ PrepareData2Send <- function(rv, pos) {
         data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
     }
 
-    if (dev_mode) {
+    if (mode == 'dev') {
         cat(crayon::blue("<----------------- Data sent to children ------------------> \n"))
         print(data2send)
         cat(crayon::blue("<----------------------------------------------------> \n"))

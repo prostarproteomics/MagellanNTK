@@ -2,11 +2,12 @@
 #' 
 #' @description xxxx
 #' 
-#' @param dev_mode xxxx
+#' @param mode A  `character(1)` which indicates xxxx. Available values are: 
+#' 'user' (default) and 'dev'.
 #' 
 #' @export
 #' 
-launch_app <- function(dev_mode = FALSE) {
+launch_app <- function(mode = 'user') {
   ui_file_path <- system.file("app/ui.R", package = "MagellanNTK")
   if (!nzchar(ui_file_path)) stop("ui() function not found")
   server_file_path <- system.file("app/server.R", package = "MagellanNTK")

@@ -15,7 +15,7 @@ mod_load_workflow_ui <- function(id) {
   ns <- NS(id)
   tagList(
     useShinyjs(),
-    radioButtons(ns('chooseLoad'), 'Open', choices = c('directory', 'plugin'), selected = character(0)),
+    uiOutput(ns('chooseLoadUI')),
     hidden(
       div(id = ns('directory'),
         fluidRow(
@@ -51,7 +51,9 @@ mod_load_workflow_ui <- function(id) {
 #'
 #' @export
 #'
-mod_load_workflow_server <- function(id, path=reactive({NULL})) {
+mod_load_workflow_server <- function(id, 
+                                     path = reactive({NULL}),
+                                     mode = reactive({'user'})) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -68,6 +70,21 @@ mod_load_workflow_server <- function(id, path=reactive({NULL})) {
       package = NULL,
       is.valid = FALSE
       )
+    
+    
+    
+    output$chooseLoadUI <- renderUI({
+      mode()
+      .choices <- switch(mode(),
+                         dev = c('directory', 'plugin'),
+                         user = c('plugin')
+                         )
+      
+      radioButtons(ns('chooseLoad'), 'Open a workflow', 
+                   choices = .choices, 
+                   selected = character(0))
+      
+    })
     
     
     observeEvent(input$chooseLoad, {

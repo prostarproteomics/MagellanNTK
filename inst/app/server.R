@@ -41,35 +41,43 @@ server <- shinyServer(
     current.obj = NULL,
     
     # pipeline choosen by the user for its dataset
-    current.pipeline = NULL
+    current.pipeline = NULL,
+    
+    mode = 'user',
+    
+    notificationData = data.frame(
+      text = c(
+        "Sales are steady this month.",
+        "How do I register?",
+        "The new server is ready."
+      ),
+      status = c('success', 'success', 'warning'),
+      stringsAsFactors = FALSE
+    )
   )
-  
-  GetNotifications <- reactive({
-    notificationData <- data.frame(
-    text = c(
-      "Sales are steady this month.",
-      "How do I register?",
-      "The new server is ready."
-    ),
-    status = c('success', 'success', 'warning'),
-    stringsAsFactors = FALSE
-  )
-    notificationData
-  })
-  
   
   
   output$messageMenu <- renderMenu({
-    msgs <- apply(GetNotifications(), 1, function(row) {
-      notificationItem(text = row[["text"]], status = row[["status"]])
+    msgs <- apply(rv.core$notificationData, 1, function(row) {
+      notificationItem(text = row[["text"]], 
+                       status = row[["status"]]
+                       )
     })
     
-    dropdownMenu(type = "notifications", .list = msgs)
+    dropdownMenu(type = "notifications", 
+                 badgeStatus = "warning", 
+                 icon = icon('bell'),
+                 .list = msgs)
   })
   
-  
+  observeEvent(input$devmode, ignoreInit = TRUE, {
+    rv.core$mode <- if(isTRUE(input$devmode)) 'dev' else 'user'
+    options(shiny.fullstacktrace = input$devmode)
+  })
  
-    tmp.workflow <- mod_load_workflow_server("openwf")
+    tmp.workflow <- mod_load_workflow_server("openwf",
+                                             mode = reactive({rv.core$mode})
+                                             )
     
     ###
     ### Launch the workflow server function
@@ -85,7 +93,9 @@ server <- shinyServer(
       
       nav_server(id = rv.core$workflow,
                  dataIn = reactive({rv.core$current.obj}),
-                 tl.layout = tl.layout)
+                 tl.layout = tl.layout,
+                 mode = reactive({rv.core$mode})
+                 )
     })
     
    

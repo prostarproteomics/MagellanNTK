@@ -32,10 +32,7 @@ run_workflow <- function(id,
     if (missing(id))
         stop("'id' is required.")
     
-  options(shiny.fullstacktrace = dev_mode)
-
-
-    ui <- fluidPage(
+  ui <- fluidPage(
         tagList(
             nav_ui(id),
             uiOutput("debugInfos_ui")
@@ -49,7 +46,7 @@ run_workflow <- function(id,
 
         
         output$debugInfos_ui <- renderUI({
-            req(dev_mode)
+            req(rv.core$mode == 'dev')
             Debug_Infos_ui("debug_infos")
         })
 

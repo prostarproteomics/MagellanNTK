@@ -32,10 +32,7 @@ ui <- dashboardPage(
       
       #tags$li(class='dropdown', uiOutput('title')),
 
-      tags$li(class='dropdown', uiOutput('menuTitle')
-              
-      ),
-      tags$li(class='dropdown', hidden(actionButton('browser', 'browser()'))),
+      tags$li(class='dropdown', uiOutput('menuTitle')),
       
         
       
@@ -45,10 +42,8 @@ ui <- dashboardPage(
         icon = icon("gear"),
         status = "primary",
         circle = FALSE,
-        checkboxInput(
-          inputId = "devmode",
-          label = "dev mode",
-          value = FALSE)
+        checkboxInput(inputId = "devmode", label = "dev mode", value = FALSE),
+        hidden(actionButton('browser', 'browser()'))
         # prettyToggle(
         #   inputId = "devmode",
         #   label_on = "Switch to user mode",
@@ -58,13 +53,13 @@ ui <- dashboardPage(
         # )
         )
       ),
-      dropdownMenu(
-        type = "messages", 
-        badgeStatus = "success",
-        messageItem(from = "Support Team", message = "This is the content of a message.", time = "5 mins"),
-        messageItem(from = "Support Team", message = "This is the content of another message.", time = "2 hours"),
-        messageItem(from = "New User", message = "Can I get some help?", time = "Today")
-      ),
+      # dropdownMenu(
+      #   type = "messages", 
+      #   badgeStatus = "success",
+      #   messageItem(from = "Support Team", message = "This is the content of a message.", time = "5 mins"),
+      #   messageItem(from = "Support Team", message = "This is the content of another message.", time = "2 hours"),
+      #   messageItem(from = "New User", message = "Can I get some help?", time = "Today")
+      # ),
       # tagList(
       #   tags$li(uiOutput('title')),
       #   tags$li(shinyjs::hidden(actionButton('browser', 'browser()')))
@@ -89,9 +84,7 @@ ui <- dashboardPage(
     #     )
     #   ),
     
-tags$li(class='dropdown', 
-      tags$li(tags$a(href="http://www.prostar-proteomics.org/", target="_blank",
-                     img(src="logo.png", title="Prostar website", height="17px")))),
+
 hidden(
   tags$li(id = 'githubLink',
         class='dropdown',

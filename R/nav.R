@@ -59,6 +59,8 @@ nav_ui <- function(id) {
 #' level of navigation module.
 #' 
 #' @param path xxx
+#' 
+#' @param mode Defaul
 #'
 #' @return A list of four items:
 #' * dataOut A dataset of the same class of the parameter dataIn
@@ -78,10 +80,11 @@ nav_server <- function(id,
     remoteReset = reactive({FALSE}),
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
-    path = NULL) {
+    path = NULL,
+    mode = reactive({'user'})
+    ) {
 
-    options(shiny.fullstacktrace = dev_mode)
-
+    
 
     ### -------------------------------------------------------------###
     ###                                                             ###
@@ -175,7 +178,7 @@ nav_server <- function(id,
                 ### the parameter 'id'. 
                 ### The name of the server function is prefixed by 'mod_' and 
                 ### suffixed by '_server'. This will give access to its config
-                if(dev_mode)
+                if(mode() == 'dev')
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
                 
                 rv$proc <- do.call(
@@ -196,7 +199,7 @@ nav_server <- function(id,
                 rv$config <- rv$proc$config()
                 
                 #browser()
-                if(dev_mode){
+                if(mode() == 'dev'){
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_conf()"), '\n')))
                   rv$config
                 }
@@ -251,7 +254,7 @@ nav_server <- function(id,
                 
                 
                 #######################################################
-                if(dev_mode)
+                if(mode() == 'dev')
                   cat(crayon::yellow(paste0(id, ': Entering observeEvent(req(rv$config), {...})\n')))
                 
                 switch(rv$config@mode,
@@ -278,7 +281,7 @@ nav_server <- function(id,
                          rv$config@ll.UI <- setNames(lapply(
                            GetStepsNames(),
                            function(x) {
-                             if(dev_mode)
+                             if(mode() == 'dev')
                                cat(paste0(id, ": Launch: ", 'nav_ui(', ns(paste0(id, '_', x)), ')\n'))
                              
                              nav_ui(ns(paste0(id, '_', x)))
@@ -291,7 +294,7 @@ nav_server <- function(id,
                          ### 
                          #browser()
                          lapply(GetStepsNames(), function(x) {
-                           if(dev_mode)
+                           if(mode() == 'dev')
                              cat(paste0(id, ": Launch nav_server(", id, "_", x, ")\n"))
                            
                            tmp.return[[x]] <- nav_server(
@@ -318,7 +321,7 @@ nav_server <- function(id,
                            triggerValues <- values.children$triggers
                            return.values <- values.children$values
                            
-                           if (dev_mode) {
+                           if (mode() == 'dev') {
                              cat(crayon::blue("---------- Data received from children ---\n"))
                              print(return.values)
                              cat(crayon::blue("------------------------------------------\n"))
@@ -338,7 +341,7 @@ nav_server <- function(id,
                              newValue <- tmp.return[[processHasChanged]]$dataOut()$value
                              
                              
-                             if (dev_mode) {
+                             if (mode() == 'dev') {
                                cat(crayon::blue("---------- New children data status ---\n"))
                                print(newValue)
                                cat(crayon::blue("------------------------------------------\n"))
@@ -628,7 +631,7 @@ nav_server <- function(id,
         # This function is not directly implemented in the main UI of nav_ui
         # because it is hide/show w.r.t. the value of dev_mode
         output$debug_infos_ui <- renderUI({
-            req(dev_mode)
+            req(mode() == 'dev')
           
           Debug_Infos_server(
             id = "debug_infos",
@@ -688,7 +691,7 @@ nav_server <- function(id,
         # function 'Build..'
         output$nav_mod_ui <- renderUI({
           req(rv$tl.layout)
-          if(dev_mode)
+          if(mode() == 'dev')
             cat(crayon::blue(paste0(id, ': Entering output$nav_mod_ui <- renderUI({...})\n')))
           
             #do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
@@ -717,7 +720,9 @@ nav_server <- function(id,
                   if (rv$config@mode == "pipeline") {
                       if (is.null(rv$dataIn)) {
                           res <- PrepareData2Send(rv = rv, 
-                                                  pos = rv$current.pos)
+                                                  pos = rv$current.pos,
+                                                  mode = mode()
+                                                  )
                           rv$child.data2send <- res$data2send
                           rv$steps.enabled <- res$steps.enabled
                           }
@@ -771,7 +776,7 @@ nav_server <- function(id,
 
             if (rv$config@mode == "pipeline") {
                 # Specific to pipeline code
-                res <- PrepareData2Send(rv = rv, pos = NULL)
+                res <- PrepareData2Send(rv = rv, pos = NULL, mode=mode())
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled
 
@@ -790,7 +795,7 @@ nav_server <- function(id,
         # Then, launch observers and functions specific to
         # processes nor pipelines
         # observeEvent(req(rv$config), {
-        #     if(dev_mode)
+        #     if(mode() == 'dev')
         #       cat(crayon::yellow(paste0(id, ': Entering observeEvent(req(rv$config), {...})\n')))
         #   
         #     switch(rv$config@mode,
@@ -817,7 +822,7 @@ nav_server <- function(id,
         #             rv$config@ll.UI <- setNames(lapply(
         #               GetStepsNames(),
         #                 function(x) {
-        #                   if(dev_mode)
+        #                   if(mode() == 'dev')
         #                     cat(paste0(id, ": Launch: ", 'nav_ui(', ns(paste0(id, '_', x)), ')\n'))
         # 
         #                   nav_ui(ns(paste0(id, '_', x)))

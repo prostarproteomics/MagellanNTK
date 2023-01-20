@@ -118,7 +118,7 @@
 #' ssdtwclust(reinterpolate(CharTraj[1L:20L], 150L))
 #' }
 #'
-nav <- function(dev_mode = FALSE) {
+nav <- function(mode = FALSE) {
   
   file_path <- system.file("app", "app.R", package = "MagellanNTK")
   if (!nzchar(file_path)) stop("Shiny app not found")
@@ -126,7 +126,7 @@ nav <- function(dev_mode = FALSE) {
   source(file_path, local = TRUE, chdir = TRUE)
   
   server_env <- environment(server) # will see all dtwclust functions
-  server_env$dev_mode <- dev_mode
+  server_env$mode <- mode
   
   app <- shiny::shinyApp(ui, server)
   shiny::runApp(app)
