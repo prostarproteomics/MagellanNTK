@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(shinyWidgets)
 library(dashboardthemes)
 library(shinyjs)
@@ -88,21 +89,21 @@ ui <- shinydashboardPlus::dashboardPage(
         menuItem("Open file", tabName = "tab_openfile"),
         menuItem("Run workflow", tabName = "run_workflow", icon = icon("cogs")),
         menuItem("Export to", tabName = "tab_export"),
-        menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs")),
+        menuItem("EDA", tabName = "tab_EDA", icon = icon("cogs"))
         
-        hidden(
-          div(id = 'Help_menu',
-              menuItem("Help for MagellanNTK",
-          icon = icon("question-circle"),
-          menuSubItem("About", tabName = "tab_about"),
-          menuSubItem("FAQ", tabName = "tab_faq"),
-          menuSubItem("Bug Report", tabName = "bugReport")
-          #menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
-          #menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
-          #menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
-        )
-      )
-      )
+      #   hidden(
+      #     div(id = 'Help_menu',
+      #         menuItem("Help for MagellanNTK",
+      #     icon = icon("question-circle"),
+      #     menuSubItem("About", tabName = "tab_about"),
+      #     menuSubItem("FAQ", tabName = "tab_faq"),
+      #     menuSubItem("Bug Report", tabName = "bugReport")
+      #     #menuSubItem("Global Settings", tabName = "globalSettings", icon = icon("cogs")),
+      #     #menuSubItem("Release Notes", tabName = "releaseNotes", icon = icon("clipboard")),
+      #     #menuSubItem("Check for Updates", tabName = "checkUpdates", icon = icon("wrench"))
+      #   )
+      # )
+      # )
       )
      ), 
     
@@ -116,13 +117,13 @@ controlbar = shinydashboardPlus::dashboardControlbar(
       icon = icon("desktop"),
       active = TRUE,
       checkboxInput(inputId = "devmode", label = "dev mode", value = FALSE),
+      
       hidden(actionLink('browser', 'browser()')),
       hidden(
-        tags$li(id = 'githubLink',
-                class='dropdown',
-                tags$a(href="https://github.com/prostarproteomics/MagellanNTK", 
-                       target="_blank", icon("github"),  title="GitHub"))
-      )
+        a(href="https://github.com/prostarproteomics/MagellanNTK", 
+                       target="_blank", icon("github"),  title="GitHub")
+      ),
+      a("Computation Completed", onclick = "openTab('tabItem2')", href="#shiny-tab-tabItem2")
       
     ),
     controlbarItem(
@@ -141,6 +142,15 @@ controlbar = shinydashboardPlus::dashboardControlbar(
 
 
     dashboardBody(
+      tags$script(HTML("
+        var openTab = function(tabName){
+          $('a', $('.sidebar')).each(function() {
+            if(this.getAttribute('data-value') == tabName) {
+              this.click()
+            };
+          });
+        }
+      ")),
       useShinyjs(),
       
         # body content
@@ -159,6 +169,23 @@ controlbar = shinydashboardPlus::dashboardControlbar(
           tabItem(tabName = "tab_export", uiOutput('exportUI')),
           
           tabItem(tabName = "run_workflow", uiOutput('run_workflowUI')),
+          
+          
+          tabItem(tabName = "tabItem1",
+                  fluidRow(
+                    box(plotOutput("plot1", height = 250)),
+                    
+                    box(
+                      title = "Controls",
+                      sliderInput("slider", "Number of observations:", 1, 100, 50)
+                    )
+                  ),
+                  infoBoxOutput("out1")
+          ),
+          
+          tabItem(tabName = "tabItem2",
+                  h2("Widgets tab content")
+          ),
           
           
           #tabItem(tabName = "globalSettings", h3('Global settings'),

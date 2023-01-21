@@ -21,9 +21,7 @@ dev_mode <<- FALSE
 #' @import shinyjs
 #' 
 #' @noRd
-server <- 
-
-    function( input, output, session) {
+server <- function( input, output, session) {
       
   observeEvent(input$ReloadApp, {js$resetApp()})
       

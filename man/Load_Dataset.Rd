@@ -12,6 +12,9 @@ mod_load_workflow_server(
   id,
   path = reactive({
      NULL
+ }),
+  mode = reactive({
+     "user"
  })
 )
 }

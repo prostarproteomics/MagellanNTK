@@ -4,10 +4,11 @@
 \alias{launch_app}
 \title{xxxx}
 \usage{
-launch_app(dev_mode = FALSE)
+launch_app(mode = "user")
 }
 \arguments{
-\item{dev_mode}{xxxx}
+\item{mode}{A  `character(1)` which indicates xxxx. Available values are: 
+'user' (default) and 'dev'.}
 }
 \description{
 xxxx

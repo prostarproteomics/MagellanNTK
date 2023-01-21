@@ -34,7 +34,9 @@
     })
     
     output$openFileUI <- renderUI({
-      tmp <- mod_load_workflow_server("demo")
+      tmp <- mod_load_workflow_server(id = "demo", 
+                                      mode = reactive({"dev"})
+                                      )
       
       mod_load_workflow_ui("demo")
     })

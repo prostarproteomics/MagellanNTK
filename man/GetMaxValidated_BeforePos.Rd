@@ -37,7 +37,7 @@ the current step.
 #'
 Build_EncapsulateScreens_ui <- function(ns, id, config) {
     len <- length(config@ll.UI)
-    if(dev_mode){
+    if(rv.core$mode == 'dev'){
       cat ('Entering Build_EncapsulateScreens_ui()')
       show(config)
     }

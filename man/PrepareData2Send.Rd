@@ -4,12 +4,14 @@
 \alias{PrepareData2Send}
 \title{xxxx}
 \usage{
-PrepareData2Send(rv, pos)
+PrepareData2Send(rv, pos, mode)
 }
 \arguments{
 \item{rv}{xxxx}
 
 \item{pos}{xxx}
+
+\item{mode}{xxx}
 }
 \value{
 NA

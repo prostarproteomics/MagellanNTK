@@ -23,10 +23,13 @@ nav_server(
      FALSE
  }),
   tl.layout = NULL,
-  path = NULL
+  path = NULL,
+  mode = reactive({
+     "user"
+ })
 )
 
-nav(dev_mode = FALSE)
+nav(mode = FALSE)
 }
 \arguments{
 \item{id}{A `character(1)` which defines the id of the module. It is the same
@@ -53,6 +56,8 @@ where each item correspond to the orientation of the timeline for a given
 level of navigation module.}
 
 \item{path}{xxx}
+
+\item{mode}{Defaul}
 
 \item{series}{Time series in the formats accepted by [compare_clusterings()].}
 
