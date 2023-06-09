@@ -9,10 +9,11 @@
 #' @param path A `character()` to indicate the directory where to find the source
 #' files of all workflows. This directory must also contains a 'md' directory
 #' that contains the md files corresponding to the workflows.
-#' 
-#' @example examples/test_load_code.R
+#' @param recursive xxx
 #' 
 #' @export
+#' 
+#' @example examples/test_load_code.R
 #' 
 
 LoadCode <- function(name, path, recursive = FALSE){

@@ -49,9 +49,6 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 #' #' @param config xxx
 #' #'
 #' #' @return A `renderUI` function
-#' #'
-#' #' @examples NULL
-#' #' 
 #' #' @export
 #' #'
 #' Build_EncapsulateScreens_ui <- function(ns, id, config) {
@@ -99,8 +96,6 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 #'
 #' @return A `integer(1)`
 #' 
-#' @examples NULL
-#' 
 #' @export
 #'
 GetMaxValidated_BeforePos <- function(pos = NULL,
@@ -131,8 +126,6 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
 #'
 #' @return A `integer(1)`
 #' 
-#' @examples NULL
-#' 
 #' @export
 #'
 GetMaxValidated_AllSteps <- function(steps.status) {
@@ -157,17 +150,6 @@ GetMaxValidated_AllSteps <- function(steps.status) {
 #' @param rv xxx
 #'
 #' @return xxx
-#' @examples
-#' library(shinyjs)
-#' if (interactive()) {
-#'     ui <- shiny::fluidPage()
-#'     server <- function(input, output, session) {
-#'         rv <- reactiveValues(
-#'         steps.status = c(TRUE, TRUE, FALSE))
-#'         observe({ToggleState_Screens(FALSE, c(1,2), TRUE, rv)})
-#'          }
-#'     shiny::shinyApp(ui = ui, server = server)
-#' }
 #'
 #' @export
 #' 
@@ -202,9 +184,6 @@ ToggleState_Screens <- function(cond,
 #' @param title.style xxx
 #'
 #' @return xxx
-#' @examples
-#' GetStringStatus(1)
-#' 
 #' @export
 #'
 GetStringStatus <- function(i, title.style = FALSE) {
@@ -231,9 +210,6 @@ GetStringStatus <- function(i, title.style = FALSE) {
 #' @param len A `integer(1)` which is the number of steps in the process.
 #'
 #' @return A `integer(1)` which is the new current position.
-#' @examples
-#' NavPage(1, 3, 5)
-#' 
 #' @export
 #'
 NavPage <- function(direction, current.pos, len) {
@@ -256,7 +232,6 @@ NavPage <- function(direction, current.pos, len) {
 #'
 #' @return A tag div for ui
 #' 
-#' @examples NULL
 #' 
 #' @export
 #'
@@ -290,7 +265,6 @@ dataModal <- function(ns, mode) {
 #'
 #' @return xxx
 #' 
-#' @examples NULL
 #' 
 #' @export
 #'
@@ -316,8 +290,6 @@ Discover_Skipped_Steps <- function(steps.status) {
 #' @param tag xxx
 #'
 #' @return xxx
-#' @examples 
-#' NULL
 #' 
 #' @export
 #'
@@ -335,8 +307,6 @@ All_Skipped_tag <- function(steps.status, tag) {
 #' @param rv xxx
 #'
 #' @return xxx
-#' 
-#' @examples NULL
 #' 
 #' @export
 #'
@@ -371,8 +341,6 @@ GetFirstMandatoryNotValidated <- function(range,rv) {
 #' @param rv xxx
 #' @return NA
 #' 
-#' @examples
-#' NA
 #'
 #' @export
 #'
@@ -448,16 +416,6 @@ Update_State_Screens <- function(is.skipped,
 #'
 #' @return NA
 #' 
-#' @examples
-#' library(shinyjs)
-#' if (interactive()) {
-#'     ui <- shiny::fluidPage()
-#'
-#'     server <- function(input, output, session) {
-#'          ToggleState_NavBtns(2, 4)
-#'          }
-#'     shiny::shinyApp(ui = ui, server = server)
-#' }
 #' 
 #' @export
 #'
@@ -479,15 +437,6 @@ ToggleState_NavBtns <- function(current.pos, nSteps) {
 #'
 #' @return NA
 #' 
-#' @examples
-#' library(shinyjs)
-#' if (interactive()) {
-#'     ui <- shiny::fluidPage()
-#'     server <- function(input, output, session) {
-#'          ToggleState_ResetBtn(FALSE)
-#'          }
-#'     shiny::shinyApp(ui = ui, server = server)
-#' }
 #' @export
 #'
 ToggleState_ResetBtn <- function(cond) {

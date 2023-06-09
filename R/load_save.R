@@ -10,11 +10,6 @@
 #' @export
 #'
 #' @return NA
-#' 
-#' @examples
-#' data(data1)
-#' Save_Object(data1, 'foo.rda')
-#' unlink('foo.rda')
 #'
 Save_Object <- function(object, file) {
     if (is.null(object)) {

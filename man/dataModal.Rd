@@ -17,7 +17,3 @@ A tag div for ui
 \description{
 xxx
 }
-\examples{
-NULL
-
-}

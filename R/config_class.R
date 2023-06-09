@@ -19,10 +19,7 @@
 #'  * Description pipeline: This case is for a process -called 'Description' which is 
 #'  the first process module of a pipeline
 #'
-#' @export Config
-#' @exportClass Config
-#' @rdname config
-#' @example examples/example_config_class.R
+#' @name Config
 #' 
 #' @slot fullname xxxx
 #' @slot name xxx
@@ -33,9 +30,11 @@
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
 #' 
-#' @usage xxx
-#' 
-#' 
+#' @example examples/example_config_class.R
+#'
+#' @rdname Config
+#' @export Config
+#' @exportClass Config
 Config <- setClass("Config",
     representation(
       fullname = "character",
@@ -48,20 +47,18 @@ Config <- setClass("Config",
       steps.source.file = 'vector'
     ),
 
-    #' @param object xxx
-    #' 
-    validity <- function(object) {
+    validity <- function(.Object) {
         passed <- TRUE
-        nSteps <- length(object@steps)
+        nSteps <- length(.Object@steps)
         #
         # General conditions
         #
-        if (length(object@fullname) != 1 && object@fullname != ''){
+        if (length(.Object@fullname) != 1 && .Object@fullname != ''){
           warning(paste0("The slot 'fullname' must contain one string. Current value is: ", object@name))
           passed <- FALSE
         } 
         
-        # if (length(object@name) != 1){
+        # if (length(.Object@name) != 1){
         #     warning(paste0("The slot 'name' must contain one string. Current value is: ", object@name))
         #     passed <- FALSE
         # } 
@@ -69,7 +66,7 @@ Config <- setClass("Config",
         
         
         # Check if mode exists and is an available keyword
-        if (!(object@mode %in% c('process', 'pipeline'))){
+        if (!(.Object@mode %in% c('process', 'pipeline'))){
             warning("The 'mode' must be one of the following: 'process', 'pipeline'")
             passed <- FALSE
         }
@@ -113,11 +110,21 @@ is.GenericProcess <- function(.Object){
   passed <- validity(.Object)
   
   passed <- passed && (.Object@mode == 'process')
-  passed <- passed && (.Object@parent != '')
+  passed <- passed && (length(.Object@parent) >= 1)
   passed <- passed && (length(.Object@steps) >= 1 && .Object@name != 'Description')
   
   return(passed)
 }
+
+
+is.RootProcess <- function(.Object){
+  passed <- validity(.Object)
+  passed <- passed && is.GenericProcess(.Object)
+  passed <- passed && .Object@parent == ''
+  
+  return(passed)
+}
+
 
 is.GenericPipeline <- function(.Object){
   passed <- validity(.Object)
@@ -139,8 +146,9 @@ is.RootPipeline <- function(.Object){
 is.DescriptionProcess <- function(.Object){
   passed <- validity(.Object)
   passed <- passed && (.Object@mode == 'process')
-  passed <- passed && (.Object@parent != '')
-  passed <- passed && (.Object@steps == '' && .Object@mandatory == '')
+  passed <- passed && (length(.Object@parent) >= 1 && .Object@parent != '')
+  passed <- passed && all(.Object@steps == '')
+  passed <- passed && all(.Object@mandatory == '')
   passed <- passed && grepl('Description', .Object@name)
   
   return(passed)
@@ -153,6 +161,26 @@ is.DescriptionProcess <- function(.Object){
 
 init.GenericProcess <- function(.Object){
 
+  # A process has a parent
+  
+  .Object@steps <- c('Description', .Object@steps, 'Save')
+  .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
+  
+  # .Object@steps <- setNames(.Object@steps,
+  #                           nm = paste0(.Object@fullname, '_', 
+  #                                       gsub(' ', '',.Object@steps, fixed=TRUE)))
+  
+  .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  
+  .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
+  
+  return(.Object)
+}
+
+
+
+init.RootProcess <- function(.Object){
+  
   # A process has a parent
   
   .Object@steps <- c('Description', .Object@steps, 'Save')
@@ -247,39 +275,42 @@ init.DescriptionProcess <- function(.Object){
 }
 
 
-
+#' @title xxx
+#' @description xxx
+#' @param object xxx
+#' 
 setMethod("show", 'Config',
-          function(.Object){
+          function(object){
             cat(crayon::green('\t ------- Config -------\n'))
-            cat(crayon::green(paste0('\tfullname: ', .Object@fullname, '\n')))
-            cat(crayon::green(paste0('\tname: ', .Object@name, '\n')))
-            cat(crayon::green(paste0('\tparent: ', .Object@parent, '\n')))
-            cat(crayon::green(paste0('\tmode: ', .Object@mode, '\n')))
+            cat(crayon::green(paste0('\tfullname: ', object@fullname, '\n')))
+            cat(crayon::green(paste0('\tname: ', object@name, '\n')))
+            cat(crayon::green(paste0('\tparent: ', object@parent, '\n')))
+            cat(crayon::green(paste0('\tmode: ', object@mode, '\n')))
               
               cat(crayon::green('\tnames(steps): '))
-              cat(crayon::green(names(.Object@steps)))
+              cat(crayon::green(names(object@steps)))
               cat(crayon::green('\n'))
 
               cat(crayon::green('\tsteps: '))
-              cat(crayon::green(.Object@steps))
+              cat(crayon::green(object@steps))
               cat(crayon::green('\n'))
               
               cat(crayon::green('\tmandatory: '))
-              cat(crayon::green(.Object@mandatory))
+              cat(crayon::green(object@mandatory))
               cat(crayon::green('\n'))
               
               cat(crayon::green('\tnames(ll.UI): '))
-              cat(crayon::green(names(.Object@ll.UI)))
+              cat(crayon::green(names(object@ll.UI)))
               cat(crayon::green('\n'))
               
               cat(crayon::green('\tll.UI: '))
-              cat(crayon::green(.Object@ll.UI))
+              cat(crayon::green(object@ll.UI))
               cat(crayon::green('\n'))
               }
 )
 
 #' @title Initialization method for the class `Config`
-#' @rdname config
+#' @rdname Config
 #' 
 setMethod("initialize" ,
     "Config" ,
@@ -288,16 +319,22 @@ setMethod("initialize" ,
     #' @param mode xxx
     #' @param steps xxx
     #' @param mandatory xxx
+    #' @param steps.source.file xxx
     function(.Object,
              fullname,
              mode,
              steps,
-             mandatory){
+             mandatory,
+             steps.source.file){
         
         # Basic init of slots
-      
-      
+
+
       .Object@fullname <- fullname
+      
+      if (!is.null(steps.source.file))
+        .Object@steps.source.file <- steps.source.file
+      
       
         tmp <- unlist(strsplit(fullname, '_'))
         if (length(tmp) == 2){
@@ -305,6 +342,7 @@ setMethod("initialize" ,
           .Object@parent <- tmp[1]
         } else {
           .Object@name <- tmp[1]
+          .Object@parent <- ''
         }
          
         .Object@mode <- mode
@@ -312,10 +350,12 @@ setMethod("initialize" ,
         .Object@mandatory <- mandatory 
         
         
-        
+        #browser()
         
         if (is.GenericProcess(.Object))
           .Object <- init.GenericProcess(.Object)
+        else if (is.RootProcess(.Object))
+          .Object <- init.RootProcess(.Object)
         else if (is.GenericPipeline(.Object))
           .Object <- init.GenericPipeline(.Object)
         else if (is.DescriptionProcess(.Object))
@@ -336,7 +376,7 @@ setMethod("initialize" ,
 #' 
 #' @description Wrapper function to the constructor of the class
 #' 
-#' @rdname config
+#' @rdname Config
 #' 
 #' @param fullname xxx
 #' @param mode xxx
@@ -344,13 +384,15 @@ setMethod("initialize" ,
 #' @param mandatory xxx
 #' 
 Config <- function(fullname = '', 
-    mode = '',
-    steps = '', 
-    mandatory = ''){
+                   mode = '',
+                   steps = '', 
+                   mandatory = '',
+                   steps.source.file = NULL){
     
     new(Class ="Config",
         fullname = fullname,
         mode = mode,
         steps = steps, 
-        mandatory = mandatory)
+        mandatory = mandatory,
+        steps.source.file = steps.source.file)
 }

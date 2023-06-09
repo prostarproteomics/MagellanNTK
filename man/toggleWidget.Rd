@@ -17,18 +17,6 @@ NA
 \description{
 Wrapper for the toggleWidget function of the package `shinyjs`
 }
-\examples{
-if (interactive()) {
-    ui <- shiny::fluidPage(uiOutput('foo'))
-    
-    server <- function(input, output, session) {
-    wgt <- actionButton('foo_btn', 'foo')
-    output$foo <- renderUI({toggleWidget(wgt, FALSE)})
-         }
-    shiny::shinyApp(ui, server)
-}
-
-}
 \author{
 Samuel Wieczorek
 }

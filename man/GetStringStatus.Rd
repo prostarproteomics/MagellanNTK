@@ -17,7 +17,3 @@ xxx
 \description{
 Converts status code (intefer) into a readable string.
 }
-\examples{
-GetStringStatus(1)
-
-}

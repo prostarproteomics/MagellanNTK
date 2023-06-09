@@ -6,8 +6,18 @@
 #' and 'mandatory'
 #'  list, erases all white spaces for the names of the steps.
 #'
-#' @name insertCodeForExternalModules
+#' @name insertCodeForExternalModules 
 #' 
+#' @param widgets.names A `list` containing the names of the widgets in all
+#' steps of the module.
+#' @param rv.custom.names A `list` containing the names of the custom values.
+#' @param mode xxx
+#' @param name xxx
+#' @param w.names xxx
+#' @param rv.custom.names xxx
+#'
+#' @author Samuel Wieczorek
+#'
 NULL
 
 
@@ -31,8 +41,6 @@ NULL
 #' 
 #' @rdname insertCodeForExternalModules
 #' 
-#' @examples
-#' Get_Code_Update_Config_Variable()
 #'
 Get_Code_Update_Config_Variable <- function() {
     code <- "
@@ -55,20 +63,11 @@ Get_Code_Update_Config_Variable <- function() {
 #' To avoid confusion, the first string is the name of the step while the
 #' second is the name of the widget
 #'
-#' @param widgets.names A `list` containing the names of the widgets in all
-#' steps of the module.
-#'
-#' @author Samuel Wieczorek
-#'
 #' @return NA
 #'
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
-#'
-#' @examples
-#' widgets <- paste0("widget", 1:3)
-#' Get_Code_Declare_widgets(widgets)
 #'
 Get_Code_Declare_widgets <- function(widgets.names = NULL) {
     # If one is on a composed workflow which do not have explicit ui
@@ -101,8 +100,6 @@ Get_Code_Declare_widgets <- function(widgets.names = NULL) {
 #' To avoid confusion, the first string is the name of the step while the
 #' second is the name of the widget
 #'
-#' @param rv.custom.names A `list` containing the names of the custom values.
-#'
 #' @author Samuel Wieczorek
 #'
 #' @return NA
@@ -111,9 +108,6 @@ Get_Code_Declare_widgets <- function(widgets.names = NULL) {
 #' 
 #' @rdname insertCodeForExternalModules
 #'
-#' @examples
-#' custom <- list(foo1 = list(), foo2 = 3)
-#' Get_Code_Declare_rv_custom(names(custom))
 #'
 Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL) {
     # If one is on a composed workflow which do not have explicit ui
@@ -144,18 +138,9 @@ Get_Code_Declare_rv_custom <- function(rv.custom.names = NULL) {
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #'
-#' @param widgets.names A `list` containing the names of the widgets in all
-#' steps of the module.
-#'
-#' @author Samuel Wieczorek
-#'
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
-#'
-#' @examples
-#' widgets <- paste0("widget", 1:3)
-#' Get_Code_for_ObserveEvent_widgets(widgets)
 #'
 #' @return NA
 #'
@@ -184,14 +169,10 @@ Get_Code_for_ObserveEvent_widgets <- function(widgets.names = NULL) {
 #'
 #' @return A `string` containing some R code
 #'
-#' @author Samuel Wieczorek
-#'
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
 #'
-#' @examples
-#' Get_Code_for_rv_reactiveValues()
 #'
 Get_Code_for_rv_reactiveValues <- function() {
     basis <- "rv <- reactiveValues(
@@ -220,14 +201,10 @@ Get_Code_for_rv_reactiveValues <- function() {
 # has called the process.
 # DO NOT MODIFY THIS FUNCTION
 #'
-#' @author Samuel Wieczorek
-#'
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
 #'
-#' @examples
-#' Get_Code_for_dataOut()
 #'
 #' @return NA
 #'
@@ -246,14 +223,9 @@ Get_Code_for_dataOut <- function() {
 #'
 #' @description xxx
 #'
-#' @author Samuel Wieczorek
-#'
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
-#'
-#' @examples
-#' Get_Code_for_General_observeEvents()
 #'
 #' @return NA
 #'
@@ -294,10 +266,6 @@ observeEvent(remoteReset(), {
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' Module_Return_Func()
 #'
 #' @export
 #' 
@@ -323,17 +291,7 @@ dataOut = reactive({dataOut})
 #' @description This function xxx
 #' # Generate dynamically the observeEvent function for each widget
 #'
-#' @param w.names xxx
-#' @param rv.custom.names xxx
-#'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' id <- 'PipelineA_Process1'
-#' widgets <- c('widget1', 'widget2')
-#' custom <- list(foo1 = list(), foo2 = 3)
-#' Get_Workflow_Core_Code('process', id, widgets, names(custom))
-#'
+#' 
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules
@@ -381,6 +339,9 @@ Get_Workflow_Core_Code <- function(
 }
 
 
+#' @title xxx
+#' @description xxx
+#' @param name xxx
 #' @export
 Insert_Call_to_Config <- function(name){
   code <- "
@@ -403,17 +364,7 @@ config@ll.UI <- setNames(
 
 #' @title Code for declaring xxx
 #'
-#' @description This function xxx
-#' # Generate dynamically the observeEvent function for each widget
-#'
-#' @param w.names xxx
-#' @param rv.custom.names xxx
-#'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' widgets <- c('widget1', 'widget2')
-#' Get_AdditionalModule_Core_Code(widgets)
+#' @description This function generates dynamically the observeEvent function for each widget
 #'
 #' @export
 #' 
@@ -441,13 +392,8 @@ Get_AdditionalModule_Core_Code <- function(
 #' @title Code for declaring xxx
 #'
 #' @description This function xxx
-#' # Generate dynamically the observeEvent function for each widget
-
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' Get_Code_for_AddMod_observeEvents()
-#'
+#' Generate dynamically the observeEvent function for each widget
+#' 
 #' @export
 #' 
 #' @rdname insertCodeForExternalModules

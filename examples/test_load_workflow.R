@@ -1,14 +1,15 @@
-#if (interactive()){
+if (interactive()){
   
   library(shiny)
   library(shinyjs)
   library(shinydashboard)
   library(shinyWidgets)
   library(shinyFiles)
-  #library(shinyTree)
   options(shiny.fullstacktrace = TRUE)
   
   path <- '/home/samuel/Github/MagellanNTK/inst/Workflow_examples'
+  
+  
   ui <- dashboardPage(
     dashboardHeader(title="MagellanNTK"),
     dashboardSidebar(),
@@ -51,4 +52,4 @@
   }
   
   shinyApp(ui, server)
-#}
+}

@@ -1,6 +1,6 @@
-#if(interactive()){
+if(interactive()){
   library(shiny)
-  server_env <- environment(server) # will see all dtwclust functions
+  server_env <- environment() # will see all dtwclust functions
   server_env$dev_mode <- FALSE
   
   # Uncomment and Change this for a process workflow
@@ -81,8 +81,8 @@ server <- function(input, output){
 
 
 
-app <- shiny::shinyApp(ui, server)
-shiny::runApp(app)
+shiny::shinyApp(ui, server)
 
-#}
+
+}
 

@@ -12,7 +12,3 @@ A `integer()`.
 \description{
 Returns the date and time in timestamp UNIX format.
 }
-\examples{
-Timestamp()
-
-}

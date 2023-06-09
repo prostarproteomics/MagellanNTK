@@ -1,14 +1,20 @@
 #' @title Load dataset shiny module
 #'
 #' @description  A shiny Module to load a dataset.
+#' 
+#' @param id xxx
+#' @param path xxx
+#' @param mode xxx
+#' 
+# #' @example examples/test_load_workflow.R
+#' 
 #' @name Load_Dataset
 #' 
-#' @example examples/test_load_dataset.R
 NULL
 
-#' @param id xxx
+
 #' @rdname Load_Dataset
-#'
+#' @importFrom shinyFiles shinyDirButton
 #' @export
 #'
 mod_load_workflow_ui <- function(id) {
@@ -50,7 +56,7 @@ mod_load_workflow_ui <- function(id) {
 }
 
 
-#' @param id xxx
+
 #' @return xxxxx
 #'
 #' @rdname Load_Dataset

@@ -16,11 +16,6 @@ A string which contains the source code condensed
 \description{
 xxx
 }
-\examples{
-file <- system.file("extdata/module_examples", "mod_PipelineA_Process1.R", package = "MagellanNTK")
-CleanSourceCode(file)
-
-}
 \author{
 Samuel Wieczorek
 }

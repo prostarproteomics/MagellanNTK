@@ -7,11 +7,15 @@
 #' pipelines nor processes to be managed with `MagellanNTK`.
 #'
 #' @param id xxx
+#' @param dataIn xxx
 #' @param tl.layout Additional parameters for nav
 #' @param path The path to the directory where are the source code files 
 #' for processes and pipelines
+#' @param mode xxx
 #'
 #' @rdname example_workflow
+#' 
+#' @example examples/example_run_workflow.R
 #'
 #' @author Samuel Wieczorek
 #'
@@ -22,12 +26,12 @@
 #'
 #' @return NA
 #'
-#' @example examples/example_run_workflow.R
 #'
 run_workflow <- function(id,
-  dataIn = NULL,
-  tl.layout = NULL,
-  path = NULL) {
+                         dataIn = NULL,
+                         tl.layout = NULL,
+                         path = NULL,
+                         mode = 'user') {
   
     if (missing(id))
         stop("'id' is required.")
@@ -46,7 +50,12 @@ run_workflow <- function(id,
 
         
         output$debugInfos_ui <- renderUI({
-            req(rv.core$mode == 'dev')
+            req(mode == 'dev')
+          Debug_Infos_server(id = 'debug_infos',
+                             title = 'Infos from shiny app',
+                             rv.dataIn = reactive({rv$dataIn}),
+                             dataOut = reactive({rv$dataOut$dataOut()})
+          )
             Debug_Infos_ui("debug_infos")
         })
 
@@ -70,12 +79,7 @@ run_workflow <- function(id,
                 path = path
                 ))
 
-            Debug_Infos_server(
-                id = "debug_infos",
-                title = "Infos from shiny app",
-                rv.dataIn = reactive({dataIn}),
-                dataOut = reactive({dataOut()$dataOut()$value})
-            )
+            
         })
     }
 

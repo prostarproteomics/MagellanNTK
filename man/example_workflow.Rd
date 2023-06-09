@@ -4,15 +4,19 @@
 \alias{run_workflow}
 \title{Shiny example module `Process`}
 \usage{
-run_workflow(id, dataIn = NULL, tl.layout = NULL, path = NULL)
+run_workflow(id, dataIn = NULL, tl.layout = NULL, path = NULL, mode = "user")
 }
 \arguments{
 \item{id}{xxx}
+
+\item{dataIn}{xxx}
 
 \item{tl.layout}{Additional parameters for nav}
 
 \item{path}{The path to the directory where are the source code files 
 for processes and pipelines}
+
+\item{mode}{xxx}
 }
 \value{
 NA
@@ -28,11 +32,13 @@ if (interactive()) {
   data(data_na)
   
   path <- system.file("extdata/module_examples", package = "MagellanNTK")
-    run_workflow("PipelineA_Process1", dataIn = NULL, path = path)
+  
+  # Nothing happens whien dataIn is NULL
+  run_workflow("PipelineA_Process1", dataIn = NULL, path = path)
 
-    run_workflow("PipelineA", dataIn = data_na, path = path, tl.layout = c("v", "h"))
+  run_workflow("PipelineA", dataIn = data_na, path = path, tl.layout = c("v", "h"))
     
-    run_workflow("PipelineB", path = path, tl.layout = c("v", "h"))
+  run_workflow("PipelineB", path = path, tl.layout = c("v", "h"))
 }
 }
 \author{

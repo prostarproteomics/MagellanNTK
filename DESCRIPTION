@@ -20,6 +20,7 @@ Imports:
     shinyWidgets,
     shinyBS,
     shinyjs,
+    shinyFiles,
     sass,
     shinyjqui,
     stringi,
@@ -29,38 +30,26 @@ Imports:
 Collate: 
     AllGenerics.R
     config_class.R
-    mod_homepage.R
-    mod_insert_md.R
-    mod_loading_page.R
     doc-data.R
     global.R
     mod_load_workflow.R
-    mod_shinyTree.R
     load_code.R
-    bsmodal.R
     mod_default_plugins.R
-    popover_for_help.R
-    mod_bug_report.R
-    mod_format_DT.R
     utils.R
     check_funcs.R
-    export_Excel.R
     timeline_h.R
     timeline_v.R
     code_used_by_external_modules.R
     mod_debug_infos.R
     nav.R
-    mod_dl.R
     launch_app.R
     Save_dataset.R
     general_nav_funcs.R
     pipeline_funcs.R
-    mod_apModal.R
     process_funcs.R
     build_nav_ui.R
     load_save.R
     run_workflow.R
-    SHINY-MagellanNTK.R
 biocViews: Software, WorkflowStep
 Encoding: UTF-8
 RoxygenNote: 7.2.3

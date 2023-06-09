@@ -189,7 +189,7 @@ PipelineA_Process1_server <- function(id,
         uiOutput(ns('Step1_select1_ui')),
         uiOutput(ns('Step1_select2_ui')),
         uiOutput(ns('Step1_select3_ui')),
-        foo_ui(ns('foo')),
+        #foo_ui(ns('foo')),
         # Insert validation button
         uiOutput(ns('Step1_btn_validate_ui')),
         
@@ -204,11 +204,11 @@ PipelineA_Process1_server <- function(id,
     
     
     
-    rv.custom$foo <- foo_server('foo',
-      obj = reactive({rv$dataIn}),
-      reset = reactive({NULL}),
-      is.enabled = reactive({rv$steps.enabled['Step1']})
-    )
+    # rv.custom$foo <- foo_server('foo',
+    #   obj = reactive({rv$dataIn}),
+    #   reset = reactive({NULL}),
+    #   is.enabled = reactive({rv$steps.enabled['Step1']})
+    # )
     
     
     

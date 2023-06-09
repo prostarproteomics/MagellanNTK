@@ -15,8 +15,3 @@ NA
 \description{
 xxx
 }
-\examples{
-NA
-
-
-}

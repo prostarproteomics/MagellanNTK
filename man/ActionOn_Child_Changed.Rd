@@ -43,10 +43,6 @@ NA
 \description{
 # A process has changed
 }
-\examples{
-NULL
-
-}
 \author{
 Samuel Wieczorek
 }

@@ -8,8 +8,6 @@
 #'
 #' @return NA
 #'
-#' @examples
-#' NULL
 #' 
 #' @export
 #'
@@ -52,9 +50,6 @@ Found_Mod_Funcs <- function(id) {
 #'
 #' @author Samuel Wieczorek
 #'
-#' @examples
-#' file <- system.file("extdata/module_examples", "mod_PipelineA_Process1.R", package = "MagellanNTK")
-#' CleanSourceCode(file)
 #' 
 #' @export
 #'
@@ -91,11 +86,6 @@ CleanSourceCode <- function(file = NULL) {
 #'
 #' @param text xxx
 #' @param openPos A `integer`
-#'
-#' @examples
-#' text <- "myfunc <- function(a, b){ return (a+b)}"
-#' posParam <- 19
-#' FindClosingParenthesis(text, posParam)
 #'
 #' @return A `integer`
 #' 
@@ -136,12 +126,6 @@ FindClosingParenthesis <- function(text, openPos) {
 #'
 #' @author Samuel Wieczorek
 #'
-#' @examples
-#' f <- system.file("extdata/module_examples", "example_module_PipelineA_Process1.R",
-#'     package = "MagellanNTK"
-#' )
-#' CheckProcessCode(f)
-#' 
 #' @export
 #'
 CheckProcessCode <- function(sourcefile = NULL) {

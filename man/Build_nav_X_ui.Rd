@@ -15,6 +15,8 @@ Build_nav_h_ui(ns)
 }
 \arguments{
 \item{ns}{The namespace variable from the module that called this function.}
+
+\item{layout}{xxx}
 }
 \value{
 A shiny UI
@@ -22,10 +24,6 @@ A shiny UI
 \description{
 These functions display the timeline UI with a vertical nor 
 horizontal layout
-}
-\examples{
-NULL
-
 }
 \author{
 Samuel Wieczorek

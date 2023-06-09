@@ -21,16 +21,3 @@ xxx
 \description{
 Updates the status of steps in range
 }
-\examples{
-library(shinyjs)
-if (interactive()) {
-    ui <- shiny::fluidPage()
-    server <- function(input, output, session) {
-        rv <- reactiveValues(
-        steps.status = c(TRUE, TRUE, FALSE))
-        observe({ToggleState_Screens(FALSE, c(1,2), TRUE, rv)})
-         }
-    shiny::shinyApp(ui = ui, server = server)
-}
-
-}

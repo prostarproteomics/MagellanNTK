@@ -15,6 +15,8 @@ workflow).}
 \item{path}{A `character()` to indicate the directory where to find the source
 files of all workflows. This directory must also contains a 'md' directory
 that contains the md files corresponding to the workflows.}
+
+\item{recursive}{xxx}
 }
 \description{
 This function xx

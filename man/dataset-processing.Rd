@@ -50,7 +50,3 @@ object (of type list)
 The object must be of type list. Thetwo functions are implemented here for 
 of the package which uses MagellanNTK
 }
-\examples{
-NA
-
-}

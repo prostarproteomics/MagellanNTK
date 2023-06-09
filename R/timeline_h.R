@@ -2,9 +2,6 @@
 #'
 #' @description Shiny Modules to manage timelines.
 #' 
-#' @example examples/test_timeline_H.R
-#' @example examples/test_timeline_v.R
-#' 
 #' @name timelines
 NULL
 
@@ -33,19 +30,6 @@ timeline_h_ui <- function(id) {
 }
 
 
-#' @param id The `id` of the module,
-#' @param config A static `list` (not `reactiveList`) containing the same elements
-#' as the process module.
-#' @param status A `reactive vector` which contain the status (validated,
-#' skipped or undone) of each step of the process module. Its length is equal
-#' to the number of steps.
-#' @param position A `reactive integer` that reflects the position of the
-#' current (active) step.
-#' @param enabled A `reactive vector` of length the number of steps and which
-#' indicate whether the step is enabled or disabled.
-#'
-#' @return NA
-#'
 #' @rdname timelines
 #' 
 #' @export

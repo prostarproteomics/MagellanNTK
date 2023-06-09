@@ -31,6 +31,8 @@ default_export_server(id, object)
 \item{id}{xxxx}
 
 \item{path}{xxx}
+
+\item{object}{xxx}
 }
 \description{
 xx

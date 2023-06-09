@@ -1,4 +1,5 @@
-library(shiny)
+if(interactive()){
+  library(shiny)
 library(shinyWidgets)
 library(shinyjs)
 library(MagellanNTK)
@@ -11,12 +12,12 @@ ui <- fillPage(
     column(width=2, 
            actionButton("prevpos_v", icon("arrow-up")),
            actionButton("nextpos_v", icon("arrow-down")),
-           mod_timeline_v_ui('TLv')
+           timeline_v_ui('TLv')
            ),
     column(width=10,
            style=" padding-left: 60px;",
            tagList(
-             mod_timeline_h_ui('TLh'),
+             timeline_h_ui('TLh'),
              actionButton("prevpos_h", icon("arrow-left")),
              actionButton("nextpos_h", icon("arrow-right"))
              )
@@ -36,11 +37,12 @@ server <- function(input, output){
   )
   
   config_h <- config_v <- Config(
-    name = 'Process X',
+    fullname = 'Process1',
     mode = 'process',
-    steps = c('Description', 'Step 1', 'Step 2', 'Save'),
-    mandatory = c(TRUE, FALSE, TRUE, TRUE),
-    path = system.file('extdata/module_examples', package='MagellanNTK')
+    steps = c('Step 1', 'Step 2'),
+    mandatory = c(TRUE, TRUE),
+    steps.source.file = system.file('extdata/workflow/PipelineA/R/PipelineA_Process1.R', 
+                                    package='MagellanNTK')
   )
 
   rv_v <- reactiveValues(
@@ -71,14 +73,14 @@ server <- function(input, output){
   })
   
   
-  mod_timeline_v_server(id = 'TLv',
+  timeline_v_server(id = 'TLv',
     config = config_v,
     status = reactive({rv_v$status}),
     position = reactive({rv_v$current.pos}),
     enabled = reactive({rv_v$tl.tags.enabled})
     )
   
-  mod_timeline_h_server(id = 'TLh',
+  timeline_h_server(id = 'TLh',
     config = config_h,
     status = reactive({rv_h$status}),
     position = reactive({rv_h$current.pos}),
@@ -89,3 +91,5 @@ server <- function(input, output){
 
 
 shinyApp(ui, server)
+
+}

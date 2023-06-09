@@ -5,18 +5,27 @@
 #' 
 #' @name Debug_Infos
 #' 
-#' @examples 
-#' #'
-#' @examples examples/test_mod_debug_infos.R
+#' @param id xxx
+#' @param title The title of the Panel which contains the debugging tables
+#' @param config An instance of the class `Config`
+#' @param rv.dataIn xxx
+#' @param dataIn A `list()` of data.frames
+#' @param dataOut A `list()` of data.frames
+#' @param steps.enabled A `logical()` xxxx
+#' @param steps.status A `logical()` xxxx
+#' @param steps.skipped A `logical()` xxxx
+#' @param current.pos A `integer(1)` which is the indice of the active step.
+#' @param is.enabled A `logical(1)` xxxx
+#'
+#' @example examples/test_mod_debug_infos.R
 #' 
+#' @author Samuel Wieczorek
 NULL
 
 
 
-#' @param id xxx
-#'
+
 #' @rdname Debug_Infos
-#' 
 #' @export
 #'
 Debug_Infos_ui <- function(id) {
@@ -32,18 +41,7 @@ Debug_Infos_ui <- function(id) {
 }
 
 
-#' @param id xxx
-#' @param title The title of the Panel which contains the debugging tables
-#' @param config An instance of the class `Config`
-#' @param rv.dataIn xxx
-#' @param dataIn A `list()` of data.frames
-#' @param dataOut A `list()` of data.frames
-#' @param steps.enabled A `logical()` xxxx
-#' @param steps.status A `logical()` xxxx
-#' @param steps.skipped A `logical()` xxxx
-#' @param current.pos A `integer(1)` which is the indice of the active step.
-#' @param is.enabled A `logical(1)` xxxx
-#'
+
 #' @return NA
 #' 
 #' @export

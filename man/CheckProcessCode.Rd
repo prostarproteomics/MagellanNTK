@@ -22,13 +22,6 @@ xxxx
 xxx
 xxxx
 }
-\examples{
-f <- system.file("extdata/module_examples", "example_module_PipelineA_Process1.R",
-    package = "MagellanNTK"
-)
-CheckProcessCode(f)
-
-}
 \author{
 Samuel Wieczorek
 }

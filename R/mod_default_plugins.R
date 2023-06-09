@@ -5,6 +5,8 @@
 #' 
 #' @param id xxxx
 #' @param path xxx
+#' @param object xxx
+#' 
 #' 
 #' @name default_plugin
 #' 

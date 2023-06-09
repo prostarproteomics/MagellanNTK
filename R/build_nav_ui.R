@@ -9,11 +9,12 @@
 #'
 #' @author Samuel Wieczorek
 #' 
-#' @name Build_nav_X_ui
-#' 
+#' @param layout xxx
 #' @param ns The namespace variable from the module that called this function.
 #' 
-#' @examples NULL
+#' @name Build_nav_X_ui
+#' 
+#' 
 #' 
 NULL
 

@@ -48,6 +48,10 @@ steps of the module.}
 
 \item{rv.custom.names}{xxx}
 
+\item{mode}{xxx}
+
+\item{name}{xxx}
+
 \item{w.names}{xxx}
 }
 \value{
@@ -114,42 +118,10 @@ This function xxx
 This function xxx
 # Generate dynamically the observeEvent function for each widget
 
-This function xxx
-# Generate dynamically the observeEvent function for each widget
+This function generates dynamically the observeEvent function for each widget
 
 This function xxx
-# Generate dynamically the observeEvent function for each widget
-}
-\examples{
-Get_Code_Update_Config_Variable()
-
-widgets <- paste0("widget", 1:3)
-Get_Code_Declare_widgets(widgets)
-
-custom <- list(foo1 = list(), foo2 = 3)
-Get_Code_Declare_rv_custom(names(custom))
-
-widgets <- paste0("widget", 1:3)
-Get_Code_for_ObserveEvent_widgets(widgets)
-
-Get_Code_for_rv_reactiveValues()
-
-Get_Code_for_dataOut()
-
-Get_Code_for_General_observeEvents()
-
-Module_Return_Func()
-
-id <- 'PipelineA_Process1'
-widgets <- c('widget1', 'widget2')
-custom <- list(foo1 = list(), foo2 = 3)
-Get_Workflow_Core_Code('process', id, widgets, names(custom))
-
-widgets <- c('widget1', 'widget2')
-Get_AdditionalModule_Core_Code(widgets)
-
-Get_Code_for_AddMod_observeEvents()
-
+Generate dynamically the observeEvent function for each widget
 }
 \author{
 Samuel Wieczorek

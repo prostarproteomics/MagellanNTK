@@ -3,12 +3,11 @@
 #' @description The module navigation can be launched via a Shiny app. 
 #' This is the core module of MagellanNTK
 #'
-#' 
+#'
+# #' @example examples/example_nav_module.R 
 #' @name nav
 #' 
 #' @author Samuel Wieczorek
-#' 
-#' @example examples/example_nav_module.R
 #'
 NULL
 

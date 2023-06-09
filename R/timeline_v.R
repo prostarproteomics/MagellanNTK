@@ -1,13 +1,36 @@
 
-#'
+#' @title xxxx
+#' @description xxxx
+#' 
+#' 
 #' @param id The `id` of the server
+#' @param config A static `list` (not `reactiveList`) containing the same 
+#' elements as the process module.
+#' @param status A `reactive vector` which contain the status (validated,
+#' skipped or undone) of each step of the process module. Its length is equal
+#' to the number of steps.
+#' @param position A `reactive integer` that reflects the position of the
+#' current (active) step.
+#' @param enabled A `reactive vector` of length the number of steps and which
+#' indicate whether the step is enabled or disabled.
+#'
+#' @return NA
+#'
+#' @name timelines
+#' 
+#' @author Samuel Wieczorek
+#' 
+# #' @example examples/test_both_timelines.R
+# #' @example examples/test_timeline_H.R
+# #' @example examples/test_timeline_v.R
+#' 
+NULL
+
 #'
 #' @importFrom shiny NS tagList
 #'
 #' @rdname timelines
 #'
-#' @author Samuel Wieczorek
-#' 
 #' @export
 #'
 timeline_v_ui <- function(id) {
@@ -24,31 +47,15 @@ timeline_v_ui <- function(id) {
 }
 
 
-#' @param id The `id` of the server
-#' @param config A static `list` (not `reactiveList`) containing the same 
-#' elements as the process module.
-#' @param status A `reactive vector` which contain the status (validated,
-#' skipped or undone) of each step of the process module. Its length is equal
-#' to the number of steps.
-#' @param position A `reactive integer` that reflects the position of the
-#' current (active) step.
-#' @param enabled A `reactive vector` of length the number of steps and which
-#' indicate whether the step is enabled or disabled.
-#'
-#' @return NA
-#'
-#'
+
 #' @rdname timelines
-#'
-#' @author Samuel Wieczorek
-#' 
 #' @export
 #'
 timeline_v_server <- function(id,
-    config,
-    status,
-    position,
-    enabled) {
+                              config,
+                              status,
+                              position,
+                              enabled) {
 
     # Define colors for the different status of steps
     colCompletedDisabled <- "#ABDBAC"

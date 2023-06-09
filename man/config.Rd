@@ -5,11 +5,23 @@
 \alias{initialize,Config-method}
 \title{Config class definition}
 \usage{
-xxx
+Config(
+  fullname = "",
+  mode = "",
+  steps = "",
+  mandatory = "",
+  steps.source.file = NULL
+)
 
-\S4method{initialize}{Config}(.Object, fullname, mode, steps, mandatory)
+\S4method{initialize}{Config}(.Object, fullname, mode, steps, mandatory, steps.source.file)
 
-Config(fullname = "", mode = "", steps = "", mandatory = "")
+Config(
+  fullname = "",
+  mode = "",
+  steps = "",
+  mandatory = "",
+  steps.source.file = NULL
+)
 }
 \arguments{
 \item{fullname}{xxx}
@@ -20,9 +32,9 @@ Config(fullname = "", mode = "", steps = "", mandatory = "")
 
 \item{mandatory}{xxx}
 
-\item{.Object}{xxx}
+\item{steps.source.file}{xxx}
 
-\item{object}{xxx}
+\item{.Object}{xxx}
 }
 \description{
 This class is used to store the configuration of any process

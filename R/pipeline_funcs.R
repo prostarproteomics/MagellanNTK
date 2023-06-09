@@ -28,8 +28,6 @@
 #'
 #' @return NA
 #' 
-#' @examples 
-#' NULL
 #'
 ActionOn_Child_Changed <- function(temp.dataIn,
                                    dataIn,
@@ -113,8 +111,6 @@ ActionOn_Child_Changed <- function(temp.dataIn,
 #' @export
 #'
 #' @return NA
-#' 
-#' @examples NA
 #'
 GetValuesFromChildren <- function(config, tmp.return) {
   
@@ -153,8 +149,6 @@ GetValuesFromChildren <- function(config, tmp.return) {
 #' @export
 #'
 #' @return NA
-#' 
-#' @examples NULL
 #'
 ResetChildren <- function(range, resetChildren) {
     
@@ -173,8 +167,6 @@ ResetChildren <- function(range, resetChildren) {
 #' @export
 #'
 #' @return NA
-#' 
-#' @examples NA
 #'
 #'
 Update_Data2send_Vector <- function(rv) {
@@ -205,8 +197,6 @@ Update_Data2send_Vector <- function(rv) {
 #' @export
 #'
 #' @return NA
-#' 
-#' @examples NULL
 #'
 PrepareData2Send <- function(rv, pos, mode) {
     # Returns NULL to all modules except the one pointed by the current position

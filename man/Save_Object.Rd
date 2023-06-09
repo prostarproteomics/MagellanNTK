@@ -17,9 +17,3 @@ NA
 \description{
 This function saves an R object to a '.rda' file.
 }
-\examples{
-data(data1)
-Save_Object(data1, 'foo.rda')
-unlink('foo.rda')
-
-}

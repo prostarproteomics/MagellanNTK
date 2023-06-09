@@ -19,7 +19,3 @@ NA
 \description{
 xxx
 }
-\examples{
-NULL
-
-}

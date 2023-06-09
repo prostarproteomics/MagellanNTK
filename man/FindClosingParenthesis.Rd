@@ -17,9 +17,3 @@ A `integer`
 \description{
 xxx
 }
-\examples{
-text <- "myfunc <- function(a, b){ return (a+b)}"
-posParam <- 19
-FindClosingParenthesis(text, posParam)
-
-}

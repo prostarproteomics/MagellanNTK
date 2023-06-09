@@ -71,7 +71,33 @@ A shiny Module which shows the values of the datasets variables
 along the different processes of a process nor pipeline.
 }
 \examples{
-#'
-examples/test_mod_debug_infos.R
+if(interactive()){
+  library(shiny)
 
+ui <- fluidPage(
+        Debug_Infos_ui("tbl")
+    )
+ 
+
+server <- function(input, output) {
+      data(data_na)
+      
+      #dataset <- NULL
+      dataset <- data_na
+      
+      
+      Debug_Infos_server(
+        id = "tbl",
+        title = "Infos from shiny app",
+        rv.dataIn = reactive({dataset}),
+        dataOut = reactive({NULL})
+      )
+}
+
+
+  shinyApp(ui, server)
+}
+}
+\author{
+Samuel Wieczorek
 }
