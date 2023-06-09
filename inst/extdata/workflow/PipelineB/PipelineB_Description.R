@@ -28,8 +28,7 @@ PipelineB_Description_server <- function(id,
     steps.enabled = reactive({NULL}),
     remoteReset = reactive({FALSE}),
     steps.status = reactive({NULL}),
-    current.pos = reactive({1}),
-    path = NULL
+    current.pos = reactive({1})
 ){
   
   
@@ -67,7 +66,9 @@ PipelineB_Description_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      file <- paste0(path, '/md/', name, '.md')
+      md.file <- paste0(id, '.md')
+      path <- system.file('extdata/workflow/PipelineB/md', package='MagellanNTK')
+      file <- file.path(path, md.file)
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

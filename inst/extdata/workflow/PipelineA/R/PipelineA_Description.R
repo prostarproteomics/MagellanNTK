@@ -26,9 +26,8 @@ PipelineA_Description_server <- function(id,
     steps.enabled = reactive({NULL}),
     remoteReset = reactive({FALSE}),
     steps.status = reactive({NULL}),
-    current.pos = reactive({1}),
-    path = NULL
-){
+    current.pos = reactive({1})
+    ){
   
   
   
@@ -60,7 +59,8 @@ PipelineA_Description_server <- function(id,
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      file <- file.path('md', md.file)
+      path <- system.file('extdata/workflow/PipelineA/md', package='DaparToolshed')
+      file <- file.path(path, md.file)
       tagList(
         if (file.exists(file))
           includeMarkdown(file)

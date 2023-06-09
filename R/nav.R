@@ -57,8 +57,6 @@ nav_ui <- function(id) {
 #' where each item correspond to the orientation of the timeline for a given
 #' level of navigation module.
 #' 
-#' @param path xxx
-#' 
 #' @param mode Defaul
 #'
 #' @return A list of four items:
@@ -79,7 +77,6 @@ nav_server <- function(id,
     remoteReset = reactive({FALSE}),
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
-    path = NULL,
     mode = reactive({'user'})
     ) {
 
@@ -188,8 +185,7 @@ nav_server <- function(id,
                         steps.enabled = reactive({rv$steps.enabled}),
                         remoteReset = reactive({input$rstBtn + remoteReset()}),
                         steps.status = reactive({rv$steps.status}),
-                        current.pos = reactive({rv$current.pos}),
-                        path = path
+                        current.pos = reactive({rv$current.pos})
                         )
                     )
 
@@ -302,9 +298,8 @@ nav_server <- function(id,
                              is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                              remoteReset = reactive({rv$resetChildren[x]}),
                              is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                             tl.layout = rv$tl.layout[-1],
-                             path = path
-                           )
+                             tl.layout = rv$tl.layout[-1]
+                             )
                          })
                          
                          

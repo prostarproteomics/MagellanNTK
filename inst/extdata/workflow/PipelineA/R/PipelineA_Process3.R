@@ -69,8 +69,7 @@ PipelineA_Process3_server <- function(id,
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
-  current.pos = reactive({1}),
-  path = NULL
+  current.pos = reactive({1})
 ){
   
   # Define default selected values for widgets
@@ -111,7 +110,9 @@ PipelineA_Process3_server <- function(id,
     
     
     output$Description <- renderUI({
-      file <- paste0(config@path, '/md/', id, '.md')
+      md.file <- paste0(id, '.md')
+      path <- system.file('extdata/workflow/PipelineA/md', package='MagellanNTK')
+      file <- file.path(path, md.file)
       
       tagList(
         # In this example, the md file is found in the module_examples directory

@@ -30,7 +30,6 @@
 run_workflow <- function(id,
                          dataIn = NULL,
                          tl.layout = NULL,
-                         path = NULL,
                          mode = 'user') {
   
     if (missing(id))
@@ -72,12 +71,12 @@ run_workflow <- function(id,
         })
 
         observeEvent(dataIn, {
-            dataOut(nav_server(
-                id = id,
-                dataIn = reactive({dataIn}),
-                tl.layout = tl.layout,
-                path = path
-                ))
+            dataOut(
+              nav_server(id = id,
+                         dataIn = reactive({dataIn}),
+                         tl.layout = tl.layout
+                         )
+              )
 
             
         })

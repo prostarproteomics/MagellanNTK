@@ -74,8 +74,7 @@ PipelineB_Process1_server <- function(id,
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
-  current.pos = reactive({1}),
-  path = NULL
+  current.pos = reactive({1})
   ){
 
   
@@ -125,7 +124,9 @@ PipelineB_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
-      file <- paste0(config@path, '/', id, '.md')
+      md.file <- paste0(id, '.md')
+      path <- system.file('extdata/workflow/PipelineB/md', package='MagellanNTK')
+      file <- file.path(path, md.file)
       
       tagList(
         # In this example, the md file is found in the extdata/module_examples directory

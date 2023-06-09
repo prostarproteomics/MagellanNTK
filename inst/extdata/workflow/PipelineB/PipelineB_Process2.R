@@ -70,8 +70,7 @@ PipelineB_Process2_server <- function(id,
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
   steps.status = reactive({NULL}),
-  current.pos = reactive({1}),
-  path = NULL
+  current.pos = reactive({1})
 ){
 
   # Define default selected values for widgets
@@ -110,7 +109,9 @@ PipelineB_Process2_server <- function(id,
     
     
     output$Description <- renderUI({
-      file <- paste0(config@path, '/', name, '.md')
+      md.file <- paste0(id, '.md')
+      path <- system.file('extdata/workflow/PipelineB/md', package='MagellanNTK')
+      file <- file.path(path, md.file)
       tagList(
         # In this example, the md file is found in the extdata/module_examples directory
         # but with a real app, it should be provided by the package which
