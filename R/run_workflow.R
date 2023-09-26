@@ -9,8 +9,6 @@
 #' @param id xxx
 #' @param dataIn xxx
 #' @param tl.layout Additional parameters for nav
-#' @param path The path to the directory where are the source code files 
-#' for processes and pipelines
 #' @param mode xxx
 #'
 #' @rdname example_workflow

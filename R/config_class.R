@@ -19,7 +19,6 @@
 #'  * Description pipeline: This case is for a process -called 'Description' which is 
 #'  the first process module of a pipeline
 #'
-#' @name Config
 #' 
 #' @slot fullname xxxx
 #' @slot name xxx
@@ -32,9 +31,10 @@
 #' 
 #' @example examples/example_config_class.R
 #'
-#' @rdname Config
+#' @name Config-class
+#' @rdname Config-class
 #' @export Config
-#' @exportClass Config
+#' 
 Config <- setClass("Config",
     representation(
       fullname = "character",
@@ -310,16 +310,18 @@ setMethod("show", 'Config',
 )
 
 #' @title Initialization method for the class `Config`
-#' @rdname Config
+#' 
+#' @param .Object xxx
+#' @param fullname xxx
+#' @param mode xxx
+#' @param steps xxx
+#' @param mandatory xxx
+#' @param steps.source.file xxx
+#' 
+#' @rdname Config-class
 #' 
 setMethod("initialize" ,
     "Config" ,
-    #' @param .Object xxx
-    #' @param fullname xxx
-    #' @param mode xxx
-    #' @param steps xxx
-    #' @param mandatory xxx
-    #' @param steps.source.file xxx
     function(.Object,
              fullname,
              mode,
@@ -376,12 +378,13 @@ setMethod("initialize" ,
 #' 
 #' @description Wrapper function to the constructor of the class
 #' 
-#' @rdname Config
+#' @rdname Config-class
 #' 
 #' @param fullname xxx
 #' @param mode xxx
 #' @param steps xxx
 #' @param mandatory xxx
+#' @param steps.source.file xxx
 #' 
 Config <- function(fullname = '', 
                    mode = '',

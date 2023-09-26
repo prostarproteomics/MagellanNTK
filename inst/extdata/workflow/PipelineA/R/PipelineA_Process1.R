@@ -86,6 +86,7 @@ PipelineA_Process1_server <- function(id,
     Step1_select1 = 1,
     Step1_select2 = NULL,
     Step1_select3 = 1,
+    Step1_radio1 = NULL,
     Step1_btn1 = NULL,
     Step2_select1 = 1,
     Step2_select2 = 1
@@ -189,6 +190,7 @@ PipelineA_Process1_server <- function(id,
         uiOutput(ns('Step1_select1_ui')),
         uiOutput(ns('Step1_select2_ui')),
         uiOutput(ns('Step1_select3_ui')),
+        uiOutput(ns('Step1_radio1_ui')),
         #foo_ui(ns('foo')),
         # Insert validation button
         uiOutput(ns('Step1_btn_validate_ui')),
@@ -249,7 +251,13 @@ PipelineA_Process1_server <- function(id,
       toggleWidget(widget, rv$steps.enabled['Step1'])
     })
     
-    
+    output$Step1_radio1_ui <- renderUI({
+      widget <- radioButtons(ns('Step1_radio1'), 'Radio 1 in renderUI',
+                            c("choice 1" = "choice1", "choice 2" = "choice2"),
+                            selected = rv.widgets$Step1_radio1
+                            )
+      toggleWidget(widget, rv$steps.enabled['Step1'])
+    })
     
     output$Step1_btn_validate_ui <- renderUI({
       widget <-  actionButton(ns("Step1_btn_validate"),
@@ -272,13 +280,14 @@ PipelineA_Process1_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- global$VALIDATED
+
     })
     
     
-    output$showPlot <- renderPlot({
-      req(rv$dataIn)
-      plot(as.matrix(rv$dataIn[[1]][,1]))
-    })
+    # output$showPlot <- renderPlot({
+    #   req(rv$dataIn)
+    #   plot(as.matrix(rv$dataIn[[1]][,1]))
+    # })
     # <<< END ------------- Code for step 1 UI---------------
     
     

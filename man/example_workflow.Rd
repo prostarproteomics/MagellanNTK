@@ -4,7 +4,7 @@
 \alias{run_workflow}
 \title{Shiny example module `Process`}
 \usage{
-run_workflow(id, dataIn = NULL, tl.layout = NULL, path = NULL, mode = "user")
+run_workflow(id, dataIn = NULL, tl.layout = NULL, mode = "user")
 }
 \arguments{
 \item{id}{xxx}
@@ -12,9 +12,6 @@ run_workflow(id, dataIn = NULL, tl.layout = NULL, path = NULL, mode = "user")
 \item{dataIn}{xxx}
 
 \item{tl.layout}{Additional parameters for nav}
-
-\item{path}{The path to the directory where are the source code files 
-for processes and pipelines}
 
 \item{mode}{xxx}
 }
@@ -31,14 +28,21 @@ pipelines nor processes to be managed with `MagellanNTK`.
 if (interactive()) {
   data(data_na)
   
-  path <- system.file("extdata/module_examples", package = "MagellanNTK")
-  
-  # Nothing happens whien dataIn is NULL
-  run_workflow("PipelineA_Process1", dataIn = NULL, path = path)
+  path <- system.file("extdata/workflow", package = "MagellanNTK")
+  files <- list.files(file.path(path, 'R'), full.names = TRUE)
+    for(f in files)
+      source(f, local = FALSE, chdir = TRUE)
 
-  run_workflow("PipelineA", dataIn = data_na, path = path, tl.layout = c("v", "h"))
+  # Nothing happens when dataIn is NULL
+  run_workflow("PipelineA_Process1", dataIn = NULL)
+  
+  run_workflow("PipelineA_Process1", dataIn = data_na)
+
+  run_workflow("PipelineA_Process1", dataIn = data.frame())
+  
+  run_workflow("PipelineA", dataIn = data_na, tl.layout = c("v", "h"))
     
-  run_workflow("PipelineB", path = path, tl.layout = c("v", "h"))
+  run_workflow("PipelineB", tl.layout = c("v", "h"))
 }
 }
 \author{

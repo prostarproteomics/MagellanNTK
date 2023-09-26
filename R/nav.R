@@ -3,8 +3,39 @@
 #' @description The module navigation can be launched via a Shiny app. 
 #' This is the core module of MagellanNTK
 #'
+#' @param id A `character(1)` which defines the id of the module. It is the same
+#' as for the ui() function.
 #'
-# #' @example examples/example_nav_module.R 
+#' @param dataIn The dataset
+#'
+#' @param is.enabled A `boolean`. This variable is a remote command to specify
+#' if the corresponding module is enabled/disabled in the calling module of
+#' upper level.
+#' For example, if this module is part of a pipeline and the pipeline calculates
+#' that it is disabled (i.e. skipped), then this variable is set to TRUE. Then,
+#' all the widgets will be disabled. If not, the enabling/disabling of widgets
+#' is deciding by this module.
+#'
+#' @param remoteReset It is a remote command to reset the module. A boolen that
+#' indicates is the pipeline has been reseted by a program of higher level
+#' Basically, it is the program which has called this module
+#'
+#' @param is.skipped xxx
+#'
+#' @param tl.layout A vector of character ('h' for horizontal, 'v' for vertical)
+#' where each item correspond to the orientation of the timeline for a given
+#' level of navigation module.
+#' 
+#' @param mode Default
+#'
+#' @return A list of four items:
+#' * dataOut A dataset of the same class of the parameter dataIn
+#' * steps.enabled A vector of `boolean` of the same length than config@steps
+#' * status A vector of `integer(1)` of the same length than the config@steps
+#'   vector
+#' * reset xxxx
+#'
+#' @example examples/example_nav_module.R 
 #' @name nav
 #' 
 #' @author Samuel Wieczorek
@@ -34,37 +65,7 @@ nav_ui <- function(id) {
 }
 
 
-#' @param id A `character(1)` which defines the id of the module. It is the same
-#' as for the ui() function.
-#'
-#' @param dataIn The dataset
-#'
-#' @param is.enabled A `boolean`. This variable is a remote command to specify
-#' if the corresponding module is enabled/disabled in the calling module of
-#' upper level.
-#' For example, if this module is part of a pipeline and the pipeline calculates
-#' that it is disabled (i.e. skipped), then this variable is set to TRUE. Then,
-#' all the widgets will be disabled. If not, the enabling/disabling of widgets
-#' is deciding by this module.
-#'
-#' @param remoteReset It is a remote command to reset the module. A boolen that
-#' indicates is the pipeline has been reseted by a program of higher level
-#' Basically, it is the program which has called this module
-#'
-#' @param is.skipped xxx
-#'
-#' @param tl.layout A vector of character ('h' for horizontal, 'v' for vertical)
-#' where each item correspond to the orientation of the timeline for a given
-#' level of navigation module.
-#' 
-#' @param mode Defaul
-#'
-#' @return A list of four items:
-#' * dataOut A dataset of the same class of the parameter dataIn
-#' * steps.enabled A vector of `boolean` of the same length than config@steps
-#' * status A vector of `integer(1)` of the same length than the config@steps
-#'   vector
-#' * reset xxxx
+
 #'
 #' @export
 #'
