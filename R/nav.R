@@ -35,7 +35,7 @@
 #'   vector
 #' * reset xxxx
 #'
-#' @example examples/example_nav_module.R 
+#' @example inst/extdata/funcs_examples/example_nav_module.R 
 #' @name nav
 #' 
 #' @author Samuel Wieczorek

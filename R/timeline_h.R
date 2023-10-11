@@ -1,10 +1,3 @@
-#' @title Timelines modules
-#'
-#' @description Shiny Modules to manage timelines.
-#' 
-#' @name timelines
-NULL
-
 
 #'
 #' @rdname timelines
@@ -35,10 +28,10 @@ timeline_h_ui <- function(id) {
 #' @export
 #'
 timeline_h_server <- function(id,
-    config,
-    status,
-    position,
-    enabled) {
+                              config,
+                              status,
+                              position,
+                              enabled) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 

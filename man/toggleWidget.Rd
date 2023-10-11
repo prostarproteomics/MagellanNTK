@@ -7,7 +7,7 @@
 toggleWidget(widget, condition)
 }
 \arguments{
-\item{widget}{A `Shiny` widget}
+\item{widget}{The id of a `Shiny` widget}
 
 \item{condition}{A `logical(1)` to hide/show the widget.}
 }

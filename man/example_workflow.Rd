@@ -28,10 +28,10 @@ pipelines nor processes to be managed with `MagellanNTK`.
 if (interactive()) {
   data(data_na)
   
-  path <- system.file("extdata/workflow", package = "MagellanNTK")
+  path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
   files <- list.files(file.path(path, 'R'), full.names = TRUE)
-    for(f in files)
-      source(f, local = FALSE, chdir = TRUE)
+  for(f in files)
+    source(f, local = FALSE, chdir = TRUE)
 
   # Nothing happens when dataIn is NULL
   run_workflow("PipelineA_Process1", dataIn = NULL)

@@ -1,13 +1,18 @@
 
 
-#' @title xxx
-#' @description xxx
-#' @param base_name xxx
+#' @title Checks if a Shiny module exists
+#' @description This function checks if the ui() and server() parts of a 
+#' Shiny module are available in the global environment.
+#' @param base_name The name of the module (without '_ui' nor '_server' suffixes)
+#' 
+#' @return A boolean
 #' @export
 #'
 module.exists <- function(base_name){
-  server.exists <- exists(paste0(base_name, '_server'), envir = .GlobalEnv, mode = "function")
-  ui.exists <- exists(paste0(base_name, '_ui'), envir = .GlobalEnv, mode = "function")
+  server.exists <- exists(paste0(base_name, '_server'), 
+                          envir = .GlobalEnv, mode = "function")
+  ui.exists <- exists(paste0(base_name, '_ui'), 
+                      envir = .GlobalEnv, mode = "function")
   
   return(server.exists && ui.exists)
 }
@@ -58,7 +63,7 @@ CheckWorkflowDir <- function(path){
   # Checks the correspondance between files in 'R' and 'md' directories
   files.R <- list.files(file.path(path, 'R/workflows'))
   files.md <- list.files(file.path(path, 'md'))
- browser()
+
   # Remove the definition of root pipelines which does not have a 
   # corresponding md file (their description is contained in a separate file)
   files.R <- files.R[grepl('_', files.R)]
@@ -90,7 +95,7 @@ CheckWorkflowDir <- function(path){
 #' @description
 #' Wrapper for the toggleWidget function of the package `shinyjs`
 #'
-#' @param widget A `Shiny` widget
+#' @param widget The id of a `Shiny` widget
 #' @param condition A `logical(1)` to hide/show the widget.
 #'
 #' @return NA
@@ -103,11 +108,10 @@ CheckWorkflowDir <- function(path){
 toggleWidget <- function(widget, condition) {
     tagList(
         shinyjs::useShinyjs(),
-        if (isTRUE(condition)) {
+        if (isTRUE(condition))
             widget
-        } else {
+        else
             shinyjs::disabled(widget)
-        }
     )
 }
 
@@ -123,9 +127,9 @@ toggleWidget <- function(widget, condition) {
 #' @return A `integer()`.
 #' @export
 #'
-Timestamp <- function() {
+Timestamp <- function()
     as.numeric(Sys.time())
-}
+
 
 
 
@@ -180,27 +184,25 @@ NULL
 
 #' @exportMethod Keep_Datasets_from_Object
 #' @rdname dataset-processing
-setMethod(
-    "Keep_Datasets_from_Object",
-    "NULL",
+setMethod("Keep_Datasets_from_Object", "NULL",
     function(object, range) {
         return()
     }
 )
 
 #' @rdname dataset-processing
-setMethod(
-    "Keep_Datasets_from_Object",
-    "list",
+setMethod("Keep_Datasets_from_Object", "list",
     function(object, range) {
-        if (missing(range)) {
+        if (missing(range))
             stop("Provide range of array to be processed")
-        }
+
         if (is.null(object)) {
             return()
         }
 
-        if (is.numeric(range)) range <- names(object)[range]
+        if (is.numeric(range)) 
+          range <- names(object)[range]
+        
         object[range]
     }
 )
@@ -227,9 +229,7 @@ setMethod(
 #' @exportMethod Add_Datasets_to_Object
 #'
 #' @rdname dataset-processing
-setMethod(
-    "Add_Datasets_to_Object",
-    "NULL",
+setMethod("Add_Datasets_to_Object", "NULL",
     function(object, dataset, name) {
         return()
     }
@@ -237,15 +237,12 @@ setMethod(
 
 
 #' @rdname dataset-processing
-setMethod(
-    "Add_Datasets_to_Object",
-    "list",
+setMethod( "Add_Datasets_to_Object", "list",
     function(object, dataset, name) {
-        if (is.null(object)) {
+        if (is.null(object))
             setNames(list(dataset), nm = name)
-        } else {
+        else
             append(object, setNames(list(dataset), nm = name))
-        }
     }
 )
 

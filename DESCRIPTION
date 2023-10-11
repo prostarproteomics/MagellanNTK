@@ -10,7 +10,7 @@ Description: MagellanNTK (Magellan Navigation ToolKit) is a collection of Shiny 
     pipelines compliant with MagellanNTK such as MSPipelines and Prostar. It can 
     handle lists of objects and manage a hierarchy of levels.
 License: Artistic-2.0
-Depends: R (>= 4.2.0)
+Depends: R (>= 4.3.0)
 Imports: 
     S4Vectors,
     methods,

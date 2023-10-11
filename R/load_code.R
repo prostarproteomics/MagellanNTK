@@ -13,7 +13,7 @@
 #' 
 #' @export
 #' 
-#' @example examples/test_load_code.R
+#' @example inst/extdata/funcs_examples/test_load_code.R
 #' 
 
 LoadCode <- function(name, path, recursive = FALSE){

@@ -1,5 +1,5 @@
 
-#' @title xxxx
+#' @title Timelines for the processes manager
 #' @description xxxx
 #' 
 #' 
@@ -14,7 +14,7 @@
 #' @param enabled A `reactive vector` of length the number of steps and which
 #' indicate whether the step is enabled or disabled.
 #'
-#' @return NA
+#' @return A Shiny module
 #'
 #' @name timelines
 #' 

@@ -1,19 +1,320 @@
 ---
-title: "Magellan"
-output: rmarkdown::html_vignette
+title: "MagellanNTK user manual"
+author: 
+- name: Samuel Wieczorek
+- name: Thomas Burger
+package: MagellanNTK
+abstract: >
+    The R package `MagellanNTK` (Magellan Navigation ToolKit) is a workflow 
+    manager, based on Shiny modules.
+    It has been developed with genericity in mind so as to handle generic datasets
+    formats.
+    This document covers the functionalities available in `r BiocStyle::pkg_ver('MagellanNTK')`.
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+    toc: true
+    highlight: tango
+    number_sections: yes
+    toc_depth: 2
+    theme: united
+    keep_md: true
+    papersize: a4
 vignette: >
-  %\VignetteIndexEntry{Magellan}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{MagellanNTK user Manual}
+    %\VignetteEngine{knitr::rmarkdown}
+    %%\VignetteKeywords{Softmware, Mass Spectrometry, Quantitative, process manager}
+    %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+\newcommand{\shellcmd}[1]{\\\indent\indent\texttt{\footnotesize\# #1}}
+
+\newcommand{\Rcmd}[1]{\\\indent\indent\texttt{\footnotesize\# #1}}
+
+\newcommand{\bordurefigure}[1]{\fbox{\includegraphics{#1}}}
+
+
+
+# Introduction
+
+
+This package contains functions that consist in core engine. 
+
+This document covers the use of the interface from the user point of view. Please
+note that, as a Shiny module, MagellanNTK can be run standalone or embebbed in 
+another Shiny module, as it is the case with `Prostar`.
+
+
+In order to have a more complete view of how MagellanNTK works or if you 
+intent to develop workflows or pipelines for MagellanNTK, it is advised to
+see the xxx.
+
+One key feature of the engine provided by `MagellanNTK` is its flexibility
+
+
+# Installation
+
+The installation is quite simple as it is sufficient to install the package. 
+This is explicitly needed only if one want to launch the workflow manager in a
+standalone mode.
+
+To install this package, start R (version "4.3") and enter:
+
+```
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("MagellanNTK")
 ```
 
-```{r setup}
-library(MagellanNTK)
+This will also install dependencies.
+
+It is also possible to install `DaparViz` from Github:
+
+```
+library(devtools)
+install_github('prostarproteomics/MagellanNTK')
+
+```
+
+If `MagellanNTK` is about to be used via a Shiny module, the latter is supposed 
+to load or import the package `MagellanNTK`.
+
+
+# Global overview
+
+
+MagellanNTK is a Shiny module that performs some operations on a given dataset.
+It is only the engine and one have to 'instantiate' or configure MagellanNTK to
+work on a specific process.
+
+It has two channels (input and output) to communicate 
+with other modules and a configuration element to indicate where to find the 
+modules to display. 
+
+
+MagellanNTK can manage the different steps of a process. It is the user who
+select the current step to work on by the mean of clickable buttons.
+
+A workflow is described a configuration file and the code for processes. Describing
+this is not in the topics of this vignette. For more details, please refer to the 
+developer vignette
+
+
+## Process in details
+
+
+### Overview
+
+
+A *process* is a series of steps that accomplish a given task on a dataset. In a 
+process, two additional steps are required by `MagellanNTK`: 'Description' step 
+and a 'Save' step.
+They are mandatory. Otherwise, a process must have at least one step and as many
+as needed. 
+
+
+A *(processing) step* is the minimal thing that operates pressing data program 
+on a dataset.
+It is built with a UI which can contains widgets (to define parameters values), plots, etc.
+In short, a step cannot be divided into multiple steps.
+Concretely, a process is implemented as a Shiny module. For more details on 
+how to build a process module, see xxx.
+
+
+
+```{r 'processOverview', results='markup', fig.cap="Process overview", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process_overview2.png", error = FALSE)
+```
+
+The steps have several properties, the two main are:
+* status (or state): Done or undone
+* mandatory. In a process, any step may be mandatory or not, that depends on 
+what the developer of the process have decided. However, the
+first and the last steps of a process (respectively called 'Description' and 'Save')
+are always mandatory and are added by `MagellanNTK`
+
+
+
+### Process workflow
+
+In this section, one describe a conventional execution of a workflow.
+
+
+To begin, a few generalities.
+
+The buttons allow to go forward or back in the timeline. The current step is marked
+by an underline below the name of the step. In the 'C' region, the UI is the
+UI of the current step. Thus, the interface changes each time the user clicks on 
+the Prev or Next button.
+
+
+When the proces
+
+
+
+## Pipeline in details
+
+
+### Overview
+
+A *pipeline* is a particular process. As it, it is composed of a series of steps
+but here, each step is a process (as defined above). `MagellanNTK` is a recursive
+engine and can manage several levels of processes
+
+
+```{r 'pipelineOverview', results='markup', fig.cap="Pipeline overview", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/pipeline_overview2.png", error = FALSE)
+```
+
+
+
+### Pipeline workflow
+
+xxxxx
+
+
+
+
+
+This vignette aims to describe how to use the workflow ui to process a dataset. The goal is not to describe the different data processing tools available in prostar but to explain the behaviour of the user interface of what we call 'Prostar core'.
+
+As explained in xxx, Prostar implements two different levels of data processing tools:
+
+* the upper level correspond to a 'pipeline' and it deals with the type of data and the level of analysis (peptide, protein, peptidomic, etc..). The description of that can be found here (xxx).
+* the xxx level correspond to the data processing tools (Filtering, Normalization, etc..)
+
+One timeline is used to navigate within each of these levels. They have mostly the same behaviour 
+
+
+
+
+A workflow is defined as a series of operations
+
+
+
+# User interface
+
+We describe in this section the user interface of MagellanNTk.
+
+The graphical elements are mainly navigation elements which permit to navigate between
+steps of a process or processes of a pipeline
+
+## Global overview
+
+
+The UI is divided in three regions on the screen, as it is showed on xxx. In this example,
+one have the workflow for a process (called 'Process1') which contains 4 steps named 
+'Description', 'Step1', 'Step2, 'Save'. The first and last ones are common to all- the 
+workflows managed by MagellanNTK. The processes Step1 and step2 are specific to the workflow
+and are the main processes.
+
+* the region called 'A' on the figure show the 'timeline' with the processes placed in the order
+they might be run. It is the representation of the set of steps composing the process
+* The region 'B' contains the navigation buttons ('Go back', 'Go forward' and 'Reset') that
+allow to pass from a step to another one.
+* the region 'C' is the place where the content of each step of the workflow is displayed.
+
+
+```{r 'generalOverview_tlh', results='markup', fig.cap="Overview of the MagellanNTK user interface", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/run_workflow_empty_dataset_tlh_withFrame.png", error = FALSE)
+```
+
+
+```{r 'generalOverview_tlv', results='markup', fig.cap="Overview of the MagellanNTK user interface", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/run_workflow_empty_dataset_tlv.png", error = FALSE)
+```
+
+
+## Timelines and navigation buttons
+
+A "timeline" is the reThe timelines implemented in Prostar have the following characteristics:
+  
+  * a main centered part which displays the timeline with steps/processes which composed the object workflow,
+* a 'reset' button to reset the current workflow
+* two buttons 'next' and 'previous' to navigate in the timeline
+
+The effects of each button will be discussed in the sections related to workflows and processing modules.
+
+
+## Data processing modules
+
+As we see previously, a data processing module is a unit of treatment which takes an object (list of n datasets) as input and return an object (list of n+1 datasets).
+It is composed of one or more steps, each step using the result of a previous step. Thus, the basic behaviour of a processing module is very similar to the workflow: data processing is straightforward.
+Steps are also tagged mandatory or not and can be skipped if they are not.
+
+At the end of each processing module, the user have to validate it. By this action, it creates the final dataset, adds it to the object received in input and returns it
+
+### Timeline features
+
+The behaviour of the timeline used in the general workflow is similar in many points to the data processing modules
+
+The 'next'and 'previous' buttons can be enabled or disabled w.r.t the current position. Let i in [1, n] be the current position 
+
+| current position i | Previous button | Next button |
+  | :------------- | :----------: | -----------: |
+  | i = 1 (start of the timeline) | Disabled | enabled because there is at least one further processing module |
+  | 1 < i < n | enabled | enabled if there are further processing modules and if module(i) is not mandatory |
+  | i = n (end of the timeline) | Enabled | Disabled |
+  
+  
+  
+  Note that the 'Reset' button is always enabled.
+
+
+### Behaviour
+
+The 'prev' button needs two conditions being TRUE to be enabled:
+  * if there is at least one more step backward,
+* if the process is not yet validated (otherwise, the user must use the 'undo' button)
+
+The 'prev' button needs two conditions being TRUE to be enabled:
+  * if there is at least one more step backward,
+* if the process is not yet validated (otherwise, the user must use the 'undo' button)
+
+
+The 'reset' button is only enabled while the user fill the UI and has not yet clicked on the 'validate' button. Its effects is to set all inputs of the process to their default value.
+
+
+
+If the user goes backward on a previous step and validate this step, then  the following steps are automatically set to 'undone' and have to be rerun. This guarantees that the steps are always done in the same way. This feature must be implemented in each module source code. It cannot be coded in the navigation module (recursive loop on the listener of isDone vector)
+
+
+The undo button is enabled only if the user is on the last step and has validated it.The action is the same as reset but, in addition, we get back the previous dataset
+
+
+
+## Content of steps
+
+
+
+# Annexes
+
+## Styles for steps bullets
+
+In the timelines, steps are identified by bullets linked by line.
+The style of both bullets and line gives an information about the state of the
+corresponding step.
+
+The table below describes the different styles and their meaning
+
+
+| Bullet image | Property | State | Done/Undone | Description |
+  | :------------- | :----------: | -----------: | -----------: 
+  | <div id="bg"> 
+    <img src="figs/bullet_empty_grey_disabled.png" alt=""> </div> | Skipped | disabled | Undone |
+  | <div id="bg"> 
+    <img src="figs/bullet_empty_red_disabled.png" alt=""> </div> | Mandatory | disabled | Undone |
+  | <div id="bg"> 
+    <img src="figs/bullet_empty_red_enabled.png" alt=""> </div> | Mandatory | Enabled | Undone |
+  | <div id="bg"> 
+    <img src="figs/bullet_full_green_disabled.png" alt=""> </div> | - | disabled | Done |
+
+
+
+
+# Session information
+
+```{r}
+sessionInfo()
 ```

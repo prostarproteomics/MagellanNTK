@@ -2,13 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{module.exists}
 \alias{module.exists}
-\title{xxx}
+\title{Checks if a Shiny module exists}
 \usage{
 module.exists(base_name)
 }
 \arguments{
-\item{base_name}{xxx}
+\item{base_name}{The name of the module (without '_ui' nor '_server' suffixes)}
+}
+\value{
+A boolean
 }
 \description{
-xxx
+This function checks if the ui() and server() parts of a 
+Shiny module are available in the global environment.
 }

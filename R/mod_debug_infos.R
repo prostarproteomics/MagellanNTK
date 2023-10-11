@@ -17,7 +17,7 @@
 #' @param current.pos A `integer(1)` which is the indice of the active step.
 #' @param is.enabled A `logical(1)` xxxx
 #'
-#' @example examples/test_mod_debug_infos.R
+#' @example inst/extdata/funcs_examples/test_mod_debug_infos.R
 #' 
 #' @author Samuel Wieczorek
 NULL

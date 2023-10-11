@@ -13,7 +13,7 @@
 #'
 #' @rdname example_workflow
 #' 
-#' @example examples/example_run_workflow.R
+#' @example inst/extdata/funcs_examples/example_run_workflow.R
 #'
 #' @author Samuel Wieczorek
 #'
@@ -57,15 +57,13 @@ run_workflow <- function(id,
         })
 
         output$save_dataset_ui <- renderUI({
-            req(dataOut())
-            req(dataOut()$dataOut()$value)
-            dl_ui("saveDataset")
+            req(c(dataOut(), dataOut()$dataOut()$value))
 
+            dl_ui("saveDataset")
             dl_server(
                 id = "saveDataset",
                 dataIn = reactive({dataOut()$dataOut()$value})
             )
- 
         })
 
         observeEvent(dataIn, {
@@ -75,9 +73,7 @@ run_workflow <- function(id,
                          tl.layout = tl.layout
                          )
               )
-
-            
-        })
+          })
     }
 
     shinyApp(ui, server)

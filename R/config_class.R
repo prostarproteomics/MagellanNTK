@@ -16,7 +16,7 @@
 #'  
 #'  A generic process
 #'  * Generic pipeline : xxxx
-#'  * Description pipeline: This case is for a process -called 'Description' which is 
+#'  * Description pipeline: This case is for a process called 'Description' which is 
 #'  the first process module of a pipeline
 #'
 #' 
@@ -29,7 +29,7 @@
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
 #' 
-#' @example examples/example_config_class.R
+#' @example inst/extdata/funcs_examples/example_config_class.R
 #'
 #' @name Config-class
 #' @rdname Config-class

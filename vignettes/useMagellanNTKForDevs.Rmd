@@ -1,23 +1,23 @@
 ---
-title: "Inside Magellan by example"
+title: "Inside MagellanNTK (by example)"
 subtitle: "A developer's guideline"
 author: "Samuel Wieczorek"
+abstract: >
+    This document covers the functionalities available in `r BiocStyle::pkg_ver('MagellanNTK')`.
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
     BiocStyle::html_document:
         toc: true
+        toc_depth: 2
         highlight: tango
-number_sections: true
-theme: united
-keep_md: true
-papersize: a4
+        number_sections: true
+        theme: united
+        keep_md: true
+        papersize: a4
 vignette: >
-    %\VignetteIndexEntry{Use Magellan with external R package}
+    %\VignetteIndexEntry{Inside MagellanNTK (by example)}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-    markdown: 
-        wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -32,7 +32,7 @@ BiocStyle::markdown()
 
 # Overview
 
-The code of `Magellan` has two main objectives:
+The code of `MagellanNTK` has two main objectives:
 
 - be generic to handle several different types of datasets,
 - be sufficiently xxx to include most of the xxx so as to minimize the code to 
@@ -49,9 +49,9 @@ The package `Magellan` is a generic package that offers a graphical workflow
 manager, based on Shiny modules. It is very generic and can handle different 
 types of objects but they must be of type `list` (see \ref{objecttypes}).
 
-`Magellan` is intimely linked to the data analysis modules and vice-versa. So 
+`Magellan` is close linked to the data analysis modules and vice-versa. So 
 as to facilitate both the development of a new module and the maintenance, we 
-have volontarly want to have a quite constraint code and Module template. It 
+have voluntarily want to have a quite constraint code and Module template. It 
 guarantees xxx
 
 ## General principle of work
@@ -88,7 +88,9 @@ Ces différents aspects sont décrits dans le document utilisateur.
 `Magellan` cannot be run alone, it is always run with a package which contains 
 the information about the steps to manage.
 
-```{r 'globalArch', results='markup', fig.cap="Global architecture of connectivity between Magellan, Shiny and packages containing the code for modules.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'globalArch', results='markup', fig.cap="Global architecture of connectivity between Magellan, 
+Shiny and packages containing the code for modules.", echo=FALSE, out.width='100%', 
+fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/globalArch.png", error = FALSE)
 ```
 
@@ -119,7 +121,8 @@ Magellan.
 
 ### Structure of a Magellan-compliant module process
 
-Comme tout module Shiny, il doit comporter deux fonctions : ui() et server()
+As for any Shiny module, it must contain the two following functions: 
+ui() and server()
 
 Ces fonctions doivent avoir des noms construits de la manière suivante :
 4 chaînes de caractères séparées par un '\_':
