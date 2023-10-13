@@ -69,15 +69,13 @@ PipelineA_Process1_ui <- function(id){
 #' @export
 #' 
 PipelineA_Process1_server <- function(id,
-  dataIn = reactive({NULL}),
-  steps.enabled = reactive({NULL}),
-  remoteReset = reactive({FALSE}),
-  steps.status = reactive({NULL}),
-  current.pos = reactive({1})
-){
-  
-  
-  
+                                      dataIn = reactive({NULL}),
+                                      steps.enabled = reactive({NULL}),
+                                      remoteReset = reactive({FALSE}),
+                                      steps.status = reactive({NULL}),
+                                      current.pos = reactive({1})
+                                      ){
+ 
   #source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
@@ -186,11 +184,16 @@ PipelineA_Process1_server <- function(id,
         # widget he want to insert
         # Be aware of the naming convention for ids in uiOutput()
         # For more details, please refer to the dev document.
-        uiOutput(ns('Step1_btn1_ui')),
-        uiOutput(ns('Step1_select1_ui')),
-        uiOutput(ns('Step1_select2_ui')),
-        uiOutput(ns('Step1_select3_ui')),
-        uiOutput(ns('Step1_radio1_ui')),
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step1_btn1_ui'))),
+          column(width = 3, uiOutput(ns('Step1_radio1_ui')))
+          ),
+        
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step1_select1_ui'))),
+          column(width = 3, uiOutput(ns('Step1_select2_ui'))),
+          column(width = 3, uiOutput(ns('Step1_select3_ui')))
+          ),
         #foo_ui(ns('foo')),
         # Insert validation button
         uiOutput(ns('Step1_btn_validate_ui')),

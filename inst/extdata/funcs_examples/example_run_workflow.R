@@ -17,3 +17,5 @@ if (interactive()) {
     
   run_workflow("PipelineB", tl.layout = c("v", "h"))
 }
+
+

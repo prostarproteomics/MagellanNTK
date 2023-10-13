@@ -211,63 +211,6 @@ equal to the length of the variables 'steps',
 
 
 
-UI
-Each process UI is composed of one or more screens which correspond to the different steps of the process. The navigation between each screen is realized by means of buttons placed on the right and the left of the navigation UI (the 'timeline').
-
-The timeline may take different aspects w.r.t the style applied. The principle is to have
-
-Several buttons are available:
-* the buttons 'Prev' (on the left) and 'Next' 'on the right' are always part of the timeline. AT the initialization of the process, only the 'Next' button is visible and disabled 
-
-## Logics for processes and datasets
-
-Here are the different rules that exists in Prostar core to deal with the different transactions between data processing modules and the dataset.
-The UI of Prostar allows the user to navigate between those two lists so as to rerun a process, fix a mistake in its parameters. But, to guarantee that the workflow stay consistent with the objective/philosophy of Prostar, some rules are implemented.
-
-Each data processing modules and dataset can be seen as a list of respectively P and N items. Let i, p be the indices of respectively the current item in the dataset list and the current item in the process list of the workflow.
-
-The different combination of values for i and p (their relative position) determines the behaviour of datasets and processes regarding the general philosophy of Prostar.
-
-Without any action of the user on the current item nor process, Prostar follows the standard workflow:
-
-* At the beginning of Prostar, i = 1 = N and p = 1
-* after the run of any process p, i = N = p -1 (the process has produced a new item in the dataset)
-
-The user may change either the current item in the dataset or the current process to be run. This leads to several situations. 
-
-### Default (standard) behaviour
-
-
-* The default behaviour one have to see at the end of the execution of the workflow is that it seems to has gone straightforwards in the process list. It means that each process p runs on the item i=N and generates a dataset of N+1 items. If next process to be run is p', then p' > p.
-
-
-* By default, the behaviour of a module process is to work on the last item of the dataset; the resulting new item is appended to the list of items. Thus, by default, the current indice i is set to the last item of the dataset. For example, if the user starts the workflow with i = 1 (+ offset), p = 1, then at the end of the workflow, one must have i = N, p = P with N = P + 1 (+ offset)
-
-
-* A process cannot be run more than one time on the same item. To avoid that a process be run on the previous result of itself.
-
-But, the user may navigate differently in the process and dataset lists. Thus, different situations may occur.
-Suppose we are after a standard run, then p = P, i = N, i = p + 1
-
-
-### Reprocess a previous item of the dataset
-
-Suppose i = N and p = P (from the standard workflow). The user can change the current item of the dataset (WHAT'S ITS GOAL ?????)
-
-* i < N (the current item is not the last one of the dataset): Two cases has to be distinguished:
-  * p = P ((the current process is the last process of the workflow): xxx
-           * p < P (the current process is not the last one of the workflow): xxx
-           
-           In both cases, one delete all the items of the dataset from i+1 to N then the new item (produced by the process) is appended to the dataset list. 
-           
-           At the end of this sequence, the current indices must return to their normal values (i = N, p = P). That means that the real workflow has been modified by the user but the final workflow is like the standard one
-           
-           ### 
-           
-           * a l'affichage de l'UI d'un processus déjà exécuté auparavant:
-  * si l'indice courant i est positionné sur le dernier élément du dataset, alors affichage du début du processus,
-           * si i est positionné sur un dataset précédent (i < N) (le dataset déjà traité par ce processus), alors on n'affiche que la dernière page du processus
-
 
 ## Nomenclature 
 
