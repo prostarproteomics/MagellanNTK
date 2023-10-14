@@ -218,16 +218,14 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Step1_btn1_ui <- renderUI({
-      widget <- actionButton(ns('Step1_btn1'),
-        'Step1_btn1',
+      widget <- actionButton(ns('Step1_btn1'), 'Button',
         class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
     })
     
     # This part must be customized by the developer of a new module
     output$Step1_select1_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select1'),
-        'Select 1 in renderUI',
+      widget <- selectInput(ns('Step1_select1'), 'Select',
         choices = 1:4,
         selected = rv.widgets$Step1_select1,
         width = '150px')
@@ -236,8 +234,7 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Step1_select2_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select2'),
-        'Select 2 in renderUI',
+      widget <- selectInput(ns('Step1_select2'), 'Select',
         choices = 1:4,
         selected = rv.widgets$Step1_select2,
         width = '150px')
@@ -246,8 +243,7 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Step1_select3_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select3'),
-        'Select 1 in renderUI',
+      widget <- selectInput(ns('Step1_select3'), 'Select',
         choices = 1:4,
         selected = rv.widgets$Step1_select3,
         width = '150px')
@@ -255,7 +251,7 @@ PipelineA_Process1_server <- function(id,
     })
     
     output$Step1_radio1_ui <- renderUI({
-      widget <- radioButtons(ns('Step1_radio1'), 'Radio 1 in renderUI',
+      widget <- radioButtons(ns('Step1_radio1'), 'Choose',
                             c("choice 1" = "choice1", "choice 2" = "choice2"),
                             selected = rv.widgets$Step1_radio1
                             )
@@ -299,9 +295,10 @@ PipelineA_Process1_server <- function(id,
     output$Step2 <- renderUI({
       wellPanel(
         # Two examples of widgets in a renderUI() function
-        uiOutput(ns('Step2_select1_ui')),
-        uiOutput(ns('Step2_select2_ui')),
-        
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step2_select1_ui'))),
+          column(width = 3, uiOutput(ns('Step2_select2_ui')))
+        ),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Step2_btn_validate_ui'))
@@ -310,8 +307,7 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Step2_select1_ui <- renderUI({
-      widget <- selectInput(ns('Step2_select1'),
-        'Select 1 in renderUI',
+      widget <- selectInput(ns('Step2_select1'), 'Select',
         choices = 1:4,
         selected = rv.widgets$Step2_select1,
         width = '150px')
@@ -319,8 +315,7 @@ PipelineA_Process1_server <- function(id,
     })
     
     output$Step2_select2_ui <- renderUI({
-      widget <- selectInput(ns('Step2_select2'),
-        'Select 1 in renderUI',
+      widget <- selectInput(ns('Step2_select2'), 'Select',
         choices = 1:4,
         selected = rv.widgets$Step2_select2,
         width = '150px')

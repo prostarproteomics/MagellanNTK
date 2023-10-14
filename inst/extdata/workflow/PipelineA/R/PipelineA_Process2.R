@@ -14,26 +14,45 @@
 #' 
 #' In this example, `PipelineA_ProcessA_ui()` and `PipelineA_ProcessA_server()` define
 #' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+#'
+#' @name example_module_process1
+#' 
+#' @param id xxx
+#' @param dataIn The dataset
+#' @param steps.enabled A vector of boolean which has the same length of the steps
+#' of the pipeline. This information is used to enable/disable the widgets. It is not
+#' a communication variable between the caller and this module, thus there is no
+#' corresponding output variable
+#' @param remoteReset It is a remote command to reset the module. A boolean that
+#' indicates is the pipeline has been reseted by a program of higher level
+#' Basically, it is the program which has called this module
+#' @param steps.status xxx
+#' @param current.pos xxx
+#' @param path xxx
+#' 
+#' 
+#' 
+#' 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' 
+NULL
 
-
-#' @rdname example_module_process2
+#' @rdname example_module_process1
 #' @export
 #' 
 PipelineA_Process2_conf <- function(){
   Config(
-    fullname = 'PipelineA_Process2',
+    fullname = 'PipelineA_Process1',
     mode = 'process',
-    steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE)
+    steps = c('Step 1', 'Step 2', 'Step 3'),
+    mandatory = c(FALSE, TRUE, FALSE)
   )
 }
 
 
-#' @param id xxx
-#' 
-#' @rdname example_module_Process2
-#' 
-#' @author Samuel Wieczorek
+#' @rdname example_module_process1
 #' 
 #' @export
 #'
@@ -42,36 +61,22 @@ PipelineA_Process2_ui <- function(id){
 }
 
 
-#' @param id xxx
-#'
-#' @param dataIn The dataset
-#'
-#' @param steps.enabled A vector of boolean which has the same length of the steps
-#' of the pipeline. This information is used to enable/disable the widgets. It is not
-#' a communication variable between the caller and this module, thus there is no
-#' corresponding output variable
-#'
-#' @param remoteReset It is a remote command to reset the module. A boolean that
-#' indicates is the pipeline has been reseted by a program of higher level
-#' Basically, it is the program which has called this module
-#' 
-#' @param steps.status xxx
-#' 
-#' @param current.pos xxx
-#'
-#' @rdname example_module_Process2
+
+#' @rdname example_module_process1
 #' 
 #' @importFrom stats setNames rnorm
 #' 
 #' @export
 #' 
 PipelineA_Process2_server <- function(id,
-  dataIn = reactive({NULL}),
-  steps.enabled = reactive({NULL}),
-  remoteReset = reactive({FALSE}),
-  steps.status = reactive({NULL}),
-  current.pos = reactive({1})
+                                      dataIn = reactive({NULL}),
+                                      steps.enabled = reactive({NULL}),
+                                      remoteReset = reactive({FALSE}),
+                                      steps.status = reactive({NULL}),
+                                      current.pos = reactive({1})
 ){
+  
+  #source(paste0(path, '/foo.R'), local=TRUE)$value
   
   # Define default selected values for widgets
   # This is only for simple workflows
@@ -79,12 +84,17 @@ PipelineA_Process2_server <- function(id,
     Step1_select1 = 1,
     Step1_select2 = NULL,
     Step1_select3 = 1,
+    Step1_radio1 = NULL,
     Step1_btn1 = NULL,
     Step2_select1 = 1,
-    Step2_select2 = 1
+    Step2_select2 = 1,
+    Step3_select1 = 1
   )
   
-  rv.custom.default.values <- list()
+  
+  rv.custom.default.values <- list(
+    foo = NULL
+  )
   
   ###-------------------------------------------------------------###
   ###                                                             ###
@@ -94,6 +104,8 @@ PipelineA_Process2_server <- function(id,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    # Insert necessary code which is hosted by MagellanNTK
+    # DO NOT MODIFY THIS LINE
     core.code <- Get_Workflow_Core_Code(
       mode = 'process',
       name = id,
@@ -102,7 +114,6 @@ PipelineA_Process2_server <- function(id,
     )
     
     eval(str2expression(core.code))
-    
     
     
     # >>>
@@ -116,10 +127,10 @@ PipelineA_Process2_server <- function(id,
       file <- file.path(path, md.file)
       
       tagList(
-        # In this example, the md file is found in the extdata/module_examples directory
-        # but with a real app, it should be provided by the package which
-        # contains the UI for the different steps of the process module.
-        # system.file(xxx)
+        ### In this example, the md file is found in the extdata/module_examples 
+        ### directory but with a real app, it should be provided by the package 
+        ### which contains the UI for the different steps of the process module.
+        ### system.file(xxx)
         
         if (file.exists(file))
           includeMarkdown(file)
@@ -137,7 +148,7 @@ PipelineA_Process2_server <- function(id,
     })
     
     output$datasetDescription_ui <- renderUI({
-      # Insert your own code to vizualise some information
+      # Insert your own code to visualize some information
       # about your dataset. It will appear once the 'Start' button
       # has been clicked
       
@@ -174,10 +185,17 @@ PipelineA_Process2_server <- function(id,
         # widget he want to insert
         # Be aware of the naming convention for ids in uiOutput()
         # For more details, please refer to the dev document.
-        uiOutput(ns('Step1_btn1_ui')),
-        uiOutput(ns('Step1_select1_ui')),
-        uiOutput(ns('Step1_select2_ui')),
-        uiOutput(ns('Step1_select3_ui')),
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step1_btn1_ui'))),
+          column(width = 3, uiOutput(ns('Step1_radio1_ui')))
+        ),
+        
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step1_select1_ui'))),
+          column(width = 3, uiOutput(ns('Step1_select2_ui'))),
+          column(width = 3, uiOutput(ns('Step1_select3_ui')))
+        ),
+        #foo_ui(ns('foo')),
         # Insert validation button
         uiOutput(ns('Step1_btn_validate_ui')),
         
@@ -189,22 +207,26 @@ PipelineA_Process2_server <- function(id,
     
     # >>> START: Definition of the widgets
     
-    output$Step1_btn1_ui <- renderUI({
-      
-      
-    })
+    
+    
+    
+    # rv.custom$foo <- foo_server('foo',
+    #   obj = reactive({rv$dataIn}),
+    #   reset = reactive({NULL}),
+    #   is.enabled = reactive({rv$steps.enabled['Step1']})
+    # )
+    
+    
     
     output$Step1_btn1_ui <- renderUI({
-      widget <- actionButton(ns('Step1_btn1'),
-                             'Step1_btn1',
+      widget <- actionButton(ns('Step1_btn1'), 'Button',
                              class = GlobalSettings$btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
     })
     
     # This part must be customized by the developer of a new module
     output$Step1_select1_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select1'),
-                            'Select 1 in renderUI',
+      widget <- selectInput(ns('Step1_select1'), 'Select',
                             choices = 1:4,
                             selected = rv.widgets$Step1_select1,
                             width = '150px')
@@ -213,25 +235,29 @@ PipelineA_Process2_server <- function(id,
     
     
     output$Step1_select2_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select2'),
-                            'Select 2 in renderUI',
+      widget <- selectInput(ns('Step1_select2'), 'Select',
                             choices = 1:4,
                             selected = rv.widgets$Step1_select2,
                             width = '150px')
-      toggleWidget(widget, rv$steps.enabled['Step1'] )
+      toggleWidget(widget, rv$steps.enabled['Step1'])
     })
     
     
     output$Step1_select3_ui <- renderUI({
-      widget <- selectInput(ns('Step1_select3'),
-                            'Select 1 in renderUI',
+      widget <- selectInput(ns('Step1_select3'), 'Select',
                             choices = 1:4,
                             selected = rv.widgets$Step1_select3,
                             width = '150px')
-      toggleWidget(widget, rv$steps.enabled['Step1'] )
+      toggleWidget(widget, rv$steps.enabled['Step1'])
     })
     
-    
+    output$Step1_radio1_ui <- renderUI({
+      widget <- radioButtons(ns('Step1_radio1'), 'Choose',
+                             c("choice 1" = "choice1", "choice 2" = "choice2"),
+                             selected = rv.widgets$Step1_radio1
+      )
+      toggleWidget(widget, rv$steps.enabled['Step1'])
+    })
     
     output$Step1_btn_validate_ui <- renderUI({
       widget <-  actionButton(ns("Step1_btn_validate"),
@@ -245,18 +271,23 @@ PipelineA_Process2_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-      
+      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = new.dataset,
+                                          name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- global$VALIDATED
+      
     })
     
     
-    output$showPlot <- renderPlot({
-      plot(as.matrix(dataIn()[[1]]))
-    })
+    # output$showPlot <- renderPlot({
+    #   req(rv$dataIn)
+    #   plot(as.matrix(rv$dataIn[[1]][,1]))
+    # })
     # <<< END ------------- Code for step 1 UI---------------
     
     
@@ -265,9 +296,10 @@ PipelineA_Process2_server <- function(id,
     output$Step2 <- renderUI({
       wellPanel(
         # Two examples of widgets in a renderUI() function
-        uiOutput(ns('Step2_select1_ui')),
-        uiOutput(ns('Step2_select2_ui')),
-        
+        fluidRow(
+          column(width = 3, uiOutput(ns('Step2_select1_ui'))),
+          column(width = 3, uiOutput(ns('Step2_select2_ui')))
+        ),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Step2_btn_validate_ui'))
@@ -276,8 +308,7 @@ PipelineA_Process2_server <- function(id,
     
     
     output$Step2_select1_ui <- renderUI({
-      widget <- selectInput(ns('Step2_select1'),
-                            'Select 1 in renderUI',
+      widget <- selectInput(ns('Step2_select1'), 'Select',
                             choices = 1:4,
                             selected = rv.widgets$Step2_select1,
                             width = '150px')
@@ -285,8 +316,7 @@ PipelineA_Process2_server <- function(id,
     })
     
     output$Step2_select2_ui <- renderUI({
-      widget <- selectInput(ns('Step2_select2'),
-                            'Select 1 in renderUI',
+      widget <- selectInput(ns('Step2_select2'), 'Select',
                             choices = 1:4,
                             selected = rv.widgets$Step2_select2,
                             width = '150px')
@@ -302,7 +332,10 @@ PipelineA_Process2_server <- function(id,
     
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
-      
+      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = new.dataset,
+                                          name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -313,39 +346,96 @@ PipelineA_Process2_server <- function(id,
     # <<< END ------------- Code for step 2 UI---------------
     
     
+    
     # >>> START ------------- Code for step 3 UI---------------
+    
+    output$Step3 <- renderUI({
+      wellPanel(
+        # Two examples of widgets in a renderUI() function
+        fluidRow(
+          column(width=4, uiOutput(ns('Step3_select1_ui'))),
+          column(width=8, plotOutput(ns('Step3_plot_ui')))
+          ),
+        # Insert validation button
+        # This line is necessary. DO NOT MODIFY
+        uiOutput(ns('Step3_btn_validate_ui'))
+      )
+    })
+    
+    
+    output$Step3_select1_ui <- renderUI({
+      widget <- selectInput(ns('Step3_select1'), 'Select number of points',
+                            choices = 1:20,
+                            selected = rv.widgets$Step2_select1,
+                            width = '150px')
+      toggleWidget(widget, rv$steps.enabled['Step3'] )
+    })
+    
+    output$Step3_plot_ui <- renderPlot({
+      req(input$Step3_select1)
+      plot(runif(1:input$Step3_select1))
+    })
+
+    
+    output$Step3_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Step3_btn_validate"),
+                             "Perform",
+                             class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Step3'] )
+    })
+    
+    observeEvent(input$Step3_btn_validate, {
+      # Do some stuff
+      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
+                                          dataset = new.dataset,
+                                          name = paste0('temp_',id))
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step3'] <- global$VALIDATED
+    })
+    
+    # <<< END ------------- Code for step 2 UI---------------
+    
+    
+    
+    # >>> START ------------- Code for step 'Save' UI---------------
     output$Save <- renderUI({
       tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Save_btn_validate_ui'))
+        uiOutput(ns('Save_btn_validate_ui')),
+        uiOutput(ns('dl_ui'))
       )
     })
     
+    output$dl_ui <- renderUI({
+      req(config@mode == 'process')
+      req(rv$steps.status['Save'] == global$VALIDATED)
+      dl_ui(ns('createQuickLink'))
+    })
+    
     output$Save_btn_validate_ui <- renderUI({
-      tagList(
-        toggleWidget( 
-                     actionButton(ns("Save_btn_validate"), "Save",
-                                  class = GlobalSettings$btn_success_color),
-                     rv$steps.enabled['Save']
-        ),
-        if (config@mode == 'process' && rv$steps.status['Save'] == global$VALIDATED) {
-          Save_Dataset_ui(ns('createQuickLink'))
-        }
+      toggleWidget(
+        actionButton(ns("Save_btn_validate"), "Save",
+                     class = GlobalSettings$btn_success_color),
+        rv$steps.enabled['Save']
       )
-      
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
+      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
       rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = rnorm(1:5),
+                                          dataset = new.dataset,
                                           name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      Save_Dataset_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

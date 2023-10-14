@@ -62,9 +62,20 @@ why there is no installation nor launching section about this package.
 For those details, please refer to the vignette 'Configure MagellanNTK'
 
 The graphical elements are mainly navigation elements which permit to
-navigate between steps of a process or processes of a pipeline
+navigate between steps of a process or processes of a pipeline.
 
-# A quick workflow tutorial
+# Data structure
+
+\`MagellanNTK\` is compliant with objects with a list structure. One
+defines here as dataset, a list composed of at least one sub-dataset. By
+default, the first sub-dataset is called 'original'.
+
+As we will see along this document, the object manipulated by
+MagellanNTK is a list of datasets.
+
+The minimal object possible has one dataset (generally names 'original')
+
+# Workflow overview
 
 As a workflow manager, the aim of the engine provided by `MagellanNTK`
 is to execute a series of actions over a dataset and in a particular
@@ -82,13 +93,15 @@ configuration file to indicate where to find the modules to display.
 
 Hierarchical and ordered workflow structure
 
-## Basic wokflow
+## Single actions
 
 As said, a workflow is a series of actions (steps)
 
 In MagellanNTK, one defines a *step* as a data processing program that
 performs a 'single' action on a dataset. Typically, a step cannot be
 divided into smaller parts.
+
+Typically
 
 One can consider this graph as an automate.
 
@@ -116,9 +129,9 @@ please refer to Annex 1
 
 ## Process
 
-A *process* is a series of steps (actions) executed on a dataset in a
-predefined order. The set of steps is consistent with a more complex
-computation than the singles steps.
+The series of steps (actions) executed on a dataset in a predefined
+order is called a process. The set of steps is consistent with a more
+complex computation than the singles steps.
 
 With `MagellanNTK`, two mandatory. steps are automatically added:
 'Description' and 'Save'. In addition, a process have at least one step
@@ -134,6 +147,12 @@ xxx.
 ```{r 'processOverview', results='markup', fig.cap="Process overview", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/process.png", error = FALSE)
 ```
+
+Any process transforms its input dataset to produce a new dataset at
+output. In terms of structure, that means that the object given as input
+has *n* items (datasets) and has *n+1* items (datasets) at the end of
+the process. Thus, at any time, the object keeps the entire history of
+what happened to datasets.
 
 ## Pipeline
 
@@ -152,7 +171,11 @@ As shown in xxx, a pipeline is at third level of such a structure.
 knitr::include_graphics("./figs/pipeline.png", error = FALSE)
 ```
 
-# Describing the UI
+As a pipeline is also a workflow, one have globally the same behaviour
+for the dataset. Thus, the object at the output of a pipeline has on
+more dataset than the dataset passed at the input.
+
+# User interface explained
 
 The interface depends on the complexity of the structure. The minimal UI
 is about process workflow (two-levels structure). But as said
@@ -162,7 +185,7 @@ complexity.
 This is why this section mainly focus on the process workflow to explain
 how it works. Describing more complex structures will be easier.
 
-## Process UI
+## Interface for processes
 
 In this section, one describes how a workflow is implemented in
 MagellanNTK First, let's discover the general UI (see xxx). The UI is
@@ -171,14 +194,6 @@ the workflow for a process (called 'Process1') which contains 4 steps
 named respectively 'Description', 'Step1', 'Step2, 'Save'. The first and
 last steps are common to all workflows managed by `MagellanNTK` while
 the steps 'Step1' and 'Step2' are specific to the workflow.
-
-```{r 'generalOverview_tlh', results='markup', fig.cap="Overview of the MagellanNTK user interface", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/run_workflow_empty_dataset_tlh_withFrame.png", error = FALSE)
-```
-
-```{r 'generalOverview_tlv', results='markup', fig.cap="Overview of the MagellanNTK user interface", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/run_workflow_empty_dataset_tlv.png", error = FALSE)
-```
 
 -   the area called **Timeline** represent the actions defined in the
     process, placed in the order they might be executed. It is the
@@ -202,6 +217,8 @@ bullet of a step is enabled then all the widgets of this step are
 enabled (the Perform button also). In the contrary, a bullet that is
 disabled means that all the widgets and the 'Perform' button in the UI
 are disabled
+
+![](figs/UI_process.png)
 
 The interface for each step contains at least one button named
 'Perform'. This is the mean to validate a step. Th evalidatin of a step
@@ -249,15 +266,14 @@ The table below describes the different styles and their meaning
 | ![](figs/bullet_full_green_disabled.png) |      \-       | Disabled |    Done     |
 | ![](figs/bullet_empty_grey_disabled.png) | Not mandatory |          |   Undone    |
 
-## General rules about steps
+## Rules
 
 The behaviour of the timeline used in the general workflow is similar in
 many points to the data processing modules
 
-The 'next'and 'previous' buttons can be enabled or disabled w.r.t the
-current position. They are enabled if
-
-it is possible to go in their direction
+The 'Next' and 'Previous' buttons can be enabled or disabled w.r.t the
+current position. They are enabled if it is possible to go in their
+direction
 
 Note that the 'Reset' button is always enabled.
 
@@ -274,13 +290,27 @@ are disabled. This feature is useful if one wants to see/discover the
 content of next steps or to remind the values set in the previous
 widgets.
 
-## Pipeline UI
+-   A process cannot be run several times on the same dataset. To avoid
+    that, a process be run on the previous result of itself.
+
+## Interface for pipelines
 
 In the case of a pipeline, a second pipeline is needed to navigate
 between processes. Thus, in xxx, is figured the UI of a pipeline with
 the additional timeline.
 
-# Use case
+![](figs/UI_pipeline_annotated.png)
+
+Note that in a pipeline timeline, the first step is still 'Description'
+but there is not more step called 'Save' as it is the case for any
+process timeline. The reason is because it is not necessary due to the
+fact that a 'Save' step exists in the last process.
+
+Thus, when the user save its work in the last process of the pipeline,
+this will automatically save the whole object and return it to the
+caller program.
+
+# Process workflow use case
 
 This section aims at describing how to use the workflow UI when
 processing a dataset. The goal is not to describe the different data
@@ -297,160 +327,181 @@ library(MagellanNTK)
 demo_workflow()
 ```
 
-## Launching the workflow
+**Launching the workflow**
 
-When the user launches the workflow manager, it runs with the first Step
-called 'Description'. At this time, all the other steps are disabled
-until the user validate the current step. This ensure that the dataset
-is correctly passed to the first step.
+When the user launches the workflow manager, it comes with the first
+Step called 'Description'. At this time, all the other steps are
+disabled until the user validate the current step. This ensure that the
+dataset is correctly passed to the first step. By default, a workflow
+work on the last dataset of the object. Thus, if this object contains
+several datasets, the last one is loaded.
 
-![Test](figs/demo_1.png)
+![](figs/demo_1.png)
 
 At this step, only the 'Description' step is enabled (see the style of
 the bullet and the button 'Start'). The other steps (timeline) are
-disabled.
+disabled. However, it is possible to view the content of the other
+steps.
 
-One discover the different properties of the steps with their bullet:
-the step 2 is not mandatory while the steps 3 and 'Save' are. None of
-the steps are validated yet (empty bullets).
+![Demo 2_2](figs/demo_1_2.png)
 
-![Demo 2_2](figs/demo_2_2.png)
-
-## Validating the 'Description' step
+**Validating the 'Description' step**
 
 Here, the user has clicked on the 'Start' button (contented in the ui of
-'Description' step).
+'Description' step). The bullet has changed to take the style of 'Done'
+steps.
 
-![Validating 'Description' step.](figs/demo_2.png)
+![Validating 'Description' step.](figs/demo_1_3.png)
 
-This action has the follolling effects:
+The validation of the step (same behavior for all steps) has two main
+consequences:
 
--   The current step ('Description') becomes disabled (all widgets
-    disabled) to avoid any additional action from the user
+-   The current step ( here 'Description') becomes disabled (all its
+    widgets disabled). This is to avoid any additional action from the
+    user inside this step
 
--   The next steps may become enabled but this must respect the rule
-    (See xxx). Thus, steps 1 and 2 are enabled but not the step 'Save'
-    because it is placed after a undone mandatory step.
+-   The forwarding steps may potentially be enabled but this must
+    respect the rule (See xxx). In this case, the steps 'Step 1' and
+    'Step 2' are enabled but not the step 'Save' because it is placed
+    after a non-validated mandatory step.
 
 The user switch to 'Step 1' by clicking on the 'Next' button.
 
-## Change to 'Step1'
+The 'Step 1' is now the current step (note the underline that means it
+is now the current step). As it is enabled, all its widgets are enabled.
 
-One then view the interface of the Step 1 (note the underline that means
-it is now the current step).
+![ ](figs/demo_2.png)
 
-![Demo 3](figs/demo_3.png)
+In this use case, on gonna skip this step. For this, the user go to the
+next step ('Step 2') by clicking on the 'Next' button.
 
 The user set the widgets to the value he wants and then validate his
 choices by clicking on the button 'Perform'. Once done, the entire step
 become disabled and the bullet's style is changing to "Done".
 
-![Demo 3 2](figs/demo_3_2.png)
+![One has skipped the 'Step 1' and go directly to the 'Step 2' without
+saing the previous one.](figs/demo_3.png)
 
-As said previously, a workflow execute actions in a predefined order. In
-general, once a step is done, tye user go to the next one until the last
-one
+One the widgets are set to their custom value, the user validate the
+step by clicking on the 'Perform' button. The changes are:
 
-So as to facilitate the use of the UI, MagellanNTK has implemented a few
-rules:
+-   As for all current steps, the entire interface switch to a disabled
+    state,
+
+-   the bullet changes to the style of Validated steps
+
+-   the next steps become enabled. In this case, there is only one last
+    step ('Save')
+
+-   the style of bullets for previous steps is updated if necessary. It
+    is the case for 'Step 1' which has been skipped
+
+Note: A step is really skipped only if it has not been validated and a
+further one is validated. That means that one can begin to modify the
+widgets in a step *n*. If the user do not validate it and go to another
+step (*\>n*), then the values of the step *n* will be forgotten.
+
+If one go back to the previous step (the one we have skipped), we can
+see a blue area which informs the user that this step has been skipped
+(it has been disabled even with no validation).
+
+![](figs/demo_3_3.png)
+
+**Saving workflow result**
+
+The last step has been enabled by the validation of the previous step.
+The user can now save its work by clicking on the 'Save' button. This
+will result in sending th new dataset (processed by this workflow) to
+the program which has called it.
+
+![](figs/demo_4.png)
 
 To ensure consistency in workflow, each step has some properties which
 are used to drive the workflow. Note that here, one look at a given
 level and steps can be processes if we are at the level of pipeline.
 
-# UI overview
+the resulting new item is appended to the list of items.
 
-A workflow is defined as a series of operations
+To remind, the object get at this step has one more dataset than the one
+given at the beginning.
 
-## Timelines and navigation buttons
+A process cannot be run more than one time on the same item. To avoid
+that a process be run on the previous result of itself.
 
-A "timeline" is the reThe timelines implemented in Prostar have the
-following characteristics:
+**Reset a process**
 
--   a main centered part which displays the timeline with
-    steps/processes which composed the object workflow,
--   a 'reset' button to reset the current workflow
--   two buttons 'next' and 'previous' to navigate in the timeline
+The button 'Reset' allows to set back the workflow in its default state
+(the same state as when the user launches the workflow). At any time, it
+is possible to reset the workflow; A popup warns the user of the
+effects.
 
-The effects of each button will be discussed in the sections related to
-workflows and processing modules.
+![](figs/demo_reset.png)
 
-## Data processing modules
+Then, if the reset is done, one return to the initial state of the
+workflow (see fig..)
 
-As we see previously, a data processing module is a unit of treatment
-which takes an object (list of n datasets) as input and return an object
-(list of n+1 datasets). It is composed of one or more steps, each step
-using the result of a previous step. Thus, the basic behaviour of a
-processing module is very similar to the workflow: data processing is
-straightforward. Steps are also tagged mandatory or not and can be
-skipped if they are not.
+About the dataset. Two differents things appears whether the Reset
+button is clicked:
 
-At the end of each processing module, the user have to validate it. By
-this action, it creates the final dataset, adds it to the object
-received in input and returns it
+-   **Reset is clicked after the user has validated the whole process**.
+    That means that the object has one more dataset (the one that has
+    been calculated during the process). In this case, a click on the
+    Reset button delete the last dataset in the object so as to return
+    to the same object as vefore.
 
-### Timeline features
+-   **Reset is clicked whenever during the workflow (which is not
+    validated yet)**. In a process workflow, there is no engine to save
+    the object at each step of the workflow. That means that during the
+    workflow, the initial object has no changes (changes are made in a
+    temporary object). Thus, if a Reset occurs at this time, it happens
+    nothing to the object.
 
-## Content of steps
+# Pipeline use case
 
-UI Each process UI is composed of one or more screens which correspond
-to the different steps of the process. The navigation between each
-screen is realized by means of buttons placed on the right and the left
-of the navigation UI (the 'timeline').
+## Launch a pipeline
 
-The timeline may take different aspects w.r.t the style applied. The
-principle is to have
+When laucnhing a pipeline workflow, two timelines appear (their style -
+vertical or horizontal - depends of the parameters used). The upper one
+is dedicated to the steps (each one is a process) of the pipeline while
+the down one stands for the steps of the process.
 
-Several buttons are available: \* the buttons 'Prev' (on the left) and
-'Next' 'on the right' are always part of the timeline. AT the
-initialization of the process, only the 'Next' button is visible and
-disabled
+Note that the process called 'Description' of a pipeline does not have
+any steps besides a Description one. This is an exception to the rule
+that any process have at least one real step.
 
-## Logics for processes and datasets
+![Again, while a mandatory step is not validated (here, the step
+'Description' of the first process 'Description'), all of its further
+steps is disabled.](figs/demo_pipeline_1.png)
 
-Here are the different rules that exists in Prostar core to deal with
-the different transactions between data processing modules and the
-dataset. The UI of Prostar allows the user to navigate between those two
-lists so as to rerun a process, fix a mistake in its parameters. But, to
-guarantee that the workflow stay consistent with the
-objective/philosophy of Prostar, some rules are implemented.
+![The Description step has been validated and the other processes have
+been enabled. The object to analyze has been
+loaded.](figs/demo_pipeline_1_3.png)
 
-Each data processing modules and dataset can be seen as a list of
-respectively P and N items. Let i, p be the indices of respectively the
-current item in the dataset list and the current item in the process
-list of the workflow.
+![](figs/demo_pipeline_5.png)
 
-The different combination of values for i and p (their relative
-position) determines the behaviour of datasets and processes regarding
-the general philosophy of Prostar.
+## Reset function in a pipeline
 
-Without any action of the user on the current item nor process, Prostar
-follows the standard workflow:
+When working with a pipeline level, there are two timelines and
+therefore, two 'Reset' Buttons: one for the pipeline itself and one for
+the processes
 
--   At the beginning of Prostar, i = 1 = N and p = 1
--   after the run of any process p, i = N = p -1 (the process has
-    produced a new item in the dataset)
+**Resetting a process**
 
-The user may change either the current item in the dataset or the
-current process to be run. This leads to several situations.
+If the Reset button of a process is clicked, that affects only the
+current process. The behaviour is the same as for processes (See xxx).
+The current step becomes the first one (Description), all the widgets
+are set to their default values and are disabled. The current process is
+still the same
 
-### Default (standard) behaviour
+**Resetting a pipeline**
 
--   The default behaviour one have to see at the end of the execution of
-    the workflow is that it seems to has gone straightforwards in the
-    process list. It means that each process p runs on the item i=N and
-    generates a dataset of N+1 items. If next process to be run is p',
-    then p' \> p.
+If the Reset button of a pipeline is clicked, this will set back the
+entire pipeline to its default values. The object is set back to the
+beginning, i.e. all the datasets added by the processes are deleted. In
+the pipeline's timeline, the first sptep ('Description') becomes the
+current one.
 
--   By default, the behaviour of a module process is to work on the last
-    item of the dataset; the resulting new item is appended to the list
-    of items. Thus, by default, the current indice i is set to the last
-    item of the dataset. For example, if the user starts the workflow
-    with i = 1 (+ offset), p = 1, then at the end of the workflow, one
-    must have i = N, p = P with N = P + 1 (+ offset)
-
--   A process cannot be run more than one time on the same item. To
-    avoid that a process be run on the previous result of itself.
+I
 
 If the user goes backward on a previous step and validate this step,
 then the following steps are automatically set to 'undone' and have to
@@ -491,14 +542,6 @@ change the current item of the dataset (WHAT'S ITS GOAL ?????)
         positionné sur un dataset précédent (i \< N) (le dataset déjà
         traité par ce processus), alors on n'affiche que la dernière
         page du processus
-
-# Annexes
-
-## Styles for steps bullets
-
-In the timelines, steps are identified by bullets linked by line. The
-style of both bullets and line gives an information about the state of
-the corresponding step.
 
 # Session information
 
