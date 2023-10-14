@@ -64,57 +64,58 @@ navigate between steps of a process or processes of a pipeline.
 
 # Workflow overview
 
-As a workflow manager, the aim of the engine provided by `MagellanNTK`
-is to execute a series of actions over a dataset and in a particular
-order.
+As a workflow manager, the aim of `MagellanNTK` is to execute a series
+of ordered tasks over a dataset.
 
 At high level, it can be view as a black box with two communication
 channels (input and output). A dataset is passed to the engine which
-performs actions on it and then return a new dataset. The role of
+performs actions on it and return a new dataset. The role of
 MagellantNTK is to organize and adapt the succession of actions that
 will be performed on the dataset. For example, some steps can be
 skipped, other are mandatory and cannot be skipped...
 
 ![](figs/WF_principle.png)
 
-The actions managed by the engine are implemented as Shiny modules. A
-configuration file to indicate where to find the modules to display.
-
-Hierarchical and ordered workflow structure
-
-## Single actions
+## Single task
 
 As said, a workflow is a series of actions (steps)
 
-In MagellanNTK, one defines a *step* as a data processing program that
-performs a 'single' action on a dataset. Typically, a step cannot be
-divided into smaller parts.
+In MagellanNTK, a task (or step) is defined as a data processing program
+that performs a minimal and consistent set of basic operations on a
+dataset. It cannot be divided into subtasks.
 
-Typically
+A basic workflow execute all the tasks in their predefined order. But,
+even if the global direction is always one-way, it can be interesting to
+introduce some rules to customize the effective execution of the set of
+tasks. Fro example, a given task may be facultative (eventually under
+some condition) while another one will be mandatory. The implementation
+of such possibilities is made by mean of properties on tasks.
 
-One can consider this graph as an automate.
+To this end, task are tagged with a few properties. Two tags determine
+the state of a task:
 
-Typical properties of an action are: \* *status* (or state): Done or
-undone \* *mandatory* In a process, any step may be mandatory or not,
-that depends on what the developer of the process have decided. However,
-the first and the last steps of a process (respectively called
+| Tag     | Values       | Description                                                                                                 |
+|------------------|--------------------|-----------------------------------|
+| Done    | true / false | Indicates whether a task has been executed                                                                  |
+| Skipped | true / false | Indicates whether a task has been skipped (i.e. there is at least one task further that has been validated) |
+
+One property refines the possibilities of a task:
+
+| Name      | Values       | Description                                                                   |
+|-----------|--------------|-------------------------------------------------------------------------------|
+| Mandatory | true / false | Indicates whether a task must be executed to be able to pursuie the workflow. |
+
+In real life, tasks are identified by a combination of tags and
+properties. Different styles are used to identify them
+
+However, the first and the last steps of a process (respectively called
 'Description' and 'Save') are always mandatory and are added by
 \`MagellanNTK \* *skipped*. A step can be facultative and may be skipped
 without any consequences on the execution of the other steps.
 
-Each step allow the display of the corresponding UI. Those UI are
-developed by the creator of the process w.r.t. some guidelines (See
-xxx). In particular, each step has of 'Validate' button which save the
-dataset in the state it is at that time. Once the steps has been
-validated, it status pass from 'Undone' to 'Done. Graphically, this is
-visible with the bullet which become full rather than empty.
-
-```{r 'steps', results='markup', fig.cap="Three steps in the workflow", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/steps.png", error = FALSE)
-```
-
-For a view of styles used to the bullets w.r.t the state of the step,
-please refer to Annex 1
+MagellanNTK associates a UI (as a Shiny module) to each task. For a view
+of styles used to the bullets w.r.t the state of the step, please refer
+to Annex 1
 
 ## Process
 
@@ -164,7 +165,7 @@ As a pipeline is also a workflow, one have globally the same behaviour
 for the dataset. Thus, the object at the output of a pipeline has on
 more dataset than the dataset passed at the input.
 
-## Data structure
+## Data formats
 
 \`MagellanNTK\` is compliant with objects with a list structure. One
 defines here as dataset, a list composed of at least one sub-dataset. By
@@ -174,6 +175,28 @@ As we will see along this document, the object manipulated by
 MagellanNTK is a list of datasets.
 
 The minimal object possible has one dataset (generally names 'original')
+
+## Rules
+
+Rules are applied here to guarantee that the global strategy of the
+workflow in MagellanNTK are followed.
+
+**One way**. The deroulement is in one way. Tasks are executed from the
+first towards the last. It is not possible de go back or rerun a task
+that has already been validated (exception if reset, see xxx).
+
+A task may be run only if the previous one has been done. this ensures
+to execute the set of tasks in one direction. It is not possible to
+return to a task already done. Each task can be run once.
+
+Those UI are developed by the creator of the process w.r.t. some
+guidelines (See xxx). In particular, each step has of 'Validate' button
+which save the dataset in the state it is at that time. Once the steps
+has been validated, it status pass from 'Undone' to 'Done. Graphically,
+this is visible with the bullet which become full rather than empty.
+
+```{r 'steps', results='markup', fig.cap="Three steps in the workflow", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE} knitr::include_graphics("./figs/steps.png", error = FALSE)}
+```
 
 # User interface
 
