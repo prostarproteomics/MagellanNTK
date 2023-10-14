@@ -175,7 +175,7 @@ As a pipeline is also a workflow, one have globally the same behaviour
 for the dataset. Thus, the object at the output of a pipeline has on
 more dataset than the dataset passed at the input.
 
-# User interface explained
+# User interface
 
 The interface depends on the complexity of the structure. The minimal UI
 is about process workflow (two-levels structure). But as said
@@ -185,64 +185,7 @@ complexity.
 This is why this section mainly focus on the process workflow to explain
 how it works. Describing more complex structures will be easier.
 
-## Interface for processes
-
-In this section, one describes how a workflow is implemented in
-MagellanNTK First, let's discover the general UI (see xxx). The UI is
-divided in three regions, as showed on xxx. In this example, one view
-the workflow for a process (called 'Process1') which contains 4 steps
-named respectively 'Description', 'Step1', 'Step2, 'Save'. The first and
-last steps are common to all workflows managed by `MagellanNTK` while
-the steps 'Step1' and 'Step2' are specific to the workflow.
-
--   the area called **Timeline** represent the actions defined in the
-    process, placed in the order they might be executed. It is the
-    representation of the set of steps composing the process
--   The area called **Navigation commands** contains the navigation
-    buttons ('Next, 'Previous' and 'Reset') that allow to pass from a
-    step to another one (changing the current step)
--   the region **Main UI** is the place where the content of each step
-    of the workflow is displayed.
-
-### Main UI
-
-This place shows the content of the current step. Depending on which
-actions are allowed at current time, the widgets used to interact with
-the interface may be enabled or disabled. This depends of the state of
-the process and is explained in details in section xxx.
-
-The state of the bullet in the timeline for a given step determines the
-state of the widgets in the corresponding UI. It means that if the
-bullet of a step is enabled then all the widgets of this step are
-enabled (the Perform button also). In the contrary, a bullet that is
-disabled means that all the widgets and the 'Perform' button in the UI
-are disabled
-
-![](figs/UI_process.png)
-
-The interface for each step contains at least one button named
-'Perform'. This is the mean to validate a step. Th evalidatin of a step
-leads to different actions in the UI, especially a change in the status
-of bullets and other steps.
-
-### Navigation commands
-
-Three buttons are available to interact with the whole current step and
-navigate through the different steps of the process.
-
-The **Prev** button (on the left) changes the current step to set the
-previous one. This button is enabled only if there is at least one step
-backward.
-
-Similarly, the **Next** button (on the right) changes the current step
-to set the next one on the timeline. This button is enabled only if
-there is at least one step forwards.
-
-The **Reset** button sets all the widgets of the process to their
-default value. It is enabled only if the process is not validated yet.
-The current step is also set to the first one.
-
-### Timeline
+## Timeline
 
 In this schema, the steps are represented by bullets linked by lines. At
 any time, the current step is marked with an underline below the name of
@@ -266,7 +209,22 @@ The table below describes the different styles and their meaning
 | ![](figs/bullet_full_green_disabled.png) |      \-       | Disabled |    Done     |
 | ![](figs/bullet_empty_grey_disabled.png) | Not mandatory |          |   Undone    |
 
-## Rules
+## Navigation commands
+
+Three buttons are available to interact with the whole current step and
+navigate through the different steps of the process.
+
+The **Prev** button (on the left) changes the current step to set the
+previous one. This button is enabled only if there is at least one step
+backward.
+
+Similarly, the **Next** button (on the right) changes the current step
+to set the next one on the timeline. This button is enabled only if
+there is at least one step forwards.
+
+The **Reset** button sets all the widgets of the process to their
+default value. It is enabled only if the process is not validated yet.
+The current step is also set to the first one.
 
 The behaviour of the timeline used in the general workflow is similar in
 many points to the data processing modules
@@ -276,6 +234,8 @@ current position. They are enabled if it is possible to go in their
 direction
 
 Note that the 'Reset' button is always enabled.
+
+## Rules
 
 A step at rank *n* is enabled if:
 
@@ -289,6 +249,46 @@ It is always possible to navigate between all the steps event if they
 are disabled. This feature is useful if one wants to see/discover the
 content of next steps or to remind the values set in the previous
 widgets.
+
+## Interface for processes
+
+In this section, one describes how a workflow is implemented in
+MagellanNTK First, let's discover the general UI (see xxx). The UI is
+divided in three regions, as showed on xxx. In this example, one view
+the workflow for a process (called 'Process1') which contains 4 steps
+named respectively 'Description', 'Step1', 'Step2, 'Save'. The first and
+last steps are common to all workflows managed by `MagellanNTK` while
+the steps 'Step1' and 'Step2' are specific to the workflow.
+
+-   the area called **Timeline** represent the actions defined in the
+    process, placed in the order they might be executed. It is the
+    representation of the set of steps composing the process
+
+-   The area called **Navigation commands** contains the navigation
+    buttons ('Next, 'Previous' and 'Reset') that allow to pass from a
+    step to another one (changing the current step)
+
+-   the region **Main UI** is the place where the content of each step
+    of the workflow is displayed.
+
+This place shows the content of the current step. Depending on which
+actions are allowed at current time, the widgets used to interact with
+the interface may be enabled or disabled. This depends of the state of
+the process and is explained in details in section xxx.
+
+The state of the bullet in the timeline for a given step determines the
+state of the widgets in the corresponding UI. It means that if the
+bullet of a step is enabled then all the widgets of this step are
+enabled (the Perform button also). In the contrary, a bullet that is
+disabled means that all the widgets and the 'Perform' button in the UI
+are disabled
+
+![](figs/UI_process.png)
+
+The interface for each step contains at least one button named
+'Perform'. This is the mean to validate a step. Th evalidatin of a step
+leads to different actions in the UI, especially a change in the status
+of bullets and other steps.
 
 -   A process cannot be run several times on the same dataset. To avoid
     that, a process be run on the previous result of itself.
@@ -310,7 +310,7 @@ Thus, when the user save its work in the last process of the pipeline,
 this will automatically save the whole object and return it to the
 caller program.
 
-# Process workflow use case
+# Process workflow
 
 This section aims at describing how to use the workflow UI when
 processing a dataset. The goal is not to describe the different data
@@ -456,9 +456,9 @@ button is clicked:
     temporary object). Thus, if a Reset occurs at this time, it happens
     nothing to the object.
 
-# Pipeline use case
+# Pipeline workflow
 
-## Launch a pipeline
+**Launch a pipeline**
 
 When laucnhing a pipeline workflow, two timelines appear (their style -
 vertical or horizontal - depends of the parameters used). The upper one
@@ -478,8 +478,6 @@ been enabled. The object to analyze has been
 loaded.](figs/demo_pipeline_1_3.png)
 
 ![](figs/demo_pipeline_5.png)
-
-## Reset function in a pipeline
 
 When working with a pipeline level, there are two timelines and
 therefore, two 'Reset' Buttons: one for the pipeline itself and one for
@@ -501,8 +499,6 @@ beginning, i.e. all the datasets added by the processes are deleted. In
 the pipeline's timeline, the first sptep ('Description') becomes the
 current one.
 
-I
-
 If the user goes backward on a previous step and validate this step,
 then the following steps are automatically set to 'undone' and have to
 be rerun. This guarantees that the steps are always done in the same
@@ -510,13 +506,7 @@ way. This feature must be implemented in each module source code. It
 cannot be coded in the navigation module (recursive loop on the listener
 of isDone vector)
 
-### Timeline
-
-But, the user may navigate differently in the process and dataset lists.
-Thus, different situations may occur. Suppose we are after a standard
-run, then p = P, i = N, i = p + 1
-
-### Reprocess a previous item of the dataset
+# Reprocess a dataset
 
 Suppose i = N and p = P (from the standard workflow). The user can
 change the current item of the dataset (WHAT'S ITS GOAL ?????)
