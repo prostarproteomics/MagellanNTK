@@ -6,8 +6,8 @@ author:
 package: MagellanNTK
 abstract: >
     The R package `MagellanNTK` (Magellan Navigation ToolKit) is a workflow 
-    manager for processes based on Shiny modules. As it provides core engine 
-    functionnality, it is a package companion for whom wants to make easier
+    manager using Shiny modules. As it provides core engine 
+    functionnality, it is a perfect companion package to make easier
     the succession of process of calculation for datasets.
     It has been developed with genericity in mind so as to handle generic 
     data formats based of `list`.
@@ -41,39 +41,26 @@ editor_options:
 
 # Introduction
 
-This package contains functions that consist in core engine. A workflow
-manager provides an infrastructure for the configuration, the execution
-and the surveillance of a defined sequence of tasks.
+This package contains the core engine to instantiate a workflow manager
+and provide an infrastructure for the configuration, the execution and
+the surveillance of a defined sequence of tasks.
 
-This document covers the use of the interface from the user point of
-view. Please note that, as a Shiny module, MagellanNTK can be run
-standalone or embebbed in another Shiny module, as it is the case with
+The audience of this document is end-users and describes the user
+interface and the functionnality of the core engine. Please note that,
+as a Shiny module, MagellanNTK can be run standalone or embebbed in
+another Shiny module, as it is the case with
 
 In order to have a more complete view of how MagellanNTK works or if you
 intent to develop workflows or pipelines for MagellanNTK, it is advised
 to see the xxx.
 
-One key feature of the engine provided by `MagellanNTK` is its
-flexibility
-
 Generally, end users will not have to know much about `MagellanNTK`
 other than the use of UI. This is the topic of this vignette. This is
-why there is no installation nor launching section about this package.
-For those details, please refer to the vignette 'Configure MagellanNTK'
+why there is no installation nor technical section in his document. For
+technical details, please refer to the vignette 'Configure MagellanNTK'
 
 The graphical elements are mainly navigation elements which permit to
 navigate between steps of a process or processes of a pipeline.
-
-# Data structure
-
-\`MagellanNTK\` is compliant with objects with a list structure. One
-defines here as dataset, a list composed of at least one sub-dataset. By
-default, the first sub-dataset is called 'original'.
-
-As we will see along this document, the object manipulated by
-MagellanNTK is a list of datasets.
-
-The minimal object possible has one dataset (generally names 'original')
 
 # Workflow overview
 
@@ -81,12 +68,14 @@ As a workflow manager, the aim of the engine provided by `MagellanNTK`
 is to execute a series of actions over a dataset and in a particular
 order.
 
-At high level, it can be considered as a black box with two
-communication channels (input and output). A dataset is passed to the
-engine which performs actions on it and then return a new dataset. The
-role of MagellantNTK is to organize and adapt the succession of actions
-that will be performed on the dataset. For example, some steps can be
+At high level, it can be view as a black box with two communication
+channels (input and output). A dataset is passed to the engine which
+performs actions on it and then return a new dataset. The role of
+MagellantNTK is to organize and adapt the succession of actions that
+will be performed on the dataset. For example, some steps can be
 skipped, other are mandatory and cannot be skipped...
+
+![](figs/WF_principle.png)
 
 The actions managed by the engine are implemented as Shiny modules. A
 configuration file to indicate where to find the modules to display.
@@ -174,6 +163,17 @@ knitr::include_graphics("./figs/pipeline.png", error = FALSE)
 As a pipeline is also a workflow, one have globally the same behaviour
 for the dataset. Thus, the object at the output of a pipeline has on
 more dataset than the dataset passed at the input.
+
+## Data structure
+
+\`MagellanNTK\` is compliant with objects with a list structure. One
+defines here as dataset, a list composed of at least one sub-dataset. By
+default, the first sub-dataset is called 'original'.
+
+As we will see along this document, the object manipulated by
+MagellanNTK is a list of datasets.
+
+The minimal object possible has one dataset (generally names 'original')
 
 # User interface
 
@@ -479,14 +479,13 @@ loaded.](figs/demo_pipeline_1_3.png)
 
 ![](figs/demo_pipeline_5.png)
 
-When working with a pipeline level, there are two timelines and
-therefore, two 'Reset' Buttons: one for the pipeline itself and one for
-the processes
+When using a pipeline level, there are two timelines and therefore, two
+'Reset' Buttons: one for the pipeline itself and one for the processes
 
 **Resetting a process**
 
 If the Reset button of a process is clicked, that affects only the
-current process. The behaviour is the same as for processes (See xxx).
+current process. The behavior is the same as for processes (See xxx).
 The current step becomes the first one (Description), all the widgets
 are set to their default values and are disabled. The current process is
 still the same
