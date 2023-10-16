@@ -5,12 +5,8 @@ author:
 - name: Thomas Burger
 package: MagellanNTK
 abstract: >
-    The R package `MagellanNTK` (Magellan Navigation ToolKit) is a workflow 
-    manager using Shiny modules. As it provides core engine 
-    functionnality, it is a perfect companion package to make easier
-    the succession of process of calculation for datasets.
-    It has been developed with genericity in mind so as to handle generic 
-    data formats based of `list`.
+    The R package MagellanNTK (Magellan Navigation ToolKit) is a workflow 
+    manager using Shiny modules. It is the perfect companion package to build          workflows and integrate them in your UI or run it standalone.
 date: "`r Sys.Date()`"
 output:
     BiocStyle::html_document:
@@ -33,27 +29,22 @@ editor_options:
 
 # Introduction
 
-The package \`MagellanNTK\` provides the infrastructure for the
+The package MagellanNTK provides the infrastructure for the
 configuration, the execution and the surveillance of a defined sequence
-of tasks. The tasks it uses are structured as Shiny modules. It is very
-flexible in two ways:
+of tasks. It builds graphical workflow based on third party tasks,
+developed as Shiny modules. As a Shiny application itself, MagellanNTK
+runs standalone or embebbed in another Shiny application, as it is the
+case with the package [Prostar
+2.0](https://github.com/prostarproteomics/Prostar.2.0).
 
--   It does not content any tasks to run but is only the infrastructure
-    to manage them. Task have to be be inserted from another packages or
-    code. Thus, \`MagellanNTK\` can work with a very large panel of
-    domains. For more details on creating tasks for MagellanNTK, please
-    see xxxx.
+This document covers the description and the use of the user interface
+provided by MagellanNTK. It starts with a general overview of workflows
+and their principles. Then , it focuses on the User Interface of
+`MagellanNTK`.
 
-As for Shiny module, MagellanNTK can be run standalone or embebbed in
-another Shiny module, as it is the case with the package [Prostar
-2.0](https://github.com/prostarproteomics/Prostar.2.0) for example. In
-order to have a more complete view of how MagellanNTK works or if you
-intent to develop workflows or pipelines for MagellanNTK, it is advised
-to see the xxx.
-
-Generally, end users will not have to know much about `MagellanNTK`
-other than the use of UI. This is the topic of this vignette. This is
-why there is no installation nor technical section in his document.
+A more complete (and technical) information of how MagellanNTK works can
+be www or if you intent to develop workflows or pipelines for
+MagellanNTK, it is advised to see the xxx.
 
 To go further in technical details, please refer to:
 
@@ -67,147 +58,125 @@ To go further in technical details, please refer to:
 
 -   Inside MagellanNTK
 
-This document starts with a general overview of workflows and their
-principles. Then , it focuses ont the User Interface of
-\``MagellanNTK`\`.
-
 # Workflow overview
 
 As a workflow manager, the aim of `MagellanNTK` is to execute a series
-of ordered tasks over a dataset (see Fig \@ref(fig:WFprinciple)). The
-workflow, instantiated by MagellanNTK, has two communication channels
-(input and output). An input dataset is passed to the engine which
-returns a new dataset (i.e. a dataset in which the result of tasks as
-been added).
-
-```{r 'WFprinciple', results='markup', fig.cap="A process: task organizer", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/WF_principle.png", error = FALSE)
-```
+of ordered tasks over a dataset.
 
 ## Single task
 
 In MagellanNTK, a task (or step) is defined as a data analysis process
-that performs a minimal and consistent set of operations on a dataset.
-Note that the dataset is not obligatory modified, for example in case of
-a visualization task. Each task has its own user interface, based on
-Shiny modules. These interfaces may contain different elements to
-interact with the user (widgets to define parameters values, plots,
-etc).
+that performs a minimal and consistent in a set of operations on a
+dataset (see Fig \@ref(fig:singleTask)) and a user interface based on
+Shiny modules. Each task has also its own input object and returns an
+object as output. Within MagellanNTK, those objects are *lists* in which
+each item is a dataset (several formats are possible).
 
-In a workflow, the sequence of tasks is always one-way: it begins at the
-first task and ends up at the last one. So, the simplest workflow is the
-one where each task is executed after its previous one, from the first
-one to the last one. However, it may be interesting to introduce some
-additional rules to customize the sequence of tasks. Fro example, a
-given task may be facultative (eventually under some condition) while
-another one will be mandatory. The implementation of such possibilities
-is made by mean of properties on tasks. Actually, one property refines
-the possibilities of a task:
+```{r 'singleTask', results='markup', fig.cap="A single task composed of data analysis functions and user interface.", out.extra='style="border-style: solid;"', echo=FALSE, out.width='50%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/singleTask.png", error = FALSE)
+```
 
-| Name      | Values       | Description                                                                   |
-|---------------|---------------|-------------------------------------------|
-| Mandatory | true / false | Indicates whether a task must be executed to be able to pursiue the workflow. |
+The data analysis process do not necessarly modify the input dataset,
+for example in case of a visualization task the input object and the
+output objects are the same.
 
-: In order to decide what to do for the next task, MagellanNTK uses tags
-on tasks to determine their state during the workflow:
+A single task is the simplest workflow that may exist.
 
-| Tag     | Values       | Description                                                                                                                         |
-|-----------|------------|-----------------------------------------------|
-| Done    | true / false | Indicates whether a task has been executed                                                                                          |
-| Skipped | true / false | Indicates whether a task has been skipped (i.e. it is not validated and there is at least one task further that has been validated) |
-| Enabled | true / false | Indicates whether the UI of the task can be modified.                                                                               |
+## Process
 
-Concretely, tasks are identified by a combination of tags and
-properties. Different styles are used to identify them in the user
-interface (See Tab xxx)
+A more complex workflow consists in a sequence of several tasks, what
+defines here a *process*. Processes are implemented as Shiny
+applications and embed the functions and UI of each of their single
+tasks.
+
+```{r 'processOverview', results='markup', fig.cap="Process overview", echo=FALSE, out.width='50%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/process.png", error = FALSE)
+```
+
+As for single tasks, a process take a list of datasets as input, execute
+a series of tasks on the last dataset of the list (the more recent),
+then returns a list of datasets. The output list may be:
+
+-   identical to the input list (same datasets) if the process did not
+    modify it (vizualization functions for example),
+
+-   different if the program modifies the data. In this case,
+    MagellanNTK adds the modified dataset to the end of the list of
+    datasets rather than just updating the last dataset. The new list
+    has one more dataset.. Thus, at any time, the list of datasets keeps
+    the entire history of what happened to datasets.
+
+In a process workflow, the sequence of tasks is one-way: it always
+begins from the first task and ends up at the last one. The simplest
+sequence of tasks is the one where each task is executed once, after its
+previous neighboor has been executed. However, it may be interesting to
+introduce some additional rules to customize this sequence of tasks. As
+for example, a given task may be facultative (eventually under some
+condition) while another one will be mandatory. The implementation of
+such features is made by mean of *properties* on tasks. Actually, four
+tags refines the possibilities of a task:
+
+-   Mandatory: indicates whether a task must be executed to be able to
+    pursiue the workflow.
+
+-   Done: indicates whether a task has been executed
+
+-   Skipped: indicates whether a task has been skipped (i.e. it is not
+    validated and there is at least one task further that has been
+    validated)
+
+-   Enabled: indicates whether the task is runnable (UI is enabled or
+    disabled).
+
+In MagellanNTK, tasks are tagged with a combination of these four tags.
+Different styles are used to identify them in the user interface (See
+Tab xxx)
 
 |                              Bullet                              |   Property    |  State   | Done/Undone |
-|:-------:|:-----------:|:---------:|:------------:|
+|:----------------------------------------------------------------:|:-------------:|:--------:|:-----------:|
 | ![](figs/bullet_empty_red_disabled.png){width="15" height="15"}  |    Skipped    | Disabled |   Undone    |
 | ![](figs/bullet_empty_red_disabled.png){width="15" height="15"}  |   Mandatory   | Disabled |   Undone    |
 |        ![](figs/bullet_empty_red_enabled.png){width="15"}        |   Mandatory   | Enabled  |   Undone    |
 | ![](figs/bullet_full_green_disabled.png){width="15" height="15"} |      \-       | Disabled |    Done     |
 | ![](figs/bullet_empty_red_disabled.png){width="15" height="15"}  | Not mandatory |          |   Undone    |
 
-## Process
-
-In MagellanNTK, a process if defined as a sequence of tasks. Thus, it is
-a more complex workflow than a single task (which is a workflow with
-only one task). Processes are implemented as Shiny modules which contain
-the user interface, the plots, the data analysis functions. This code is
-not the purpose of MagellanNTK. For more details on how to build a
-process module, see xxx.
-
-```{r 'processOverview', results='markup', fig.cap="Process overview", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/process.png", error = FALSE)
-```
-
-Any process takes a dataset as input and returns a dataset as output.
-The output dataset may be:
-
--   identical to the input dataset in the process do not modify it
-    (vizualization functions for example),
-
--   different if the program modifies the data. In this case,
-    MagellanNTK adds the modify dataset to the list of datasets rather
-    than just updating the dataset. It means that if the list input has
-    *n* datasets then the list at output will have *n+1* datasets .
-    Thus, at any time, the list of datasets keeps the entire history of
-    what happened to datasets.
-
 ## Pipeline
 
-The engine's architecture in `MagellanNTK` is implemented in a recursive
-way. A process has been defnied as a sequence of tasks. Here, one
-defines a pipeline as a sequence of processes. Thus, if one remark that
-a process can be view as a (complex) task, then a pipeline is also a
-workflow. Thus, the manner of pipeline works will be very similar to a
-process behaviour:
+Similarly to a process, a pipeline is a workflow defined as a sequence
+of processes (Fig \@ref(fig:pipelineEV)). Thus, the manner of pipeline
+works will be very similar to a process behaviour:
 
--   each process (complex tasks) in a pipeline has tags and properties
-    (See xxx)
+-   each process (task of a pipeline) in a pipeline has tags and
+    properties (See xxx)
 
 -   there is a list of datasets in input and get a list of datasets at
     output
 
 As shown in xxx, a pipeline is at third level of such a structure.
 
-```{r 'hierarchyWorkflow', results='markup', fig.cap="Process overview", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'pipelineEV', results='markup', fig.cap="Eclated view of a pipeline.", echo=FALSE, out.width='75%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/pipeline.png", error = FALSE)
 ```
 
-## Data formats
+## Rules of navigation
 
-It has been descibed earlier that a single process uses a dataset as
-input to execute some tasks and returns a (eventually) modified dataset.
-In a whole workflow management system, this option has a caveat: if one
-wants to save the resulting datasets all over the workflow, one must
-implement this feature outside.
-
-This feature is implemented in MagellanNTK as ordered list of datasets.
-Rather than working a on a single dataset as input to a workflow,
-MagellanNTK pass a list where each item is a dataset resulting of a
-process. And each process takes the last dataset of this list to work on
-it and its resulting new dataset is appended to the list.
-
-The obly exception to that rule is the first dataset of the list which
-is the original. s at a time but with an ordered list of datasets where
-each datasets is the result of one process (except for the first dataset
-which is the original one).
-
-## Rules
-
-Rules are applied here to guarantee that the global strategy of the
-workflow in MagellanNTK are followed. This point is important to
-understand the possibilities of navigation within the UI.
+Some rules are applied to a workflow to guarantee the global strategy of
+the workflow. This point is important to understand the possibilities of
+navigation with MagellanNTK.
 
 **Start workflow at the beginning**. When launching a workflow, the
 first task is the only enabled task. This guarantees to always start
 from the first one.
 
-**One way direction**. The deroulement is in one way. Tasks are executed
-from the first towards the last. It is not possible de go back or rerun
+**One way direction**. The order in which tasks are executed is in one
+direction: tasks are executed from the first one towards the last one.
+Each iteration of time is a xxx. It is not possible de go back or rerun
 a task that has already been validated (exception if reset, see xxx).
+
+**Chronological order of datasets in the list**. The input object of a
+workflow is a list of datasets but the workflow operates only on the
+last one (the most recent one). When a workflow produces a new dataset,
+this one is added at the end of the list.
 
 **Tasks run once.** In the same way, once a task has been validated, it
 becomes disabled. This is to avoid to rerun a task. In this case, that
@@ -219,6 +188,10 @@ until the next mandatory one are automatically enabled.
 
 **Disabled tasks**. A disabled task means there is a rule which do not
 allow it to be executed at this time.
+
+Resetting tasks. It is not possible to reset an atomic task (the lower
+level of tasks). Only whole processes and pipelines can be reseted. For
+more details, see xxx.
 
 Those UI are developed by the creator of the process w.r.t. some
 guidelines (See xxx). In particular, each step has of 'Validate' button
@@ -330,7 +303,7 @@ widgets.
 ## Interface for processes
 
 The interface for each step contains at least one button named
-'Perform'. This is the mean to validate a step. Th evalidatin of a step
+'Perform'. This is the mean to validate a step. The validation of a step
 leads to different actions in the UI, especially a change in the status
 of bullets and other steps.
 
@@ -370,7 +343,7 @@ command in a R console:
 
 ``` r
 library(MagellanNTK)
-demo_workflow()
+demo_workflow('PipelineA_Process1')
 ```
 
 **Launching the workflow**
@@ -382,7 +355,7 @@ dataset is correctly passed to the first step. By default, a workflow
 work on the last dataset of the object. Thus, if this object contains
 several datasets, the last one is loaded.
 
-```{r 'demo_1', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo1', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_1.png", error = FALSE)
 ```
 
@@ -391,7 +364,7 @@ the bullet and the button 'Start'). The other steps (timeline) are
 disabled. However, it is possible to view the content of the other
 steps.
 
-```{r 'demo_1_2', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo12', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_1_2.png", error = FALSE)
 ```
 
@@ -422,7 +395,7 @@ The user switch to 'Step 1' by clicking on the 'Next' button.
 The 'Step 1' is now the current step (note the underline that means it
 is now the current step). As it is enabled, all its widgets are enabled.
 
-```{r 'demo_2', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo2', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_2.png", error = FALSE)
 ```
 
@@ -433,7 +406,7 @@ The user set the widgets to the value he wants and then validate his
 choices by clicking on the button 'Perform'. Once done, the entire step
 become disabled and the bullet's style is changing to "Done".
 
-```{r 'demo_3', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo3', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_3.png", error = FALSE)
 ```
 
@@ -460,7 +433,7 @@ If one go back to the previous step (the one we have skipped), we can
 see a blue area which informs the user that this step has been skipped
 (it has been disabled even with no validation).
 
-```{r 'demo_3_3', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo33', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_3_3.png", error = FALSE)
 ```
 
@@ -471,7 +444,7 @@ The user can now save its work by clicking on the 'Save' button. This
 will result in sending th new dataset (processed by this workflow) to
 the program which has called it.
 
-```{r 'demo_4', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo4', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_4.png", error = FALSE)
 ```
 
@@ -494,7 +467,7 @@ The button 'Reset' allows to set back the workflow in its default state
 is possible to reset the workflow; A popup warns the user of the
 effects.
 
-```{r 'demo_reset', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demoreset', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_reset.png", error = FALSE)
 ```
 
@@ -521,10 +494,17 @@ is clicked:
 
 **Launch a pipeline**
 
-When laucnhing a pipeline workflow, two timelines appear (their style -
+When launching a pipeline workflow, two timelines appear (their style -
 vertical or horizontal - depends of the parameters used). The upper one
 is dedicated to the steps (each one is a process) of the pipeline while
 the down one stands for the steps of the process.
+
+To run this example, type the following command in a R console:
+
+``` r
+library(MagellanNTK) 
+demo_workflow('PipelineA')
+```
 
 Note that the process called 'Description' of a pipeline does not have
 any steps besides a Description one. This is an exception to the rule
@@ -538,7 +518,7 @@ steps is disabled.](figs/demo_pipeline_1.png)
 been enabled. The object to analyze has been
 loaded.](figs/demo_pipeline_1_3.png)
 
-```{r 'demo_pipeline_5', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demopipeline5', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_pipeline_5.png", error = FALSE)
 ```
 
@@ -558,7 +538,7 @@ still the same
 If the Reset button of a pipeline is clicked, this will set back the
 entire pipeline to its default values. The object is set back to the
 beginning, i.e. all the datasets added by the processes are deleted. In
-the pipeline's timeline, the first sptep ('Description') becomes the
+the pipeline's timeline, the first step ('Description') becomes the
 current one.
 
 If the user goes backward on a previous step and validate this step,
@@ -600,5 +580,3 @@ modified by the user but the final workflow is like the standard one
 ```{r}
 sessionInfo()
 ```
-
-workflow
