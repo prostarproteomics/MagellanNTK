@@ -297,19 +297,19 @@ changing the style of bullets, etc..).
 This section aims at describing how to use the workflow UI when
 processing a dataset. The goal is not to describe the different data
 processing tools available but to explain the behaviour of the user
-interface of what we call 'MagellanNTK core'. It is possible to run this
-example by typing the following command in a R console:
+interface of what we call 'MagellanNTK core'. The next of the section is
+a step-by-step guide of working with he UI worklfow. It can be followed
+by typing the following command in a R console:
 
 ``` r
 library(MagellanNTK)
 demo_workflow('PipelineA_Process1')
 ```
 
-This will launch a window with the UI of the workflow (Shiny app).
+**Starting the workflow**
 
-**Launching the workflow**
-
-When the user launches the workflow manager, it comes with the first
+Once the workflow manager is launched (window containing the Shiny
+application), the UI described in xxx appear. it comes with the first
 Step called 'Description'. At this time, all the other steps are
 disabled until the user validate the current step. This ensure that the
 dataset is correctly passed to the first step. By default, a workflow
