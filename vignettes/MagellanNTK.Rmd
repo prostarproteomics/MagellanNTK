@@ -164,30 +164,18 @@ Some rules are applied to a workflow to guarantee the global strategy of
 the workflow. This point is important to understand the possibilities of
 navigation with MagellanNTK.
 
-**Start workflow at the beginning**. When launching a workflow, the
-first task is the only enabled task. This guarantees to always start
-from the first one.
+**Start workflow at the beginning**. When launching a workflow, the first task is the only enabled task. This guarantees to always start from the first one.
 
-**One way direction**. The order in which tasks are executed is in one
-direction: tasks are executed from the first one towards the last one.
-Each iteration of time is a xxx. It is not possible de go back or rerun
-a task that has already been validated (exception if reset, see xxx).
+**One way direction**. The order in which tasks are executed is in one direction: tasks are executed from the first one towards the last one.
+Each iteration of time is a xxx. It is not possible de go back or rerun a task that has already been validated (exception if reset, see xxx).
 
-**Chronological order of datasets in the list**. The input object of a
-workflow is a list of datasets but the workflow operates only on the
-last one (the most recent one). When a workflow produces a new dataset,
-this one is added at the end of the list.
+**Chronological order of datasets in the list**. The input object of a workflow is a list of datasets but the workflow operates only on the last one (the most recent one). When a workflow produces a new dataset, this one is added at the end of the list.
 
-**Tasks run once.** In the same way, once a task has been validated, it
-becomes disabled. This is to avoid to rerun a task. In this case, that
-would mean that a task could modify its own result (modify the dataset
-it has already produced). This case is not possible in MagellanNTK
+**Tasks run once.** In the same way, once a task has been validated, it becomes disabled. This is to avoid to rerun a task. In this case, that would mean that a task could modify its own result (modify the dataset it has already produced). This case is not possible in MagellanNTK
 
-**Validating a task.** When a task is validated, its state becomes
-disabled ans all the further tasks until the next mandatory one are
-automatically enabled.
+**Validating a task.** When a task is validated, its state becomes disabled ans all the further tasks until the next mandatory one are automatically enabled.
 
-**Enabled/disabled tasks**. A disabled task means there is a rule which
+**Enabling/disabling tasks**. A disabled task means there is a rule which
 do not allow it to be executed at this time. A task at rank *n* is
 enabled if there is a previous task with rank *i* (*i \< n*) that has
 been validated and if there is no mandatory task of rank *j* (with *i \<
@@ -204,126 +192,82 @@ set in the previous widgets.
 
 # User interface
 
+
+
+## Layout
+
 The user interface provided by MagellanNTK allows to work with processes
 and pipelines as well. Thus, the interfaces for processes and pipelines
 are very similar and share a lot of features. For this reason, this
 section mainly focuses on a process workflow. Describing more complex
 structures will be easier.
 
-## Layout
+The generic layout is composed of three areas (Fig xxx):
 
-### Process workflow
+-   A **timeline:** which represent the sequence of tasks composing the process, placed in the order they might be executed (from the left to the right). The timeline may be horizontal (Fig xxx a) or vertical (Fig xxx b)
 
-Given the following example: a process called 'Process 1' which contains
-4 steps: *Step1* and *Step2* are third party code and specific to the
-process while the steps called *Description* and *Save* are added by
-MagellanNTK (to every workflow). The interface of this process is shown
-in Fig \@ref(fig:UIprocess).
+-   A **commands** panel (in two parts) containing three buttons (Next, Previous, Reset) which allow to interact and navigate through the different steps of the process.
 
-```{r 'UIprocess', results='markup', fig.cap="User interface for the example process.", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
-knitr::include_graphics("./figs/UI_process.png", error = FALSE)
-```
+-   **UI of the current task** which is a third party code.
 
-The interface built by MagellanNTK is composed of three main areas:
 
--   **Timeline:** represents the sequence of tasks composing the
-    process, placed in the order they might be executed.
 
--   **Commands** (Next, Previous, Reset) allow to interact with the
-    whole current step and navigate through the different steps of the
-    process.
+In the case of a pipeline, the principle is the same. In the example in Fig. xxx, a pipeline called 'Pipeline A' has four steps (Description, Process 1, Process 2 and Process 3). Remark that the content of the UI area of the pipeline is exactly the whole UI of its current process (e.g. in Fig \@ref(fig:UIpipelineannotated)).
 
--   **Current step interface**. The widgets of the UI may be enabled or
-    disabled, depending of the state of the process (See section xxx).
-
-### Pipeline workflow
-
-In the case of a pipeline, a second pipeline is needed to navigate
-between processes (e.g. in Fig \@ref(fig:UIpipelineannotated), the UI of
-a pipeline with the additional timeline)..
-
-```{r 'UIpipelineannotated', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r UIpipelineannotated, results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/UI_pipeline_annotated.png", error = FALSE)
 ```
 
-Note that in a pipeline timeline, the first step is still 'Description'
-but there is not more step called 'Save' as it is the case for any
-process timeline. The reason is because it is not necessary anymore due
-to the fact that a 'Save' step exists in the last process. Thus, when
-the user save its work in the last process of the pipeline, this will
-automatically save the whole object and return it to the caller program.
+Note that in a pipeline timeline, the first step is still 'Description' but there is not more step called 'Save' as it is the case for any process timeline. The reason is because it is not necessary anymore due to the fact that a 'Save' step exists in the last process. Thus, when the user save its work in the last process of the pipeline, this will automatically save the whole object and return it to the caller program.
 
 ## Timeline
 
-In this schema, the steps are represented by bullets linked by lines.
-The style of both bullets and line gives an information about the state
-of the corresponding step. If the bullet of a step is enabled then all
-the widgets of this step are enabled (the Perform button also). In the
-contrary, a bullet that is disabled means that all the widgets and the
-'Perform' button in the UI are disabled
+In the timeline, steps are represented by bullets linked by lines.
+The style of both bullets and line depends on the state
+of the corresponding step. If the bullet of a step is enabled then all the widgets of this step are enabled (as well as the Perform button). In the contrary, a bullet that is disabled means that all the widgets and the 'Perform' button in the UI are disabled
 
-At any time, the current step is marked with an underline below the name
-of the step.
+At any time, the current step is marked with an underline below the name of the step.
 
 ## Commands
 
 Three buttons are available to interact with the whole current step and
 navigate through the different steps of the process:
 
--   **Prev** changes the current step to set the previous one. This
-    button is enabled only if there is at least one step backward,
+-   **Prev** changes the current step to set the previous one. This button is enabled only if there is at least one step backward,
 
--   Similarly, **Next** (on the right) changes the current step to set
-    the next one on the timeline. This button is enabled only if there
-    is at least one step forwards,
+-   Similarly, **Next** (on the right) changes the current step to set the next one on the timeline. This button is enabled only if there is at least one step forwards,
 
--   **Reset** sets the workflow in its original state: all the widgets
-    are set to their default value, the current step becomes the first
-    one and is enabled and all other steps become disabled).
+-   **Reset** sets the workflow in its original state: all the widgets are set to their default value, the current step becomes the first one and is enabled and all other steps become disabled).
 
 ## Interface of a step
 
-The interface for each step contains the graphical elements implemented
-by the developer of the workflow such as widgets, plots, textual
-information, etc...).
+The interface for each step contains the graphical elements implemented by the developer of the workflow such as widgets, plots, textual information, etc...).
 
 MagellanNTK adds only one button to each interface: the Perform button.
-This command is used to validate the step and trigger all the updates in
-the workflow (disabling the current step, enabling further ones,
-changing the style of bullets, etc..).
+This command is used to validate the step and trigger all the updates in the workflow (disabling the current step, enabling further ones, changing the style of bullets, etc..).
 
 # Process workflow
 
-This section aims at describing how to use the workflow UI when
-processing a dataset. The goal is not to describe the different data
-processing tools available but to explain the behaviour of the user
-interface of what we call 'MagellanNTK core'. The next of the section is
-a step-by-step guide of working with he UI worklfow. It can be followed
-by typing the following command in a R console:
+This section aims at describing how to use the workflow UI when processing a dataset. The goal is not to describe the different data processing tools available but to explain the behaviour of the user interface of what we call 'MagellanNTK core'. The next of the section is a step-by-step guide of working with he UI worklfow. It can be followed by typing the following command in a R console:
 
 ``` r
 library(MagellanNTK)
 demo_workflow('PipelineA_Process1')
 ```
 
+In the example of this section, let's start with a process called 'Process 1' which contains
+four steps: *Step1* and *Step2* are third party code and specific to the process while the steps *Description* and *Save* are added by MagellanNTK. 
+
 **Starting the workflow**
 
-Once the workflow manager is launched (window containing the Shiny
-application), the UI described in xxx appear. it comes with the first
-Step called 'Description'. At this time, all the other steps are
-disabled until the user validate the current step. This ensure that the
-dataset is correctly passed to the first step. By default, a workflow
-work on the last dataset of the object. Thus, if this object contains
-several datasets, the last one is loaded.
+Once the workflow manager is launched, a window containing the Shiny application opens (Fig \@ref(fig:demo1)). The current task is the first one ('Description') and it is enabled. At this time, the other steps are disabled until the user validate the current step. This ensures that the dataset (the last one of the list passed in input to the workflow) is correctly passed to the first step.
 
 ```{r 'demo1', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_1.png", error = FALSE)
 ```
 
-At this step, only the 'Description' step is enabled (see the style of
-the bullet and the button 'Start'). The other steps (timeline) are
-disabled. However, it is possible to view the content of the other
-steps.
+However, it is possible to view the content of the other
+steps even if they are disabled (Fig \@ref(fig:demo12)).
 
 ```{r 'demo12', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_1_2.png", error = FALSE)
@@ -331,25 +275,16 @@ knitr::include_graphics("./figs/demo_1_2.png", error = FALSE)
 
 **Validating the 'Description' step**
 
-Here, the user has clicked on the 'Start' button (contented in the ui of
-'Description' step). The bullet has changed to take the style of 'Done'
-steps.
+The validation of the step (clicked on the 'Start' button) leads to some changes:
+-   the bullet of the step change from 'Undone' to 'Done'. 
+-   The current step (here 'Description') becomes disabled (all its widgets disabled). 
+-   The forwarding steps become enabled if the respect the rule 'Enabling/disabling tasks' (See Section \@ref(rules-of-navigation)) In this example, the steps 'Step 1' and 'Step 2' are enabled but not the step 'Save' because it is placed after a non-validated mandatory step.
 
-```{r 'demo_1_3', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+```{r 'demo13', results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
 knitr::include_graphics("./figs/demo_1_3.png", error = FALSE)
 ```
 
-The validation of the step (same behavior for all steps) has two main
-consequences:
 
--   The current step ( here 'Description') becomes disabled (all its
-    widgets disabled). This is to avoid any additional action from the
-    user inside this step
-
--   The forwarding steps may potentially be enabled but this must
-    respect the rule (See xxx). In this case, the steps 'Step 1' and
-    'Step 2' are enabled but not the step 'Save' because it is placed
-    after a non-validated mandatory step.
 
 The user switch to 'Step 1' by clicking on the 'Next' button.
 
