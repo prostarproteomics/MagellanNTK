@@ -28,7 +28,7 @@ NULL
 #' @export
 #' @rdname createTemplate
 #'
-createModuleTemplate <- function(config = NULL, path=NULL) {
+createModuleTemplate <- function(config = NULL, path='.') {
   if (class(config) != 'list')
     stop("'config' is not a `list`. Abort.")
   

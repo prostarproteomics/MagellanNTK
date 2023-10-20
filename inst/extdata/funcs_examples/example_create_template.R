@@ -1,9 +1,11 @@
+library(MagellanNTK)
 
   ### 
   ### Full example for a process workflow
   ###
    path <- tempdir()
    path <- system.file(package='MagellanNTK')
+   path <- '.'
    
   ll.process <- list(
     fullname = 'PipeA_ProcessX',

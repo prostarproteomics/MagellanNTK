@@ -1,0 +1,583 @@
+---
+title: "Inside MagellanNTK"
+subtitle: "A developer's guideline"
+author: "Samuel Wieczorek"
+abstract: >
+    This document covers the functionalities.
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+    BiocStyle::html_document:
+        toc: true
+        toc_depth: 2
+        highlight: tango
+        number_sections: true
+        theme: united
+        keep_md: true
+        papersize: a4
+vignette: >
+    %\VignetteIndexEntry{Inside MagellanNTK}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{css echo=FALSE}
+.bordered{
+  border-style: solid;
+}
+```
+
+# Introduction
+
+The user manual of MagellanNTK covers a strict end-user aspect of
+MagellanNTK, describing the user interfaces and how to navigate through
+the steps of a workflow. This document focuses on a more technical view
+of the package and how to use it to instantiate workflows written bby
+thrid party
+
+A guide to understand how the workflows code is built and how to wrote
+some code is available in vignette xxx.
+
+The package MagellanNTK has two main objectives:
+
+-   be generic to handle several different types of datasets,
+
+-   versatility to integrate many workflows
+
+-   embed a maximum of code so as to minimize the code to write for
+    process modules. Thus, process modules, in a sense, only contains
+    the ui elements for the process and the logics of the modules.
+
+It facilitates the work for writing process modules but has some
+constraints such as the naming conventions which are important. To allow
+writing less 'dev' code, the core of Magellan is mostly based on dynamic
+function surcharge thus, the naming conventions are fundamental.
+
+The package MagellanNTK is a toolkit containing all tools to build a
+workflow. The instantiate of a workflow is dynamic in the sense that it
+is build with the parameters. It is an fundamental characteristic of
+MagellanNTK: it s a collection of bricks that are put together at the
+time of launching. MagellanNTK is a generic package that offers a
+graphical workflow manager, based on Shiny modules. It is very generic
+and can handle different types of objects but they must be of type list
+(see \ref{objecttypes}).
+
+# General principles
+
+MagellanNTK is a Shiny application which provides a workflow management
+framework. The data processing tools are not implemented if MagellanNTK
+but are passed are parameters to the application. Thus, alone,
+MagellanNTK is usefulness. To work, MagellanNTK needs:
+
+-   data processing tools (as Shiny modules)
+
+-   a list of datasets
+
+These data processing modules can be in a separate R script or part of a
+R package. The most important is that the functions ui(), config() and
+server() are available in the same R environment as MagellanNTK.
+
+The package MagellanNTK mainly manage two aspects :
+
+-   the navigation between the different user interfaces
+
+-   the management of the datasets during the execution of the
+    workflows.
+
+All along this document, one will take some examples to explain the
+nomenclature.
+
+## Global architecture
+
+MagellanNTK cannot be run alone, it is always run with a package which
+contains the information about the steps to manage.
+
+::: bordered
+```{r globalArch, results='markup', fig.cap="UI process", echo=FALSE, out.width='100%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/globalArch.png", error = FALSE)
+```
+:::
+
+The final shiny app is showed by Magellan, it is its functions that are
+called in the shiny app. Inside Magellan, three main operations are run:
+
+-   Magellan needs to read the configuration of the module to adjust
+    some of its features (timelines, variables): those information are
+    stored in the code of the process. The first operation of Magellan
+    is to build the name of the source file for the module and to load
+    the source code. More specially, two infos are important: the
+    configuration of the process and the list of UIs of the steps.
+
+-   This loading is accompanied by the insertion of some necessary code
+    in the module. Certain generic functions are stored in Magellan to
+    let the external package as light and easy to understand as
+    possible. While loading the source code, those functions are
+    inserted inside
+
+MagellanNTK reads the configuration class and then builds function names
+to load them. This is why these functions must be well-named and
+available in the R environment.
+
+## Workflows are built dynamically
+
+## Generic templates functions
+
+Some important functions are essential to instantiate a workflow with
+MagellanNTK, event if it is only for examples or with empty datasets.
+
+These functions are implemented in MagellantNTK as generic functions and
+they are mostly empty. The goal is just to make available their name in
+the R environment.
+
+As one will see later in this document, a module to integrate into
+MagellanNTK have to provide such functions. In the contrary, an error
+will occur. When a module is integrated, its specialized functions are
+launched and the replace the generic functions in MagellanNTK. This
+continues the spirit of dynamic workflow building.
+
+# Workflows hierarchy
+
+For e more details on our definitions of workflows, processes,
+pipelines, please refer to the User manual of MagellanNTK.
+
+One will consider here process and pipelines levels. One consider the
+default level is a pipeline, composed of several processes (as steps).
+Thus, a process always own to a pipeline.
+
+A pipeline is identified by its name while a process is identified by a
+name composed of the name of the pipeline it belongs to and its own
+name. For example, 'Pipeline A' will be identified by 'PipelineA', and
+the process 2 of this pipeline is identified by 'PipelineA_Process2'.
+
+::: bordered
+```{r listfuncs, results='markup', fig.cap="UI process", echo=FALSE, out.width='50%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/hierarchy_funcs.png", error = FALSE)
+```
+:::
+
+It is possible that a process is the same in two pipelines. For
+simplicity reasons, one decide to duplicate their code and they have
+different names.
+
+# Installation
+
+The installation is quite simple as it is sufficient to install the package. This is explicitly needed only if one want to launch the workflow manager in a standalone mode.
+
+To install this package, start R (version "4.3") and enter:
+
+```
+library(devtools)
+install_github('prostarproteomics/MagellanNTK')
+
+```
+
+If MagellanNTK is about to be used via a Shiny module, the latter is supposed to load or import the package MagellanNTK.
+
+## Understanding files for MagellanNTK
+
+The engine is getting the code of steps which i supposed to be available in the R environment. This can be done directly via the R console or via a package.
+
+Besides those code files, the developer of the module process.
+
+In this section, on describes which files are needed to feed MagellanNTK so as to use it.
+
+# Process workflow
+
+## Setting example
+
+In a effort of clarity and to make this document more comprehensive, one will take a concrete example to explain the things.
+
+Let's consider a process named Process1 which have three steps
+
+A complete source code for a data processing tool is composed of three functions. Suppose that the workflow is called Process1 and is part of a pipeline called 'Pipeline A', than the three functions are:
+
+-   PipelineA_Process1_conf() which contains information about the tool needed to configure MagellanNTK
+
+-   PipelineA_Process1_ui() which is the ui part of the Shiny
+    application
+
+-   PipelineA_Process1_server() which is the server part of the Shiny application
+
+Note: Each data processing tool must have these three functions.
+
+For example, in this case, the following functions:
+
+-   PipelineA_conf(), PipelineA_ui(), PipelineA_server()
+
+-   PipelineA_Description_conf(), PipelineA_Description_ui(),
+    PipelineA_Description_server()
+
+-   PipelineA_Process1_conf(), PipelineA_Process1_ui(),
+    PipelineA_Process1_server()
+
+-   PipelineA_Process2_conf(), PipelineA_Process2_ui(),
+    PipelineA_Process2_server()
+
+-   PipelineA_Process3_conf(), PipelineA_Process3_ui(),
+    PipelineA_Process3_server()
+
+## Configuration
+
+The first thing to set is a configuration for the workflow one wants to
+run with MagellanNTK. This allow to give necessary information to
+MagellanNTK so that it will know how ti dynamically build the interface.
+
+Several elements are needed.
+
+### Config class
+
+The S4-class named Config is used to store information about the tools.
+It contains the following external slots:
+
+-   fullname: the name of the workflow composed of the name of a
+    pipeline (prefix) and the name of the process (suffix),
+
+-   mode: a character specifying if the class describes a process or a
+    pipeline,
+
+-   steps: the list of steps names that composing the tool. ,
+
+-   mandatory: a vector of the same length that steps and which
+    indicates whether each step is mandatory or not,
+
+These information (and the class) must be diffused via a function which
+syntax is
+
+*fullname*\_conf() where name_of_tool is the name of the tool. This name
+must be the same as the value of the slot fullname.
+
+```         
+PipelineA_Process1_conf()
+```
+
+The source code
+
+## Companion package
+
+Nous décrivons ici quelques aspects fondamentaux des fonctions ui() et server() pour les modules de traitement de données qui seront gérés par MagellanNTK.
+
+### Structure of a Magellan-compliant module process
+
+As for any Shiny module, it must contain the two following functions:
+ui() and server()
+
+Ces fonctions doivent avoir des noms construits de la manière suivante :
+4 chaînes de caractères séparées par un '\_':
+
+-   xxx
+
+-   xxxx
+
+-   xxxx
+
+-   xxxx
+
+Dans l'exemple ci-dessous, il s'agit d'un module nommé 'Process1' et
+faisant partie d'un pipeline appelé 'PipelineA'.
+
+Si le module n'a pas de process parent, alors
+
+```{r structProcessModule, echo=TRUE, eval = FALSE}
+
+mod_process_PipelineA_Process1_ui <- function(id){
+  ns <- NS(id)
+}
+
+
+mod_process_PipeA_Proc1_server <- function(id,
+    nav.mode = 'process',
+    dataIn = reactive({NULL}),
+    steps.enabled = reactive({NULL}),
+    remoteReset = reactive({FALSE}),
+    current.pos = reactive({1})
+    ){
+
+    # This list contains the basic configuration of the process
+    config <- list(
+        name = NULL,
+        parent = NULL,
+        steps = NULL,
+        mandatory = NULL
+        )
+  
+    # Define default selected values for widgets
+    # This is only for simple workflows
+    widgets.default.values <- list(
+    # Add your own code
+    )
+
+    ###-------------------------------------------------------------###
+    ###                                                             ###
+    ### ------------------- MODULE SERVER --------------------------###
+    ###                                                             ###
+    ###-------------------------------------------------------------###
+    moduleServer(id, function(input, output, session) {
+        ns <- session$ns
+
+        # Insert necessary code which is hosted by Magellan
+        # DO NOT MODIFY THIS LINE
+        eval(str2expression(
+            SimpleWorflowCoreCode(
+            widgets = names(widgets.default.values),
+            steps = config$steps )
+            )
+        )
+
+        # Add your UI stuff below
+
+        # Insert necessary code which is hosted by Magellan
+        # DO NOT MODIFY THIS LINE
+        eval(parse(text = Module_Return_Func()))
+        }
+    )
+}
+
+```
+
+### Structure of a Magellan-compliant module pipeline
+
+### Conventions de nommage
+
+ceci est un poitn très important pour le bon fonctionnement des deux
+packages. En effet, comme il a été précisé xxx, Magellan est un workflow
+manager générique qui gère des modules dont on lui envoie la
+configuration. Afin de respecter cette généricité, Magellan construit
+dynamiquement un certain nombre de fonctions et de variables à partir de
+la configuration des process et pipelines
+
+# Type of objects
+
+it is suitable for objects of type list for which the fundamental
+requirments are:
+
+-   A list of items
+
+-   Each item is named and can be accessed either by its name or index
+
+-   The exists an 'append' function and a 'Remove' function. The first
+    one adds an additional item at the end of the list (append
+    function). The last one can remove any of the item in the list (even
+    with a range) We hope that the source code of modules in `Magellan`
+    is sufficient to understand how it is structured. We give here
+    several additional tips for a better understanding.
+
+`Magellan` can handle different types (classes) of objects but all based
+on the type `list`. To manipulate such objects, it use most of the R
+functions like `[]`, `[[]]`, etc... As it is generic, all types of
+objects used by the modules must work with these basic functions.
+
+However, two functions cannot be really generic: xxx and xxx(). They are
+very simple (essentially they are wrappers for existing functions) but
+necessary. These functions are defined as abstract in `Magellan`. For
+the examples, `Magellan` implements those functions for the simple class
+`list`. The dev who want to write its own process module have to write
+the code of these two functions for the class of its object.
+
+## The 'inst/scripts' directory
+
+The 'R' directory contains source code files. The files prefixed by
+'mod\_' contain a shiny module.
+
+Among those files
+
+The 'inst/scripts' directory contain the following files:
+
+-   min_simple_workflow_app_example.R: xxx
+-   min_simple_workflow_app.R: xxx
+-   test_data.R: xxx
+-   test_mod_Test_Process1.R: xxx
+
+The directory 'module_examples' contain xxx
+
+# 
+
+## Launch a workflow
+
+As Magellan is a Shiny app, to launch the app, a few lines of code are
+necessary. Here, are th minimum code to launch a worklfow called Proc1
+which belongs to a composed workflow called 'PipeA'.
+
+Here is explained a minimal shiny app (code in
+'/inst/scripts/min_simple_workflow_app_example.R'). Here are the
+comments
+
+Launch the packages
+
+```{r minshinyappexample_launchpackages,attr.source = ".numberLines", eval = FALSE}
+library(MagellanNTK)
+
+f <- system.file("module_examples", 
+    "example_module_PipelineA_Process1.R",
+    package="Magellan")
+source(file(f), local=TRUE)$value
+
+ui <- fluidPage(
+    mod_navigation_ui('PipelineA_Process1')
+
+server <- function(input, output){
+    data(feat1, package='Magellan')
+    rv <- reactiveValues(
+        dataIn = feat1,
+        dataOut = NULL
+        )
+  
+    observe({
+        rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+            nav.mode = 'process',
+            dataIn = reactive({rv$dataIn})
+            )
+    }, priority=1000)
+}
+
+shinyApp(ui, server)
+
+```
+
+As we can see, launching a shiny app which shows a process module pass
+by `Magellan` which acts as a bridge package: the ui() and server()
+functions of the app only call `Magellan` functions.
+
+There is here a first example of the imortance of names convention. If
+we focus on the id of these functions, one can see that it is composed
+of two concatenated strings : the name of the parent and the name of the
+process. This id is splitted and xxxx. This string is precisely the name
+of the procs module source code file in the external package (but
+prefixed by 'mod\_')
+
+A generic script example is here:
+'/inst/scripts/min_simple_workflow_app.R'
+
+## Naming conventions for modules
+
+As `Magellan` heavily uses dynamically built function names (to be
+generic), the naming of scripts and variables is fundamental.
+
+A module is well-defined by its `config` variable which contains its
+name and the name of the parent workflow to which it belongs to. In this
+document, 'mod_name' will refer to the name of the module (i.e. Process1
+as in example) and 'parent_name' to the name of its parent (i.e.
+PipelineA as in example).
+
+For more details on how to name files and variables in the process
+modules, please read the manual 'xxx'
+
+## Requirments
+
+This package must have xxx. Two other articles are available that
+explain how to write a module for simple and composed workflows.
+
+## Specific functions to write
+
+Whether the class of the object, it may be necessary to write the code
+for two functions that cannot be generic
+
+-   An append function named Add_Datasets_to_Object()
+-   A remove function named Keep_Datasets_from_Object()
+
+Those functions must be part of the external package to avoid too many
+dependancies for the package `Magellan`.
+
+The developer of shiny modules that will use `Magellan` can find in an
+exmaple of those functions that are implemented for the type `list` and
+for examples purpose.
+
+# Simple workflow
+
+This vignette explains how to create a new process in the `Magellan`
+framework. A process is a set of data processes applied to a dataset (ie
+an object of class QFeatures).
+
+We hope that the source code is well documented but we think it is a
+good idea to start with this article. Normally, there is no need to go
+deep in the source code to write your own process.
+
+The code of a module for `Magellan` is structured so as to have very few
+functions to write and develop your own module.
+
+Examples of processes are in the inst/scripts directory. This tutorial
+aims to explain step-by-step the construction of the process
+
+As a process in `Magellan` is a shiny module, it comes with two
+functions ui() and server().
+
+## Nomenclature of ui and server functions
+
+The name of these functions is very important because Magellan call
+those functions by building their name dynamically. C'est pour cela
+qu'il est primordial de respecter la nomenclature.
+
+Chacune des deux fonctions contient quatre mots-clés séparés par '\_':
+
+-   `mod`:mot-clé fixe qui précise que la fonction est celle d'un
+    module,
+-   `pipeline_name`: le nom du pipeline auquel le process appartient,
+-   `process_name`: le nom du process lui-même,
+-   `ui` ou `server` selon qu'il s'agit de la fonction ui ou server.
+
+Par example, la fonction `mod_PipelineA_Process4_server()` est le nom du
+serveur pour le process 4 du pipeline A.
+
+## Timeline styles
+
+The timelines are coded as modules. They are not exported as only
+mod_navigation_server use them. However, it may be interesting to the
+developer to know a little about them if he want to customize or develop
+another timeline.
+
+The look & feel if managed by the ui() function while the logics is
+managed by the module server() function. This server ensures that the
+different states (enabled/disabled, color and style, display of the
+cursor for the active step) of each item in the timeline works well
+
+Despite that hose information are documented in the reference manual of
+Magellan but it allows to better understand here how it works.
+
+The server() function is based on the same fundamental code:
+
+```{r serverTL, eval=FALSE, echo=TRUE}
+mod_timeline_v_server <- function(id, 
+    config, 
+    status,
+    position,
+    enabled) {
+
+    moduleServer(id, function(input, output, session) {
+        ns <- session$ns
+    
+        UpdateTags <- reactive({...})
+        output$show_v_TL <- renderUI({...})
+    })
+}
+```
+
+The parameters of the server are the same for both vertical and
+horizontal timelines:
+
+-   id: the `id` of the server (same as the `id` of the ui() function),
+-   config: A `list` (not a `reactiveList`) containing the same elements
+    as the process module.
+-   status: A `reactive vector` which contain the status (validated,
+    skipped or undone) of each step of the process module. Its length is
+    equal to the number of steps.
+-   position: A `reactive integer` that reflects the position of the
+    current (active) step.
+-   enabled: A `reactive vector` of length the number of steps and which
+    indicate if the step is enabled or disabled.
+
+The reactive function `UpdateTags()` updates a vector containing the
+tags inserted in the css-style.
+
+# Tools for developers
+
+## Debug module
+
+A shiny module called Debug_Infos is available to follow the execution
+of a workflow and more precisely, the content of datasets.
+
+\section{Session information}\label{sec:sessionInfo}
+
+```{r}
+sessionInfo()
+```
