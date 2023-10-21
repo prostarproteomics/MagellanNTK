@@ -21,9 +21,11 @@ dyn_widgets_server <- function(id) {
     # reactive value to "collect" company inputs
     steps <- reactiveValues(inputs = c(),
                             mandatory = c())
+    
     dataOut <- reactiveVal(list())
     
     observe({
+      req(input$add_button)
       # update steps inputs
       lapply(1:input$add_button, function(i){
         out = ''

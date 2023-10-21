@@ -5,10 +5,10 @@ create_process_template_ui <- function(id) {
   ns <- NS(id)
   tagList(
     p('test'),
+    uiOutput(ns('path_ui')),
     uiOutput(ns('mode_ui')),
     uiOutput(ns('parent_ui')),
     uiOutput(ns('name_ui')),
-    actionButton(ns('addStep'), 'Add step'),
     uiOutput(ns('steps_ui')),
     actionButton(ns('createTemplate'), 'Create template')
   )
@@ -23,6 +23,37 @@ create_process_template_server <- function(id) {
       steps = NULL
     )
     
+    #-------------------------------------------------------
+    output$path_ui <- renderUI({
+      tagList(
+        shinyDirButton(ns("dir"), "Input directory", "Upload"),
+      verbatimTextOutput(ns("dir"), placeholder = TRUE) 
+      )
+    })
+    
+    shinyDirChoose(input, 'dir', roots = c(home = '~'))
+    
+    global <- reactiveValues(datapath = getwd())
+    
+    dir <- reactive(input$dir)
+    
+    output$dir <- renderText({
+      global$datapath
+    })
+    
+    observeEvent(ignoreNULL = TRUE,
+                 eventExpr = {
+                   input$dir
+                 },
+                 handlerExpr = {
+                   if (!"path" %in% names(dir())) return()
+                   home <- normalizePath("~")
+                   global$datapath <-
+                     file.path(home, paste(unlist(dir()$path[-1]), collapse = .Platform$file.sep))
+                 })
+    
+    #-------------------------------------------------------
+    
     output$mode_ui <- renderUI({
       selectInput(ns('mode'), 'Mode', choices = c('process', 'pipeline'), width='100px')
     })
@@ -35,23 +66,13 @@ create_process_template_server <- function(id) {
       textInput(ns('name'), 'name', width='100px')
     })
     
-    observeEvent(input$addStep, {
-      name <- paste0('step_', length(rv$steps))
-      rv$steps[[name]] <- textInput(ns(name), name, 
-                                             value = rv$steps[[name]],
-                                             width='100px')
-      # ,
-      #                              selectInput(ns(paste0('mandatory_', name)), 
-      #                                          paste0('mandatory_', name),
-      #                                          choices=c(TRUE, FALSE), 
-      #                                          width='70px')
-                                   # )
-
+    output$steps_ui <- renderUI({
+      dyn_widgets_ui(ns('dyn_steps'))
     })
     
-    output$steps_ui <- renderUI({
-      rv$steps
-    })
+    res <- reactiveValues(dataOut = list())
+    res$dataOut <- dyn_widgets_server('dyn_steps')
+    
   
     ################################################################### 
     
@@ -60,10 +81,16 @@ create_process_template_server <- function(id) {
     })
     
     observeEvent(input$createTemplate, {
-      fullname <- paste0(input$parent, '_', input$name)
+      miniConfig <- list(fullname = paste0(input$parent, '_', input$name),
+                         mode = input$mode,
+                         steps = res$dataOut()$inputs,
+                         mandatory = res$dataOut()$mandatory
+                         )
       browser()
-      steps <- names(rv$steps)
-      mandatory <- unlist(rv$steps)
+      
+      files <- createModuleTemplate(miniConfig, 
+                                    path = global$datapath)
+      
     })
 })
 }
