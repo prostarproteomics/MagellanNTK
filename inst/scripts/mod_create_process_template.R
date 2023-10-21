@@ -36,14 +36,16 @@ create_process_template_server <- function(id) {
     })
     
     observeEvent(input$addStep, {
-      name <- paste0('step', length(rv$steps))
-      rv$steps[[name]] <- div(style = "display:inline-block; vertical-align: top;",
-                                   textInput(ns(name), name, width='100px'),
-                                   selectInput(ns(paste0('mandatory_', name)), 
-                                               paste0('mandatory_', name),
-                                               choices=c(TRUE, FALSE), 
-                                               width='70px')
-                                   )
+      name <- paste0('step_', length(rv$steps))
+      rv$steps[[name]] <- textInput(ns(name), name, 
+                                             value = rv$steps[[name]],
+                                             width='100px')
+      # ,
+      #                              selectInput(ns(paste0('mandatory_', name)), 
+      #                                          paste0('mandatory_', name),
+      #                                          choices=c(TRUE, FALSE), 
+      #                                          width='70px')
+                                   # )
 
     })
     
@@ -51,9 +53,17 @@ create_process_template_server <- function(id) {
       rv$steps
     })
   
+    ################################################################### 
+    
+    build_fullname <- reactive({
+      paste0(input$parent, '_', input$name)
+    })
     
     observeEvent(input$createTemplate, {
-      print('titi')
+      fullname <- paste0(input$parent, '_', input$name)
+      browser()
+      steps <- names(rv$steps)
+      mandatory <- unlist(rv$steps)
     })
 })
 }
