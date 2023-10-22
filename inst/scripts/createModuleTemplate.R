@@ -28,7 +28,8 @@ NULL
 #' @export
 #' @rdname createTemplate
 #'
-createModuleTemplate <- function(config = NULL, path='.') {
+createModuleTemplate <- function(config = NULL, 
+                                 path='.') {
   if (class(config) != 'list')
     stop("'config' is not a `list`. Abort.")
   
@@ -42,7 +43,7 @@ createModuleTemplate <- function(config = NULL, path='.') {
  
   # Create template module file
   mod.filename <- file.path(path, paste0(config$fullname, ".R"))
-  value <- c(value, paste0(config$fullname, ".R"))
+  value <- c('R', paste0(config$fullname, ".R"))
   if (file.exists(mod.filename)) {
     file.remove(mod.filename)
     }

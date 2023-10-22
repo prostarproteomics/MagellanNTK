@@ -1,5 +1,5 @@
 
-#' @title Shiny example process module.
+  #' @title Shiny example process module.
 #'
 #' @description
 #' This module contains the configuration informations for the corresponding pipeline.
@@ -13,10 +13,10 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `PipeA_ProcessX_ui()` and `PipeA_ProcessX_server()` define
+#' In this example, `PipelineA_Process1_ui()` and `PipelineA_Process1_server()` define
 #' the code for the process `xxx` which is part of the pipeline called `xxx`.
 #'
-#' @name module_PipeA_ProcessX
+#' @name module_PipelineA_Process1
 #' 
 #' @param id xxx
 #' @param dataIn The dataset
@@ -38,12 +38,12 @@ NULL
 
 #' @export
 #' 
-PipeA_ProcessX_conf <- function(){
+PipelineA_Process1_conf <- function(){
   Config(
-    fullname = 'PipeA_ProcessX',
+    fullname = 'PipelineA_Process1',
     mode = 'process',
-    steps = c('Step 1', 'Step 2'),
-    mandatory = c(TRUE, FALSE)
+    steps = c('Step 1', 'Step 2', 'Step 3'),
+    mandatory = c(TRUE, FALSE, TRUE)
     )
 }
 
@@ -51,7 +51,7 @@ PipeA_ProcessX_conf <- function(){
 
 #' @export
 #' 
-PipeA_ProcessX_ui <- function(id){
+PipelineA_Process1_ui <- function(id){
   ns <- NS(id)
   }
 
@@ -59,7 +59,7 @@ PipeA_ProcessX_ui <- function(id){
 
 #' @export
 #' 
- PipeA_ProcessX_server <- function(id,
+ PipelineA_Process1_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -293,6 +293,55 @@ output$Step2_btn_validate_ui <- renderUI({
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Step2'] <- global$VALIDATED
+    })
+  
+
+
+output$Step3 <- renderUI({
+
+wellPanel(
+        # uiOutput for all widgets in this UI
+        # This part is mandatory
+        # The renderUI() function of each widget is managed by MagellanNTK
+        # The dev only have to define a reactive() function for each
+        # widget he want to insert
+        # Be aware of the naming convention for ids in uiOutput()
+        # For more details, please refer to the dev document.
+        
+        # Insert validation button
+        uiOutput(ns('Step3_btn_validate_ui')),
+        
+        # Additional code
+            
+        )
+    })
+
+
+output$Step3_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('Step3_btn_validate'),
+                   'Perform',
+                   class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Step3'] )
+      
+    })
+    # >>> END: Definition of the widgets
+    
+    
+    observeEvent(input$Step3_btn_validate, {
+      # Do some stuff
+      
+      # Here, you to hase use a function to add an item to the
+      # dataset
+      # rv$dataIn <- Add_Datasets_to_Object(
+      #                object = rv$dataIn,
+      #                dataset = rnorm(1:5),
+      #                name = paste0('temp_',id)
+      #                )
+      
+      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Step3'] <- global$VALIDATED
     })
   
 

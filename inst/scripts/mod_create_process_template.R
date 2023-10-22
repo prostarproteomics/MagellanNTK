@@ -5,12 +5,18 @@ library(shinyFiles)
 create_process_template_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    shinyjs::useShinyjs(),
     h3('Create process template'),
     uiOutput(ns('path_ui')),
-    uiOutput(ns('mode_ui')),
-    uiOutput(ns('parent_ui')),
-    uiOutput(ns('name_ui')),
-    uiOutput(ns('steps_ui')),
+    fluidRow(
+      column(width = 4, selectInput(ns('mode'), 'Mode', choices = c('pipeline', 'process'), width='100px')),
+      column(width = 4, 
+             shinyjs::disabled(
+               textInput(ns('parent'), 'Parent', width='100px')
+             )),
+      column(width = 4, textInput(ns('name'), 'Name', width='100px'))
+    ),
+    dyn_widgets_ui(ns('dyn_steps')),
     actionButton(ns('createTemplate'), 'Create template'),
     uiOutput(ns('filesCreated'))
   )
@@ -31,24 +37,11 @@ create_process_template_server <- function(id) {
     output$path_ui <- renderUI({
       path(chooseDir_server('chooseDir'))
       chooseDir_ui(ns('chooseDir'))
-      
     })
     
-    
-    output$mode_ui <- renderUI({
-      selectInput(ns('mode'), 'Mode', choices = c('process', 'pipeline'), width='100px')
-    })
-    
-    output$parent_ui <- renderUI({
-      textInput(ns('parent'), 'Parent', width='100px')
-    })
-    
-    output$name_ui <- renderUI({
-      textInput(ns('name'), 'name', width='100px')
-    })
-    
-    output$steps_ui <- renderUI({
-      dyn_widgets_ui(ns('dyn_steps'))
+    observe({
+      input$mode
+      shinyjs::toggle('parent', condition = input$mode=='process')
     })
     
     res <- reactiveValues(dataOut = list())
@@ -62,7 +55,6 @@ create_process_template_server <- function(id) {
     })
     
     observeEvent(input$createTemplate, {
-      browser()
       miniConfig <- list(fullname = paste0(input$parent, '_', input$name),
                          mode = input$mode,
                          steps = res$dataOut()$inputs,
@@ -74,7 +66,10 @@ create_process_template_server <- function(id) {
     
     output$filesCreated <- renderUI({
       req(files())
-      lapply(files(), function(i) p(i))
+      tagList(
+        p('Template files created;'),
+        lapply(files(), function(i) p(i))
+      )
     })
 })
 }
