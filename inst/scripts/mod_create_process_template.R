@@ -1,16 +1,18 @@
 
 library(shiny)
+library(shinyFiles)
 
 create_process_template_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    p('test'),
+    h3('Create process template'),
     uiOutput(ns('path_ui')),
     uiOutput(ns('mode_ui')),
     uiOutput(ns('parent_ui')),
     uiOutput(ns('name_ui')),
     uiOutput(ns('steps_ui')),
-    actionButton(ns('createTemplate'), 'Create template')
+    actionButton(ns('createTemplate'), 'Create template'),
+    uiOutput(ns('filesCreated'))
   )
 }
 
@@ -22,37 +24,16 @@ create_process_template_server <- function(id) {
     rv <- reactiveValues(
       steps = NULL
     )
+    path <- reactiveVal(NULL)
+    files <- reactiveVal(NULL)
     
     #-------------------------------------------------------
     output$path_ui <- renderUI({
-      tagList(
-        shinyDirButton(ns("dir"), "Input directory", "Upload"),
-      verbatimTextOutput(ns("dir"), placeholder = TRUE) 
-      )
+      path(chooseDir_server('chooseDir'))
+      chooseDir_ui(ns('chooseDir'))
+      
     })
     
-    shinyDirChoose(input, 'dir', roots = c(home = '~'))
-    
-    global <- reactiveValues(datapath = getwd())
-    
-    dir <- reactive(input$dir)
-    
-    output$dir <- renderText({
-      global$datapath
-    })
-    
-    observeEvent(ignoreNULL = TRUE,
-                 eventExpr = {
-                   input$dir
-                 },
-                 handlerExpr = {
-                   if (!"path" %in% names(dir())) return()
-                   home <- normalizePath("~")
-                   global$datapath <-
-                     file.path(home, paste(unlist(dir()$path[-1]), collapse = .Platform$file.sep))
-                 })
-    
-    #-------------------------------------------------------
     
     output$mode_ui <- renderUI({
       selectInput(ns('mode'), 'Mode', choices = c('process', 'pipeline'), width='100px')
@@ -81,16 +62,20 @@ create_process_template_server <- function(id) {
     })
     
     observeEvent(input$createTemplate, {
+      browser()
       miniConfig <- list(fullname = paste0(input$parent, '_', input$name),
                          mode = input$mode,
                          steps = res$dataOut()$inputs,
                          mandatory = res$dataOut()$mandatory
                          )
+      
+      files(createModuleTemplate(miniConfig, path = path()))
+    })
+    
+    output$filesCreated <- renderUI({
+      req(files())
       browser()
-      
-      files <- createModuleTemplate(miniConfig, 
-                                    path = global$datapath)
-      
+      lapply(files(), function(i) p(i))
     })
 })
 }
