@@ -69,12 +69,11 @@ create_process_template_server <- function(id) {
                          mandatory = res$dataOut()$mandatory
                          )
       
-      files(createModuleTemplate(miniConfig, path = path()))
+      files(createModuleTemplate(miniConfig, path = path()()))
     })
     
     output$filesCreated <- renderUI({
       req(files())
-      browser()
       lapply(files(), function(i) p(i))
     })
 })

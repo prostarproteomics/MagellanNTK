@@ -1,4 +1,4 @@
-
+library(shinyFiles)
 
 chooseDir_ui <- function(id) {
   ns <- NS(id)
@@ -16,12 +16,12 @@ chooseDir_server <- function(id) {
     
 shinyDirChoose(input, 'dir', roots = c(home = '~'))
 
-global <- reactiveValues(datapath = getwd())
+path <- reactiveVal(getwd())
 
 dir <- reactive(input$dir)
 
 output$dir <- renderText({
-  global$datapath
+  path()
 })
 
 observeEvent(ignoreNULL = TRUE,
@@ -31,11 +31,12 @@ observeEvent(ignoreNULL = TRUE,
              handlerExpr = {
                if (!"path" %in% names(dir())) return()
                home <- normalizePath("~")
-               global$datapath <-
+               path(
                  file.path(home, paste(unlist(dir()$path[-1]), collapse = .Platform$file.sep))
+               )
              })
 
-reactive(global$datapath)
+reactive(path())
 
 })
 }
@@ -43,10 +44,19 @@ reactive(global$datapath)
 
 
 chooseDir<- function(){
-  ui <- chooseDir_ui('test')
+  ui <- fluidPage(
+    chooseDir_ui('test'),
+    uiOutput('info')
+    )
   
-  server <- function(input, output, session) 
-    chooseDir_server('test')
+  server <- function(input, output, session) {
+    path <- reactiveVal(chooseDir_server('test'))
+    
+    output$info <- renderUI({
+      p(path()())
+    })
+  }
+    
   
   shinyApp(ui, server)
   

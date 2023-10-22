@@ -30,6 +30,9 @@ Imports:
 Collate: 
     AllGenerics.R
     demos.R
+    mod_chooseDir.R
+    mod_dl.R
+    mod_dyn_widgets.R
     config_class.R
     doc-data.R
     global.R
