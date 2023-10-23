@@ -1,35 +1,9 @@
-#' @title Create process template code
-#'
-#' @description This function creates the source code of an empty module 
-#' (i.e. a module without any widgets). This module contains the minimal
-#' skeleton to work. The developer can then insert its own code for widgets
-#' and data processing functions.
-#' 
-#' The 'Description' step is generic and creates a *.md file to be filled by
-#' th developer.
-#'
-#'
-#' @example examples/example_create_template.R
-#'
-#' @author Samuel Wieczorek
-#'
-#' @importFrom stringi stri_locate_all stri_locate
-#'
-#' @name createTemplate
-#' 
-#' @param ll.config A `list()` of 4 items
-#' @param path xxx
-#' @param name xxx
-#' 
-NULL
 
-
-#' @return NA
 #' @export
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 createModuleTemplate <- function(config = NULL, 
-                                 path='.') {
+                                 path = '.') {
   if (class(config) != 'list')
     stop("'config' is not a `list`. Abort.")
   
@@ -90,12 +64,17 @@ createModuleTemplate <- function(config = NULL,
     # not to a process
     value <- c(value, Create_md_file(path, config$fullname))
   
+  
+  # Create extra fucntions template
+  value <- c(value, createExtraFunctions(path))
+  
+  
   return(value)
 }
 
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 #' 
 write_general_comment <- function(con, name){
   
@@ -178,7 +157,7 @@ return(md.file)
 }
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 write_ui_func <- function(con, name) {
 code <- "
@@ -192,7 +171,7 @@ code <- "
     writeLines(gsub("#name#", name, code), con)
 }
 
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 write_header_server_func <- function(con, name) {
 code <- "
@@ -224,7 +203,7 @@ code <- "
 
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 write_config_func <- function(con, config) {
 code <- "
@@ -249,7 +228,7 @@ code <- "
 }
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 write_process_code_for_default_value_widgets <- function(con) {
 code <- "
@@ -264,7 +243,7 @@ writeLines(code, con)
 }
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 write_module_server_header <- function(con, mode) {
 code <- "
@@ -326,7 +305,7 @@ writeLines(code, con)
 }
 
   
-#' @rdname createTemplate
+#' @rdname create_template
 #' @export
 #' 
 write_stepUI_template <- function(step.name){
@@ -367,7 +346,7 @@ output$#step.name#_btn_validate_ui <- renderUI({
       
       # Here, you to hase use a function to add an item to the
       # dataset
-      # rv$dataIn <- Add_Datasets_to_Object(
+      # rv$dataIn <- addDatasets(
       #                object = rv$dataIn,
       #                dataset = rnorm(1:5),
       #                name = paste0('temp_',id)
@@ -390,7 +369,7 @@ code
 
 #' @title xxx
 #' @description This function inserts the necessary code for the 'Description' step
-#' @rdname createTemplate
+#' @rdname create_template
 #' 
 write_Insert_Description_Step_code_for_Process <- function(con, path){
 
@@ -455,7 +434,7 @@ writeLines(code, con)
 
 #' @title xxx
 #' @description This function inserts the necessary code for the 'Description' step
-#' @rdname createTemplate
+#' @rdname create_template
 #' 
 write_Insert_Save_Step_code_for_Process <- function(con){
   
@@ -485,8 +464,8 @@ code <- "
     
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                          dataset = rnorm(1:5),
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+      dataset = rnorm(1:5),
                           name = id)
     
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
@@ -509,7 +488,7 @@ writeLines(code, con)
 #' @title xxx
 #' @description This function inserts the necessary code for the 
 #' Description' step
-#' @rdname createTemplate
+#' @rdname create_template
 #' 
 Create_Pipeline_Description_source_file <- function(fullname, path){
 
@@ -594,7 +573,7 @@ code <- gsub('#fullname#', fullname, code)
 
 
 
-#' @rdname createTemplate
+#' @rdname create_template
 write_output_func <- function(con) {
 code <- "
 # Insert necessary code which is hosted by MagellanNTK
@@ -619,7 +598,7 @@ writeLines(code, con)
 #' strings or not. In this case, they will be quoted in the result
 #' 
 #' @return A string
-#' @rdname createTemplate
+#' @rdname create_template
 #'
 vec2code <- function(ls_list, is.char = FALSE) {
   if (is.char) {

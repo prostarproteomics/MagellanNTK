@@ -2,9 +2,12 @@
 % Please edit documentation in R/run_workflow.R
 \name{run_workflow}
 \alias{run_workflow}
+\alias{demo_workflow}
 \title{Shiny example module `Process`}
 \usage{
 run_workflow(id, dataIn = NULL, tl.layout = NULL, mode = "user")
+
+demo_workflow(name = NULL)
 }
 \arguments{
 \item{id}{xxx}
@@ -14,6 +17,8 @@ run_workflow(id, dataIn = NULL, tl.layout = NULL, mode = "user")
 \item{tl.layout}{Additional parameters for nav}
 
 \item{mode}{xxx}
+
+\item{name}{xxx}
 }
 \value{
 NA
@@ -23,6 +28,8 @@ This module contains the configuration information for the corresponding
 pipeline. It is called by the nav_pipeline module of the package MagellanNTK
 This documentation is for developers who want to create their own 
 pipelines nor processes to be managed with `MagellanNTK`.
+
+xxx
 }
 \examples{
 if (interactive()) {
@@ -38,12 +45,14 @@ if (interactive()) {
   
   run_workflow("PipelineA_Process1", dataIn = data_na)
 
-  run_workflow("PipelineA_Process1", dataIn = data.frame())
+  run_workflow("PipelineA_Process1", dataIn = data.frame(), tl.layout = "v")
   
   run_workflow("PipelineA", dataIn = data_na, tl.layout = c("v", "h"))
     
   run_workflow("PipelineB", tl.layout = c("v", "h"))
 }
+
+
 }
 \author{
 Samuel Wieczorek

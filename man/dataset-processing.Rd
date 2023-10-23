@@ -2,21 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{dataset-processing}
 \alias{dataset-processing}
-\alias{Keep_Datasets_from_Object}
-\alias{Keep_Datasets_from_Object,list-method}
-\alias{Add_Datasets_to_Object}
-\alias{Add_Datasets_to_Object,list-method}
-\alias{Keep_Datasets_from_Object,NULL-method}
-\alias{Add_Datasets_to_Object,NULL-method}
+\alias{keepDatasets}
+\alias{keepDatasets,list-method}
+\alias{addDatasets}
+\alias{addDatasets,list-method}
 \title{Datasets processing}
 \usage{
-\S4method{Keep_Datasets_from_Object}{`NULL`}(object, range)
+keepDatasets(object, range)
 
-\S4method{Keep_Datasets_from_Object}{list}(object, range)
-
-\S4method{Add_Datasets_to_Object}{`NULL`}(object, dataset, name)
-
-\S4method{Add_Datasets_to_Object}{list}(object, dataset, name)
+addDatasets(object, dataset, name)
 }
 \arguments{
 \item{object}{An object of class `list`.}
@@ -38,10 +32,10 @@ index) on which to operate.
 
 The following functions are currently available:
 
-- `Keep_Datasets_from_Object(object, range)` keep datasets in object which
+- `keepDatasets(object, range)` keep datasets in object which
 are in range
 
-- `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the 
+- `addDatasets(object, dataset, name)` add the 'dataset' to the 
 object (of type list)
 
 - `Save(object, file)` stores the object to a .RData file

@@ -1,7 +1,31 @@
+#' @title Create process template code
+#'
+#' @description  This function creates the source code of an empty module 
+#' (i.e. a module without any widgets). This module contains the minimal
+#' skeleton to work. The developer can then insert its own code for widgets
+#' and data processing functions.
+#' 
+#' The 'Description' step is generic and creates a *.md file to be filled by
+#' th developer.
+#' 
+#' @name create_template
+#' 
+#' @param id xxx
+#' @param config xxx
+#' @param path xxx
+#'
+#' @examples
+#' NULL
+#' 
+#' @import shinyFiles
+#' 
+#' @author Samuel Wieczorek
+NULL
 
-library(shiny)
-library(shinyFiles)
 
+#' @export
+#' @import shinyFiles
+#' @rdname create_template
 create_process_template_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -23,6 +47,8 @@ create_process_template_ui <- function(id) {
 }
 
 
+#' @export
+#' @rdname create_template
 create_process_template_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -75,7 +101,8 @@ create_process_template_server <- function(id) {
 }
 
 
-
+#' @export
+#' @rdname create_template
 create_process_template <- function(){
   ui <- create_process_template_ui('test')
   
@@ -85,6 +112,3 @@ create_process_template <- function(){
   shinyApp(ui, server)
   
 }
-
-create_process_template()
-

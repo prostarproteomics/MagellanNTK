@@ -28,8 +28,6 @@ Imports:
     utils,
     openxlsx
 Collate: 
-    AllGenerics.R
-    demos.R
     mod_chooseDir.R
     mod_dl.R
     mod_dyn_widgets.R

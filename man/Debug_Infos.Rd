@@ -71,7 +71,7 @@ A shiny Module which shows the values of the datasets variables
 along the different processes of a process nor pipeline.
 }
 \examples{
-if(interactive()){
+if (interactive()){
   library(shiny)
 
 ui <- fluidPage(

@@ -76,5 +76,4 @@ dyn_widgets <- function(){
   
 }
 
-dyn_widgets()
 

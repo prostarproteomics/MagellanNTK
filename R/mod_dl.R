@@ -13,7 +13,8 @@
 #' @return NA
 #'
 #' @name dl
-#' @example inst/extdata/examples/ex_dl.R
+#' @examples
+#' NULL
 #'
 NULL
 

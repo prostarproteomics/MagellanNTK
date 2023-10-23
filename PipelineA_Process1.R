@@ -183,9 +183,9 @@ moduleServer(id, function(input, output, session) {
     
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                          dataset = rnorm(1:5),
-                          name = id)
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = rnorm(1:5),
+                               name = id)
     
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -234,7 +234,7 @@ output$Step1_btn_validate_ui <- renderUI({
       
       # Here, you to hase use a function to add an item to the
       # dataset
-      # rv$dataIn <- Add_Datasets_to_Object(
+      # rv$dataIn <- addDatasets(
       #                object = rv$dataIn,
       #                dataset = rnorm(1:5),
       #                name = paste0('temp_',id)
@@ -283,7 +283,7 @@ output$Step2_btn_validate_ui <- renderUI({
       
       # Here, you to hase use a function to add an item to the
       # dataset
-      # rv$dataIn <- Add_Datasets_to_Object(
+      # rv$dataIn <- addDatasets(
       #                object = rv$dataIn,
       #                dataset = rnorm(1:5),
       #                name = paste0('temp_',id)
@@ -332,7 +332,7 @@ output$Step3_btn_validate_ui <- renderUI({
       
       # Here, you to hase use a function to add an item to the
       # dataset
-      # rv$dataIn <- Add_Datasets_to_Object(
+      # rv$dataIn <- addDatasets(
       #                object = rv$dataIn,
       #                dataset = rnorm(1:5),
       #                name = paste0('temp_',id)

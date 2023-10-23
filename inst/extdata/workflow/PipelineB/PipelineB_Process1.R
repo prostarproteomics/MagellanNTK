@@ -265,9 +265,9 @@ PipelineB_Process1_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = rnorm(1:5),
-                                          name = paste0('temp_',id))
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = rnorm(1:5),
+                               name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -359,9 +359,9 @@ PipelineB_Process1_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = rnorm(1:5),
-                                          name = id)
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = rnorm(1:5),
+                               name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()

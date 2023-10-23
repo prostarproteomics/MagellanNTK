@@ -1,15 +1,33 @@
-library(shinyFiles)
+#' @title Module choose directory
+#'
+#' @description  A shiny Module which xxx
+#' 
+#' @name choose_dir
+#' 
+#' @param id xxx
+#'
+#' @examples
+#' NULL
+#' 
+#' @author Samuel Wieczorek
+NULL
 
+
+#' @import shinyFiles
+#' @export
+#' @rdname choose_dir
 chooseDir_ui <- function(id) {
   ns <- NS(id)
   tagList(
     shinyDirButton(ns("dir"), "Input directory", "Upload"),
-    verbatimTextOutput(ns("dir"), placeholder = TRUE) 
+    textOutput(ns("dir")) 
   )
 }
     
 
-
+#' @import shinyFiles
+#' @export
+#' @rdname choose_dir
 chooseDir_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -42,7 +60,8 @@ reactive(path())
 }
 
 
-
+#' @export
+#' @rdname choose_dir
 chooseDir<- function(){
   ui <- fluidPage(
     chooseDir_ui('test'),
@@ -56,10 +75,6 @@ chooseDir<- function(){
       p(path()())
     })
   }
-    
-  
   shinyApp(ui, server)
-  
-}
+  }
 
-chooseDir()

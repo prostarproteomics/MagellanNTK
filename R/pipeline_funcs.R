@@ -71,9 +71,8 @@ ActionOn_Child_Changed <- function(temp.dataIn,
         } else {
             name.last.validated <- steps[ind.last.validated]
             dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
-            dataIn <- Keep_Datasets_from_Object(
-                object = dataIn,
-                range = seq_len(dataIn.ind.last.validated)
+            dataIn <- keepDatasets(object = dataIn,
+                                   range = seq_len(dataIn.ind.last.validated)
             )
         }
     } else {
@@ -176,9 +175,8 @@ Update_Data2send_Vector <- function(rv) {
     if (is.null(ind.last.validated)) {
         data <- rv$temp.dataIn
     } else {
-        data <- Keep_Datasets_from_Object(
-            object = rv$dataIn,
-            range = seq_len(ind.last.validated + rv$original.length - 1)
+        data <- keepDatasets(object = rv$dataIn,
+                             range = seq_len(ind.last.validated + rv$original.length - 1)
         )
     }
     return(data)

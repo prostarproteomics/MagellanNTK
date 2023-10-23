@@ -52,7 +52,7 @@ To be continued...
  
  A generic process
  * Generic pipeline : xxxx
- * Description pipeline: This case is for a process -called 'Description' which is 
+ * Description pipeline: This case is for a process called 'Description' which is 
  the first process module of a pipeline
 
 Wrapper function to the constructor of the class

@@ -271,9 +271,9 @@ PipelineA_Process3_server <- function(id,
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = new.dataset,
-                                          name = paste0('temp_',id))
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = new.dataset,
+                               name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -332,9 +332,9 @@ PipelineA_Process3_server <- function(id,
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = new.dataset,
-                                          name = paste0('temp_',id))
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = new.dataset,
+                               name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -371,9 +371,9 @@ PipelineA_Process3_server <- function(id,
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- Add_Datasets_to_Object(object = rv$dataIn,
-                                          dataset = new.dataset,
-                                          name = id)
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+                               dataset = new.dataset,
+                               name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()

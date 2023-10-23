@@ -20,7 +20,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
   
-  ```{r style, echo = FALSE, results = 'asis'}
+```{r style, echo = FALSE, results = 'asis'}
 BiocStyle::markdown()
 ```
 
@@ -36,7 +36,7 @@ knitr::opts_chunk$set(
 
 A data processing module in Prostar is an independant Shinyapp which operate one or several treatments to a dataset. Its input has at least one dataset and its output is at least the modified input dataset.
 As in Prostar (>=2.0.0), the class of the dataset is QFeatures.
-The aim of this tutorial is to show how to develop a process module for Prostar (ie a module which belongs to a pipeline and operates transformations on the dataset). Along this tutorial, one will create a module with 3 steps and aims to modify some values in the input dataset. For that, we will also use another module available in Prostar: the navigation module which manages modules wkith several steps.
+The aim of this tutorial is to show how to develop a process module for Prostar (i.e. a module which belongs to a pipeline and operates transformations on the dataset). Along this tutorial, one will create a module with 3 steps and aims to modify some values in the input dataset. For that, we will also use another module available in Prostar: the navigation module which manages modules wkith several steps.
 
 
 # Global architecture of the module
@@ -94,7 +94,7 @@ Two types of reactive variables are used in a process module:
 
 The following code defines the reactive variable to interact with the navigation module:
   
-  ```{r nav_module, eval=FALSE}
+```{r nav_module, eval=FALSE}
 ## Section navigation module
 # Variable to manage the different screens of the module
 r.nav <- reactiveValues(

@@ -144,10 +144,10 @@ Timestamp <- function()
 #'
 #' The following functions are currently available:
 #'
-#' - `Keep_Datasets_from_Object(object, range)` keep datasets in object which
+#' - `keepDatasets(object, range)` keep datasets in object which
 #' are in range
 #'
-#' - `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the 
+#' - `addDatasets(object, dataset, name)` add the 'dataset' to the 
 #' object (of type list)
 #'
 #' - `Save(object, file)` stores the object to a .RData file
@@ -168,8 +168,8 @@ Timestamp <- function()
 #'
 #' @return An processed object of the same class as `object`.
 #'
-#' @aliases Keep_Datasets_from_Object Keep_Datasets_from_Object,list-method
-#' @aliases Add_Datasets_to_Object Add_Datasets_to_Object,list-method
+#' @aliases keepDatasets keepDatasets,list-method
+#' @aliases addDatasets addDatasets,list-method
 #'
 #' @name dataset-processing
 #'
@@ -182,33 +182,26 @@ NULL
 ##   Keep datasets from object
 ## -------------------------------------------------------
 
-#' @exportMethod Keep_Datasets_from_Object
-#' @rdname dataset-processing
-setMethod("Keep_Datasets_from_Object", "NULL",
-    function(object, range) {
-        return()
-    }
-)
 
 #' @rdname dataset-processing
-setMethod("Keep_Datasets_from_Object", "list",
-    function(object, range) {
-        if (missing(range))
-            stop("Provide range of array to be processed")
-
-        if (is.null(object)) {
-            return()
-        }
-
-        if (is.numeric(range)) 
-          range <- names(object)[range]
-        
-        object[range]
+keepDatasets <- function(object, range) {
+  stopifnot(!inherits(object, 'list'))
+  if (missing(range))
+    stop("Provide range of array to be processed")
+  
+  if (is.null(object)) {
+    return()
     }
-)
+  
+  if (is.numeric(range))
+    range <- names(object)[range]
+  
+  object[range]
+  }
+
 
 # #' @rdname dataset-processing
-# setMethod("Keep_Datasets_from_Object",
+# setMethod("keepDatasets",
 #           "QFeatures",
 #           function(object, range) {
 #             if (missing(range))
@@ -226,28 +219,19 @@ setMethod("Keep_Datasets_from_Object", "list",
 ##   Add datasets to object
 ## -------------------------------------------------------
 
-#' @exportMethod Add_Datasets_to_Object
-#'
-#' @rdname dataset-processing
-setMethod("Add_Datasets_to_Object", "NULL",
-    function(object, dataset, name) {
-        return()
-    }
-)
-
 
 #' @rdname dataset-processing
-setMethod( "Add_Datasets_to_Object", "list",
-    function(object, dataset, name) {
-        if (is.null(object))
-            setNames(list(dataset), nm = name)
-        else
-            append(object, setNames(list(dataset), nm = name))
-    }
-)
+addDatasets <- function(object, dataset, name) {
+  stopifnot(!inherits(object, 'list'))
+  if (is.null(object))
+    setNames(list(dataset), nm = name)
+  else
+    append(object, setNames(list(dataset), nm = name))
+  }
+
 
 # #' @rdname dataset-processing
-# setMethod("Add_Datasets_to_Object",
+# setMethod("addDatasets",
 #           "QFeatures",
 #           function(object, dataset) {
 #             if (missing(dataset))
