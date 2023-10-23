@@ -203,9 +203,6 @@ PipelineB_Process1_server <- function(id,
 
     # >>> START: Definition of the widgets
     
-    
-    
-    
     rv.custom$foo <- foo_server('foo',
       obj = reactive({rv$dataIn}),
       reset = reactive({NULL}),

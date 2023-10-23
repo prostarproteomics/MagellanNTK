@@ -65,9 +65,11 @@ createModuleTemplate <- function(config = NULL,
     value <- c(value, Create_md_file(path, config$fullname))
   
   
-  # Create extra fucntions template
-  value <- c(value, createExtraFunctions(path))
+  # Create extra functions template
+  #value <- c(value, createExtraFunctions(path))
   
+  
+  #value <- c(value, createExtraModule(path, extraModuleName))
   
   return(value)
 }
