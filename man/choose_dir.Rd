@@ -9,7 +9,12 @@
 \usage{
 chooseDir_ui(id)
 
-chooseDir_server(id)
+chooseDir_server(
+  id,
+  path = reactive({
+     "~"
+ })
+)
 
 chooseDir()
 }

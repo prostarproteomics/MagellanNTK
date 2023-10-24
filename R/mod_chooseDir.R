@@ -21,7 +21,7 @@ chooseDir_ui <- function(id) {
   fluidPage(
     shinyjs::useShinyjs(),
     uiOutput(ns('directory_ui')),
-    uiOutput(ns('details_check_ui')),
+    uiOutput(ns('details_ckb_ui')),
     
     shinyjs::hidden(
       div(id = ns('div_details'),
@@ -37,70 +37,39 @@ chooseDir_ui <- function(id) {
 #' @export
 #' @rdname choose_dir
 chooseDir_server <- function(id,
-                             reset = reactive({NULL}),
+                             path = reactive({'~'}),
                              is.enabled = reactive({TRUE})
                              ) {
-  
-  # Define default selected values for widgets
-  # This is only for simple workflows
-  widgets.default.values <- list(
-    directory = '~',
-    widget2 = NULL,
-    widget3 = NULL
-  )
-  
-  
-  rv.custom.default.values <- list(
-    path = getwd()
-  )
-  
-  
-  
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    # DO NOT MODIFY THIS FUNCTION CALL
-    eval(
-      str2expression(
-        Get_AdditionalModule_Core_Code(
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-        )
-      )
-    )
     
- 
-session$onSessionEnded(function(){
-  stopApp()
-})
-
-
 output$directory_ui <- renderUI({
-  widget <- div(id='div_directory',
-                directoryInput(ns('directory'), label = 'selected directory', value = '~')
+  widget <- div(id = ns('div_directory'),
+      directoryInput(ns('directory'), 
+                 label = 'Selected directory', 
+                 value = path())
   )
-  MagellanNTK::toggleWidget(widget, is.enabled())
+  toggleWidget(widget, condition = is.enabled())
+  
 })
 
-output$details_check_ui <- renderUI({
+
+output$details_ckb_ui <- renderUI({
   widget <- checkboxInput(ns('details_ckb'), 'Show details', value = FALSE)
-  MagellanNTK::toggleWidget(widget, is.enabled())
+  toggleWidget(widget, condition = is.enabled())
 })
 
-observeEvent(
-  ignoreNULL = TRUE,
-  eventExpr = {
-    input$directory
-  },
-  handlerExpr = {
-    if (input$directory > 0) {
-      # condition prevents handler execution on initial app launch
-      rv.custom$path = choose.dir(default = readDirectoryInput(session, 'directory'),
-                        caption="Choose a directory...")
-      updateDirectoryInput(session, 'directory', value = rv.custom$path)
-    }
-  }
-)
+
+
+
+observeEvent(req(input$directory > 0), ignoreNULL = TRUE, {
+    # condition prevents handler execution on initial app launch
+    .path <- choose.dir(default = readDirectoryInput(session, 'directory'),
+                      caption="Choose a directory...")
+    updateDirectoryInput(session, 'directory', value = .path)
+    })
+
 
 
 observeEvent(input$details_ckb, {
@@ -127,12 +96,20 @@ reactive(readDirectoryInput(session, 'directory'))
 #' @rdname choose_dir
 chooseDir <- function(){
   ui <- fluidPage(
-    chooseDir_ui('test')
+    div(id = 'div_test',
+        chooseDir_ui('test')
+    )
     #uiOutput('info')
     )
   
   server <- function(input, output, session) {
-    path <- reactiveVal(chooseDir_server('test', is.enabled = reactive({FALSE})))
+    
+    observe({
+      shinyjs::toggleState('div_test', condition=FALSE)
+    })
+    
+    path <- reactiveVal(chooseDir_server('test',
+                                         is.enabled = reactive({TRUE})))
     
     output$info <- renderUI({
       p(path()())

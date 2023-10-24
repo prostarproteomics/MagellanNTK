@@ -74,7 +74,7 @@ Tools_Templates_server <- function(id,
                                    remoteReset = reactive({FALSE}),
                                    steps.status = reactive({NULL}),
                                    current.pos = reactive({1})
-                                   ){
+){
   
   #source(paste0(path, '/foo.R'), local=TRUE)$value
   
@@ -88,7 +88,7 @@ Tools_Templates_server <- function(id,
   
   
   rv.custom.default.values <- list(
-    path = NULL,
+    path = '~',
     files = NULL
   )
   
@@ -181,7 +181,7 @@ Tools_Templates_server <- function(id,
         # widget he want to insert
         # Be aware of the naming convention for ids in uiOutput()
         # For more details, please refer to the dev document.
-        chooseDir_ui(ns('Directory_chooseDir')),
+        uiOutput(ns('Directory_chooseDir_ui')),
         #uiOutput(ns('Directory_guess_ui')),
         
         # Insert validation button
@@ -201,15 +201,16 @@ Tools_Templates_server <- function(id,
     #   is.enabled = reactive({rv$steps.enabled['Step1']})
     # )
     rv.custom$path <- chooseDir_server('Directory_chooseDir',
-                                       reset = reactive({NULL}),
-                                       is.enabled = reactive({rv$steps.enabled['Directory']})
-                                       )
+                                       path = rv.custom$path,
+                                       is.enabled = reactive({rv$steps.enabled['Directory']}))
     
     
-    # output$Directory_chooseDir_ui <- renderUI({
-    #   widget <- chooseDir_ui(ns('Directory_chooseDir'))
-    #   toggleWidget(widget, rv$steps.enabled['Directory'] )
-    # })
+    output$Directory_chooseDir_ui <- renderUI({
+      widget <- div(id = ns('div_Directory_chooseDir'),
+                    chooseDir_ui(ns('Directory_chooseDir'))
+      )
+      toggleWidget(widget, rv$steps.enabled['Directory'] )
+    })
     
     # This part must be customized by the developer of a new module
     output$Directory_guess_ui <- renderUI({
@@ -237,7 +238,7 @@ Tools_Templates_server <- function(id,
       #                          dataset = new.dataset,
       #                          name = paste0('temp_',id))
       
-      # DO NOT MODIFY THE THREE FOLLOWINF LINES
+      # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Directory'] <- global$VALIDATED
@@ -279,8 +280,9 @@ Tools_Templates_server <- function(id,
                   'Parent pipeline', 
                   value = rv.widgets$parent,
                   width='100px')
-        )
-      toggleWidget(widget, rv$steps.enabled['Step2'] )
+      )
+      toggleWidget(widget, rv$steps.enabled['Step2'] 
+                   && input$Step2_mode == 'process')
     })
     
     output$Step2_name_ui <- renderUI({
@@ -300,10 +302,6 @@ Tools_Templates_server <- function(id,
     
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -319,7 +317,7 @@ Tools_Templates_server <- function(id,
     output$Addsteps <- renderUI({
       wellPanel(
         # Two examples of widgets in a renderUI() function
-        dyn_widgets_ui(ns('Addsteps_dyn_steps')),
+        uiOutput(ns('Addsteps_dyn_steps_ui')),
         
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
@@ -329,6 +327,30 @@ Tools_Templates_server <- function(id,
     
     
     rv.custom$steps <- dyn_widgets_server('Addsteps_dyn_steps')
+    
+    output$Addsteps_dyn_steps_ui <- renderUI({
+      widget <- div(id = 'div_Addsteps_dyn_steps',
+                    dyn_widgets_ui(ns('Addsteps_dyn_steps'))
+      )
+      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
+    })
+    
+    
+    output$Addsteps_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Addsteps_btn_validate"),
+                             "Perform",
+                             class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
+    })
+    
+    observeEvent(input$Addsteps_btn_validate, {
+      # Do some stuff
+      
+      # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Addsteps'] <- global$VALIDATED
+    })
     
     # <<< END ------------- Code for step 3 UI---------------
     
@@ -350,7 +372,7 @@ Tools_Templates_server <- function(id,
     
     output$Save_btn_validate_ui <- renderUI({
       toggleWidget(
-        actionButton(ns("Save_btn_validate"), "Save",
+        actionButton(ns("Save_btn_validate"), "Create template",
                      class = GlobalSettings$btn_success_color),
         rv$steps.enabled['Save']
       )
@@ -362,7 +384,7 @@ Tools_Templates_server <- function(id,
                          steps = rv.custom$steps()$inputs,
                          mandatory = rv.custom$steps()$mandatory
       )
-      
+      browser()
       if (input$Step2_mode == 'module')
         createExtraModule(name = input$Step2_name, path = rv.custom$path)
       else {
@@ -388,17 +410,3 @@ Tools_Templates_server <- function(id,
   )
 }
 
-
-#' @title xxx
-#' @description xxx
-#' @param name xxx
-#' @rdname example_workflow
-#' @export
-Tools_Templates <- function(){
-  data(data_na)
-    path <- system.file("extdata/workflow/Tools", package = "MagellanNTK")
-    files <- list.files(file.path(path, 'R'), full.names = TRUE)
-    for(f in files)
-      source(f, local = FALSE, chdir = TRUE)
-    run_workflow('Tools_Templates', dataIn = data_na)
-}
