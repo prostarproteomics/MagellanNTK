@@ -1,6 +1,16 @@
+#' @title Create dynamic widgets
+#'
+#' @description  A shiny Module to create a dynamic number of widgets.
+#' 
+#' @param id xxx
+#' 
+#' @name DynamicWidgets
+#' 
+NULL
 
-library(shiny)
 
+#' @rdname DynamicWidgets
+#' @import shiny
 #' @export
 dyn_widgets_ui <- function(id) {
   ns <- NS(id)
@@ -18,6 +28,8 @@ dyn_widgets_ui <- function(id) {
   )
 }
 
+#' @rdname DynamicWidgets
+#' @import shiny
 #' @export
 dyn_widgets_server <- function(id) {
   moduleServer(id, function(input, output, session) {
@@ -54,6 +66,8 @@ dyn_widgets_server <- function(id) {
 }
 
 
+#' @rdname DynamicWidgets
+#' @import shiny
 #' @export
 dyn_widgets <- function(){
   ui <- shinyUI(

@@ -33,7 +33,7 @@ createTemplate_ui <- function(id) {
     h3(strong('Create templates'), align ='center'),
     uiOutput(ns('path_ui')),
     #uiOutput(ns('guess_ui')),
-    selectInput(ns('mode'), 'Mode', 
+    selectInput(ns('mode'), 'Template to create', 
                 choices = c('pipeline', 'process', 'module'), 
                 width='100px'),
     

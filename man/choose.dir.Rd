@@ -2,9 +2,24 @@
 % Please edit documentation in R/directoryInput.R
 \name{choose.dir}
 \alias{choose.dir}
+\alias{choose.dir.darwin}
+\alias{choose.dir.linux}
+\alias{choose.dir.windows}
+\alias{directoryInput}
+\alias{updateDirectoryInput}
 \title{Choose a Folder Interactively}
 \usage{
 choose.dir(default = NA, caption = NA, useNew = TRUE)
+
+choose.dir.darwin(default = NA, caption = NA)
+
+choose.dir.linux(default = NA, caption = NA)
+
+choose.dir.windows(default = NA, caption = NA, useNew = TRUE)
+
+directoryInput(inputId, label, value = NULL)
+
+updateDirectoryInput(session, inputId, value = NULL, ...)
 }
 \arguments{
 \item{default}{which folder to show initially}
@@ -12,9 +27,28 @@ choose.dir(default = NA, caption = NA, useNew = TRUE)
 \item{caption}{the caption on the selection dialog}
 
 \item{useNew}{boolean, selects the type of dialog shown in windows}
+
+\item{inputId}{The id of the input object.}
+
+\item{label}{Display label for the control, or NULL for no label}
+
+\item{value}{A directory path to set}
+
+\item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
+
+\item{...}{Additional arguments passed to \code{\link{choose.dir}}.  Only used
+if \code{value} is \code{NULL}.}
 }
 \value{
 A length one character vector, character NA if 'Cancel' was selected.
+
+A length one character vector, character NA if 'Cancel' was selected.
+
+A length one character vector, character NA if 'Cancel' was selected.
+
+A length one character vector, character NA if 'Cancel' was selected.
+
+A directory input control that can be added to a UI definition.
 }
 \description{
 Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
@@ -38,4 +72,24 @@ determined by defaul behavior of the zenity script.
 
 The new windows batch script allows both initial folder and caption to be set.
 In the old batch script for Windows the initial folder is always ignored.
+
+This widget relies on \code{\link{choose.dir}} to present an interactive
+dialog to users for selecting a directory on the local filesystem.  Therefore,
+this widget is intended for shiny apps that are run locally - i.e. on the
+same system that files/directories are to be accessed - and not from hosted
+applications (e.g. from shinyapps.io).
+
+Sends a message to the client, telling it to change the value of the input
+object.  For \code{directoryInput} objects, this changes the value displayed
+in the text-field and triggers a client-side change event.  A directory
+selection dialog is not displayed.
+}
+\seealso{
+\code{\link{choose.dir}}
+
+\code{\link{choose.dir}}
+
+\code{\link{choose.dir}}
+
+\code{\link{updateDirectoryInput}}, \code{\link{readDirectoryInput}}, \code{\link{choose.dir}}
 }

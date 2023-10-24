@@ -33,7 +33,9 @@
 #'
 #' @export
 #' 
-choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
+choose.dir = function(default = NA, 
+                      caption = NA, 
+                      useNew=TRUE) {
   if (Sys.info()['sysname'] == 'Darwin') {
     return(choose.dir.darwin(default = default, caption = caption))
   } else if (Sys.info()['sysname'] == 'Linux') {
@@ -46,7 +48,7 @@ choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
   return(paste("Error: don't know how to show a folder dialog in", Sys.info()['sysname']) )
 }
 
-#' @name choose.dir.darwin
+#' @rdname choose.dir
 #' 
 #' @title The apple version of the choose folder
 #' 
@@ -88,7 +90,7 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 }
 
 
-#' @name choose.dir.linux
+#' @rdname choose.dir
 #' 
 #' @title The linux version of the choose folder
 #' 
@@ -97,7 +99,8 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 #' @return 
 #' A length one character vector, character NA if 'Cancel' was selected.
 #' 
-choose.dir.linux <- function(default = NA, caption = NA) {
+choose.dir.linux <- function(default = NA, 
+                             caption = NA) {
   command = 'zenity'
   args = '--file-selection --directory'
   
@@ -127,7 +130,7 @@ choose.dir.linux <- function(default = NA, caption = NA) {
   return(path)
 }
 
-#' @name choose.dir.windows
+#' @rdname choose.dir
 #' 
 #' @title The windows version of the choose folder
 #' 
@@ -136,7 +139,9 @@ choose.dir.linux <- function(default = NA, caption = NA) {
 #' @return 
 #' A length one character vector, character NA if 'Cancel' was selected.
 #'
-choose.dir.windows <- function(default = NA, caption = NA, useNew = TRUE) {
+choose.dir.windows <- function(default = NA, 
+                               caption = NA, 
+                               useNew = TRUE) {
   if(useNew){
     ## uses a powershell script rather than the bat version, gives a nicer interface
     ## and allows setting of the default directory and the caption
@@ -167,7 +172,7 @@ choose.dir.windows <- function(default = NA, caption = NA, useNew = TRUE) {
 }
 
 
-#' @name directoryInput
+#' @rdname choose.dir
 #' 
 #' @title Directory Selection Control
 #'
@@ -189,7 +194,9 @@ choose.dir.windows <- function(default = NA, caption = NA, useNew = TRUE) {
 #' \code{\link{updateDirectoryInput}}, \code{\link{readDirectoryInput}}, \code{\link{choose.dir}}
 #' @export
 #' 
-directoryInput = function(inputId, label, value = NULL) {
+directoryInput = function(inputId, 
+                          label, 
+                          value = NULL) {
   if (!is.null(value) && !is.na(value)) {
     value = path.expand(value)
   }
@@ -237,7 +244,7 @@ directoryInput = function(inputId, label, value = NULL) {
 }
 
 
-#' @name updateDirectoryInput
+#' @rdname choose.dir
 #' 
 #' @title Change the value of a directoryInput on the client
 #'
