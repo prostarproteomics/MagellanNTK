@@ -30,6 +30,11 @@ Imports:
 Collate: 
     mod_chooseDir.R
     mod_dl.R
+    createExtraFunctions.R
+    mod_createTemplate.R
+    createExtraModules.R
+    createModuleTemplate.R
+    directoryInput.R
     mod_dyn_widgets.R
     config_class.R
     doc-data.R

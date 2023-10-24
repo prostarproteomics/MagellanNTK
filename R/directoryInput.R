@@ -2,7 +2,7 @@
 #' 
 #' @title Choose a Folder Interactively
 #'
-#' Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
+#' @description Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
 #' Windows.
 #' 
 #' This code has been entirely copied from 

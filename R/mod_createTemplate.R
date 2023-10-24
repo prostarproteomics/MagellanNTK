@@ -31,11 +31,8 @@ createTemplate_ui <- function(id) {
   tagList(
     shinyjs::useShinyjs(),
     h3(strong('Create templates'), align ='center'),
-    wellPanel(
-      uiOutput(ns('path_ui')),
-      uiOutput(ns('guess_ui'))
-      ),
-    
+    uiOutput(ns('path_ui')),
+    #uiOutput(ns('guess_ui')),
     selectInput(ns('mode'), 'Mode', 
                 choices = c('pipeline', 'process', 'module'), 
                 width='100px'),
@@ -45,12 +42,15 @@ createTemplate_ui <- function(id) {
       fluidRow(
       column(width = 4, 
              shinyjs::disabled(
-               textInput(ns('parent'), 'Parent', width='100px')
+               textInput(ns('parent'), 'Parent pipeline', width='100px')
              )),
       column(width = 4, textInput(ns('name'), 'Name', width='100px'))
     )
     ),
-    wellPanel(dyn_widgets_ui(ns('dyn_steps'))),
+    shinyjs::hidden(
+      wellPanel(id = ns('wp_dyn_steps'),
+                dyn_widgets_ui(ns('dyn_steps')))
+      ),
     actionButton(ns('createTemplate'), 'Create', class = 'btn-primary')
     #uiOutput(ns('filesCreated'))
   )
@@ -69,6 +69,10 @@ createTemplate_server <- function(id) {
     )
     path <- reactiveVal(NULL)
      
+    guessWorkflow <- reactive({
+      req(path())
+      lst.files <- list.files(file.path(path()(), 'R'))
+    })
     #-------------------------------------------------------
     output$path_ui <- renderUI({
       path(chooseDir_server('chooseDir'))
@@ -78,15 +82,16 @@ createTemplate_server <- function(id) {
     # List files in the R directory. It is supposed to contain R files
     # for the code of processes, pieplines, etc...
     output$guess_ui <- renderUI({
-      req(path()())
-      lst.files <- list.files(file.path(path()(), 'R'))
-      lapply(lst.files, function(i)
+     req(path()())
+    guessWorkflow()
+      lapply(guessWorkflow(), function(i)
         p(i))
     })
     
     observe({
       input$mode
       shinyjs::toggleState('parent', condition = input$mode=='process')
+      shinyjs::toggle('wp_dyn_steps', condition = input$mode!='module')
     })
     
     res <- reactiveValues(dataOut = list())
@@ -106,8 +111,12 @@ createTemplate_server <- function(id) {
                          mandatory = res$dataOut()$mandatory
                          )
       
-      rv$files <- c(rv$files, createModuleTemplate(miniConfig, path = path()()))
-      rv$files <- c(rv$files, createExtraFunctions( path()()))
+      if (input$mode == 'module')
+        createExtraModule(name = input$name, path = path()())
+      else {
+        createModuleTemplate(miniConfig, path = path()())
+        createExtraFunctions(path()())
+      }
     })
     
     # output$filesCreated <- renderUI({
