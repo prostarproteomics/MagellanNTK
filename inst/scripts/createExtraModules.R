@@ -1,6 +1,14 @@
-
+#' @title Creates the template extar module
+#' @description Creates an exemplary extra module to be included into
+#' a step. 
+#' Int the code that will be produced, the parts that are not commented 
+#' are mandatory ans should not be modified.
+#' The commented parts are just for example purpose and need to be
+#' customize to your function
+#' @param name The name of the module. This will lead to two functions 
+#' 'name_ui()' and 'name_server()'
 #' @export
-#' @rdname create_template
+#' @rdname create_templates
 #'
 createExtraModule <- function(name, path = '.') {
   
@@ -19,17 +27,17 @@ createExtraModule <- function(name, path = '.') {
 }
 
 
-
-
-#' @rdname create_template
+#' @param con xxx
+#' @param  name The name
+#' @rdname create_templates
 #' 
 write_extraModule_code <- function(con, name){
   
   code <- "
-#' @title module foo
+#' @title ## To be customized ##
 #' 
 #' @description 
-#' xxxxx
+#' ## To be customized ##
 #' 
 #' @name extra_module
 #'
@@ -69,10 +77,18 @@ NULL
 #name#_ui <- function(id){
   
   ns <- NS(id)
+  
+  # This is an example of what it is expected
+  # You must 
+  # All the widgets must be defined in the server part. Here, 
+  # one have only calls with uiOutput() function.
+  
+  # Each line correspond to one widget and the id is composed of
+  # the name of the widget followed by '_ui'
   tagList(
-    uiOutput(ns('widget1_ui')),
-    uiOutput(ns('widget2_ui')),
-    uiOutput(ns('widget3_ui')),
+    #uiOutput(ns('widget1_ui')),
+    #uiOutput(ns('widget2_ui')),
+    #uiOutput(ns('widget3_ui')),
     uiOutput(ns('valid_btn_ui'))
   )
 }
@@ -86,10 +102,12 @@ NULL
   
   # Define default selected values for widgets
   # This is only for simple workflows
+  # This list must contain one item per widget (defined in the ui() function
+  # The name of each item is the same as in the ui minus the suffix '_ui')
   widgets.default.values <- list(
-    widget1 = NULL,
-    widget2 = NULL,
-    widget3 = NULL
+    #widget1 = NULL,
+   # widget2 = NULL,
+   # widget3 = NULL
   )
   
   

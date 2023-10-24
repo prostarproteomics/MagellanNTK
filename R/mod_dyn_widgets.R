@@ -1,27 +1,24 @@
 
 library(shiny)
 
+#' @export
 dyn_widgets_ui <- function(id) {
   ns <- NS(id)
   fluidPage(
+    p('Add steps to the workflow'),
     fluidRow(
-      column(width = 4, 
-             textInput(ns('step'),
-                       label = 'Step ', 
-                       placeholder = paste0("Enter the name"))
-      ),
-      column(width = 3, 
-            selectInput(ns('mandatory'), label = "",
-                         choices = c(TRUE, FALSE),
-                         width = '80px')
-    ),
-    column(width = 3, actionButton(ns("add_button"), "Add"))
+      column(width = 3, align='middle', 
+             textInput(ns('step'), label = '', placeholder = paste0("Enter the name"))),
+      column(width = 3, align='center',
+             selectInput(ns('mandatory'), label = "", choices = c(TRUE, FALSE), width = '80px')),
+             column(width = 3, align='center',
+                    actionButton(ns("add_button"), "Add", class = "btn-info"))
     ),
     uiOutput(ns("add_exp"))
   )
 }
 
-
+#' @export
 dyn_widgets_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -34,7 +31,6 @@ dyn_widgets_server <- function(id) {
     dataOut <- reactiveVal(list())
     
     observeEvent(input$add_button,{
-      
       steps$inputs[input$add_button] <- input$step
       steps$mandatory[input$add_button] <- input$mandatory
       updateTextInput(session, 'step', value = '')
@@ -52,16 +48,17 @@ dyn_widgets_server <- function(id) {
       
       lapply(1:(input$add_button), create_widget)
     })
-    
 
     reactive({dataOut()})
 })
 }
 
 
-
+#' @export
 dyn_widgets <- function(){
-  ui <- dyn_widgets_ui('test')
+  ui <- shinyUI(
+    dyn_widgets_ui('test')
+  )
   
   server <- function(input, output, session) {
     res <- reactiveValues(dataOut = list())
@@ -73,7 +70,6 @@ dyn_widgets <- function(){
   }
   
   shinyApp(ui, server)
-  
 }
 
 

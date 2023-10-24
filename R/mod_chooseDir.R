@@ -18,9 +18,20 @@ NULL
 #' @rdname choose_dir
 chooseDir_ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    shinyDirButton(ns("dir"), "Input directory", "Upload"),
-    textOutput(ns("dir")) 
+  fluidPage(
+    fluidRow(
+      column(1),
+      column(
+        width = 10,
+        
+        # Application title
+        #titlePanel("Directory Input Demo"),
+        directoryInput(ns('directory'), label = 'selected directory', value = '~')
+        #tags$h5('Files'),
+        #dataTableOutput(ns('files'))
+      ),
+      column(1)
+    )
   )
 }
     
@@ -32,29 +43,38 @@ chooseDir_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-shinyDirChoose(input, 'dir', roots = c(home = '~'))
 
 path <- reactiveVal(getwd())
 
-dir <- reactive(input$dir)
-
-output$dir <- renderText({
-  path()
+session$onSessionEnded(function(){
+  stopApp()
 })
 
-observeEvent(ignoreNULL = TRUE,
-             eventExpr = {
-               input$dir
-             },
-             handlerExpr = {
-               if (!"path" %in% names(dir())) return()
-               home <- normalizePath("~")
-               path(
-                 file.path(home, paste(unlist(dir()$path[-1]), collapse = .Platform$file.sep))
-               )
-             })
+observeEvent(
+  ignoreNULL = TRUE,
+  eventExpr = {
+    input$directory
+  },
+  handlerExpr = {
+    if (input$directory > 0) {
+      # condition prevents handler execution on initial app launch
+      path = choose.dir(default = readDirectoryInput(session, 'directory'),
+                        caption="Choose a directory...")
+      updateDirectoryInput(session, 'directory', value = path)
+    }
+  }
+)
 
-reactive(path())
+output$directory = renderText({
+  readDirectoryInput(session, 'directory')
+})
+
+# output$files = renderDataTable({
+#   files = list.files(readDirectoryInput(session, 'directory'), full.names = T)
+#   data.frame(name = basename(files), file.info(files))
+# })
+
+reactive(readDirectoryInput(session, 'directory'))
 
 })
 }
@@ -62,7 +82,7 @@ reactive(path())
 
 #' @export
 #' @rdname choose_dir
-chooseDir<- function(){
+chooseDir <- function(){
   ui <- fluidPage(
     chooseDir_ui('test'),
     uiOutput('info')

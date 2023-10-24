@@ -26,6 +26,13 @@ createExtraFunctions <- function(path = '.') {
 write_addDatasets_func <- function(con){
   
   code <- "
+  #' @title Adds a dataset to the list
+  #' @description This function appends a dataset in the list with customization
+  if necessary
+  #' @param object An instance of type list. Must get TRUE to inherits(object, 'list')
+  #' @param dataset xxx
+  #' @param name the name to associate to the dataset in the object list
+  #' @export
   addDatasets <- function(object, dataset, name) {
   stopifnot(!inherits(object, 'list'))
   if (is.null(object))
@@ -46,6 +53,13 @@ write_addDatasets_func <- function(con){
 write_keepDatasets_func <- function(con){
   
   code <- "
+  #' @title Get a subset of the object
+  #' @description This function deletes the items not included in the
+  range parameter
+  #' @param object An instance of type list. Must get TRUE to inherits(object, 'list')
+  #' @param range xxx
+  #' @export
+  #'
   keepDatasets <- function(object, range) {
   stopifnot(!inherits(object, 'list'))
   if (missing(range))
