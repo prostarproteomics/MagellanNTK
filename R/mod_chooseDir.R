@@ -51,7 +51,6 @@ output$directory_ui <- renderUI({
                  value = path())
   )
   toggleWidget(widget, condition = is.enabled())
-  
 })
 
 

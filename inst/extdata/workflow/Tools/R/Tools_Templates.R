@@ -183,7 +183,7 @@ Tools_Templates_server <- function(id,
         # For more details, please refer to the dev document.
         uiOutput(ns('Directory_chooseDir_ui')),
         #uiOutput(ns('Directory_guess_ui')),
-        
+        uiOutput(ns('Directory_warnDir_ui')),
         # Insert validation button
         uiOutput(ns('Directory_btn_validate_ui'))
       )
@@ -201,17 +201,30 @@ Tools_Templates_server <- function(id,
     #   is.enabled = reactive({rv$steps.enabled['Step1']})
     # )
     rv.custom$path <- chooseDir_server('Directory_chooseDir',
-                                       path = rv.custom$path,
+                                       path = reactive({rv.custom$path()}),
                                        is.enabled = reactive({rv$steps.enabled['Directory']}))
     
     
     output$Directory_chooseDir_ui <- renderUI({
       widget <- div(id = ns('div_Directory_chooseDir'),
-                    chooseDir_ui(ns('Directory_chooseDir'))
-      )
+                    chooseDir_ui(ns('Directory_chooseDir')))
       toggleWidget(widget, rv$steps.enabled['Directory'] )
     })
     
+    
+    output$Directory_warnDir_ui <- renderUI({
+      req(rv.custom$path())
+      .path <- gsub('\\', '/', rv.custom$path(), fixed = TRUE)
+      pattern <- c('R', 'md')
+      dirs <- list.dirs(.path, recursive = FALSE, full.names=FALSE)
+      if (length(dirs) == 0)
+        msg <- pattern
+      else
+        msg <- pattern[-which(intersect(dirs, pattern) == pattern)]
+      lapply(msg, function(i) 
+        p(paste0("The '", i, "' directory does not exists. It will be created")))
+    })  
+
     # This part must be customized by the developer of a new module
     output$Directory_guess_ui <- renderUI({
       req(rv.custom$path())
