@@ -88,7 +88,7 @@ Tools_Templates_server <- function(id,
   
   
   rv.custom.default.values <- list(
-    path = '~',
+    path =  reactive({'~'}),
     files = NULL
   )
   
@@ -115,6 +115,7 @@ Tools_Templates_server <- function(id,
     # >>>
     # >>> START ------------- Code for Description UI---------------
     # >>> 
+    
     
     
     output$Description <- renderUI({
@@ -200,13 +201,14 @@ Tools_Templates_server <- function(id,
     #   reset = reactive({NULL}),
     #   is.enabled = reactive({rv$steps.enabled['Step1']})
     # )
-    rv.custom$path <- chooseDir_server('Directory_chooseDir',
-                                       path = reactive({rv.custom$path()}),
+    
+  rv.custom$path <- chooseDir_server('Directory_chooseDir',
+                                       path = reactive({'~'}),
                                        is.enabled = reactive({rv$steps.enabled['Directory']}))
     
     
     output$Directory_chooseDir_ui <- renderUI({
-      widget <- div(id = ns('div_Directory_chooseDir'),
+        widget <- div(id = ns('div_Directory_chooseDir'),
                     chooseDir_ui(ns('Directory_chooseDir')))
       toggleWidget(widget, rv$steps.enabled['Directory'] )
     })
@@ -246,10 +248,6 @@ Tools_Templates_server <- function(id,
     
     observeEvent(input$Directory_btn_validate, {
       # Do some stuff
-      # new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      # rv$dataIn <- addDatasets(object = rv$dataIn,
-      #                          dataset = new.dataset,
-      #                          name = paste0('temp_',id))
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
@@ -396,13 +394,13 @@ Tools_Templates_server <- function(id,
                          mode = input$Step2_mode,
                          steps = rv.custom$steps()$inputs,
                          mandatory = rv.custom$steps()$mandatory
-      )
-      browser()
+                         )
+      
       if (input$Step2_mode == 'module')
-        createExtraModule(name = input$Step2_name, path = rv.custom$path)
+        createExtraModule(name = input$Step2_name, path = rv.custom$path())
       else {
-        createModuleTemplate(miniConfig, path = rv.custom$path)
-        createExtraFunctions(rv.custom$path)
+        createModuleTemplate(miniConfig, path = rv.custom$path())
+        createExtraFunctions(rv.custom$path())
       }
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES

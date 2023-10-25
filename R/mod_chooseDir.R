@@ -40,15 +40,20 @@ chooseDir_server <- function(id,
                              path = reactive({'~'}),
                              is.enabled = reactive({TRUE})
                              ) {
+  
+  
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
+    rv <- reactiveValues(path = NULL)
+    
+    observeEvent(path(), { rv$path <- path()})
     
 output$directory_ui <- renderUI({
   widget <- div(id = ns('div_directory'),
       directoryInput(ns('directory'), 
                  label = 'Selected directory', 
-                 value = path())
+                 value = rv$path)
   )
   toggleWidget(widget, condition = is.enabled())
 })
@@ -63,10 +68,12 @@ output$details_ckb_ui <- renderUI({
 
 
 observeEvent(req(input$directory > 0), ignoreNULL = TRUE, {
+ 
     # condition prevents handler execution on initial app launch
-    .path <- choose.dir(default = readDirectoryInput(session, 'directory'),
+    rv$path <- choose.dir(default = readDirectoryInput(session, 'directory'),
                       caption="Choose a directory...")
-    updateDirectoryInput(session, 'directory', value = .path)
+    
+    updateDirectoryInput(session, 'directory', value = rv$path)
     })
 
 
@@ -85,7 +92,7 @@ output$files = renderDataTable({
   data.frame(name = basename(files), file.info(files))
 })
 
-reactive(readDirectoryInput(session, 'directory'))
+reactive({readDirectoryInput(session, 'directory')})
 
 })
 }
@@ -97,8 +104,8 @@ chooseDir <- function(){
   ui <- fluidPage(
     div(id = 'div_test',
         chooseDir_ui('test')
-    )
-    #uiOutput('info')
+    ),
+    uiOutput('info')
     )
   
   server <- function(input, output, session) {
@@ -106,12 +113,20 @@ chooseDir <- function(){
     observe({
       shinyjs::toggleState('div_test', condition=FALSE)
     })
+     
+    rv <- reactiveValues(
+       path = '~'
+     )
     
-    path <- reactiveVal(chooseDir_server('test',
-                                         is.enabled = reactive({TRUE})))
+    rv$path <- chooseDir_server('test',
+                                path = reactive({'~'}),
+                                is.enabled = reactive({TRUE}))
+
     
     output$info <- renderUI({
-      p(path()())
+      rv$path
+      #browser()
+      p(rv$path())
     })
   }
   shinyApp(ui, server)
