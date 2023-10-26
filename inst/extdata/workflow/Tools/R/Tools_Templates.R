@@ -84,7 +84,8 @@ Tools_Templates_server <- function(id,
     Step2_mode = '',
     Step2_parent = NULL,
     Step2_name = NULL,
-    Step2_mdEditor = ''
+    Step2_mdEditor = '',
+    Addsteps_selectStep = NULL
   )
   
   
@@ -435,6 +436,7 @@ Tools_Templates_server <- function(id,
         # Two examples of widgets in a renderUI() function
         uiOutput(ns('Addsteps_dyn_steps_ui')),
         uiOutput(ns('Addsteps_view_ui')),
+        uiOutput(ns('Addsteps_selectStep_ui')),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Addsteps_btn_validate_ui'))
@@ -450,6 +452,17 @@ Tools_Templates_server <- function(id,
       )
       toggleWidget(widget, rv$steps.enabled['Addsteps'] )
     })
+    
+    # render the widget collection
+    output$Addsteps_selectStep_ui <- renderUI({
+      req(rv.custom$steps())
+      
+      widget <- selectInput(ns('Addsteps_selectStep'), 'Select step to configure',
+                            choices = rv.custom$steps()$inputs,
+                            width = '150px')
+      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
+    })
+    
     
     # render the widget collection
     output$Addsteps_view_ui <- renderUI({
