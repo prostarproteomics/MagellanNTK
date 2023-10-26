@@ -225,6 +225,7 @@ Tools_Templates_server <- function(id,
         msg <- pattern
       else
         msg <- pattern[-which(intersect(dirs, pattern) == pattern)]
+      
       lapply(msg, function(i) 
         p(paste0("The '", i, "' directory does not exists. It will be created")))
     })  
@@ -290,12 +291,11 @@ Tools_Templates_server <- function(id,
     })
     
     output$Step2_parent_ui <- renderUI({
-      widget <- shinyjs::disabled(
-        textInput(ns('Step2_parent'), 
+      widget <- textInput(ns('Step2_parent'), 
                   'Parent pipeline', 
-                  value = rv.widgets$parent,
+                  value = rv.widgets$Step2_parent,
                   width='100px')
-      )
+      
       toggleWidget(widget, rv$steps.enabled['Step2'] 
                    && input$Step2_mode == 'process')
     })
@@ -316,14 +316,6 @@ Tools_Templates_server <- function(id,
     
     output$Step2_mdEditor_ui <- renderUI({
       
-      # shinyAce::aceEditor(ns("Step2_mdEditor"),
-      #                     value = input$Step2_mdEditor,
-      #                     mode = "markdown",
-      #                     theme = 'github',
-      #                     height = '100px',
-      #                     readOnly = !rv$steps.enabled['Step2'])
-      
-
       shiny::div(
         #class = class,
         style = "margin-bottom: 15px;",
@@ -340,7 +332,7 @@ Tools_Templates_server <- function(id,
                                                  value = isolate(input$Step2_mdEditor),
                                                  mode = "markdown",
                                                  theme = 'github',
-                                                 height = '100px',
+                                                 height = '300px',
                                                  readOnly = !rv$steps.enabled['Step2'])
                            ),
 
@@ -444,7 +436,7 @@ Tools_Templates_server <- function(id,
       wellPanel(
         # Two examples of widgets in a renderUI() function
         uiOutput(ns('Addsteps_dyn_steps_ui')),
-        
+        uiOutput(ns('Addsteps_view_ui')),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Addsteps_btn_validate_ui'))
@@ -460,6 +452,20 @@ Tools_Templates_server <- function(id,
       )
       toggleWidget(widget, rv$steps.enabled['Addsteps'] )
     })
+    
+    # render the widget collection
+    output$Addsteps_view_ui <- renderUI({
+      req(rv.custom$steps())
+
+      # function to create widget
+      create_widget = function(i){
+        p(paste0(rv.custom$steps()$inputs[i], ' ', rv.custom$steps()$mandatory[i]))
+      }
+      
+      lapply(1:length(rv.custom$steps()$inputs), create_widget)
+    })
+    
+    
     
     
     output$Addsteps_btn_validate_ui <- renderUI({
@@ -518,7 +524,7 @@ Tools_Templates_server <- function(id,
                     Create_md_file(mode = input$Step2_mode,
                                    fullname = fullname,
                                    path = rv.custom$path(),
-                                   raw = input$Step2_mdEditor)
+                                   rawText = input$Step2_mdEditor)
                     )
       
       

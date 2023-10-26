@@ -53,17 +53,17 @@ createModuleTemplate <- function(config = NULL,
     value <- c(value, Create_Pipeline_Description_source_file(config$fullname, path))
 
   
-  if (config$mode == 'pipeline')
-    # In this particularly case, on add the prefix '_Description' to the name of the
-    # process. Here, it is considered as an independant step of the pipeline and
-    # all steps names are built on the same pattern : the name of the workflow
-    # suffixed with the name of the step
-    value <- c(value, Create_md_file(path, paste0(config$fullname, '_Description')))
-  else
-    # Here, one can directly use the fullname because it refers to an internal step, 
-    # not to a process
-    value <- c(value, Create_md_file(path, config$fullname))
-  
+  # if (config$mode == 'pipeline')
+  #   # In this particularly case, on add the prefix '_Description' to the name of the
+  #   # process. Here, it is considered as an independant step of the pipeline and
+  #   # all steps names are built on the same pattern : the name of the workflow
+  #   # suffixed with the name of the step
+  #   value <- c(value, Create_md_file(path, paste0(config$fullname, '_Description')))
+  # else
+  #   # Here, one can directly use the fullname because it refers to an internal step, 
+  #   # not to a process
+  #   value <- c(value, Create_md_file(path, config$fullname))
+  # 
   
   # Create extra functions template
   #value <- c(value, createExtraFunctions(path))
@@ -125,38 +125,38 @@ NULL
 
 
 
-Create_md_file <- function(path, fullname){
-###
-### Create the Description md file
-###
-  
-  
-desc.dir <- file.path(path, 'md')
-if (!dir.exists(desc.dir)) 
-  dir.create(desc.dir)          
-
-md.file <- paste0(fullname, ".md")
-desc.filename <- file.path(desc.dir, md.file)
-if (file.exists(desc.filename)) {
-  file.remove(desc.filename)
-}
-con.desc <- file(desc.filename, open = "a")
-
-
-code <- "
-  ## Overview
-  
-  This page describes the workflow '#name#'.
-  
-  "
-writeLines(gsub("#name#", fullname, code), con.desc)
-
-
-close(con.desc)
-
-return(md.file)
-
-}
+# Create_md_file <- function(path, fullname){
+# ###
+# ### Create the Description md file
+# ###
+#   
+#   
+# desc.dir <- file.path(path, 'md')
+# if (!dir.exists(desc.dir)) 
+#   dir.create(desc.dir)          
+# 
+# md.file <- paste0(fullname, ".md")
+# desc.filename <- file.path(desc.dir, md.file)
+# if (file.exists(desc.filename)) {
+#   file.remove(desc.filename)
+# }
+# con.desc <- file(desc.filename, open = "a")
+# 
+# 
+# code <- "
+#   ## Overview
+#   
+#   This page describes the workflow '#name#'.
+#   
+#   "
+# writeLines(gsub("#name#", fullname, code), con.desc)
+# 
+# 
+# close(con.desc)
+# 
+# return(md.file)
+# 
+# }
 
 
 #' @rdname create_template

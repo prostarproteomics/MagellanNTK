@@ -4,14 +4,14 @@
 \alias{Create_md_file}
 \title{xxx}
 \usage{
-Create_md_file(path, fullname)
+Create_md_file(mode, fullname, path, rawText)
 }
 \arguments{
-\item{path}{xxx}
+\item{mode}{xxx}
 
 \item{fullname}{xxx}
 
-\item{mode}{xxx}
+\item{path}{xxx}
 
 \item{rawText}{xxx}
 }

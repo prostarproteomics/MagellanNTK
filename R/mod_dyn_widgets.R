@@ -23,8 +23,7 @@ dyn_widgets_ui <- function(id) {
              selectInput(ns('mandatory'), label = "", choices = c(TRUE, FALSE), width = '80px')),
              column(width = 3, align='center',
                     actionButton(ns("add_button"), "Add", class = "btn-info"))
-    ),
-    uiOutput(ns("add_exp"))
+    )
   )
 }
 
@@ -50,16 +49,7 @@ dyn_widgets_server <- function(id) {
       dataOut(list(inputs = steps$inputs,
                    mandatory = steps$mandatory))
     })
-    
-    # render the widget collection
-    output$add_exp <- renderUI({
-      # function to create widget
-      create_widget = function(i){
-        p(paste0(steps$inputs[i], ' ', steps$mandatory[i]))
-      }
-      
-      lapply(1:(input$add_button), create_widget)
-    })
+
 
     reactive({dataOut()})
 })

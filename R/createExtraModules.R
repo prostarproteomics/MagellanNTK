@@ -29,7 +29,7 @@ createExtraModule <- function(name, path = '.') {
 
 
 #' @param con xxx
-#' @param  name The name
+#' @param name The name
 #' @rdname create_extra_module
 #' 
 write_extraModule_code <- function(con, name){
