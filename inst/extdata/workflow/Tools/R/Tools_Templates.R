@@ -290,7 +290,7 @@ Tools_Templates_server <- function(id,
                            shiny::tabPanel(
                              title = "Write Description md code",
                              value = 1,
-                             shinyAce::aceEditor(ns("Step2_mdEditor"),
+                             shinyAce::aceEditor(ns("Directory_mdEditor"),
                                                  value = isolate(input$Directory_mdEditor),
                                                  mode = "markdown",
                                                  theme = 'github',
