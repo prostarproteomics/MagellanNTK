@@ -13,6 +13,9 @@ chooseDir_server(
   id,
   path = reactive({
      "~"
+ }),
+  is.enabled = reactive({
+     TRUE
  })
 )
 
@@ -20,6 +23,10 @@ chooseDir()
 }
 \arguments{
 \item{id}{xxx}
+
+\item{path}{xxx}
+
+\item{is.enabled}{xxx}
 }
 \description{
 A shiny Module which xxx

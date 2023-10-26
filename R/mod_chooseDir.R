@@ -5,6 +5,8 @@
 #' @name choose_dir
 #' 
 #' @param id xxx
+#' @param path xxx
+#' @param is.enabled xxx
 #'
 #' @examples
 #' NULL

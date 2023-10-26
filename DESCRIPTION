@@ -26,10 +26,13 @@ Imports:
     stringi,
     stats,
     utils,
-    openxlsx
+    openxlsx,
+    markdown,
+    shinyAce
 Collate: 
     mod_chooseDir.R
     mod_dl.R
+    createMdDescriptionFiles.R
     createExtraFunctions.R
     mod_createTemplate.R
     createExtraModules.R

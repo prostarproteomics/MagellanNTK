@@ -5,6 +5,7 @@
 \alias{createExtraFunctions}
 \alias{write_addDatasets_func}
 \alias{write_keepDatasets_func}
+\alias{create_template}
 \alias{createModuleTemplate}
 \alias{module_#name#}
 \alias{write_general_comment}
@@ -13,6 +14,7 @@
 \alias{write_config_func}
 \alias{write_process_code_for_default_value_widgets}
 \alias{write_module_server_header}
+\alias{write_process_renderUI_for_steps}
 \alias{write_stepUI_template}
 \alias{write_Insert_Description_Step_code_for_Process}
 \alias{write_Insert_Save_Step_code_for_Process}
@@ -40,6 +42,8 @@ write_config_func(con, config)
 write_process_code_for_default_value_widgets(con)
 
 write_module_server_header(con, mode)
+
+write_process_renderUI_for_steps(con, ll.config, path)
 
 write_stepUI_template(step.name)
 

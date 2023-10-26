@@ -7,8 +7,9 @@
 #' customize to your function
 #' @param name The name of the module. This will lead to two functions 
 #' 'name_ui()' and 'name_server()'
+#' @param path xxx
 #' @export
-#' @rdname create_templates
+#' @name create_extra_module
 #'
 createExtraModule <- function(name, path = '.') {
   
@@ -29,7 +30,7 @@ createExtraModule <- function(name, path = '.') {
 
 #' @param con xxx
 #' @param  name The name
-#' @rdname create_templates
+#' @rdname create_extra_module
 #' 
 write_extraModule_code <- function(con, name){
   

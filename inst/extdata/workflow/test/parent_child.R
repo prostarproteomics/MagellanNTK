@@ -13,10 +13,10 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `PipelineA_Process1_ui()` and `PipelineA_Process1_server()` define
+#' In this example, `parent_child_ui()` and `parent_child_server()` define
 #' the code for the process `xxx` which is part of the pipeline called `xxx`.
 #'
-#' @name module_PipelineA_Process1
+#' @name module_parent_child
 #' 
 #' @param id xxx
 #' @param dataIn The dataset
@@ -38,12 +38,12 @@ NULL
 
 #' @export
 #' 
-PipelineA_Process1_conf <- function(){
+parent_child_conf <- function(){
   Config(
-    fullname = 'PipelineA_Process1',
+    fullname = 'parent_child',
     mode = 'process',
-    steps = c('Step 1', 'Step 2', 'Step 3'),
-    mandatory = c(TRUE, FALSE, TRUE)
+    steps = c('step1', 'step2'),
+    mandatory = c(TRUE, TRUE)
     )
 }
 
@@ -51,7 +51,7 @@ PipelineA_Process1_conf <- function(){
 
 #' @export
 #' 
-PipelineA_Process1_ui <- function(id){
+parent_child_ui <- function(id){
   ns <- NS(id)
   }
 
@@ -59,7 +59,7 @@ PipelineA_Process1_ui <- function(id){
 
 #' @export
 #' 
- PipelineA_Process1_server <- function(id,
+ parent_child_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),
@@ -184,8 +184,8 @@ moduleServer(id, function(input, output, session) {
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
       rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = rnorm(1:5),
-                               name = id)
+      dataset = rnorm(1:5),
+                          name = id)
     
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -199,7 +199,7 @@ moduleServer(id, function(input, output, session) {
 
 
 
-output$Step1 <- renderUI({
+output$step1 <- renderUI({
 
 wellPanel(
         # uiOutput for all widgets in this UI
@@ -211,7 +211,7 @@ wellPanel(
         # For more details, please refer to the dev document.
         
         # Insert validation button
-        uiOutput(ns('Step1_btn_validate_ui')),
+        uiOutput(ns('step1_btn_validate_ui')),
         
         # Additional code
             
@@ -219,17 +219,17 @@ wellPanel(
     })
 
 
-output$Step1_btn_validate_ui <- renderUI({
-    widget <-  actionButton(ns('Step1_btn_validate'),
+output$step1_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('step1_btn_validate'),
                    'Perform',
                    class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Step1'] )
+      toggleWidget(widget, rv$steps.enabled['step1'] )
       
     })
     # >>> END: Definition of the widgets
     
     
-    observeEvent(input$Step1_btn_validate, {
+    observeEvent(input$step1_btn_validate, {
       # Do some stuff
       
       # Here, you to hase use a function to add an item to the
@@ -243,12 +243,12 @@ output$Step1_btn_validate_ui <- renderUI({
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- global$VALIDATED
+      rv$steps.status['step1'] <- global$VALIDATED
     })
   
 
 
-output$Step2 <- renderUI({
+output$step2 <- renderUI({
 
 wellPanel(
         # uiOutput for all widgets in this UI
@@ -260,7 +260,7 @@ wellPanel(
         # For more details, please refer to the dev document.
         
         # Insert validation button
-        uiOutput(ns('Step2_btn_validate_ui')),
+        uiOutput(ns('step2_btn_validate_ui')),
         
         # Additional code
             
@@ -268,17 +268,17 @@ wellPanel(
     })
 
 
-output$Step2_btn_validate_ui <- renderUI({
-    widget <-  actionButton(ns('Step2_btn_validate'),
+output$step2_btn_validate_ui <- renderUI({
+    widget <-  actionButton(ns('step2_btn_validate'),
                    'Perform',
                    class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Step2'] )
+      toggleWidget(widget, rv$steps.enabled['step2'] )
       
     })
     # >>> END: Definition of the widgets
     
     
-    observeEvent(input$Step2_btn_validate, {
+    observeEvent(input$step2_btn_validate, {
       # Do some stuff
       
       # Here, you to hase use a function to add an item to the
@@ -292,56 +292,7 @@ output$Step2_btn_validate_ui <- renderUI({
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- global$VALIDATED
-    })
-  
-
-
-output$Step3 <- renderUI({
-
-wellPanel(
-        # uiOutput for all widgets in this UI
-        # This part is mandatory
-        # The renderUI() function of each widget is managed by MagellanNTK
-        # The dev only have to define a reactive() function for each
-        # widget he want to insert
-        # Be aware of the naming convention for ids in uiOutput()
-        # For more details, please refer to the dev document.
-        
-        # Insert validation button
-        uiOutput(ns('Step3_btn_validate_ui')),
-        
-        # Additional code
-            
-        )
-    })
-
-
-output$Step3_btn_validate_ui <- renderUI({
-    widget <-  actionButton(ns('Step3_btn_validate'),
-                   'Perform',
-                   class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Step3'] )
-      
-    })
-    # >>> END: Definition of the widgets
-    
-    
-    observeEvent(input$Step3_btn_validate, {
-      # Do some stuff
-      
-      # Here, you to hase use a function to add an item to the
-      # dataset
-      # rv$dataIn <- addDatasets(
-      #                object = rv$dataIn,
-      #                dataset = rnorm(1:5),
-      #                name = paste0('temp_',id)
-      #                )
-      
-      # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step3'] <- global$VALIDATED
+      rv$steps.status['step2'] <- global$VALIDATED
     })
   
 

@@ -83,13 +83,15 @@ Tools_Templates_server <- function(id,
   widgets.default.values <- list(
     Step2_mode = '',
     Step2_parent = NULL,
-    Step2_name = NULL
+    Step2_name = NULL,
+    Step2_mdEditor = ''
   )
   
   
   rv.custom.default.values <- list(
     path =  reactive({'~'}),
-    files = NULL
+    files = NULL,
+    md_raw = ''
   )
   
   ###-------------------------------------------------------------###
@@ -270,6 +272,8 @@ Tools_Templates_server <- function(id,
           column(width = 3, uiOutput(ns('Step2_parent_ui'))),
           column(width = 3, uiOutput(ns('Step2_name_ui')))
         ),
+        
+        uiOutput(ns('Step2_mdEditor_ui')),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Step2_btn_validate_ui'))
@@ -304,6 +308,67 @@ Tools_Templates_server <- function(id,
       toggleWidget(widget, rv$steps.enabled['Step2'] )
     })
     
+    
+    
+    observeEvent(input$Step2_mdEditor, {
+      rv.custom$md_raw <- input$Step2_mdEditor
+    })
+    
+    output$Step2_mdEditor_ui <- renderUI({
+      
+      # shinyAce::aceEditor(ns("Step2_mdEditor"),
+      #                     value = input$Step2_mdEditor,
+      #                     mode = "markdown",
+      #                     theme = 'github',
+      #                     height = '100px',
+      #                     readOnly = !rv$steps.enabled['Step2'])
+      
+
+      shiny::div(
+        #class = class,
+        style = "margin-bottom: 15px;",
+       # shiny::tags$label('label'),
+
+        shiny::tabsetPanel(selected = 1,
+                           type = "tabs",
+
+                           # text input:
+                           shiny::tabPanel(
+                             title = "Write Description md code",
+                             value = 1,
+                             shinyAce::aceEditor(ns("Step2_mdEditor"),
+                                                 value = isolate(input$Step2_mdEditor),
+                                                 mode = "markdown",
+                                                 theme = 'github',
+                                                 height = '100px',
+                                                 readOnly = !rv$steps.enabled['Step2'])
+                           ),
+
+
+                           # MD preview:
+                           shiny::tabPanel(
+                             title = "Preview",
+                             value = 2,
+                             uiOutput(ns('Step2_preview_ui'))
+                           )
+        )
+      )
+    })
+    
+    
+    output$Step2_preview_ui <- renderUI({
+      req(input$Step2_mdEditor)
+      shiny::div(class = "",
+                 shiny::withMathJax(
+        shiny::HTML(
+          markdown::markdownToHTML(text = input$Step2_mdEditor,
+                                   fragment.only = TRUE)
+        )
+      )
+      )
+    })
+    
+    
     output$Step2_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Step2_btn_validate"),
                              "Perform",
@@ -321,6 +386,56 @@ Tools_Templates_server <- function(id,
     })
     
     # <<< END ------------- Code for step 2 UI---------------
+    
+    
+    
+    # # >>> START ------------- Code for Write md UI---------------
+    # 
+    # output$Writemd <- renderUI({
+    #   wellPanel(
+    #     # Two examples of widgets in a renderUI() function
+    #     uiOutput(ns('Writemd_editor_ui')),
+    #     # Insert validation button
+    #     # This line is necessary. DO NOT MODIFY
+    #     uiOutput(ns('Writemd_btn_validate_ui'))
+    #   )
+    # })
+    # 
+    # 
+    # output$Writemd_editor_ui <- renderUI({
+    #   init <- 'test'
+    #   widget <- shinyAce::aceEditor(ns("Writemd_editor"),
+    #                                 value = input$Writemd_editor,
+    #                                 mode = "markdown",
+    #                                 theme = 'github',
+    #                                 height = '100px',
+    #                                 readOnly = !rv$steps.enabled['Writemd'])
+    #   
+    #   #toggleWidget(widget, rv$steps.enabled['Writemd'] )
+    # })
+    # 
+    # 
+    # 
+    # output$Writemd_btn_validate_ui <- renderUI({
+    #   widget <- actionButton(ns("Writemd_btn_validate"),
+    #                          "Perform",
+    #                          class = GlobalSettings$btn_success_color)
+    #   toggleWidget(widget, rv$steps.enabled['Writemd'] )
+    # })
+    # 
+    # observeEvent(input$Writemd_btn_validate, {
+    #   # Do some stuff
+    #   
+    #   # DO NOT MODIFY THE THREE FOLLOWINF LINES
+    #   dataOut$trigger <- Timestamp()
+    #   dataOut$value <- rv$dataIn
+    #   rv$steps.status['Writemd'] <- global$VALIDATED
+    # })
+    # 
+    # # <<< END ------------- Code for Write md UI---------------
+    # 
+    
+    
     
     
     # >>> START ------------- Code for step 3 UI---------------
@@ -390,17 +505,31 @@ Tools_Templates_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      miniConfig <- list(fullname = paste0(input$Step2_parent, '_', input$Step2_name),
+      fullname <- paste0(input$Step2_parent, '_', input$Step2_name)
+      
+      miniConfig <- list(fullname = fullname,
                          mode = input$Step2_mode,
                          steps = rv.custom$steps()$inputs,
                          mandatory = rv.custom$steps()$mandatory
                          )
       
+      browser()
+      rv$files <- c(rv$files, 
+                    Create_md_file(mode = input$Step2_mode,
+                                   fullname = fullname,
+                                   path = rv.custom$path(),
+                                   raw = input$Step2_mdEditor)
+                    )
+      
+      
       if (input$Step2_mode == 'module')
-        createExtraModule(name = input$Step2_name, path = rv.custom$path())
+        rv$files <- c(rv$files, 
+                      createExtraModule(name = input$Step2_name, path = rv.custom$path()))
       else {
-        createModuleTemplate(miniConfig, path = rv.custom$path())
-        createExtraFunctions(rv.custom$path())
+        rv$files <- c(rv$files, 
+                      createModuleTemplate(miniConfig, path = rv.custom$path()))
+        rv$files <- c(rv$files, 
+                      createExtraFunctions(rv.custom$path()))
       }
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES

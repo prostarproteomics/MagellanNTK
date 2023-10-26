@@ -1,6 +1,6 @@
 
 #' @export
-#' @rdname create_template
+#' @name create_template
 #'
 createModuleTemplate <- function(config = NULL, 
                                  path = '.') {
@@ -273,6 +273,7 @@ code <- gsub("#mode#", mode, code)
 writeLines(code, con)
 }
 
+#' @rdname create_template
 #' @export
 write_process_renderUI_for_steps <- function(con, ll.config, path) {
     code <- NULL
