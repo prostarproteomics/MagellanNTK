@@ -46,8 +46,8 @@ Tools_Templates_conf <- function(){
   Config(
     fullname = 'Tools_Templates',
     mode = 'process',
-    steps = c('Directory', 'Step 2', 'Add steps'),
-    mandatory = c(TRUE, TRUE, TRUE)
+    steps = c('Directory', 'Add steps'),
+    mandatory = c(TRUE, TRUE)
   )
 }
 
@@ -81,10 +81,10 @@ Tools_Templates_server <- function(id,
   # Define default selected values for widgets
   # This is only for simple workflows
   widgets.default.values <- list(
-    Step2_mode = '',
-    Step2_parent = NULL,
-    Step2_name = NULL,
-    Step2_mdEditor = '',
+    Directory_mode = '',
+    Directory_parent = NULL,
+    Directory_name = NULL,
+    Directory_mdEditor = '',
     Addsteps_selectStep = NULL
   )
   
@@ -188,6 +188,17 @@ Tools_Templates_server <- function(id,
         uiOutput(ns('Directory_chooseDir_ui')),
         #uiOutput(ns('Directory_guess_ui')),
         uiOutput(ns('Directory_warnDir_ui')),
+        
+        
+        fluidRow(
+          column(width = 3, uiOutput(ns('Directory_mode_ui'))),
+          column(width = 3, uiOutput(ns('Directory_parent_ui'))),
+          column(width = 3, uiOutput(ns('Directory_name_ui')))
+        ),
+        
+        uiOutput(ns('Directory_mdEditor_ui')),
+        
+        
         # Insert validation button
         uiOutput(ns('Directory_btn_validate_ui'))
       )
@@ -241,6 +252,78 @@ Tools_Templates_server <- function(id,
     
     
     
+    output$Directory_mode_ui <- renderUI({
+      widget <- selectInput(ns('Directory_mode'), 'Template to create', 
+                            choices = c('pipeline', 'process', 'module'), 
+                            selected = isolate(rv.widgets$Directory_mode),
+                            width='100px')
+      toggleWidget(widget, rv$steps.enabled['Directory'] )
+    })
+    
+    output$Directory_parent_ui <- renderUI({
+      widget <- textInput(ns('Directory_parent'), 'Parent pipeline', 
+                          value = isolate(rv.widgets$Directory_parent),
+                          width='100px')
+      
+      toggleWidget(widget, rv$steps.enabled['Directory'] 
+                   && input$Step2_mode == 'process')
+    })
+    
+    output$Directory_name_ui <- renderUI({
+      widget <- textInput(ns('Directory_name'), 'Name', 
+                          value = isolate(rv.widgets$Directory_name),
+                          width='100px')
+      toggleWidget(widget, rv$steps.enabled['Directory'] )
+    })
+    
+    output$Directory_mdEditor_ui <- renderUI({
+      
+      shiny::div(
+        #class = class,
+        style = "margin-bottom: 15px;",
+        # shiny::tags$label('label'),
+        
+        shiny::tabsetPanel(selected = 1,
+                           type = "tabs",
+                           
+                           # text input:
+                           shiny::tabPanel(
+                             title = "Write Description md code",
+                             value = 1,
+                             shinyAce::aceEditor(ns("Step2_mdEditor"),
+                                                 value = isolate(input$Directory_mdEditor),
+                                                 mode = "markdown",
+                                                 theme = 'github',
+                                                 height = '300px',
+                                                 readOnly = !rv$steps.enabled['Directory'])
+                           ),
+                           
+                           
+                           # MD preview:
+                           shiny::tabPanel(
+                             title = "Preview",
+                             value = 2,
+                             uiOutput(ns('Directory_preview_ui'))
+                           )
+        )
+      )
+    })
+    
+    
+    output$Directory_preview_ui <- renderUI({
+      req(input$Directory_mdEditor)
+      shiny::div(class = "",
+                 shiny::withMathJax(
+                   shiny::HTML(
+                     markdown::markdownToHTML(text = input$Directory_mdEditor,
+                                              fragment.only = TRUE)
+                   )
+                 )
+      )
+    })
+    
+    
+    
     output$Directory_btn_validate_ui <- renderUI({
       widget <-  actionButton(ns("Directory_btn_validate"), "Perform",
                               class = 'btn-info')
@@ -264,120 +347,7 @@ Tools_Templates_server <- function(id,
     # <<< END ------------- Code for step 1 UI---------------
     
     
-    # >>> START ------------- Code for step 2 UI---------------
-    
-    output$Step2 <- renderUI({
-      wellPanel(
-        # Two examples of widgets in a renderUI() function
-        fluidRow(
-          column(width = 3, uiOutput(ns('Step2_mode_ui'))),
-          column(width = 3, uiOutput(ns('Step2_parent_ui'))),
-          column(width = 3, uiOutput(ns('Step2_name_ui')))
-        ),
-        
-        uiOutput(ns('Step2_mdEditor_ui')),
-        # Insert validation button
-        # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Step2_btn_validate_ui'))
-      )
-    })
-    
-    
-    output$Step2_mode_ui <- renderUI({
-      widget <- selectInput(ns('Step2_mode'), 'Template to create', 
-                            choices = c('pipeline', 'process', 'module'), 
-                            selected = isolate(rv.widgets$Step2_mode),
-                            width='100px')
-      toggleWidget(widget, rv$steps.enabled['Step2'] )
-    })
-    
-    output$Step2_parent_ui <- renderUI({
-      widget <- textInput(ns('Step2_parent'), 'Parent pipeline', 
-                          value = isolate(rv.widgets$Step2_parent),
-                          width='100px')
-      
-      toggleWidget(widget, rv$steps.enabled['Step2'] 
-                   && input$Step2_mode == 'process')
-    })
-    
-    output$Step2_name_ui <- renderUI({
-      widget <- textInput(ns('Step2_name'), 'Name', 
-                          value = isolate(rv.widgets$Step2_name),
-                          width='100px')
-      toggleWidget(widget, rv$steps.enabled['Step2'] )
-    })
-    
-    
-    
-    observeEvent(input$Step2_mdEditor, {
-      rv.custom$md_raw <- input$Step2_mdEditor
-    })
-    
-    output$Step2_mdEditor_ui <- renderUI({
-      
-      shiny::div(
-        #class = class,
-        style = "margin-bottom: 15px;",
-       # shiny::tags$label('label'),
-
-        shiny::tabsetPanel(selected = 1,
-                           type = "tabs",
-
-                           # text input:
-                           shiny::tabPanel(
-                             title = "Write Description md code",
-                             value = 1,
-                             shinyAce::aceEditor(ns("Step2_mdEditor"),
-                                                 value = isolate(input$Step2_mdEditor),
-                                                 mode = "markdown",
-                                                 theme = 'github',
-                                                 height = '300px',
-                                                 readOnly = !rv$steps.enabled['Step2'])
-                           ),
-
-
-                           # MD preview:
-                           shiny::tabPanel(
-                             title = "Preview",
-                             value = 2,
-                             uiOutput(ns('Step2_preview_ui'))
-                           )
-        )
-      )
-    })
-    
-    
-    output$Step2_preview_ui <- renderUI({
-      req(input$Step2_mdEditor)
-      shiny::div(class = "",
-                 shiny::withMathJax(
-        shiny::HTML(
-          markdown::markdownToHTML(text = input$Step2_mdEditor,
-                                   fragment.only = TRUE)
-        )
-      )
-      )
-    })
-    
-    
-    output$Step2_btn_validate_ui <- renderUI({
-      widget <- actionButton(ns("Step2_btn_validate"),
-                             "Perform",
-                             class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Step2'] )
-    })
-    
-    observeEvent(input$Step2_btn_validate, {
-      # Do some stuff
-      
-      # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- global$VALIDATED
-    })
-    
-    # <<< END ------------- Code for step 2 UI---------------
-    
+   
     
     
     # # >>> START ------------- Code for Write md UI---------------
