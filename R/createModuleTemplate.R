@@ -16,7 +16,7 @@ createModuleTemplate <- function(config = NULL,
   names(config$steps) <- gsub(' ', '', config$steps)
  
   # Create template module file
-  mod.filename <- file.path(path, paste0(config$fullname, ".R"))
+  mod.filename <- file.path(path, "R", paste0(config$fullname, ".R"))
   value <- c('R', paste0(config$fullname, ".R"))
   if (file.exists(mod.filename)) {
     file.remove(mod.filename)

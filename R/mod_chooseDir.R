@@ -62,7 +62,7 @@ output$directory_ui <- renderUI({
 
 
 output$details_ckb_ui <- renderUI({
-  widget <- checkboxInput(ns('details_ckb'), 'Show details', value = FALSE)
+  widget <- checkboxInput(ns('details_ckb'), 'Show files details', value = FALSE)
   toggleWidget(widget, condition = is.enabled())
 })
 

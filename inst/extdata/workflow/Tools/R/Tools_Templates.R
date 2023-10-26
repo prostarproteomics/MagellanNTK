@@ -285,25 +285,23 @@ Tools_Templates_server <- function(id,
     output$Step2_mode_ui <- renderUI({
       widget <- selectInput(ns('Step2_mode'), 'Template to create', 
                             choices = c('pipeline', 'process', 'module'), 
-                            selected = rv.widgets$Step2_mode,
+                            selected = isolate(rv.widgets$Step2_mode),
                             width='100px')
       toggleWidget(widget, rv$steps.enabled['Step2'] )
     })
     
     output$Step2_parent_ui <- renderUI({
-      widget <- textInput(ns('Step2_parent'), 
-                  'Parent pipeline', 
-                  value = rv.widgets$Step2_parent,
-                  width='100px')
+      widget <- textInput(ns('Step2_parent'), 'Parent pipeline', 
+                          value = isolate(rv.widgets$Step2_parent),
+                          width='100px')
       
       toggleWidget(widget, rv$steps.enabled['Step2'] 
                    && input$Step2_mode == 'process')
     })
     
     output$Step2_name_ui <- renderUI({
-      widget <- textInput(ns('Step2_name'),
-                          'Name', 
-                          value = rv.widgets$Step2_name,
+      widget <- textInput(ns('Step2_name'), 'Name', 
+                          value = isolate(rv.widgets$Step2_name),
                           width='100px')
       toggleWidget(widget, rv$steps.enabled['Step2'] )
     })
@@ -496,10 +494,20 @@ Tools_Templates_server <- function(id,
       )
     })
     
-    output$dl_ui <- renderUI({
-      req(config@mode == 'process')
-      req(rv$steps.status['Save'] == global$VALIDATED)
-      dl_ui(ns('createQuickLink'))
+    # output$dl_ui <- renderUI({
+    #   req(config@mode == 'process')
+    #   req(rv$steps.status['Save'] == global$VALIDATED)
+    #   dl_ui(ns('createQuickLink'))
+    # })
+    
+    output$Save_files_ui <- renderUI({
+      req(rv.custom$files)
+      tagList(
+        h5('Files created'),
+        lapply(rv.custom$files, function(i)
+          p(i))
+      )
+      
     })
     
     output$Save_btn_validate_ui <- renderUI({
@@ -519,8 +527,8 @@ Tools_Templates_server <- function(id,
                          mandatory = rv.custom$steps()$mandatory
                          )
       
-      browser()
-      rv$files <- c(rv$files, 
+     
+      rv.custom$files <- c(rv.custom$files, 
                     Create_md_file(mode = input$Step2_mode,
                                    fullname = fullname,
                                    path = rv.custom$path(),
@@ -529,12 +537,12 @@ Tools_Templates_server <- function(id,
       
       
       if (input$Step2_mode == 'module')
-        rv$files <- c(rv$files, 
+        rv.custom$files <- c(rv.custom$files, 
                       createExtraModule(name = input$Step2_name, path = rv.custom$path()))
       else {
-        rv$files <- c(rv$files, 
+        rv.custom$files <- c(rv.custom$files, 
                       createModuleTemplate(miniConfig, path = rv.custom$path()))
-        rv$files <- c(rv$files, 
+        rv.custom$files <- c(rv.custom$files, 
                       createExtraFunctions(rv.custom$path()))
       }
       
@@ -542,7 +550,7 @@ Tools_Templates_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- global$VALIDATED
-      dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+     # dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------
