@@ -85,6 +85,7 @@ Tools_Templates_server <- function(id,
     Directory_parent = NULL,
     Directory_name = NULL,
     Directory_mdEditor = '',
+    Directory_mdEditorLayout = 'tabs',
     Addsteps_selectStep = NULL
   )
   
@@ -196,9 +197,11 @@ Tools_Templates_server <- function(id,
           column(width = 3, uiOutput(ns('Directory_name_ui')))
         ),
         
-        uiOutput(ns('Directory_mdEditor_ui')),
-        
-        
+        uiOutput(ns('Directory_mdEditorLayout_ui')),
+        #uiOutput(ns('Directory_mdEditor_ui')),
+        uiOutput(ns('Directory_mdEditorPanels_ui')),
+        uiOutput(ns('Directory_mdEditorTabs_ui')),
+
         # Insert validation button
         uiOutput(ns('Directory_btn_validate_ui'))
       )
@@ -276,8 +279,44 @@ Tools_Templates_server <- function(id,
       toggleWidget(widget, rv$steps.enabled['Directory'] )
     })
     
-    output$Directory_mdEditor_ui <- renderUI({
+    
+    output$Directory_mdEditorLayout_ui <- renderUI({
+      widget <- selectInput(ns('Directory_mdEditorLayout'), 
+                            'Markdown editor layout',
+                            choices = c('tabs', 'panels'),
+                            width = '100px')
       
+      toggleWidget(widget, rv$steps.enabled['Directory'] )
+    })
+    
+    
+    observeEvent(input$Directory_mdEditorLayout, {
+      shinyjs::toggle('Directory_mdEditorPanels_ui', condition = input$Directory_mdEditorLayout == 'panels')
+      shinyjs::toggle('Directory_mdEditorTabs_ui', condition = input$Directory_mdEditorLayout == 'tabs')
+    })
+    
+    output$Directory_mdEditorPanels_ui <- renderUI({
+      req(input$Directory_mdEditorLayout == 'panels')
+      shiny::div(
+        #class = class,
+        style = "margin-bottom: 15px;",
+        fluidRow(
+          column(width = 6,
+                 shinyAce::aceEditor(ns("Directory_mdEditor"),
+                                     value = isolate(input$Directory_mdEditor),
+                                     mode = "markdown",
+                                     theme = 'github',
+                                     height = '300px',
+                                     readOnly = !rv$steps.enabled['Directory'])
+                 ),
+          column(width = 6, uiOutput(ns('Directory_preview_ui')))
+        )
+      )
+    })
+    
+    
+    output$Directory_mdEditorTabs_ui <- renderUI({
+      req(input$Directory_mdEditorLayout == 'tabs')
       shiny::div(
         #class = class,
         style = "margin-bottom: 15px;",
@@ -312,13 +351,19 @@ Tools_Templates_server <- function(id,
     
     output$Directory_preview_ui <- renderUI({
       req(input$Directory_mdEditor)
-      shiny::div(class = "",
+      wellPanel(style = "overflow-y:scroll; 
+                overflow-X:scroll; 
+                max-height: 300px; 
+                background: white;",
+                height = '100px',
+                shiny::div(class = "",
                  shiny::withMathJax(
                    shiny::HTML(
                      markdown::markdownToHTML(text = input$Directory_mdEditor,
                                               fragment.only = TRUE)
                    )
                  )
+      )
       )
     })
     
