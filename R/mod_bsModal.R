@@ -65,23 +65,17 @@ bsmodal_server <- function(id,
         return(NULL)
       }
     })
-    dataOut <- reactiveVal(NULL)
     
-    # shinyjqui::jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
-    #                ,options = list(minHeight = 500, minWidth=500  ))
-    #
+    dataOut <- reactiveVal(reactive({NULL}))
+    
+     shinyjqui::jqui_resizable(paste0("#",ns("window")," .modal-content")
+                    ,options = list(minHeight = 500, minWidth=500  ))
+    
     shinyjqui::jqui_draggable(paste0("#", ns("window"), " .modal-content"),
                               options = list(revert = TRUE)
     )
-    
-    observe({
-      req(shiny.module)
-      dataOut(do.call(shiny.module$server.func, 
-                    append(list(id = shiny.module$id),
-                           shiny.module$server.params)))
-    })
-    
-    observeEvent(dataOut()(), {
+
+    observeEvent(req(dataOut()()), {
       print(paste0('dataOut = ', dataOut()()))
       
     })
@@ -94,12 +88,20 @@ bsmodal_server <- function(id,
         ui <- do.call(shiny.module$ui.func, 
                       append(list(id = ns(shiny.module$id)),
                              shiny.module$ui.params))
+      
+      ui
     })
     
     output$bsmodalUI <- renderUI({
       if (is.null(width)) {
         width <- "small"
       }
+      
+      if(!is.null(shiny.module))
+        dataOut(do.call(shiny.module$server.func, 
+                        append(list(id = shiny.module$id),
+                               shiny.module$server.params)))
+      
       tagList(
         tags$head(tags$style(paste0(".modal-dialog { 
                     width:", width, " }"))),
