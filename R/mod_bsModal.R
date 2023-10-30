@@ -13,7 +13,7 @@
 bsmodal_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    uiOutput(ns("bsmodal_ui"))
+    uiOutput(ns("bsmodalUI"))
   )
 }
 
@@ -53,12 +53,18 @@ bsmodal_server <- function(id,
                            title = NULL,
                            width = NULL,
                            uiContent = NULL,
-                           mod.funcs = NULL) { # height auto
+                           shiny.module = NULL) { # height auto
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    rv <- reactiveValues(temp = NULL)
+    
+    observe({
+      if(!is.null(uiContent) && !is.null(shiny.module)){
+        warning('There can be only one non-NULL among uiContent and shiny.module')
+        return(NULL)
+      }
+    })
     dataOut <- reactiveVal(NULL)
     
     # shinyjqui::jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
@@ -67,18 +73,30 @@ bsmodal_server <- function(id,
     shinyjqui::jqui_draggable(paste0("#", ns("window"), " .modal-content"),
                               options = list(revert = TRUE)
     )
-
-    rv$temp <- do.call(mod.funcs$server.func, 
-                       append(list(id = mod.funcs$id),
-                              mod.funcs$server.params))
     
-    observeEvent(rv$temp(), {
-      print(rv$temp())
+    observe({
+      req(shiny.module)
+      dataOut(do.call(shiny.module$server.func, 
+                    append(list(id = shiny.module$id),
+                           shiny.module$server.params)))
+    })
+    
+    observeEvent(dataOut()(), {
+      print(paste0('dataOut = ', dataOut()()))
       
     })
     
     
-    output$bsmodal_ui <- renderUI({
+    GetUI <- reactive({
+      if(!is.null(uiContent))
+        ui <- uiContent
+      else if(!is.null(shiny.module))
+        ui <- do.call(shiny.module$ui.func, 
+                      append(list(id = ns(shiny.module$id)),
+                             shiny.module$ui.params))
+    })
+    
+    output$bsmodalUI <- renderUI({
       if (is.null(width)) {
         width <- "small"
       }
@@ -93,20 +111,16 @@ bsmodal_server <- function(id,
                      icon("chart-bar", lib = "font-awesome"),
                      class = "btn-success"
         ),
-        # div(id = 'test',
-        #ui <- uiContent,
-        
         
         shinyBS::bsModal(ns("window"),
                          title = title,
                          trigger = ns("openModalBtn"),
-                         do.call(mod.funcs$ui.func, 
-                                 append(list(id = ns(mod.funcs$id)),
-                                        mod.funcs$ui.params))
+                         GetUI()
         )
-        #  )
       )
     })
+    
+    reactive({dataOut()()})
   })
 }
 
@@ -117,17 +131,28 @@ if (interactive()) {
   library(shinyBS)
   
   ui <- fluidPage(
-    bsmodal_ui("tbl")
+    tagList(
+      p('testtets'),
+      uiOutput('res'),
+      bsmodal_ui("tbl")
+    )
   )
   server <- function(input, output) {
-    bsmodal_server(id = "tbl",
-                   title = "test",
-                   mod.funcs = list(id = 'toto',
-                                    ui.func = mdEditor_ui,
-                                    ui.params = list(),
-                                    server.func = mdEditor_server,
-                                    server.params = list())
+    rv <- reactiveValues(res=NULL)
+    rv$res <- bsmodal_server(id = "tbl",
+                             title = "test",
+                             shiny.module = list(id = 'toto',
+                                              ui.func = mdEditor_ui,
+                                              ui.params = list(),
+                                              server.func = mdEditor_server,
+                                              server.params = list())
     )
+   
+    
+    output$res <- renderUI({
+      req(rv$res())
+      p(rv$res())
+    })
   }
   shinyApp(ui, server)
 }

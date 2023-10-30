@@ -32,6 +32,8 @@ Imports:
 Collate: 
     mod_chooseDir.R
     mod_dl.R
+    mod_bsModal.R
+    mod_mdEditor.R
     createMdDescriptionFiles.R
     createExtraFunctions.R
     mod_createTemplate.R
