@@ -23,7 +23,7 @@ chooseDir_ui <- function(id) {
   fluidPage(
     shinyjs::useShinyjs(),
     uiOutput(ns('directory_ui')),
-    uiOutput(ns('details_ckb_ui')),
+    shinyjs::hidden(uiOutput(ns('details_ckb_ui'))),
     
     shinyjs::hidden(
       div(id = ns('div_details'),
@@ -40,7 +40,8 @@ chooseDir_ui <- function(id) {
 #' @rdname choose_dir
 chooseDir_server <- function(id,
                              path = reactive({'~'}),
-                             is.enabled = reactive({TRUE})
+                             is.enabled = reactive({TRUE}),
+                             show.details = FALSE
                              ) {
   
   
@@ -50,6 +51,10 @@ chooseDir_server <- function(id,
     rv <- reactiveValues(path = NULL)
     
     observeEvent(path(), { rv$path <- path()})
+    
+    observe({
+      shinyjs::toggle('details_ckb_ui', condition = show.details)
+    })
     
 output$directory_ui <- renderUI({
   widget <- div(id = ns('div_directory'),
@@ -102,7 +107,7 @@ reactive({readDirectoryInput(session, 'directory')})
 
 #' @export
 #' @rdname choose_dir
-chooseDir <- function(){
+chooseDir <- function(show.details = FALSE){
   ui <- fluidPage(
     div(id = 'div_test',
         chooseDir_ui('test')
@@ -122,7 +127,8 @@ chooseDir <- function(){
     
     rv$path <- chooseDir_server('test',
                                 path = reactive({'~'}),
-                                is.enabled = reactive({TRUE}))
+                                is.enabled = reactive({TRUE}),
+                                show.details = show.details)
 
     
     output$info <- renderUI({

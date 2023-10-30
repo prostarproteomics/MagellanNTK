@@ -245,13 +245,13 @@ Tools_Templates_server <- function(id,
         p(paste0("The '", i, "' directory does not exists. It will be created")))
     })  
 
-    # This part must be customized by the developer of a new module
-    output$Directory_guess_ui <- renderUI({
-      req(rv.custom$path())
-      lst.files <- list.files(file.path(rv.custom$path(), 'R'))
-      lapply(lst.files, function(i)
-        p(i))
-    })
+    # # This part must be customized by the developer of a new module
+    # output$Directory_guess_ui <- renderUI({
+    #   req(rv.custom$path())
+    #   lst.files <- list.files(file.path(rv.custom$path(), 'R'))
+    #   lapply(lst.files, function(i)
+    #     p(i))
+    # })
     
     
     
