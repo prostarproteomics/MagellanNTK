@@ -53,12 +53,12 @@ bsmodal_server <- function(id,
                            title = NULL,
                            width = NULL,
                            uiContent = NULL,
-                           mod = NULL) { # height auto
+                           mod.funcs = NULL) { # height auto
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-   rv <- reactiveValues(temp = NULL)
+    rv <- reactiveValues(temp = NULL)
     dataOut <- reactiveVal(NULL)
     
     # shinyjqui::jqui_resizable(paste0("#",ns("fenetre")," .modal-content")
@@ -67,15 +67,14 @@ bsmodal_server <- function(id,
     shinyjqui::jqui_draggable(paste0("#", ns("window"), " .modal-content"),
                               options = list(revert = TRUE)
     )
-    
-    
-   # observe({
-      rv$temp <- do.call(mdEditor_server, list(id = 'toto'))
-    #})
+
+    rv$temp <- do.call(mod.funcs$server.func, 
+                       append(list(id = mod.funcs$id),
+                              mod.funcs$server.params))
     
     observeEvent(rv$temp(), {
       print(rv$temp())
-     
+      
     })
     
     
@@ -101,7 +100,9 @@ bsmodal_server <- function(id,
         shinyBS::bsModal(ns("window"),
                          title = title,
                          trigger = ns("openModalBtn"),
-                         do.call(mdEditor_ui, list(id = ns('toto')))
+                         do.call(mod.funcs$ui.func, 
+                                 append(list(id = ns(mod.funcs$id)),
+                                        mod.funcs$ui.params))
         )
         #  )
       )
@@ -112,17 +113,21 @@ bsmodal_server <- function(id,
 
 
 if (interactive()) {
-    library(shiny)
-    library(shinyBS)
-
-    ui <- fluidPage(
-        bsmodal_ui("tbl")
+  library(shiny)
+  library(shinyBS)
+  
+  ui <- fluidPage(
+    bsmodal_ui("tbl")
+  )
+  server <- function(input, output) {
+    bsmodal_server(id = "tbl",
+                   title = "test",
+                   mod.funcs = list(id = 'toto',
+                                    ui.func = mdEditor_ui,
+                                    ui.params = list(),
+                                    server.func = mdEditor_server,
+                                    server.params = list())
     )
-    server <- function(input, output) {
-        bsmodal_server(id = "tbl",
-                       title = "test",
-                       mod = mod1()
-        )
-        }
-    shinyApp(ui, server)
+  }
+  shinyApp(ui, server)
 }
