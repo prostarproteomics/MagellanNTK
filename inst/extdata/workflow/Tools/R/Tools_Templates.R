@@ -46,7 +46,7 @@ Tools_Templates_conf <- function(){
   Config(
     fullname = 'Tools_Templates',
     mode = 'process',
-    steps = c('Directory', 'Add steps'),
+    steps = c('Create template', 'Configure steps'),
     mandatory = c(TRUE, TRUE)
   )
 }
@@ -81,17 +81,18 @@ Tools_Templates_server <- function(id,
   # Define default selected values for widgets
   # This is only for simple workflows
   widgets.default.values <- list(
-    Directory_mode = '',
-    Directory_parent = NULL,
-    Directory_name = NULL,
-    Directory_mdEditor = '',
-    Directory_mdEditorLayout = 'tabs',
-    Addsteps_selectStep = NULL
+    Createtemplate_mode = '',
+    Createtemplate_parent = NULL,
+    Createtemplate_name = NULL,
+    #Createtemplate_mdEditor = '',
+    #Createtemplate_mdEditorLayout = 'tabs',
+    Configuresteps_selectStep = NULL
   )
   
   
   rv.custom.default.values <- list(
     path =  reactive({'~'}),
+    tempdir = reactive({NULL}),
     files = NULL,
     md_raw = ''
   )
@@ -129,7 +130,7 @@ Tools_Templates_server <- function(id,
       
       tagList(
         ### In this example, the md file is found in the extdata/module_examples 
-        ### directory but with a real app, it should be provided by the package 
+        ### Createtemplate but with a real app, it should be provided by the package 
         ### which contains the UI for the different steps of the process module.
         ### system.file(xxx)
         
@@ -177,7 +178,7 @@ Tools_Templates_server <- function(id,
     # >>> 
     
     # >>>> -------------------- STEP 1 : Global UI ------------------------------------
-    output$Directory <- renderUI({
+    output$Createtemplate <- renderUI({
       wellPanel(
         # uiOutput for all widgets in this UI
         # This part is mandatory
@@ -186,24 +187,25 @@ Tools_Templates_server <- function(id,
         # widget he want to insert
         # Be aware of the naming convention for ids in uiOutput()
         # For more details, please refer to the dev document.
-        uiOutput(ns('Directory_chooseDir_ui')),
-        #uiOutput(ns('Directory_guess_ui')),
-        uiOutput(ns('Directory_warnDir_ui')),
         
         
         fluidRow(
-          column(width = 3, uiOutput(ns('Directory_mode_ui'))),
-          column(width = 3, uiOutput(ns('Directory_parent_ui'))),
-          column(width = 3, uiOutput(ns('Directory_name_ui')))
+          column(width = 3, uiOutput(ns('Createtemplate_mode_ui'))),
+          column(width = 3, uiOutput(ns('Createtemplate_parent_ui'))),
+          column(width = 3, uiOutput(ns('Createtemplate_name_ui')))
+          #column(width = 3, uiOutput(ns('Createtemplate_editMd_ui')))
         ),
         
-        uiOutput(ns('Directory_mdEditorLayout_ui')),
-        #uiOutput(ns('Directory_mdEditor_ui')),
-        uiOutput(ns('Directory_mdEditorPanels_ui')),
-        uiOutput(ns('Directory_mdEditorTabs_ui')),
+        uiOutput(ns('Createtemplate_dyn_steps_ui')),
+        uiOutput(ns('Createtemplate_view_ui')),
+        
+        # uiOutput(ns('Createtemplate_mdEditorLayout_ui')),
+        # #uiOutput(ns('Createtemplate_mdEditor_ui')),
+        # uiOutput(ns('Createtemplate_mdEditorPanels_ui')),
+        # uiOutput(ns('Createtemplate_mdEditorTabs_ui')),
 
         # Insert validation button
-        uiOutput(ns('Directory_btn_validate_ui'))
+        uiOutput(ns('Createtemplate_btn_validate_ui'))
       )
     })
     
@@ -219,172 +221,140 @@ Tools_Templates_server <- function(id,
     #   is.enabled = reactive({rv$steps.enabled['Step1']})
     # )
     
-  rv.custom$path <- chooseDir_server('Directory_chooseDir',
-                                       path = reactive({'~'}),
-                                       is.enabled = reactive({rv$steps.enabled['Directory']}))
+ 
     
     
-    output$Directory_chooseDir_ui <- renderUI({
-        widget <- div(id = ns('div_Directory_chooseDir'),
-                    chooseDir_ui(ns('Directory_chooseDir')))
-      toggleWidget(widget, rv$steps.enabled['Directory'] )
+    output$Createtemplate_mode_ui <- renderUI({
+      widget <- selectInput(ns('Createtemplate_mode'), 'Template to create', 
+                            choices = c('pipeline', 'process', 'module'), 
+                            selected = isolate(rv.widgets$Createtemplate_mode),
+                            width='100px')
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
+    })
+    
+    output$Createtemplate_parent_ui <- renderUI({
+      widget <- textInput(ns('Createtemplate_parent'), 'Parent pipeline', 
+                          value = isolate(rv.widgets$Createtemplate_parent),
+                          width='100px')
+      
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] 
+                   && input$Createtemplate_mode == 'process')
+    })
+    
+    output$Createtemplate_name_ui <- renderUI({
+      widget <- textInput(ns('Createtemplate_name'), 'Name', 
+                          value = isolate(rv.widgets$Createtemplate_name),
+                          width='100px')
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
     })
     
     
-    output$Directory_warnDir_ui <- renderUI({
-      req(rv.custom$path())
-      .path <- gsub('\\', '/', rv.custom$path(), fixed = TRUE)
-      pattern <- c('R', 'md')
-      dirs <- list.dirs(.path, recursive = FALSE, full.names=FALSE)
-      if (length(dirs) == 0)
-        msg <- pattern
-      else
-        msg <- pattern[-which(intersect(dirs, pattern) == pattern)]
+    
+    
+    
+    rv.custom$steps <- dyn_widgets_server('Createtemplate_dyn_steps')
+    
+    output$Createtemplate_dyn_steps_ui <- renderUI({
+      widget <- div(id = 'div_Createtemplate_dyn_steps',
+                    dyn_widgets_ui(ns('Createtemplate_dyn_steps'))
+      )
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
+    })
+    
+    output$Createtemplate_view_ui <- renderUI({
+      req(rv.custom$steps())
       
-      lapply(msg, function(i) 
-        p(paste0("The '", i, "' directory does not exists. It will be created")))
-    })  
-
-    # # This part must be customized by the developer of a new module
-    # output$Directory_guess_ui <- renderUI({
-    #   req(rv.custom$path())
-    #   lst.files <- list.files(file.path(rv.custom$path(), 'R'))
-    #   lapply(lst.files, function(i)
-    #     p(i))
+      # function to create widget
+      create_widget = function(i){
+        p(paste0(rv.custom$steps()$inputs[i], ' ', rv.custom$steps()$mandatory[i]))
+      }
+      
+      lapply(1:length(rv.custom$steps()$inputs), create_widget)
+    })
+    
+    
+    
+    
+    
+    
+    
+    # bsmodal_server(id = "Createtemplate_editMd",
+    #                label = "Edit md",
+    #                title = "test",
+    #                shiny.module = list(id = 'toto',
+    #                                    ui.func = mdEditor_ui,
+    #                                    ui.params = list(),
+    #                                    server.func = mdEditor_server,
+    #                                    server.params = list())
+    # )
+    
+    # output$Createtemplate_editMd_ui <- renderUI({
+    #   widget <- div(id = ns('Createtemplate_editMd_div'),
+    #                 bsmodal_ui(ns("Createtemplate_editMd"))
+    #   )
+    #   toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
     # })
     
     
-    
-    output$Directory_mode_ui <- renderUI({
-      widget <- selectInput(ns('Directory_mode'), 'Template to create', 
-                            choices = c('pipeline', 'process', 'module'), 
-                            selected = isolate(rv.widgets$Directory_mode),
-                            width='100px')
-      toggleWidget(widget, rv$steps.enabled['Directory'] )
-    })
-    
-    output$Directory_parent_ui <- renderUI({
-      widget <- textInput(ns('Directory_parent'), 'Parent pipeline', 
-                          value = isolate(rv.widgets$Directory_parent),
-                          width='100px')
-      
-      toggleWidget(widget, rv$steps.enabled['Directory'] 
-                   && input$Step2_mode == 'process')
-    })
-    
-    output$Directory_name_ui <- renderUI({
-      widget <- textInput(ns('Directory_name'), 'Name', 
-                          value = isolate(rv.widgets$Directory_name),
-                          width='100px')
-      toggleWidget(widget, rv$steps.enabled['Directory'] )
-    })
-    
-    
-    output$Directory_mdEditorLayout_ui <- renderUI({
-      widget <- selectInput(ns('Directory_mdEditorLayout'), 
-                            'Markdown editor layout',
-                            choices = c('tabs', 'panels'),
-                            width = '100px')
-      
-      toggleWidget(widget, rv$steps.enabled['Directory'] )
-    })
-    
-    
-    observeEvent(input$Directory_mdEditorLayout, {
-      shinyjs::toggle('Directory_mdEditorPanels_ui', condition = input$Directory_mdEditorLayout == 'panels')
-      shinyjs::toggle('Directory_mdEditorTabs_ui', condition = input$Directory_mdEditorLayout == 'tabs')
-    })
-    
-    output$Directory_mdEditorPanels_ui <- renderUI({
-      req(input$Directory_mdEditorLayout == 'panels')
-      shiny::div(
-        #class = class,
-        style = "margin-bottom: 15px;",
-        fluidRow(
-          column(width = 6,
-                 shinyAce::aceEditor(ns("Directory_mdEditor"),
-                                     value = isolate(input$Directory_mdEditor),
-                                     mode = "markdown",
-                                     theme = 'github',
-                                     height = '300px',
-                                     readOnly = !rv$steps.enabled['Directory'])
-                 ),
-          column(width = 6, uiOutput(ns('Directory_preview_ui')))
-        )
-      )
-    })
-    
-    
-    output$Directory_mdEditorTabs_ui <- renderUI({
-      req(input$Directory_mdEditorLayout == 'tabs')
-      shiny::div(
-        #class = class,
-        style = "margin-bottom: 15px;",
-        # shiny::tags$label('label'),
-        
-        shiny::tabsetPanel(selected = 1,
-                           type = "tabs",
-                           
-                           # text input:
-                           shiny::tabPanel(
-                             title = "Write Description md code",
-                             value = 1,
-                             shinyAce::aceEditor(ns("Directory_mdEditor"),
-                                                 value = isolate(input$Directory_mdEditor),
-                                                 mode = "markdown",
-                                                 theme = 'github',
-                                                 height = '300px',
-                                                 readOnly = !rv$steps.enabled['Directory'])
-                           ),
-                           
-                           
-                           # MD preview:
-                           shiny::tabPanel(
-                             title = "Preview",
-                             value = 2,
-                             uiOutput(ns('Directory_preview_ui'))
-                           )
-        )
-      )
-    })
-    
-    
-    output$Directory_preview_ui <- renderUI({
-      req(input$Directory_mdEditor)
-      wellPanel(style = "overflow-y:scroll; 
-                overflow-X:scroll; 
-                max-height: 300px; 
-                background: white;",
-                height = '100px',
-                shiny::div(class = "",
-                 shiny::withMathJax(
-                   shiny::HTML(
-                     markdown::markdownToHTML(text = input$Directory_mdEditor,
-                                              fragment.only = TRUE)
-                   )
-                 )
-      )
-      )
-    })
-    
-    
-    
-    output$Directory_btn_validate_ui <- renderUI({
-      widget <-  actionButton(ns("Directory_btn_validate"), "Perform",
+    output$Createtemplate_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Createtemplate_btn_validate"), "Perform",
                               class = 'btn-info')
-      toggleWidget(widget, rv$steps.enabled['Directory'] )
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
       
     })
     # >>> END: Definition of the widgets
     
     
-    observeEvent(input$Directory_btn_validate, {
+    observeEvent(input$Createtemplate_btn_validate, {
       # Do some stuff
+      
+      rv.custom$tempdir <- tempdir()
+      R.path <- file.path(tempdir(), 'R')
+      md.path <- file.path(tempdir(), 'md')
+      if (!dir.exists(R.path))
+        dir.create(R.path)
+      
+      if (!dir.exists(md.path))
+      dir.create(md.path)
+      
+      
+      fullname <- paste0(input$Createtemplate_parent, '_', input$Createtemplate_name)
+      
+      miniConfig <- list(fullname = fullname,
+                         mode = input$Createtemplate_mode,
+                         steps = rv.custom$steps()$inputs,
+                         mandatory = rv.custom$steps()$mandatory
+      )
+      
+      
+      # rv.custom$files <- c(rv.custom$files, 
+      #                      Create_md_file(mode = input$Step2_mode,
+      #                                     fullname = fullname,
+      #                                     path = rv.custom$tempdir,
+      #                                     rawText = input$Step2_mdEditor)
+      # )
+      
+      
+      
+      
+      if (input$Createtemplate_mode == 'module')
+        rv.custom$files <- c(rv.custom$files, 
+                             createExtraModule(name = input$Createtemplate_name, 
+                                               path = rv.custom$tempdir))
+      else {
+        rv.custom$files <- c(rv.custom$files, 
+                             createModuleTemplate(miniConfig, 
+                                                  path = rv.custom$tempdir))
+        rv.custom$files <- c(rv.custom$files, 
+                             createExtraFunctions(rv.custom$tempdir))
+      }
+      
+      
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Directory'] <- global$VALIDATED
+      rv$steps.status['Createtemplate'] <- global$VALIDATED
       
     })
     
@@ -395,7 +365,7 @@ Tools_Templates_server <- function(id,
    
     
     
-    # # >>> START ------------- Code for Write md UI---------------
+    # # >>> START ------------- Code for configure steps UI---------------
     # 
     # output$Writemd <- renderUI({
     #   wellPanel(
@@ -444,70 +414,53 @@ Tools_Templates_server <- function(id,
     
     
     
-    # >>> START ------------- Code for step 3 UI---------------
+    # >>> START ------------- Code for ConfigureSteps UI---------------
     
-    output$Addsteps <- renderUI({
+    output$Configuresteps <- renderUI({
       wellPanel(
         # Two examples of widgets in a renderUI() function
-        uiOutput(ns('Addsteps_dyn_steps_ui')),
-        uiOutput(ns('Addsteps_view_ui')),
-        uiOutput(ns('Addsteps_selectStep_ui')),
+        uiOutput(ns('Configuresteps_preview_ui')),
+        uiOutput(ns('Configuresteps_selectStep_ui')),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Addsteps_btn_validate_ui'))
+        uiOutput(ns('Configuresteps_btn_validate_ui'))
       )
     })
     
     
-    rv.custom$steps <- dyn_widgets_server('Addsteps_dyn_steps')
-    
-    output$Addsteps_dyn_steps_ui <- renderUI({
-      widget <- div(id = 'div_Addsteps_dyn_steps',
-                    dyn_widgets_ui(ns('Addsteps_dyn_steps'))
-      )
-      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
-    })
-    
-    # render the widget collection
-    output$Addsteps_selectStep_ui <- renderUI({
-      req(rv.custom$steps())
-      
-      widget <- selectInput(ns('Addsteps_selectStep'), 'Select step to configure',
-                            choices = rv.custom$steps()$inputs,
-                            width = '150px')
-      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
-    })
     
     
     # render the widget collection
-    output$Addsteps_view_ui <- renderUI({
+    output$Configuresteps_selectStep_ui <- renderUI({
       req(rv.custom$steps())
 
-      # function to create widget
-      create_widget = function(i){
-        p(paste0(rv.custom$steps()$inputs[i], ' ', rv.custom$steps()$mandatory[i]))
-      }
-      
-      lapply(1:length(rv.custom$steps()$inputs), create_widget)
+      widget <- selectInput(ns('Configuresteps_selectStep'), 'Select step to configure',
+                            choices = rv.custom$steps()$inputs,
+                            width = '150px')
+      toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
     })
     
     
+    # render the widget collection
     
     
-    output$Addsteps_btn_validate_ui <- renderUI({
-      widget <- actionButton(ns("Addsteps_btn_validate"),
+    
+    
+    
+    output$Configuresteps_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Configuresteps_btn_validate"),
                              "Perform",
                              class = GlobalSettings$btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Addsteps'] )
+      toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
     })
-    
-    observeEvent(input$Addsteps_btn_validate, {
+
+    observeEvent(input$Configuresteps_btn_validate, {
       # Do some stuff
-      
+
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Addsteps'] <- global$VALIDATED
+      rv$steps.status['Configuresteps'] <- global$VALIDATED
     })
     
     # <<< END ------------- Code for step 3 UI---------------
@@ -517,6 +470,11 @@ Tools_Templates_server <- function(id,
       tagList(
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
+        
+        uiOutput(ns('Save_chooseDir_ui')),
+        #uiOutput(ns('Createtemplate_guess_ui')),
+        uiOutput(ns('Save_warnDir_ui')),
+        
         uiOutput(ns('Save_btn_validate_ui'))
         #uiOutput(ns('dl_ui'))
       )
@@ -527,6 +485,43 @@ Tools_Templates_server <- function(id,
     #   req(rv$steps.status['Save'] == global$VALIDATED)
     #   dl_ui(ns('createQuickLink'))
     # })
+    
+    
+    rv.custom$path <- chooseDir_server('Save_chooseDir',
+                                       path = reactive({'~'}),
+                                       is.enabled = reactive({rv$steps.enabled['Save']}))
+    
+    
+    output$Save_chooseDir_ui <- renderUI({
+      widget <- div(id = ns('div_Save_chooseDir'),
+                    chooseDir_ui(ns('Save_chooseDir')))
+      toggleWidget(widget, rv$steps.enabled['Save'] )
+    })
+    
+    
+    output$Save_warnDir_ui <- renderUI({
+      req(rv.custom$path())
+      .path <- gsub('\\', '/', rv.custom$path(), fixed = TRUE)
+      pattern <- c('R', 'md')
+      dirs <- list.dirs(.path, recursive = FALSE, full.names=FALSE)
+      if (length(dirs) == 0)
+        msg <- pattern
+      else
+        msg <- pattern[-which(intersect(dirs, pattern) == pattern)]
+      
+      lapply(msg, function(i) 
+        p(paste0("The '", i, "' Createtemplate does not exists. It will be created")))
+    })  
+    
+    # # This part must be customized by the developer of a new module
+    # output$Createtemplate_guess_ui <- renderUI({
+    #   req(rv.custom$path())
+    #   lst.files <- list.files(file.path(rv.custom$path(), 'R'))
+    #   lapply(lst.files, function(i)
+    #     p(i))
+    # })
+    
+    
     
     output$Save_files_ui <- renderUI({
       req(rv.custom$files)
@@ -547,33 +542,11 @@ Tools_Templates_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      fullname <- paste0(input$Step2_parent, '_', input$Step2_name)
       
-      miniConfig <- list(fullname = fullname,
-                         mode = input$Step2_mode,
-                         steps = rv.custom$steps()$inputs,
-                         mandatory = rv.custom$steps()$mandatory
-                         )
-      
-     
-      rv.custom$files <- c(rv.custom$files, 
-                    Create_md_file(mode = input$Step2_mode,
-                                   fullname = fullname,
-                                   path = rv.custom$path(),
-                                   rawText = input$Step2_mdEditor)
-                    )
-      
-      
-      if (input$Step2_mode == 'module')
-        rv.custom$files <- c(rv.custom$files, 
-                      createExtraModule(name = input$Step2_name, path = rv.custom$path()))
-      else {
-        rv.custom$files <- c(rv.custom$files, 
-                      createModuleTemplate(miniConfig, path = rv.custom$path()))
-        rv.custom$files <- c(rv.custom$files, 
-                      createExtraFunctions(rv.custom$path()))
-      }
-      
+      #file.copy(, file.path(rv.custom$path(), 'R', rv.custom$fullname))
+      #file.copy(, file.path(rv.custom$path(), 'R', rv.custom$fullname)
+                          
+                          
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
