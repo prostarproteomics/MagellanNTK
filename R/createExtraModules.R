@@ -14,7 +14,7 @@
 createExtraModule <- function(name, path = '.') {
   
   # Create template module file
-  module.name <- file.path(path, "R", "extra_functions.R")
+  module.name <- file.path(path, "R", paste0(name, ".R"))
   if (file.exists(module.name)) {
     file.remove(module.name)
   }
@@ -24,7 +24,7 @@ createExtraModule <- function(name, path = '.') {
   write_extraModule_code(con, name)
   
   close(con)
-  return(module.name)
+  return(paste0(name, ".R"))
 }
 
 

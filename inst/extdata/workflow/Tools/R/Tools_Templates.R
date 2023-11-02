@@ -192,8 +192,8 @@ Tools_Templates_server <- function(id,
         fluidRow(
           column(width = 3, uiOutput(ns('Createtemplate_mode_ui'))),
           column(width = 3, uiOutput(ns('Createtemplate_parent_ui'))),
-          column(width = 3, uiOutput(ns('Createtemplate_name_ui')))
-          #column(width = 3, uiOutput(ns('Createtemplate_editMd_ui')))
+          column(width = 3, uiOutput(ns('Createtemplate_name_ui'))),
+          column(width = 3, uiOutput(ns('Createtemplate_editMd_ui')))
         ),
         
         uiOutput(ns('Createtemplate_dyn_steps_ui')),
@@ -278,22 +278,22 @@ Tools_Templates_server <- function(id,
     
     
     
-    # bsmodal_server(id = "Createtemplate_editMd",
-    #                label = "Edit md",
-    #                title = "test",
-    #                shiny.module = list(id = 'toto',
-    #                                    ui.func = mdEditor_ui,
-    #                                    ui.params = list(),
-    #                                    server.func = mdEditor_server,
-    #                                    server.params = list())
-    # )
+    bsmodal_server(id = "Createtemplate_editMd",
+                   label = "Edit md",
+                   title = "test",
+                   shiny.module = list(id = 'toto',
+                                       ui.func = mdEditor_ui,
+                                       ui.params = list(),
+                                       server.func = mdEditor_server,
+                                       server.params = list())
+    )
     
-    # output$Createtemplate_editMd_ui <- renderUI({
-    #   widget <- div(id = ns('Createtemplate_editMd_div'),
-    #                 bsmodal_ui(ns("Createtemplate_editMd"))
-    #   )
-    #   toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
-    # })
+    output$Createtemplate_editMd_ui <- renderUI({
+      widget <- div(id = ns('Createtemplate_editMd_div'),
+                    bsmodal_ui(ns("Createtemplate_editMd"))
+      )
+      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
+    })
     
     
     output$Createtemplate_btn_validate_ui <- renderUI({
@@ -311,6 +311,7 @@ Tools_Templates_server <- function(id,
       rv.custom$tempdir <- tempdir()
       R.path <- file.path(tempdir(), 'R')
       md.path <- file.path(tempdir(), 'md')
+      
       if (!dir.exists(R.path))
         dir.create(R.path)
       
@@ -327,29 +328,30 @@ Tools_Templates_server <- function(id,
       )
       
       
-      # rv.custom$files <- c(rv.custom$files, 
-      #                      Create_md_file(mode = input$Step2_mode,
-      #                                     fullname = fullname,
-      #                                     path = rv.custom$tempdir,
-      #                                     rawText = input$Step2_mdEditor)
-      # )
+      rv.custom$files <- c(rv.custom$files,
+                           file.path('md', Create_md_file(mode = input$Createtemplate_mode,
+                                          fullname = fullname,
+                                          path = rv.custom$tempdir,
+                                          rawText = input$Createtemplate_mdEditor)
+                           )
+      )
       
       
       
       
       if (input$Createtemplate_mode == 'module')
         rv.custom$files <- c(rv.custom$files, 
-                             createExtraModule(name = input$Createtemplate_name, 
-                                               path = rv.custom$tempdir))
+                             file.path('R', createExtraModule(name = input$Createtemplate_name, 
+                                               path = rv.custom$tempdir)))
       else {
         rv.custom$files <- c(rv.custom$files, 
-                             createModuleTemplate(miniConfig, 
-                                                  path = rv.custom$tempdir))
+                             file.path('R', createModuleTemplate(miniConfig, 
+                                                  path = rv.custom$tempdir)))
         rv.custom$files <- c(rv.custom$files, 
-                             createExtraFunctions(rv.custom$tempdir))
+                             file.path('R', createExtraFunctions(rv.custom$tempdir)))
       }
       
-      
+      browser()
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
@@ -543,9 +545,19 @@ Tools_Templates_server <- function(id,
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
       
-      #file.copy(, file.path(rv.custom$path(), 'R', rv.custom$fullname))
-      #file.copy(, file.path(rv.custom$path(), 'R', rv.custom$fullname)
-                          
+      R.path <- file.path(rv.custom$path(), 'R')
+      md.path <- file.path(rv.custom$path(), 'md')
+      
+      if (!dir.exists(R.path))
+        dir.create(R.path)
+      
+      if (!dir.exists(md.path))
+        dir.create(md.path)
+      
+      for (f in rv.custom$files)
+        file.copy(file.path(tempdir(), f), file.path(rv.custom$path(), f))
+      
+      
                           
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()

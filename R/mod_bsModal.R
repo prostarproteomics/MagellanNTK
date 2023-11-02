@@ -50,6 +50,7 @@ bsmodal_ui <- function(id) {
 #' @rdname bsmodal
 #'
 bsmodal_server <- function(id,
+                           label = "Edit md",
                            title = NULL,
                            width = NULL,
                            uiContent = NULL,

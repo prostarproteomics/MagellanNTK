@@ -71,7 +71,7 @@ createModuleTemplate <- function(config = NULL,
   
   #value <- c(value, createExtraModule(path, extraModuleName))
   
-  return(value)
+  return(paste0(config$fullname, ".R"))
 }
 
 

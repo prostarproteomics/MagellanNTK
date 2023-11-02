@@ -1,31 +1,4 @@
 
-#' @export
-#' @rdname create_template
-#'
-createExtraFunctions <- function(path = '.') {
-  
-  # Create template module file
-  mod.filename <- file.path(path, "R", "extra_functions.R")
-  if (file.exists(mod.filename)) {
-    file.remove(mod.filename)
-  }
-  con <- file(mod.filename, open = "a")
-  
-  # Write code to file
-  write_addDatasets_func(con)
-  write_keepDatasets_func(con)
-  
-  close(con)
-  return("extra_functions.R")
-}
-
-
-
-#' @rdname create_template
-#' 
-write_addDatasets_func <- function(con){
-  
-  code <- "
   #' @title Adds a dataset to the list
   #' @description This function appends a dataset in the list with customization
   if necessary
@@ -41,18 +14,8 @@ write_addDatasets_func <- function(con){
     append(object, setNames(list(dataset), nm = name))
   }
   
-  "
   
-  writeLines(code, con)
-  
-}
 
-
-#' @rdname create_template
-#' 
-write_keepDatasets_func <- function(con){
-  
-  code <- "
   #' @title Get a subset of the object
   #' @description This function deletes the items not included in the
   range parameter
@@ -74,8 +37,4 @@ write_keepDatasets_func <- function(con){
   
   object[range]
   }
-  "
-  writeLines(code, con)
   
-}
-

@@ -16,10 +16,11 @@ chooseDir_server(
  }),
   is.enabled = reactive({
      TRUE
- })
+ }),
+  show.details = FALSE
 )
 
-chooseDir()
+chooseDir(show.details = FALSE)
 }
 \arguments{
 \item{id}{xxx}
