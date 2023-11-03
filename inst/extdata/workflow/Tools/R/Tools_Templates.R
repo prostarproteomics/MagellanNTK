@@ -303,8 +303,10 @@ Tools_Templates_server <- function(id,
       if (!dir.exists(md.path))
       dir.create(md.path)
       
-      
-      fullname <- paste0(input$Createtemplate_parent, '_', input$Createtemplate_name)
+      if (input$Createtemplate_mode == 'pipeline')
+        fullname <- input$Createtemplate_name
+      else if (input$Createtemplate_mode == 'process')
+        fullname <- paste0(input$Createtemplate_parent, '_', input$Createtemplate_name)
       
       rv.custom$miniConfig <- list(fullname = fullname,
                          mode = input$Createtemplate_mode,
@@ -407,14 +409,12 @@ Tools_Templates_server <- function(id,
 
     observeEvent(input$Configuresteps_btn_validate, {
       # Do some stuff
+      md_file <- Create_md_file(mode = input$Createtemplate_mode,
+                                fullname = rv.custom$miniConfig$fullname,
+                                path = rv.custom$tempdir,
+                                rawText = rv.custom$rawmd())
       
-      rv.custom$files <- c(rv.custom$files,
-                           file.path('md', Create_md_file(mode = input$Createtemplate_mode,
-                                                          fullname = rv.custom$miniConfig$fullname,
-                                                          path = rv.custom$tempdir,
-                                                          rawText = rv.custom$rawmd)
-                           )
-      )
+      rv.custom$files <- c(rv.custom$files, file.path('md', md_file))
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
