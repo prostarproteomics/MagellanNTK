@@ -2,9 +2,15 @@
 #'
 #' @description Displays of formatted modal-dialog with 'Cancel' and 
 #' 'Ok' buttons.
+#' 
+#' @param id A `character(1)` which is the id of the instance of the module
 #'
+#' @name mdEditor
+#' 
+NULL
+
+
 #' @rdname mdEditor
-#'
 #' @export
 #'
 mdEditor_ui <- function(id) {
@@ -22,36 +28,13 @@ mdEditor_ui <- function(id) {
 }
 
 
-#' @param id A `character(1)` which is the id of the instance of the module
-#' @param title A `character(1)`
-#' @param width A `character(1)` indicating the size of the modal window. Can 
-#' be "s" for small (the default), "m" for medium, or "l" for large.
-#' @param uiContent The content of the modal dialog.
-#'
+#' @rdname mdEditor
 #' @importFrom shinyjqui jqui_draggable
 #'
 #' @export
 #'
 #' @return A Shiny modal-dialog
-#'
-#' @examples
-#' if (interactive()) {
-#'     library(shiny)
-#'     library(shinyBS)
-#'
-#'     ui <- fluidPage(
-#'         bsmodal_ui("tbl")
-#'     )
-#'     server <- function(input, output) {
-#'         bsmodal_server(
-#'             id = "tbl",
-#'             title = "test",
-#'             uiContent = p("test")
-#'         )}
-#'     shinyApp(ui, server)
-#' }
-#'
-#' @rdname bsmodal
+#
 #'
 mdEditor_server <- function(id) { # height auto
   

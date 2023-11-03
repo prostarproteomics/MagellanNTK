@@ -28,6 +28,8 @@ chooseDir(show.details = FALSE)
 \item{path}{xxx}
 
 \item{is.enabled}{xxx}
+
+\item{show.details}{xxx}
 }
 \description{
 A shiny Module which xxx

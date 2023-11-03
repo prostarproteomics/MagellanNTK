@@ -94,7 +94,8 @@ Tools_Templates_server <- function(id,
     path =  reactive({'~'}),
     tempdir = reactive({NULL}),
     files = NULL,
-    md_raw = ''
+    rawmd = '',
+    miniconfig = NULL
   )
   
   ###-------------------------------------------------------------###
@@ -192,8 +193,7 @@ Tools_Templates_server <- function(id,
         fluidRow(
           column(width = 3, uiOutput(ns('Createtemplate_mode_ui'))),
           column(width = 3, uiOutput(ns('Createtemplate_parent_ui'))),
-          column(width = 3, uiOutput(ns('Createtemplate_name_ui'))),
-          column(width = 3, uiOutput(ns('Createtemplate_editMd_ui')))
+          column(width = 3, uiOutput(ns('Createtemplate_name_ui')))
         ),
         
         uiOutput(ns('Createtemplate_dyn_steps_ui')),
@@ -278,22 +278,7 @@ Tools_Templates_server <- function(id,
     
     
     
-    bsmodal_server(id = "Createtemplate_editMd",
-                   label = "Edit md",
-                   title = "test",
-                   shiny.module = list(id = 'toto',
-                                       ui.func = mdEditor_ui,
-                                       ui.params = list(),
-                                       server.func = mdEditor_server,
-                                       server.params = list())
-    )
     
-    output$Createtemplate_editMd_ui <- renderUI({
-      widget <- div(id = ns('Createtemplate_editMd_div'),
-                    bsmodal_ui(ns("Createtemplate_editMd"))
-      )
-      toggleWidget(widget, rv$steps.enabled['Createtemplate'] )
-    })
     
     
     output$Createtemplate_btn_validate_ui <- renderUI({
@@ -321,22 +306,11 @@ Tools_Templates_server <- function(id,
       
       fullname <- paste0(input$Createtemplate_parent, '_', input$Createtemplate_name)
       
-      miniConfig <- list(fullname = fullname,
+      rv.custom$miniConfig <- list(fullname = fullname,
                          mode = input$Createtemplate_mode,
                          steps = rv.custom$steps()$inputs,
                          mandatory = rv.custom$steps()$mandatory
       )
-      
-      
-      rv.custom$files <- c(rv.custom$files,
-                           file.path('md', Create_md_file(mode = input$Createtemplate_mode,
-                                          fullname = fullname,
-                                          path = rv.custom$tempdir,
-                                          rawText = input$Createtemplate_mdEditor)
-                           )
-      )
-      
-      
       
       
       if (input$Createtemplate_mode == 'module')
@@ -345,13 +319,13 @@ Tools_Templates_server <- function(id,
                                                path = rv.custom$tempdir)))
       else {
         rv.custom$files <- c(rv.custom$files, 
-                             file.path('R', createModuleTemplate(miniConfig, 
+                             file.path('R', createModuleTemplate(rv.custom$miniConfig, 
                                                   path = rv.custom$tempdir)))
         rv.custom$files <- c(rv.custom$files, 
                              file.path('R', createExtraFunctions(rv.custom$tempdir)))
       }
       
-      browser()
+      #browser()
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
@@ -366,56 +340,6 @@ Tools_Templates_server <- function(id,
     
    
     
-    
-    # # >>> START ------------- Code for configure steps UI---------------
-    # 
-    # output$Writemd <- renderUI({
-    #   wellPanel(
-    #     # Two examples of widgets in a renderUI() function
-    #     uiOutput(ns('Writemd_editor_ui')),
-    #     # Insert validation button
-    #     # This line is necessary. DO NOT MODIFY
-    #     uiOutput(ns('Writemd_btn_validate_ui'))
-    #   )
-    # })
-    # 
-    # 
-    # output$Writemd_editor_ui <- renderUI({
-    #   init <- 'test'
-    #   widget <- shinyAce::aceEditor(ns("Writemd_editor"),
-    #                                 value = input$Writemd_editor,
-    #                                 mode = "markdown",
-    #                                 theme = 'github',
-    #                                 height = '100px',
-    #                                 readOnly = !rv$steps.enabled['Writemd'])
-    #   
-    #   #toggleWidget(widget, rv$steps.enabled['Writemd'] )
-    # })
-    # 
-    # 
-    # 
-    # output$Writemd_btn_validate_ui <- renderUI({
-    #   widget <- actionButton(ns("Writemd_btn_validate"),
-    #                          "Perform",
-    #                          class = GlobalSettings$btn_success_color)
-    #   toggleWidget(widget, rv$steps.enabled['Writemd'] )
-    # })
-    # 
-    # observeEvent(input$Writemd_btn_validate, {
-    #   # Do some stuff
-    #   
-    #   # DO NOT MODIFY THE THREE FOLLOWINF LINES
-    #   dataOut$trigger <- Timestamp()
-    #   dataOut$value <- rv$dataIn
-    #   rv$steps.status['Writemd'] <- global$VALIDATED
-    # })
-    # 
-    # # <<< END ------------- Code for Write md UI---------------
-    # 
-    
-    
-    
-    
     # >>> START ------------- Code for ConfigureSteps UI---------------
     
     output$Configuresteps <- renderUI({
@@ -423,6 +347,7 @@ Tools_Templates_server <- function(id,
         # Two examples of widgets in a renderUI() function
         uiOutput(ns('Configuresteps_preview_ui')),
         uiOutput(ns('Configuresteps_selectStep_ui')),
+        shinyjs::hidden(uiOutput(ns('Configuresteps_editMd_ui'))),
         # Insert validation button
         # This line is necessary. DO NOT MODIFY
         uiOutput(ns('Configuresteps_btn_validate_ui'))
@@ -430,18 +355,42 @@ Tools_Templates_server <- function(id,
     })
     
     
-    
+    observeEvent(input$Configuresteps_selectStep, {
+      shinyjs::toggle('Configuresteps_editMd_ui', 
+                      condition = input$Configuresteps_selectStep =='Description')
+    })
     
     # render the widget collection
     output$Configuresteps_selectStep_ui <- renderUI({
       req(rv.custom$steps())
 
       widget <- selectInput(ns('Configuresteps_selectStep'), 'Select step to configure',
-                            choices = rv.custom$steps()$inputs,
+                            choices = c('Description', 
+                                        rv.custom$steps()$inputs,
+                                        'Save'),
                             width = '150px')
       toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
     })
     
+    
+    
+    rv.custom$rawmd <- bsmodal_server(id = "Configuresteps_editMd",
+                   label = "Edit md",
+                   title = "test",
+                   shiny.module = list(id = 'toto',
+                                       ui.func = mdEditor_ui,
+                                       ui.params = list(),
+                                       server.func = mdEditor_server,
+                                       server.params = list())
+    )
+    
+    output$Configuresteps_editMd_ui <- renderUI({
+      req(input$Configuresteps_selectStep == 'Description')
+      widget <- div(id = ns('Configuresteps_editMd_div'),
+                    bsmodal_ui(ns("Configuresteps_editMd"))
+      )
+      toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
+    })
     
     # render the widget collection
     
@@ -458,7 +407,15 @@ Tools_Templates_server <- function(id,
 
     observeEvent(input$Configuresteps_btn_validate, {
       # Do some stuff
-
+      
+      rv.custom$files <- c(rv.custom$files,
+                           file.path('md', Create_md_file(mode = input$Createtemplate_mode,
+                                                          fullname = rv.custom$miniConfig$fullname,
+                                                          path = rv.custom$tempdir,
+                                                          rawText = rv.custom$rawmd)
+                           )
+      )
+      
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn

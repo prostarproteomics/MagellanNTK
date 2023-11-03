@@ -9,7 +9,7 @@
 #' 'name_ui()' and 'name_server()'
 #' @param path xxx
 #' @export
-#' @name create_extra_module
+#' @rdname create_extra_module
 #'
 createExtraModule <- function(name, path = '.') {
   
@@ -30,7 +30,6 @@ createExtraModule <- function(name, path = '.') {
 
 #' @param con xxx
 #' @param name The name
-#' @rdname create_extra_module
 #' 
 write_extraModule_code <- function(con, name){
   

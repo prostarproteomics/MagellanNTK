@@ -19,10 +19,12 @@ bsmodal_ui <- function(id) {
 
 
 #' @param id A `character(1)` which is the id of the instance of the module
+#' @param label xxx
 #' @param title A `character(1)`
 #' @param width A `character(1)` indicating the size of the modal window. Can 
 #' be "s" for small (the default), "m" for medium, or "l" for large.
 #' @param uiContent The content of the modal dialog.
+#' @param shiny.module xxx
 #'
 #' @importFrom shinyjqui jqui_draggable
 #'
@@ -110,7 +112,7 @@ bsmodal_server <- function(id,
         tags$head(
           tags$style("#test .modal-dialog {
                         width: fit-content !important;}")),
-        actionButton(ns("openModalBtn"), "",
+        actionButton(ns("openModalBtn"), label,
                      icon("chart-bar", lib = "font-awesome"),
                      class = "btn-success"
         ),

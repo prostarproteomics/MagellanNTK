@@ -7,6 +7,7 @@
 #' @param id xxx
 #' @param path xxx
 #' @param is.enabled xxx
+#' @param show.details xxx
 #'
 #' @examples
 #' NULL
