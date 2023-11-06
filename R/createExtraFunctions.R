@@ -1,31 +1,18 @@
+#' @title xxx
+#' @description xxx
+#' 
+#' @name create_custom_funcs
+#' 
+#' 
+#' 
+NULL
+
 
 #' @export
-#' @rdname create_template
-#'
-createExtraFunctions <- function(path = '.') {
-  
-  # Create template module file
-  mod.filename <- file.path(path, "R", "extra_functions.R")
-  if (file.exists(mod.filename)) {
-    file.remove(mod.filename)
-  }
-  con <- file(mod.filename, open = "a")
-  
-  # Write code to file
-  write_addDatasets_func(con)
-  write_keepDatasets_func(con)
-  
-  close(con)
-  return("extra_functions.R")
-}
-
-
-
-#' @rdname create_template
+#' @rdname create_custom_funcs
 #' 
-write_addDatasets_func <- function(con){
-  
-  code <- "
+default_add_func <- function() {
+default <- "
   #' @title Adds a dataset to the list
   #' @description This function appends a dataset in the list with customization
   if necessary
@@ -42,17 +29,16 @@ write_addDatasets_func <- function(con){
   }
   
   "
-  
-  writeLines(code, con)
-  
+
+return(default)
 }
 
 
-#' @rdname create_template
+#' @export
+#' @rdname create_custom_funcs
 #' 
-write_keepDatasets_func <- function(con){
-  
-  code <- "
+default_keep_func <- function() {
+  default <- "
   #' @title Get a subset of the object
   #' @description This function deletes the items not included in the
   range parameter
@@ -75,7 +61,35 @@ write_keepDatasets_func <- function(con){
   object[range]
   }
   "
-  writeLines(code, con)
   
+  return(default)
 }
 
+
+
+#' @param path.dir xxx
+#' @param add_func xxx
+#' @param keep_func xxx
+#' 
+#' @export
+#' @rdname create_custom_funcs
+#'
+createExtraFunctions <- function(path.dir = '.',
+                                 add_func = default_add_func(),
+                                 keep_func = default_keep_func()) {
+  
+  
+  # Create template module file
+  mod.filename <- file.path(path.dir, "R", "extra_functions.R")
+  if (file.exists(mod.filename)) {
+    file.remove(mod.filename)
+  }
+  con <- file(mod.filename, open = "a")
+  
+  # Write code to file
+  writeLines(add_func, con)
+  writeLines(keep_func, con)
+  
+  close(con)
+  return("extra_functions.R")
+}

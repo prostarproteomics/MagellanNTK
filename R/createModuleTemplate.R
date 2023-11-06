@@ -13,7 +13,8 @@ createModuleTemplate <- function(config = NULL,
   # Return values
   value <- NULL
   
-  names(config$steps) <- gsub(' ', '', config$steps)
+  if (!is.null(config$steps))
+    names(config$steps) <- gsub(' ', '', config$steps)
  
   # Create template module file
   mod.filename <- file.path(path, "R", paste0(config$fullname, ".R"))
@@ -604,12 +605,13 @@ writeLines(code, con)
 #' @rdname create_template
 #'
 vec2code <- function(ls_list, is.char = FALSE) {
-  if (is.char) {
+  st_string_from_list <- 'c()'
+  if (is.char)
     coll <- "', '"
-  } else {
+  else
     coll <- ", "
-  }
-  
+
+  if (length(ls_list) > 0){
   # create string
   if (is.char) {
     st_string_from_list <- paste0(
@@ -628,4 +630,7 @@ vec2code <- function(ls_list, is.char = FALSE) {
   } else {
     paste0(st_string_from_list, ")")
   }
+  }
+  
+  st_string_from_list
 }

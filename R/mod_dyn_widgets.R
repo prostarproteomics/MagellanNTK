@@ -46,12 +46,14 @@ dyn_widgets_server <- function(id) {
       steps$mandatory[input$add_button] <- input$mandatory
       updateTextInput(session, 'step', value = '')
       updateSelectInput(session, 'mandatory', selected = 'TRUE')
-      dataOut(list(inputs = steps$inputs,
-                   mandatory = steps$mandatory))
+      #dataOut(list(inputs = steps$inputs,
+      #             mandatory = steps$mandatory))
     })
 
 
-    reactive({dataOut()})
+    reactive({list(steps = steps$inputs,
+                   mandatory = steps$mandatory)
+      })
 })
 }
 
@@ -65,11 +67,11 @@ dyn_widgets <- function(){
   )
   
   server <- function(input, output, session) {
-    res <- reactiveValues(dataOut = list())
-    res$dataOut <- dyn_widgets_server('test')
+    res <- dyn_widgets_server('test')
     
-    observeEvent(req(length(res$dataOut()) > 0), {
-      print(res$dataOut())
+    observeEvent(res(), {
+      print(res()$steps)
+      print(res()$mandatory)
     })
   }
   

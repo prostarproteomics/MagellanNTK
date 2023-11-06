@@ -46,8 +46,8 @@ Tools_Templates_conf <- function(){
   Config(
     fullname = 'Tools_Templates',
     mode = 'process',
-    steps = c('Create template', 'Configure steps'),
-    mandatory = c(TRUE, TRUE)
+    steps = c('Create template', 'Custom dataset functions', 'Configure steps'),
+    mandatory = c(TRUE, FALSE, FALSE)
   )
 }
 
@@ -86,7 +86,31 @@ Tools_Templates_server <- function(id,
     Createtemplate_name = NULL,
     #Createtemplate_mdEditor = '',
     #Createtemplate_mdEditorLayout = 'tabs',
-    Configuresteps_selectStep = NULL
+    Configuresteps_selectStep = NULL,
+    Customdatasetfunctions_addDatasets = '',
+    Customdatasetfunctions_keepDatasets = "
+  #' @title Get a subset of the object
+  #' @description This function deletes the items not included in the
+  range parameter
+  #' @param object An instance of type list. Must get TRUE to inherits(object, 'list')
+  #' @param range xxx
+  #' @export
+  #'
+  keepDatasets <- function(object, range) {
+  stopifnot(!inherits(object, 'list'))
+  if (missing(range))
+    stop('Provide range of array to be processed')
+  
+  if (is.null(object)) {
+    return()
+    }
+  
+  if (is.numeric(range))
+    range <- names(object)[range]
+  
+  object[range]
+  }
+  "
   )
   
   
@@ -266,10 +290,10 @@ Tools_Templates_server <- function(id,
       
       # function to create widget
       create_widget = function(i){
-        p(paste0(rv.custom$steps()$inputs[i], ' ', rv.custom$steps()$mandatory[i]))
+        p(paste0(rv.custom$steps()$steps[i], ' ', rv.custom$steps()$mandatory[i]))
       }
       
-      lapply(1:length(rv.custom$steps()$inputs), create_widget)
+      lapply(1:length(rv.custom$steps()$steps), create_widget)
     })
     
     
@@ -310,11 +334,11 @@ Tools_Templates_server <- function(id,
       
       rv.custom$miniConfig <- list(fullname = fullname,
                          mode = input$Createtemplate_mode,
-                         steps = rv.custom$steps()$inputs,
+                         steps = rv.custom$steps()$steps,
                          mandatory = rv.custom$steps()$mandatory
       )
       
-      
+     # browser()
       if (input$Createtemplate_mode == 'module')
         rv.custom$files <- c(rv.custom$files, 
                              file.path('R', createExtraModule(name = input$Createtemplate_name, 
@@ -323,8 +347,7 @@ Tools_Templates_server <- function(id,
         rv.custom$files <- c(rv.custom$files, 
                              file.path('R', createModuleTemplate(rv.custom$miniConfig, 
                                                   path = rv.custom$tempdir)))
-        rv.custom$files <- c(rv.custom$files, 
-                             file.path('R', createExtraFunctions(rv.custom$tempdir)))
+   
       }
       
       #browser()
@@ -338,6 +361,77 @@ Tools_Templates_server <- function(id,
     
     
     # <<< END ------------- Code for step 1 UI---------------
+    
+    
+    
+    
+    # >>> START ------------- Code for Custom dataset functions  UI---------------
+    
+    output$Customdatasetfunctions <- renderUI({
+      wellPanel(
+        # Two examples of widgets in a renderUI() function
+        h3('Custom addDataset() function'),
+        uiOutput(ns('Customdatasetfunctions_addDatasets_ui')),
+        h3('Custom keepDataset() function'),
+        uiOutput(ns('Customdatasetfunctions_keepDatasets_ui')),
+        # Insert validation button
+        # This line is necessary. DO NOT MODIFY
+        uiOutput(ns('Customdatasetfunctions_btn_validate_ui'))
+      )
+    })
+    
+    
+       # render the widget collection
+    
+    output$Customdatasetfunctions_addDatasets_ui <- renderUI({
+      
+      widget <- shinyAce::aceEditor(ns("Customdatasetfunctions_addDatasets"),
+                          value = isolate(default_add_func()),
+                          mode = "r",
+                          theme = 'github',
+                          height = '300px')
+      
+      toggleWidget(widget, condition = rv$steps.enabled['Customdatasetfunctions'])
+      
+    })
+    
+    output$Customdatasetfunctions_keepDatasets_ui <- renderUI({
+       
+      widget <- shinyAce::aceEditor(ns("Customdatasetfunctions_keepDatasets"),
+                          value = isolate(default_keep_func()),
+                          mode = "r",
+                          theme = 'github',
+                          height = '300px')
+      
+      toggleWidget(widget, condition = rv$steps.enabled['Customdatasetfunctions'])
+      
+    })
+    
+    output$Customdatasetfunctions_btn_validate_ui <- renderUI({
+      widget <- actionButton(ns("Customdatasetfunctions_btn_validate"),
+                             "Perform",
+                             class = GlobalSettings$btn_success_color)
+      toggleWidget(widget, rv$steps.enabled['Customdatasetfunctions'] )
+    })
+    
+    observeEvent(input$Customdatasetfunctions_btn_validate, {
+      # Do some stuff
+      keepDat <- input$Customdatasetfunctions_keepDatasets
+      addDat <- input$Customdatasetfunctions_addDatasets
+      browser()
+      rv.custom$files <- c(rv.custom$files, 
+                           file.path('R', createExtraFunctions(path.dir = rv.custom$tempdir,
+                                                               add_func = addDat,
+                                                               keep_func = keepDat)))
+      
+      # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
+      dataOut$trigger <- Timestamp()
+      dataOut$value <- rv$dataIn
+      rv$steps.status['Customdatasetfunctions'] <- global$VALIDATED
+    })
+    
+    # <<< END ------------- Code for Step: Custom dataset functions UI---------------
+    
     
     
    
@@ -368,7 +462,7 @@ Tools_Templates_server <- function(id,
 
       widget <- selectInput(ns('Configuresteps_selectStep'), 'Select step to configure',
                             choices = c('Description', 
-                                        rv.custom$steps()$inputs,
+                                        rv.custom$steps()$steps,
                                         'Save'),
                             width = '150px')
       toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
