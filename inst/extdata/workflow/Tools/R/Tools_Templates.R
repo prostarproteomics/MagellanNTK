@@ -87,30 +87,8 @@ Tools_Templates_server <- function(id,
     #Createtemplate_mdEditor = '',
     #Createtemplate_mdEditorLayout = 'tabs',
     Configuresteps_selectStep = NULL,
-    Customdatasetfunctions_addDatasets = '',
-    Customdatasetfunctions_keepDatasets = "
-  #' @title Get a subset of the object
-  #' @description This function deletes the items not included in the
-  range parameter
-  #' @param object An instance of type list. Must get TRUE to inherits(object, 'list')
-  #' @param range xxx
-  #' @export
-  #'
-  keepDatasets <- function(object, range) {
-  stopifnot(!inherits(object, 'list'))
-  if (missing(range))
-    stop('Provide range of array to be processed')
-  
-  if (is.null(object)) {
-    return()
-    }
-  
-  if (is.numeric(range))
-    range <- names(object)[range]
-  
-  object[range]
-  }
-  "
+    Customdatasetfunctions_addDatasets = default_add_func(),
+    Customdatasetfunctions_keepDatasets = default_keep_func()
   )
   
   
@@ -386,7 +364,7 @@ Tools_Templates_server <- function(id,
     output$Customdatasetfunctions_addDatasets_ui <- renderUI({
       
       widget <- shinyAce::aceEditor(ns("Customdatasetfunctions_addDatasets"),
-                          value = isolate(default_add_func()),
+                          value = isolate(rv.widgets$Customdatasetfunctions_addDatasets),
                           mode = "r",
                           theme = 'github',
                           height = '300px')
@@ -398,7 +376,7 @@ Tools_Templates_server <- function(id,
     output$Customdatasetfunctions_keepDatasets_ui <- renderUI({
        
       widget <- shinyAce::aceEditor(ns("Customdatasetfunctions_keepDatasets"),
-                          value = isolate(default_keep_func()),
+                          value = isolate(rv.widgets$Customdatasetfunctions_keepDatasets),
                           mode = "r",
                           theme = 'github',
                           height = '300px')
@@ -418,7 +396,7 @@ Tools_Templates_server <- function(id,
       # Do some stuff
       keepDat <- input$Customdatasetfunctions_keepDatasets
       addDat <- input$Customdatasetfunctions_addDatasets
-      browser()
+      
       rv.custom$files <- c(rv.custom$files, 
                            file.path('R', createExtraFunctions(path.dir = rv.custom$tempdir,
                                                                add_func = addDat,
@@ -527,7 +505,7 @@ Tools_Templates_server <- function(id,
         uiOutput(ns('Save_chooseDir_ui')),
         #uiOutput(ns('Createtemplate_guess_ui')),
         uiOutput(ns('Save_warnDir_ui')),
-        
+        uiOutput(ns('Save_files_ui')),
         uiOutput(ns('Save_btn_validate_ui'))
         #uiOutput(ns('dl_ui'))
       )
@@ -577,6 +555,7 @@ Tools_Templates_server <- function(id,
     
     
     output$Save_files_ui <- renderUI({
+      browser()
       req(rv.custom$files)
       tagList(
         h5('Files created'),
@@ -608,7 +587,7 @@ Tools_Templates_server <- function(id,
       for (f in rv.custom$files)
         file.copy(file.path(tempdir(), f), file.path(rv.custom$path(), f))
       
-      
+      print('Done')
                           
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
