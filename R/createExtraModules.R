@@ -8,8 +8,14 @@
 #' @param name The name of the module. This will lead to two functions 
 #' 'name_ui()' and 'name_server()'
 #' @param path xxx
+#' @param con xxx
+#' @name createExtraModule
+#' 
+NULL
+
+
 #' @export
-#' @rdname create_extra_module
+#' @rdname createExtraModule
 #'
 createExtraModule <- function(name, path = '.') {
   
@@ -21,17 +27,19 @@ createExtraModule <- function(name, path = '.') {
   con <- file(module.name, open = "a")
   
   # Write code to file
-  write_extraModule_code(con, name)
+  code <- gsub('#name#', name, default_extraModule_code())
+  writeLines(code, con)
   
   close(con)
   return(paste0(name, ".R"))
 }
 
 
-#' @param con xxx
-#' @param name The name
+
+#' @rdname createExtraModule
+#' @export
 #' 
-write_extraModule_code <- function(con, name){
+default_extraModule_code <- function(){
   
   code <- "
 #' @title ## To be customized ##
@@ -162,7 +170,6 @@ NULL
 }
 
 "
+return(code)
 
-code <- gsub('#name#', name, code)
-writeLines(code, con)
 }

@@ -1,4 +1,15 @@
-
+#' @title Create template code for modules
+#' @description xxx
+#' 
+#' @param con xxx
+#' @param name xxx
+#' @param config xxx
+#' @param mode xxx
+#' @param ll.config xxx
+#' @param step.name xxx
+#' @param fullname xxx
+#' @param path xxx
+#' 
 #' @export
 #' @name create_template
 #'

@@ -17,7 +17,7 @@
 \alias{Create_Pipeline_Description_source_file}
 \alias{write_output_func}
 \alias{vec2code}
-\title{Shiny example process module.}
+\title{Create template code for modules}
 \usage{
 createModuleTemplate(config = NULL, path = ".")
 
@@ -48,7 +48,21 @@ write_output_func(con)
 vec2code(ls_list, is.char = FALSE)
 }
 \arguments{
+\item{config}{xxx}
+
 \item{path}{xxx}
+
+\item{con}{xxx}
+
+\item{name}{xxx}
+
+\item{mode}{xxx}
+
+\item{ll.config}{xxx}
+
+\item{step.name}{xxx}
+
+\item{fullname}{xxx}
 
 \item{ls_list}{A vector}
 
@@ -76,6 +90,8 @@ Basically, it is the program which has called this module}
 A string
 }
 \description{
+xxx
+
 This module contains the configuration informations for the corresponding pipeline.
 It is called by the nav_pipeline module of the package MagellanNTK
 

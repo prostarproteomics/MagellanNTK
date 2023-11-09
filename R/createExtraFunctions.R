@@ -1,6 +1,11 @@
 #' @title xxx
 #' @description xxx
 #' 
+#' @param path.dir xxx
+#' @param add_func xxx
+#' @param keep_func xxx
+#' 
+#' 
 #' @name create_custom_funcs
 #' 
 #' 
@@ -67,10 +72,6 @@ default_keep_func <- function() {
 
 
 
-#' @param path.dir xxx
-#' @param add_func xxx
-#' @param keep_func xxx
-#' 
 #' @export
 #' @rdname create_custom_funcs
 #'

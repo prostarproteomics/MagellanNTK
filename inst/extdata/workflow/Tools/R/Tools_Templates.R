@@ -555,7 +555,7 @@ Tools_Templates_server <- function(id,
     
     
     output$Save_files_ui <- renderUI({
-      browser()
+      
       req(rv.custom$files)
       tagList(
         h5('Files created'),
