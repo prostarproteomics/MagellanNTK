@@ -1,11 +1,12 @@
 #' @title Module debugging
-#'
+#' 
 #' @description  A shiny Module which shows the values of the datasets variables
 #' along the different processes of a process nor pipeline.
 #' 
 #' @name Debug_Infos
 #' 
 #' @param id xxx
+#' @param obj xxx
 #' @param title The title of the Panel which contains the debugging tables
 #' @param config An instance of the class `Config`
 #' @param rv.dataIn xxx
@@ -17,9 +18,11 @@
 #' @param current.pos A `integer(1)` which is the indice of the active step.
 #' @param is.enabled A `logical(1)` xxxx
 #'
-#' @example inst/extdata/funcs_examples/test_mod_debug_infos.R
+#' @examples
+#' Debug_Infos(data_na)
 #' 
 #' @author Samuel Wieczorek
+#' 
 NULL
 
 
@@ -31,12 +34,12 @@ NULL
 Debug_Infos_ui <- function(id) {
     ns <- NS(id)
     wellPanel(
-      uiOutput(ns('title')),
-    uiOutput(ns("show_is_enabled")),
-      fluidRow(
-        column(width = 4, DT::DTOutput(ns("show_steps_infos"))),
-        column(width = 4, DT::DTOutput(ns("show_varContent")))
-      )
+        uiOutput(ns('title')),
+        uiOutput(ns("show_is_enabled")),
+        fluidRow(
+            column(width = 4, DT::DTOutput(ns("show_steps_infos"))),
+            column(width = 4, DT::DTOutput(ns("show_varContent")))
+        )
     )
 }
 
@@ -181,4 +184,25 @@ Debug_Infos_server <- function(id,
             )
         })
     })
+}
+
+
+
+
+#' @import shiny
+#' @rdname Debug_Infos
+#' @export
+#' @return A shiny app
+#'
+Debug_Infos <- function(obj) {
+    ui <- fluidPage(
+        Debug_Infos_ui("debug")
+        )
+    
+    server <- function(input, output, session) {
+      Debug_Infos_server("debug",
+        rv.dataIn = reactive({obj}))
+    }
+    
+    shinyApp(ui, server)
 }

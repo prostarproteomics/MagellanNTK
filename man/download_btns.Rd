@@ -39,3 +39,6 @@ NA
 \description{
 A shiny module that shows download buttons in different formats.
 }
+\examples{
+
+}

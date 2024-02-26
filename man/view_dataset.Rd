@@ -8,10 +8,12 @@
 \usage{
 view_dataset_ui(id)
 
-view_dataset_server(id)
+view_dataset_server(id, obj = NULL)
 }
 \arguments{
 \item{id}{xxx}
+
+\item{obj}{}
 }
 \description{
 A shiny Module.

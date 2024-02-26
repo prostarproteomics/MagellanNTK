@@ -9,13 +9,13 @@
 #' 'name_ui()' and 'name_server()'
 #' @param path xxx
 #' @param con xxx
+#' 
 #' @name createExtraModule
 #' 
 NULL
 
 
 #' @export
-#' @rdname createExtraModule
 #'
 createExtraModule <- function(name, path = '.') {
   
@@ -36,9 +36,7 @@ createExtraModule <- function(name, path = '.') {
 
 
 
-#' @rdname createExtraModule
 #' @export
-#' 
 default_extraModule_code <- function(){
   
   code <- "

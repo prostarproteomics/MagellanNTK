@@ -1,8 +1,9 @@
-#' @title   mod_open_demo_dataset_ui and mod_open_demo_dataset_server
+#' @title mod_open_demo_dataset_ui and mod_open_demo_dataset_server
 #' 
 #' @description  A shiny Module.
 #' 
 #' @param id xxx
+#' @param obj
 #' 
 #' @name view_dataset
 #'
@@ -34,7 +35,7 @@ view_dataset_ui <- function(id){
 #' @importFrom utils data
 #' @importFrom shinyjs info
 #' 
-view_dataset_server <- function(id){
+view_dataset_server <- function(id, obj = NULL){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns

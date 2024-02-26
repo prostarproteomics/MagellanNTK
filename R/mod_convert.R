@@ -30,7 +30,7 @@ convert_conf <- function(){
 #'
 convert_ui <- function(id) {
   ns <- NS(id)
-  h3(style="color: blue;", '-- Default convert module --')
+  h3(style="color: blue;", 'Default convert module')
 }
 
 
@@ -43,9 +43,6 @@ convert_server <- function(id) {
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
-    
-    
     return(reactive({NULL}))
   })
 
@@ -55,14 +52,13 @@ convert_server <- function(id) {
 
 #---------------------------------------------
 
-# ui <- Convert_ui("qf_file")
-# 
-# 
-# server <- function(input, output, session) {
-#   Convert_server("qf_file")
-#   
-# }
-# 
-# shinyApp(ui, server)
-# 
+ui <- fluidPage(
+  convert_ui("qf_file")
+)
 
+
+server <- function(input, output, session) {
+  convert_server("qf_file")
+}
+
+shinyApp(ui, server)

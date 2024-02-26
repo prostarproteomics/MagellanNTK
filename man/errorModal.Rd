@@ -21,3 +21,6 @@ NA
 \description{
 A shiny module that shows messages in modal.
 }
+\examples{
+
+}

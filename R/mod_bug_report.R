@@ -71,7 +71,7 @@ mod_bug_report_server <- function(id){
       tagList(
         a(actionButton(inputId = ns("email1"), label = "Contact maintainer", 
                        icon = icon("envelope", lib = "font-awesome"), class = actionBtnClass),
-          href=paste0("mailto:", mail,"?subject=[Prostar2 bug report]&body=")
+          href=paste0("mailto:", mail,"?subject=[MagellanNTK bug report]&body=")
         )
       ) 
       

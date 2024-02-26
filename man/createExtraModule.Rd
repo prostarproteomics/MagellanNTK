@@ -2,14 +2,7 @@
 % Please edit documentation in R/createExtraModules.R
 \name{createExtraModule}
 \alias{createExtraModule}
-\alias{extra_module}
-\alias{default_extraModule_code}
 \title{Creates the template extar module}
-\usage{
-createExtraModule(name, path = ".")
-
-default_extraModule_code()
-}
 \arguments{
 \item{name}{The name of the module. This will lead to two functions 
 'name_ui()' and 'name_server()'}
@@ -17,8 +10,6 @@ default_extraModule_code()
 \item{path}{xxx}
 
 \item{con}{xxx}
-
-\item{id}{xxx}
 }
 \description{
 Creates an exemplary extra module to be included into
@@ -27,33 +18,4 @@ Int the code that will be produced, the parts that are not commented
 are mandatory ans should not be modified.
 The commented parts are just for example purpose and need to be
 customize to your function
-
-## To be customized ##
-}
-\examples{
-if (interactive()){
-data(ft_na)
-ui <- foo_ui('query')
-
-server <- function(input, output, session) {
-  
-  rv <- reactiveValues(
-    res = NULL
-  )
-  ll.tags <- c('None' = 'None', 
-  qMetadata.def(typeDataset(ft_na[[1]]))$node)
-  
-  rv$res <- foo_server('query', 
-  reset = reactive({NULL}),
-  is.enabled = reactive({NULL})
-  )
-  
-  observeEvent(rv$res$dataOut()$value, ignoreNULL = TRUE, ignoreInit = TRUE, {
-    print(rv$res$dataOut()$value)
-    print(rv$res$dataOut()$widgets)
-  })
-}
-
-shinyApp(ui=ui, server=server)
-}
 }

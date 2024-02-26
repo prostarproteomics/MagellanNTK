@@ -39,6 +39,8 @@ Debug_Infos_server(
      NULL
  })
 )
+
+Debug_Infos(obj)
 }
 \arguments{
 \item{id}{xxx}
@@ -62,41 +64,21 @@ Debug_Infos_server(
 \item{current.pos}{A `integer(1)` which is the indice of the active step.}
 
 \item{is.enabled}{A `logical(1)` xxxx}
+
+\item{obj}{xxx}
 }
 \value{
 NA
+
+A shiny app
 }
 \description{
 A shiny Module which shows the values of the datasets variables
 along the different processes of a process nor pipeline.
 }
 \examples{
-#if (interactive()){
-  library(shiny)
+Debug_Infos(data_na)
 
-ui <- fluidPage(
-        Debug_Infos_ui("tbl")
-    )
- 
-
-server <- function(input, output) {
-      data(data_na)
-      
-      #dataset <- NULL
-      dataset <- data_na
-      
-      
-      Debug_Infos_server(
-        id = "tbl",
-        title = "Infos from shiny app",
-        rv.dataIn = reactive({dataset}),
-        dataOut = reactive({NULL})
-      )
-}
-
-
-  shinyApp(ui, server)
-#
 }
 \author{
 Samuel Wieczorek

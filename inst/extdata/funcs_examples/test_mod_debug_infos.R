@@ -11,8 +11,7 @@ server <- function(input, output) {
       
       #dataset <- NULL
       dataset <- data_na
-      
-      
+
       Debug_Infos_server(
         id = "tbl",
         title = "Infos from shiny app",

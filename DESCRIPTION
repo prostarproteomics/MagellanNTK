@@ -24,10 +24,9 @@ Description: MagellanNTK (Magellan Navigation ToolKit) is a collection of Shiny 
     Contrarily to most other similar R packages, it is endowed with rich and 
     user-friendly graphical interfaces, so that no programming skill is 
     required.
-BiocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, 
-    Software, GUI, WorkflowStep
+BiocViews: Proteomics, Preprocessing, Software, GUI, WorkflowStep
 License: Artistic-2.0
-Depends: R (>= 4.3.0)
+Depends: R (>= 4.4.0)
 Imports: 
     S4Vectors,
     methods,
@@ -46,9 +45,22 @@ Imports:
     utils,
     openxlsx,
     markdown,
-    shinyAce
+    shinyAce,
+    BiocGenerics, BiocManager, DAPAR, DAPARdata,
+    DaparToolshedData, DaparViz, QFeatures, data.table, future,
+    ggplot2, gplots, highcharter, later, promises,
+    rhandsontable, shinycssloaders, shinythemes, tibble,
+    vioplot, webshot
 Collate: 
     mod_chooseDir.R
+    mod_change_assay.R
+    mod_choose_pipeline.R
+    mod_launch_magellan.R
+    mod_observe_dynamic_colourPicker_input.R
+    mod_splash.R
+    mod_test.R
+    rclip.R
+    write_excel.R
     mod_dl.R
     mod_bsModal.R
     mod_mdEditor.R
