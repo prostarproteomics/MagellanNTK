@@ -1,14 +1,31 @@
 Package: MagellanNTK
 Title: A Pipeline Manager
-Version: 1.00.1
+Version: 0.99.1
 Authors@R: 
-    person('Samuel', 'Wieczorek', email = 'samuel.wieczorek@cea.fr', 
-    role = c('cre', 'aut'))
+  c(person(given = "Samuel", 
+      family = "Wieczorek",
+      email = "samuel.wieczorek@cea.fr", 
+      role = c("aut","cre"),
+      comment = c(ORCID="0000-0002-5016-1203")),
+  person(given = "Thomas", 
+      family ="Burger",
+      email = "thomas.burger@cea.fr",
+      role = c("aut"))
+      )
 Description: MagellanNTK (Magellan Navigation ToolKit) is a collection of Shiny modules which provide the basis 
     for a generic workflow manager for data processing toolswith several steps. 
     It works in combination with any package which implements data processing 
     pipelines compliant with MagellanNTK such as MSPipelines and Prostar. It can 
     handle lists of objects and manage a hierarchy of levels.
+    This package provides a GUI interface for the DAPAR package. The 
+    package Prostar (Proteomics statistical analysis with R) is a Bioconductor 
+    distributed R package which provides all the necessary functions to 
+    analyze quantitative data from label-free proteomics experiments. 
+    Contrarily to most other similar R packages, it is endowed with rich and 
+    user-friendly graphical interfaces, so that no programming skill is 
+    required.
+BiocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, 
+    Software, GUI, WorkflowStep
 License: Artistic-2.0
 Depends: R (>= 4.3.0)
 Imports: 
@@ -16,6 +33,7 @@ Imports:
     methods,
     DT,
     shiny,
+    shinydashboardPlus, shiny, shinydashboard, shinyEffects,
     htmlwidgets,
     shinyWidgets,
     shinyBS,
@@ -62,14 +80,38 @@ Collate:
     build_nav_ui.R
     load_save.R
     run_workflow.R
+    mod_modalDialog.R
+    mod_format_DT.R
+    mod_infos_dataset.R
+    mod_dataManager.R
+    mod_insert_md.R
+    mod_convert.R
+    mod_homepage.R
+    mod_bsmodal2.R
+    mod_view_dataset.R
+    default_mod_view_dataset.R
+    mod_check_updates.R
+    mod_error_modal.R
+    mod_bug_report.R
+    mod_download.R
+    mod_download_btns.R
+    mod_navbar_menu.R
+    mod_open_dataset.R
+    mod_popover_for_help.R
+    mod_release_notes.R
+    mod_settings.R
+    open_demoDataset.R
+    utils_Prostar.R
+    prostar.R
+    mod_loadapp.R
+    mod_mainapp.R
 biocViews: Software, WorkflowStep
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/prostarproteomics/MagellanNTK
 BugReports: https://github.com/prostarproteomics/MagellanNTK/issues
 Suggests: 
-    knitr,
     rmarkdown,
-    BiocStyle,
-    testthat
+    BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
+    gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass, tibble
 VignetteBuilder: knitr

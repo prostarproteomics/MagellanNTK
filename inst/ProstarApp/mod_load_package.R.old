@@ -1,0 +1,172 @@
+
+#' @title   mod_choose_pipeline_ui and mod_choose_pipeline_server
+#' @description  This module is used to load the package which contains all the code
+#' to work with prostar.2.0.
+#' 
+#' @param id shiny id
+#' @param pkg xxx
+#'
+#' 
+#' @name mod_load_package
+#' @author Samuel Wieczorek
+#' 
+NULL
+
+timeoutSeconds <- 30*60
+
+inactivity <- sprintf("function idleTimer() {
+var t = setTimeout(logout, %s);
+window.onmousemove = resetTimer; // catches mouse movements
+window.onmousedown = resetTimer; // catches mouse movements
+window.onclick = resetTimer;     // catches mouse clicks
+window.onscroll = resetTimer;    // catches scrolling
+window.onkeypress = resetTimer;  //catches keyboard actions
+function logout() {
+Shiny.setInputValue('timeOut', '%ss')
+}
+function resetTimer() {
+clearTimeout(t);
+t = setTimeout(logout, %s);  // time is in milliseconds (1000 is 1 second)
+}
+}
+idleTimer();", timeoutSeconds*1000, timeoutSeconds, timeoutSeconds*1000)
+
+
+
+#' @rdname mod_load_package
+#' @import shiny
+#' @export
+#'
+mod_load_package_ui <- function(id) {
+  ns <- NS(id)
+  
+  uiOutput(ns('load_pkg'))
+}
+
+
+
+
+
+#'
+#' @export
+#' @import shiny
+#' @rdname mod_load_package
+#'
+mod_load_package_server <- function(id, pkg = NULL, funcs = NULL) {
+  
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    rv.pkg <- reactiveVal(pkg)
+    
+    dataOut <- reactiveValues(
+      done = FALSE)
+    
+    rv <- reactiveValues(
+      list.funcs = lapply(setNames(nm=funcs), function(x) NULL)
+      )
+   
+    
+    output$load_pkg <- renderUI({
+      req(is.null(pkg))
+      wellPanel(
+        h3('Choose packages to load'),
+        #uiOutput(ns('checkUi')),
+        rv$m,
+        actionButton(ns('load_pkg'), 'Load package'))
+    })
+    
+    
+    observeEvent(req(funcs), {
+      rv$list.funcs <- lapply(setNames(nm=funcs), function(x) NULL)
+      
+      lapply(funcs, function(x){
+        find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
+        find_server_func <- find_funs(paste0(x, '_server'))$package_name
+        rv$list.funcs[[x]] <- append(rv$list.funcs[[x]], unique(find_ui_func, find_server_func))
+      }
+      )
+      
+      mods <- names(rv$list.funcs)
+      pkgs <- unique(unname(unlist(rv$list.funcs)))
+      n <- length(names(rv$list.funcs))
+      
+      rv$m <- matrix(
+        rep('', length(mods)), 
+        nrow = length(mods), 
+        ncol = 1, 
+        byrow = TRUE,
+        dimnames = list(names(rv$list.funcs), 'Packages')
+      )
+      
+       
+      rv$m <- lapply(names(rv$list.funcs), function(x){
+        content <- rv$list.funcs[[x]]
+        if (!is.null(content))
+          list(
+            h3(x),
+            radioButtons(ns(x), '', choices=content)
+            )
+        })
+
+      })
+
+
+  output$checkUi <- renderUI({
+    #req(rv$m)
+    #browser()
+    rv$m
+    })
+    
+
+  
+    observeEvent(input$load_pkg, {
+      req(!isTRUE(rv$done))
+      lapply(names(rv$list.funcs), function(x){
+        content <- rv$list.funcs[[x]]
+        if (is.null(content)){
+          assign(paste0(x, '_ui'), eval(parse(text = paste0('generic_', x, '_ui'))))
+          assign(paste0(x, '_server'), eval(parse(text = paste0('generic_', x, '_server'))))
+        } else {
+          library(input[[x]], character.only = TRUE)
+          assign(paste0(x, '_ui'), eval(parse(text = paste0(x, '_ui'))))
+          assign(paste0(x, '_server'), eval(parse(text = paste0(x, '_server'))))
+          
+          # Exception
+          if (x=='Convert')
+            assign(paste0(x, '_conf'), eval(parse(text = paste0(x, '_conf'))))
+        }
+      })
+        
+        
+      
+      dataOut$done <- TRUE
+    })
+    
+    reactive({dataOut$done})
+  })
+  
+}
+
+
+
+#___________________________________________________________
+ui <- mod_load_package_ui("mod_pkg")
+
+server <- function(input, output, session) {
+  funcs <- c('Convert', 
+             'mod_open_dataset', 
+             'mod_open_demoDataset',
+             'mod_view_dataset', 
+             'mod_insert_md')
+  
+  done <- mod_load_package_server("mod_pkg", funcs = funcs)
+  #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')
+  
+  # observeEvent(done(), {
+  #   print(done())
+  # })
+}
+
+shinyApp(ui, server)
+

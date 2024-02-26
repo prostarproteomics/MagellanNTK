@@ -386,6 +386,8 @@ setMethod("initialize" ,
 #' @param mandatory xxx
 #' @param steps.source.file xxx
 #' 
+#' @export
+#' 
 Config <- function(fullname = '', 
                    mode = '',
                    steps = '', 

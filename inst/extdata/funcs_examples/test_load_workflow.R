@@ -1,4 +1,4 @@
-if (interactive()){
+#if (interactive()){
   
   library(shiny)
   library(shinyjs)
@@ -52,4 +52,4 @@ if (interactive()){
   }
   
   shinyApp(ui, server)
-}
+#}

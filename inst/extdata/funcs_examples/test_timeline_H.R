@@ -1,4 +1,4 @@
-if(interactive()){
+#if(interactive()){
   library(shiny)
 library(shinyWidgets)
 library(shinyjs)
@@ -6,7 +6,7 @@ library(shinyjs)
 options(shiny.fullstacktrace = TRUE)
 
 
-config <- Config(
+config <- MagellanNTK::Config(
   fullname = 'PipelineA_test',
   mode = 'process',
   steps = c('Step 1', 'Step 2', 'Step 3'),
@@ -59,4 +59,4 @@ server <- function(input, output){
 
 shinyApp(ui, server)
 #
-}
+#}

@@ -45,7 +45,6 @@ run_workflow <- function(id,
     server <- function(input, output) {
         dataOut <- reactiveVal()
 
-        
         output$debugInfos_ui <- renderUI({
             req(mode == 'dev')
           Debug_Infos_server(id = 'debug_infos',
