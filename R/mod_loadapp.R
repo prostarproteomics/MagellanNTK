@@ -29,7 +29,9 @@
 #' chosen.
 #' 
 #' @examples 
-#' if(interactive(){
+#' if(interactive()){
+#' app <- loadApp()
+#' shiny::runApp(app)
 #' }
 #' 
 #' 
@@ -43,11 +45,11 @@ NULL
 #' @export 
 #' @importFrom shiny NS tagList
 #' @importFrom shinyjs inlineCSS
+#' @importFrom shinyBS bsModal
+#' 
 loadapp_ui <- function(id){
     ns <- NS(id)
-    tagList(
-        uiOutput(ns('load_pkg'))
-    )
+    uiOutput(ns('modal'))
 }
 
 
@@ -55,12 +57,18 @@ loadapp_ui <- function(id){
 #' @export
 #' @keywords internal
 #' 
-loadapp_server <- function(id, 
-                           funcs = NULL){
+loadapp_server <- function(id){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
+    funcs <- c('Convert', 
+      'open_dataset', 
+      'open_demoDataset',
+      'view_dataset',
+      'infos_dataset')
+    
+    
     dataOut <- reactiveValues(
       pkg.loaded = FALSE,
       files.sourced = FALSE)
@@ -72,16 +80,24 @@ loadapp_server <- function(id,
     )
 
     
-    output$load_pkg <- renderUI({
-      #req(is.null(pkg))
-      
-      tagList(
+    output$modal <- renderUI({
+      showModal(
+        modalDialog(
+        
         h3('Choose packages to load'),
-        rv$m,
-        actionButton(ns('load_pkg'), 'Load package')
+            hr(),
+          rv$m
+        ,
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(ns("ok"), "OK") # wrapped in ns()
+        
+        )
+      )
       )
     })
     
+
     observeEvent(req(funcs), ignoreInit = FALSE, {
       lapply(funcs, function(x){
         find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
@@ -110,10 +126,13 @@ loadapp_server <- function(id,
     }, priority=1000)
     
 
-    observeEvent(input$load_pkg, {
+    observeEvent(input$ok, {
         dataOut$files.sourced <- TRUE
         rv$dataOut <- reactiveValuesToList(input)[funcs]
+        removeModal()
     })
+    
+    
     reactive({rv$dataOut})
 
   })
@@ -123,26 +142,89 @@ loadapp_server <- function(id,
 
 
 
-#___________________________________________________________
-ui <- fluidPage(
+
+
+#' @title Find the packages of a function
+#' 
+#' @description 
+#' This code is extracted from https://sebastiansauer.github.io/finds_funs/
+#' 
+#' @param f name of function for which the package(s) are to be identified.
+#' 
+#' @examples 
+#' find_funs('filter')
+#' 
+#' @return 
+#' A dataframe with two columns:
+# `package_name`: packages(s) which the function is part of (chr)
+# `builtin_package`:  whether the package comes with standard R 
+#  (a 'builtin'  package)
+#' 
+#' @export
+#' 
+#' @rdname mod_loading_page
+#' 
+find_funs <- function(f) {
+  
+  if ("tidyverse" %in% rownames(installed.packages()) == FALSE) {
+    cat("tidyverse is needed for this fuction. Please install. Stopping")
+    stop()}
+  
+  suppressMessages(library(tidyverse))
+  
+  
+  # search for help in list of installed packages
+  help_installed <- help.search(paste0("^",f,"$"), agrep = FALSE)
+  
+  # extract package name from help file
+  pckg_hits <- help_installed$matches[,"Package"]
+  
+  if (length(pckg_hits) == 0) pckg_hits <- "No_results_found"
+  
+  
+  # get list of built-in packages
+  
+  pckgs <- installed.packages()  %>% as_tibble
+  pckgs %>%
+    dplyr::filter(Priority %in% c("base","recommended")) %>%
+    dplyr::select(Package) %>%
+    distinct -> builtin_pckgs_df
+  
+  # check for each element of 'pckg hit' whether its built-in and loaded (via match). Then print results.
+  
+  results <- tibble(
+    package_name = pckg_hits,
+    builtin_pckage = match(pckg_hits, builtin_pckgs_df$Package, nomatch = 0) > 0,
+    loaded = match(paste("package:",pckg_hits, sep = ""), search(), nomatch = 0) > 0
+  )
+  
+  return(results)
+  
+}
+
+
+
+
+#' @export
+#' 
+#' @rdname mod_loading_page
+#' 
+loadApp <- function(){
+  ui <- fluidPage(
   loadapp_ui("mod_pkg")
-)
+    )
 
 server <- function(input, output, session) {
-  funcs <- c('Convert', 
-             'open_dataset', 
-             'open_demoDataset',
-             'view_dataset',
-             'infos_dataset')
   
-  done <- loadapp_server("mod_pkg", funcs = funcs)
-  #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')
+  done <- loadapp_server("mod_pkg")
   
   observeEvent(req(done()), {
                print(done())
     })
 }
 
-shinyApp(ui, server)
+app <- shinyApp(ui, server)
+
+}
 
 

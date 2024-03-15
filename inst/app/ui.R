@@ -11,7 +11,9 @@ library(shinyjs)
 #' @import shinydashboardPlus
 #' @import shinydashboard
 #' @noRd
-shinyUI(
+#' @export
+#' 
+ui_MagellanNTK <- shinyUI(
     tagList(
 
         #launchGA(),
@@ -23,10 +25,9 @@ shinyUI(
         #theme = shinythemes::shinytheme("cerulean"),
         
         titlePanel("", windowTitle = "Prostar"),
-        div(id = 'div_loadapp_module',
-          loadapp_ui('loadapp_module')),
-        hidden(div(id = 'div_mainapp_module',
-          mainapp_ui('mainapp_module')))
+        #hidden(div(id = 'div_mainapp_module',
+          mainapp_ui('mainapp_module')
+  #)
 
         
     )

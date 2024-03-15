@@ -5,25 +5,17 @@
 #' 
 #' @examples 
 #' if(interactive()){
-#' library(shinyjs)
-#' library(shiny)
-#' library(shinydashboard)
 #' 
-#' 
-#' ui <- mod_main_page_ui("mod_info")
-#' 
-#' server <- function(input, output, session) {
-#'   mod_main_page_server("mod_info")
-#' }
-#' 
-#' shinyApp(ui, server)
+#' shiny::runApp(mainapp())
 #' 
 #' }
 #' 
 #' @import shiny
 #' @import shinyjs
 #' @import shinydashboard
-#' @import shinydashboardPlus
+#' @importFrom shinydashboardPlus userOutput dashboardPage dashboardHeader 
+#' dashboardBadge dashboardControlbar skinSelector dashboardSidebar renderUser
+#' socialButton
 #' @import shinyEffects
 #' 
 NULL
@@ -119,7 +111,7 @@ mainapp_ui <- function(id){
           leftUi = tagList(
             h4(style = "font-weight: bold;", "MagellanNTK"), 
             shinydashboardPlus::dashboardBadge(
-              installed.packages()['MagellanNTK', 'Version'],
+              GetPackageVersion('MagellanNTK'),
               color = "green")
             ),
           
@@ -131,14 +123,14 @@ mainapp_ui <- function(id){
           #   taskItem(value = 60, color = "yellow", "Another task"),
           #   taskItem(value = 80, color = "red", "Write documentation")
           # ),
-          userOutput(ns("user"))
+          shinydashboardPlus::userOutput(ns("user"))
         ),
         ##
         ## Sidebar
         ## 
-        sidebar = dashboardSidebar(
+        sidebar = shinydashboardPlus::dashboardSidebar(
           #fixed = TRUE,
-          sidebarMenu(id = "sb",
+          shinydashboard::sidebarMenu(id = "sb",
                       #style = "position: fixed; overflow: visible;",
             # inactiveClass for import menus inactivation 
            # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -201,24 +193,24 @@ mainapp_ui <- function(id){
                      )
             )
         ),
-        controlbar = dashboardControlbar(
+        controlbar = shinydashboardPlus::dashboardControlbar(
           skin = "dark",
-          controlbarMenu(
-            controlbarItem(
+          shinydashboardPlus::controlbarMenu(
+            shinydashboardPlus::controlbarItem(
               title = "Tab 1",
               icon = icon("desktop"),
               active = TRUE,
               actionLink(ns('browser'), 'Console'),
               mod_settings_ui(ns('global_settings'))
             ),
-            controlbarItem(
+            shinydashboardPlus::controlbarItem(
               icon = icon("paint-brush"),
               title = "Skin",
               shinydashboardPlus::skinSelector()
             )
           )
         ),
-        body = dashboardBody(
+        body = shinydashboard::dashboardBody(
           
           # some styling
           tags$head(
@@ -277,9 +269,7 @@ mainapp_ui <- function(id){
 #' 
 mainapp_server <- function(id,
                            funcs = NULL){
-  
-  source(system.file("app/global.R", package = 'MagellanNTK'))$value
-  
+   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
@@ -297,25 +287,31 @@ mainapp_server <- function(id,
       current.pipeline = NULL
     )
     
+    # observeEvent(id, {
+    #   data(Exp1_R25_prot, package = 'DAPARdata')
+    #   rv.core$current.obj <- Exp1_R25_prot
+    #   print('New dataset')
+    # }, priority = 1000)
+    
     
     delay(ms = 3500, show("app_title"))
     delay(ms = 3800, show("app_slider_plot"))
     
     #browser()
     
-    output$user <- renderUser({
-      dashboardUser(
+    output$user <- shinydashboardPlus::renderUser({
+      shinydashboardPlus::dashboardUser(
         name = "Prostar proteomics", 
         image = 'https://raw.githubusercontent.com/prostarproteomics/Prostar_website/master/docs/favicon.ico', 
         #title = "Prostar-proteomics",
         #subtitle = "Author", 
         footer = fluidRow(
           column(width = 6, 
-                 socialButton(href = "https://github.com/prostarproteomics/MagellanNTK",
+            shinydashboardPlus::socialButton(href = "https://github.com/prostarproteomics/MagellanNTK",
                               icon = icon("github")
                               )),
         column(width = 6,
-               socialButton(href = "https://prostar-proteomics.org",
+          shinydashboardPlus::socialButton(href = "https://prostar-proteomics.org",
                             icon = icon("dropbox")
                             )
                )
@@ -404,20 +400,25 @@ mainapp_server <- function(id,
     
     
     
-
-
     call.func(
-        fname = paste0(funcs$view_dataset, '_server'),
-        args = list(id = 'view_dataset',
-                    obj = reactive({DaparViz::convert2Viz(rv.core$current.obj)})))
+      fname = paste0(funcs$view_dataset, '_server'),
+      args = list(id = 'view_dataset',
+        obj = reactive({rv.core$current.obj}),
+        useModal = FALSE,
+        verbose = TRUE))
+    
+    
     
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(funcs)
+
       call.func(
         fname = paste0(funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))
     })
+    
+    
     
     
     #mod_test_server('tutu')
@@ -440,9 +441,11 @@ mainapp_server <- function(id,
 
 
 #___________________________________________________________
-ui <- fluidPage(
+mainapp <- function(){
+  
+  ui <- fluidPage(
   mainapp_ui("main")
-)
+    )
 
 server <- function(input, output, session) {
   funcs <- list(convert = "DaparToolshed::convert",
@@ -460,6 +463,8 @@ server <- function(input, output, session) {
   mainapp_server("main", funcs = funcs)
 }
 
-shinyApp(ui, server)
+
+shiny::shinyApp(ui, server)
+}
 
 

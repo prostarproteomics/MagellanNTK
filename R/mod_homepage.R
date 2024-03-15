@@ -1,5 +1,3 @@
-# Module UI
-  
 #' @title   mod_homepage_ui and mod_homepage_server
 #' @description  A shiny Module.
 #'

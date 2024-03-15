@@ -187,7 +187,7 @@ The management of the popup window is done with the package 'shinyalert'. For th
 
 ui part
 ```{r shinyalert_ui, eval=FALSE}
-useShinyalert(),
+useShinyalert()
 ```  
 
 
@@ -450,7 +450,6 @@ must be the following line:
 
 ```{r observe_var_done, eval=FALSE}
     r.nav$isDone[i] <- TRUE
-  })
 ``` 
 
 

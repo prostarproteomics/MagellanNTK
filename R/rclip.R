@@ -5,7 +5,7 @@
 #' 
 #' @export
 #' 
-clipboard <- function(x, sep="\t", row.names=FALSE, col.names=F){
+clipboard <- function(x, sep="\t", row.names = FALSE, col.names = FALSE){
   con <- pipe("xclip -selection clipboard -i  -display :1", open="w") # note the 1 here
   #writeChar(x, con)  # for strings
   write.table(x, con, sep=sep, row.names=row.names, col.names=col.names) # for table

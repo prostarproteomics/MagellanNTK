@@ -14,30 +14,33 @@ enableJIT(3)
 #' @import shinyjs
 #' 
 #' @noRd
-shinyServer( 
+server_MagellanNTK <- shinyServer( 
   
     function(input, output, session ) {
       
-      # First, load the module to specify customizable functions
-    loaded_funcs <- loadapp_server('loadapp_module',funcs = funcs)
+      funcs <- list(convert = "MagellanNTK::convert",
+        open_dataset = "MagellanNTK::open_dataset",
+        open_demoDataset = "MagellanNTK::open_demoDataset",
+        view_dataset = "omXplore::view_dataset",
+        infos_dataset = "MagellanNTK::infos_dataset")
       
-      observeEvent(req(loaded_funcs()), {
-       # Once the server part is loaded, hide the loading page 
-      # and show the main content
+      #library(omXplore)
+      
+      observeEvent(funcs, {
+        print(funcs)
+        
+        for(i in names(funcs))
+          requireNamespace(unlist(strsplit(funcs[[i]], split='::'))[1])
 
-      shinyjs::hide('div_loadapp_module', 
-        anim = TRUE, 
-        animType = "fade", 
-        time = 1)
-      shinyjs::show('div_mainapp_module', 
-        anim = TRUE, 
-        animType = "fade", 
-        time = 1)
-      
-      mainapp_server('mainapp_module',
-                     funcs = loaded_funcs())
+        shinyjs::toggle('mainapp_module', condition = !is.null(funcs))
+        mainapp_server('mainapp_module', funcs)
+
       })
-
+      
+      
+    
  
     }
 )
+
+

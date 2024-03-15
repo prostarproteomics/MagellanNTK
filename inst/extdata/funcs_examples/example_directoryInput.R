@@ -56,7 +56,7 @@ server <- shinyServer(function(input, output, session) {
   })
   
   output$files = renderDataTable({
-    files = list.files(readDirectoryInput(session, 'directory'), full.names = T)
+    files = list.files(readDirectoryInput(session, 'directory'), full.names = TRUE)
     data.frame(name = basename(files), file.info(files))
   })
   

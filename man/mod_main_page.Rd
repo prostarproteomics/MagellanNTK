@@ -24,18 +24,8 @@ A shiny Module.
 }
 \examples{
 if(interactive()){
-library(shinyjs)
-library(shiny)
-library(shinydashboard)
 
-
-ui <- mod_main_page_ui("mod_info")
-
-server <- function(input, output, session) {
-  mod_main_page_server("mod_info")
-}
-
-shinyApp(ui, server)
+shiny::runApp(mainapp())
 
 }
 

@@ -96,7 +96,7 @@ output$directory = renderText({
 })
 
 output$files = renderDataTable({
-  files = list.files(readDirectoryInput(session, 'directory'), full.names = T)
+  files = list.files(readDirectoryInput(session, 'directory'), full.names = TRUE)
   data.frame(name = basename(files), file.info(files))
 })
 

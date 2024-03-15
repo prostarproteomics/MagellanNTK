@@ -18,12 +18,11 @@ NULL
 #' @rdname view_dataset
 #' @importFrom shiny NS tagList 
 #' @import shinyjs
-#' @import DaparViz
 #' 
 view_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default demo dataset module --')
+    h3(style="color: blue;", 'Default view_dataset module')
   )
 }
 

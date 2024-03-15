@@ -1,5 +1,3 @@
-# Module UI
-
 #' @title   mod_open_demo_dataset_ui and mod_open_demo_dataset_server
 #' 
 #' @description  A shiny Module.
@@ -19,16 +17,23 @@ NULL
 #' @rdname generic_mod_open_demo_dataset
 #' @importFrom shiny NS tagList 
 #' @import shinyjs
-#' @import DaparViz
 #' 
 open_demoDataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default demo dataset module --')
-  )
+    h3(style="color: blue;", '-- Default demo dataset module --'),
+      shinyjs::useShinyjs(),
+      tagList(
+        uiOutput(ns("choosePkg")),
+        uiOutput(ns("chooseDemoDataset")),
+        uiOutput(ns("linktoDemoPdf")),
+        shinyjs::disabled(
+          actionButton(ns('load_dataset_btn'), 'Load dataset', 
+            class= GlobalSettings$actionBtnClass))
+      )
+    )
 }
 
-# Module Server
 
 #' @rdname generic_mod_open_demo_dataset
 #' 
@@ -47,8 +52,60 @@ open_demoDataset_server <- function(id){
       dataOut = NULL
     )
     
+    
+    
+    
+    output$choosePkg <- renderUI({
+      
+      selectInput(ns("pkg"),
+        "Choose package",
+        choices = rownames(installed.packages()),
+        selected = character(0),
+        width='200px')
+    })
+    
+    ## function for demo mode
+    output$chooseDemoDataset <- renderUI({
+      req(input$pkg)
+      pkgs.require(input$pkg)
+      
+      selectInput(ns("demoDataset"),
+        "Demo dataset",
+        choices = c('None', utils::data(package=input$pkg)$results[,"Item"]),
+        selected = character(0),
+        width='200px')
+    })
+    
+    
+    
+    observeEvent(req(input$demoDataset != 'None'), {
+      nSteps <- 1
+      withProgress(message = '',detail = '', value = 0, {
+        incProgress(1/nSteps, detail = 'Loading dataset')
+        utils::data(list = input$demoDataset, package = input$pkg)
+        rv.openDemo$dataRead <- BiocGenerics::get(input$demoDataset)
+        # if (!inherits(rv.openDemo$dataRead, "QFeatures")) {
+        #   shinyjs::info("Warning : this file is not a QFeatures file ! 
+        #               Please choose another one.")
+        #   return(NULL)
+        # }
+        shinyjs::toggleState('load_dataset_btn', condition = !is.null(rv.openDemo$dataRead))
+      }) # End withProgress
+    }) # End observeEvent
+    
+    
+    observeEvent(input$load_dataset_btn, {
+      rv.openDemo$dataOut <- rv.openDemo$dataRead
+    })
+    
+    output$linktoDemoPdf <- renderUI({
+      req(input$demoDataset)
+      
+    })
+    
     reactive({rv.openDemo$dataOut })
   })
+  
   
 }
 

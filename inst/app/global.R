@@ -5,7 +5,6 @@ library(fresh)
 library(MagellanNTK)
 
 
-
 #source(file.path(".", "mod_load_package.R"), local = TRUE)$value
 #source(file.path(".", "mod_loadapp.R"), local = TRUE)$value
 #source(file.path(".", "utils_Prostar.R"), local = TRUE)$value
@@ -22,6 +21,11 @@ funcs <- c('convert',
 #   if (x=='Convert')
 #     assign(paste0(x, '_conf'), eval(parse(text = paste0('generic_', x, '_conf'))))
 #   })
+
+
+
+
+
 
 #browser()
 ## URLs for the .md files stored in the website github directory
