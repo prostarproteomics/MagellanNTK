@@ -10,26 +10,7 @@
 #' 
 #' @examples 
 #' if (interactive()){
-#' ui <- fluidPage(
-#' tagList(
-#'   mod_open_dataset_ui("qf_file"),
-#'   textOutput('res')
-#' )
-#' )
-#' 
-#' server <- function(input, output, session) {
-#'   rv <- reactiveValues(
-#'     obj = NULL
-#'   )
-#'   rv$obj <- mod_open_dataset_server("qf_file")
-#'   
-#'   output$res <- renderText({
-#'     rv$obj()
-#'     paste0('Names of the datasets: ', names(rv$obj()))
-#'   })
-#' }
-#' 
-#' shinyApp(ui, server)
+#' shiny::runApp(open_dataset())
 #' }
 #' 
 NULL
@@ -44,7 +25,9 @@ NULL
 open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open dataset module --')
+    h3(style="color: blue;", '-- Default open dataset module --'),
+    fileInput(ns("file"), "Open file", multiple = FALSE),
+    actionButton(ns('load_btn'), 'Load file')
   )
 }
 
@@ -52,7 +35,8 @@ open_dataset_ui <- function(id){
 #' @rdname mod_open_dataset
 #' 
 #' @export
-#' @importFrom shinyjs info
+#' @importFrom shinyjs info 
+#' @importFrom shiny moduleServer reactiveValues observeEvent
 #' 
 open_dataset_server <- function(id){
   
@@ -63,6 +47,31 @@ open_dataset_server <- function(id){
       dataRead = NULL,
       dataOut = NULL
     )
+    
+    ## -- Open a MSnset File --------------------------------------------
+    observeEvent(input$load_btn, ignoreInit = TRUE, {
+      input$file
+      
+      tryCatch(
+        {
+          rv.open$dataRead <- readRDS(input$file$datapath)
+          rv.open$dataOut <- rv.open$dataRead
+        },
+        warning = function(w) {
+          shinyjs::info(conditionMessage(w))
+          return(NULL)
+        },
+        error = function(e) {
+          shinyjs::info(conditionMessage(e))
+          return(NULL)
+        },
+        finally = {
+          # cleanup-code
+        }
+      )
+      
+    })
+    
     reactive({rv.open$dataOut})
   })
   
@@ -73,14 +82,36 @@ open_dataset_server <- function(id){
 
 
 
-#----------------------------------------------------
-
-ui <- open_dataset_ui("qf_file")
-
+#' @rdname mod_open_dataset
+#' 
+#' @export
+#' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent
+#' shinyApp
+#' 
+open_dataset <- function(){
+ui <- fluidPage(
+  tagList(
+    open_dataset_ui("qf_file"),
+    textOutput('res')
+  )
+)
 
 server <- function(input, output, session) {
-  open_dataset_server("qf_file")
-
+  rv <- reactiveValues(
+    obj = NULL,
+    result = NULL
+  )
+  
+  
+  rv$result <- open_dataset_server("qf_file")
+  
+  observeEvent(req(rv$result()), {
+    rv$obj <- rv$result()
+  })
+  
 }
 
-shinyApp(ui, server)
+app <- shiny::shinyApp(ui, server)
+}
+
+

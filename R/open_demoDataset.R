@@ -117,7 +117,7 @@ open_demoDataset_server <- function(id){
 ##                                                               ##
 ###################################################################
 
-library(shiny)
+open_demoDataset <- function(){
 
 ui <- open_demoDataset_ui("demo")
 
@@ -131,4 +131,5 @@ server <- function(input, output, session) {
 
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}
