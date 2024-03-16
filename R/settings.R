@@ -11,5 +11,17 @@ GlobalSettings <- list(
   redBtnClass = "btn-danger",
   PrevNextBtnClass = "btn-info",
   btn_success_color = "btn-success",
-  base_URL = "http://www.prostar-proteomics.org/md/"
+  btn_css_style = "display:inline-block; vertical-align: middle; padding: 7px;"
+)
+
+#' @export
+#' 
+default.config <- list(
+  funcs = list(convert = "MagellanNTK::convert",
+    open_dataset = "MagellanNTK::open_dataset",
+    open_demoDataset = "MagellanNTK::open_demoDataset",
+    view_dataset = "MagellanNTK::view_dataset",
+    infos_dataset = "MagellanNTK::infos_dataset"),
+  title = 'MagellanNTK',
+  base_URL = ""
 )

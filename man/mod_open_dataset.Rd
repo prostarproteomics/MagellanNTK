@@ -4,11 +4,14 @@
 \alias{mod_open_dataset}
 \alias{open_dataset_ui}
 \alias{open_dataset_server}
+\alias{open_dataset}
 \title{mod_open_dataset_ui and mod_open_dataset_server}
 \usage{
 open_dataset_ui(id)
 
 open_dataset_server(id)
+
+open_dataset()
 }
 \arguments{
 \item{id}{xxx}
@@ -18,26 +21,7 @@ A shiny Module.
 }
 \examples{
 if (interactive()){
-ui <- fluidPage(
-tagList(
-  mod_open_dataset_ui("qf_file"),
-  textOutput('res')
-)
-)
-
-server <- function(input, output, session) {
-  rv <- reactiveValues(
-    obj = NULL
-  )
-  rv$obj <- mod_open_dataset_server("qf_file")
-  
-  output$res <- renderText({
-    rv$obj()
-    paste0('Names of the datasets: ', names(rv$obj()))
-  })
-}
-
-shinyApp(ui, server)
+shiny::runApp(open_dataset())
 }
 
 }

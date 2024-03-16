@@ -24,11 +24,25 @@
 #' MagellanNTK(funcs)
 #' }
 #' 
-MagellanNTK <- function() {
-  source(system.file('app/global.R', package = 'MagellanNTK'))
-  source(system.file('app/ui.R', package = 'MagellanNTK'))
-  source(system.file('app/server.R', package = 'MagellanNTK'))
+MagellanNTK <- function(config = default.config) {
   
-  app <- shiny::shinyApp(ui = ui_MagellanNTK, server = server_MagellanNTK)
+  file_path_ui <- system.file("app/ui.R", package = "MagellanNTK")
+  file_path_server <- system.file("app/server.R", package = "MagellanNTK")
+  if (!nzchar(file_path_ui) || !nzchar(file_path_server)) 
+    stop("Shiny app not found")
+  
+  ui <- server <- NULL # avoid NOTE about undefined globals
+  source(file_path_ui, local = TRUE)
+  source(file_path_server, local = TRUE)
+  server_env <- environment(server)
+  
+  # Here you add any variables that your server can find
+  server_env$funcs <- config$funcs
+  server_env$title <- config$title
+  server_env$base_URL <- config$base_URL
+  
+  app <- shiny::shinyApp(ui_MagellanNTK, server_MagellanNTK)
   shiny::runApp(app)
+  
+  
 }

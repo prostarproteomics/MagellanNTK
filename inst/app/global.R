@@ -29,15 +29,11 @@ funcs <- c('convert',
 
 #browser()
 ## URLs for the .md files stored in the website github directory
-base_URL <- "http://www.prostar-proteomics.org/md/"
-URL_FAQ <- paste0(base_URL, "FAQ.md")
-URL_links <- paste0(base_URL, "links.md")
-URL_ProstarPresentation <- paste0(base_URL, "presentation.md")
-URL_formerReleases <-paste0(base_URL, "formerReleases.md")
-URL_versionNotes <- paste0(base_URL, "versionNotes.md")
-
-
-actionBtnClass <- "btn-primary"
+URL_FAQ <- paste0(config$base_URL, "FAQ.md")
+URL_links <- paste0(config$base_URL, "links.md")
+URL_ProstarPresentation <- paste0(config$base_URL, "presentation.md")
+URL_formerReleases <-paste0(config$base_URL, "formerReleases.md")
+URL_versionNotes <- paste0(config$base_URL, "versionNotes.md")
 
 # Bootstrap colors for buttons
 
@@ -52,12 +48,9 @@ actionBtnClass <- "btn-primary"
 #   
 #   <button type="button" class="btn btn-link">Link</button>
 
-redBtnClass <- "btn-danger"
-PrevNextBtnClass <- "btn-info"
-btn_success_color <- "btn-success"
-optionsBtnClass <- "info"
 
-btn_style <- "display:inline-block; vertical-align: middle; padding: 7px;"
+
+
 
 listBrewerPalettes <- c("Dark2 (qualit.)" = "Dark2",
   "Accent (qualit.)"="Accent",

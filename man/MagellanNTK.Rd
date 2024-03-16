@@ -4,7 +4,7 @@
 \alias{MagellanNTK}
 \title{Main Shiny application}
 \usage{
-MagellanNTK()
+MagellanNTK(config)
 }
 \description{
 xxx
