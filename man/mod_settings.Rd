@@ -16,4 +16,10 @@ mod_settings_server(id, obj)
 \description{
 A shiny Module.
 }
+\examples{
+if(interactive()){
+shiny::runApp(mod_setting(sub_R25))
+}
+
+}
 \keyword{internal}

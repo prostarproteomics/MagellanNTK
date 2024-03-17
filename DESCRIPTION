@@ -12,7 +12,8 @@ Authors@R:
       email = "thomas.burger@cea.fr",
       role = c("aut"))
       )
-Description: MagellanNTK (Magellan Navigation ToolKit) is a collection of Shiny modules which provide the basis 
+Description: MagellanNTK (Magellan Navigation ToolKit) is a collection of Shiny 
+    modules which provide the basis 
     for a generic workflow manager for data processing toolswith several steps. 
     It works in combination with any package which implements data processing 
     pipelines compliant with MagellanNTK such as MSPipelines and Prostar. It can 
@@ -61,7 +62,6 @@ Collate:
     mod_launch_magellan.R
     mod_observe_dynamic_colourPicker_input.R
     mod_splash.R
-    mod_test.R
     rclip.R
     write_excel.R
     mod_dl.R
@@ -78,17 +78,16 @@ Collate:
     doc-data.R
     mod_load_workflow.R
     load_code.R
-    mod_default_plugins.R
     utils.R
     check_funcs.R
     timeline_h.R
     timeline_v.R
     code_used_by_external_modules.R
     mod_debug_infos.R
-    nav.R
+    core.R
     launch_app.R
     Save_dataset.R
-    general_nav_funcs.R
+    general_core_funcs.R
     pipeline_funcs.R
     process_funcs.R
     build_nav_ui.R
@@ -103,7 +102,6 @@ Collate:
     mod_homepage.R
     mod_bsmodal2.R
     mod_view_dataset.R
-    default_mod_view_dataset.R
     mod_check_updates.R
     mod_error_modal.R
     mod_bug_report.R

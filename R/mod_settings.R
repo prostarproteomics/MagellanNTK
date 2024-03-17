@@ -1,5 +1,3 @@
-# Module UI
-
 #' @title   mod_settings_ui and mod_settings_server
 #' 
 #' @description  A shiny Module.
@@ -7,7 +5,13 @@
 #' @param id shiny id
 #' 
 #' @name mod_settings
-
+#' 
+#' @examples
+#' if(interactive()){
+#' shiny::runApp(mod_setting(sub_R25))
+#' }
+#' 
+NULL
 
 
 
@@ -18,7 +22,8 @@
 #' 
 #' @export 
 #' 
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList tabsetPanel tabPanel div uiOutput br hr 
+#' selectInput
 #' 
 mod_settings_ui <- function(id){
   ns <- NS(id)
@@ -57,15 +62,14 @@ mod_settings_ui <- function(id){
 
 
 
-# Module Server
-
 #' @rdname mod_settings
 #' 
 #' @export
 #' 
 #' @keywords internal
 #' 
-#' @import shiny
+#' @importFrom shiny moduleServer observe req reactiveValues sliderInput
+#' renderUI numericInput observeEvent HTML
 #' 
 #' @import highcharter
 #' 
@@ -82,7 +86,7 @@ mod_settings_server <- function(id, obj){
     observe({
       req(obj())
       
-      if(class(obj()) != 'QFeatures'){
+      if(!inherits(obj(), 'QFeatures')){
         warning("mod_settings: 'obj()' is not of class 'QFeatures'.")
         return(NULL)
       }
@@ -141,8 +145,9 @@ mod_settings_server <- function(id, obj){
     
     
     mod_popover_for_help_server("modulePopover_numPrecision", 
-                                data = list(title=HTML(paste0("<strong><font size=\"4\">Numerical precisions</font></strong>")),
-                                            content= "Set the number of decimals to display for numerical values."))
+                                title=HTML(paste0("<strong><font size=\"4\">Numerical precisions</font></strong>"),
+                                content= "Set the number of decimals to display for numerical values.")
+      )
     
     output$settings_nDigits_UI <- renderUI({
       numericInput(ns("settings_nDigits"), "", value=rv.settings$nDigits, min=0, width="100px")
@@ -337,8 +342,32 @@ mod_settings_server <- function(id, obj){
   
 }
 
-## To be copied in the UI
-# mod_settings_ui("settings_ui_1")
-
-## To be copied in the server
-# callModule(mod_settings_server, "settings_ui_1")
+#' @rdname mod_open_dataset
+#' 
+#' @export
+#' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent
+#' shinyApp
+#' 
+mod_settings <- function(obj){
+  ui <- fluidPage(
+      mod_settings_ui("settings")
+  )
+  
+  server <- function(input, output, session) {
+    rv <- reactiveValues(
+      obj = NULL,
+      result = NULL
+    )
+    
+    
+    rv$result <- mod_settings_server("settings",
+      obj = reactive({obj}))
+    
+    observeEvent(req(rv$result()), {
+      rv$obj <- rv$result()
+    })
+    
+  }
+  
+  app <- shiny::shinyApp(ui, server)
+}

@@ -8,14 +8,24 @@
 \usage{
 view_dataset_ui(id)
 
-view_dataset_server(id, obj = NULL)
+view_dataset_server(id, obj = NULL, ...)
+
+view_dataset(obj, ...)
 }
 \arguments{
 \item{id}{xxx}
 
-\item{obj}{}
+\item{obj}{An instance of class xxx}
+
+\item{...}{Additionla parameters}
 }
 \description{
 A shiny Module.
+}
+\examples{
+if(interactive()){
+shiny::runApp(view_dataset(sub_R25))}
+
+
 }
 \keyword{internal}

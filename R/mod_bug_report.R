@@ -8,16 +8,26 @@
 #' @param output internal
 #' @param session internal
 #'
+#'
+#' @name mod_bug_report
+#' 
+#' @examples
+#' shiny::runApp(bug_report())
+#' 
+#' 
+NULL
+
+
 #' @rdname mod_bug_report
 #'
 #' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
+#' 
 mod_bug_report_ui <- function(id){
   ns <- NS(id)
   tagList(
-    tags$p("If you encounter an issue with Prostar, you can send an email to the maintainer so he will have sufficient informations
-                  to start identify the problem. In addition, you can add the MSnset as an attachment to the mail."),
+    tags$p("If you encounter an issue, you can send an email to the maintainer."),
     tags$br(),
     uiOutput(ns("BugReport_output")),
     tags$br(),
@@ -40,14 +50,7 @@ mod_bug_report_server <- function(id){
     
     logfile <- tempfile(fileext=".log")
     
-    if (isTRUE(getOption('golem.app.prod'))){
-      print(logfile)
-      con <- file(logfile, open="wt")
-      sink(con, append=TRUE)
-      sink(con, append=TRUE, type="message")
-    } else {
-      sink()
-    }
+    sink()
     
     # ============================================================
     # This part of the code monitors the file for changes once per
@@ -65,7 +68,7 @@ mod_bug_report_server <- function(id){
     
     output$BugReport_output <- renderUI({
       
-      mail <- unlist(strsplit(maintainer("Prostar2"), "<"))[2]
+      mail <- unlist(strsplit(maintainer("MagellanNTK"), "<"))[2]
       mail <- unlist(strsplit(mail, ">"))[1]
       
       tagList(
@@ -84,9 +87,18 @@ mod_bug_report_server <- function(id){
   
 }
 
-## To be copied in the UI
-# mod_bug_report_ui("bug_report_ui_1")
-
-## To be copied in the server
-# callModule(mod_bug_report_server, "bug_report_ui_1")
-
+#' @rdname mod_bug_report
+#'
+#' @keywords internal
+#' @export 
+#' @importFrom shiny NS tagList fluidPage shinyApp
+#' 
+bug_report <- function(){
+  ui <- fluidPage(
+    mod_bug_report_ui('bug')
+    )
+  server <- server <- function(input, output, session) {
+    mod_bug_report_server('bug')
+  }
+  app <- shiny::shinyApp(ui, server)
+}

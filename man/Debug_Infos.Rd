@@ -77,7 +77,9 @@ A shiny Module which shows the values of the datasets variables
 along the different processes of a process nor pipeline.
 }
 \examples{
-Debug_Infos(data_na)
+if(interactive()){
+shiny::runApp(Debug_Infos(sub_R25))
+}
 
 }
 \author{

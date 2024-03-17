@@ -1,5 +1,3 @@
-# Module UI
-
 #' @title   mod_popover_for_help_ui and mod_popover_for_help_server
 #' @description  A shiny Module.
 #'
@@ -7,16 +5,26 @@
 #' @param input internal
 #' @param output internal
 #' @param session internal
-#' @param data A list of two items:
-#' * title: xxxx
-#' * content: xxxx
+#' @param title xxxx
+#' @param content xxx
 #'
+#' @name mod_popover_for_help
+#'
+#' @examples
+#' if(interactive()){
+#' shiny::runApp(popover_for_help('myTitle', 'myContent'))
+#' }
+#' 
+NULL
+
+
 #' @rdname mod_popover_for_help
 #'
 #' @keywords internal
 #' @export 
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList div uiOutput
 #' @importFrom shinyjs inlineCSS useShinyjs
+#' 
 mod_popover_for_help_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -36,7 +44,7 @@ mod_popover_for_help_ui <- function(id){
   )
 }
 
-# Module Server
+
 
 #' @rdname mod_popover_for_help
 #' 
@@ -45,16 +53,17 @@ mod_popover_for_help_ui <- function(id){
 #' @keywords internal
 #' 
 #' @importFrom shinyBS bsPopover addPopover bsTooltip
+#' @importFrom shiny renderUI req moduleServer
 #' 
-mod_popover_for_help_server <- function(id, data){
+mod_popover_for_help_server <- function(id, title, content){
   
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
     output$write_title_ui <- renderUI({
-      req(data)
-      data$title
+      req(title)
+      title
     })
     
     output$dot <- renderUI({
@@ -62,11 +71,9 @@ mod_popover_for_help_server <- function(id, data){
     })
     
     output$show_Pop <- renderUI({
-      shinyBS::bsTooltip(ns("dot"), data$content, trigger = "hover")
-      
+      req(content)
+      shinyBS::bsTooltip(ns("dot"), content, trigger = "hover")
     })
-    
-    
   })
   
 }
@@ -120,9 +127,22 @@ button.Prostar_tooltip_white {
 }"
 
 
-## To be copied in the UI
-# mod_popover_for_help_ui("popover_for_help_ui_1")
-
-## To be copied in the server
-# callModule(mod_popover_for_help_server, "popover_for_help_ui_1")
-
+#' @rdname mod_open_dataset
+#' 
+#' @export
+#' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent
+#' shinyApp
+#' 
+popover_for_help <- function(title, content){
+  ui <- fluidPage(
+    mod_popover_for_help_ui("settings")
+  )
+  
+  server <- function(input, output, session) {
+    rv$result <- mod_popover_for_help_server("settings",
+      title = title,
+      content = content)
+  }
+  
+  app <- shiny::shinyApp(ui, server)
+}

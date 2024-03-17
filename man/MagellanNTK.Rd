@@ -4,7 +4,12 @@
 \alias{MagellanNTK}
 \title{Main Shiny application}
 \usage{
-MagellanNTK(config)
+MagellanNTK(config = default.config)
+}
+\arguments{
+\item{config}{A list optionaly containing th following items:
+* title: xxx
+* base_URL: xxx}
 }
 \description{
 xxx

@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_code.R
 \name{pull_fifo}
 \alias{pull_fifo}
-\title{Push item in a FIFO}
+\title{Get item in a FIFO}
 \usage{
 pull_fifo(fifo)
 }
@@ -15,5 +15,5 @@ A `list(2)` of two items:
 * xxx
 }
 \description{
-Push item in a FIFO
+Get item in a FIFO
 }

@@ -41,7 +41,8 @@ mod_homepage_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    insert_md_server("ProstarPresentation_MD",URL_ProstarPresentation)
+    insert_md_server("ProstarPresentation_MD",
+      paste0(config$base_URL, "presentation.Rmd"))
     
     output$citationText <- renderUI({
       tagList(

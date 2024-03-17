@@ -3,11 +3,17 @@
 #' @description  A shiny Module.
 #' 
 #' @param id xxx
-#' @param obj
+#' @param obj An instance of class xxx
+#' @param ... Additionla parameters
 #' 
 #' @name view_dataset
 #'
 #' @keywords internal
+#' 
+#' @examples
+#' if(interactive()){
+#' shiny::runApp(view_dataset(sub_R25))}
+#' 
 #' 
 NULL
 
@@ -16,7 +22,7 @@ NULL
 
 #' @export 
 #' @rdname view_dataset
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList h3
 #' @import shinyjs
 #' 
 view_dataset_ui <- function(id){
@@ -30,11 +36,9 @@ view_dataset_ui <- function(id){
 #' @rdname view_dataset
 #'  
 #' @export
-#' @importFrom BiocGenerics get
-#' @importFrom utils data
-#' @importFrom shinyjs info
+#' @importFrom shiny moduleServer reactiveValues reactive
 #' 
-view_dataset_server <- function(id, obj = NULL){
+view_dataset_server <- function(id, obj = NULL, ...){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -44,20 +48,18 @@ view_dataset_server <- function(id, obj = NULL){
       dataOut = NULL
     )
     
-    reactive({rv.openDemo$dataOut })
+    reactive({rv.openDemo$dataOut})
   })
   
 }
 
 
 
-
-###################################################################
-##                                                               ##
-##                                                               ##
-###################################################################
-
-library(shiny)
+#' @export
+#' @rdname view_dataset
+#' @importFrom shiny shinyApp reactiveValues reactive
+#' 
+view_dataset <- function(obj, ...){
 
 ui <- view_dataset_ui("demo")
 
@@ -67,8 +69,12 @@ server <- function(input, output, session) {
     obj = NULL
   )
   
-  rv$obj <- view_dataset_server("demo")
+  rv$obj <- view_dataset_server("demo",
+    obj = reactive({obj}),
+    ...
+    )
   
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}

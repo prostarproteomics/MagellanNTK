@@ -73,7 +73,7 @@ push_fifo <- function(fifo, value){
 }
 
 
-#' @title Push item in a FIFO
+#' @title Get item in a FIFO
 #' 
 #' @param fifo A `vector` of strings
 #' 

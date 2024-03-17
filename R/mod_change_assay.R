@@ -1,12 +1,22 @@
-#' change_assay UI Function
-#'
+
+#' @title xxx
 #' @description A shiny Module.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd 
+#' 
+#' @examples
+#' if(interactive()){
+#' mod_change_assay(ll.se, indice)
+#' }
+#' 
 #'
-#' @importFrom shiny NS tagList 
+NULL
+
+
+
+#' @importFrom shiny NS tagList absolutePanel uiOutput
 mod_change_assay_ui <- function(id){
   ns <- NS(id)
 
@@ -22,14 +32,17 @@ mod_change_assay_ui <- function(id){
       fixed = FALSE,
       cursor = "default",
       uiOutput(ns("datasetAbsPanel"))
-
   )
 }
     
 #' change_assay Server Function
+#' @importFrom shiny moduleServer reactiveValues observe req renderUI
+#' tagList req div selectInput observeEvent
 #'
 #' @noRd 
-mod_change_assay_server <- function(id, ll.se, indice){
+mod_change_assay_server <- function(id, 
+  ll.se, 
+  indice){
   
   
   moduleServer(id, function(input, output, session){
@@ -91,9 +104,22 @@ mod_change_assay_server <- function(id, ll.se, indice){
   
 }
     
-## To be copied in the UI
-# mod_change_assay_ui("change_assay_ui_1")
-    
-## To be copied in the server
-# callModule(mod_change_assay_server, "change_assay_ui_1")
- 
+#' @rdname mod_open_dataset
+#' 
+#' @export
+#' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent
+#' shinyApp
+#' 
+mod_change_assay <- function(ll.se, indice){
+  ui <- fluidPage(
+    mod_change_assay_ui("chassay")
+  )
+  
+  server <- function(input, output, session) {
+    rv$result <- mod_change_assay_server("chassay",
+      ll.se = ll.se,
+      indice = indice)
+  }
+  
+  app <- shiny::shinyApp(ui, server)
+}

@@ -14,6 +14,10 @@ GlobalSettings <- list(
   btn_css_style = "display:inline-block; vertical-align: middle; padding: 7px;"
 )
 
+
+
+#' @title Default config values
+#' @description xxx
 #' @export
 #' 
 default.config <- list(
@@ -23,5 +27,5 @@ default.config <- list(
     view_dataset = "MagellanNTK::view_dataset",
     infos_dataset = "MagellanNTK::infos_dataset"),
   title = 'MagellanNTK',
-  base_URL = ""
+  base_URL = system.file('app/md', package = 'MagellanNTK')
 )

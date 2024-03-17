@@ -11,7 +11,16 @@ GetPackageVersion <- function(pkg){
     error = function(e) NA)
   }
 
+#' @title Call function
+#' @description xxx
+#' 
+#' @seealso [do.call()]
+#' 
 #' @export
+#' 
+#' @examples
+#' call.func("stats::rnorm", list(10))
+#' 
 call.func <- function(fname,
                       args){
   do.call(eval(parse(text=fname)), args)
@@ -125,7 +134,14 @@ initComplete <- function(){
 } #comonFunc.R de prostar 2.0
 
 
+#' @title Get file extension
+#' 
 #' @export
+#' 
+#' @examples
+#' GetExtension('foo.xlsx')
+#' 
+#' 
 GetExtension <- function(name) {
   temp <- unlist(strsplit(name, ".", fixed = TRUE))
   return(temp[length(temp)])

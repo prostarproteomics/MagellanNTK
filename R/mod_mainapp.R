@@ -426,11 +426,8 @@ mainapp_server <- function(id,
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
-    insert_md_server("links_MD", 
-                         URL_links)
-    insert_md_server("FAQ_MD", 
-                     URL_FAQ,
-                     link_URL = 'https://www.prostar-proteomics.org/#Frequently_asked_questions')
+    insert_md_server("links_MD", paste0(config$base_URL, "links.md"))
+    insert_md_server("FAQ_MD", paste0(config$base_URL, "FAQ.md"))
     #mod_bug_report_server("bug_report")
   })
   

@@ -19,7 +19,9 @@
 #' @param is.enabled A `logical(1)` xxxx
 #'
 #' @examples
-#' Debug_Infos(data_na)
+#' if(interactive()){
+#' shiny::runApp(Debug_Infos(sub_R25))
+#' }
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -30,6 +32,7 @@ NULL
 
 #' @rdname Debug_Infos
 #' @export
+#' @importFrom shiny NS wellPanel uiOutput fluidRow column 
 #'
 Debug_Infos_ui <- function(id) {
     ns <- NS(id)
@@ -53,6 +56,8 @@ Debug_Infos_ui <- function(id) {
 #'
 #' @importFrom DT renderDT DTOutput formatStyle %>% styleEqual
 #' @importFrom S4Vectors DataFrame
+#' @importFrom shiny moduleServer renderUI h3 reactive p req
+#' @importFrom DT renderDT formatStyle styleEqual datatable
 #'
 Debug_Infos_server <- function(id,
     title = NULL,
@@ -189,7 +194,7 @@ Debug_Infos_server <- function(id,
 
 
 
-#' @import shiny
+#' @importFrom shiny fluidPage reactive shinyApp
 #' @rdname Debug_Infos
 #' @export
 #' @return A shiny app
@@ -204,5 +209,5 @@ Debug_Infos <- function(obj) {
         rv.dataIn = reactive({obj}))
     }
     
-    shinyApp(ui, server)
+   app <- shinyApp(ui, server)
 }

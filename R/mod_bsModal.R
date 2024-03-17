@@ -1,23 +1,8 @@
-# ouvre une fenetre, parametre renseigne quoi afficher dans la fenetre
-
-
 #' @title Predefined modal
 #'
 #' @description Displays of formatted modal-dialog with 'Cancel' and 
 #' 'Ok' buttons.
 #'
-#' @rdname bsmodal
-#'
-#' @export
-#'
-bsmodal_ui <- function(id) {
-  ns <- NS(id)
-  tagList(
-    uiOutput(ns("bsmodalUI"))
-  )
-}
-
-
 #' @param id A `character(1)` which is the id of the instance of the module
 #' @param label xxx
 #' @param title A `character(1)`
@@ -26,32 +11,44 @@ bsmodal_ui <- function(id) {
 #' @param uiContent The content of the modal dialog.
 #' @param shiny.module xxx
 #'
-#' @importFrom shinyjqui jqui_draggable
-#'
 #' @export
 #'
 #' @return A Shiny modal-dialog
 #'
 #' @examples
 #' if (interactive()) {
-#'     library(shiny)
-#'     library(shinyBS)
-#'
-#'     ui <- fluidPage(
-#'         bsmodal_ui("tbl")
-#'     )
-#'     server <- function(input, output) {
-#'         bsmodal_server(
-#'             id = "tbl",
-#'             title = "test",
-#'             uiContent = p("test")
-#'         )}
-#'     shinyApp(ui, server)
+#'   shiny::runApp(mod_bsmodal())
 #' }
 #'
-#' @rdname bsmodal
+#' @name mod_bsmodal
 #'
-bsmodal_server <- function(id,
+NULL
+
+
+
+
+#' @importFrom shiny uiOutput tagList NS
+#' @rdname mod_bsmodal
+#'
+#' @export
+#'
+mod_bsmodal_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    uiOutput(ns("bsmodalUI"))
+  )
+}
+
+
+
+#' @rdname mod_bsmodal
+#' @export
+#' @importFrom shiny moduleServer observe reactiveVal reactive observeEvent
+#' req renderUI tagList actionButton 
+#' @importFrom shinyBS bsModal
+#' @importFrom shinyjqui jqui_resizable jqui_draggable
+#'
+mod_bsmodal_server <- function(id,
                            label = "Edit md",
                            title = NULL,
                            width = NULL,
@@ -87,9 +84,9 @@ bsmodal_server <- function(id,
     GetUI <- reactive({
       if(!is.null(uiContent))
         ui <- uiContent
-      else if(!is.null(shiny.module))
+      else if(!is.null(shiny.module$ui.func))
         ui <- do.call(shiny.module$ui.func, 
-                      append(list(id = ns(shiny.module$id)),
+                      append(list(id = ns('id')),
                              shiny.module$ui.params))
       
       ui
@@ -100,9 +97,9 @@ bsmodal_server <- function(id,
         width <- "small"
       }
       
-      if(!is.null(shiny.module))
+      if(!is.null(shiny.module$server.func))
         dataOut(do.call(shiny.module$server.func, 
-                        append(list(id = shiny.module$id),
+                        append(list(id = 'id'),
                                shiny.module$server.params)))
       
       tagList(
@@ -110,8 +107,7 @@ bsmodal_server <- function(id,
                     width:", width, " }"))),
         tags$head(tags$style(".modal-dialog {z-index: 1000;}")),
         tags$head(
-          tags$style("#test .modal-dialog {
-                        width: fit-content !important;}")),
+          tags$style("#test .modal-dialog {width: fit-content !important;}")),
         actionButton(ns("openModalBtn"), label,
                      icon("chart-bar", lib = "font-awesome"),
                      class = "btn-success"
@@ -131,26 +127,31 @@ bsmodal_server <- function(id,
 
 
 
-if (interactive()) {
-  library(shiny)
-  library(shinyBS)
+#' @export
+#' @rdname mod_bsmodal
+#' @importFrom shiny fluidPage tagList p uiOutput reactiveValues renderUI
+#' req shinyApp
+#' 
+mod_bsmodal <- function(title = 'test',
+  ui.func = NULL,
+  ui.params = list(),
+  server.func = NULL,
+  server.params = list()){
   
   ui <- fluidPage(
     tagList(
-      p('testtets'),
       uiOutput('res'),
       bsmodal_ui("tbl")
     )
   )
-  server <- function(input, output) {
+  server <- function(input, output, session) {
     rv <- reactiveValues(res=NULL)
     rv$res <- bsmodal_server(id = "tbl",
-                             title = "test",
-                             shiny.module = list(id = 'toto',
-                                              ui.func = mdEditor_ui,
-                                              ui.params = list(),
-                                              server.func = mdEditor_server,
-                                              server.params = list())
+                             title = title,
+                             shiny.module = list(ui.func = ui.func,
+                                              ui.params = ui.params,
+                                              server.func = server.func,
+                                              server.params = server.params)
     )
    
     
@@ -159,5 +160,5 @@ if (interactive()) {
       p(rv$res())
     })
   }
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 }

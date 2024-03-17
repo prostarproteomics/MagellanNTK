@@ -1,6 +1,10 @@
 #' @title Main Shiny application
 #' @description xxx
 #' 
+#' @param config A list optionaly containing th following items:
+#' * title: xxx
+#' * base_URL: xxx
+#' 
 #' @export
 #' @examples
 #' if(interactive()){

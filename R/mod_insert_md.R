@@ -7,11 +7,21 @@
 #' @param url internal
 #'
 #' @rdname mod_insert_md
+#' 
+#' @examples
+#' if(interactive()){
+#' base <- system.file('app/md', package = 'MagellanNTK')
+#' url <- paste0(base, "presentation.Rmd")
+#' shiny::runApp(insert_md(url))
+#' }
+#' 
 #'
 
 
+#' @rdname mod_insert_md
 #' @export 
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList uiOutput htmlOutput
+#' 
 insert_md_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -20,8 +30,12 @@ insert_md_ui <- function(id){
   )
 }
 
-# Module Server
 
+
+#' @importFrom shiny tagList uiOutput htmlOutput observeEvent
+#'  tagList uiOutput htmlOutput actionLink- req includeMarkdown p
+#' @importFrom shinyjs info
+#' 
 #' @rdname mod_insert_md
 #' @export
 insert_md_server <- function(id,
@@ -65,21 +79,21 @@ insert_md_server <- function(id,
 
 
 
+#' @export
+#' @importFrom shiny shinyApp fluidPage
+#' @rdname insert_md
+
+insert_md <- function(url){
+  ui <- fluidPage(
+    insert_md_ui('tree')
+  )
 
 
-
-ui <- fluidPage(
-  insert_md_ui('tree')
-)
-
-
-server <- function(input, output) {
+  server <- function(input, output) {
   
-  insert_md_server('tree', 
-                       url = 'http://www.prostar-proteomics.org/md/presentation.md',
-                       link_URL = 'https://www.prostar-proteomics.org/#Frequently_asked_questions')
-  
+  insert_md_server('tree', url)
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}
 
