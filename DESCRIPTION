@@ -127,3 +127,4 @@ Suggests:
     BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass, tibble
 VignetteBuilder: knitr
+StagedInstall: no

@@ -202,7 +202,7 @@ nav_server <- function(id,
                 
                 n <- length(rv$config@steps)
                 stepsnames <- names(rv$config@steps)
-                rv$steps.status <- setNames(rep(global$UNDONE, n), nm = stepsnames)
+                rv$steps.status <- setNames(rep(GlobalSettings$stepStatus$UNDONE, n), nm = stepsnames)
                 rv$steps.enabled <- setNames(rep(FALSE, n), nm = stepsnames)
                 rv$steps.skipped <- setNames(rep(FALSE, n), nm = stepsnames)
                 rv$resetChildren <- setNames(rep(0, n), nm = stepsnames)
@@ -325,7 +325,7 @@ nav_server <- function(id,
                            if (is.null(return.values)) {
                              # The entire pipeline has been reseted
                              rv$dataIn <- NULL
-                             rv$steps.status[seq_len(length(rv$config@steps))] <- global$UNDONE
+                             rv$steps.status[seq_len(length(rv$config@steps))] <- GlobalSettings$stepStatus$UNDONE
                            } else {
                              
                              .cd <- max(triggerValues, na.rm = TRUE) == triggerValues
@@ -399,7 +399,7 @@ nav_server <- function(id,
                                       {
                                         # If a value is returned, this is because the 
                                         # current step has been validated
-                                        rv$steps.status[rv$current.pos] <- global$VALIDATED
+                                        rv$steps.status[rv$current.pos] <- GlobalSettings$stepStatus$VALIDATED
                                         
                                         # Look for new skipped steps
                                         rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)
@@ -513,7 +513,7 @@ nav_server <- function(id,
                 )
 
             n <- length(rv$config@steps)
-            if (rv$steps.status[n] == global$VALIDATED) {
+            if (rv$steps.status[n] == GlobalSettings$stepStatus$VALIDATED) {
                 # Set current position to the last one
                 rv$current.pos <- n
 
@@ -530,9 +530,9 @@ nav_server <- function(id,
         # if it is skipped or not (remote action from the caller)
         observeEvent(is.skipped(), ignoreNULL = FALSE,  ignoreInit = TRUE, {
             if (isTRUE(is.skipped())) {
-                rv$steps.status <- All_Skipped_tag(rv$steps.status, global$SKIPPED)
+                rv$steps.status <- All_Skipped_tag(rv$steps.status, GlobalSettings$stepStatus$SKIPPED)
             } else {
-                rv$steps.status <- All_Skipped_tag(rv$steps.status, global$UNDONE)
+                rv$steps.status <- All_Skipped_tag(rv$steps.status, GlobalSettings$stepStatus$UNDONE)
                 rv$steps.enabled <- Update_State_Screens(
                     is.skipped = is.skipped(),
                     is.enabled = is.enabled(),
@@ -549,7 +549,7 @@ nav_server <- function(id,
           n <- length(rv$config@steps)
           # The status of the steps are reinitialized to the default
           # configuration of the process
-          rv$steps.status <- setNames(rep(global$UNDONE, n), nm = names(rv$config@steps))
+          rv$steps.status <- setNames(rep(GlobalSettings$stepStatus$UNDONE, n), nm = names(rv$config@steps))
 
           # If the current module is a pipeline type (node and not
           # leaf), then sent to its children the information that
@@ -582,7 +582,7 @@ nav_server <- function(id,
                 n <- length(rv$config@steps)
                 # The status of the steps are reinitialized to the default
                 # configuration of the process
-                rv$steps.status <- setNames(rep(global$UNDONE, n), nm = names(rv$config@steps))
+                rv$steps.status <- setNames(rep(GlobalSettings$stepStatus$UNDONE, n), nm = names(rv$config@steps))
 
                 # If the current module is a pipeline type (node and not
                 # leaf), then sent to its children the information that
@@ -775,7 +775,7 @@ nav_server <- function(id,
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled
 
-                if (rv$steps.status[rv$current.pos] == global$VALIDATED) 
+                if (rv$steps.status[rv$current.pos] == GlobalSettings$stepStatus$VALIDATED) 
                     rv$child.position[rv$current.pos] <- paste0("last_", Timestamp())
             }
             
@@ -866,7 +866,7 @@ nav_server <- function(id,
         #                 if (is.null(return.values)) {
         #                     # The entire pipeline has been reseted
         #                     rv$dataIn <- NULL
-        #                     rv$steps.status[seq_len(length(rv$config@steps))] <- global$UNDONE
+        #                     rv$steps.status[seq_len(length(rv$config@steps))] <- GlobalSettings$stepStatus$UNDONE
         #                 } else {
         #                     .cd <- max(triggerValues, na.rm = TRUE) == triggerValues
         #                     # ind.process.has.changed <- which(.cd)
@@ -931,7 +931,7 @@ nav_server <- function(id,
         #                 {
         #                     # If a value is returned, this is because the 
         #                     # current step has been validated
-        #                     rv$steps.status[rv$current.pos] <- global$VALIDATED
+        #                     rv$steps.status[rv$current.pos] <- GlobalSettings$stepStatus$VALIDATED
         # 
         #                     # Look for new skipped steps
         #                     rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)

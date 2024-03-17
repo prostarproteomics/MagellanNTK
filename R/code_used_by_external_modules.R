@@ -240,7 +240,7 @@ Get_Code_for_General_observeEvents <- function() {
 
 observeEvent(steps.status(), ignoreNULL = TRUE, {
     if (is.null(steps.enabled()))
-        rv$steps.status <- setNames(rep(global$UNDONE, rv$length),
+        rv$steps.status <- setNames(rep(GlobalSettings$stepStatus$UNDONE, rv$length),
                                  nm = names(rv$config@steps))
     else
         rv$steps.status <- steps.status()

@@ -370,7 +370,7 @@ output$#step.name#_btn_validate_ui <- renderUI({
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['#step.name#'] <- global$VALIDATED
+      rv$steps.status['#step.name#'] <- GlobalSettings$stepStatus$VALIDATED
     })
   
 
@@ -436,7 +436,7 @@ code <- "
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- GlobalSettings$stepStatus$VALIDATED
     })
 
 
@@ -466,7 +466,7 @@ code <- "
     
   output$dl_ui <- renderUI({
     req(config@mode == 'process')
-    req(rv$steps.status['Save'] == global$VALIDATED)
+    req(rv$steps.status['Save'] == GlobalSettings$stepStatus$VALIDATED)
     dl_ui(ns('createQuickLink'))
     })
     
@@ -486,7 +486,7 @@ code <- "
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- global$VALIDATED
+      rv$steps.status['Save'] <- GlobalSettings$stepStatus$VALIDATED
       dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
       })

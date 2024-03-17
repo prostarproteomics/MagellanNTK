@@ -76,10 +76,10 @@ timeline_v_server <- function(id,
           
           tl_status <- rep("undone", length(config@steps))
             
-          .ind1 <- which(unlist(status()) == global$VALIDATED)
+          .ind1 <- which(unlist(status()) == GlobalSettings$stepStatus$VALIDATED)
           tl_status[which(config@mandatory)] <- "mandatory"
           tl_status[.ind1] <- "completed"
-          tl_status[which(unlist(status()) == global$SKIPPED)] <- "skipped"
+          tl_status[which(unlist(status()) == GlobalSettings$stepStatus$SKIPPED)] <- "skipped"
 
           for (i in seq_len(length(enabled()))) {
               if (!enabled()[i]) {
@@ -177,19 +177,19 @@ timeline_v_server <- function(id,
             .ensB <- intersect(which(config@mandatory), which(enabled() == 0))
             tl_status[.ensB] <- mandatoryDisabled()
 
-            .ensC <- intersect(which(unlist(status()) == global$VALIDATED), 
+            .ensC <- intersect(which(unlist(status()) == GlobalSettings$stepStatus$VALIDATED), 
                 which(enabled() == 1))
             tl_status[.ensC] <- completed()
             
-            .ensD <- intersect(which(unlist(status()) == global$VALIDATED), 
+            .ensD <- intersect(which(unlist(status()) == GlobalSettings$stepStatus$VALIDATED), 
                 which(enabled() == 0))
             tl_status[.ensD] <- completedDisabled()
 
-            .ensE <- intersect(which(unlist(status()) == global$SKIPPED), 
+            .ensE <- intersect(which(unlist(status()) == GlobalSettings$stepStatus$SKIPPED), 
                 which(enabled() == 1))
             tl_status[.ensE] <- skipped()
             
-            .ensF <- intersect(which(unlist(status()) == global$SKIPPED), 
+            .ensF <- intersect(which(unlist(status()) == GlobalSettings$stepStatus$SKIPPED), 
                 which(enabled() == 0))
             tl_status[.ensF] <- skippedDisabled()
 

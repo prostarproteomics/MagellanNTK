@@ -6,12 +6,12 @@
 #' @param id shiny id
 #' @param url internal
 #'
-#' @rdname mod_insert_md
+#' @name mod_insert_md
 #' 
 #' @examples
 #' if(interactive()){
 #' base <- system.file('app/md', package = 'MagellanNTK')
-#' url <- paste0(base, "presentation.Rmd")
+#' url <- file.path(base, "presentation.Rmd")
 #' shiny::runApp(insert_md(url))
 #' }
 #' 
@@ -33,7 +33,7 @@ insert_md_ui <- function(id){
 
 
 #' @importFrom shiny tagList uiOutput htmlOutput observeEvent
-#'  tagList uiOutput htmlOutput actionLink- req includeMarkdown p
+#'  tagList uiOutput htmlOutput actionLink req includeMarkdown p
 #' @importFrom shinyjs info
 #' 
 #' @rdname mod_insert_md
@@ -81,8 +81,8 @@ insert_md_server <- function(id,
 
 #' @export
 #' @importFrom shiny shinyApp fluidPage
-#' @rdname insert_md
-
+#' @rdname mod_insert_md
+#' 
 insert_md <- function(url){
   ui <- fluidPage(
     insert_md_ui('tree')

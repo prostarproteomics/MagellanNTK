@@ -138,7 +138,7 @@ mainapp_ui <- function(id){
             # Menus and submenus in sidebar
             #br(),
             menuItem("Home", 
-                     tabName = "ProstarHome", 
+                     tabName = "Home", 
                      icon = icon("home"),
                      selected = TRUE),
             hr(),
@@ -164,11 +164,9 @@ mainapp_ui <- function(id){
               badgeLabel = "new", 
               badgeColor = "green"),
             hr(),
-            menuItem("Pipeline", 
-                     tabName = "pipeline", 
-                     icon = icon("cogs"),
-                     badgeLabel = "todo", 
-                     badgeColor = "blue"),
+            menuItem("Workflow", 
+                     tabName = "workflow", 
+                     icon = icon("cogs")),
             hr(),
             menuItem("EDA", 
                      tabName = "eda", 
@@ -211,7 +209,6 @@ mainapp_ui <- function(id){
           )
         ),
         body = shinydashboard::dashboardBody(
-          
           # some styling
           tags$head(
             tags$style(
@@ -239,13 +236,17 @@ mainapp_ui <- function(id){
           div(style="margin-top: 40px;", 
             # body content
             tabItems(
-              tabItem(tabName = "ProstarHome", class="active", mod_homepage_ui(ns('home'))),
+              tabItem(tabName = "Home", class="active", mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openDataset", uiOutput(ns('open_dataset_UI'))),
               tabItem(tabName = "demoDataset", uiOutput(ns('open_demo_dataset_UI'))),
               tabItem(tabName = "convertDataset", uiOutput(ns('open_convert_dataset_UI'))),
               tabItem(tabName = "eda", uiOutput(ns('EDA_UI'))),
               tabItem(tabName = "export", h3("Export")), # export module not yet
+              
+              tabItem(tabName = "workflow", uiOutput(ns('workflow_UI'))),
+              
+              
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               tabItem(tabName = "releaseNotes", mod_release_notes_ui(ns('rl'))),
               tabItem(tabName = "checkUpdates", mod_check_updates_ui(ns('check_updates'))),
@@ -399,6 +400,30 @@ mainapp_server <- function(id,
     })
     
     
+    # Workflow code
+    output$workflow_UI <- renderUI({
+      #workflow_ui(ns('PipelineA'))
+      
+      tagList(
+        h3('test3'),
+        nav_ui(ns('PipelineA'))
+
+      )
+      # 
+    })
+    
+    
+    #
+     observeEvent(rv.core$current.obj, {
+       #workflow_server('PipelineA', rv.core$current.obj)
+  #     print('titi')
+  #   #dataOut(
+       nav_server(id = 'PipelineA',
+         dataIn = reactive({rv.core$current.obj})
+       )
+  #   #)
+   })
+  # 
     
     call.func(
       fname = paste0(funcs$view_dataset, '_server'),
@@ -406,9 +431,6 @@ mainapp_server <- function(id,
         obj = reactive({rv.core$current.obj}),
         useModal = FALSE,
         verbose = TRUE))
-    
-    
-    
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(funcs)
@@ -426,8 +448,8 @@ mainapp_server <- function(id,
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
-    insert_md_server("links_MD", paste0(config$base_URL, "links.md"))
-    insert_md_server("FAQ_MD", paste0(config$base_URL, "FAQ.md"))
+    insert_md_server("links_MD", file.path(config$base_URL, "links.md"))
+    insert_md_server("FAQ_MD", file.path(config$base_URL, "FAQ.md"))
     #mod_bug_report_server("bug_report")
   })
   

@@ -14,8 +14,8 @@
 #' @export
 #'
 Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
-    req(steps.status[current.pos] == global$SKIPPED)
-    .op1 <- global$SKIPPED * length(config@steps)
+    req(steps.status[current.pos] == GlobalSettings$stepStatus$SKIPPED)
+    .op1 <- GlobalSettings$stepStatus$SKIPPED * length(config@steps)
     process_entirely_skipped <- isTRUE(sum(steps.status) == .op1)
 
     if (process_entirely_skipped) {
@@ -105,7 +105,7 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
     }
 
     ind.max <- NULL
-    indices.validated <- which(rv$steps.status == global$VALIDATED)
+    indices.validated <- which(rv$steps.status == GlobalSettings$stepStatus$VALIDATED)
     if (length(indices.validated) > 0) {
         ind <- which(indices.validated < pos)
         if (length(ind) > 0) {
@@ -130,7 +130,7 @@ GetMaxValidated_BeforePos <- function(pos = NULL,
 #'
 GetMaxValidated_AllSteps <- function(steps.status) {
     val <- 0
-    ind <- grep(global$VALIDATED, steps.status)
+    ind <- grep(GlobalSettings$stepStatus$VALIDATED, steps.status)
     if (length(ind) > 0) {
         val <- max(ind)
     }
@@ -163,10 +163,10 @@ ToggleState_Screens <- function(cond,
     if (isTRUE(is.enabled)) {
         #browser()
         #rv$steps.enabled[range] <- rep(cond, length(range)) && 
-        #    !(rv$steps.status[range] == global$SKIPPED)
+        #    !(rv$steps.status[range] == GlobalSettings$SKIPPED)
         rv$steps.enabled[range] <- unlist(
             lapply(range,function(x) 
-                    cond && !(rv$steps.status[x] == global$SKIPPED)
+                    cond && !(rv$steps.status[x] == GlobalSettings$stepStatus$SKIPPED)
                 )
             )
     }
@@ -271,8 +271,8 @@ dataModal <- function(ns, mode) {
 Discover_Skipped_Steps <- function(steps.status) {
     for (i in seq_len(length(steps.status))) {
         max.val <- GetMaxValidated_AllSteps(steps.status)
-        if (steps.status[i] != global$VALIDATED && max.val > i) {
-            steps.status[i] <- global$SKIPPED
+        if (steps.status[i] != GlobalSettings$stepStatus$VALIDATED && max.val > i) {
+            steps.status[i] <- GlobalSettings$stepStatus$SKIPPED
         }
     }
 

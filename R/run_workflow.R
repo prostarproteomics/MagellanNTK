@@ -11,7 +11,7 @@
 #' @param tl.layout Additional parameters for nav
 #' @param mode xxx
 #'
-#' @rdname example_workflow
+#' @name workflow
 #' 
 #' @example inst/extdata/funcs_examples/example_run_workflow.R
 #'
@@ -23,59 +23,97 @@
 #' @export
 #'
 #' @return NA
+#' 
+#' @examples
+#' if (interactive()) {
+#' data(sub_R25)
+#' shiny::runApp(workflow('PipelineA', sub_R25))
+#' }
 #'
 #'
-run_workflow <- function(id,
+NULL
+
+
+#' @export
+#' @rdname workflow
+#' 
+workflow_ui <- function(id){
+  ns <- NS(id)
+  tagList(
+    nav_ui(ns(id)),
+    uiOutput(ns("debugInfos_ui"))
+  )
+  
+}
+
+
+
+#' @export
+#' @rdname workflow
+#' 
+workflow_server <- function(id,
+  dataIn = reactive({NULL}),
+  tl.layout = NULL,
+  mode = "user"){
+  
+  moduleServer(id, function(input, output, session){
+    ns <- session$ns
+    
+    dataOut <- reactiveVal()
+    
+    output$debugInfos_ui <- renderUI({
+      req(mode == 'dev')
+      Debug_Infos_server(id = 'debug_infos',
+        title = 'Infos from shiny app',
+        rv.dataIn = reactive({dataIn}),
+        dataOut = reactive({rv$dataOut$dataOut()})
+      )
+      Debug_Infos_ui("debug_infos")
+    })
+    
+    output$save_dataset_ui <- renderUI({
+      req(c(dataOut(), dataOut()$dataOut()$value))
+      
+      dl_ui(ns("saveDataset"))
+      dl_server(
+        id = "saveDataset",
+        dataIn = reactive({dataOut()$dataOut()$value})
+      )
+    })
+    
+    observeEvent(dataIn, {
+      dataOut(
+        nav_server(id = id,
+          dataIn = reactive({dataIn}),
+          tl.layout = tl.layout
+        )
+      )
+    })
+    
+    
+    })
+}
+  
+  
+  
+#' @title xxx
+#' @description xxx
+#' @param name xxx
+#' @rdname workflow
+#' @export
+workflow <- function(id,
                          dataIn = NULL,
                          tl.layout = NULL,
                          mode = 'user') {
-  
-    if (missing(id))
-        stop("'id' is required.")
-    
-  ui <- fluidPage(
-        tagList(
-            nav_ui(id),
-            uiOutput("debugInfos_ui")
-        )
-    )
 
-
-    #----------------------------------------------------------------------
-    server <- function(input, output) {
-        dataOut <- reactiveVal()
-
-        output$debugInfos_ui <- renderUI({
-            req(mode == 'dev')
-          Debug_Infos_server(id = 'debug_infos',
-                             title = 'Infos from shiny app',
-                             rv.dataIn = reactive({rv$dataIn}),
-                             dataOut = reactive({rv$dataOut$dataOut()})
-          )
-            Debug_Infos_ui("debug_infos")
-        })
-
-        output$save_dataset_ui <- renderUI({
-            req(c(dataOut(), dataOut()$dataOut()$value))
-
-            dl_ui("saveDataset")
-            dl_server(
-                id = "saveDataset",
-                dataIn = reactive({dataOut()$dataOut()$value})
-            )
-        })
-
-        observeEvent(dataIn, {
-            dataOut(
-              nav_server(id = id,
-                         dataIn = reactive({dataIn}),
-                         tl.layout = tl.layout
-                         )
-              )
-          })
+  ui <- workflow_ui(id)
+  server <- function(input, output, session) {
+      workflow_server(id, 
+        dataIn = reactive({dataIn})
+      )
     }
 
-    shinyApp(ui, server)
+  app <-shinyApp(ui, server)
 }
 
 
@@ -84,7 +122,7 @@ run_workflow <- function(id,
 #' @param name xxx
 #' @rdname example_workflow
 #' @export
-demo_workflow <- function(name=NULL){
+demo_workflow <- function(name = NULL, dataIn = NULL){
   if(is.null(name)){
     cat('Available examples are:\n')
     cat("* PipelineA_Process2\n")
@@ -93,11 +131,10 @@ demo_workflow <- function(name=NULL){
     cat("* PipelineA\n")
     return()
   } else {
-    data(data_na)
     path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
     files <- list.files(file.path(path, 'R'), full.names = TRUE)
     for(f in files)
       source(f, local = FALSE, chdir = TRUE)
-    run_workflow(name, dataIn = data_na)
+    run_workflow(name, dataIn = dataIn)
   }
 }

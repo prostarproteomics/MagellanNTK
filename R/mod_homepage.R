@@ -25,7 +25,7 @@ mod_homepage_ui <- function(id){
     
     #uiOutput("descriptionText")
     #includeMarkdown(URL_ProstarPresentation)
-    insert_md_ui(ns("ProstarPresentation_MD"))
+    insert_md_ui(ns("Presentation_MD"))
   )
 }
     
@@ -41,7 +41,7 @@ mod_homepage_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    insert_md_server("ProstarPresentation_MD",
+    insert_md_server("Presentation_MD",
       paste0(config$base_URL, "presentation.Rmd"))
     
     output$citationText <- renderUI({

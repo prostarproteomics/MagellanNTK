@@ -165,7 +165,7 @@ PipelineA_Process1_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- GlobalSettings$stepStatus$VALIDATED
     })
     
     
@@ -278,7 +278,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- global$VALIDATED
+      rv$steps.status['Step1'] <- GlobalSettings$stepStatus$VALIDATED
 
     })
     
@@ -339,7 +339,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- global$VALIDATED
+      rv$steps.status['Step2'] <- GlobalSettings$stepStatus$VALIDATED
     })
     
     # <<< END ------------- Code for step 2 UI---------------
@@ -357,7 +357,7 @@ PipelineA_Process1_server <- function(id,
     
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
-      req(rv$steps.status['Save'] == global$VALIDATED)
+      req(rv$steps.status['Save'] == GlobalSettings$stepStatus$VALIDATED)
       dl_ui(ns('createQuickLink'))
     })
     
@@ -378,7 +378,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- global$VALIDATED
+      rv$steps.status['Save'] <- GlobalSettings$stepStatus$VALIDATED
       dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })

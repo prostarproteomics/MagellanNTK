@@ -2,63 +2,18 @@
 % Please edit documentation in R/mod_createTemplate.R, R/run_workflow.R
 \name{Tools_Templates}
 \alias{Tools_Templates}
-\alias{run_workflow}
 \alias{demo_workflow}
 \title{xxx}
 \usage{
 Tools_Templates()
 
-run_workflow(id, dataIn = NULL, tl.layout = NULL, mode = "user")
-
-demo_workflow(name = NULL)
+demo_workflow(name = NULL, dataIn = NULL)
 }
 \arguments{
-\item{id}{xxx}
-
-\item{dataIn}{xxx}
-
-\item{tl.layout}{Additional parameters for nav}
-
-\item{mode}{xxx}
-
 \item{name}{xxx}
-}
-\value{
-NA
 }
 \description{
 xxx
 
-This module contains the configuration information for the corresponding 
-pipeline. It is called by the nav_pipeline module of the package MagellanNTK
-This documentation is for developers who want to create their own 
-pipelines nor processes to be managed with `MagellanNTK`.
-
 xxx
-}
-\examples{
-if (interactive()) {
-  data(data_na)
-  
-  path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
-  files <- list.files(file.path(path, 'R'), full.names = TRUE)
-  for(f in files)
-    source(f, local = FALSE, chdir = TRUE)
-
-  # Nothing happens when dataIn is NULL
-  run_workflow("PipelineA_Process1", dataIn = NULL)
-  
-  run_workflow("PipelineA_Process1", dataIn = data_na)
-
-  run_workflow("PipelineA_Process1", dataIn = data.frame(), tl.layout = "v")
-  
-  run_workflow("PipelineA", dataIn = data_na, tl.layout = c("v", "h"))
-    
-  run_workflow("PipelineB", tl.layout = c("v", "h"))
-}
-
-
-}
-\author{
-Samuel Wieczorek
 }
