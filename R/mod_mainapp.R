@@ -288,10 +288,12 @@ mainapp_server <- function(id,
       current.pipeline = NULL
     )
 
-    observeEvent(id, {
-      print('base_URL')
-      browser()
-    }, priority = 1000)
+    # observeEvent(rv.core$current.obj, {
+    #   print('base_URL')
+    #   obj <- convert_to_mae(rv.core$current.obj)
+    #   print(colnames(SummarizedExperiment::rowData(obj[[1]])))
+    #   browser()
+    # }, priority = 1000)
     
     
     # delay(ms = 3500, show("app_title"))
@@ -401,11 +403,7 @@ mainapp_server <- function(id,
     
     # Workflow code
     output$workflow_UI <- renderUI({
-      #workflow_ui(ns('PipelineA'))
-      
       tagList(
-        h3('test3'),
-        #nav_ui(ns('PipelineA'))
         nav_ui(ns(workflow$name))
       )
       # 
@@ -414,12 +412,16 @@ mainapp_server <- function(id,
     
     #
      observeEvent(rv.core$current.obj, {
-       #workflow_server('PipelineA', rv.core$current.obj)
-  #     print('titi')
+      # Check if it is based on a list
+      browser()
+      if (!is.list(rv.core$current.obj)){
+        # try to covnert the dataset into a list
+        rv.core$current.obj <- list(original = rv.core$current.obj)
+      }
+       
+       
   #   #dataOut(
-        browser()
        nav_server(
-         #id ='PipelineA',
          id = workflow$name,
          dataIn = reactive({rv.core$current.obj})
        )

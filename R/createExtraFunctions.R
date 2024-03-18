@@ -26,7 +26,7 @@ default <- "
   #' @param name the name to associate to the dataset in the object list
   #' @export
   addDatasets <- function(object, dataset, name) {
-  stopifnot(!inherits(object, 'list'))
+  #stopifnot(!is.list(object))
   if (is.null(object))
     setNames(list(dataset), nm = name)
   else
@@ -52,7 +52,7 @@ default_keep_func <- function() {
   #' @export
   #'
   keepDatasets <- function(object, range) {
-  stopifnot(!inherits(object, 'list'))
+  #stopifnot(!inherits(object, 'list'))
   if (missing(range))
     stop('Provide range of array to be processed')
   

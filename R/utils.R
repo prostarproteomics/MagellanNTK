@@ -182,22 +182,22 @@ NULL
 ##   Keep datasets from object
 ## -------------------------------------------------------
 
-
-#' @rdname dataset-processing
-keepDatasets <- function(object, range) {
-  stopifnot(!inherits(object, 'list'))
-  if (missing(range))
-    stop("Provide range of array to be processed")
-  
-  if (is.null(object)) {
-    return()
-    }
-  
-  if (is.numeric(range))
-    range <- names(object)[range]
-  
-  object[range]
-  }
+#' 
+#' #' @rdname dataset-processing
+#' keepDatasets <- function(object, range) {
+#'   #stopifnot(!is.list(object, 'list'))
+#'   if (missing(range))
+#'     stop("Provide range of array to be processed")
+#'   
+#'   if (is.null(object)) {
+#'     return()
+#'     }
+#'   
+#'   if (is.numeric(range))
+#'     range <- names(object)[range]
+#'   
+#'   object[range]
+#'   }
 
 
 # #' @rdname dataset-processing
@@ -220,14 +220,14 @@ keepDatasets <- function(object, range) {
 ## -------------------------------------------------------
 
 
-#' @rdname dataset-processing
-addDatasets <- function(object, dataset, name) {
-  stopifnot(!inherits(object, 'list'))
-  if (is.null(object))
-    setNames(list(dataset), nm = name)
-  else
-    append(object, setNames(list(dataset), nm = name))
-  }
+#' #' @rdname dataset-processing
+#' addDatasets <- function(object, dataset, name) {
+#'   #stopifnot(!inherits(object, 'list'))
+#'   if (is.null(object))
+#'     setNames(list(dataset), nm = name)
+#'   else
+#'     append(object, setNames(list(dataset), nm = name))
+#'   }
 
 
 # #' @rdname dataset-processing

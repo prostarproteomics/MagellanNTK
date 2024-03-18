@@ -56,6 +56,7 @@ Imports:
 Collate: 
     app.R
     settings.R
+    default_funcs.R
     mod_chooseDir.R
     mod_change_assay.R
     mod_choose_pipeline.R

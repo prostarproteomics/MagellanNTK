@@ -270,7 +270,9 @@ PipelineA_Process1_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
+      browser()
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      
       rv$dataIn <- addDatasets(object = rv$dataIn,
                                dataset = new.dataset,
                                name = paste0('temp_',id))

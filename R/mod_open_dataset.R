@@ -52,10 +52,8 @@ open_dataset_server <- function(id){
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       input$file
       
-      tryCatch(
-        {
-          rv.open$dataRead <- readRDS(input$file$datapath)
-          rv.open$dataOut <- rv.open$dataRead
+      rv.open$dataRead <- tryCatch({
+          readRDS(input$file$datapath)
         },
         warning = function(w) {
           shinyjs::info(conditionMessage(w))
@@ -64,11 +62,28 @@ open_dataset_server <- function(id){
         error = function(e) {
           shinyjs::info(conditionMessage(e))
           return(NULL)
-        },
-        finally = {
-          # cleanup-code
         }
       )
+      
+      if (is.null(rv.open$dataRead)){
+        rv.open$dataRead <- tryCatch({
+          load(file = input$file$datapath)
+          name <- unlist(strsplit(input$file$name, split='.', fixed = TRUE))[1]
+          rv.open$dataRead <- get(name)
+        },
+          warning = function(w) {
+            shinyjs::info(conditionMessage(w))
+            return(NULL)
+          },
+          error = function(e) {
+            shinyjs::info(conditionMessage(e))
+            return(NULL)
+          }
+        )
+      }
+      
+      
+      rv.open$dataOut <- rv.open$dataRead
       
     })
     
@@ -107,6 +122,7 @@ server <- function(input, output, session) {
   
   observeEvent(req(rv$result()), {
     rv$obj <- rv$result()
+    print(rv$obj)
   })
   
 }

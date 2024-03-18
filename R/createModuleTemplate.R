@@ -15,8 +15,8 @@
 #'
 createModuleTemplate <- function(config = NULL, 
                                  path = '.') {
-  if (!inherits(config, 'list'))
-    stop("'config' is not a `list`. Abort.")
+  #if (!inherits(config, 'list'))
+  #  stop("'config' is not a `list`. Abort.")
   
   if(is.null(path))
     stop('path is not configured.')
