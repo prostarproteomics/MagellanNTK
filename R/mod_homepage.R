@@ -42,7 +42,7 @@ mod_homepage_server <- function(id){
     ns <- session$ns
     
     insert_md_server("Presentation_MD",
-      paste0(config$base_URL, "presentation.Rmd"))
+      paste0(base_URL, "presentation.Rmd"))
     
     output$citationText <- renderUI({
       tagList(

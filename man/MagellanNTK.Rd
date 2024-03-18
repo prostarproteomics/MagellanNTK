@@ -4,7 +4,12 @@
 \alias{MagellanNTK}
 \title{Main Shiny application}
 \usage{
-MagellanNTK(config = default.config, workflowName = NULL)
+MagellanNTK(
+  funcs = default.funcs,
+  workflow = default.workflow,
+  base_URL = default.base.URL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{config}{A list optionaly containing th following items:

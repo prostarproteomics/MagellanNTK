@@ -28,36 +28,43 @@
 #' MagellanNTK(funcs)
 #' }
 #' 
-MagellanNTK <- function(config = default.config, workflow = NULL) {
+MagellanNTK <- function(
+    funcs = default.funcs,
+    workflow = default.workflow,
+    base_URL = default.base.URL,
+  verbose = FALSE) {
   
   file_path_ui <- system.file("app/ui.R", package = "MagellanNTK")
   file_path_server <- system.file("app/server.R", package = "MagellanNTK")
-  if (!nzchar(file_path_ui) || !nzchar(file_path_server)) 
+  file_path_global <- system.file("app/global.R", package = "MagellanNTK")
+  if (!nzchar(file_path_ui) || !nzchar(file_path_server) || !nzchar(file_path_global)) 
     stop("Shiny app not found")
   
    ui <- server <- NULL # avoid NOTE about undefined globals
-   source(file_path_ui, local = TRUE)
-   source(file_path_server, local = TRUE)
-   server_env <- environment(server)
-  # 
-  # Here you add any variables that your server can find
-   server_env$funcs <- config$funcs
-   server_env$workflow <- workflow
-   server_env$base_URL <- config$base_URL
-  # server_env$base_URL <- config$base_URL
-  # server_env$base_URL <- config$base_URL
-  # server_env$VALIDATED <- 1
+   source(file_path_ui, local = FALSE)
+   source(file_path_server, local = FALSE)
+   source(file_path_global, local = FALSE)
 
-   
-   .GlobalEnv$funcs <- config$funcs
+   .GlobalEnv$funcs <- funcs
    .GlobalEnv$workflow <- workflow
-   .GlobalEnv$base_URL <- config$base_URL
-   
+   .GlobalEnv$base_URL <- base_URL
+
    on.exit(rm(funcs, envir=.GlobalEnv))
    on.exit(rm(workflow, envir=.GlobalEnv))
    on.exit(rm(base_URL, envir=.GlobalEnv))
    
-   app <- shiny::shinyApp(ui, server)
+  # browser()
+   # Source workflow files
+   dirpath <- file.path(workflow$path, 'R')
+   files <- list.files(dirpath, full.names = FALSE)
+   for(f in files){
+     if(verbose)
+       cat('sourcing ', file.path(dirpath, f), '...')
+     source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
+   }
+   
+   
+   app <- shiny::shinyApp(ui_MagellanNTK, server_MagellanNTK)
   shiny::runApp(app)
   
   

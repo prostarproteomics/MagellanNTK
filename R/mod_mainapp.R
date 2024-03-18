@@ -287,7 +287,7 @@ mainapp_server <- function(id,
       # pipeline choosen by the user for its dataset
       current.pipeline = NULL
     )
-    
+
     observeEvent(id, {
       print('base_URL')
       browser()
@@ -405,8 +405,8 @@ mainapp_server <- function(id,
       
       tagList(
         h3('test3'),
-        nav_ui(ns('PipelineA'))
-
+        #nav_ui(ns('PipelineA'))
+        nav_ui(ns(workflow$name))
       )
       # 
     })
@@ -418,7 +418,9 @@ mainapp_server <- function(id,
   #     print('titi')
   #   #dataOut(
         browser()
-       nav_server(id = 'PipelineA',
+       nav_server(
+         #id ='PipelineA',
+         id = workflow$name,
          dataIn = reactive({rv.core$current.obj})
        )
   #   #)
@@ -448,8 +450,8 @@ mainapp_server <- function(id,
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
-    insert_md_server("links_MD", file.path(config$base_URL, "links.md"))
-    insert_md_server("FAQ_MD", file.path(config$base_URL, "FAQ.md"))
+    insert_md_server("links_MD", file.path(base_URL, "links.md"))
+    insert_md_server("FAQ_MD", file.path(base_URL, "FAQ.md"))
     #mod_bug_report_server("bug_report")
   })
   

@@ -14,7 +14,7 @@ enableJIT(3)
 #' @import shinyjs
 #' 
 #' @noRd
-server <- shinyServer( 
+server_MagellanNTK <- shinyServer( 
   
     function(input, output, session ) {
       
@@ -24,12 +24,7 @@ server <- shinyServer(
 
         shinyjs::toggle('mainapp_module', condition = !is.null(funcs))
         mainapp_server('mainapp_module', funcs)
-
       })
-      
-      
-    
- 
     }
 )
 

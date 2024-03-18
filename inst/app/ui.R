@@ -13,7 +13,7 @@ library(shinyjs)
 #' @noRd
 #' @export
 #' 
-ui <- shinyUI(
+ui_MagellanNTK <- shinyUI(
     tagList(
 
         #launchGA(),
