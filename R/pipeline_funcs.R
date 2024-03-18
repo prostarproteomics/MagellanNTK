@@ -51,14 +51,14 @@ ActionOn_Child_Changed <- function(temp.dataIn,
         # One take the last validated step (before the one
         # corresponding to processHasChanges
         # but it is straightforward because we just updates rv$status
-        steps.status[ind.processHasChanged:len] <- GlobalSettings$stepStatus$UNDONE
+        steps.status[ind.processHasChanged:len] <- stepStatus$UNDONE
 
         steps.enabled[(ind.processHasChanged + 1):len] <- FALSE
         steps.enabled[ind.processHasChanged] <- TRUE
 
         steps.skipped[ind.processHasChanged:len] <- FALSE
 
-        validated.steps <- which(steps.status == GlobalSettings$stepStatus$VALIDATED)
+        validated.steps <- which(steps.status == stepStatus$VALIDATED)
         if (length(validated.steps) > 0) {
             ind.last.validated <- max(validated.steps)
         } else {
@@ -78,10 +78,10 @@ ActionOn_Child_Changed <- function(temp.dataIn,
     } else {
        
       # A process has been validated
-        steps.status[ind.processHasChanged] <- GlobalSettings$stepStatus$VALIDATED
+        steps.status[ind.processHasChanged] <- stepStatus$VALIDATED
 
         if (ind.processHasChanged < len) {
-            steps.status[(1 + ind.processHasChanged):len] <- GlobalSettings$stepStatus$UNDONE
+            steps.status[(1 + ind.processHasChanged):len] <- stepStatus$UNDONE
         }
 
         steps.status <- Discover_Skipped_Steps(steps.status)

@@ -156,7 +156,7 @@ PipelineA_Process1_server <- function(id,
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
         "Start",
-        class = GlobalSettings$btn_success_color)
+        class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
     })
     
@@ -165,7 +165,7 @@ PipelineA_Process1_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
     
@@ -219,7 +219,7 @@ PipelineA_Process1_server <- function(id,
     
     output$Step1_btn1_ui <- renderUI({
       widget <- actionButton(ns('Step1_btn1'), 'Button',
-        class = GlobalSettings$btn_success_color)
+        class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
     })
     
@@ -261,7 +261,7 @@ PipelineA_Process1_server <- function(id,
     output$Step1_btn_validate_ui <- renderUI({
       widget <-  actionButton(ns("Step1_btn_validate"),
         "Perform",
-        class = GlobalSettings$btn_success_color)
+        class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
       
     })
@@ -278,7 +278,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Step1'] <- stepStatus$VALIDATED
 
     })
     
@@ -325,7 +325,7 @@ PipelineA_Process1_server <- function(id,
     output$Step2_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Step2_btn_validate"),
         "Perform",
-        class = GlobalSettings$btn_success_color)
+        class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step2'] )
     })
     
@@ -339,7 +339,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Step2'] <- stepStatus$VALIDATED
     })
     
     # <<< END ------------- Code for step 2 UI---------------
@@ -357,14 +357,14 @@ PipelineA_Process1_server <- function(id,
     
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
-      req(rv$steps.status['Save'] == GlobalSettings$stepStatus$VALIDATED)
+      req(rv$steps.status['Save'] == stepStatus$VALIDATED)
       dl_ui(ns('createQuickLink'))
     })
     
     output$Save_btn_validate_ui <- renderUI({
       toggleWidget(
         actionButton(ns("Save_btn_validate"), "Save",
-                     class = GlobalSettings$btn_success_color),
+                     class = btn_success_color),
         rv$steps.enabled['Save']
         )
     })
@@ -378,7 +378,7 @@ PipelineA_Process1_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Save'] <- stepStatus$VALIDATED
       dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })

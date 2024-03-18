@@ -94,7 +94,7 @@ PipelineB_Description_server <- function(id,
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
                              "Start",
-                             class = GlobalSettings$btn_success_color)
+                             class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
     })
     

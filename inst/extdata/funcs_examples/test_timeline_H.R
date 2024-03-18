@@ -16,8 +16,8 @@ config <- MagellanNTK::Config(
 
 
 ui <- fluidPage(
-  actionButton("prevpos", GlobalSettings$tl_h_prev_icon),
-  actionButton("nextpos", GlobalSettings$tl_h_next_icon),
+  actionButton("prevpos", tl_h_prev_icon),
+  actionButton("nextpos", tl_h_next_icon),
   timeline_h_ui('TLh')
   )
 

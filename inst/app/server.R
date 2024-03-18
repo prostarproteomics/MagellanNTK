@@ -14,10 +14,9 @@ enableJIT(3)
 #' @import shinyjs
 #' 
 #' @noRd
-server_MagellanNTK <- shinyServer( 
+server <- shinyServer( 
   
     function(input, output, session ) {
-      
       
       observeEvent(funcs, {
         for(i in names(funcs))

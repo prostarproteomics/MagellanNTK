@@ -20,14 +20,12 @@
 #' @importFrom utils data
 #' @import shiny
 #'
-#' @export
-#'
 #' @return NA
 #' 
 #' @examples
 #' if (interactive()) {
 #' data(sub_R25)
-#' shiny::runApp(workflow('PipelineA', sub_R25))
+#' shiny::runApp(workflowApp('PipelineA', sub_R25))
 #' }
 #'
 #'
@@ -101,7 +99,7 @@ workflow_server <- function(id,
 #' @param name xxx
 #' @rdname workflow
 #' @export
-workflow <- function(id,
+workflowApp <- function(id,
                          dataIn = NULL,
                          tl.layout = NULL,
                          mode = 'user') {
@@ -120,7 +118,7 @@ workflow <- function(id,
 #' @title xxx
 #' @description xxx
 #' @param name xxx
-#' @rdname example_workflow
+#' @rdname workflow
 #' @export
 demo_workflow <- function(name = NULL, dataIn = NULL){
   if(is.null(name)){

@@ -7,8 +7,8 @@
   
 
 ui <- fluidPage(
-  actionButton("prevpos", GlobalSettings$tl_v_prev_icon),
-  actionButton("nextpos", GlobalSettings$tl_v_next_icon),
+  actionButton("prevpos", tl_v_prev_icon),
+  actionButton("nextpos", tl_v_next_icon),
   timeline_v_ui('TLv')
 )
 

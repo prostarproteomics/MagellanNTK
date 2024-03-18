@@ -4,6 +4,8 @@
 \alias{workflow}
 \alias{workflow_ui}
 \alias{workflow_server}
+\alias{workflowApp}
+\alias{demo_workflow}
 \title{Shiny example module `Process`}
 \usage{
 workflow_ui(id)
@@ -17,7 +19,9 @@ workflow_server(
   mode = "user"
 )
 
-workflow(id, dataIn = NULL, tl.layout = NULL, mode = "user")
+workflowApp(id, dataIn = NULL, tl.layout = NULL, mode = "user")
+
+demo_workflow(name = NULL, dataIn = NULL)
 }
 \arguments{
 \item{id}{xxx}
@@ -38,6 +42,8 @@ This module contains the configuration information for the corresponding
 pipeline. It is called by the nav_pipeline module of the package MagellanNTK
 This documentation is for developers who want to create their own 
 pipelines nor processes to be managed with `MagellanNTK`.
+
+xxx
 
 xxx
 }
@@ -67,7 +73,7 @@ if (interactive()) {
 
 if (interactive()) {
 data(sub_R25)
-shiny::runApp(workflow('PipelineA', sub_R25))
+shiny::runApp(workflowApp('PipelineA', sub_R25))
 }
 
 

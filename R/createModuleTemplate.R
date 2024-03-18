@@ -349,7 +349,7 @@ wellPanel(
 output$#step.name#_btn_validate_ui <- renderUI({
     widget <-  actionButton(ns('#step.name#_btn_validate'),
                    'Perform',
-                   class = GlobalSettings$btn_success_color)
+                   class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['#step.name#'] )
       
     })
@@ -370,7 +370,7 @@ output$#step.name#_btn_validate_ui <- renderUI({
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['#step.name#'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['#step.name#'] <- stepStatus$VALIDATED
     })
   
 
@@ -427,7 +427,7 @@ code <- "
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns('Description_btn_validate'),
                   'Start',
-                  class = GlobalSettings$btn_success_color)
+                  class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
       })
 
@@ -436,7 +436,7 @@ code <- "
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
 
 
@@ -466,13 +466,13 @@ code <- "
     
   output$dl_ui <- renderUI({
     req(config@mode == 'process')
-    req(rv$steps.status['Save'] == GlobalSettings$stepStatus$VALIDATED)
+    req(rv$steps.status['Save'] == stepStatus$VALIDATED)
     dl_ui(ns('createQuickLink'))
     })
     
   output$Save_btn_validate_ui <- renderUI({
     toggleWidget(actionButton(ns('Save_btn_validate'), 'Save',
-                        class = GlobalSettings$btn_success_color),
+                        class = btn_success_color),
                        rv$steps.enabled['Save']
                      )
     })
@@ -486,7 +486,7 @@ code <- "
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- GlobalSettings$stepStatus$VALIDATED
+      rv$steps.status['Save'] <- stepStatus$VALIDATED
       dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
       })

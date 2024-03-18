@@ -42,24 +42,24 @@ Build_nav_v_ui <- function(ns) {
                     div(
                         style = "padding: 10px",
                         div(
-                            style = GlobalSettings$btn_style,
+                            style = btn_style,
                             shinyjs::disabled(
                                 actionButton(ns("prevBtn"),
-                                    GlobalSettings$tl_v_prev_icon,
-                                    class = GlobalSettings$PrevNextBtnClass,
+                                    tl_v_prev_icon,
+                                    class = PrevNextBtnClass,
                                     style = "padding:4px; font-size:80%"
                                 )
                             ),
                             actionButton(ns("rstBtn"), "Reset",
-                                class = GlobalSettings$redBtnClass,
+                                class = redBtnClass,
                                 style = "padding:4px; font-size:80%"
                             )
                         ),
                         div(
-                            style = GlobalSettings$btn_style,
+                            style = btn_style,
                             actionButton(ns("nextBtn"), 
-                                GlobalSettings$tl_v_next_icon,
-                                class = GlobalSettings$PrevNextBtnClass,
+                                tl_v_next_icon,
+                                class = PrevNextBtnClass,
                                 style = "padding:4px; font-size:80%"
                             )
                         ),
@@ -94,21 +94,21 @@ Build_nav_h_ui <- function(ns) {
             justify-content: center;",
             column(width = 1, shinyjs::disabled(
                 actionButton(ns("prevBtn"),
-                    GlobalSettings$tl_h_prev_icon,
-                    class = GlobalSettings$PrevNextBtnClass,
+                    tl_h_prev_icon,
+                    class = PrevNextBtnClass,
                     style = "font-size:80%"
                 )
             )),
             column(width = 1, 
                    actionButton(ns("rstBtn"), "Reset",
-                                class = GlobalSettings$redBtnClass,
+                                class = redBtnClass,
                                 style = "font-size:80%")
                    ),
             column(width = 9, uiOutput(ns("show_TL"))),
             column(width = 1,
                 actionButton(ns("nextBtn"),
-                    GlobalSettings$tl_h_next_icon,
-                    class = GlobalSettings$PrevNextBtnClass,
+                    tl_h_next_icon,
+                    class = PrevNextBtnClass,
                     style = "font-size:80%"
                 )
             )

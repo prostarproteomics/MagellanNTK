@@ -29,7 +29,7 @@ open_demoDataset_ui <- function(id){
         uiOutput(ns("linktoDemoPdf")),
         shinyjs::disabled(
           actionButton(ns('load_dataset_btn'), 'Load dataset', 
-            class= GlobalSettings$actionBtnClass))
+            class= actionBtnClass))
       )
     )
 }

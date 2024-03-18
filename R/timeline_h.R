@@ -41,8 +41,8 @@ timeline_h_server <- function(id,
 
           tl_status <- rep("undone", length(config@steps))
           tl_status[which(config@mandatory)] <- "mandatory"
-          tl_status[which(unlist(status()) == GlobalSettings$stepStatus$VALIDATED)] <- "completed"
-          tl_status[which(unlist(status()) == GlobalSettings$stepStatus$SKIPPED)] <- "skipped"
+          tl_status[which(unlist(status()) == stepStatus$VALIDATED)] <- "completed"
+          tl_status[which(unlist(status()) == stepStatus$SKIPPED)] <- "skipped"
           for (i in seq_len(length(enabled()))) {
             if (!enabled()[i]) {
               tl_status[i] <- paste0(tl_status[i], "Disabled")

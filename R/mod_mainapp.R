@@ -288,15 +288,14 @@ mainapp_server <- function(id,
       current.pipeline = NULL
     )
     
-    # observeEvent(id, {
-    #   data(Exp1_R25_prot, package = 'DAPARdata')
-    #   rv.core$current.obj <- Exp1_R25_prot
-    #   print('New dataset')
-    # }, priority = 1000)
+    observeEvent(id, {
+      print('base_URL')
+      browser()
+    }, priority = 1000)
     
     
-    delay(ms = 3500, show("app_title"))
-    delay(ms = 3800, show("app_slider_plot"))
+    # delay(ms = 3500, show("app_title"))
+    # delay(ms = 3800, show("app_slider_plot"))
     
     #browser()
     
@@ -418,6 +417,7 @@ mainapp_server <- function(id,
        #workflow_server('PipelineA', rv.core$current.obj)
   #     print('titi')
   #   #dataOut(
+        browser()
        nav_server(id = 'PipelineA',
          dataIn = reactive({rv.core$current.obj})
        )

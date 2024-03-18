@@ -162,7 +162,7 @@ Tools_Templates_server <- function(id,
     output$Description_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Description_btn_validate"),
                              "Start",
-                             class = GlobalSettings$btn_success_color)
+                             class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Description'])
     })
     
@@ -388,7 +388,7 @@ Tools_Templates_server <- function(id,
     output$Customdatasetfunctions_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Customdatasetfunctions_btn_validate"),
                              "Perform",
-                             class = GlobalSettings$btn_success_color)
+                             class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Customdatasetfunctions'] )
     })
     
@@ -475,7 +475,7 @@ Tools_Templates_server <- function(id,
     output$Configuresteps_btn_validate_ui <- renderUI({
       widget <- actionButton(ns("Configuresteps_btn_validate"),
                              "Perform",
-                             class = GlobalSettings$btn_success_color)
+                             class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Configuresteps'] )
     })
 
@@ -568,7 +568,7 @@ Tools_Templates_server <- function(id,
     output$Save_btn_validate_ui <- renderUI({
       toggleWidget(
         actionButton(ns("Save_btn_validate"), "Create template",
-                     class = GlobalSettings$btn_success_color),
+                     class = btn_success_color),
         rv$steps.enabled['Save']
       )
     })
