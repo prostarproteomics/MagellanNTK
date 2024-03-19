@@ -56,7 +56,7 @@ NULL
 #' 
 #' @export
 addDatasets <- function(object, dataset, name) {
-  #stopifnot(!inherits(object, 'list'))
+  stopifnot(is.Magellan.compliant(object))
   if (is.null(object))
     setNames(list(dataset), nm = name)
   else
@@ -77,7 +77,7 @@ addDatasets <- function(object, dataset, name) {
 #' @export
 #'
 keepDatasets <- function(object, range) {
-  #stopifnot(!inherits(object, 'list'))
+  stopifnot(is.Magellan.compliant(object))
   if (missing(range))
     stop('Provide range of array to be processed')
   

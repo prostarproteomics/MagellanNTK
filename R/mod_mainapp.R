@@ -352,7 +352,6 @@ mainapp_server <- function(id,
     
     output$open_convert_dataset_UI <- renderUI({
       req(funcs)
-      #req(input$dmUI == 'convert')
       call.func(
         fname = paste0(funcs$convert, '_ui'),
         args = list(id = ns('Convert')))
@@ -372,7 +371,6 @@ mainapp_server <- function(id,
     
     output$open_demo_dataset_UI <- renderUI({
       req(funcs)
-      #req(input$dmUI == 'demo')
       call.func(
         fname = paste0(funcs$open_demoDataset, '_ui'),
         args = list(id = ns('open_demo_dataset')))
@@ -391,7 +389,6 @@ mainapp_server <- function(id,
     
     output$open_dataset_UI <- renderUI({
       req(funcs)
-      #req(input$dmUI == 'open')
       call.func(fname = paste0(funcs$open_dataset, '_ui'),
         args = list(id = ns('open_dataset')))
     })
@@ -412,22 +409,12 @@ mainapp_server <- function(id,
     
     #
      observeEvent(rv.core$current.obj, {
-      # Check if it is based on a list
-      browser()
-      if (!is.list(rv.core$current.obj)){
-        # try to covnert the dataset into a list
-        rv.core$current.obj <- list(original = rv.core$current.obj)
-      }
-       
-       
-  #   #dataOut(
-       nav_server(
+       rv.core$current.obj <- nav_server(
          id = workflow$name,
          dataIn = reactive({rv.core$current.obj})
        )
-  #   #)
    })
-  # 
+
     
     call.func(
       fname = paste0(funcs$view_dataset, '_server'),

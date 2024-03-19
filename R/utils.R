@@ -1,4 +1,66 @@
-
+#' @title Checks if the object is compliant with MagellanNTK
+#' @description
+#' Checks and accept the following data formats:
+#' * An instance of class `MSnSet`
+#' * An instance of class `MultiAssayExperiment`
+#' * An instance of class `SummarizedExperiment`
+#' * An instance of class `data.frame`
+#' * An instance of class `matrix`
+#' * A list of instances of class `MSnSet`
+#' * A list of instances of class `SummarizedExperiment`
+#' * A list of instances of class `data.frame`
+#' * A list of instances of class `matrix`
+#' 
+#' 
+#' @param obj xxx
+#' 
+#' @export
+#' 
+#' @examples
+#' is.Magellan.compliant(data.frame())
+#' 
+#' 
+#' ll <- list(data.frame(), data.frame())
+#' is.Magellan.compliant(ll)
+#' 
+is.Magellan.compliant <- function(obj){
+  passed <- FALSE
+  
+  
+  is.listOf <- function(object, obj.class = NULL){
+    res <- NULL
+    if(is.null(obj.class)){
+      ll <- unlist(lapply(object, function(x) class(x)[[1]]))
+      if (length(unique(ll)) == 1)
+        res <- unique(ll)
+    } else {
+      res <- TRUE
+      res <- res && inherits(object, 'list')
+      res <- res && all(unlist(lapply(object, 
+          function(x) class(x)[[1]] == obj.class)))
+    }
+    return(res)
+  }
+  
+  
+  
+  passed <- passed || inherits(obj, 'MSnset') 
+  passed <- passed || inherits(obj, 'QFeatures') 
+  passed <- passed || inherits(obj, 'SummarizedExperiment') 
+  passed <- passed || inherits(obj, 'MultiAssayExperiment') 
+  passed <- passed || inherits(obj, 'data.frame')
+  passed <- passed || inherits(obj, 'matrix')
+  
+  
+  if (inherits(obj, 'list')){
+    passed <- passed || is.listOf(obj, 'matrix')
+    passed <- passed || is.listOf(obj, 'data.frame')
+    passed <- passed || is.listOf(obj, 'SummarizedExperiment')
+    passed <- passed || is.listOf(obj, 'MSnset')
+  }
+  
+  return(passed)
+}
 
 #' @title Checks if a Shiny module exists
 #' @description This function checks if the ui() and server() parts of a 

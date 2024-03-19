@@ -13,6 +13,8 @@
 #' shiny::runApp(open_dataset())
 #' }
 #' 
+#' @return A list
+#' 
 NULL
 
 
@@ -51,16 +53,15 @@ open_dataset_server <- function(id){
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       input$file
-      
-      rv.open$dataRead <- tryCatch({
-          readRDS(input$file$datapath)
+      rv.open$dataRead <- NULL
+      tryCatch({
+        # Try with readRDS()
+        rv.open$dataRead <- readRDS(input$file$datapath)
         },
         warning = function(w) {
-          shinyjs::info(conditionMessage(w))
           return(NULL)
         },
         error = function(e) {
-          shinyjs::info(conditionMessage(e))
           return(NULL)
         }
       )
@@ -68,23 +69,25 @@ open_dataset_server <- function(id){
       if (is.null(rv.open$dataRead)){
         rv.open$dataRead <- tryCatch({
           load(file = input$file$datapath)
-          name <- unlist(strsplit(input$file$name, split='.', fixed = TRUE))[1]
-          rv.open$dataRead <- get(name)
+            name <- unlist(strsplit(input$file$name, split='.', fixed = TRUE))[1]
+            get(name)
         },
           warning = function(w) {
-            shinyjs::info(conditionMessage(w))
             return(NULL)
           },
           error = function(e) {
-            shinyjs::info(conditionMessage(e))
             return(NULL)
           }
         )
       }
       
-      
-      rv.open$dataOut <- rv.open$dataRead
-      
+      if (is.Magellan.compliant(rv.open$dataRead)){
+        if (!inherits(rv.open$dataset, 'list'))
+          rv.open$dataRead <- list(original = rv.open$dataRead)
+        rv.open$dataOut <- rv.open$dataRead
+      } else {
+        shinyjs::info("Dataset not compatible with MagellanNTK")
+      }
     })
     
     reactive({rv.open$dataOut})
