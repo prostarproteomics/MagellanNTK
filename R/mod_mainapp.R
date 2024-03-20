@@ -273,7 +273,8 @@ mainapp_ui <- function(id){
 #' @keywords internal
 #' 
 mainapp_server <- function(id,
-                           funcs = NULL){
+                           funcs = NULL,
+  verbose = FALSE){
    
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -285,13 +286,15 @@ mainapp_server <- function(id,
       result_convert = NULL,
       result_openDemoDataset = NULL,
       result_open_dataset = NULL,
+      result_open_workflow = NULL,
       # Current QFeatures object in Prostar
       current.obj = NULL,
       
       # pipeline choosen by the user for its dataset
       current.pipeline = NULL,
       
-      tmp = NULL
+      workflow.name = '',
+      workflow.path = ''
     )
 
     # observeEvent(rv.core$current.obj, {
@@ -404,7 +407,21 @@ mainapp_server <- function(id,
     
     
     # Get workflow directory
-    rv.core$workflow <- open_workflow_server("wf")
+    rv.core$result_open_workflow <- open_workflow_server("wf")
+    
+    observeEvent(req(rv.core$result_open_workflow()),{
+      rv.core$workflow.name <- basename(rv.core$result_open_workflow())
+      rv.core$workflow.path <- rv.core$result_open_workflow()
+      browser()
+      
+      dirpath <- file.path(rv.core$workflow.path, 'R')
+      files <- list.files(dirpath, full.names = FALSE)
+      for(f in files){
+        if(verbose)
+          cat('sourcing ', file.path(dirpath, f), '...')
+        source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
+      }
+    })
     
     output$open_workflow_UI <- renderUI({
       open_workflow_ui(ns("wf"))
@@ -413,24 +430,23 @@ mainapp_server <- function(id,
     
     # Workflow code
     output$workflow_UI <- renderUI({
-      req(rv.core$workflow())
-      nav_ui(ns(basename(rv.core$workflow())))
-      
-      tmp <- nav_server(
-        id = basename(rv.core$workflow()),
-        dataIn = reactive({rv.core$current.obj})
-      )
-      
-      observeEvent(req(tmp()$dataOut()$trigger), ignoreInit = TRUE, {
-        browser()
-        rv.core$current.obj <- tmp()$dataOut()$value
-      })
-      
+      req(rv.core$workflow.name)
+      print(rv.core$workflow.name)
+      browser()
+      nav_ui(ns(basename(rv.core$workflow.name)))
       })
 
-      
 
-       
+    tmp <- nav_server(
+      id = 'PipelineA',
+      dataIn = reactive({rv.core$current.obj})
+    )
+    
+    observeEvent(req(tmp$dataOut()$trigger), ignoreInit = TRUE, {
+      browser()
+      rv.core$current.obj <- tmp$dataOut()$value
+    })
+
        
 
     call.func(

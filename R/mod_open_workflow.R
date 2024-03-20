@@ -131,8 +131,7 @@ open_workflow <- function(){
     rv$result <- open_workflow_server("wf")
     
     observeEvent(req(rv$result()), {
-      rv$obj <- rv$result()
-      print(rv$obj)
+      print(rv$result())
     })
     
   }
