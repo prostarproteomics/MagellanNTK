@@ -1,9 +1,14 @@
 #' @title Main Shiny application
 #' @description xxx
 #' 
-#' @param config A list optionaly containing th following items:
+#' @param funcs An list containing th following items:
 #' * title: xxx
 #' * base_URL: xxx
+#' @param workflow A list containing the following items:
+#' * name : The name of the workflow. If it is in a package, the functions
+#' name_ui(), name_server() and name_config() must be be available in its 
+#' environment
+#' * xxx
 #' 
 #' @export
 #' @examples
@@ -32,19 +37,25 @@ MagellanNTK <- function(
     funcs = default.funcs,
     workflow = default.workflow,
     base_URL = default.base.URL,
-  verbose = FALSE) {
+    verbose = FALSE) {
   
+  
+  # Checks if app can be found
   file_path_ui <- system.file("app/ui.R", package = "MagellanNTK")
   file_path_server <- system.file("app/server.R", package = "MagellanNTK")
   file_path_global <- system.file("app/global.R", package = "MagellanNTK")
-  if (!nzchar(file_path_ui) || !nzchar(file_path_server) || !nzchar(file_path_global)) 
+  if (!nzchar(file_path_ui) || 
+      !nzchar(file_path_server) || 
+      !nzchar(file_path_global)) 
     stop("Shiny app not found")
   
+  # Source add files
    ui <- server <- NULL # avoid NOTE about undefined globals
    source(file_path_ui, local = FALSE)
    source(file_path_server, local = FALSE)
    source(file_path_global, local = FALSE)
 
+   # Set global variables to global environment
    .GlobalEnv$funcs <- funcs
    .GlobalEnv$workflow <- workflow
    .GlobalEnv$base_URL <- base_URL
@@ -63,6 +74,7 @@ MagellanNTK <- function(
    }
    
    
+   # Launch app
    app <- shiny::shinyApp(ui_MagellanNTK, server_MagellanNTK)
   shiny::runApp(app)
   

@@ -113,7 +113,7 @@
 #'   )
 #' }
 #'   
-#' shinyApp(ui = ui, server = server)
+#' app <- shinyApp(ui = ui, server = server)
 #' 
 #' 
 #' 
@@ -155,5 +155,5 @@
 #'   loadapp_server(id = "tbl1")
 #' }
 #' 
-#' shinyApp(ui = ui, server = server)
+#' app <- shinyApp(ui = ui, server = server)
 #' 

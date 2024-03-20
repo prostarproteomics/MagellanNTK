@@ -16,5 +16,5 @@ if (interactive()){
       file.md = file.path("http://www.prostar-proteomics.org/md", "presentation.md"))
   }
   
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 }

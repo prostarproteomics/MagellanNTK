@@ -4,5 +4,5 @@ if(interactive()){
   library(shinyjs)
   options(shiny.fullstacktrace = TRUE)
   
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 }

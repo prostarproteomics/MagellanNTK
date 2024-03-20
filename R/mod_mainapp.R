@@ -470,7 +470,7 @@ server <- function(input, output, session) {
 }
 
 
-shiny::shinyApp(ui, server)
+app <- shiny::shinyApp(ui, server)
 }
 
 

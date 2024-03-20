@@ -76,7 +76,7 @@ addDatasets <- function(object, dataset, name) {
 #' 
 #' @export
 #'
-keepDatasets <- function(object, range) {
+keepDatasets <- function(object, range = seq(length(object))) {
   stopifnot(is.Magellan.compliant(object))
   if (missing(range))
     stop('Provide range of array to be processed')

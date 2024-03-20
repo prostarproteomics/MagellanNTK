@@ -12,9 +12,15 @@ MagellanNTK(
 )
 }
 \arguments{
-\item{config}{A list optionaly containing th following items:
+\item{funcs}{An list containing th following items:
 * title: xxx
 * base_URL: xxx}
+
+\item{workflow}{A list containing the following items:
+* name : The name of the workflow. If it is in a package, the functions
+name_ui(), name_server() and name_config() must be be available in its 
+environment
+* xxx}
 }
 \description{
 xxx

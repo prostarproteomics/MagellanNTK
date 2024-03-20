@@ -9,14 +9,25 @@
 mdEditor_ui(id)
 
 mdEditor_server(id)
+
+mdEditor()
 }
 \arguments{
 \item{id}{A `character(1)` which is the id of the instance of the module}
 }
 \value{
 A Shiny modal-dialog
+
+A Shiny modal-dialog
 }
 \description{
 Displays of formatted modal-dialog with 'Cancel' and 
 'Ok' buttons.
+}
+\examples{
+if(interactive()){
+shiny::runApp(mdEditor())
+}
+
+
 }

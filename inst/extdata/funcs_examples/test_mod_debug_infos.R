@@ -21,5 +21,5 @@ server <- function(input, output) {
 }
 
 
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 #

@@ -51,5 +51,5 @@
     })
   }
   
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 #}

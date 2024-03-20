@@ -1,14 +1,13 @@
 #' @name choose.dir
 #' 
 #' @title Choose a Folder Interactively
-#'
-#' @description Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
+#' 
+#' @description
+#' This code is heavily based on the following repository:
+#' https://github.com/wleepang/shiny-directory-input
+#' Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
 #' Windows.
 #' 
-#' This code has been entirely copied from 
-#' https://github.com/wleepang/shiny-directory-input/tree/master.
-#' The reason is because within Bioconductor, one cannot have package
-#' dependencies which are not in CRAN nor Bioconductor.
 #'
 #' @param default which folder to show initially
 #' @param caption the caption on the selection dialog
@@ -33,9 +32,7 @@
 #'
 #' @export
 #' 
-choose.dir = function(default = NA, 
-                      caption = NA, 
-                      useNew=TRUE) {
+choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
   if (Sys.info()['sysname'] == 'Darwin') {
     return(choose.dir.darwin(default = default, caption = caption))
   } else if (Sys.info()['sysname'] == 'Linux') {
@@ -48,7 +45,7 @@ choose.dir = function(default = NA,
   return(paste("Error: don't know how to show a folder dialog in", Sys.info()['sysname']) )
 }
 
-#' @rdname choose.dir
+#' @name choose.dir.darwin
 #' 
 #' @title The apple version of the choose folder
 #' 
@@ -66,14 +63,14 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
   } else {
     prompt = ''
   }
-  args = sub('{{prompt}}', prompt, args, fixed = TRUE)
+  args = sub('{{prompt}}', prompt, args, fixed = T)
   
   if (!is.null(default) && !is.na(default) && nzchar(default)) {
     default = sprintf(' default location \\"%s\\"', path.expand(default))
   } else {
     default = ''
   }
-  args = sub('{{default}}', default, args, fixed = TRUE)
+  args = sub('{{default}}', default, args, fixed = T)
   
   suppressWarnings({
     path = system2(command, args = args, stderr = TRUE)
@@ -90,7 +87,7 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 }
 
 
-#' @rdname choose.dir
+#' @name choose.dir.linux
 #' 
 #' @title The linux version of the choose folder
 #' 
@@ -99,8 +96,7 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 #' @return 
 #' A length one character vector, character NA if 'Cancel' was selected.
 #' 
-choose.dir.linux <- function(default = NA, 
-                             caption = NA) {
+choose.dir.linux <- function(default = NA, caption = NA) {
   command = 'zenity'
   args = '--file-selection --directory'
   
@@ -130,7 +126,7 @@ choose.dir.linux <- function(default = NA,
   return(path)
 }
 
-#' @rdname choose.dir
+#' @name choose.dir.windows
 #' 
 #' @title The windows version of the choose folder
 #' 
@@ -139,13 +135,11 @@ choose.dir.linux <- function(default = NA,
 #' @return 
 #' A length one character vector, character NA if 'Cancel' was selected.
 #'
-choose.dir.windows <- function(default = NA, 
-                               caption = NA, 
-                               useNew = TRUE) {
+choose.dir.windows <- function(default = NA, caption = NA, useNew = TRUE) {
   if(useNew){
     ## uses a powershell script rather than the bat version, gives a nicer interface
     ## and allows setting of the default directory and the caption
-    whereisutils <- system.file("utils", 'newFolderDialog.ps1', package = "shinyDirectoryInput")
+    whereisutils <- system.file("utils", 'newFolderDialog.ps1', package = "MagellanNTK")
     command = 'powershell'
     args = paste('-NoProfile -ExecutionPolicy Bypass -File',normalizePath(whereisutils))
     if (!is.null(default) && !is.na(default) && nzchar(default)) {
@@ -160,7 +154,7 @@ choose.dir.windows <- function(default = NA,
       path = system2(command, args = args, stdout = TRUE)
     })
   } else {
-    whereisutils <- system.file("utils", 'choose_dir.bat', package = "shinyDirectoryInput")
+    whereisutils <- system.file("utils", 'choose_dir.bat', package = "MagellanNTK")
     command = normalizePath(whereisutils)
     args = if (is.na(caption)) '' else sprintf('"%s"', caption)
     suppressWarnings({
@@ -172,7 +166,7 @@ choose.dir.windows <- function(default = NA,
 }
 
 
-#' @rdname choose.dir
+#' @name directoryInput
 #' 
 #' @title Directory Selection Control
 #'
@@ -194,9 +188,7 @@ choose.dir.windows <- function(default = NA,
 #' \code{\link{updateDirectoryInput}}, \code{\link{readDirectoryInput}}, \code{\link{choose.dir}}
 #' @export
 #' 
-directoryInput = function(inputId, 
-                          label, 
-                          value = NULL) {
+directoryInput = function(inputId, label, value = NULL) {
   if (!is.null(value) && !is.na(value)) {
     value = path.expand(value)
   }
@@ -218,7 +210,7 @@ directoryInput = function(inputId,
           shiny::div(
             class = 'input-group shiny-input-container',
             style = 'width:100%;',
-            div(class = 'input-group-addon', icon('folder')),
+            div(class = 'input-group-addon', icon('folder-o')),
             tags$input(
               id = sprintf('%s__chosen_dir', inputId),
               value = value,
@@ -244,7 +236,7 @@ directoryInput = function(inputId,
 }
 
 
-#' @rdname choose.dir
+#' @name updateDirectoryInput
 #' 
 #' @title Change the value of a directoryInput on the client
 #'
@@ -287,22 +279,72 @@ readDirectoryInput = function(session, inputId) {
 
 
 
-#' AND infix operator
+#' @name runDirinputExample
 #' 
-#' Given x and y, return y only if both x and y are set
+#' @title Runs a demo app with the code
 #' 
-#' @param x left operand
-#' @param y right operand
-#' @noRd 
-`%AND%` <- function(x, y) {
-  if (!is.null(x) && !isTRUE(is.na(x)))
-    if (!is.null(y) && !isTRUE(is.na(y)))
-      return(y)
-  return(NULL)
+#' @details 
+#' Runs a demo app with the code. See the code in the example_application folder for
+#' how this is accomplished.
+#' 
+#' @examples
+#' shiny::runApp(runDirinputExample())
+#' 
+#' 
+#' @export
+runDirinputExample <- function() {
+  
+  ui <- 
+    shinyUI(fluidPage(
+      fluidRow(
+        column(1),
+        column(
+          width = 10,
+          
+          # Application title
+          titlePanel("Directory Input Demo"),
+          directoryInput('directory', label = 'selected directory', value = '~'),
+          tags$h5('Files'),
+          dataTableOutput('files')
+        ),
+        column(1)
+      )
+    ))
+  
+  
+  
+  
+  server <- shinyServer(function(input, output, session) {
+    
+    session$onSessionEnded(function(){
+      stopApp()
+    })
+    
+    observeEvent(
+      ignoreNULL = TRUE,
+      eventExpr = {
+        input$directory
+      },
+      handlerExpr = {
+        if (input$directory > 0) {
+          # condition prevents handler execution on initial app launch
+          path = choose.dir(default = readDirectoryInput(session, 'directory'),
+            caption="Choose a directory...")
+          updateDirectoryInput(session, 'directory', value = path)
+        }
+      }
+    )
+    
+    output$directory = renderText({
+      readDirectoryInput(session, 'directory')
+    })
+    
+    output$files = renderDataTable({
+      files = list.files(readDirectoryInput(session, 'directory'), full.names = T)
+      data.frame(name = basename(files), file.info(files))
+    })
+    
+  })
+  
+  shiny::shinyApp(ui, server)
 }
-
-
-
-
-
-

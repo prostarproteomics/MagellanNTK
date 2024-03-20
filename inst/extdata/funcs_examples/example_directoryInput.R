@@ -64,4 +64,4 @@ server <- shinyServer(function(input, output, session) {
 
 
 if(interactive())
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)

@@ -75,7 +75,7 @@ dyn_widgets <- function(){
     })
   }
   
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
 }
 
 

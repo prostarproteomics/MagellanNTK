@@ -7,6 +7,13 @@
 #'
 #' @name mdEditor
 #' 
+#' 
+#' @examples
+#' if(interactive()){
+#' shiny::runApp(mdEditor())
+#' }
+#' 
+#' 
 NULL
 
 
@@ -137,14 +144,21 @@ mdEditor_server <- function(id) { # height auto
 
 
 
-if (interactive()) {
-  library(shiny)
-  library(shinyBS)
+#' @export
+#' @rdname mdEditor
+#' @importFrom shiny shinyApp
+#'
+#' @export
+#'
+#' @return A Shiny modal-dialog
+#' 
+mdEditor <- function(){
   
   ui <- mdEditor_ui("tbl")
 
   server <- function(input, output) {
     mdEditor_server(id = "tbl")
-    }
-  shinyApp(ui, server)
+  }
+  
+  app <- shiny::shinyApp(ui, server)
 }

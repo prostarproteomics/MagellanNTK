@@ -31,10 +31,11 @@ Depends: R (>= 4.4.0)
 Imports: 
     S4Vectors,
     methods,
-    shinyWidgets, stringi, openxlsx, markdown,
     DT, sos,
     shiny,
-    shinydashboardPlus, shiny, shinydashboard, shinyEffects,
+    shinydashboardPlus, 
+    shinydashboard, 
+    shinyEffects,
     htmlwidgets,
     shinyWidgets,
     shinyBS,
@@ -57,6 +58,8 @@ Collate:
     app.R
     settings.R
     default_funcs.R
+    mod_open_workflow.R
+    directoryInput.R
     mod_chooseDir.R
     mod_change_assay.R
     mod_choose_pipeline.R
@@ -73,7 +76,6 @@ Collate:
     mod_createTemplate.R
     createExtraModules.R
     createModuleTemplate.R
-    directoryInput.R
     mod_dyn_widgets.R
     config_class.R
     doc-data.R

@@ -137,6 +137,6 @@ chooseDir <- function(show.details = FALSE){
       p(rv$path())
     })
   }
-  shinyApp(ui, server)
+  app <- shinyApp(ui, server)
   }
 

@@ -10,7 +10,7 @@
 \usage{
 addDatasets(object, dataset, name)
 
-keepDatasets(object, range)
+keepDatasets(object, range = seq(length(object)))
 }
 \arguments{
 \item{object}{An object of class `list`.}

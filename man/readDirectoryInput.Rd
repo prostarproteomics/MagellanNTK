@@ -5,6 +5,8 @@
 \title{Read the value of a directoryInput}
 \usage{
 readDirectoryInput(session, inputId)
+
+readDirectoryInput(session, inputId)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
@@ -13,8 +15,13 @@ readDirectoryInput(session, inputId)
 }
 \description{
 Read the value of a directoryInput
+
+Read the value of a directoryInput
 }
 \details{
+Reads the value of the text field associated with a \code{directoryInput}
+object that stores the user selected directory path.
+
 Reads the value of the text field associated with a \code{directoryInput}
 object that stores the user selected directory path.
 }
