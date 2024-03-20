@@ -164,6 +164,9 @@ mainapp_ui <- function(id){
               badgeLabel = "new", 
               badgeColor = "green"),
             hr(),
+            menuItem("Open workflow", 
+              tabName = "openWorkflow", 
+              icon = icon("cogs")),
             menuItem("Workflow", 
                      tabName = "workflow", 
                      icon = icon("cogs")),
@@ -244,6 +247,7 @@ mainapp_ui <- function(id){
               tabItem(tabName = "eda", uiOutput(ns('EDA_UI'))),
               tabItem(tabName = "export", h3("Export")), # export module not yet
               
+              tabItem(tabName = "openWorkflow", uiOutput(ns('open_workflow_UI'))),
               tabItem(tabName = "workflow", uiOutput(ns('workflow_UI'))),
               
               
@@ -285,7 +289,9 @@ mainapp_server <- function(id,
       current.obj = NULL,
       
       # pipeline choosen by the user for its dataset
-      current.pipeline = NULL
+      current.pipeline = NULL,
+      
+      tmp = NULL
     )
 
     # observeEvent(rv.core$current.obj, {
@@ -396,20 +402,36 @@ mainapp_server <- function(id,
     })
     
     
+    
+    # Get workflow directory
+    rv.core$workflow <- open_workflow_server("wf")
+    
+    output$open_workflow_UI <- renderUI({
+      open_workflow_ui(ns("wf"))
+    })
+    
+    
     # Workflow code
     output$workflow_UI <- renderUI({
-      nav_ui(ns(workflow$name))
+      req(rv.core$workflow())
+      nav_ui(ns(basename(rv.core$workflow())))
+      
+      tmp <- nav_server(
+        id = basename(rv.core$workflow()),
+        dataIn = reactive({rv.core$current.obj})
+      )
+      
+      observeEvent(req(tmp()$dataOut()$trigger), ignoreInit = TRUE, {
+        browser()
+        rv.core$current.obj <- tmp()$dataOut()$value
+      })
+      
       })
 
-       tmp <- nav_server(
-         id = workflow$name,
-         dataIn = reactive({rv.core$current.obj})
-       )
+      
 
        
-       observeEvent(req(tmp$dataOut()$trigger), ignoreInit = TRUE, {
-         rv.core$current.obj <- tmp$dataOut()$value
-       })
+       
 
     call.func(
       fname = paste0(funcs$view_dataset, '_server'),

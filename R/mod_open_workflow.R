@@ -27,10 +27,12 @@ NULL
 open_workflow_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open dataset module --'),
-    directoryInput(ns('directory'), label = 'selected directory', value = '~'),
+    h3(style="color: blue;", '-- Default open workflow module --'),
+    uiOutput(ns('dirInput_UI')),
     actionButton(ns('load_btn'), 'Load'),
-    infos_dataset_ui(ns("infos"))
+    #infos_workflow_ui(ns("infos")),
+    tags$h3('Files'),
+    dataTableOutput(ns('files'))
   )
 }
 
@@ -46,15 +48,21 @@ open_workflow_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    rv.open <- reactiveValues(
-      dataRead = NULL,
+    rv.wf <- reactiveValues(
+      path = path.expand('~'),
       dataOut = NULL
     )
-    
-    
-    
+
     session$onSessionEnded(function(){
       stopApp()
+    })
+    
+    
+    output$dirInput_UI <- renderUI({
+      directoryInput(ns('directory'), 
+        label = 'selected directory', 
+        value = rv.wf$path)
+      
     })
     
     observeEvent(
@@ -65,9 +73,9 @@ open_workflow_server <- function(id){
       handlerExpr = {
         if (input$directory > 0) {
           # condition prevents handler execution on initial app launch
-          path = choose.dir(default = readDirectoryInput(session, 'directory'),
+          rv.wf$path = choose.dir(default = readDirectoryInput(session, 'directory'),
             caption="Choose a directory...")
-          updateDirectoryInput(session, 'directory', value = path)
+          updateDirectoryInput(session, 'directory', value = rv.wf$path)
         }
       }
     )
@@ -80,16 +88,17 @@ open_workflow_server <- function(id){
     
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
-      input$file
-      rv.open$dataRead <- NULL
-     
-        #  rv.open$dataOut <- list(original = rv.open$dataRead)
+      rv.wf$path
+
+      rv.wf$dataOut <- rv.wf$path
     })
     
-    infos_dataset_server("infos", 
-      obj = reactive({rv.open$dataOut}))
+    output$files = renderDataTable({
+      files = list.files(rv.wf$path, full.names = TRUE)
+      data.frame(name = basename(files), file.info(files))
+    })
     
-    reactive({rv.open$dataOut})
+    reactive({rv.wf$dataOut})
   })
   
 }
@@ -108,8 +117,7 @@ open_workflow_server <- function(id){
 open_workflow <- function(){
   ui <- fluidPage(
     tagList(
-      open_workflow_ui("wf"),
-      textOutput('res')
+      open_workflow_ui("wf")
     )
   )
   
