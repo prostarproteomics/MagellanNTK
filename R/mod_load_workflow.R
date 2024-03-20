@@ -136,13 +136,13 @@ mod_load_workflow_server <- function(id,
     observe({
       shinyDirChoose(input, 'sheets_dir', roots = Theroots(), session = session)
       rv$folder <- parseDirPath(roots = Theroots(), input$sheets_dir)
-      #browser()
+
       if (length(rv$folder) > 0){
           rv$workflow <- unlist(input$sheets_dir$path)[length(unlist(input$sheets_dir$path))]
           toggleState('load', condition = TRUE)
           
       }
-        #browser()
+
       #rv$is.valid <- CheckWorkflowDir(rv$folder)
     })
     

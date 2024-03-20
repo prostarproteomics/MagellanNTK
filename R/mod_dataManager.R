@@ -79,7 +79,6 @@ dataManager_server <- function(id, funcs){
    })
    
    
-    #browser()
     #
     # Code for convert tool
     #

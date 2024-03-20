@@ -352,8 +352,6 @@ setMethod("initialize" ,
         .Object@mandatory <- mandatory 
         
         
-        #browser()
-        
         if (is.GenericProcess(.Object))
           .Object <- init.GenericProcess(.Object)
         else if (is.RootProcess(.Object))

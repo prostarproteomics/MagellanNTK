@@ -77,7 +77,7 @@ mod_check_updates_server <- function(id){
           
           zipVersion <- substr(GetOnlineZipVersion(), 9, regexpr(".zip",GetOnlineZipVersion())[1] -1),
           prostarVersion <- installed.packages(lib.loc=Prostar.loc)["Prostar","Version"],
-          #browser(),
+
           if (compareVersion(zipVersion, prostarVersion) == 1){
             p(style="font-size: 16px", "If you use the Zero-install version, please download the latest zip file on our website ",
               tags$a("(www.prostar-proteomics.org)", href="http://www.prostar-proteomics.org", target="_blank")

@@ -134,7 +134,6 @@ chooseDir <- function(show.details = FALSE){
     
     output$info <- renderUI({
       rv$path
-      #browser()
       p(rv$path())
     })
   }

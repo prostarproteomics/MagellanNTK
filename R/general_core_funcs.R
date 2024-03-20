@@ -157,11 +157,9 @@ ToggleState_Screens <- function(cond,
                                 range,
                                 is.enabled,
                                 rv) {
-    
-    #browser()
+
     #print(rv$steps.status[range])
     if (isTRUE(is.enabled)) {
-        #browser()
         #rv$steps.enabled[range] <- rep(cond, length(range)) && 
         #    !(rv$steps.status[range] == SKIPPED)
         rv$steps.enabled[range] <- unlist(

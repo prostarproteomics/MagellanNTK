@@ -292,14 +292,12 @@ mainapp_server <- function(id,
     #   print('base_URL')
     #   obj <- convert_to_mae(rv.core$current.obj)
     #   print(colnames(SummarizedExperiment::rowData(obj[[1]])))
-    #   browser()
     # }, priority = 1000)
     
     
     # delay(ms = 3500, show("app_title"))
     # delay(ms = 3800, show("app_slider_plot"))
-    
-    #browser()
+
     
     output$user <- shinydashboardPlus::renderUser({
       shinydashboardPlus::dashboardUser(
@@ -342,7 +340,7 @@ mainapp_server <- function(id,
     })
     
     
-    #browser()
+
     #
     # Code for convert tool
     #
@@ -400,28 +398,26 @@ mainapp_server <- function(id,
     
     # Workflow code
     output$workflow_UI <- renderUI({
-      tagList(
-        nav_ui(ns(workflow$name))
-      )
-      # 
-    })
-    
-    
-    #
-     observeEvent(rv.core$current.obj, {
-       rv.core$current.obj <- nav_server(
+      nav_ui(ns(workflow$name))
+      })
+
+       tmp <- nav_server(
          id = workflow$name,
          dataIn = reactive({rv.core$current.obj})
        )
-   })
 
-    
+       
+       observeEvent(req(tmp$dataOut()$trigger), ignoreInit = TRUE, {
+         rv.core$current.obj <- tmp$dataOut()$value
+       })
+
     call.func(
       fname = paste0(funcs$view_dataset, '_server'),
       args = list(id = 'view_dataset',
         obj = reactive({rv.core$current.obj}),
         useModal = FALSE,
         verbose = TRUE))
+
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(funcs)

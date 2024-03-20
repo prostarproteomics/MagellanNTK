@@ -114,7 +114,6 @@ mod_load_package_server <- function(id, pkg = NULL, funcs = NULL) {
 
   output$checkUi <- renderUI({
     #req(rv$m)
-    #browser()
     rv$m
     })
     

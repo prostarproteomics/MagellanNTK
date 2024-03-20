@@ -29,7 +29,8 @@ open_dataset_ui <- function(id){
   tagList(
     h3(style="color: blue;", '-- Default open dataset module --'),
     fileInput(ns("file"), "Open file", multiple = FALSE),
-    actionButton(ns('load_btn'), 'Load file')
+    actionButton(ns('load_btn'), 'Load file'),
+    infos_dataset_ui(ns("infos"))
   )
 }
 
@@ -82,13 +83,17 @@ open_dataset_server <- function(id){
       }
       
       if (is.Magellan.compliant(rv.open$dataRead)){
-        if (!inherits(rv.open$dataset, 'list'))
-          rv.open$dataRead <- list(original = rv.open$dataRead)
-        rv.open$dataOut <- rv.open$dataRead
+        if (inherits(rv.open$dataRead, 'list'))
+          rv.open$dataOut <- rv.open$dataRead
+        else 
+          rv.open$dataOut <- list(original = rv.open$dataRead)
       } else {
         shinyjs::info("Dataset not compatible with MagellanNTK")
       }
     })
+    
+  infos_dataset_server("infos", 
+    obj = reactive({rv.open$dataOut}))
     
     reactive({rv.open$dataOut})
   })

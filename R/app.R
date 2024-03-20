@@ -53,7 +53,6 @@ MagellanNTK <- function(
    on.exit(rm(workflow, envir=.GlobalEnv))
    on.exit(rm(base_URL, envir=.GlobalEnv))
    
-  # browser()
    # Source workflow files
    dirpath <- file.path(workflow$path, 'R')
    files <- list.files(dirpath, full.names = FALSE)

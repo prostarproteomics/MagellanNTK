@@ -43,6 +43,7 @@ create_list_data <- function(){
     data3 = build_toy_example())
 
   save(lldata, file = 'data/lldata.rda')
+  lldata
 }
 
 

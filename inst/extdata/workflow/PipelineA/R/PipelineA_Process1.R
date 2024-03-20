@@ -270,12 +270,12 @@ PipelineA_Process1_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-      browser()
+
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
       
       rv$dataIn <- addDatasets(object = rv$dataIn,
                                dataset = new.dataset,
-                               name = paste0('temp_',id))
+                               name = paste0('Step1_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
@@ -336,7 +336,7 @@ PipelineA_Process1_server <- function(id,
       new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
       rv$dataIn <- addDatasets(object = rv$dataIn,
                                dataset = new.dataset,
-                               name = paste0('temp_',id))
+                               name = paste0('step2_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()

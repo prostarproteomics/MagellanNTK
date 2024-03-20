@@ -26,6 +26,9 @@ mod_settings(obj)
 \arguments{
 \item{id}{xxx}
 }
+\value{
+A list
+}
 \description{
 A shiny Module.
 }

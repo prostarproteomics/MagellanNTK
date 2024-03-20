@@ -193,8 +193,7 @@ nav_server <- function(id,
                 # Update the reactive value config with the config of the 
                 # pipeline
                 rv$config <- rv$proc$config()
-                
-                #browser()
+
                 if(mode() == 'dev'){
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_conf()"), '\n')))
                   rv$config
@@ -288,7 +287,6 @@ nav_server <- function(id,
                          ###
                          ### Launch the server for each step of the pipeline
                          ### 
-                         #browser()
                          lapply(GetStepsNames(), function(x) {
                            if(mode() == 'dev')
                              cat(paste0(id, ": Launch nav_server(", id, "_", x, ")\n"))
@@ -828,7 +826,6 @@ nav_server <- function(id,
         #             ###
         #             ### Launch the server for each step of the pipeline
         #             ### 
-        #             #browser()
         #             lapply(GetStepsNames(), function(x) {
         #               if(dev_mode)
         #                 cat(paste0(id, ": Launch nav_server(", id, "_", x, ")\n"))

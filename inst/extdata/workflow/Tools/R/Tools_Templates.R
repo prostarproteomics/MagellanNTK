@@ -316,7 +316,6 @@ Tools_Templates_server <- function(id,
                          mandatory = rv.custom$steps()$mandatory
       )
       
-     # browser()
       if (input$Createtemplate_mode == 'module')
         rv.custom$files <- c(rv.custom$files, 
                              file.path('R', createExtraModule(name = input$Createtemplate_name, 
@@ -328,7 +327,6 @@ Tools_Templates_server <- function(id,
    
       }
       
-      #browser()
       
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
