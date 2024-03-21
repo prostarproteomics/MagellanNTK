@@ -36,7 +36,6 @@
 MagellanNTK <- function(
     funcs = default.funcs,
     workflow = default.workflow,
-    base_URL = default.base.URL,
     verbose = FALSE) {
   
   
@@ -58,20 +57,11 @@ MagellanNTK <- function(
    # Set global variables to global environment
    .GlobalEnv$funcs <- funcs
    .GlobalEnv$workflow <- workflow
-   .GlobalEnv$base_URL <- base_URL
-
+   
    on.exit(rm(funcs, envir=.GlobalEnv))
    on.exit(rm(workflow, envir=.GlobalEnv))
-   on.exit(rm(base_URL, envir=.GlobalEnv))
    
-   # Source workflow files
-   dirpath <- file.path(workflow$path, 'R')
-   files <- list.files(dirpath, full.names = FALSE)
-   for(f in files){
-     if(verbose)
-       cat('sourcing ', file.path(dirpath, f), '...')
-     source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
-   }
+   source_wf_files(workflow$path)
    
    
    # Launch app

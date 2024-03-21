@@ -7,7 +7,6 @@
 MagellanNTK(
   funcs = default.funcs,
   workflow = default.workflow,
-  base_URL = default.base.URL,
   verbose = FALSE
 )
 }

@@ -5,21 +5,13 @@
 \title{The apple version of the choose folder}
 \usage{
 choose.dir.darwin(default = NA, caption = NA)
-
-choose.dir.darwin(default = NA, caption = NA)
 }
 \value{
-A length one character vector, character NA if 'Cancel' was selected.
-
 A length one character vector, character NA if 'Cancel' was selected.
 }
 \description{
 The apple version of the choose folder
-
-The apple version of the choose folder
 }
 \seealso{
-\code{\link{choose.dir}}
-
 \code{\link{choose.dir}}
 }

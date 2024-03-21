@@ -5,21 +5,13 @@
 \title{The linux version of the choose folder}
 \usage{
 choose.dir.linux(default = NA, caption = NA)
-
-choose.dir.linux(default = NA, caption = NA)
 }
 \value{
-A length one character vector, character NA if 'Cancel' was selected.
-
 A length one character vector, character NA if 'Cancel' was selected.
 }
 \description{
 The linux version of the choose folder
-
-The linux version of the choose folder
 }
 \seealso{
-\code{\link{choose.dir}}
-
 \code{\link{choose.dir}}
 }

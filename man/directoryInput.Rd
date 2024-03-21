@@ -5,8 +5,6 @@
 \title{Directory Selection Control}
 \usage{
 directoryInput(inputId, label, value = NULL)
-
-directoryInput(inputId, label, value = NULL)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value}
@@ -17,12 +15,8 @@ directoryInput(inputId, label, value = NULL)
 }
 \value{
 A directory input control that can be added to a UI definition.
-
-A directory input control that can be added to a UI definition.
 }
 \description{
-Directory Selection Control
-
 Directory Selection Control
 }
 \details{
@@ -31,15 +25,7 @@ dialog to users for selecting a directory on the local filesystem.  Therefore,
 this widget is intended for shiny apps that are run locally - i.e. on the
 same system that files/directories are to be accessed - and not from hosted
 applications (e.g. from shinyapps.io).
-
-This widget relies on \code{\link{choose.dir}} to present an interactive
-dialog to users for selecting a directory on the local filesystem.  Therefore,
-this widget is intended for shiny apps that are run locally - i.e. on the
-same system that files/directories are to be accessed - and not from hosted
-applications (e.g. from shinyapps.io).
 }
 \seealso{
-\code{\link{updateDirectoryInput}}, \code{\link{readDirectoryInput}}, \code{\link{choose.dir}}
-
 \code{\link{updateDirectoryInput}}, \code{\link{readDirectoryInput}}, \code{\link{choose.dir}}
 }

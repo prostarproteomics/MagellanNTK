@@ -5,18 +5,16 @@
 \title{Runs a demo app with the code}
 \usage{
 runDirinputExample()
-
-runDirinputExample()
 }
 \description{
-Runs a demo app with the code
-
 Runs a demo app with the code
 }
 \details{
 Runs a demo app with the code. See the code in the example_application folder for
 how this is accomplished.
+}
+\examples{
+shiny::runApp(runDirinputExample())
 
-Runs a demo app with the code. See the code in the example_application folder for
-how this is accomplished.
+
 }

@@ -5,21 +5,13 @@
 \title{The windows version of the choose folder}
 \usage{
 choose.dir.windows(default = NA, caption = NA, useNew = TRUE)
-
-choose.dir.windows(default = NA, caption = NA, useNew = TRUE)
 }
 \value{
-A length one character vector, character NA if 'Cancel' was selected.
-
 A length one character vector, character NA if 'Cancel' was selected.
 }
 \description{
 The windows version of the choose folder
-
-The windows version of the choose folder
 }
 \seealso{
-\code{\link{choose.dir}}
-
 \code{\link{choose.dir}}
 }

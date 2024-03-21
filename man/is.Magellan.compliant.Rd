@@ -2,7 +2,8 @@
 % Please edit documentation in R/utils.R
 \name{is.Magellan.compliant}
 \alias{is.Magellan.compliant}
-\title{Checks if the object is compliant with MagellanNTK}
+\title{# example code
+#' @title Checks if the object is compliant with MagellanNTK}
 \usage{
 is.Magellan.compliant(obj)
 }

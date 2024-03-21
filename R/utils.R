@@ -1,4 +1,32 @@
-#' @title Checks if the object is compliant with MagellanNTK
+#' @title Source workflow files
+#' 
+#' @description xxx
+#' 
+#' @param dirpath xxx
+#' 
+#' @examples
+#' path <- system.file("extdata/workflow/PipelineA", package = 'MagellanNTK')
+#' source_wf_files(path)
+#' 
+#' @export
+#'
+source_wf_files <- function(dirpath, 
+  verbose = FALSE){
+dirpath <- file.path(workflow$path, 'R')
+files <- list.files(dirpath, full.names = FALSE)
+for(f in files){
+  if(verbose)
+    cat('sourcing ', file.path(dirpath, f), '...')
+  source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
+}
+}
+
+
+
+
+
+#' # example code
+#' #' @title Checks if the object is compliant with MagellanNTK
 #' @description
 #' Checks and accept the following data formats:
 #' * An instance of class `MSnSet`

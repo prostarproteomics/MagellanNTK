@@ -5,8 +5,6 @@
 \title{Choose a Folder Interactively}
 \usage{
 choose.dir(default = NA, caption = NA, useNew = TRUE)
-
-choose.dir(default = NA, caption = NA, useNew = TRUE)
 }
 \arguments{
 \item{default}{which folder to show initially}
@@ -17,34 +15,14 @@ choose.dir(default = NA, caption = NA, useNew = TRUE)
 }
 \value{
 A length one character vector, character NA if 'Cancel' was selected.
-
-A length one character vector, character NA if 'Cancel' was selected.
 }
 \description{
 This code is heavily based on the following repository:
 https://github.com/wleepang/shiny-directory-input
 Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
 Windows.
-
-This code is heavily based on the following repository:
-https://github.com/wleepang/shiny-directory-input
-Display an OS-native folder selection dialog under Mac OS X, Linux GTK+ or
-Windows.
 }
 \details{
-Uses an Apple Script, Zenity or Windows Batch script to display an OS-native
-folder selection dialog.
-
-For Apple Script, with \code{default = NA}, the initial folder selection
-is determined by default behavior of the "choose folder" script. Otherwise,
-paths are expanded with \code{\link{path.expand}}.
-
-For Linux, with \code{default = NA}, the initial folder selection is
-determined by defaul behavior of the zenity script.
-
-The new windows batch script allows both initial folder and caption to be set.
-In the old batch script for Windows the initial folder is always ignored.
-
 Uses an Apple Script, Zenity or Windows Batch script to display an OS-native
 folder selection dialog.
 

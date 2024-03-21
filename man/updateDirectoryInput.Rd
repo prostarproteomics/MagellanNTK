@@ -5,8 +5,6 @@
 \title{Change the value of a directoryInput on the client}
 \usage{
 updateDirectoryInput(session, inputId, value = NULL, ...)
-
-updateDirectoryInput(session, inputId, value = NULL, ...)
 }
 \arguments{
 \item{session}{The \code{session} object passed to function given to \code{shinyServer}.}
@@ -20,15 +18,8 @@ if \code{value} is \code{NULL}.}
 }
 \description{
 Change the value of a directoryInput on the client
-
-Change the value of a directoryInput on the client
 }
 \details{
-Sends a message to the client, telling it to change the value of the input
-object.  For \code{directoryInput} objects, this changes the value displayed
-in the text-field and triggers a client-side change event.  A directory
-selection dialog is not displayed.
-
 Sends a message to the client, telling it to change the value of the input
 object.  For \code{directoryInput} objects, this changes the value displayed
 in the text-field and triggers a client-side change event.  A directory

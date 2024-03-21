@@ -412,15 +412,7 @@ mainapp_server <- function(id,
     observeEvent(req(rv.core$result_open_workflow()),{
       rv.core$workflow.name <- basename(rv.core$result_open_workflow())
       rv.core$workflow.path <- rv.core$result_open_workflow()
-      browser()
-      
-      dirpath <- file.path(rv.core$workflow.path, 'R')
-      files <- list.files(dirpath, full.names = FALSE)
-      for(f in files){
-        if(verbose)
-          cat('sourcing ', file.path(dirpath, f), '...')
-        source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
-      }
+      source_wf_files(rv.core$workflow.path)
     })
     
     output$open_workflow_UI <- renderUI({
@@ -431,11 +423,8 @@ mainapp_server <- function(id,
     # Workflow code
     output$workflow_UI <- renderUI({
       req(rv.core$workflow.name)
-      print(rv.core$workflow.name)
-      browser()
       nav_ui(ns(basename(rv.core$workflow.name)))
       })
-
 
     tmp <- nav_server(
       id = 'PipelineA',
@@ -443,7 +432,6 @@ mainapp_server <- function(id,
     )
     
     observeEvent(req(tmp$dataOut()$trigger), ignoreInit = TRUE, {
-      browser()
       rv.core$current.obj <- tmp$dataOut()$value
     })
 
@@ -473,8 +461,10 @@ mainapp_server <- function(id,
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
-    insert_md_server("links_MD", file.path(base_URL, "links.md"))
-    insert_md_server("FAQ_MD", file.path(base_URL, "FAQ.md"))
+    insert_md_server("links_MD", 
+      file.path(rv.core$workflow$path, '/md/', "links.md"))
+    insert_md_server("FAQ_MD", 
+      file.path(rv.core$workflow$path, '/md/', "FAQ.md"))
     #mod_bug_report_server("bug_report")
   })
   
