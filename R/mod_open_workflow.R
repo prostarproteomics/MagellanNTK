@@ -29,6 +29,7 @@ open_workflow_ui <- function(id){
   tagList(
     h3(style="color: blue;", '-- Default open workflow module --'),
     uiOutput(ns('dirInput_UI')),
+    uiOutput(ns('chooseWF_UI')),
     actionButton(ns('load_btn'), 'Load'),
     #infos_workflow_ui(ns("infos")),
     tags$h3('Files'),
@@ -86,11 +87,32 @@ open_workflow_server <- function(id){
     
     
     
+    output$chooseWF_UI <- renderUI({
+      req(rv.wf$path)
+      ll.files <- list.files(file.path(rv.wf$path, 'R'), full.names = FALSE)
+      
+      ll <- unlist(lapply(ll.files, function(x)
+        if (is.substr(basename(rv.wf$path), x))
+          x
+        ))
+      
+
+      if (length(ll) > 0){
+        radioButtons(ns('chooseWF'), 'Choose workflow',
+        choices = gsub('.R', '', ll)
+        )
+      } else {
+        
+      }
+      
+    })
+    
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       rv.wf$path
 
-      rv.wf$dataOut <- rv.wf$path
+      rv.wf$dataOut$path <- rv.wf$path
+      rv.wf$dataOut$wf_name <- input$chooseWF
     })
     
     output$files = renderDataTable({
@@ -102,8 +124,6 @@ open_workflow_server <- function(id){
   })
   
 }
-
-
 
 
 
@@ -131,7 +151,8 @@ open_workflow <- function(){
     rv$result <- open_workflow_server("wf")
     
     observeEvent(req(rv$result()), {
-      print(rv$result())
+      print(paste('path = ', rv$result()$path))
+      print(paste('wf_name = ', rv$result()$wf_name))
     })
     
   }

@@ -22,6 +22,10 @@ for(f in files){
 }
 
 
+#' @export
+is.substr <- function(pattern, target){
+  length(grep(pattern, target, fixed = TRUE)) > 0
+}
 
 
 

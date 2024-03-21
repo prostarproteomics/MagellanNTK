@@ -425,9 +425,9 @@ mainapp_server <- function(id,
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
-      rv.core$workflow.name <- 'PipelineA_Process1'
+      rv.core$workflow.name <- rv.core$result_open_workflow()$wf_name
       #rv.core$workflow.name <- basename(rv.core$result_open_workflow())
-      rv.core$workflow.path <- rv.core$result_open_workflow()
+      rv.core$workflow.path <- rv.core$result_open_workflow()$path
       
       #browser()
       source_wf_files(rv.core$workflow.path)
