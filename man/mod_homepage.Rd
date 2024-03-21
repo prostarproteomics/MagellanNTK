@@ -10,8 +10,7 @@ mod_homepage_ui(id)
 
 mod_homepage_server(
   id,
-  dirpath = system.file("app/md", package = "MagellanNTK"),
-  filename = "Presentation.Rmd"
+  mdfile = file.path(system.file("app/md", package = "MagellanNTK"), "Presentation.Rmd")
 )
 
 mod_homepage()

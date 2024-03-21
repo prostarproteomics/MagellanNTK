@@ -22,7 +22,7 @@ NULL
 mod_homepage_ui <- function(id){
   ns <- NS(id)
   tagList(
-    insert_md_ui(ns("Presentation"))
+    insert_md_ui(ns("md_file"))
   )
 }
     
@@ -38,11 +38,14 @@ mod_homepage_server <- function(id,
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
-    
+
     if(file.exists(mdfile))
-      insert_md_server("Presentation", normalizePath(mdfile))
+      .mdfile <- mdfile
     else
-      browser()
+      .mdfile <-file.path(system.file('app/md', 
+        package = 'MagellanNTK'),'404.Rmd')
+    
+    insert_md_server("md_file", normalizePath(.mdfile))
   })
 
 }

@@ -4,11 +4,7 @@
 \alias{MagellanNTK}
 \title{Main Shiny application}
 \usage{
-MagellanNTK(
-  funcs = default.funcs,
-  workflow = default.workflow,
-  verbose = FALSE
-)
+MagellanNTK(funcs = default.funcs, verbose = FALSE)
 }
 \arguments{
 \item{funcs}{An list containing th following items:

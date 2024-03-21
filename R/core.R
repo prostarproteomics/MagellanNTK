@@ -72,7 +72,7 @@ nav_ui <- function(id) {
 #' @rdname nav
 #' @importFrom stats setNames
 #' 
-nav_server <- function(id,
+nav_server <- function(id = NULL,
     dataIn = reactive({NULL}),
     is.enabled = reactive({TRUE}),
     remoteReset = reactive({FALSE}),
@@ -164,7 +164,7 @@ nav_server <- function(id,
         # and is attached to the server, this function can be view as the 
         # initialization of the server module. This code is generic to both 
         # process and pipeline modules
-        observeEvent(id,
+        observeEvent(req(id),
             {
               # When the server starts, the default position is 1
                 # Not necessary ?
@@ -540,6 +540,7 @@ nav_server <- function(id,
         })
 
         observeEvent(remoteReset(), ignoreInit = FALSE, ignoreNULL = TRUE,{
+          req(rv$config)
           rv$dataIn <- NULL
           # The cursor is set to the first step
           rv$current.pos <- 1

@@ -302,7 +302,7 @@ mainapp_server <- function(id,
       result_openDemoDataset = NULL,
       result_open_dataset = NULL,
       result_open_workflow = NULL,
-      # Current QFeatures object in Prostar
+      result_run_workflow = NULL,
       current.obj = NULL,
       
       # pipeline choosen by the user for its dataset
@@ -425,8 +425,11 @@ mainapp_server <- function(id,
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
-      rv.core$workflow.name <- basename(rv.core$result_open_workflow())
+      rv.core$workflow.name <- 'PipelineA_Process1'
+      #rv.core$workflow.name <- basename(rv.core$result_open_workflow())
       rv.core$workflow.path <- rv.core$result_open_workflow()
+      
+      #browser()
       source_wf_files(rv.core$workflow.path)
     })
     
@@ -441,13 +444,16 @@ mainapp_server <- function(id,
       nav_ui(ns(basename(rv.core$workflow.name)))
       })
 
-    tmp <- nav_server(
-      id = 'PipelineA',
-      dataIn = reactive({rv.core$current.obj})
-    )
+    observe({
+      rv.core$result_run_workflow <- nav_server(
+        id = rv.core$workflow.name,
+        dataIn = reactive({rv.core$current.obj})
+        )
+    })
     
-    observeEvent(req(tmp$dataOut()$trigger), ignoreInit = TRUE, {
-      rv.core$current.obj <- tmp$dataOut()$value
+    observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger), 
+      ignoreInit = TRUE, {
+      rv.core$current.obj <- rv.core$result_run_workflow$dataOut()$value
     })
 
        
@@ -472,7 +478,6 @@ mainapp_server <- function(id,
     observe({
       
       filepath <- NULL
-      browser()
       if (!is.null(rv.core$workflow.path))
         filepath <- file.path(rv.core$workflow.path, 'md', 
           paste0(rv.core$workflow.name, '_Description.md'))

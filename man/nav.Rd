@@ -9,7 +9,7 @@
 nav_ui(id)
 
 nav_server(
-  id,
+  id = NULL,
   dataIn = reactive({
      NULL
  }),
