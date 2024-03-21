@@ -76,9 +76,13 @@ workflow_ui <- function(id){
 #' @rdname workflow
 #' 
 workflow_server <- function(id,
+  path = NULL,
   dataIn = reactive({NULL}),
   tl.layout = NULL,
   mode = "user"){
+  
+  source_shinyApp_files()
+  source_wf_files(path)
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -126,13 +130,15 @@ workflow_server <- function(id,
 #' @rdname workflow
 #' @export
 workflowApp <- function(id,
-                         dataIn = NULL,
-                         tl.layout = NULL,
-                         mode = 'user') {
+  path = NULL,
+  dataIn = NULL,
+  tl.layout = NULL,
+  mode = 'user') {
 
   ui <- workflow_ui(id)
   server <- function(input, output, session) {
       workflow_server(id, 
+        path = path,
         dataIn = reactive({dataIn})
       )
     }
