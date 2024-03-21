@@ -32,15 +32,17 @@ mod_homepage_ui <- function(id){
 #' @export
 #' @keywords internal
 mod_homepage_server <- function(id,
-  dirpath = system.file('app/md', package = 'MagellanNTK'),
-  filename = 'Presentation.Rmd'){
+  mdfile = file.path(system.file('app/md', 
+    package = 'MagellanNTK'),'Presentation.Rmd')){
   
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    insert_md_server("Presentation",
-      file.path(dirpath, filename))
+    if(file.exists(mdfile))
+      insert_md_server("Presentation", normalizePath(mdfile))
+    else
+      browser()
   })
 
 }

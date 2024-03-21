@@ -12,7 +12,7 @@
 #'
 source_wf_files <- function(dirpath, 
   verbose = FALSE){
-dirpath <- file.path(workflow$path, 'R')
+dirpath <- file.path(dirpath, 'R')
 files <- list.files(dirpath, full.names = FALSE)
 for(f in files){
   if(verbose)

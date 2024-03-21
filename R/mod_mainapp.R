@@ -239,25 +239,40 @@ mainapp_ui <- function(id){
           div(style="margin-top: 40px;", 
             # body content
             tabItems(
-              tabItem(tabName = "Home", class="active", mod_homepage_ui(ns('home'))),
-              #tabItem(tabName = "dataManager", uiOutput(ns('dataManager_UI'))),
-              tabItem(tabName = "openDataset", uiOutput(ns('open_dataset_UI'))),
-              tabItem(tabName = "demoDataset", uiOutput(ns('open_demo_dataset_UI'))),
-              tabItem(tabName = "convertDataset", uiOutput(ns('open_convert_dataset_UI'))),
-              tabItem(tabName = "eda", uiOutput(ns('EDA_UI'))),
-              tabItem(tabName = "export", h3("Export")), # export module not yet
+              tabItem(tabName = "Home", class="active", 
+                mod_homepage_ui(ns('home'))),
+              #tabItem(tabName = "dataManager", 
+              #uiOutput(ns('dataManager_UI'))),
+              tabItem(tabName = "openDataset", 
+                uiOutput(ns('open_dataset_UI'))),
+              tabItem(tabName = "demoDataset", 
+                uiOutput(ns('open_demo_dataset_UI'))),
+              tabItem(tabName = "convertDataset", 
+                uiOutput(ns('open_convert_dataset_UI'))),
+              tabItem(tabName = "eda", 
+                uiOutput(ns('EDA_UI'))),
+              tabItem(tabName = "export", 
+                h3("Export")), # export module not yet
               
-              tabItem(tabName = "openWorkflow", uiOutput(ns('open_workflow_UI'))),
-              tabItem(tabName = "workflow", uiOutput(ns('workflow_UI'))),
+              tabItem(tabName = "openWorkflow", 
+                uiOutput(ns('open_workflow_UI'))),
+              tabItem(tabName = "workflow", 
+                uiOutput(ns('workflow_UI'))),
               
               
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
-              tabItem(tabName = "releaseNotes", mod_release_notes_ui(ns('rl'))),
-              tabItem(tabName = "checkUpdates", mod_check_updates_ui(ns('check_updates'))),
-              tabItem(tabName = "usefulLinks", insert_md_ui(ns('links_MD'))),
-              tabItem(tabName = "faq", insert_md_ui(ns('FAQ_MD'))),
-              tabItem(tabName = "bugReport", mod_bug_report_ui(ns("bug_report"))),
-              tabItem(tabName = "pipeline", uiOutput(ns('show_pipeline')))
+              tabItem(tabName = "releaseNotes", 
+                mod_release_notes_ui(ns('rl'))),
+              tabItem(tabName = "checkUpdates", 
+                mod_check_updates_ui(ns('check_updates'))),
+              tabItem(tabName = "usefulLinks", 
+                insert_md_ui(ns('links_MD'))),
+              tabItem(tabName = "faq", 
+                insert_md_ui(ns('FAQ_MD'))),
+              tabItem(tabName = "bugReport", 
+                mod_bug_report_ui(ns("bug_report"))),
+              tabItem(tabName = "pipeline", 
+                uiOutput(ns('show_pipeline')))
             )
             # uiOutput('show_pipeline')
           )
@@ -293,8 +308,8 @@ mainapp_server <- function(id,
       # pipeline choosen by the user for its dataset
       current.pipeline = NULL,
       
-      workflow.name = '',
-      workflow.path = ''
+      workflow.name = NULL,
+      workflow.path = NULL
     )
 
     # observeEvent(rv.core$current.obj, {
@@ -453,18 +468,31 @@ mainapp_server <- function(id,
         args = list(id = ns('view_dataset')))
     })
     
+
+    observe({
+      
+      filepath <- NULL
+      browser()
+      if (!is.null(rv.core$workflow.path))
+        filepath <- file.path(rv.core$workflow.path, 'md', 
+          paste0(rv.core$workflow.name, '_Description.md'))
+      else
+        filepath <- file.path(system.file('app/md', 
+          package = 'MagellanNTK'),'Presentation.Rmd')
+          
+          
+      mod_homepage_server('home', filepath)
+      
+    })
     
     
-    
-    #mod_test_server('tutu')
-    mod_homepage_server('home')
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     mod_check_updates_server("check_updates")
     insert_md_server("links_MD", 
-      file.path(rv.core$workflow$path, '/md/', "links.md"))
+      file.path(rv.core$workflow.path, 'md', "links.md"))
     insert_md_server("FAQ_MD", 
-      file.path(rv.core$workflow$path, '/md/', "FAQ.md"))
+      file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     #mod_bug_report_server("bug_report")
   })
   

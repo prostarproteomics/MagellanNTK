@@ -35,7 +35,6 @@
 #' 
 MagellanNTK <- function(
     funcs = default.funcs,
-    workflow = default.workflow,
     verbose = FALSE) {
   
   
@@ -56,12 +55,12 @@ MagellanNTK <- function(
 
    # Set global variables to global environment
    .GlobalEnv$funcs <- funcs
-   .GlobalEnv$workflow <- workflow
+   #.GlobalEnv$workflow <- workflow
    
    on.exit(rm(funcs, envir=.GlobalEnv))
-   on.exit(rm(workflow, envir=.GlobalEnv))
+   #on.exit(rm(workflow, envir=.GlobalEnv))
    
-   source_wf_files(workflow$path)
+   #source_wf_files(workflow$path)
    
    
    # Launch app
