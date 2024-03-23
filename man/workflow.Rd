@@ -12,6 +12,7 @@ workflow_ui(id)
 
 workflow_server(
   id,
+  path = NULL,
   dataIn = reactive({
      NULL
  }),
@@ -19,12 +20,14 @@ workflow_server(
   mode = "user"
 )
 
-workflowApp(id, dataIn = NULL, tl.layout = NULL, mode = "user")
+workflowApp(id, path = NULL, dataIn = NULL, tl.layout = NULL, mode = "user")
 
 demo_workflow(name = NULL, dataIn = NULL)
 }
 \arguments{
 \item{id}{xxx}
+
+\item{path}{xxx}
 
 \item{dataIn}{xxx}
 
@@ -71,38 +74,29 @@ if (interactive()) {
 }
 
 
-if (interactive()) {
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sub_R25)
 
-path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
-files <- list.files(file.path(path, 'R'), full.names = TRUE)
-for(f in files)
-  source(f, local = FALSE, chdir = TRUE)
+path <- system.file('extdata/workflow/PipelineA', package = 'MagellanNTK')
 
 # Nothing happens when dataIn is NULL
-shiny::runApp(workflowApp("PipelineA_Process1", 
-dataIn = NULL))
+shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = NULL))
 
-shiny::runApp(workflowApp("PipelineA_Process1", 
-dataIn = sub_R25))
+shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = sub_R25))
 
 shiny::runApp(workflowApp("PipelineA_Process1", 
 dataIn = data.frame(), 
 tl.layout = "v"))
 
-shiny::runApp(workflowApp("PipelineA", 
-dataIn = sub_R25, 
+shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
 tl.layout = c("v", "h")))
 
-shiny::runApp(workflowApp("PipelineB", 
+shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
+
+shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
 tl.layout = c("v", "h")))
 
-shiny::runApp(workflowApp("PipelineA", 
-dataIn = sub_R25, 
-tl.layout = c("v", "h")))
-}
-
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Samuel Wieczorek

@@ -176,6 +176,7 @@ PipelineA_Process1_server <- function(id,
     
     # >>>> -------------------- STEP 1 : Global UI ------------------------------------
     output$Step1 <- renderUI({
+      shinyjs::useShinyjs()
       wellPanel(
         # uiOutput for all widgets in this UI
         # This part is mandatory
@@ -191,7 +192,7 @@ PipelineA_Process1_server <- function(id,
         
         fluidRow(
           column(width = 3, uiOutput(ns('Step1_select1_ui'))),
-          column(width = 3, uiOutput(ns('Step1_select2_ui'))),
+          column(width = 3, shinyjs::hidden(uiOutput(ns('Step1_select2_ui')))),
           column(width = 3, uiOutput(ns('Step1_select3_ui')))
           ),
         #foo_ui(ns('foo')),
@@ -258,6 +259,11 @@ PipelineA_Process1_server <- function(id,
       toggleWidget(widget, rv$steps.enabled['Step1'])
     })
     
+    
+    observe({
+      rv.widgets$Step1_select1
+      shinyjs::toggle('Step1_select2_ui', condition = rv.widgets$Step1_select1 == 3)
+    })
     output$Step1_btn_validate_ui <- renderUI({
       widget <-  actionButton(ns("Step1_btn_validate"),
         "Perform",

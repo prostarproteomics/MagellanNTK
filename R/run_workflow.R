@@ -7,6 +7,7 @@
 #' pipelines nor processes to be managed with `MagellanNTK`.
 #'
 #' @param id xxx
+#' @param path xxx
 #' @param dataIn xxx
 #' @param tl.layout Additional parameters for nav
 #' @param mode xxx
@@ -22,37 +23,27 @@
 #'
 #' @return NA
 #' 
-#' @examples
-#' if (interactive()) {
+#' @examplesIf interactive()
 #' data(sub_R25)
 #' 
-#' path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
-#' files <- list.files(file.path(path, 'R'), full.names = TRUE)
-#' for(f in files)
-#'   source(f, local = FALSE, chdir = TRUE)
+#' path <- system.file('extdata/workflow/PipelineA', package = 'MagellanNTK')
 #' 
 #' # Nothing happens when dataIn is NULL
-#' shiny::runApp(workflowApp("PipelineA_Process1", 
-#' dataIn = NULL))
+#' shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = NULL))
 #' 
-#' shiny::runApp(workflowApp("PipelineA_Process1", 
-#' dataIn = sub_R25))
+#' shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = sub_R25))
 #' 
 #' shiny::runApp(workflowApp("PipelineA_Process1", 
 #' dataIn = data.frame(), 
 #' tl.layout = "v"))
 #' 
-#' shiny::runApp(workflowApp("PipelineA", 
-#' dataIn = sub_R25, 
+#' shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
 #' tl.layout = c("v", "h")))
 #' 
-#' shiny::runApp(workflowApp("PipelineB", 
-#' tl.layout = c("v", "h")))
+#' shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
 #' 
-#' shiny::runApp(workflowApp("PipelineA", 
-#' dataIn = sub_R25, 
+#' shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
 #' tl.layout = c("v", "h")))
-#' }
 #'
 #'
 NULL
@@ -80,6 +71,13 @@ workflow_server <- function(id,
   dataIn = reactive({NULL}),
   tl.layout = NULL,
   mode = "user"){
+  
+  
+ if(is.null(path)){
+   message("'path' is not correctly configured. Abort...")
+   return(NULL)
+ }
+  
   
   source_shinyApp_files()
   source_wf_files(path)
@@ -139,7 +137,7 @@ workflowApp <- function(id,
   server <- function(input, output, session) {
       workflow_server(id, 
         path = path,
-        dataIn = reactive({dataIn})
+        dataIn = dataIn
       )
     }
 
