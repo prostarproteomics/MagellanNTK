@@ -58,6 +58,7 @@ Collate:
     app.R
     settings.R
     default_funcs.R
+    mod_sweetAlert.R
     mod_open_workflow.R
     directoryInput.R
     mod_chooseDir.R
