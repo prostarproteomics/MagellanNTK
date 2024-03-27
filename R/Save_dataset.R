@@ -3,9 +3,17 @@
 #' @description  A shiny Module to load a dataset.
 #' @name Save_Dataset
 #' 
+#' @param id xxx
+#' @param data xxx
+#' 
+#' @examplesIf interactive()
+#' data(sub_R25)
+#' shiny::runApp(Save_Dataset(sub_R25))
+#' 
+#' 
 NULL
 
-#' @param id xxx
+
 #' @rdname Save_Dataset
 #'
 #' @export
@@ -16,9 +24,8 @@ Save_Dataset_ui <- function(id) {
 }
 
 
-#' @param id xxx
-#' @param data xxx
-#' 
+
+#' @importFrom shiny downloadHandler moduleServer
 #' @return xxxxx
 #'
 #' @rdname Save_Dataset
@@ -44,4 +51,25 @@ Save_Dataset_server <- function(id, data) {
       }
     )
   })
+}
+
+
+
+
+#' @importFrom shiny fluidPage shinyApp
+#' 
+#' @return xxxxx
+#'
+#' @rdname Save_Dataset
+#'
+#' @export
+#'
+Save_Dataset <- function(data){
+  ui <- Save_Dataset_ui(id = 'saveDataset')
+  
+  server <- function(input, output, session) {
+    Save_Dataset_server(id = 'saveDataset', reactive({data}))
+  }
+  
+  app <- shiny::shinyApp(ui, server)
 }

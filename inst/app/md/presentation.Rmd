@@ -1,17 +1,16 @@
+---
+title: "Introduction to MagellanNTK"
+output:
+    BiocStyle::html_document:
+        toc_float: false
+        toc: false
+vignette: >
+  %\VignetteIndexEntry{MagellanNTK}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-```{r style, echo = FALSE, results = 'asis'}
-BiocStyle::markdown()
-```
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-```
+# Introduction to MagellanNTK
 
-
-
-This is MagellanNTK version
-```{r echo = FALSE, eval=TRUE} 
-installed.packages()['MagellanNTK', 'Version']
-```
-
-## Citation
+[test](http://www.google.fr)

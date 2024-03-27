@@ -132,3 +132,19 @@ dl_server <- function(id,
 }
 
 
+
+
+
+downloadLink <- function(data){
+  ui <- dl_ui("dl")
+
+server <- function(input, output, session) {
+  
+  dl_server("dl",
+    dataIn = reactive({data}),
+    extension = c('csv', 'xlsx', 'RData')
+  )
+}
+
+app <- shiny::shinyApp(ui = ui, server = server)
+}

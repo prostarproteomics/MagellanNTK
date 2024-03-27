@@ -73,13 +73,14 @@ workflow_server <- function(id,
   mode = "user"){
   
   
+  source_shinyApp_files()
+  
  if(is.null(path)){
    message("'path' is not correctly configured. Abort...")
    return(NULL)
  }
   
   
-  source_shinyApp_files()
   source_wf_files(path)
   
   moduleServer(id, function(input, output, session){
@@ -116,6 +117,7 @@ workflow_server <- function(id,
       )
     })
     
+    return(reactive({dataOut()}))
     
     })
 }
@@ -135,34 +137,17 @@ workflowApp <- function(id,
 
   ui <- workflow_ui(id)
   server <- function(input, output, session) {
-      workflow_server(id, 
+    
+      res <- workflow_server(id, 
         path = path,
         dataIn = dataIn
       )
+
+      observeEvent(req(res()$dataOut()$trigger), {
+        print(res()$dataOut()$value)
+      })
     }
 
   app <-shinyApp(ui, server)
 }
 
-
-#' @title xxx
-#' @description xxx
-#' @param name xxx
-#' @rdname workflow
-#' @export
-demo_workflow <- function(name = NULL, dataIn = NULL){
-  if(is.null(name)){
-    cat('Available examples are:\n')
-    cat("* PipelineA_Process2\n")
-    cat("* PipelineA_Process1\n")
-    cat("* PipelineA_Process3\n")
-    cat("* PipelineA\n")
-    return()
-  } else {
-    path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
-    files <- list.files(file.path(path, 'R'), full.names = TRUE)
-    for(f in files)
-      source(f, local = FALSE, chdir = TRUE)
-    run_workflow(name, dataIn = dataIn)
-  }
-}

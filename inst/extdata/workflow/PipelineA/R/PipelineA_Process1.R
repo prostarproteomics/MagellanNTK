@@ -276,16 +276,16 @@ PipelineA_Process1_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      
+#browser()
+      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
+      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
       rv$dataIn <- addDatasets(object = rv$dataIn,
                                dataset = new.dataset,
                                name = paste0('Step1_',id))
-      
+
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
+      #dataOut$value <- rv$dataIn
       rv$steps.status['Step1'] <- stepStatus$VALIDATED
 
     })
@@ -339,14 +339,15 @@ PipelineA_Process1_server <- function(id,
     
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
+      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
       rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('step2_',id))
-      
+        dataset = new.dataset,
+        name = paste0('Step2_',id))
+
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
+      #dataOut$value <- rv$dataIn
       rv$steps.status['Step2'] <- stepStatus$VALIDATED
     })
     
@@ -378,10 +379,6 @@ PipelineA_Process1_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()

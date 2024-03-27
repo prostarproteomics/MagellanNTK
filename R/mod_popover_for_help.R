@@ -10,10 +10,8 @@
 #'
 #' @name mod_popover_for_help
 #'
-#' @examples
-#' if(interactive()){
+#' @examplesIf
 #' shiny::runApp(popover_for_help('myTitle', 'myContent'))
-#' }
 #' 
 NULL
 
@@ -62,12 +60,11 @@ mod_popover_for_help_server <- function(id, title, content){
     ns <- session$ns
     
     output$write_title_ui <- renderUI({
-      req(title)
-      title
+      HTML(paste0("<strong><font size=\"4\">", title, "</font></strong>"))
     })
     
     output$dot <- renderUI({
-      tags$button(tags$sup("[?]"), class="Prostar_tooltip")
+      tags$button(tags$sup("[?]"), class="custom_tooltip")
     })
     
     output$show_Pop <- renderUI({
@@ -79,7 +76,7 @@ mod_popover_for_help_server <- function(id, title, content){
 }
 
 
-pop_css <- "button.Prostar_tooltip {
+pop_css <- "button.custom_tooltip {
     background:none;
     color: #2EA8B1;
     border:none;
@@ -139,7 +136,7 @@ popover_for_help <- function(title, content){
   )
   
   server <- function(input, output, session) {
-    rv$result <- mod_popover_for_help_server("settings",
+    mod_popover_for_help_server("settings",
       title = title,
       content = content)
   }

@@ -9,6 +9,8 @@
 Save_Dataset_ui(id)
 
 Save_Dataset_server(id, data)
+
+Save_Dataset(data)
 }
 \arguments{
 \item{id}{xxx}
@@ -17,7 +19,16 @@ Save_Dataset_server(id, data)
 }
 \value{
 xxxxx
+
+xxxxx
 }
 \description{
 A shiny Module to load a dataset.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sub_R25)
+shiny::runApp(Save_Dataset(sub_R25))
+
+\dontshow{\}) # examplesIf}
 }
