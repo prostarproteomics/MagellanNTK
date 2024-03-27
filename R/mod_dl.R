@@ -13,8 +13,9 @@
 #' @return NA
 #'
 #' @name dl
-#' @examples
-#' NULL
+#' @examplesIf interactive()
+#' data(sub_R25)
+#' shiny::runApp(mod_downloadLink(sub_R25))
 #'
 NULL
 
@@ -67,9 +68,10 @@ dl_server <- function(id,
     output$dl_csv <- renderUI({
       req('csv' %in% extension)
       type <- GetType()[which(extension == 'csv')]
+      
       do.call(paste0('download', type),
               list(
-                ns("downloadDatacsv"), 
+                ns("downloadDatacsv"),
                 "csv",
                 class = if (type=='Button') actionBtnClass else ''
               )
@@ -135,7 +137,7 @@ dl_server <- function(id,
 
 
 
-downloadLink <- function(data){
+mod_downloadLink <- function(data){
   ui <- dl_ui("dl")
 
 server <- function(input, output, session) {
