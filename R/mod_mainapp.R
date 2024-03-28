@@ -427,12 +427,13 @@ mainapp_server <- function(id,
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
-      rv.core$workflow.name <- rv.core$result_open_workflow()$wf_name
-      #rv.core$workflow.name <- basename(rv.core$result_open_workflow())
-      rv.core$workflow.path <- rv.core$result_open_workflow()$path
+      rv.core$workflow.name <- 
+        session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
       
-      #browser()
-      source_wf_files(rv.core$workflow.path)
+      rv.core$workflow.path <- 
+        session$userData$workflow.path <- rv.core$result_open_workflow()$path
+      
+      source_wf_files(session$userData$workflow.path)
     })
     
     output$open_workflow_UI <- renderUI({

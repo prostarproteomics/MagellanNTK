@@ -47,9 +47,8 @@ PipelineA_Process1_conf <- function(){
     fullname = 'PipelineA_Process1',
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
-    mandatory = c(FALSE, TRUE),
-    dirpath_to_md_file = system.file('extdata/workflow/PipelineA/md/', package='MagellanNTK')
-  )
+    mandatory = c(FALSE, TRUE)
+    )
 }
 
 
@@ -122,8 +121,8 @@ PipelineA_Process1_server <- function(id,
     
     
     output$Description <- renderUI({
-      md.file <- paste0(id, '.md')
-      file <- file.path(config@dirpath_to_md_file, md.file)
+      file <- normalizePath(file.path(session$userData$workflow.path, 
+        'md', paste0(id, '.md')))
       
       tagList(
         ### In this example, the md file is found in the extdata/module_examples 

@@ -66,7 +66,9 @@ A shiny Module.
 A shiny Module.
 }
 \examples{
-NULL
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sub_R25)
+shiny::runApp(mod_downloadLink(sub_R25))
+\dontshow{\}) # examplesIf}
 
 }

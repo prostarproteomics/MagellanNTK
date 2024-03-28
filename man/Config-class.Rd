@@ -11,27 +11,17 @@ Config(
   mode = "",
   steps = "",
   mandatory = "",
-  steps.source.file = NULL,
-  dirpath_to_md_file = NULL
+  steps.source.file = NULL
 )
 
-\S4method{initialize}{Config}(
-  .Object,
-  fullname,
-  mode,
-  steps,
-  mandatory,
-  steps.source.file,
-  dirpath_to_md_file
-)
+\S4method{initialize}{Config}(.Object, fullname, mode, steps, mandatory, steps.source.file)
 
 Config(
   fullname = "",
   mode = "",
   steps = "",
   mandatory = "",
-  steps.source.file = NULL,
-  dirpath_to_md_file = NULL
+  steps.source.file = NULL
 )
 }
 \arguments{

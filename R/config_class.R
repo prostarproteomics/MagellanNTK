@@ -44,8 +44,8 @@ Config <- setClass("Config",
       steps = "vector",
       mandatory = "vector",
       ll.UI = "list",
-      steps.source.file = 'vector',
-      dirpath_to_md_file = 'vector'
+      steps.source.file = 'vector'
+      #,dirpath_to_md_file = 'vector'
     ),
 
     validity <- function(.Object) {
@@ -328,8 +328,9 @@ setMethod("initialize" ,
              mode,
              steps,
              mandatory,
-             steps.source.file,
-      dirpath_to_md_file){
+             steps.source.file
+      #,dirpath_to_md_file
+      ){
         
         # Basic init of slots
 
@@ -367,7 +368,7 @@ setMethod("initialize" ,
         else 
           .Object <- NULL
 
-        .Object@dirpath_to_md_file <- dirpath_to_md_file
+        #.Object@dirpath_to_md_file <- dirpath_to_md_file
         
         # If the config represents a pipeline, builds the expected names of 
         # the source files of its steps
@@ -393,14 +394,16 @@ Config <- function(fullname = '',
   mode = '',
   steps = '', 
   mandatory = '',
-  steps.source.file = NULL,
-  dirpath_to_md_file = NULL){
+  steps.source.file = NULL
+  #,dirpath_to_md_file = NULL
+  ){
     
     new(Class ="Config",
         fullname = fullname,
         mode = mode,
         steps = steps, 
         mandatory = mandatory,
-        steps.source.file = steps.source.file,
-      dirpath_to_md_file = dirpath_to_md_file)
+        steps.source.file = steps.source.file
+      #,dirpath_to_md_file = dirpath_to_md_file
+      )
 }

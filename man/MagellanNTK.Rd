@@ -20,6 +20,17 @@ environment
 \description{
 xxx
 }
+\details{
+The list of customizable funcs (param `funcs`) contains the following items:
+
+ These are the default values where each item points to a default fucntion
+ implemented into MagellanNTK.
+ 
+ The user can modify these values by two means:
+ * setting the values in the parameter to pass to the function 
+ `MagellanNTK()`,
+ * inside the UI of MagellanNTK, in the settings panels
+}
 \examples{
 \dontshow{if () (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
@@ -33,7 +44,7 @@ open_demoDataset = "DaparToolshed::open_demoDataset",
 view_dataset = "DaparViz::view_dataset",
 infos_dataset = "DaparToolshed::infos_dataset",
 addDatasets = "DaparToolshed::addDatasets",
-  keepDatasets = "DaparToolshed::infos_dataset" )
+keepDatasets = "DaparToolshed::keepDatasets" )
 
 funcs <- list(convert = "MagellanNTK::convert",
   open_dataset = "MagellanNTK::open_dataset",
@@ -41,7 +52,7 @@ funcs <- list(convert = "MagellanNTK::convert",
   view_dataset = "MagellanNTK::view_dataset",
   infos_dataset = "MagellanNTK::infos_dataset",
   addDatasets = "MagellanNTK::addDatasets",
-  keepDatasets = "MagellanNTK::infos_dataset")
+  keepDatasets = "MagellanNTK::keepDatasets")
 
 MagellanNTK(funcs)
 
