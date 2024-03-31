@@ -40,7 +40,7 @@ mod_navbar_menu_ui <- function(id){
       # ),
       navbarMenu("Data manager",
       #                        tabPanel("Open Dataset",value = 'openMSnsetTab',mod_open_dataset_ui('moduleOpenDataset')),
-                              tabPanel("Convert",value = "convertTab", convert_ui('moduleConvert')),
+                              tabPanel("Convert",value = "convertTab", convert_dataset_ui('moduleConvert')),
                               tabPanel("Demo data",  value='demoTab', mod_open_demo_dataset_ui(ns('mod_OpenDemoDataset')))
       #            tabPanel(title="ReloadProstar",
       #                     value="ReloadTab",

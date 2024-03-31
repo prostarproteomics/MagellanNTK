@@ -12,13 +12,20 @@
 #'
 source_wf_files <- function(dirpath, 
   verbose = FALSE){
-dirpath <- file.path(dirpath, 'R')
-files <- list.files(dirpath, full.names = FALSE)
+R.dirpath <- file.path(dirpath, 'R')
+files <- list.files(R.dirpath, full.names = FALSE)
 for(f in files){
   if(verbose)
-    cat('sourcing ', file.path(dirpath, f), '...')
-  source(file.path(dirpath, f), local = FALSE, chdir = FALSE)
+    cat('sourcing ', file.path(R.dirpath, f), '...')
+  source(file.path(R.dirpath, f), local = FALSE, chdir = FALSE)
 }
+
+
+# if config.txt exists, update some funcs
+config.file <- normalizePath(file.path(dirpath, 'config.txt'))
+file.exists(config.file)
+#browser()
+
 }
 
 

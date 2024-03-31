@@ -78,7 +78,7 @@ workflow_server <- function(id,
  if(is.null(path)){
    message("'path' is not correctly configured. Abort...")
    return(NULL)
- }
+ } 
   
   
   source_wf_files(path)
@@ -109,6 +109,8 @@ workflow_server <- function(id,
     })
     
     observeEvent(dataIn, {
+      session$userData$workflow.path <- path
+      
       dataOut(
         nav_server(id = id,
           dataIn = reactive({dataIn}),
@@ -137,6 +139,7 @@ workflowApp <- function(id,
 
   ui <- workflow_ui(id)
   server <- function(input, output, session) {
+    
     
       res <- workflow_server(id, 
         path = path,

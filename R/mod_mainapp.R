@@ -371,13 +371,13 @@ mainapp_server <- function(id,
     # Code for convert tool
     #
     rv.core$result_convert <- call.func(
-      fname = paste0(funcs$convert, '_server'),
+      fname = paste0(funcs$convert_dataset, '_server'),
       args = list(id = 'Convert'))
     
     output$open_convert_dataset_UI <- renderUI({
       req(funcs)
       call.func(
-        fname = paste0(funcs$convert, '_ui'),
+        fname = paste0(funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
     })
     
