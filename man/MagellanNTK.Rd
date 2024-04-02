@@ -38,7 +38,7 @@ The list of customizable funcs (param `funcs`) contains the following items:
 MagellanNTK()
 
 # launch with config
-funcs <- list(convert = "DaparToolshed::convert",
+funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 open_dataset = "DaparToolshed::open_dataset",
 open_demoDataset = "DaparToolshed::open_demoDataset",
 view_dataset = "DaparViz::view_dataset",
@@ -46,7 +46,7 @@ infos_dataset = "DaparToolshed::infos_dataset",
 addDatasets = "DaparToolshed::addDatasets",
 keepDatasets = "DaparToolshed::keepDatasets" )
 
-funcs <- list(convert = "MagellanNTK::convert",
+funcs <- list(convert_dataset = "MagellanNTK::convert",
   open_dataset = "MagellanNTK::open_dataset",
   open_demoDataset = "MagellanNTK::open_demoDataset",
   view_dataset = "MagellanNTK::view_dataset",

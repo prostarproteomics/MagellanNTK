@@ -48,7 +48,7 @@
 
 
 default.funcs <- list(
-  convert = "MagellanNTK::convert",
+  convert_dataset = "MagellanNTK::convert_dataset",
   open_dataset = "MagellanNTK::open_dataset",
   open_demoDataset = "MagellanNTK::open_demoDataset",
   view_dataset = "MagellanNTK::view_dataset",

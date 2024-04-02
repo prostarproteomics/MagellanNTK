@@ -300,7 +300,7 @@ mainapp_server <- function(id,
       pipeline = NULL,
       pipeline.name = NULL,
       dataIn = NULL,
-      result_convert = NULL,
+      result_convert = reactive({NULL}),
       result_openDemoDataset = NULL,
       result_open_dataset = NULL,
       result_open_workflow = NULL,
@@ -311,9 +311,17 @@ mainapp_server <- function(id,
       current.pipeline = NULL,
       
       workflow.name = NULL,
-      workflow.path = NULL
+      workflow.path = NULL,
+      
+      funcs = default.funcs
     )
 
+    
+    observeEvent(id, {
+      funcs <- funcs
+    }, priority = 1000)
+    
+    
     # observeEvent(rv.core$current.obj, {
     #   print('base_URL')
     #   obj <- convert_to_mae(rv.core$current.obj)
@@ -370,12 +378,15 @@ mainapp_server <- function(id,
     #
     # Code for convert tool
     #
-    rv.core$result_convert <- call.func(
-      fname = paste0(funcs$convert_dataset, '_server'),
-      args = list(id = 'Convert'))
+    
     
     output$open_convert_dataset_UI <- renderUI({
       req(funcs)
+
+      rv.core$result_convert <- call.func(
+        fname = paste0(funcs$convert_dataset, '_server'),
+        args = list(id = 'Convert'))
+      
       call.func(
         fname = paste0(funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
@@ -432,6 +443,8 @@ mainapp_server <- function(id,
       
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
+      
+      funcs <- rv.core$result_open_workflow()$funcs
       
       source_wf_files(session$userData$workflow.path)
     })

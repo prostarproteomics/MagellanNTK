@@ -66,11 +66,7 @@ open_workflow_server <- function(id){
       
     })
     
-    observeEvent(
-      ignoreNULL = TRUE,
-      eventExpr = {
-        input$directory
-      },
+    observeEvent(input$directory, ignoreNULL = TRUE,
       handlerExpr = {
         if (input$directory > 0) {
           # condition prevents handler execution on initial app launch
@@ -113,6 +109,10 @@ open_workflow_server <- function(id){
 
       rv.wf$dataOut$path <- rv.wf$path
       rv.wf$dataOut$wf_name <- input$chooseWF
+      
+      # Load customizable functions if config.txt file exists
+      # 
+      rv.wf$dataOut$funcs <- readCustomizableFuncs(rv.wf$path)
     })
     
     output$files = renderDataTable({
@@ -153,6 +153,7 @@ open_workflow <- function(){
     observeEvent(req(rv$result()), {
       print(paste('path = ', rv$result()$path))
       print(paste('wf_name = ', rv$result()$wf_name))
+      print(paste('funcs = ', rv$result()$funcs))
     })
     
   }

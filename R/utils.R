@@ -1,3 +1,48 @@
+
+#' @title Read pipelines configuration files
+#' 
+#' @description xxx
+#' 
+#' @param path xxx
+#' 
+#' @examples
+#' path <- system.file("extdata/workflow/PipelineA", package = 'MagellanNTK')
+#' readCustomizableFuncs(file.path(path, 'config.txt'))
+#' 
+#' @export
+#'
+readCustomizableFuncs <- function(path){
+
+  config.file <- normalizePath(file.path(path, 'config.txt'))
+  if(!file.exists(config.file))
+    stop('file does not exist')
+  
+  prepare_data <- function(lines, pattern){
+    
+    record <- lines[grepl(paste0(pattern, ":"), lines)]
+    ll <- unlist(strsplit(record, split = ': ', fixed = TRUE))
+    as.character(paste0(ll[2], '::', ll[1]))
+  }
+  
+  lines <- readLines(config.file)
+  
+  funcs <- list(
+    convert_dataset = NULL,
+    open_dataset = NULL,
+    open_demoDataset = NULL,
+    view_dataset = NULL,
+    infos_dataset = NULL,
+    addDatasets = NULL,
+    keepDatasets = NULL
+  )
+  
+  funcs <- lapply(funcs, 
+    function(x) prepare_data(lines, x))
+  
+  return(funcs = funcs)
+}
+
+
 #' @title Source workflow files
 #' 
 #' @description xxx

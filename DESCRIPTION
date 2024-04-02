@@ -102,10 +102,10 @@ Collate:
     mod_infos_dataset.R
     mod_dataManager.R
     mod_insert_md.R
-    mod_convert.R
     mod_homepage.R
     mod_bsmodal2.R
     mod_view_dataset.R
+    mod_convert_dataset.R
     mod_check_updates.R
     mod_error_modal.R
     mod_bug_report.R

@@ -1,2 +1,15 @@
-addDatasets = 1
-keepDatasets = 1
+# Configuration file to be used with MagellanNTK
+
+
+# Customizable functions
+
+convert_dataset: MagellanNTK
+open_dataset: MagellanNTK
+open_demoDataset: MagellanNTK
+view_dataset: MagellanNTK
+infos_dataset: MagellanNTK
+addDatasets: MagellanNTK
+keepDatasets: MagellanNTK
+
+# Other
+
