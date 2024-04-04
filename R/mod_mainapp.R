@@ -195,8 +195,9 @@ mainapp_ui <- function(id){
               # ,badgeColor = "green"
               ),
             hr(),
-            menuItem("Help for workflow", 
-                     icon = icon("question-circle"),
+            menuItem(h4('Help', style="color: green;"),
+ 
+                     #icon = icon("question-circle"),
                      menuSubItem("Useful Links", tabName = "usefulLinks"),
                      menuSubItem("FAQ", tabName = "faq"),
                      menuSubItem("Bug Report", tabName = "bugReport"),
@@ -270,8 +271,8 @@ mainapp_ui <- function(id){
               #uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openDataset", 
                 uiOutput(ns('open_dataset_UI'))),
-              tabItem(tabName = "demoDataset", 
-                uiOutput(ns('open_demo_dataset_UI'))),
+              #tabItem(tabName = "demoDataset", 
+              #  uiOutput(ns('open_demo_dataset_UI'))),
               tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
               tabItem(tabName = "eda", 
@@ -324,7 +325,7 @@ mainapp_server <- function(id,
       pipeline.name = NULL,
       dataIn = NULL,
       result_convert = reactive({NULL}),
-      result_openDemoDataset = NULL,
+      #result_openDemoDataset = NULL,
       result_open_dataset = NULL,
       result_open_workflow = NULL,
       result_run_workflow = NULL,
@@ -431,20 +432,20 @@ mainapp_server <- function(id,
     #
     # Code for open demo dataset
     #
-    rv.core$result_openDemoDataset <- call.func(
-      fname = paste0(rv.core$funcs$open_demoDataset, '_server'),
-      args = list(id = 'open_demo_dataset'))
-    
-    output$open_demo_dataset_UI <- renderUI({
-      req(rv.core$funcs)
-      call.func(
-        fname = paste0(rv.core$funcs$open_demoDataset, '_ui'),
-        args = list(id = ns('open_demo_dataset')))
-    })
-    
-    observeEvent(req(rv.core$result_openDemoDataset()),{
-      rv.core$current.obj <- rv.core$result_openDemoDataset()
-    })
+    # rv.core$result_openDemoDataset <- call.func(
+    #   fname = paste0(rv.core$funcs$open_demoDataset, '_server'),
+    #   args = list(id = 'open_demo_dataset'))
+    # 
+    # output$open_demo_dataset_UI <- renderUI({
+    #   req(rv.core$funcs)
+    #   call.func(
+    #     fname = paste0(rv.core$funcs$open_demoDataset, '_ui'),
+    #     args = list(id = ns('open_demo_dataset')))
+    # })
+    # 
+    # observeEvent(req(rv.core$result_openDemoDataset()),{
+    #   rv.core$current.obj <- rv.core$result_openDemoDataset()
+    # })
     
     #
     # Code for open dataset

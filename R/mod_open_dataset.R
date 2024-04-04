@@ -1,19 +1,17 @@
-#' @title   mod_open_dataset_ui and mod_open_dataset_server
+#' @title mod_open_dataset_ui and mod_open_dataset_server
 #' 
 #' @description  A shiny Module.
 #' 
 #' @param id xxx
 #' 
-#' @name mod_open_dataset
+#' @name generic_mod_open_dataset
 #'
 #' @keywords internal
 #' 
-#' @examples 
-#' if (interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(open_dataset())
-#' }
 #' 
-#' @return A list
+#' 
 #' 
 NULL
 
@@ -21,25 +19,38 @@ NULL
 
 
 #' @export 
-#' @rdname mod_open_dataset
-#' @import shiny
+#' @rdname generic_mod_open_dataset
+#' @importFrom shiny NS tagList 
+#' @import shinyjs
 #' 
 open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open dataset module --'),
-    fileInput(ns("file"), "Open file", multiple = FALSE),
-    actionButton(ns('load_btn'), 'Load file'),
-    infos_dataset_ui(ns("infos"))
-  )
+    h3(style="color: blue;", '-- Default demo dataset module --'),
+      shinyjs::useShinyjs(),
+      tagList(
+        selectInput(ns('chooseSource'), 'Dataset source',
+          choices = c('Custom dataset' = 'customDataset',
+            'package dataset' = 'packageDataset')),
+        
+        wellPanel(
+          uiOutput(ns('customDataset_UI'))
+          ),
+        wellPanel(
+          uiOutput(ns('packageDataset_UI'))
+          ),
+        infos_dataset_ui(ns("infos"))
+      )
+    )
 }
 
 
-#' @rdname mod_open_dataset
+#' @rdname generic_mod_open_dataset
 #' 
 #' @export
-#' @importFrom shinyjs info 
-#' @importFrom shiny moduleServer reactiveValues observeEvent
+#' @importFrom BiocGenerics get
+#' @importFrom utils data
+#' @importFrom shinyjs info
 #' 
 open_dataset_server <- function(id){
   
@@ -51,6 +62,83 @@ open_dataset_server <- function(id){
       dataOut = NULL
     )
     
+    
+    
+    
+    output$packageDataset_UI <- renderUI({
+      req(input$chooseSource == 'packageDataset')
+        tagList(
+          uiOutput(ns("choosePkg")),
+          uiOutput(ns("chooseDemoDataset")),
+          uiOutput(ns("linktoDemoPdf")),
+          shinyjs::disabled(
+            actionButton(ns('load_dataset_btn'), 'Load dataset', 
+              class= actionBtnClass))
+        )
+    })
+    
+    
+    output$customDataset_UI <- renderUI({
+      req(input$chooseSource == 'customDataset')
+      tagList(
+        h3(style="color: blue;", '-- Default open dataset module --'),
+        fileInput(ns("file"), "Open file", multiple = FALSE),
+        actionButton(ns('load_btn'), 'Load file')
+      )
+    })
+    
+    output$choosePkg <- renderUI({
+      req(input$chooseSource == 'packageDataset')
+      selectInput(ns("pkg"),
+        "Choose package",
+        choices = rownames(installed.packages()),
+        selected = character(0),
+        width='200px')
+    })
+    
+    ## function for demo mode
+    output$chooseDemoDataset <- renderUI({
+      req(input$chooseSource == 'packageDataset')
+      req(input$pkg)
+      pkgs.require(input$pkg)
+      
+      selectInput(ns("demoDataset"),
+        "Demo dataset",
+        choices = c('None', utils::data(package=input$pkg)$results[,"Item"]),
+        selected = character(0),
+        width='200px')
+    })
+    
+    
+    
+    observeEvent(req(input$demoDataset != 'None'), {
+      nSteps <- 1
+      withProgress(message = '',detail = '', value = 0, {
+        incProgress(1/nSteps, detail = 'Loading dataset')
+        utils::data(list = input$demoDataset, package = input$pkg)
+        rv.open$dataRead <- BiocGenerics::get(input$demoDataset)
+        # if (!inherits(rv.open$dataRead, "QFeatures")) {
+        #   shinyjs::info("Warning : this file is not a QFeatures file ! 
+        #               Please choose another one.")
+        #   return(NULL)
+        # }
+        shinyjs::toggleState('load_dataset_btn', condition = !is.null(rv.open$dataRead))
+      }) # End withProgress
+    }) # End observeEvent
+    
+    
+    observeEvent(input$load_dataset_btn, {
+      rv.open$dataOut <- rv.open$dataRead
+    })
+    
+    output$linktoDemoPdf <- renderUI({
+      req(input$demoDataset)
+      req(input$chooseSource == 'packageDataset')
+      
+    })
+    
+    
+    # Part of open custom dataset
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       input$file
@@ -58,7 +146,7 @@ open_dataset_server <- function(id){
       tryCatch({
         # Try with readRDS()
         rv.open$dataRead <- readRDS(input$file$datapath)
-        },
+      },
         warning = function(w) {
           return(NULL)
         },
@@ -70,8 +158,8 @@ open_dataset_server <- function(id){
       if (is.null(rv.open$dataRead)){
         rv.open$dataRead <- tryCatch({
           load(file = input$file$datapath)
-            name <- unlist(strsplit(input$file$name, split='.', fixed = TRUE))[1]
-            get(name)
+          name <- unlist(strsplit(input$file$name, split='.', fixed = TRUE))[1]
+          get(name)
         },
           warning = function(w) {
             return(NULL)
@@ -92,50 +180,41 @@ open_dataset_server <- function(id){
       }
     })
     
-  infos_dataset_server("infos", 
-    obj = reactive({rv.open$dataOut}))
     
-    reactive({rv.open$dataOut})
+    infos_dataset_server("infos", 
+      obj = reactive({rv.open$dataOut}))
+    
+    
+    reactive({rv.open$dataOut })
   })
+  
   
 }
 
 
 
 
-
-
-#' @rdname mod_open_dataset
-#' 
+###################################################################
+##                                                               ##
+##                                                               ##
+###################################################################
 #' @export
-#' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent
-#' shinyApp
+#' @rdname generic_mod_open_dataset
+#' 
 #' 
 open_dataset <- function(){
-ui <- fluidPage(
-  tagList(
-    open_dataset_ui("qf_file"),
-    textOutput('res')
-  )
-)
+
+ui <- open_dataset_ui("demo")
+
 
 server <- function(input, output, session) {
   rv <- reactiveValues(
-    obj = NULL,
-    result = NULL
+    obj = NULL
   )
   
-  
-  rv$result <- open_dataset_server("qf_file")
-  
-  observeEvent(req(rv$result()), {
-    rv$obj <- rv$result()
-    print(rv$obj)
-  })
-  
+  rv$obj <- open_dataset_server("demo")
+
 }
 
-app <- shiny::shinyApp(ui, server)
+app <- shinyApp(ui = ui, server = server)
 }
-
-

@@ -17,7 +17,7 @@ view_dataset(obj, ...)
 
 \item{obj}{An instance of class xxx}
 
-\item{...}{Additionla parameters}
+\item{...}{Additional parameters}
 }
 \description{
 A shiny Module.

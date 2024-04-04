@@ -116,7 +116,6 @@ Collate:
     mod_popover_for_help.R
     mod_release_notes.R
     mod_settings.R
-    open_demoDataset.R
     utils_Prostar.R
     prostar.R
     mod_loadapp.R
