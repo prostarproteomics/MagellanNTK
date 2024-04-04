@@ -105,25 +105,37 @@ mainapp_ui <- function(id){
           title = 
             tagList(
               span(class = "logo-lg", 
-                   absolutePanel(fixed = TRUE, "Menu"))
+                   absolutePanel(fixed = TRUE, "Menu workflow"))
               #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
               ),
           leftUi = tagList(
             h4(style = "font-weight: bold;", "MagellanNTK"), 
             shinydashboardPlus::dashboardBadge(
               GetPackageVersion('MagellanNTK'),
-              color = "green")
-            ),
+              color = "green"),
+            uiOutput(ns('WF_Name_UI'))
+            
+            )
           
-          # dropdownMenu(
-          #   type = "tasks", 
-          #   badgeStatus = "danger",
-          #   taskItem(value = 20, color = "aqua", "Refactor code"),
-          #   taskItem(value = 40, color = "green", "Design new layout"),
-          #   taskItem(value = 60, color = "yellow", "Another task"),
-          #   taskItem(value = 80, color = "red", "Write documentation")
-          # ),
-          shinydashboardPlus::userOutput(ns("user"))
+          
+          ,dropdownMenu(
+            type = "tasks",
+            badgeStatus = "danger"
+            # taskItem(value = 20, color = "aqua", "Refactor code"),
+            # taskItem(value = 40, color = "green", "Design new layout"),
+            # taskItem(value = 60, color = "yellow", "Another task"),
+            # taskItem(value = 80, color = "red", "Write documentation")
+            ,menuItem("Home 2", 
+              tabName = "Home2", 
+              icon = icon("home"),
+              selected = TRUE)
+            ,menuItem("User manual", 
+              tabName = "usermanual", 
+              icon = icon("home"),
+              selected = TRUE)
+          )
+          # 
+          #,shinydashboardPlus::userOutput(ns("user"))
         ),
         ##
         ## Sidebar
@@ -150,19 +162,22 @@ mainapp_ui <- function(id){
              h4('Dataset', style="color: green;"),
             menuItem("Open dataset",
               tabName = "openDataset",
-              icon = icon("folder"),
-              badgeLabel = "new", 
-              badgeColor = "green"),
+              icon = icon("folder")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+              ),
             menuItem("Demo dataset",
               tabName = "demoDataset",
-              icon = icon("folder"),
-              badgeLabel = "new", 
-              badgeColor = "green"),
+              icon = icon("folder")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+              ),
             menuItem("Convert dataset",
               tabName = "convertDataset",
-              icon = icon("folder"),
-              badgeLabel = "new", 
-              badgeColor = "green"),
+              icon = icon("folder")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+              ),
             hr(),
             h4('Workflow', style="color: green;"),
             menuItem("Open", 
@@ -175,11 +190,12 @@ mainapp_ui <- function(id){
             h4('Vizualize data', style="color: green;"),
             menuItem("EDA", 
                      tabName = "eda", 
-                     icon = icon("cogs"),
-                     badgeLabel = "new", 
-                     badgeColor = "green"),
+                     icon = icon("cogs")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+              ),
             hr(),
-            menuItem("Help", 
+            menuItem("Help for workflow", 
                      icon = icon("question-circle"),
                      menuSubItem("Useful Links", tabName = "usefulLinks"),
                      menuSubItem("FAQ", tabName = "faq"),
@@ -241,6 +257,13 @@ mainapp_ui <- function(id){
           div(style="margin-top: 40px;", 
             # body content
             tabItems(
+              
+              tabItem(tabName = "Home2", class="active",
+                mod_homepage_ui(ns('home2'))),
+              tabItem(tabName = "usermanual", class="active",
+                insert_md_ui(ns('usermanual'))),
+              
+              
               tabItem(tabName = "Home", class="active", 
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
@@ -318,8 +341,16 @@ mainapp_server <- function(id,
 
     
     observeEvent(id, {
-      funcs <- funcs
+      rv.core$funcs <- funcs
     }, priority = 1000)
+    
+    
+    
+    output$WF_Name_UI <- renderUI({
+      
+      req(rv.core$workflow.name)
+      h4(rv.core$workflow.name)
+      })
     
     
     # observeEvent(rv.core$current.obj, {
@@ -333,26 +364,26 @@ mainapp_server <- function(id,
     # delay(ms = 3800, show("app_slider_plot"))
 
     
-    output$user <- shinydashboardPlus::renderUser({
-      shinydashboardPlus::dashboardUser(
-        name = "Prostar proteomics", 
-        image = 'https://raw.githubusercontent.com/prostarproteomics/Prostar_website/master/docs/favicon.ico', 
-        #title = "Prostar-proteomics",
-        #subtitle = "Author", 
-        footer = fluidRow(
-          column(width = 6, 
-            shinydashboardPlus::socialButton(href = "https://github.com/prostarproteomics/MagellanNTK",
-                              icon = icon("github")
-                              )),
-        column(width = 6,
-          shinydashboardPlus::socialButton(href = "https://prostar-proteomics.org",
-                            icon = icon("dropbox")
-                            )
-               )
-        ),
-        p('TODO: Describe the web site')
-      )
-    })
+    # output$user <- shinydashboardPlus::renderUser({
+    #   shinydashboardPlus::dashboardUser(
+    #     name = "Prostar proteomics", 
+    #     image = 'https://raw.githubusercontent.com/prostarproteomics/Prostar_website/master/docs/favicon.ico', 
+    #     #title = "Prostar-proteomics",
+    #     #subtitle = "Author", 
+    #     footer = fluidRow(
+    #       column(width = 6, 
+    #         shinydashboardPlus::socialButton(href = "https://github.com/prostarproteomics/MagellanNTK",
+    #                           icon = icon("github")
+    #                           )),
+    #     column(width = 6,
+    #       shinydashboardPlus::socialButton(href = "https://prostar-proteomics.org",
+    #                         icon = icon("dropbox")
+    #                         )
+    #            )
+    #     ),
+    #     p('TODO: Describe the web site')
+    #   )
+    # })
     
     
     observeEvent(input$browser,{browser()})
@@ -381,14 +412,14 @@ mainapp_server <- function(id,
     
     
     output$open_convert_dataset_UI <- renderUI({
-      req(funcs)
+      req(rv.core$funcs)
 
       rv.core$result_convert <- call.func(
-        fname = paste0(funcs$convert_dataset, '_server'),
+        fname = paste0(rv.core$funcs$convert_dataset, '_server'),
         args = list(id = 'Convert'))
       
       call.func(
-        fname = paste0(funcs$convert_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
     })
     
@@ -432,7 +463,9 @@ mainapp_server <- function(id,
       rv.core$current.obj <- rv.core$result_open_dataset()
     })
     
-    
+    # observeEvent(rv.core$funcs, {
+    #   browser()
+    # })
     
     # Get workflow directory
     rv.core$result_open_workflow <- open_workflow_server("wf")
@@ -444,7 +477,7 @@ mainapp_server <- function(id,
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
       
-      funcs <- rv.core$result_open_workflow()$funcs
+      funcs <- rv.core$funcs <- rv.core$result_open_workflow()$funcs
       
       source_wf_files(session$userData$workflow.path)
     })
@@ -503,8 +536,12 @@ mainapp_server <- function(id,
           
           
       mod_homepage_server('home', filepath)
-      
+      mod_homepage_server('home2', filepath)
+      mod_homepage_server('home3', filepath)
     })
+    
+    insert_md_server("usermanual", 
+      file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     
     
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
