@@ -391,16 +391,16 @@ mainapp_server <- function(id,
 
     
     call.func(
-      fname = paste0(funcs$infos_dataset, '_server'),
+      fname = paste0(rv.core$funcs$infos_dataset, '_server'),
       args = list(id = 'infos',
         obj = reactive({rv.core$current.obj}))
     )
     
     output$infos_dataset_UI <- renderUI({
-      req(funcs)
+      req(rv.core$funcs)
       req(rv.core$current.obj)
       call.func(
-        fname = paste0(funcs$infos_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
         args = list(id = ns('infos')))
     })
     
@@ -432,13 +432,13 @@ mainapp_server <- function(id,
     # Code for open demo dataset
     #
     rv.core$result_openDemoDataset <- call.func(
-      fname = paste0(funcs$open_demoDataset, '_server'),
+      fname = paste0(rv.core$funcs$open_demoDataset, '_server'),
       args = list(id = 'open_demo_dataset'))
     
     output$open_demo_dataset_UI <- renderUI({
-      req(funcs)
+      req(rv.core$funcs)
       call.func(
-        fname = paste0(funcs$open_demoDataset, '_ui'),
+        fname = paste0(rv.core$funcs$open_demoDataset, '_ui'),
         args = list(id = ns('open_demo_dataset')))
     })
     
@@ -450,12 +450,12 @@ mainapp_server <- function(id,
     # Code for open dataset
     #
     rv.core$result_open_dataset <- call.func(
-      fname = paste0(funcs$open_dataset, '_server'),
+      fname = paste0(rv.core$funcs$open_dataset, '_server'),
       args = list(id = 'open_dataset'))
     
     output$open_dataset_UI <- renderUI({
-      req(funcs)
-      call.func(fname = paste0(funcs$open_dataset, '_ui'),
+      req(rv.core$funcs)
+      call.func(fname = paste0(rv.core$funcs$open_dataset, '_ui'),
         args = list(id = ns('open_dataset')))
     })
     
@@ -508,7 +508,7 @@ mainapp_server <- function(id,
        
 
     call.func(
-      fname = paste0(funcs$view_dataset, '_server'),
+      fname = paste0(rv.core$funcs$view_dataset, '_server'),
       args = list(id = 'view_dataset',
         obj = reactive({rv.core$current.obj}),
         useModal = FALSE,
@@ -516,10 +516,10 @@ mainapp_server <- function(id,
 
     #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
-      req(funcs)
+      req(rv.core$funcs)
 
       call.func(
-        fname = paste0(funcs$view_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))
     })
     
@@ -568,19 +568,21 @@ mainapp <- function(){
     )
 
 server <- function(input, output, session) {
-  funcs <- list(convert = "DaparToolshed::convert",
-                open_dataset = "DaparToolshed::open_dataset",
-                open_demoDataset = "DaparToolshed::open_demoDataset",
-                view_dataset = "DaparViz::view_dataset",
-                infos_dataset = "DaparToolshed::infos_dataset")
+  # funcs <- list(convert = "DaparToolshed::convert",
+  #               open_dataset = "DaparToolshed::open_dataset",
+  #               open_demoDataset = "DaparToolshed::open_demoDataset",
+  #               view_dataset = "DaparViz::view_dataset",
+  #               infos_dataset = "DaparToolshed::infos_dataset")
+  # 
+  # funcs <- list(convert = "MagellanNTK::convert",
+  #   open_dataset = "MagellanNTK::open_dataset",
+  #   open_demoDataset = "MagellanNTK::open_demoDataset",
+  #   view_dataset = "MagellanNTK::view_dataset",
+  #   infos_dataset = "MagellanNTK::infos_dataset")
+  #   
   
-  funcs <- list(convert = "MagellanNTK::convert",
-    open_dataset = "MagellanNTK::open_dataset",
-    open_demoDataset = "MagellanNTK::open_demoDataset",
-    view_dataset = "MagellanNTK::view_dataset",
-    infos_dataset = "MagellanNTK::infos_dataset")
-  
-  mainapp_server("main", funcs = funcs)
+  #mainapp_server("main", funcs = funcs)
+  mainapp_server("main")
 }
 
 
