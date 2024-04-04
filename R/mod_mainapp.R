@@ -479,6 +479,14 @@ mainapp_server <- function(id,
       
       funcs <- rv.core$funcs <- rv.core$result_open_workflow()$funcs
       
+      
+      # Fix NULL values
+      # #browser()
+      lapply(names(rv.core$funcs), function(x)
+        if(is.null(rv.core$funcs[[x]]))
+          rv.core$funcs[[x]] <- default.funcs[[x]]
+      )
+
       source_wf_files(session$userData$workflow.path)
     })
     
@@ -514,10 +522,8 @@ mainapp_server <- function(id,
         useModal = FALSE,
         verbose = TRUE))
 
-    #---------------------------Server modules calls---------------------------------------------------#
     output$EDA_UI <- renderUI({
       req(rv.core$funcs)
-
       call.func(
         fname = paste0(rv.core$funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))
@@ -525,7 +531,6 @@ mainapp_server <- function(id,
     
 
     observe({
-      
       filepath <- NULL
       if (!is.null(rv.core$workflow.path))
         filepath <- file.path(rv.core$workflow.path, 'md', 

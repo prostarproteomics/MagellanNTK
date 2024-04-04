@@ -4,7 +4,7 @@
 #' 
 #' @param id xxx
 #' @param obj An instance of class xxx
-#' @param ... Additionla parameters
+#' @param ... Additional parameters
 #' 
 #' @name view_dataset
 #'

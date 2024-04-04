@@ -18,10 +18,11 @@ readCustomizableFuncs <- function(path){
     stop('file does not exist')
   
   prepare_data <- function(lines, pattern){
-    
     record <- lines[grepl(paste0(pattern, ":"), lines)]
-    ll <- unlist(strsplit(record, split = ': ', fixed = TRUE))
-    as.character(paste0(ll[2], '::', ll[1]))
+    if(length(record) == 1){
+      ll <- unlist(strsplit(record, split = ': ', fixed = TRUE))
+      as.character(paste0(ll[2], '::', ll[1]))}
+    else NULL
   }
   
   lines <- readLines(config.file)
@@ -36,10 +37,12 @@ readCustomizableFuncs <- function(path){
     keepDatasets = NULL
   )
   
-  funcs <- lapply(funcs, 
-    function(x) prepare_data(lines, x))
   
-  return(funcs = funcs)
+  tmp <- lapply(names(funcs), 
+    function(x) prepare_data(lines, x))
+  names(tmp) <- names(funcs)
+  
+  return(funcs = tmp)
 }
 
 
