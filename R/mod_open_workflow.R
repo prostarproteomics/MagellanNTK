@@ -32,8 +32,8 @@ open_workflow_ui <- function(id){
     uiOutput(ns('chooseWF_UI')),
     actionButton(ns('load_btn'), 'Load'),
     #infos_workflow_ui(ns("infos")),
-    tags$h3('Files'),
-    dataTableOutput(ns('files'))
+    #tags$h3('Files'),
+    #dataTableOutput(ns('files'))
   )
 }
 
@@ -115,10 +115,10 @@ open_workflow_server <- function(id){
 
     })
     
-    output$files = renderDataTable({
-      files = list.files(rv.wf$path, full.names = TRUE)
-      data.frame(name = basename(files), file.info(files))
-    })
+    # output$files = renderDataTable({
+    #   files = list.files(rv.wf$path, full.names = TRUE)
+    #   data.frame(name = basename(files), file.info(files))
+    # })
     
     reactive({rv.wf$dataOut})
   })

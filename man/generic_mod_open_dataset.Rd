@@ -5,7 +5,7 @@
 \alias{open_dataset_ui}
 \alias{open_dataset_server}
 \alias{open_dataset}
-\title{mod_open_demo_dataset_ui and mod_open_demo_dataset_server}
+\title{mod_open_dataset_ui and mod_open_dataset_server}
 \usage{
 open_dataset_ui(id)
 

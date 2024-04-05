@@ -32,7 +32,7 @@
 #' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 #' open_dataset = "DaparToolshed::open_dataset",
 #' open_demoDataset = "DaparToolshed::open_demoDataset",
-#' view_dataset = "DaparViz::view_dataset",
+#' view_dataset = "omXplore::view_dataset",
 #' infos_dataset = "DaparToolshed::infos_dataset",
 #' addDatasets = "DaparToolshed::addDatasets",
 #' keepDatasets = "DaparToolshed::keepDatasets" )

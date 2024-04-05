@@ -50,10 +50,10 @@ Imports:
     markdown,
     shinyAce,
     BiocGenerics, BiocManager, DAPAR, DAPARdata,
-    DaparToolshedData, DaparViz, QFeatures, data.table, future,
+    DaparToolshedData, QFeatures, data.table, future,
     ggplot2, gplots, highcharter, later, promises,
     rhandsontable, shinycssloaders, shinythemes, tibble,
-    vioplot, webshot
+    vioplot, webshot, omXplore, rclipboard
 Collate: 
     app.R
     settings.R

@@ -51,7 +51,7 @@ dataManager_ui <- function(id){
 #' @importFrom BiocManager install
 #' @importFrom shinyjs info
 #' @import QFeatures
-#' @import DaparViz
+#' @import omXplore
 #' 
 dataManager_server <- function(id, funcs){
   
@@ -150,10 +150,10 @@ ui <- fluidPage(dataManager_ui("demo"))
 
 server <- function(input, output, session) {
   
-  funcs <- list(convert = "DaparToolshed::convert",
+  funcs <- list(convert_dataset = "DaparToolshed::convert",
                 open_dataset = "DaparToolshed::open_dataset",
                 open_demoDataset = "DaparToolshed::open_demoDataset",
-                view_dataset = "DaparViz::view_dataset",
+                view_dataset = "omXplore::view_dataset",
                 infos_dataset = "DaparToolshed::infos_dataset"
   )
   
