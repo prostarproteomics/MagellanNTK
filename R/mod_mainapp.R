@@ -461,6 +461,7 @@ mainapp_server <- function(id,
     })
     
     observeEvent(req(rv.core$result_open_dataset()),{
+      cat('new dataset loaded\n')
       rv.core$current.obj <- rv.core$result_open_dataset()
     })
     
@@ -516,15 +517,18 @@ mainapp_server <- function(id,
 
        
 
-    call.func(
-      fname = paste0(rv.core$funcs$view_dataset, '_server'),
-      args = list(id = 'view_dataset',
-        obj = reactive({rv.core$current.obj}),
-        useModal = FALSE,
-        verbose = TRUE))
+    
 
     output$EDA_UI <- renderUI({
       req(rv.core$funcs)
+      
+      call.func(
+        fname = paste0(rv.core$funcs$view_dataset, '_server'),
+        args = list(id = 'view_dataset',
+          obj = reactive({rv.core$current.obj}),
+          useModal = FALSE,
+          verbose = TRUE))
+      
       call.func(
         fname = paste0(rv.core$funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))

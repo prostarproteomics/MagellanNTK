@@ -91,11 +91,17 @@ open_dataset_server <- function(id){
       req(input$chooseSource == 'packageDataset')
       selectInput(ns("pkg"),
         "Choose package",
-        choices = rownames(installed.packages()),
+        choices = GetPackagesWithDatasets()[, "Package"],
         selected = character(0),
         width='200px')
     })
     
+    
+    GetPackagesWithDatasets <- reactive({
+      
+      dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
+      dat
+    })
     ## function for demo mode
     output$chooseDemoDataset <- renderUI({
       req(input$chooseSource == 'packageDataset')
@@ -170,14 +176,16 @@ open_dataset_server <- function(id){
         )
       }
       
-      if (is.Magellan.compliant(rv.open$dataRead)){
-        if (inherits(rv.open$dataRead, 'list'))
-          rv.open$dataOut <- rv.open$dataRead
-        else 
-          rv.open$dataOut <- list(original = rv.open$dataRead)
-      } else {
-        shinyjs::info("Dataset not compatible with MagellanNTK")
-      }
+      rv.open$dataOut <- rv.open$dataRead
+      
+      # if (is.Magellan.compliant(rv.open$dataRead)){
+      #   if (inherits(rv.open$dataRead, 'list'))
+      #     rv.open$dataOut <- rv.open$dataRead
+      #   else 
+      #     rv.open$dataOut <- list(original = rv.open$dataRead)
+      # } else {
+      #   shinyjs::info("Dataset not compatible with MagellanNTK")
+      # }
     })
     
     
