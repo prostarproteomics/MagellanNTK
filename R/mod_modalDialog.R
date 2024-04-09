@@ -127,8 +127,8 @@ mod_modalDialog_server <- function(id,
       if (!is.null(uiContent) && !is.null(external_mod)){
         warning('uiContent and external_mod cannot be both instantiated at the same time.')
       } else
-       actionButton(ns("show"), "Show modal dialog",
-                   icon("chart-bar", lib = "font-awesome"),
+       actionLink(ns("show"), title,
+                   #icon("chart-bar", lib = "font-awesome"),
                    class = "btn-success")
     })
     

@@ -97,9 +97,11 @@ open_dataset_server <- function(id){
     
     GetPackagesWithDatasets <- reactive({
       
+      x <- data(package = .packages(all.available = TRUE))$results
       dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
       dat
     })
+    
     ## function for demo mode
     output$chooseDemoDataset <- renderUI({
       req(input$chooseSource == 'packageDataset')

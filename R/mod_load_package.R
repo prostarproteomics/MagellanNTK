@@ -53,9 +53,9 @@ mod_load_package_ui <- function(id) {
   tagList(
     uiOutput(ns('update_func_ui')),
     uiOutput(ns('select_pkg_ui')),
-    actionButton(ns('update_btn'), 'Update value'),
-    uiOutput(ns('show_table')),
-    actionButton(ns('validate_btn'), 'Validate')
+    #actionButton(ns('update_btn'), 'Update value'),
+    uiOutput(ns('show_table'))
+    #actionButton(ns('validate_btn'), 'Validate')
   )
 }
 
@@ -88,20 +88,18 @@ mod_load_package_server <- function(id, funcs = NULL) {
           
           find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
           find_server_func <- find_funs(paste0(x, '_server'))$package_name
-          
-          
-          
-          tagList(
+
+          fluidRow(
             div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
-              p(x),
-          selectInput(ns(paste0(x, '_ui')), 
-            paste0(x, '_ui'),
+              p(x)),
+            div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
+              selectInput(ns(paste0(x, '_ui')), 
+            NULL,
             choices = unique(find_ui_func, find_server_func))
           )
           )
         })
-        
-        })
+      })
 
     # 
     # output$update_func_ui <- renderUI({
@@ -119,24 +117,31 @@ mod_load_package_server <- function(id, funcs = NULL) {
     #   )
     # })
 
-    
-    observeEvent(req(input$update_btn), {
-      
-      ind <- which(rv$list.funcs['Function' ] == input$update_func)
-
-      rv$list.funcs[ind, 'Package'] <- paste0(input$choosepkg, '::', input$update_func)
-
-      })
-
-
-    
-    observeEvent(input$validate_btn, {
+    # 
+    # observeEvent(req(input$update_btn), {
+    #   
+    #   ind <- which(rv$list.funcs['Function' ] == input$update_func)
+    # 
+    #   rv$list.funcs[ind, 'Package'] <- paste0(input$choosepkg, '::', input$update_func)
+    # 
+    #   })
+    # 
+    observeEvent(lapply(names(rv$list.funcs), function(x) input[[paste0(x, '_ui')]]), {
       ll <- list()
-      for (c in seq(nrow(rv$list.funcs)))
-        ll[[rv$list.funcs[c, 'Function']]] <- rv$list.funcs[c, 'Package']
+      for (c in names(rv$list.funcs))
+        ll[[c]] <- paste0(input[[paste0(c, '_ui')]], '::', c)
       
       dataOut$value <- ll
     })
+    
+    # 
+    # observeEvent(input$validate_btn, {
+    #   ll <- list()
+    #   for (c in names(rv$list.funcs))
+    #     ll[[c]] <- paste0(input[[paste0(c, '_ui')]], '::', c)
+    #   
+    #   dataOut$value <- ll
+    # })
     
     reactive({dataOut$value})
   })
