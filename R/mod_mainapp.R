@@ -212,11 +212,15 @@ mainapp_ui <- function(id){
           skin = "dark",
           shinydashboardPlus::controlbarMenu(
             shinydashboardPlus::controlbarItem(
-              title = "Tab 1",
+              title = "Configure",
               icon = icon("desktop"),
               active = TRUE,
               actionLink(ns('browser'), 'Console'),
-              mod_modalDialog_ui(ns('loadPkg_modal')),
+              mod_modalDialog_ui(ns('loadPkg_modal'))
+            ),
+            shinydashboardPlus::controlbarItem(
+              icon = icon("paint-brush"),
+              title = "Settings",
               mod_settings_ui(ns('global_settings'))
             ),
             shinydashboardPlus::controlbarItem(

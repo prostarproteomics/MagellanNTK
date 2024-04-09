@@ -54,7 +54,7 @@ mod_load_package_ui <- function(id) {
     uiOutput(ns('update_func_ui')),
     uiOutput(ns('select_pkg_ui')),
     actionButton(ns('update_btn'), 'Update value'),
-    DT::DTOutput(ns('show_table')),
+    uiOutput(ns('show_table')),
     actionButton(ns('validate_btn'), 'Validate')
   )
 }
@@ -76,53 +76,48 @@ mod_load_package_server <- function(id, funcs = NULL) {
     dataOut <- reactiveValues(
       done = FALSE)
     
+    
     rv <- reactiveValues(
-      list.funcs = data.frame(
-        Function = names(funcs),
-        Package = unlist(funcs, use.names = FALSE)
-      )
+      list.funcs = funcs
     )
-   
-    
-    
-    Make_Pretty <- reactive({
-      
-      df <- rv$list.funcs
 
-      for(c in seq(nrow(df))){
-        df[c, 'Package'] <- gsub(paste0('::', df[c, 'Function']), '', df[c, 'Package'], fixed = TRUE)
-      }
-      df
-    })
-    
-      output$show_table <- DT::renderDataTable(server=TRUE,{
+      output$show_table <- renderUI({
         req(rv$list.funcs)
-        DT::datatable(
-          Make_Pretty(), 
-          escape = TRUE,
-          options = list(
-            #initComplete = initComplete(),
-            dom = 'Bt',
-            autoWidth = TRUE
-          )
-        )
         
-      })
-    
-    output$update_func_ui <- renderUI({
-      selectInput(ns('update_func'), 'Function to update',
-        choices = names(funcs))
-    })
-    
-    output$select_pkg_ui <- renderUI({
-      req(input$update_func)
-      find_ui_func <- find_funs(paste0(input$update_func, '_ui'))$package_name
-      find_server_func <- find_funs(paste0(input$update_func, '_server'))$package_name
-      selectInput(ns('choosepkg'), 
-        'Package',
-        choices = unique(find_ui_func, find_server_func)
-      )
-    })
+        lapply(names(rv$list.funcs), function(x){
+          
+          find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
+          find_server_func <- find_funs(paste0(x, '_server'))$package_name
+          
+          
+          
+          tagList(
+            div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
+              p(x),
+          selectInput(ns(paste0(x, '_ui')), 
+            paste0(x, '_ui'),
+            choices = unique(find_ui_func, find_server_func))
+          )
+          )
+        })
+        
+        })
+
+    # 
+    # output$update_func_ui <- renderUI({
+    #   selectInput(ns('update_func'), 'Function to update',
+    #     choices = names(funcs))
+    # })
+    # 
+    # output$select_pkg_ui <- renderUI({
+    #   req(input$update_func)
+    #   find_ui_func <- find_funs(paste0(input$update_func, '_ui'))$package_name
+    #   find_server_func <- find_funs(paste0(input$update_func, '_server'))$package_name
+    #   selectInput(ns('choosepkg'), 
+    #     'Package',
+    #     choices = unique(find_ui_func, find_server_func)
+    #   )
+    # })
 
     
     observeEvent(req(input$update_btn), {
