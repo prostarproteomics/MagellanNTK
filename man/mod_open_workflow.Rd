@@ -5,7 +5,7 @@
 \alias{open_workflow_ui}
 \alias{open_workflow_server}
 \alias{open_workflow}
-\title{mod_open_dataset_ui and mod_open_dataset_server}
+\title{mod_open_workflow_ui and mod_open_workflow_server}
 \usage{
 open_workflow_ui(id)
 
@@ -23,9 +23,7 @@ A list
 A shiny Module.
 }
 \examples{
-if (interactive()){
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(open_workflow())
+\dontshow{\}) # examplesIf}
 }
-
-}
-\keyword{internal}

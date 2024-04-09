@@ -5,8 +5,7 @@
 #' 
 #' @name mod-foo
 #'
-#' @examples 
-#' if (interactive()){
+#' @examplesIf interactive()
 #' data(ft_na)
 #' ui <- foo_ui('query')
 #' 
@@ -30,7 +29,7 @@
 #' }
 #' 
 #' shinyApp(ui=ui, server=server)
-#' }
+
 NULL
 
 

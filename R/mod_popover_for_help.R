@@ -1,4 +1,4 @@
-#' @title   mod_popover_for_help_ui and mod_popover_for_help_server
+#' @title mod_popover_for_help_ui and mod_popover_for_help_server
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
@@ -10,7 +10,7 @@
 #'
 #' @name mod_popover_for_help
 #'
-#' @examplesIf
+#' @examplesIf interactive()
 #' shiny::runApp(popover_for_help('myTitle', 'myContent'))
 #' 
 NULL
@@ -18,7 +18,6 @@ NULL
 
 #' @rdname mod_popover_for_help
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList div uiOutput
 #' @importFrom shinyjs inlineCSS useShinyjs
@@ -48,7 +47,6 @@ mod_popover_for_help_ui <- function(id){
 #' 
 #' @export
 #' 
-#' @keywords internal
 #' 
 #' @importFrom shinyBS bsPopover addPopover bsTooltip
 #' @importFrom shiny renderUI req moduleServer
@@ -124,7 +122,7 @@ button.Prostar_tooltip_white {
 }"
 
 
-#' @rdname mod_open_dataset
+#' @rdname mod_popover_for_help
 #' 
 #' @export
 #' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent

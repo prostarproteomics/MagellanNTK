@@ -1,17 +1,13 @@
-#' @title   mod_open_dataset_ui and mod_open_dataset_server
+#' @title mod_open_workflow_ui and mod_open_workflow_server
 #' 
 #' @description  A shiny Module.
 #' 
 #' @param id xxx
 #' 
 #' @name mod_open_workflow
-#'
-#' @keywords internal
 #' 
-#' @examples 
-#' if (interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(open_workflow())
-#' }
 #' 
 #' @return A list
 #' 

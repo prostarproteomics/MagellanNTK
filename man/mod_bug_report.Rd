@@ -26,8 +26,8 @@ bug_report()
 A shiny Module.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(bug_report())
 
-
+\dontshow{\}) # examplesIf}
 }
-\keyword{internal}

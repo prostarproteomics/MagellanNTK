@@ -10,7 +10,6 @@
 #'
 #' @rdname mod_navbar_menu
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyjs extendShinyjs 
@@ -65,8 +64,7 @@ mod_navbar_menu_ui <- function(id){
     
 #' @rdname mod_navbar_menu
 #' @export
-#' @keywords internal
-    
+#' 
 mod_navbar_menu_server <- function(id){
   
   

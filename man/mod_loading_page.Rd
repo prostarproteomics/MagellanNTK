@@ -54,13 +54,11 @@ the infos.
 This code is extracted from https://sebastiansauer.github.io/finds_funs/
 }
 \examples{
-if(interactive()){
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 app <- loadApp()
 shiny::runApp(app)
-}
 
-
+\dontshow{\}) # examplesIf}
 find_funs('filter')
 
 }
-\keyword{internal}

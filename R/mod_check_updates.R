@@ -25,7 +25,6 @@ GetOnlineZipVersion <- function(){
 #' @return xxxx
 #' @rdname mod_check_updates
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 mod_check_updates_ui <- function(id){
@@ -43,7 +42,6 @@ mod_check_updates_ui <- function(id){
 
 #' @rdname mod_check_updates
 #' @export
-#' @keywords internal
 #' @import DT
 #' @importFrom BiocManager version
 #' @importFrom utils compareVersion
@@ -206,13 +204,15 @@ mod_check_updates_server <- function(id){
 }
 
 
-library(shiny)
-library(shinyjs)
 
+#' @rdname mod_check_updates
+#' @export
+check_updates <- function(){
 ui <- mod_check_updates_ui("update")
 
 server <- function(input, output, session) {
   mod_check_updates_server("update")
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}

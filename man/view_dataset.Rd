@@ -23,9 +23,8 @@ view_dataset(obj, ...)
 A shiny Module.
 }
 \examples{
-if(interactive()){
-shiny::runApp(view_dataset(sub_R25))}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+shiny::runApp(view_dataset(sub_R25))
 
-
+\dontshow{\}) # examplesIf}
 }
-\keyword{internal}

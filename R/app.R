@@ -23,10 +23,10 @@
 #'  
 #'  
 #' @export
-#' @examplesIf
+#' @examplesIf interactive()
 #' 
 #' # launch without initial config
-#' MagellanNTK()
+#' shiny::runApp(MagellanNTK())
 #' 
 #' # launch with config
 #' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
@@ -65,7 +65,6 @@ MagellanNTK <- function(
 
    # Launch app
    app <- shiny::shinyApp(ui_MagellanNTK, server_MagellanNTK)
-  shiny::runApp(app)
-  
+   shiny::runApp(app)
   
 }

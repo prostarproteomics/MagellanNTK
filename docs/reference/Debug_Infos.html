@@ -24,7 +24,7 @@ along the different processes of a process nor pipeline."><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MODIStsp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.00.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@ along the different processes of a process nor pipeline."><!-- mathjax --><scrip
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Module debugging</h1>
-    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/mod_debug_infos.R" class="external-link"><code>R/mod_debug_infos.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/MagellanNTK/blob/HEAD/R/mod_debug_infos.R" class="external-link"><code>R/mod_debug_infos.R</code></a></small>
     <div class="hidden name"><code>Debug_Infos.Rd</code></div>
     </div>
 
@@ -152,7 +152,9 @@ along the different processes of a process nor pipeline.</p>
 <span>  is.enabled <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span></span>
 <span>     <span class="cn">NULL</span></span>
 <span> <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">Debug_Infos</span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -200,20 +202,30 @@ along the different processes of a process nor pipeline.</p>
 <dt>is.enabled</dt>
 <dd><p>A `logical(1)` xxxx</p></dd>
 
+
+<dt>obj</dt>
+<dd><p>xxx</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
 <p>NA</p>
+
+
+<p>A shiny app</p>
+    </div>
+    <div id="author">
+    <h2>Author</h2>
+    <p>Samuel Wieczorek</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#'</span></span></span>
-<span class="r-in"><span><span class="va">examples</span><span class="op">/</span><span class="va">test_mod_debug_infos.R</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'examples' not found</span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu">Debug_Infos</span><span class="op">(</span><span class="va">sub_R25</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -224,7 +236,7 @@ along the different processes of a process nor pipeline.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Samuel Wieczorek.</p>
+  <p></p><p>Developed by Samuel Wieczorek, Thomas Burger.</p>
 </div>
 
 <div class="pkgdown">

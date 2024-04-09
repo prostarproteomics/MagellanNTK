@@ -6,10 +6,8 @@
 #' 
 #' @name mod_settings
 #' 
-#' @examples
-#' if(interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(mod_setting(sub_R25))
-#' }
 #' 
 NULL
 
@@ -18,8 +16,6 @@ NULL
 #'
 #' @rdname mod_settings
 #'
-#' @keywords internal
-#' 
 #' @export 
 #' 
 #' @importFrom shiny NS tagList tabsetPanel tabPanel div uiOutput br hr 
@@ -65,8 +61,6 @@ mod_settings_ui <- function(id){
 #' @rdname mod_settings
 #' 
 #' @export
-#' 
-#' @keywords internal
 #' 
 #' @importFrom shiny moduleServer observe req reactiveValues sliderInput
 #' renderUI numericInput observeEvent HTML
@@ -342,7 +336,7 @@ mod_settings_server <- function(id, obj){
   
 }
 
-#' @rdname mod_open_dataset
+#' @rdname mod_settings
 #' 
 #' @export
 #' @importFrom shiny fluidPage tagList textOutput reactiveValues observeEvent

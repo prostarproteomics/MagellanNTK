@@ -23,9 +23,7 @@ A list
 A shiny Module.
 }
 \examples{
-if (interactive()){
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(convert_dataset())
+\dontshow{\}) # examplesIf}
 }
-
-}
-\keyword{internal}

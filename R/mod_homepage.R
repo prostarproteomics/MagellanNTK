@@ -16,7 +16,6 @@ NULL
 
 
 #' @rdname mod_homepage
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 mod_homepage_ui <- function(id){
@@ -30,7 +29,6 @@ mod_homepage_ui <- function(id){
     
 #' @rdname mod_homepage
 #' @export
-#' @keywords internal
 mod_homepage_server <- function(id,
   mdfile = file.path(system.file('app/md', 
     package = 'MagellanNTK'),'Presentation.Rmd')){

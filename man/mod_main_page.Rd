@@ -23,11 +23,7 @@ mainapp_server(id, funcs = NULL, verbose = FALSE)
 A shiny Module.
 }
 \examples{
-if(interactive()){
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(mainapp())
-
+\dontshow{\}) # examplesIf}
 }
-
-}
-\keyword{internal}

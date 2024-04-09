@@ -5,10 +5,8 @@
 #' @param id xxx
 #' 
 #' @name infos_dataset
-#'
-#' @keywords internal
 #' 
-#' @examples
+#' @examplesIf interactive()
 #'   data(Exp1_R25_prot, package='DaparToolshedData')
 #'   shiny::runApp(infos_dataset(Exp1_R25_prot))
 #' 
@@ -77,6 +75,7 @@ infos_dataset_server <- function(id,
 ###################################################################
 #' @export
 #' @importFrom shiny shinyApp fluidPage
+#' @rdname infos_dataset
 #' 
 infos_dataset <- function(obj){
   

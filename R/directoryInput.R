@@ -287,7 +287,7 @@ readDirectoryInput = function(session, inputId) {
 #' Runs a demo app with the code. See the code in the example_application folder for
 #' how this is accomplished.
 #' 
-#' @examples
+#' @examplesIf interactive()
 #' shiny::runApp(runDirinputExample())
 #' 
 #' 

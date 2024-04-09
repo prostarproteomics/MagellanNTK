@@ -6,12 +6,9 @@
 #' 
 #' @name mod_convert_dataset
 #'
-#' @keywords internal
 #' 
-#' @examples 
-#' if (interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(convert_dataset())
-#' }
 #' 
 #' @return A list
 #' 

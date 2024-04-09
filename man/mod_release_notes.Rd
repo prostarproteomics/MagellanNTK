@@ -3,11 +3,14 @@
 \name{mod_release_notes_ui}
 \alias{mod_release_notes_ui}
 \alias{mod_release_notes_server}
+\alias{release_notes}
 \title{mod_release_notes_ui and mod_release_notes_server}
 \usage{
 mod_release_notes_ui(id)
 
 mod_release_notes_server(id)
+
+release_notes()
 }
 \arguments{
 \item{id}{shiny id}
@@ -21,4 +24,3 @@ mod_release_notes_server(id)
 \description{
 A shiny Module.
 }
-\keyword{internal}

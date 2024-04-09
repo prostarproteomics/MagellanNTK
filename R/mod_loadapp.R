@@ -28,11 +28,9 @@
 #' contains the code to call this function from the package the user have
 #' chosen.
 #' 
-#' @examples 
-#' if(interactive()){
+#' @examplesIf interactive()
 #' app <- loadApp()
 #' shiny::runApp(app)
-#' }
 #' 
 #' 
 NULL
@@ -41,7 +39,6 @@ NULL
 
 #' @rdname mod_loading_page
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList
 #' @importFrom shinyjs inlineCSS
@@ -55,7 +52,6 @@ loadapp_ui <- function(id){
 
 #' @rdname mod_loading_page
 #' @export
-#' @keywords internal
 #' 
 loadapp_server <- function(id){
   

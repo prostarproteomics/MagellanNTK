@@ -5,8 +5,6 @@
 #' @param id xxx
 #' 
 #' @name generic_mod_open_dataset
-#'
-#' @keywords internal
 #' 
 #' @examplesIf interactive()
 #' shiny::runApp(open_dataset())

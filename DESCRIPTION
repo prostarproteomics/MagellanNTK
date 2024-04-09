@@ -62,8 +62,6 @@ Collate:
     mod_open_workflow.R
     directoryInput.R
     mod_chooseDir.R
-    mod_change_assay.R
-    mod_choose_pipeline.R
     mod_launch_magellan.R
     mod_observe_dynamic_colourPicker_input.R
     mod_splash.R
@@ -100,7 +98,6 @@ Collate:
     mod_modalDialog.R
     mod_format_DT.R
     mod_infos_dataset.R
-    mod_dataManager.R
     mod_insert_md.R
     mod_homepage.R
     mod_bsmodal2.R
@@ -110,6 +107,7 @@ Collate:
     mod_error_modal.R
     mod_bug_report.R
     mod_download.R
+    mod_load_package.R
     mod_download_btns.R
     mod_navbar_menu.R
     mod_open_dataset.R

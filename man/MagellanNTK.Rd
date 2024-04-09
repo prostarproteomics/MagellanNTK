@@ -32,10 +32,10 @@ The list of customizable funcs (param `funcs`) contains the following items:
  * inside the UI of MagellanNTK, in the settings panels
 }
 \examples{
-\dontshow{if () (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # launch without initial config
-MagellanNTK()
+shiny::runApp(MagellanNTK())
 
 # launch with config
 funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",

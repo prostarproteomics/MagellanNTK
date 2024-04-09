@@ -3,11 +3,14 @@
 \name{mod_check_updates_ui}
 \alias{mod_check_updates_ui}
 \alias{mod_check_updates_server}
+\alias{check_updates}
 \title{mod_check_updates_ui and mod_check_updates_server}
 \usage{
 mod_check_updates_ui(id)
 
 mod_check_updates_server(id)
+
+check_updates()
 }
 \arguments{
 \item{id}{shiny id}
@@ -24,4 +27,3 @@ xxxx
 \description{
 A shiny Module.
 }
-\keyword{internal}

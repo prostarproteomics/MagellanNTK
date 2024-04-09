@@ -1,5 +1,3 @@
-# Module UI
-  
 #' @title   mod_release_notes_ui and mod_release_notes_server
 #' @description  A shiny Module.
 #'
@@ -10,7 +8,6 @@
 #'
 #' @rdname mod_release_notes
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyBS bsCollapse bsCollapsePanel
@@ -33,8 +30,7 @@ mod_release_notes_ui <- function(id){
     
 #' @rdname mod_release_notes
 #' @export
-#' @keywords internal
-    
+#' 
 mod_release_notes_server <- function(id){
   
   moduleServer(id, function(input, output, session){
@@ -48,9 +44,10 @@ mod_release_notes_server <- function(id){
 }
     
 
-
-library(shiny)
-library(shinyjs)
+#' @rdname mod_release_notes
+#' @export
+#' 
+release_notes <- function(){
 
 ui <- mod_release_notes_ui("notes")
 
@@ -58,4 +55,5 @@ server <- function(input, output, session) {
   mod_release_notes_server("notes")
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}

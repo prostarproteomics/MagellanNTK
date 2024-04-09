@@ -21,4 +21,3 @@ mod_navbar_menu_server(id)
 \description{
 A shiny Module.
 }
-\keyword{internal}

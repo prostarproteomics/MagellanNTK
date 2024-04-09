@@ -35,8 +35,9 @@ chooseDir(show.details = FALSE)
 A shiny Module which xxx
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 NULL
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Samuel Wieczorek

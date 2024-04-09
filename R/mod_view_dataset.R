@@ -8,11 +8,9 @@
 #' 
 #' @name view_dataset
 #'
-#' @keywords internal
 #' 
-#' @examples
-#' if(interactive()){
-#' shiny::runApp(view_dataset(sub_R25))}
+#' @examplesIf interactive()
+#' shiny::runApp(view_dataset(sub_R25))
 #' 
 #' 
 NULL

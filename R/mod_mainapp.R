@@ -3,12 +3,8 @@
 #' 
 #' @name mod_main_page
 #' 
-#' @examples 
-#' if(interactive()){
-#' 
+#' @examplesIf interactive()
 #' shiny::runApp(mainapp())
-#' 
-#' }
 #' 
 #' @import shiny
 #' @import shinyjs
@@ -29,7 +25,6 @@ NULL
 #'
 #' @rdname mod_main_page
 #'
-#' @keywords internal
 #' @export 
 #' 
 mainapp_ui <- function(id){
@@ -221,6 +216,7 @@ mainapp_ui <- function(id){
               icon = icon("desktop"),
               active = TRUE,
               actionLink(ns('browser'), 'Console'),
+              mod_modalDialog_ui(ns('loadPkg_modal')),
               mod_settings_ui(ns('global_settings'))
             ),
             shinydashboardPlus::controlbarItem(
@@ -311,7 +307,6 @@ mainapp_ui <- function(id){
 #' @param id xxx
 #' @rdname mod_main_page
 #' @export
-#' @keywords internal
 #' 
 mainapp_server <- function(id,
                            funcs = NULL,
@@ -406,7 +401,17 @@ mainapp_server <- function(id,
     })
     
     
-
+    tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
+      title = "test modalDialog",
+      external_mod = 'mod_load_package',
+      external_mod_args = list(funcs = rv.core$funcs)
+      )
+    
+    observeEvent(req(tmp.funcs()), {
+      rv.core$funcs <- tmp.funcs()
+    })
+    
+    
     #
     # Code for convert tool
     #

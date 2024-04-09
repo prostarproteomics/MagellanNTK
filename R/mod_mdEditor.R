@@ -8,10 +8,8 @@
 #' @name mdEditor
 #' 
 #' 
-#' @examples
-#' if(interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(mdEditor())
-#' }
 #' 
 #' 
 NULL

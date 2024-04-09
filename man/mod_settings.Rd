@@ -9,6 +9,8 @@
 mod_settings_ui(id)
 
 mod_settings_server(id, obj)
+
+mod_settings(obj)
 }
 \arguments{
 \item{id}{shiny id}
@@ -17,9 +19,7 @@ mod_settings_server(id, obj)
 A shiny Module.
 }
 \examples{
-if(interactive()){
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(mod_setting(sub_R25))
+\dontshow{\}) # examplesIf}
 }
-
-}
-\keyword{internal}

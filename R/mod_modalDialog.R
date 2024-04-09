@@ -13,18 +13,85 @@
 #'
 #' @importFrom shinyjqui jqui_draggable
 #' 
-#' @name modalDialog
+#' @name mod_modalDialog
 #' 
 #' @return A Shiny modal-dialog
+#' 
+#' @examplesIf interactive()
+#' 
+#' ########################################################
+#' ##
+#' # Example with a simple static HTML
+#' ##
+#' ########################################################
+#' 
+#' shiny::runApp(mod_modalDialog(title = "test modalDialog", uiContent = p("test")))
+#' 
+#' ########################################################
+#' ##
+#' ##   Example with a simple Shiny module without any return value
+#' ##
+#' ########################################################
+#' 
+#' simple_mod_ui <- function(id){
+#' # create the namespace from the id
+#' ns <- NS(id)
+#' fluidPage(
+#' actionButton(ns("test"), "Test")
+#' )
+#' }
+#' 
+#' 
+#' simple_mod_server <- function(id){ #height auto
+#'   
+#'   moduleServer(id, function(input, output, session){
+#'     ns <- session$ns
+#'     
+#'     # reactiveValues object for storing current data set.
+#'     dataOut <- reactiveVal(NULL)
+#'     
+#'     observeEvent(input$test, {
+#'       dataOut(paste0('Clicked ', input$test, ' times.'))
+#'     })
+#'     
+#'     
+#'     return(reactive({dataOut()}))
+#'   })
+#' }
+#' 
+#' 
+#' shiny::runApp(mod_modalDialog(title = "test modalDialog", uiContent = p("test")))
+#' 
+#' 
+#' ########################################################
+#' ##
+#' ## Example with a more complex Shiny module with a return value
+#' ##
+#' ########################################################
+#' 
+#' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
+#' open_dataset = "MagellanNTK::open_dataset",
+#' open_demoDataset = "MagellanNTK::open_demoDataset",
+#' infos_dataset = "MagellanNTK::infos_dataset",
+#' addDatasets = "MagellanNTK::addDatasets",
+#' keepDatasets = "MagellanNTK::keepDatasets"
+#' )
+#' 
+#' 
+#' shiny::runApp(
+#' mod_modalDialog(
+#' title = "test modalDialog",
+#' external_mod = 'mod_load_package',
+#' external_mod_args = list(funcs = funcs)))
 #'
 NULL
 
 #'
-#' @rdname modalDialog
+#' @rdname mod_modalDialog
 #'
 #' @export
 #'
-modalDialog_ui <- function(id){
+mod_modalDialog_ui <- function(id){
   # create the namespace from the id
   ns <- NS(id)
   
@@ -36,13 +103,13 @@ modalDialog_ui <- function(id){
 
 #' @export
 #'
-#' @rdname modalDialog
+#' @rdname mod_modalDialog
 #' 
 #' @import shiny
 #' @import shinyBS
 #' @import shinyjqui
 #'
-modalDialog_server <- function(id,
+mod_modalDialog_server <- function(id,
                            title = NULL,
                            width = NULL,
                            uiContent = NULL,
@@ -98,7 +165,7 @@ modalDialog_server <- function(id,
       req(external_mod)
       args <- list(id = 'test')
       if (length(external_mod_args))
-        args <- list(args, external_mod_args)
+        args <- append(args, external_mod_args)
         
       tmp(do.call(paste0(external_mod, '_server'), args))
     })
@@ -124,80 +191,42 @@ modalDialog_server <- function(id,
 # Example
 ########################################################################
 
-library(shiny)
 
 
-simple_mod_ui <- function(id){
-  # create the namespace from the id
-  ns <- NS(id)
+#' @export
+#' @rdname mod_modalDialog
+#' 
+mod_modalDialog <- function(title,
+  uiContent = NULL,
+  external_mod = NULL,
+  external_mod_args = list()
+  ){
   
-  fluidPage(
-    actionButton(ns("test"), "Test")
-  )
-}
-
-
-simple_mod_server <- function(id){ #height auto
-  
-  moduleServer(id, function(input, output, session){
-    ns <- session$ns
-    
-    # reactiveValues object for storing current data set.
-    dataOut <- reactiveVal(NULL)
-    
-    observeEvent(input$test, {
-      dataOut(paste0('Clicked ', input$test, ' times.'))
-    })
-    
-    
-    return(reactive({dataOut()}))
-  })
-}
-
-
-
-
-
-ui <- fluidPage(
-  modalDialog_ui(id = "tbl1"),
-  modalDialog_ui(id = "tbl2"),
-  modalDialog_ui(id = "tbl3")
-)
+  ui <- fluidPage(
+    mod_modalDialog_ui(id = "tbl")
+    )
 
 server <- function(input, output) {
   
-   res1 <- modalDialog_server(id = "tbl1",
-                  title = "test modalDialog",
-                  uiContent = p("test"))
+  dataOut <- reactiveVal(NULL)
   
-  res2 <- modalDialog_server(id = "tbl2",
-                            title = "test modalDialog",
-                            external_mod = 'simple_mod',
-                            external_mod_args = list()
-                            )
+   res <- mod_modalDialog_server(
+     id = "tbl",
+     title = title,
+     uiContent = uiContent,
+     external_mod = external_mod,
+     external_mod_args = external_mod_args
+   )
+
+
   
-  
-  funcs <- c('convert', 
-             'open_dataset', 
-             'open_demoDataset',
-             'view_dataset',
-             'infos_dataset')
-  res3 <- modalDialog_server(id = "tbl3",
-                             title = "test modalDialog",
-                             external_mod = 'loadapp',
-                             external_mod_args = list(funcs = funcs)
-                             )
-  
-  
-  observeEvent(req(res2()), {
-    print(res2())
+  observeEvent(req(res()), {
+    dataOut(res())
   })
   
-  observeEvent(req(res3()), {
-    print(res3())
-  })
+  return(reactive({dataOut()}))
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
 
-
+}

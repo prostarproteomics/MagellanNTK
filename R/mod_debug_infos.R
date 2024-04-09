@@ -18,10 +18,8 @@
 #' @param current.pos A `integer(1)` which is the indice of the active step.
 #' @param is.enabled A `logical(1)` xxxx
 #'
-#' @examples
-#' if(interactive()){
+#' @examplesIf interactive()
 #' shiny::runApp(Debug_Infos(sub_R25))
-#' }
 #' 
 #' @author Samuel Wieczorek
 #' 

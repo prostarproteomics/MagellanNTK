@@ -25,9 +25,8 @@ Displays of formatted modal-dialog with 'Cancel' and
 'Ok' buttons.
 }
 \examples{
-if(interactive()){
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(mdEditor())
-}
 
-
+\dontshow{\}) # examplesIf}
 }

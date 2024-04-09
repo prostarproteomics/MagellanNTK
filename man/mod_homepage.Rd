@@ -33,4 +33,3 @@ shiny::runApp(mod_homepage())
 
 \dontshow{\}) # examplesIf}
 }
-\keyword{internal}

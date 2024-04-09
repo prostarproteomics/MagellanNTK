@@ -11,7 +11,7 @@
 #'
 #' @name mod_bug_report
 #' 
-#' @examples
+#' @examplesIf interactive()
 #' shiny::runApp(bug_report())
 #' 
 #' 
@@ -20,7 +20,6 @@ NULL
 
 #' @rdname mod_bug_report
 #'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList 
 #' 
@@ -40,7 +39,6 @@ mod_bug_report_ui <- function(id){
 
 #' @rdname mod_bug_report
 #' @export
-#' @keywords internal
 
 mod_bug_report_server <- function(id){
   
@@ -88,8 +86,6 @@ mod_bug_report_server <- function(id){
 }
 
 #' @rdname mod_bug_report
-#'
-#' @keywords internal
 #' @export 
 #' @importFrom shiny NS tagList fluidPage shinyApp
 #' 

@@ -26,4 +26,3 @@ shiny::runApp(open_dataset())
 
 \dontshow{\}) # examplesIf}
 }
-\keyword{internal}

@@ -14,6 +14,8 @@ infos_dataset_server(
      NULL
  })
 )
+
+infos_dataset(obj)
 }
 \arguments{
 \item{id}{xxx}
@@ -22,9 +24,9 @@ infos_dataset_server(
 A shiny Module.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   data(Exp1_R25_prot, package='DaparToolshedData')
   shiny::runApp(infos_dataset(Exp1_R25_prot))
 
-
+\dontshow{\}) # examplesIf}
 }
-\keyword{internal}

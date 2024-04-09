@@ -3,9 +3,22 @@
 index or name `i` can be specified to define the array (by name of
 index) on which to operate.
 The following functions are currently available:
-- `Keep_Datasets_from_Object(object, range)` keep datasets in object which
+- `keepDatasets(object, range)` keep datasets in object which
 are in range
-- `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the 
+- `addDatasets(object, dataset, name)` add the 'dataset' to the 
+object (of type list)
+- `Save(object, file)` stores the object to a .RData file
+This function appends a dataset in the list with customization
+if necessary
+This function deletes the items not included in the
+range parameter
+This manual page describes manipulation methods using [list] objects. In 
+index or name `i` can be specified to define the array (by name of
+index) on which to operate.
+The following functions are currently available:
+- `keepDatasets(object, range)` keep datasets in object which
+are in range
+- `addDatasets(object, dataset, name)` add the 'dataset' to the 
 object (of type list)
 - `Save(object, file)` stores the object to a .RData file"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,7 +44,7 @@ object (of type list)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MODIStsp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.00.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -117,7 +130,7 @@ object (of type list)
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Datasets processing</h1>
-    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/Magellan/blob/HEAD/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/MagellanNTK/blob/HEAD/R/default_funcs.R" class="external-link"><code>R/default_funcs.R</code></a>, <a href="https://github.com/prostarproteomics/MagellanNTK/blob/HEAD/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>dataset-processing.Rd</code></div>
     </div>
 
@@ -126,35 +139,36 @@ object (of type list)
 index or name `i` can be specified to define the array (by name of
 index) on which to operate.</p>
 <p>The following functions are currently available:</p>
-<p>- `Keep_Datasets_from_Object(object, range)` keep datasets in object which
+<p>- `keepDatasets(object, range)` keep datasets in object which
 are in range</p>
-<p>- `Add_Datasets_to_Object(object, dataset, name)` add the 'dataset' to the 
+<p>- `addDatasets(object, dataset, name)` add the 'dataset' to the 
+object (of type list)</p>
+<p>- `Save(object, file)` stores the object to a .RData file</p>
+<p>This function appends a dataset in the list with customization
+if necessary</p>
+<p>This function deletes the items not included in the
+range parameter</p>
+<p>This manual page describes manipulation methods using [list] objects. In 
+index or name `i` can be specified to define the array (by name of
+index) on which to operate.</p>
+<p>The following functions are currently available:</p>
+<p>- `keepDatasets(object, range)` keep datasets in object which
+are in range</p>
+<p>- `addDatasets(object, dataset, name)` add the 'dataset' to the 
 object (of type list)</p>
 <p>- `Save(object, file)` stores the object to a .RData file</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">Keep_Datasets_from_Object</span><span class="op">(</span><span class="va">object</span>, <span class="va">range</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addDatasets</span><span class="op">(</span><span class="va">object</span>, <span class="va">dataset</span>, <span class="va">name</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for list</span></span>
-<span><span class="fu">Keep_Datasets_from_Object</span><span class="op">(</span><span class="va">object</span>, <span class="va">range</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for `NULL`</span></span>
-<span><span class="fu">Add_Datasets_to_Object</span><span class="op">(</span><span class="va">object</span>, <span class="va">dataset</span>, <span class="va">name</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for list</span></span>
-<span><span class="fu">Add_Datasets_to_Object</span><span class="op">(</span><span class="va">object</span>, <span class="va">dataset</span>, <span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">keepDatasets</span><span class="op">(</span><span class="va">object</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>An object of class `list`.</p></dd>
-
-
-<dt>range</dt>
-<dd><p>A xxxx</p></dd>
 
 
 <dt>dataset</dt>
@@ -165,10 +179,17 @@ logarithms are computed. Default is log2.</p></dd>
 <dt>name</dt>
 <dd><p>A `character(1)` naming the new array name.</p></dd>
 
+
+<dt>range</dt>
+<dd><p>A xxxx</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
+
+<p>An processed object of the same class as `object`.</p>
+
 
 <p>An processed object of the same class as `object`.</p>
     </div>
@@ -176,15 +197,10 @@ logarithms are computed. Default is log2.</p></dd>
     <h2>Details</h2>
     <p>The object must be of type list. Thetwo functions are implemented here for 
 of the package which uses MagellanNTK</p>
+<p>The object must be of type list. Thetwo functions are implemented here for 
+of the package which uses MagellanNTK</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="cn">NA</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -193,7 +209,7 @@ of the package which uses MagellanNTK</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Samuel Wieczorek.</p>
+  <p></p><p>Developed by Samuel Wieczorek, Thomas Burger.</p>
 </div>
 
 <div class="pkgdown">
