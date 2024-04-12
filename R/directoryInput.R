@@ -30,7 +30,13 @@
 #' @return
 #' A length one character vector, character NA if 'Cancel' was selected.
 #'
+#'
+NULL
+
+
+
 #' @export
+#' @rdname choose.dir
 #' 
 choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
   if (Sys.info()['sysname'] == 'Darwin') {
@@ -45,7 +51,7 @@ choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
   return(paste("Error: don't know how to show a folder dialog in", Sys.info()['sysname']) )
 }
 
-#' @name choose.dir.darwin
+#' @rdname choose.dir
 #' 
 #' @title The apple version of the choose folder
 #' 
@@ -87,7 +93,7 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 }
 
 
-#' @name choose.dir.linux
+#' @rdname choose.dir
 #' 
 #' @title The linux version of the choose folder
 #' 
@@ -126,7 +132,7 @@ choose.dir.linux <- function(default = NA, caption = NA) {
   return(path)
 }
 
-#' @name choose.dir.windows
+#' @rdname choose.dir
 #' 
 #' @title The windows version of the choose folder
 #' 
@@ -295,7 +301,7 @@ readDirectoryInput = function(session, inputId) {
 runDirinputExample <- function() {
   
   ui <- 
-    shinyUI(fluidPage(
+    shiny::shinyUI(fluidPage(
       fluidRow(
         column(1),
         column(

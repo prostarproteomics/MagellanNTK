@@ -10,7 +10,7 @@ download_btns_ui(id, settings = list())
 
 download_btns_server(
   id,
-  data = reactive({
+  obj = reactive({
      NULL
  }),
   name,
@@ -21,17 +21,21 @@ download_btns_server(
      NULL
  })
 )
+
+download_btns(obj)
 }
 \arguments{
 \item{id}{internal}
 
-\item{data}{xxxx}
+\item{settings}{xxx}
+
+\item{obj}{A data.frame}
 
 \item{name}{xxxx.}
 
 \item{colors}{xxx}
 
-\item{df.tags}{xxx}
+\item{tags}{xxx}
 }
 \value{
 NA
@@ -40,5 +44,8 @@ NA
 A shiny module that shows download buttons in different formats.
 }
 \examples{
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(lldata)
+shiny::runApp(download_btns(lldata))
+\dontshow{\}) # examplesIf}
 }

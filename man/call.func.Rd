@@ -6,6 +6,11 @@
 \usage{
 call.func(fname, args)
 }
+\arguments{
+\item{fname}{xxx}
+
+\item{args}{xxx}
+}
 \description{
 xxx
 }

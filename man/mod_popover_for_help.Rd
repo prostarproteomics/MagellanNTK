@@ -19,12 +19,6 @@ popover_for_help(title, content)
 \item{title}{xxxx}
 
 \item{content}{xxx}
-
-\item{input}{internal}
-
-\item{output}{internal}
-
-\item{session}{internal}
 }
 \description{
 A shiny Module.

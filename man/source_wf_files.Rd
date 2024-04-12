@@ -8,6 +8,8 @@ source_wf_files(dirpath, verbose = FALSE)
 }
 \arguments{
 \item{dirpath}{xxx}
+
+\item{verbose}{A boolean}
 }
 \description{
 xxx

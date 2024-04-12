@@ -4,11 +4,7 @@
 #' @param funcs An list containing th following items:
 #' * title: xxx
 #' * base_URL: xxx
-#' @param workflow A list containing the following items:
-#' * name : The name of the workflow. If it is in a package, the functions
-#' name_ui(), name_server() and name_config() must be be available in its 
-#' environment
-#' * xxx
+#' @param verbose A `boolean(1)` 
 #' 
 #' @details
 #' The list of customizable funcs (param `funcs`) contains the following items:

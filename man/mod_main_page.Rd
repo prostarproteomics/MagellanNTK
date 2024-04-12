@@ -4,20 +4,21 @@
 \alias{mod_main_page}
 \alias{mainapp_ui}
 \alias{mainapp_server}
+\alias{mainapp}
 \title{mod_main_page_ui and mod_loading_page_server}
 \usage{
 mainapp_ui(id)
 
 mainapp_server(id, funcs = NULL, verbose = FALSE)
+
+mainapp()
 }
 \arguments{
-\item{id}{xxx}
+\item{id}{shiny id}
 
-\item{input}{internal}
+\item{funcs}{xxx}
 
-\item{output}{internal}
-
-\item{session}{internal}
+\item{verbose}{xxx}
 }
 \description{
 A shiny Module.

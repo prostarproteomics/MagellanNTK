@@ -4,16 +4,10 @@
 \alias{write.excel}
 \title{This function exports a data.frame to a Excel file.}
 \usage{
-write.excel(df, tags = NULL, colors = NULL, tabname = "foo", filename = NULL)
+write.excel(obj, filename = NULL)
 }
 \arguments{
-\item{df}{An data.frame}
-
-\item{tags}{xxx}
-
-\item{colors}{xxx}
-
-\item{tabname}{xxx}
+\item{obj}{A list of data.frame() items}
 
 \item{filename}{A character string for the name of the Excel file.}
 }
@@ -21,20 +15,11 @@ write.excel(df, tags = NULL, colors = NULL, tabname = "foo", filename = NULL)
 A Excel file (.xlsx)
 }
 \description{
-This function exports a data.frame to a Excel file.
+This is the default function fo export the current dataset as an Excel file.
 }
 \examples{
-data(Exp1_R25_pept, package="DAPARdata")
-df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
-tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
-colors <- list(
-    "Missing POV" = "lightblue",
-    "Missing MEC" = "orange",
-    "Quant. by recovery" = "lightgrey",
-    "Quant. by direct id" = "white",
-    "Combined tags" = "red"
-)
-write.excel(df, tags, colors, filename = "toto")
+data(lldata)
+write.excel(lldata, "foo.xlsx")
 
 }
 \author{

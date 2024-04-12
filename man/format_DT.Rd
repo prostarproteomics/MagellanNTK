@@ -8,34 +8,25 @@
 \usage{
 format_DT_ui(id)
 
-format_DT_server(id, data)
+format_DT_server(id, obj)
+
+format_DT(obj)
 }
 \arguments{
 \item{id}{shiny id}
 
-\item{data}{xxx}
-
-\item{withDLBtns}{xxx}
-
-\item{showRownames}{xxx}
-
-\item{dom}{xxx}
-
-\item{hc_style}{xxx}
-
-\item{full_style}{A list of four items:
-* cols: a vector of colnames of columns to show,
-* vals: a vector of colnames of columns that contain values,
-* unique: unique(conds),
-* pal: RColorBrewer::brewer.pal(3, "Dark2")[seq_len(2)]}
-
-\item{filename}{xxx}
-
-\item{hideCols}{xxx}
+\item{obj}{xxx}
 }
 \value{
 NA
 }
 \description{
 A shiny Module.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(lldata)
+shiny::runApp(format_DT(assay(lldata[[1]])))
+
+\dontshow{\}) # examplesIf}
 }

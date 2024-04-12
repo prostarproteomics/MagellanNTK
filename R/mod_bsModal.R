@@ -10,6 +10,10 @@
 #' be "s" for small (the default), "m" for medium, or "l" for large.
 #' @param uiContent The content of the modal dialog.
 #' @param shiny.module xxx
+#' @param ui.func xxx
+#' @param ui.params xxx
+#' @param server.func xxx
+#' @param server.params xxx
 #'
 #' @export
 #'

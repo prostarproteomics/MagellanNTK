@@ -62,7 +62,7 @@ dyn_widgets_server <- function(id) {
 #' @import shiny
 #' @export
 dyn_widgets <- function(){
-  ui <- shinyUI(
+  ui <- shiny::shinyUI(
     dyn_widgets_ui('test')
   )
   

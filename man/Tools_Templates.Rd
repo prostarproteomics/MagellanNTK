@@ -6,8 +6,8 @@
 \usage{
 Tools_Templates()
 }
-\arguments{
-\item{name}{xxx}
+\value{
+NA
 }
 \description{
 xxx

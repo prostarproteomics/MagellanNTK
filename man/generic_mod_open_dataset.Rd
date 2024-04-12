@@ -5,7 +5,7 @@
 \alias{open_dataset_ui}
 \alias{open_dataset_server}
 \alias{open_dataset}
-\title{mod_open_dataset_ui and mod_open_dataset_server}
+\title{Change the default functions in `MagellanNTK`}
 \usage{
 open_dataset_ui(id)
 
@@ -17,7 +17,7 @@ open_dataset()
 \item{id}{xxx}
 }
 \description{
-A shiny Module.
+This module allows to change
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

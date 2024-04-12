@@ -3,18 +3,18 @@
 \docType{data}
 \name{datasets}
 \alias{datasets}
-\alias{data1}
-\alias{data_na}
-\title{data1 dataset}
+\alias{lldata}
+\alias{sub_R25}
+\title{lldata dataset}
 \format{
 An object of class `list()`
 
 An object of class `list()`
 }
 \usage{
-data(data1)
+data(lldata)
 
-data(data_na)
+data(sub_R25)
 }
 \description{
 xxx

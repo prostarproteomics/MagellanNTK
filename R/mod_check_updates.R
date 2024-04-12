@@ -1,16 +1,16 @@
 
-#' @export
-GetOnlineZipVersion <- function(){
-  
-  thepage <- readLines('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/')
-  substr(thepage[12], regexpr("Prostar_",thepage[12])[1], 2+regexpr("zip",thepage[12])[1])
-  
-  
-  thetable <- XML::readHTMLTable('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/', stringsAsFactors=FALSE)
-  onlineZipVersion <- thetable[[1]]$Name[3]
-  
-  return(onlineZipVersion)
-}
+# #' @export
+# GetOnlineZipVersion <- function(){
+#   
+#   thepage <- readLines('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/')
+#   substr(thepage[12], regexpr("Prostar_",thepage[12])[1], 2+regexpr("zip",thepage[12])[1])
+#   
+#   
+#   thetable <- XML::readHTMLTable('http://prabig-prostar.univ-lyon1.fr/ProstarZeroInstall/', stringsAsFactors=FALSE)
+#   onlineZipVersion <- thetable[[1]]$Name[3]
+#   
+#   return(onlineZipVersion)
+# }
 
 
 
@@ -18,15 +18,21 @@ GetOnlineZipVersion <- function(){
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
 #'
 #' @return xxxx
-#' @rdname mod_check_updates
+#' @name mod_check_updates
+#' 
+#' @examplesIf interactive()
+#' shiny::runApp(mod_check_updates())
+#' 
+NULL
+
+
 #'
 #' @export 
 #' @importFrom shiny NS tagList 
+#' @rdname mod_check_updates
+#' 
 mod_check_updates_ui <- function(id){
   ns <- NS(id)
   tagList(
@@ -73,7 +79,8 @@ mod_check_updates_server <- function(id){
           p(style="font-size: 16px", "Even though it remains possible to work with the current package versions, updates are advised.
          If you use the server or the stand-alone versions, please proceed via the Bioconductor."),
           
-          zipVersion <- substr(GetOnlineZipVersion(), 9, regexpr(".zip",GetOnlineZipVersion())[1] -1),
+          #zipVersion <- substr(GetOnlineZipVersion(), 9, regexpr(".zip",GetOnlineZipVersion())[1] -1),
+          zipVersion <- "0.0.0",
           prostarVersion <- installed.packages(lib.loc=Prostar.loc)["Prostar","Version"],
 
           if (compareVersion(zipVersion, prostarVersion) == 1){
@@ -207,7 +214,7 @@ mod_check_updates_server <- function(id){
 
 #' @rdname mod_check_updates
 #' @export
-check_updates <- function(){
+mod_check_updates <- function(){
 ui <- mod_check_updates_ui("update")
 
 server <- function(input, output, session) {

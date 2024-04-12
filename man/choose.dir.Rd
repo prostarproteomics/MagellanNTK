@@ -2,9 +2,18 @@
 % Please edit documentation in R/directoryInput.R
 \name{choose.dir}
 \alias{choose.dir}
+\alias{choose.dir.darwin}
+\alias{choose.dir.linux}
+\alias{choose.dir.windows}
 \title{Choose a Folder Interactively}
 \usage{
 choose.dir(default = NA, caption = NA, useNew = TRUE)
+
+choose.dir.darwin(default = NA, caption = NA)
+
+choose.dir.linux(default = NA, caption = NA)
+
+choose.dir.windows(default = NA, caption = NA, useNew = TRUE)
 }
 \arguments{
 \item{default}{which folder to show initially}
@@ -14,6 +23,12 @@ choose.dir(default = NA, caption = NA, useNew = TRUE)
 \item{useNew}{boolean, selects the type of dialog shown in windows}
 }
 \value{
+A length one character vector, character NA if 'Cancel' was selected.
+
+A length one character vector, character NA if 'Cancel' was selected.
+
+A length one character vector, character NA if 'Cancel' was selected.
+
 A length one character vector, character NA if 'Cancel' was selected.
 }
 \description{
@@ -35,4 +50,11 @@ determined by defaul behavior of the zenity script.
 
 The new windows batch script allows both initial folder and caption to be set.
 In the old batch script for Windows the initial folder is always ignored.
+}
+\seealso{
+\code{\link{choose.dir}}
+
+\code{\link{choose.dir}}
+
+\code{\link{choose.dir}}
 }

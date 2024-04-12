@@ -10,7 +10,8 @@
 #' @param width A `character(1)` indicating the size of the modal window. Can 
 #' be "s" for small (the default), "m" for medium, or "l" for large.
 #' @param uiContent The content of the modal dialog.
-#'
+#' @param external_mod xxx
+#' @param external_mod_args xxx
 #' @importFrom shinyjqui jqui_draggable
 #' 
 #' @name mod_modalDialog
@@ -129,7 +130,8 @@ mod_modalDialog_server <- function(id,
       } else
        actionLink(ns("show"), title,
                    #icon("chart-bar", lib = "font-awesome"),
-                   class = "btn-success")
+                   #class = "btn-success"
+                   )
     })
     
 
@@ -161,7 +163,7 @@ mod_modalDialog_server <- function(id,
 
     })
     
-    observe({
+    session$userData$clicks_observer <- observe({
       req(external_mod)
       args <- list(id = 'test')
       if (length(external_mod_args))
@@ -178,8 +180,23 @@ mod_modalDialog_server <- function(id,
         dataOut(tmp()())
       
       removeModal()
+      RemoveModule()
     })
     
+    
+    remove_shiny_inputs <- function(id, .input) {
+      invisible(
+        lapply(grep(id, names(.input), value = TRUE), function(i) {
+          .subset2(.input, "impl")$.values$remove(i)
+        })
+      )
+    }
+    
+    RemoveModule <- reactive({
+      removeUI(selector = "#module_content")
+      remove_shiny_inputs("my_module", input)
+      session$userData$clicks_observer$destroy()
+    })
     
     return(reactive({dataOut()}))
   })

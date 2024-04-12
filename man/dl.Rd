@@ -6,6 +6,7 @@
 \alias{dl_server}
 \alias{download_ui}
 \alias{download_server}
+\alias{mod_dl}
 \title{dl}
 \usage{
 dl_ui(id)
@@ -41,6 +42,8 @@ download_server(
      NULL
  })
 )
+
+mod_dl()
 }
 \arguments{
 \item{id}{internal}
@@ -70,5 +73,7 @@ A shiny Module.
 data(sub_R25)
 shiny::runApp(mod_downloadLink(sub_R25))
 \dontshow{\}) # examplesIf}
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+shiny::runApp(mod_dl())
+\dontshow{\}) # examplesIf}
 }

@@ -1,9 +1,11 @@
 
 #' @title xxx
 #' @description xxx
-#' @param name xxx
-#' @rdname example_workflow
+#' @rdname Tools_Templates
 #' @export
+#' 
+#' @return NA
+#' 
 Tools_Templates <- function(){
   data(data_na)
   path <- system.file("extdata/workflow/Tools", package = "MagellanNTK")

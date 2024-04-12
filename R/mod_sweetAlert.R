@@ -1,6 +1,11 @@
 #' @title xxx
 #' @description xxxxx
 #' 
+#' @param id xxx
+#' @param title xxx
+#' @param text xxx
+#' @param showClipBtn xxx
+#' @param type xxx
 #' 
 #' @examplesIf interactive()
 #' shiny::runApp(mod_SweetAlert('my title', 'my message'))
@@ -58,7 +63,9 @@ mod_SweetAlert_server <- function(id,
 
 
 
-
+#' @export
+#' @rdname mod_sweetAlert
+#' 
 mod_SweetAlert <- function(title, text, type = "warning"){
 ui <- fluidPage(
   #actionButton('test', 'Test')

@@ -1,10 +1,14 @@
 
-#' @title   mod_choose_pipeline_ui and mod_choose_pipeline_server
-#' @description  This module is used to load the package which contains all the code
-#' to work with prostar.2.0.
+#' @title Change the default functions in `MagellanNTK`
+#' @description  This module allows to change the default functions
+#' embedded in the package `MagellanNTK`. These fucntions are the following:
+#' * convert_dataset: xxx
+#' * view_dataset: xxx
+#' * infos_dataset: xxx
+#' 
 #' 
 #' @param id shiny id
-#' @param pkg xxx
+#' @param funcs xxx
 #' 
 #' @examplesIf interactive()
 #' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
@@ -68,7 +72,8 @@ mod_load_package_ui <- function(id) {
 #' @import shiny
 #' @rdname mod_load_package
 #'
-mod_load_package_server <- function(id, funcs = NULL) {
+mod_load_package_server <- function(id, 
+  funcs = reactive({NULL})) {
   
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -78,9 +83,13 @@ mod_load_package_server <- function(id, funcs = NULL) {
     
     
     rv <- reactiveValues(
-      list.funcs = funcs
+      list.funcs = NULL
     )
 
+    observeEvent(funcs(), {
+      rv$list.funcs <- funcs()
+    }, once = TRUE)
+    
       output$show_table <- renderUI({
         req(rv$list.funcs)
         
@@ -101,31 +110,6 @@ mod_load_package_server <- function(id, funcs = NULL) {
         })
       })
 
-    # 
-    # output$update_func_ui <- renderUI({
-    #   selectInput(ns('update_func'), 'Function to update',
-    #     choices = names(funcs))
-    # })
-    # 
-    # output$select_pkg_ui <- renderUI({
-    #   req(input$update_func)
-    #   find_ui_func <- find_funs(paste0(input$update_func, '_ui'))$package_name
-    #   find_server_func <- find_funs(paste0(input$update_func, '_server'))$package_name
-    #   selectInput(ns('choosepkg'), 
-    #     'Package',
-    #     choices = unique(find_ui_func, find_server_func)
-    #   )
-    # })
-
-    # 
-    # observeEvent(req(input$update_btn), {
-    #   
-    #   ind <- which(rv$list.funcs['Function' ] == input$update_func)
-    # 
-    #   rv$list.funcs[ind, 'Package'] <- paste0(input$choosepkg, '::', input$update_func)
-    # 
-    #   })
-    # 
     observeEvent(lapply(names(rv$list.funcs), function(x) input[[paste0(x, '_ui')]]), {
       ll <- list()
       for (c in names(rv$list.funcs))
@@ -134,30 +118,22 @@ mod_load_package_server <- function(id, funcs = NULL) {
       dataOut$value <- ll
     })
     
-    # 
-    # observeEvent(input$validate_btn, {
-    #   ll <- list()
-    #   for (c in names(rv$list.funcs))
-    #     ll[[c]] <- paste0(input[[paste0(c, '_ui')]], '::', c)
-    #   
-    #   dataOut$value <- ll
-    # })
-    
     reactive({dataOut$value})
   })
   
 }
 
 
-
+#' @export
+#' @import shiny
+#' @rdname mod_load_package
+#' 
 load_package <- function(funcs){
   ui <- mod_load_package_ui("mod_pkg")
 
 server <- function(input, output, session) {
   
-  
-  done <- mod_load_package_server("mod_pkg", funcs = funcs)
-  #done <- mod_load_package_server("mod_pkg", pkg = 'DaparToolshed')
+  done <- mod_load_package_server("mod_pkg", funcs = reactive({funcs}))
   
   observeEvent(done(), {
     print(done())

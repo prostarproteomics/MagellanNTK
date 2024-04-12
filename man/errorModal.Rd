@@ -8,12 +8,14 @@
 \usage{
 errorModal_ui(id)
 
-errorModal_server(id, text)
+errorModal_server(id, msg)
+
+errorModal(msg)
 }
 \arguments{
 \item{id}{internal}
 
-\item{text}{xxxx}
+\item{msg}{xxxx}
 }
 \value{
 NA
@@ -22,5 +24,7 @@ NA
 A shiny module that shows messages in modal.
 }
 \examples{
-
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+shiny::runApp(errorModal("my error text"))
+\dontshow{\}) # examplesIf}
 }

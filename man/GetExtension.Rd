@@ -6,11 +6,15 @@
 \usage{
 GetExtension(name)
 }
+\arguments{
+\item{name}{A complete filename}
+}
+\value{
+The extension of the given filename
+}
 \description{
 Get file extension
 }
 \examples{
 GetExtension('foo.xlsx')
-
-
 }

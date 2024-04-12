@@ -18,11 +18,7 @@ mod_homepage()
 \arguments{
 \item{id}{shiny id}
 
-\item{input}{internal}
-
-\item{output}{internal}
-
-\item{session}{internal}
+\item{mdfile}{xxx}
 }
 \description{
 A shiny Module.

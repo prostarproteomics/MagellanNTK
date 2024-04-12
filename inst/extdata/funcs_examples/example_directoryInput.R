@@ -6,7 +6,7 @@
 
 library(shiny)
 
-ui <- shinyUI(fluidPage(
+ui <- shiny::shinyUI(fluidPage(
   fluidRow(
     column(1),
     column(

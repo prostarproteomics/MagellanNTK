@@ -126,9 +126,7 @@ workflow_server <- function(id,
   
   
   
-#' @title xxx
-#' @description xxx
-#' @param name xxx
+
 #' @rdname workflow
 #' @export
 workflowApp <- function(id,

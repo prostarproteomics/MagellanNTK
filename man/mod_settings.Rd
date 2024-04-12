@@ -14,6 +14,8 @@ mod_settings(obj)
 }
 \arguments{
 \item{id}{shiny id}
+
+\item{obj}{xxx}
 }
 \description{
 A shiny Module.

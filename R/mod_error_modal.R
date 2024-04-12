@@ -3,10 +3,12 @@
 #' @description A shiny module that shows messages in modal.
 #' 
 #' @param id internal
-#' @param text xxxx
+#' @param msg xxxx
 #'
 #' @name errorModal
-#' @example examples/test_errorModal.R
+#' 
+#' @examplesIf interactive()
+#' shiny::runApp(errorModal("my error text"))
 #'
 NULL
 
@@ -19,16 +21,12 @@ errorModal_ui <- function(id) {}
 
 #' @rdname errorModal
 #' @return NA
-#'
+#' @import shiny
 #' @export
 #'
-errorModal_server <- function(id, text){
+errorModal_server <- function(id, msg){
   
-  if (!requireNamespace("shiny", quietly = TRUE)) {
-    stop("Please install shiny: BiocManager::install('shiny')")
-  }
-  
-  shiny::moduleServer(id, function(input, output, session) {
+  ishiny::moduleServer(id, function(input, output, session) {
       
       observeEvent(TRUE, ignoreInit = FALSE, {
         # shiny::showModal(
@@ -44,7 +42,7 @@ errorModal_server <- function(id, text){
               tags$style("#tPanel {overflow-y:scroll; color: red;}"),
               shiny::wellPanel(
                 id = "tPanel",
-                HTML(paste('> ', text, collapse = "<br/>"))
+                HTML(paste('> ', msg, collapse = "<br/>"))
               )
               ,easyClose = TRUE)
           ))
@@ -57,22 +55,18 @@ errorModal_server <- function(id, text){
 
 
 
-###################################################################
-#                             Example                             #
-###################################################################
-
-library(shiny)
-
+#' @export
+#' @rdname errorModal
+#' 
+errorModal <- function(msg){
 ui <- fluidPage(
   errorModal_ui(id = 'ex')
 )
 
 server <- function(input, output) {
-  
-  
-  errorModal_server(id = "ex", text = 'test')
-
+  errorModal_server(id = "ex", msg = msg)
 }
 
-shinyApp(ui = ui, server = server)
+app <- shiny::shinyApp(ui, server)
+}
 

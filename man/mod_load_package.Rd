@@ -4,20 +4,31 @@
 \alias{mod_load_package}
 \alias{mod_load_package_ui}
 \alias{mod_load_package_server}
-\title{mod_choose_pipeline_ui and mod_choose_pipeline_server}
+\alias{load_package}
+\title{Change the default functions in `MagellanNTK`}
 \usage{
 mod_load_package_ui(id)
 
-mod_load_package_server(id, funcs = NULL)
+mod_load_package_server(
+  id,
+  funcs = reactive({
+     NULL
+ })
+)
+
+load_package(funcs)
 }
 \arguments{
 \item{id}{shiny id}
 
-\item{pkg}{xxx}
+\item{funcs}{xxx}
 }
 \description{
-This module is used to load the package which contains all the code
-to work with prostar.2.0.
+This module allows to change the default functions
+embedded in the package `MagellanNTK`. These fucntions are the following:
+* convert_dataset: xxx
+* view_dataset: xxx
+* infos_dataset: xxx
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

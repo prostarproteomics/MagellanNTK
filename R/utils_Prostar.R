@@ -14,6 +14,9 @@ GetPackageVersion <- function(pkg){
 #' @title Call function
 #' @description xxx
 #' 
+#' @param fname xxx
+#' @param args xxx
+#' 
 #' @seealso [do.call()]
 #' 
 #' @export
@@ -21,14 +24,16 @@ GetPackageVersion <- function(pkg){
 #' @examples
 #' call.func("stats::rnorm", list(10))
 #' 
-call.func <- function(fname,
-                      args){
+call.func <- function(fname, args){
   do.call(eval(parse(text=fname)), args)
 }
 
-# function to read DT inputs
+#' @title function to read DT inputs
+#' #'description xxx
+#' @param id xxx
+#' @param num xxx
 #' @export
-shinyValue <- function(id,num) {
+shinyValue <- function(id, num) {
   unlist(lapply(seq_len(num),function(i) {
     value <- input[[paste0(id,i)]]
     if (is.null(value)) NA else value
@@ -36,8 +41,14 @@ shinyValue <- function(id,num) {
 }
 
 
+#' @title Package version
+#' #'description xxx
+#' @param FUN xxx
+#' @param id xxx
+#' @param num xxx
+#' @param ... xxx
 #' @export
-shinyOutput <- function(FUN,id,num,...) {
+shinyOutput <- function(FUN, id, num, ...) {
   inputs <- character(num)
   for (i in seq_len(num)) {
     inputs[i] <- as.character(FUN(paste0(id,i),label=NULL,...))
@@ -46,9 +57,14 @@ shinyOutput <- function(FUN,id,num,...) {
 }
 
 
-# function for dynamic inputs in DT
+#' @title function for dynamic inputs in DT
+#' #'description xxx
+#' @param FUN xxx
+#' @param id xxx
+#' @param num xxx
+#' @param ... xxx
 #' @export
-shinyInput <- function(FUN, id ,num,...) {
+shinyInput <- function(FUN, id , num, ...) {
   inputs <- character(num)
   for (i in seq_len(num)) {
     inputs[i] <- as.character(FUN(paste0(id, i),label=NULL,...))
@@ -59,8 +75,11 @@ shinyInput <- function(FUN, id ,num,...) {
 
 
 
-# Call this function with all the regular navbarPage() parameters, plus a text parameter,
-# if you want to add text to the navbar
+#' @title function for dynamic inputs in DT
+#' @description Call this function with all the regular navbarPage() parameters,
+#'  plus a text parameter, if you want to add text to the navbar
+#' @param ... xxx
+#' @param text xxx
 #' @export
 navbarPageWithText <- function(..., text) {
   navbar <- navbarPage(...)
@@ -70,9 +89,14 @@ navbarPageWithText <- function(..., text) {
   navbar
 }
 
-# Call this function with an input (such as `textInput("text", NULL, "Search")`) if you
-# want to add an input to the navbar
+
+#' @title xxx 
+#' @description Call this function with all the regular navbarPage() parameters,
+#'  plus a text parameter, if you want to add text to the navbar
+#' @param ... xxx
+#' @param inputs xxx
 #' @export
+#' 
 navbarPageWithInputs <- function(..., inputs) {
   navbar <- navbarPage(...)
   form <- tags$form(class = "navbar-form", inputs)
@@ -84,36 +108,15 @@ navbarPageWithInputs <- function(..., inputs) {
 
 
 
-###-------------------------------------
+
+
+
+
+#' @title xxx
+#' @description
+#' A short description...
 #' @export
-#' @importFrom shiny reactive
-Compute_PCA_nbDimensions <- shiny::reactive({
-  # ncp should not be greater than...
-  nmax <- 12  
-  # pour info, ncp = nombre de composantes ou de dimensions dans les r?sultats de l'ACP
-  
-  y <- Biobase::exprs(rv$current.obj)
-  nprot <- dim(y)[1]
-  # If too big, take the number of conditions.
-  n <- dim(y)[2] 
-  
-  if (n > nmax){
-    n <- length(unique(Biobase::pData(rv$current.obj)$Condition))
-  }
-  
-  
-  ncp <- min(n, nmax)
-  ncp
-})
-
-
-
-
-
-
-
-
-#' @export
+#' 
 launchGA <- function(){
   if (system('hostname')=="prabig-prostar"){
     tags$head(includeScript("www/google-analytics.js"))
@@ -124,8 +127,11 @@ launchGA <- function(){
 }
 
 
-# Dans mod_msnset_explorer.R
+#' @title xxx
+#' @description
+#' A short description...
 #' @export
+#' 
 initComplete <- function(){
   return (JS(
     "function(settings, json) {",
@@ -136,10 +142,14 @@ initComplete <- function(){
 
 #' @title Get file extension
 #' 
+#' @param name A complete filename
+#' 
 #' @export
 #' 
 #' @examples
 #' GetExtension('foo.xlsx')
+# 
+#' @return The extension of the given filename
 #' 
 #' 
 GetExtension <- function(name) {

@@ -1,6 +1,6 @@
-#' @title mod_open_dataset_ui and mod_open_dataset_server
+#' @title Change the default functions in `MagellanNTK`
 #' 
-#' @description  A shiny Module.
+#' @description This module allows to change
 #' 
 #' @param id xxx
 #' 
@@ -24,19 +24,17 @@ NULL
 open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default demo dataset module --'),
+    h3(style="color: blue;", '-- Default open dataset module --'),
       shinyjs::useShinyjs(),
       tagList(
         selectInput(ns('chooseSource'), 'Dataset source',
           choices = c('Custom dataset' = 'customDataset',
-            'package dataset' = 'packageDataset')),
-        
-        wellPanel(
-          uiOutput(ns('customDataset_UI'))
-          ),
-        wellPanel(
-          uiOutput(ns('packageDataset_UI'))
-          ),
+            'package dataset' = 'packageDataset'),
+          width = '200px'),
+
+          uiOutput(ns('customDataset_UI')),
+
+          uiOutput(ns('packageDataset_UI')),
         infos_dataset_ui(ns("infos"))
       )
     )
@@ -59,13 +57,10 @@ open_dataset_server <- function(id){
       dataRead = NULL,
       dataOut = NULL
     )
-    
-    
-    
-    
+
     output$packageDataset_UI <- renderUI({
       req(input$chooseSource == 'packageDataset')
-        tagList(
+        wellPanel(
           uiOutput(ns("choosePkg")),
           uiOutput(ns("chooseDemoDataset")),
           uiOutput(ns("linktoDemoPdf")),
@@ -78,8 +73,7 @@ open_dataset_server <- function(id){
     
     output$customDataset_UI <- renderUI({
       req(input$chooseSource == 'customDataset')
-      tagList(
-        h3(style="color: blue;", '-- Default open dataset module --'),
+      wellPanel(
         fileInput(ns("file"), "Open file", multiple = FALSE),
         actionButton(ns('load_btn'), 'Load file')
       )
@@ -96,7 +90,6 @@ open_dataset_server <- function(id){
     
     
     GetPackagesWithDatasets <- reactive({
-      
       x <- data(package = .packages(all.available = TRUE))$results
       dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
       dat

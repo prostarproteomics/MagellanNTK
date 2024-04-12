@@ -5,6 +5,7 @@
 #'
 #' @param id shiny id
 #' @param url internal
+#' @param link_URL xxx
 #'
 #' @name mod_insert_md
 #' 
@@ -36,9 +37,10 @@ insert_md_ui <- function(id){
 #' 
 #' @rdname mod_insert_md
 #' @export
-insert_md_server <- function(id,
-                             url,
-                             link_URL = NULL){
+insert_md_server <- function(
+    id,
+  url,
+  link_URL = NULL){
   
   
   moduleServer(id, function(input, output, session){
@@ -92,6 +94,6 @@ insert_md <- function(url){
   insert_md_server('tree', url)
 }
 
-app <- shinyApp(ui = ui, server = server)
+app <- shinyApp(ui, server)
 }
 

@@ -19,6 +19,8 @@ infos_dataset(obj)
 }
 \arguments{
 \item{id}{xxx}
+
+\item{obj}{xxx}
 }
 \description{
 A shiny Module.

@@ -10,15 +10,15 @@ enableJIT(3)
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @importFrom  shiny shinyServer observeEvent toggle
 #' @import shinyjs
 #' 
 #' @noRd
-server_MagellanNTK <- shinyServer( 
+server_MagellanNTK <- shiny::shinyServer( 
   
     function(input, output, session ) {
       
-      observeEvent(funcs, {
+      shiny::observeEvent(funcs, {
         for(i in names(funcs))
           requireNamespace(unlist(strsplit(funcs[[i]], split='::'))[1])
 

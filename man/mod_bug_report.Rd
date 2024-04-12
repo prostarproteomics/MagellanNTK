@@ -15,12 +15,6 @@ bug_report()
 }
 \arguments{
 \item{id}{shiny id}
-
-\item{input}{internal}
-
-\item{output}{internal}
-
-\item{session}{internal}
 }
 \description{
 A shiny Module.

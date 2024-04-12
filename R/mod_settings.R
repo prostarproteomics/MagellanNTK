@@ -3,6 +3,7 @@
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
+#' @param obj xxx
 #' 
 #' @name mod_settings
 #' 

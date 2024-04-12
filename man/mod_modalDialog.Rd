@@ -33,6 +33,10 @@ mod_modalDialog(
 be "s" for small (the default), "m" for medium, or "l" for large.}
 
 \item{uiContent}{The content of the modal dialog.}
+
+\item{external_mod}{xxx}
+
+\item{external_mod_args}{xxx}
 }
 \value{
 A Shiny modal-dialog

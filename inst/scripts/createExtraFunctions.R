@@ -75,9 +75,10 @@ default_keep_func <- function() {
 #' @export
 #' @rdname create_custom_funcs
 #'
-createExtraFunctions <- function(path.dir = '.',
-                                 add_func = default_add_func(),
-                                 keep_func = default_keep_func()) {
+createExtraFunctions <- function(
+    path.dir = '.',
+    add_func = default_add_func(),
+    keep_func = default_keep_func()) {
   
   
   # Create template module file

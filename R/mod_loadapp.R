@@ -18,9 +18,6 @@
 #' @name mod_loading_page
 #' 
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
 #'
 #' 
 #' @return 

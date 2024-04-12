@@ -4,6 +4,7 @@
 \alias{mod_sweetAlert}
 \alias{mod_SweetAlert_ui}
 \alias{mod_SweetAlert_server}
+\alias{mod_SweetAlert}
 \title{xxx}
 \usage{
 mod_SweetAlert_ui(id)
@@ -15,6 +16,19 @@ mod_SweetAlert_server(
   showClipBtn = TRUE,
   type = "error"
 )
+
+mod_SweetAlert(title, text, type = "warning")
+}
+\arguments{
+\item{id}{xxx}
+
+\item{title}{xxx}
+
+\item{text}{xxx}
+
+\item{showClipBtn}{xxx}
+
+\item{type}{xxx}
 }
 \description{
 xxxxx

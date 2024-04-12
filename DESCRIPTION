@@ -31,7 +31,8 @@ Depends: R (>= 4.4.0)
 Imports: 
     S4Vectors,
     methods,
-    DT, sos,
+    DT, 
+    sos,
     shiny,
     shinydashboardPlus, 
     shinydashboard, 
@@ -49,11 +50,14 @@ Imports:
     openxlsx,
     markdown,
     shinyAce,
-    BiocGenerics, BiocManager, DAPAR, DAPARdata,
+    BiocGenerics, DAPAR, DAPARdata,
     DaparToolshedData, QFeatures, data.table, future,
     ggplot2, gplots, highcharter, later, promises,
     rhandsontable, shinycssloaders, shinythemes, tibble,
-    vioplot, webshot, omXplore, rclipboard
+    vioplot, webshot, omXplore, rclipboard, BiocManager
+Suggests: 
+    rmarkdown, BiocStyle, testthat, shinyTree, knitr, colourpicker, 
+    gtools, XML, R.utils, RColorBrewer
 Collate: 
     app.R
     settings.R
@@ -70,11 +74,7 @@ Collate:
     mod_dl.R
     mod_bsModal.R
     mod_mdEditor.R
-    createMdDescriptionFiles.R
-    createExtraFunctions.R
     mod_createTemplate.R
-    createExtraModules.R
-    createModuleTemplate.R
     mod_dyn_widgets.R
     config_class.R
     doc-data.R
@@ -114,18 +114,13 @@ Collate:
     mod_popover_for_help.R
     mod_release_notes.R
     mod_settings.R
-    utils_Prostar.R
-    prostar.R
     mod_loadapp.R
     mod_mainapp.R
+    utils_Prostar.R
 biocViews: Software, WorkflowStep, Proteomics, GUI
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 URL: https://github.com/prostarproteomics/MagellanNTK
 BugReports: https://github.com/prostarproteomics/MagellanNTK/issues
-Suggests: 
-    rmarkdown,
-    BiocStyle, BiocManager, testthat, shinyTree, knitr, colourpicker, 
-    gtools, XML, R.utils, RColorBrewer, DT, shinyWidgets, sass, tibble
 VignetteBuilder: knitr
 StagedInstall: no

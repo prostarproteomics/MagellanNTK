@@ -20,12 +20,6 @@ loadApp()
 \item{id}{shiny id}
 
 \item{f}{name of function for which the package(s) are to be identified.}
-
-\item{input}{internal}
-
-\item{output}{internal}
-
-\item{session}{internal}
 }
 \value{
 A list where each slot is named with the customizable functions. Each slot

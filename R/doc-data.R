@@ -1,11 +1,11 @@
 
 #' @name datasets
-#' @title data1 dataset
+#' @title lldata dataset
 #' @description xxx
-#' @aliases data1
+#' @aliases lldata
 #' @docType data
 #' @keywords data
-#' @usage data(data1)
+#' @usage data(lldata)
 #'
 #' @format An object of class `list()`
 #'
@@ -14,12 +14,12 @@ NULL
 
 
 #' @name datasets
-#' @title data_na dataset
+#' @title sub_R25 dataset
 #' @description xxx
-#' @aliases data_na
+#' @aliases sub_R25
 #' @docType data
 #' @keywords data
-#' @usage data(data_na)
+#' @usage data(sub_R25)
 #'
 #' @format An object of class `list()`
 #'

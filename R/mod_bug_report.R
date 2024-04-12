@@ -1,12 +1,7 @@
-# Module UI
-
 #' @title   mod_bug_report_ui and mod_bug_report_server
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
 #'
 #'
 #' @name mod_bug_report

@@ -1,7 +1,15 @@
-#' @title   mod_main_page_ui and mod_loading_page_server
+#' @title  mod_main_page_ui and mod_loading_page_server
+#' 
 #' @description  A shiny Module.
 #' 
 #' @name mod_main_page
+#' 
+#' 
+#' @param id shiny id
+#' @param funcs xxx
+#' @param verbose xxx
+#'
+#' 
 #' 
 #' @examplesIf interactive()
 #' shiny::runApp(mainapp())
@@ -17,12 +25,6 @@
 NULL
 
 
-#'
-#' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
-#'
 #' @rdname mod_main_page
 #'
 #' @export 
@@ -308,12 +310,12 @@ mainapp_ui <- function(id){
 }
 
 
-#' @param id xxx
+
 #' @rdname mod_main_page
 #' @export
 #' 
 mainapp_server <- function(id,
-                           funcs = NULL,
+  funcs = NULL,
   verbose = FALSE){
    
   moduleServer(id, function(input, output, session){
@@ -406,9 +408,9 @@ mainapp_server <- function(id,
     
     
     tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
-      title = "test modalDialog",
+      title = "Change default functions",
       external_mod = 'mod_load_package',
-      external_mod_args = list(funcs = rv.core$funcs)
+      external_mod_args = list(funcs = reactive({rv.core$funcs}))
       )
     
     observeEvent(req(tmp.funcs()), {
@@ -579,7 +581,9 @@ mainapp_server <- function(id,
 
 
 
-#___________________________________________________________
+#' @export
+#' @rdname mod_main_page
+#' 
 mainapp <- function(){
   
   ui <- fluidPage(

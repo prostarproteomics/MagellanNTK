@@ -2,9 +2,6 @@
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
 #' @param title xxxx
 #' @param content xxx
 #'

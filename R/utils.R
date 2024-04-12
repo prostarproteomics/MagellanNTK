@@ -13,7 +13,7 @@
 #'
 readCustomizableFuncs <- function(path){
 
-  config.file <- normalizePath(file.path(path, 'config.txt'))
+  config.file <- normalizePath(file.path(path))
   if(!file.exists(config.file))
     stop('file does not exist')
   
@@ -51,6 +51,7 @@ readCustomizableFuncs <- function(path){
 #' @description xxx
 #' 
 #' @param dirpath xxx
+#' @param verbose A boolean
 #' 
 #' @examples
 #' path <- system.file("extdata/workflow/PipelineA", package = 'MagellanNTK')
@@ -82,8 +83,6 @@ file.exists(config.file)
 #' 
 #' @description xxx
 #' 
-#' @param dirpath xxx
-#' 
 #' @examples
 #' source_shinyApp_files()
 #' 
@@ -108,7 +107,13 @@ source(file_path_global, local = FALSE)
 }
 
 
+#' @title xxx
+#' @param pattern xxx
+#' @param target xxx
+#' 
+#' @return A boolean
 #' @export
+#' 
 is.substr <- function(pattern, target){
   length(grep(pattern, target, fixed = TRUE)) > 0
 }

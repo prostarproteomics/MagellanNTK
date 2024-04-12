@@ -3,6 +3,7 @@
 #' @description A shiny Module.
 #' 
 #' @param id xxx
+#' @param obj xxx
 #' 
 #' @name infos_dataset
 #' 
@@ -40,8 +41,9 @@ infos_dataset_ui <- function(id){
 #' @importFrom shinyjs info
 #' @importFrom shiny moduleServer observe req reactive 
 #' 
-infos_dataset_server <- function(id, 
-                                 obj = reactive({NULL})){
+infos_dataset_server <- function(
+    id,
+  obj = reactive({NULL})){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns

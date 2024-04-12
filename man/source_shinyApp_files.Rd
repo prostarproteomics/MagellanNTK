@@ -6,9 +6,6 @@
 \usage{
 source_shinyApp_files()
 }
-\arguments{
-\item{dirpath}{xxx}
-}
 \description{
 xxx
 }

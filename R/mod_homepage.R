@@ -2,10 +2,8 @@
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
-#' @param input internal
-#' @param output internal
-#' @param session internal
-#'
+#' @param mdfile xxx
+#' 
 #' @name mod_homepage
 #' 
 #' @examplesIf interactive()

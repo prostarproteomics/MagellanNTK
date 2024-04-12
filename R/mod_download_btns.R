@@ -3,14 +3,17 @@
 #' @description A shiny module that shows download buttons in different formats.
 #' 
 #' @param id internal
-#' @param data xxxx
+#' @param settings xxx
+#' @param obj A data.frame
 #' @param name xxxx.
 #' @param colors xxx
-#' @param df.tags xxx
+#' @param tags xxx
 #'
 #'
 #' @name download_btns
-#' @example examples/test_download_btns.R
+#' @examplesIf interactive()
+#' data(lldata)
+#' shiny::runApp(download_btns(lldata))
 #'
 NULL
 
@@ -38,7 +41,7 @@ download_btns_ui <- function(id, settings = list()) {
 #' @export
 #'
 download_btns_server <- function(id,
-                                 data = reactive({NULL}), 
+                                 obj = reactive({NULL}), 
                                  name, 
                                  colors = reactive({NULL}), 
                                  tags = reactive({NULL})) {
@@ -50,7 +53,7 @@ download_btns_server <- function(id,
           paste(name(), "-", Sys.Date(), ".csv", sep = "")
         },
         content = function(file) {
-          write.table(data(), file, sep = ";", row.names = FALSE)
+          write.table(obj(), file, sep = ";", row.names = FALSE)
         }
       )
       
@@ -59,7 +62,7 @@ download_btns_server <- function(id,
           paste ("data-", Sys.Date(), ".RData", sep = "")
         },
         content = function(fname) {
-          saveRDS(data(), file=fname)
+          saveRDS(obj(), file=fname)
         }
       )
       
@@ -70,7 +73,7 @@ download_btns_server <- function(id,
         content = function(file) {
           fname <- paste("temp", Sys.Date(), ".xlsx", sep = "")
           write.excel(
-            df = data(),
+            df = obj(),
             colors = colors(),
             tags = tags(),
             filename = fname
@@ -84,28 +87,25 @@ download_btns_server <- function(id,
 }
 
 
-###################################################################
-#                             Example                             #
-###################################################################
-
-library(shiny)
-
+#' @export
+#' @rdname download_btns
+#' 
+download_btns <- function(obj){
 ui <- fluidPage(
-  download_btns_ui(id = 'ex', settings = list(actionBtnClass = "btn-primary"))
+  download_btns_ui(id = 'ex', 
+    settings = list(actionBtnClass = "btn-primary"))
 )
 
 server <- function(input, output) {
   
-  data(iris)
-  
   download_btns_server(id = "ex",
-                       data = reactive({iris}),
-                       name = reactive({"iris"}),
+                       data = reactive({obj}),
+                       name = reactive({"myTest"}),
                        colors = reactive({NULL}),
                        tags = reactive({NULL
                       })
   )
 }
 
-shinyApp(ui = ui, server = server)
-
+shinyApp(ui, server)
+}

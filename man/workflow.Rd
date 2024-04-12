@@ -31,8 +31,6 @@ workflowApp(id, path = NULL, dataIn = NULL, tl.layout = NULL, mode = "user")
 \item{tl.layout}{Additional parameters for nav}
 
 \item{mode}{xxx}
-
-\item{name}{xxx}
 }
 \value{
 NA
@@ -42,8 +40,6 @@ This module contains the configuration information for the corresponding
 pipeline. It is called by the nav_pipeline module of the package MagellanNTK
 This documentation is for developers who want to create their own 
 pipelines nor processes to be managed with `MagellanNTK`.
-
-xxx
 }
 \examples{
 if (interactive()) {

@@ -6,20 +6,14 @@
 #' 
 #' 
 #' @param id shiny id
-#' @param data xxx
-#' @param withDLBtns xxx
-#' @param showRownames xxx
-#' @param dom xxx
-#' @param hc_style xxx
-#' @param full_style A list of four items:
-#' * cols: a vector of colnames of columns to show,
-#' * vals: a vector of colnames of columns that contain values,
-#' * unique: unique(conds),
-#' * pal: RColorBrewer::brewer.pal(3, "Dark2")[seq_len(2)]
-#' @param filename xxx
-#' @param hideCols xxx
+#' @param obj xxx
 #'
 #' @name format_DT
+#' 
+#' @examplesIf interactive()
+#' data(lldata)
+#' shiny::runApp(format_DT(assay(lldata[[1]])))
+#' 
 #' 
 #' @return NA
 #' 
@@ -55,7 +49,7 @@ format_DT_ui <- function(id) {
 #' @importFrom htmlwidgets JS
 #' @rdname format_DT
 format_DT_server <- function(id,
-                             data){
+  obj){
   
   
   moduleServer(id, function(input, output, session){
@@ -64,15 +58,15 @@ format_DT_server <- function(id,
     proxy = DT::dataTableProxy(session$ns('StaticDataTable'), session)
     
     observe({
-      req(data())
-      DT::replaceData(proxy, data(), resetPaging = FALSE)
+      req(obj())
+      DT::replaceData(proxy, obj(), resetPaging = FALSE)
     })
     
     output$StaticDataTable <- DT::renderDataTable(server=TRUE,{
       
-      req(length(data()) > 0)
+      req(length(obj()) > 0)
       dt <- DT::datatable(
-        data(), 
+        obj(), 
         escape = TRUE,
         options = list(
           #initComplete = initComplete(),
@@ -91,14 +85,17 @@ format_DT_server <- function(id,
 
 
 
-
-library(shiny)
-library(shinyjs)
-
+#' @export
+#' @rdname format_DT
+#' 
+format_DT <- function(obj){
+  
+stopifnot(inherits(obj, 'data.frame'))
 ui <- format_DT_ui("dt")
 
 server <- function(input, output, session) {
-  format_DT_server("dt", data = reactive({iris}) )
+  format_DT_server("dt", obj = reactive({obj}) )
 }
 
-shinyApp(ui = ui, server = server)
+app <- shinyApp(ui = ui, server = server)
+}

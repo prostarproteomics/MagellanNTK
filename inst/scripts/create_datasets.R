@@ -17,9 +17,6 @@ NULL
 
 
 
-#' @export
-#' @rdname build_example_datasets
-#' 
 build_toy_example <- function(name = 'original'){
   
   data <- data.frame(
@@ -27,8 +24,8 @@ build_toy_example <- function(name = 'original'){
       dimnames = list(1:5, LETTERS[1:6]))
     )
 
-  save(data, file = 'data/data.rda')
-  return(data)
+  # save(data, file = 'data/data.rda')
+  # return(data)
 }
 
 

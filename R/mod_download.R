@@ -12,7 +12,8 @@
 #'
 #'
 #' @name dl
-#' @example examples/test_dl.R
+#' @examplesIf interactive()
+#' shiny::runApp(mod_dl())
 #'
 NULL
 
@@ -131,22 +132,17 @@ download_server <- function(id,
 
 
 
-###################################################################
-#                             Example                             #
-###################################################################
-
-library(shiny)
-library(shinyBS)
-
+#' @@export
+#' @rdname dl
+#' 
+mod_dl <- function(){
 ui <- fluidPage(
   download_ui(id = "download_ex")
 )
 
 server <- function(input, output) {
-  
-  download_server(id = "download_ex"
-  )
+  download_server(id = "download_ex")
 }
 
-shinyApp(ui = ui, server = server)
-
+app <- shiny::shinyApp(ui, server)
+}

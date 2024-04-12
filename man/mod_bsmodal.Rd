@@ -38,6 +38,14 @@ be "s" for small (the default), "m" for medium, or "l" for large.}
 \item{uiContent}{The content of the modal dialog.}
 
 \item{shiny.module}{xxx}
+
+\item{ui.func}{xxx}
+
+\item{ui.params}{xxx}
+
+\item{server.func}{xxx}
+
+\item{server.params}{xxx}
 }
 \value{
 A Shiny modal-dialog
