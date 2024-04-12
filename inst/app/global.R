@@ -60,7 +60,7 @@ default.base.URL <- system.file('app/md', package = 'MagellanNTK')
 
 default.workflow <- list(
   name = 'PipelineA_Process1',
-  path = system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
+  path = system.file("workflow/PipelineA", package = "MagellanNTK")
 )
 
 

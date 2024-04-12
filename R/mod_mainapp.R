@@ -203,10 +203,10 @@ mainapp_ui <- function(id){
                                  icon = icon("cogs")),
                      menuSubItem("Release Notes", 
                                  tabName = "releaseNotes", 
-                                 icon = icon("clipboard")),
-                     menuSubItem("Check for Updates", 
-                                 tabName = "checkUpdates", 
-                                 icon = icon("wrench"))
+                                 icon = icon("clipboard"))
+                     # ,menuSubItem("Check for Updates", 
+                     #             tabName = "checkUpdates", 
+                     #             icon = icon("wrench"))
                      )
             )
         ),
@@ -218,18 +218,19 @@ mainapp_ui <- function(id){
               icon = icon("desktop"),
               active = TRUE,
               actionLink(ns('browser'), 'Console'),
-              mod_modalDialog_ui(ns('loadPkg_modal'))
+              mod_modalDialog_ui(ns('loadPkg_modal')),
+              actionLink(ns('launch_demo'), 'Launch demo')
             ),
             shinydashboardPlus::controlbarItem(
               icon = icon("paint-brush"),
               title = "Settings",
               mod_settings_ui(ns('global_settings'))
-            ),
-            shinydashboardPlus::controlbarItem(
-              icon = icon("paint-brush"),
-              title = "Skin",
-              shinydashboardPlus::skinSelector()
             )
+            # ,shinydashboardPlus::controlbarItem(
+            #   icon = icon("paint-brush"),
+            #   title = "Skin",
+            #   shinydashboardPlus::skinSelector()
+            # )
           )
         ),
         body = shinydashboard::dashboardBody(
@@ -273,8 +274,7 @@ mainapp_ui <- function(id){
               #uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openDataset", 
                 uiOutput(ns('open_dataset_UI'))),
-              #tabItem(tabName = "demoDataset", 
-              #  uiOutput(ns('open_demo_dataset_UI'))),
+              
               tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
               tabItem(tabName = "eda", 
@@ -291,8 +291,8 @@ mainapp_ui <- function(id){
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               tabItem(tabName = "releaseNotes", 
                 mod_release_notes_ui(ns('rl'))),
-              tabItem(tabName = "checkUpdates", 
-                mod_check_updates_ui(ns('check_updates'))),
+              # tabItem(tabName = "checkUpdates", 
+              #   mod_check_updates_ui(ns('check_updates'))),
               tabItem(tabName = "usefulLinks", 
                 insert_md_ui(ns('links_MD'))),
               tabItem(tabName = "faq", 
@@ -390,6 +390,29 @@ mainapp_server <- function(id,
     
     observeEvent(input$browser,{browser()})
     observeEvent(input$ReloadProstar, { js$reset()})
+    observeEvent(input$launch_demo, {
+      data(lldata)
+      rv.core$current.obj <- lldata
+      
+      rv.core$workflow.name <- 
+        session$userData$workflow.name <- 'PipelineA'
+      
+      rv.core$workflow.path <- 
+        session$userData$workflow.path <- 
+        system.file('workflow/PipelineA', package='MagellanNTK')
+      
+      funcs <- rv.core$funcs <- default.funcs
+      
+      
+      # Fix NULL values
+      # #browser()
+      lapply(names(rv.core$funcs), function(x)
+        if(is.null(rv.core$funcs[[x]]))
+          rv.core$funcs[[x]] <- default.funcs[[x]]
+      )
+      
+      source_wf_files(session$userData$workflow.path)
+      })
 
     
     call.func(
@@ -408,7 +431,7 @@ mainapp_server <- function(id,
     
     
     tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
-      title = "Change default functions",
+      title = "Default functions",
       external_mod = 'mod_load_package',
       external_mod_args = list(funcs = reactive({rv.core$funcs}))
       )
@@ -480,6 +503,8 @@ mainapp_server <- function(id,
     #   browser()
     # })
     
+    
+   
     # Get workflow directory
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
@@ -567,7 +592,7 @@ mainapp_server <- function(id,
     
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
-    mod_check_updates_server("check_updates")
+    #mod_check_updates_server("check_updates")
     insert_md_server("links_MD", 
       file.path(rv.core$workflow.path, 'md', "links.md"))
     insert_md_server("FAQ_MD", 

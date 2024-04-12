@@ -45,7 +45,7 @@ pipelines nor processes to be managed with `MagellanNTK`.
 if (interactive()) {
   data(sub_R25)
   
-  path <- system.file("extdata/workflow/PipelineA", package = "MagellanNTK")
+  path <- system.file("workflow/PipelineA", package = "MagellanNTK")
   files <- list.files(file.path(path, 'R'), full.names = TRUE)
   for(f in files)
     source(f, local = FALSE, chdir = TRUE)
@@ -68,7 +68,7 @@ if (interactive()) {
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sub_R25)
 
-path <- system.file('extdata/workflow/PipelineA', package = 'MagellanNTK')
+path <- system.file('workflow/PipelineA', package = 'MagellanNTK')
 
 # Nothing happens when dataIn is NULL
 shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = NULL))

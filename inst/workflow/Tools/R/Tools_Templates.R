@@ -128,7 +128,7 @@ Tools_Templates_server <- function(id,
     
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      path <- system.file('extdata/workflow/Tools/md', package='MagellanNTK')
+      path <- system.file('workflow/Tools/md', package='MagellanNTK')
       file <- file.path(path, md.file)
       
       tagList(

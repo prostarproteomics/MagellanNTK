@@ -5,31 +5,29 @@
 
 #' @export
 #' 
-PipelineB_Description_conf <- function(){
+PipelineA_Description_conf <- function(){
   Config(
-    fullname = 'PipelineB_Description',
-    mode = 'process',
-    steps = '',
-    mandatory = ''
-  )
+    fullname = 'PipelineA_Description',
+    mode = 'process'
+    )
 }
 
 
 
 #' @export
-PipelineB_Description_ui <- function(id){
+PipelineA_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 #' @export
-PipelineB_Description_server <- function(id,
+PipelineA_Description_server <- function(id,
     dataIn = reactive({NULL}),
     steps.enabled = reactive({NULL}),
     remoteReset = reactive({FALSE}),
     steps.status = reactive({NULL}),
     current.pos = reactive({1})
-){
+    ){
   
   
   
@@ -49,25 +47,19 @@ PipelineB_Description_server <- function(id,
     
     # Insert necessary code which is hosted by MagellanNTK
     # DO NOT MODIFY THIS LINE
-    eval(
-      str2expression(
-        Get_Workflow_Core_Code(
-          mode = 'process',
-          name = id,
-          w.names = names(widgets.default.values),
-          rv.custom.names = names(rv.custom.default.values)
-          
-        )
-      )
+    core.code <- Get_Workflow_Core_Code(
+      mode = 'process',
+      name = id,
+      w.names = names(widgets.default.values),
+      rv.custom.names = names(rv.custom.default.values)
     )
     
-    #rv.custom <- reactiveValues()
-    #rv.custom.default.values <- list()
+    eval(str2expression(core.code))
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      path <- system.file('extdata/workflow/PipelineB/md', package='MagellanNTK')
+      path <- system.file('workflow/PipelineA/md', package='DaparToolshed')
       file <- file.path(path, md.file)
       tagList(
         if (file.exists(file))
@@ -103,7 +95,7 @@ PipelineB_Description_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
     

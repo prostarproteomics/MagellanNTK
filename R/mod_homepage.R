@@ -31,7 +31,10 @@ mod_homepage_server <- function(id,
   mdfile = file.path(system.file('app/md', 
     package = 'MagellanNTK'),'Presentation.Rmd')){
   
-  
+  # mdfile <- file.path(system.file('app/md', 
+  #   package = 'MagellanNTK'),'Presentation.Rmd')
+      
+      
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 

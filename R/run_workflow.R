@@ -26,7 +26,7 @@
 #' @examplesIf interactive()
 #' data(sub_R25)
 #' 
-#' path <- system.file('extdata/workflow/PipelineA', package = 'MagellanNTK')
+#' path <- system.file('workflow/PipelineA', package = 'MagellanNTK')
 #' 
 #' # Nothing happens when dataIn is NULL
 #' shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = NULL))

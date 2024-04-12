@@ -83,7 +83,7 @@ if(interactive()){
   layout <- c('v', 'h')
   
   
-  path <- system.file('extdata/workflow', package='MagellanNTK')
+  path <- system.file('workflow', package='MagellanNTK')
   files <- list.files(file.path(path, name, 'R'), full.names = TRUE)
   for(f in files)
     source(f, local = TRUE, chdir = TRUE)

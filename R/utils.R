@@ -6,7 +6,7 @@
 #' @param path xxx
 #' 
 #' @examples
-#' path <- system.file("extdata/workflow/PipelineA", package = 'MagellanNTK')
+#' path <- system.file("workflow/PipelineA", package = 'MagellanNTK')
 #' readCustomizableFuncs(file.path(path, 'config.txt'))
 #' 
 #' @export
@@ -54,7 +54,7 @@ readCustomizableFuncs <- function(path){
 #' @param verbose A boolean
 #' 
 #' @examples
-#' path <- system.file("extdata/workflow/PipelineA", package = 'MagellanNTK')
+#' path <- system.file("workflow/PipelineA", package = 'MagellanNTK')
 #' source_wf_files(path)
 #' 
 #' @export

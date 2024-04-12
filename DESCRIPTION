@@ -74,7 +74,6 @@ Collate:
     mod_dl.R
     mod_bsModal.R
     mod_mdEditor.R
-    mod_createTemplate.R
     mod_dyn_widgets.R
     config_class.R
     doc-data.R
@@ -103,7 +102,6 @@ Collate:
     mod_bsmodal2.R
     mod_view_dataset.R
     mod_convert_dataset.R
-    mod_check_updates.R
     mod_error_modal.R
     mod_bug_report.R
     mod_download.R
@@ -116,6 +114,7 @@ Collate:
     mod_settings.R
     mod_loadapp.R
     mod_mainapp.R
+    demo.R
     utils_Prostar.R
 biocViews: Software, WorkflowStep, Proteomics, GUI
 Encoding: UTF-8

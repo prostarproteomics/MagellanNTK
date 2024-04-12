@@ -10,7 +10,8 @@
 #'
 #' 
 #' @examplesIf interactive()
-#' shiny::runApp(view_dataset(sub_R25))
+#' data(lldata)
+#' shiny::runApp(view_dataset(lldata))
 #' 
 #' 
 NULL
@@ -26,7 +27,9 @@ NULL
 view_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", 'Default view_dataset module')
+    h3(style="color: blue;", 'This is the default view_dataset module'),
+    uiOutput(ns('chooseAssay_UI')),
+    plotOutput(ns('plot'))
   )
 }
 
@@ -46,6 +49,17 @@ view_dataset_server <- function(id, obj = NULL, ...){
       dataOut = NULL
     )
     
+    
+    output$chooseAssay_UI <- renderUI({
+      selectInput(ns('assay'), 'Choose',
+        choices = names(obj()),
+        width = '100px')
+    })
+    
+    output$plot <- renderPlot({
+      req(input$assay)
+      plot(obj()[[input$assay]])
+    })
     reactive({rv.openDemo$dataOut})
   })
   
