@@ -2,7 +2,7 @@ library(shiny)
 
 if(interactive()){
 
-    wf.name <- 'PipelineA'
+    wf.name <- 'PipelineDemo'
     path <- system.file('extdata/module_examples', package='MagellanNTK')
     
   ui <- fluidPage(

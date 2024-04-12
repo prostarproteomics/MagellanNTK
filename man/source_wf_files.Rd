@@ -15,7 +15,7 @@ source_wf_files(dirpath, verbose = FALSE)
 xxx
 }
 \examples{
-path <- system.file("workflow/PipelineA", package = 'MagellanNTK')
+path <- system.file("workflow/PipelineDemo", package = 'MagellanNTK')
 source_wf_files(path)
 
 }

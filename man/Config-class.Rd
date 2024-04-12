@@ -80,7 +80,7 @@ Wrapper function to the constructor of the class
 \examples{
 # Example of a generic process
 generic.proc <- Config(
-  fullname = 'PipelineA_Process1',
+  fullname = 'PipelineDemo_Process1',
   mode = 'process',
   steps = c('Step 1', 'Step 2'),
   mandatory = c(TRUE, FALSE)
@@ -89,7 +89,7 @@ generic.proc <- Config(
 
 # Example of a generic pipeline
 generic.pipe <- Config(
-  fullname = 'Pipe1_PipelineA',
+  fullname = 'Pipe1_PipelineDemo',
   mode = 'pipeline',
   steps = c('Process 1', 'Process 2'),
   mandatory = c(TRUE, FALSE)
@@ -98,7 +98,7 @@ generic.pipe <- Config(
 # Example of a root pipeline (process has no parent)
 root.pipe <- Config(
   mode = 'pipeline',
-  fullname = 'PipelineA',
+  fullname = 'PipelineDemo',
   steps = c('Process1', 'Process2', 'Process3'),
   mandatory = c(FALSE, FALSE, TRUE)
 )
@@ -106,7 +106,7 @@ root.pipe <- Config(
 
 # Example of a description module (process has no steps)
 description.process <- Config(
-  fullname = 'PipelineA_Description',
+  fullname = 'PipelineDemo_Description',
   mode = 'process',
   steps = '',
   mandatory = ''

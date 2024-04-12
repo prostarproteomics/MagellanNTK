@@ -59,8 +59,8 @@ default.funcs <- list(
 default.base.URL <- system.file('app/md', package = 'MagellanNTK')
 
 default.workflow <- list(
-  name = 'PipelineA_Process1',
-  path = system.file("workflow/PipelineA", package = "MagellanNTK")
+  name = 'PipelineDemo_Process1',
+  path = system.file("workflow/PipelineDemo", package = "MagellanNTK")
 )
 
 

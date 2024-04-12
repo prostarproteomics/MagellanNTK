@@ -73,13 +73,13 @@ if(interactive()){
   server_env$dev_mode <- FALSE
   
   # Uncomment and Change this for a process workflow
-  # name <- 'PipelineA_Process1'
-   #name <- 'PipelineA_Description'
+  # name <- 'PipelineDemo_Process1'
+   #name <- 'PipelineDemo_Description'
   # layout <- c('h')
   
   
   # Uncomment and Change this for a pipeline workflow
-  name <- 'PipelineA'
+  name <- 'PipelineDemo'
   layout <- c('v', 'h')
   
   

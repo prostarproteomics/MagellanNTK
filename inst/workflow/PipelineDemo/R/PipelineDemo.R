@@ -1,4 +1,4 @@
-#' @title Shiny example module `Pipeline A`
+#' @title Shiny example module `Pipeline Demo`
 #'
 #' @description
 #' This module contains the configuration information for the corresponding pipeline.
@@ -11,10 +11,10 @@
 #' @rdname example_module_PiplelineA
 #' @export
 #' 
-PipelineA_conf <- function(){
+PipelineDemo_conf <- function(){
 Config(
   mode = 'pipeline',
-  fullname = 'PipelineA',
+  fullname = 'PipelineDemo',
   steps = c('Process 1', 'Process 2', 'Process 3'),
   mandatory = c(FALSE, FALSE, TRUE)
 )
@@ -30,7 +30,7 @@ Config(
 #' 
 #' @export
 #' 
-PipelineA_ui <- function(id){
+PipelineDemo_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -61,7 +61,7 @@ PipelineA_ui <- function(id){
 #' 
 #' @export
 #'
-PipelineA_server <- function(id,
+PipelineDemo_server <- function(id,
   dataIn = reactive({NULL}),
   steps.enabled = reactive({NULL}),
   remoteReset = reactive({FALSE}),

@@ -56,9 +56,9 @@ mod_test_process_server <- function(id){
     )
     
     observe({
-      source(file.path('example_modules', 'mod_PipelineA_Process1.R'), local=TRUE)$value
+      source(file.path('example_modules', 'mod_PipelineDemo_Process1.R'), local=TRUE)$value
       
-      rv$dataOut <- mod_nav_process_server(id = 'PipelineA_Process1',
+      rv$dataOut <- mod_nav_process_server(id = 'PipelineDemo_Process1',
                                            dataIn = reactive({rv$dataIn}),
                                            remoteReset = reactive({input$simReset}),
                                            is.skipped = reactive({input$simSkipped%%2 != 0}),
@@ -73,7 +73,7 @@ mod_test_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_nav_process_ui(ns('PipelineA_Process1'))
+      mod_nav_process_ui(ns('PipelineDemo_Process1'))
     })
     
     

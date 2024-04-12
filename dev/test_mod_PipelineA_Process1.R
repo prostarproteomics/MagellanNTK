@@ -8,7 +8,7 @@ options(shiny.fullstacktrace = TRUE)
 
 setwd('~/GitHub/MagellanNTK/inst/scripts')
 
-source(file.path('./module_examples', "example_module_PipelineA_Process1.R"), 
+source(file.path('./module_examples', "example_module_PipelineDemo_Process1.R"), 
        local=TRUE)$value
 
 
@@ -54,7 +54,7 @@ mod_test_navigation_process_server <- function(id){
     
     observe({
       
-      rv$dataOut <- mod_navigation_server(id = 'PipelineA_Process1',
+      rv$dataOut <- mod_navigation_server(id = 'PipelineDemo_Process1',
         nav.mode = 'process',
         dataIn = reactive({rv$dataIn}),
         remoteReset = reactive({input$simReset}),
@@ -70,7 +70,7 @@ mod_test_navigation_process_server <- function(id){
     
     
     output$UI <- renderUI({
-      mod_navigation_ui(ns('PipelineA_Process1'))
+      mod_navigation_ui(ns('PipelineDemo_Process1'))
     })
     
     

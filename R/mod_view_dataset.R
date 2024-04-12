@@ -51,6 +51,7 @@ view_dataset_server <- function(id, obj = NULL, ...){
     
     
     output$chooseAssay_UI <- renderUI({
+      req(obj())
       selectInput(ns('assay'), 'Choose',
         choices = names(obj()),
         width = '100px')

@@ -8,8 +8,8 @@
 #' @name infos_dataset
 #' 
 #' @examplesIf interactive()
-#'   data(Exp1_R25_prot, package='DaparToolshedData')
-#'   shiny::runApp(infos_dataset(Exp1_R25_prot))
+#'   data(lldata)
+#'   shiny::runApp(infos_dataset(lldata))
 #' 
 #' 
 NULL
@@ -62,7 +62,7 @@ infos_dataset_server <- function(
     output$show_SE_ui <- renderUI({
       req(input$selectInputSE != 'None')
       req(obj())
-      names(obj())
+      p(input$selectInputSE)
     })
 
   })

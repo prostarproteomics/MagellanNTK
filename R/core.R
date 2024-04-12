@@ -57,7 +57,9 @@ nav_ui <- function(id) {
         
         # Contains the UI for the timeline, the direction buttons
         # and the workflows modules
-        uiOutput(ns("nav_mod_ui")),
+        
+          uiOutput(ns("nav_mod_ui"))
+          ,
         
         # Contains the UI for the debug module
         uiOutput(ns("debug_infos_ui"))
@@ -237,9 +239,11 @@ nav_server <- function(id = NULL,
 
                 # Launch the UI of the timeline
                 output$show_TL <- renderUI({
-                    do.call(
+                    box(
+                      do.call(
                         paste0("timeline_", rv$tl.layout[1], "_ui"),
                         list(ns(paste0("timeline", rv$tl.layout[1])))
+                    )
                     )
                 })
                 

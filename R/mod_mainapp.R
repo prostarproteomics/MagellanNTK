@@ -157,19 +157,19 @@ mainapp_ui <- function(id){
             #          badgeLabel = "new", 
             #          badgeColor = "green"),
              h4('Dataset', style="color: green;"),
-            menuItem("Open dataset",
+            menuItem("Open",
               tabName = "openDataset",
               icon = icon("folder")
               # ,badgeLabel = "new"
               # ,badgeColor = "green"
-              ),
-            menuItem("Demo dataset",
-              tabName = "demoDataset",
-              icon = icon("folder")
-              # ,badgeLabel = "new"
-              # ,badgeColor = "green"
-              ),
-            menuItem("Convert dataset",
+              )
+            # ,menuItem("Demo dataset",
+            #   tabName = "demoDataset",
+            #   icon = icon("folder")
+            #   # ,badgeLabel = "new"
+            #   # ,badgeColor = "green"
+            #   )
+            ,menuItem("Convert",
               tabName = "convertDataset",
               icon = icon("folder")
               # ,badgeLabel = "new"
@@ -218,8 +218,7 @@ mainapp_ui <- function(id){
               icon = icon("desktop"),
               active = TRUE,
               actionLink(ns('browser'), 'Console'),
-              mod_modalDialog_ui(ns('loadPkg_modal')),
-              actionLink(ns('launch_demo'), 'Launch demo')
+              mod_modalDialog_ui(ns('loadPkg_modal'))
             ),
             shinydashboardPlus::controlbarItem(
               icon = icon("paint-brush"),
@@ -269,11 +268,17 @@ mainapp_ui <- function(id){
               
               
               tabItem(tabName = "Home", class="active", 
+                wellPanel(style="background-color: lightgrey",
+                  h3('New to MagellanNTK? do not wait and launch demo'),
+                  actionLink(ns('launch_demo'), 'Let\'s go!')
+                ),
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
               #uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openDataset", 
-                uiOutput(ns('open_dataset_UI'))),
+                box(uiOutput(ns('open_dataset_UI')), width = '200px' ),
+                box(uiOutput(ns('infos_dataset_UI')), width = '200px' )
+                ),
               
               tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
@@ -395,11 +400,11 @@ mainapp_server <- function(id,
       rv.core$current.obj <- lldata
       
       rv.core$workflow.name <- 
-        session$userData$workflow.name <- 'PipelineA'
+        session$userData$workflow.name <- 'PipelineDemo'
       
       rv.core$workflow.path <- 
         session$userData$workflow.path <- 
-        system.file('workflow/PipelineA', package='MagellanNTK')
+        system.file('workflow/PipelineDemo', package='MagellanNTK')
       
       funcs <- rv.core$funcs <- default.funcs
       
@@ -437,7 +442,17 @@ mainapp_server <- function(id,
       )
     
     observeEvent(req(tmp.funcs()), {
+      lapply(names(tmp.funcs()), 
+        function(x) {
+          pkg.name <- gsub(paste0('::',x), '', tmp.funcs()[[x]])
+          require(pkg.name, character.only = TRUE)
+          })
+      
+      
       rv.core$funcs <- tmp.funcs()
+      
+     
+      
     })
     
     

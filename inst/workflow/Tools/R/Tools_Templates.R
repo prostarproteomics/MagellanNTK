@@ -12,8 +12,8 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `PipelineA_ProcessA_ui()` and `PipelineA_ProcessA_server()` define
-#' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+#' In this example, `PipelineDemo_Process1_ui()` and `PipelineDemo_Process1_server()` define
+#' the code for the process `Process1` which is part of the pipeline called `PipelineDemo`.
 #'
 #' @name Tools_Templates_conf
 #' 

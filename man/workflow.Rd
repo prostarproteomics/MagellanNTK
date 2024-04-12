@@ -45,46 +45,44 @@ pipelines nor processes to be managed with `MagellanNTK`.
 if (interactive()) {
   data(sub_R25)
   
-  path <- system.file("workflow/PipelineA", package = "MagellanNTK")
+  path <- system.file("workflow/PipelineDemo", package = "MagellanNTK")
   files <- list.files(file.path(path, 'R'), full.names = TRUE)
   for(f in files)
     source(f, local = FALSE, chdir = TRUE)
 
   # Nothing happens when dataIn is NULL
-    shiny::runApp(run_workflow("PipelineA_Process1", dataIn = NULL))
+    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = NULL))
   
-    shiny::runApp(run_workflow("PipelineA_Process1", dataIn = sub_R25))
+    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = sub_R25))
 
-    shiny::runApp(run_workflow("PipelineA_Process1", dataIn = data.frame(), tl.layout = "v"))
+    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = data.frame(), tl.layout = "v"))
   
-    shiny::runApp(run_workflow("PipelineA", dataIn = sub_R25, tl.layout = c("v", "h")))
-    
-    shiny::runApp(run_workflow("PipelineB", tl.layout = c("v", "h")))
-    
-    shiny::runApp(workflow("PipelineA", dataIn = sub_R25, tl.layout = c("v", "h")))
+    shiny::runApp(run_workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
+
+    shiny::runApp(workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
 }
 
 
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sub_R25)
 
-path <- system.file('workflow/PipelineA', package = 'MagellanNTK')
+path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
 
 # Nothing happens when dataIn is NULL
-shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = NULL))
+shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = NULL))
 
-shiny::runApp(workflowApp("PipelineA_Process1", path, dataIn = sub_R25))
+shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = sub_R25))
 
-shiny::runApp(workflowApp("PipelineA_Process1", 
+shiny::runApp(workflowApp("PipelineDemo_Process1", 
 dataIn = data.frame(), 
 tl.layout = "v"))
 
-shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
+shiny::runApp(workflowApp("PipelineDemo", path, dataIn = sub_R25, 
 tl.layout = c("v", "h")))
 
 shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
 
-shiny::runApp(workflowApp("PipelineA", path, dataIn = sub_R25, 
+shiny::runApp(workflowApp("PipelineDemo", path, dataIn = sub_R25, 
 tl.layout = c("v", "h")))
 
 \dontshow{\}) # examplesIf}

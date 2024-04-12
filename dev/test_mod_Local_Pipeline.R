@@ -44,13 +44,13 @@ mod_test_pipeline_server <- function(id){
     )
     
     observe({
-      rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineA',
+      rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineDemo',
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
                                             remoteReset = reactive({FALSE})
                                             )
       output$UI <- renderUI({
-        mod_nav_pipeline_ui(ns('PipelineA'))
+        mod_nav_pipeline_ui(ns('PipelineDemo'))
       })
     }, priority=1000)
     

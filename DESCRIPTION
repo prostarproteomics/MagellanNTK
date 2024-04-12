@@ -114,7 +114,6 @@ Collate:
     mod_settings.R
     mod_loadapp.R
     mod_mainapp.R
-    demo.R
     utils_Prostar.R
 biocViews: Software, WorkflowStep, Proteomics, GUI
 Encoding: UTF-8

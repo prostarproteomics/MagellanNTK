@@ -13,7 +13,7 @@ readCustomizableFuncs(path)
 xxx
 }
 \examples{
-path <- system.file("workflow/PipelineA", package = 'MagellanNTK')
+path <- system.file("workflow/PipelineDemo", package = 'MagellanNTK')
 readCustomizableFuncs(file.path(path, 'config.txt'))
 
 }

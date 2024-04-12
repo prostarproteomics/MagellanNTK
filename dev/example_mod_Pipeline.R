@@ -39,13 +39,13 @@ server <- function(input, output){
   )
   
   observe({
-     rv$dataOut <- mod_nav_server(id = 'PipelineA',
+     rv$dataOut <- mod_nav_server(id = 'PipelineDemo',
                                   dataIn = reactive({rv$dataIn}),
                                   layout = c('v', 'h'),
                                   verbose = verbose
                                   )
     
-    output$UI <- renderUI({mod_nav_ui('PipelineA')})
+    output$UI <- renderUI({mod_nav_ui('PipelineDemo')})
   })
   
   output$debugInfos_ui <- renderUI({

@@ -12,8 +12,8 @@
 #' This convention is important because MagellanNTK call the different
 #' server and ui functions by building dynamically their name.
 #' 
-#' In this example, `PipelineA_ProcessA_ui()` and `PipelineA_ProcessA_server()` define
-#' the code for the process `ProcessA` which is part of the pipeline called `PipelineA`.
+#' In this example, `PipelineDemo_Process3_ui()` and `PipelineDemo_Process3_server()` define
+#' the code for the process `Process3` which is part of the pipeline called `PipelineDemo`.
 #'
 #' @name example_module_process1
 #' 
@@ -42,12 +42,12 @@ NULL
 #' @rdname example_module_process1
 #' @export
 #' 
-PipelineA_Process2_conf <- function(){
+PipelineDemo_Process3_conf <- function(){
   Config(
-    fullname = 'PipelineA_Process1',
+    fullname = 'PipelineDemo_Process3',
     mode = 'process',
-    steps = c('Step 1', 'Step 2', 'Step 3'),
-    mandatory = c(FALSE, TRUE, FALSE)
+    steps = c('Step 1', 'Step 2'),
+    mandatory = c(FALSE, TRUE)
   )
 }
 
@@ -56,7 +56,7 @@ PipelineA_Process2_conf <- function(){
 #' 
 #' @export
 #'
-PipelineA_Process2_ui <- function(id){
+PipelineDemo_Process3_ui <- function(id){
   ns <- NS(id)
 }
 
@@ -68,12 +68,12 @@ PipelineA_Process2_ui <- function(id){
 #' 
 #' @export
 #' 
-PipelineA_Process2_server <- function(id,
-                                      dataIn = reactive({NULL}),
-                                      steps.enabled = reactive({NULL}),
-                                      remoteReset = reactive({FALSE}),
-                                      steps.status = reactive({NULL}),
-                                      current.pos = reactive({1})
+PipelineDemo_Process3_server <- function(id,
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1})
 ){
   
   #source(paste0(path, '/foo.R'), local=TRUE)$value
@@ -87,8 +87,7 @@ PipelineA_Process2_server <- function(id,
     Step1_radio1 = NULL,
     Step1_btn1 = NULL,
     Step2_select1 = 1,
-    Step2_select2 = 1,
-    Step3_select1 = 1
+    Step2_select2 = 1
   )
   
   
@@ -123,7 +122,7 @@ PipelineA_Process2_server <- function(id,
     
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      path <- system.file('workflow/PipelineA/md', package='MagellanNTK')
+      path <- system.file('workflow/PipelineDemo/md', package='MagellanNTK')
       file <- file.path(path, md.file)
       
       tagList(
@@ -166,7 +165,7 @@ PipelineA_Process2_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- stepStatus$VALIDATED
+      rv$steps.status['Description'] <- global$VALIDATED
     })
     
     
@@ -279,7 +278,7 @@ PipelineA_Process2_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- stepStatus$VALIDATED
+      rv$steps.status['Step1'] <- global$VALIDATED
       
     })
     
@@ -340,65 +339,10 @@ PipelineA_Process2_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- stepStatus$VALIDATED
+      rv$steps.status['Step2'] <- global$VALIDATED
     })
     
     # <<< END ------------- Code for step 2 UI---------------
-    
-    
-    
-    # >>> START ------------- Code for step 3 UI---------------
-    
-    output$Step3 <- renderUI({
-      wellPanel(
-        # Two examples of widgets in a renderUI() function
-        fluidRow(
-          column(width=4, uiOutput(ns('Step3_select1_ui'))),
-          column(width=8, plotOutput(ns('Step3_plot_ui')))
-          ),
-        # Insert validation button
-        # This line is necessary. DO NOT MODIFY
-        uiOutput(ns('Step3_btn_validate_ui'))
-      )
-    })
-    
-    
-    output$Step3_select1_ui <- renderUI({
-      widget <- selectInput(ns('Step3_select1'), 'Select number of points',
-                            choices = 1:20,
-                            selected = rv.widgets$Step2_select1,
-                            width = '150px')
-      toggleWidget(widget, rv$steps.enabled['Step3'] )
-    })
-    
-    output$Step3_plot_ui <- renderPlot({
-      req(input$Step3_select1)
-      plot(runif(1:input$Step3_select1))
-    })
-
-    
-    output$Step3_btn_validate_ui <- renderUI({
-      widget <- actionButton(ns("Step3_btn_validate"),
-                             "Perform",
-                             class = btn_success_color)
-      toggleWidget(widget, rv$steps.enabled['Step3'] )
-    })
-    
-    observeEvent(input$Step3_btn_validate, {
-      # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('temp_',id))
-      
-      # DO NOT MODIFY THE THREE FOLLOWINF LINES
-      dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step3'] <- stepStatus$VALIDATED
-    })
-    
-    # <<< END ------------- Code for step 2 UI---------------
-    
     
     
     # >>> START ------------- Code for step 'Save' UI---------------
@@ -413,7 +357,7 @@ PipelineA_Process2_server <- function(id,
     
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
-      req(rv$steps.status['Save'] == stepStatus$VALIDATED)
+      req(rv$steps.status['Save'] == global$VALIDATED)
       dl_ui(ns('createQuickLink'))
     })
     
@@ -434,7 +378,7 @@ PipelineA_Process2_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- stepStatus$VALIDATED
+      rv$steps.status['Save'] <- global$VALIDATED
       dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })

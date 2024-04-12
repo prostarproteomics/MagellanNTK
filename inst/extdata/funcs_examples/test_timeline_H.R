@@ -7,7 +7,7 @@ options(shiny.fullstacktrace = TRUE)
 
 
 config <- MagellanNTK::Config(
-  fullname = 'PipelineA_test',
+  fullname = 'PipelineDemo_test',
   mode = 'process',
   steps = c('Step 1', 'Step 2', 'Step 3'),
   mandatory = c(TRUE, FALSE, FALSE)

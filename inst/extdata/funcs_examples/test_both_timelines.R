@@ -41,7 +41,7 @@ server <- function(input, output){
     mode = 'process',
     steps = c('Step 1', 'Step 2'),
     mandatory = c(TRUE, TRUE),
-    steps.source.file = system.file('workflow/PipelineA/R/PipelineA_Process1.R', 
+    steps.source.file = system.file('workflow/PipelineDemo/R/PipelineDemo_Process1.R', 
                                     package='MagellanNTK')
   )
 

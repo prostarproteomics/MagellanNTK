@@ -5,9 +5,9 @@
 
 #' @export
 #' 
-PipelineA_Description_conf <- function(){
+PipelineDemo_Description_conf <- function(){
   Config(
-    fullname = 'PipelineA_Description',
+    fullname = 'PipelineDemo_Description',
     mode = 'process'
     )
 }
@@ -15,13 +15,13 @@ PipelineA_Description_conf <- function(){
 
 
 #' @export
-PipelineA_Description_ui <- function(id){
+PipelineDemo_Description_ui <- function(id){
   ns <- NS(id)
 }
 
 
 #' @export
-PipelineA_Description_server <- function(id,
+PipelineDemo_Description_server <- function(id,
     dataIn = reactive({NULL}),
     steps.enabled = reactive({NULL}),
     remoteReset = reactive({FALSE}),
@@ -59,7 +59,7 @@ PipelineA_Description_server <- function(id,
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
       md.file <- paste0(id, '.md')
-      path <- system.file('workflow/PipelineA/md', package='DaparToolshed')
+      path <- system.file('workflow/PipelineDemo/md', package='DaparToolshed')
       file <- file.path(path, md.file)
       tagList(
         if (file.exists(file))
