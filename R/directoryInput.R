@@ -34,6 +34,38 @@
 NULL
 
 
+#' @export
+#' @rdname choose.dir
+#' 
+is.Windows <- function()
+  Sys.info()['sysname'] == 'Windows'
+
+
+#' @export
+#' @rdname choose.dir
+#' 
+is.Linux<- function()
+  Sys.info()['sysname'] == 'Linux'
+
+
+#' @export
+#' @rdname choose.dir
+#' 
+is.Darwin <- function()
+  Sys.info()['sysname'] == 'Darwin'
+
+#' @export
+#' @rdname choose.dir
+#' 
+file.sep <- function(){
+  if (is.Darwin()) {
+    return("/")
+  } else if (is.Linux()) {
+    return("/")
+  } else if (is.Windows())
+    return("\\")
+}
+  
 
 #' @export
 #' @rdname choose.dir

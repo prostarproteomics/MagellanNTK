@@ -8,7 +8,7 @@
 #' 
 #' 
 #' @param id shiny id
-#' @param funcs xxx
+#' @param funcs A list
 #' 
 #' @examplesIf interactive()
 #' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
@@ -16,6 +16,7 @@
 #' open_demoDataset = "MagellanNTK::open_demoDataset",
 #' view_dataset = "omXplore::view_dataset",
 #' infos_dataset = "MagellanNTK::infos_dataset",
+#' download_dataset = "MagellanNTK::download_dataset",
 #' addDatasets = "MagellanNTK::addDatasets",
 #' keepDatasets = "MagellanNTK::keepDatasets"
 #' )
@@ -27,7 +28,7 @@
 #' 
 NULL
 
-timeoutSeconds <- 30*60
+timeoutSeconds <- 30 * 60
 
 inactivity <- sprintf("function idleTimer() {
 var t = setTimeout(logout, %s);

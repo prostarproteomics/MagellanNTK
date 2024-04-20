@@ -59,6 +59,7 @@ loadapp_server <- function(id){
       'open_dataset', 
       'open_demoDataset',
       'view_dataset',
+      'download_dataset',
       'infos_dataset')
     
     

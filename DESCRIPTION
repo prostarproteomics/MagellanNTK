@@ -71,7 +71,7 @@ Collate:
     mod_splash.R
     rclip.R
     write_excel.R
-    mod_dl.R
+    mod_download_dataset.R
     mod_bsModal.R
     mod_mdEditor.R
     mod_dyn_widgets.R
@@ -104,7 +104,6 @@ Collate:
     mod_convert_dataset.R
     mod_error_modal.R
     mod_bug_report.R
-    mod_download.R
     mod_load_package.R
     mod_download_btns.R
     mod_navbar_menu.R

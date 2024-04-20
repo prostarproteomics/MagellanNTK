@@ -2,11 +2,23 @@
 % Please edit documentation in R/directoryInput.R
 \name{choose.dir}
 \alias{choose.dir}
+\alias{is.Windows}
+\alias{is.Linux}
+\alias{is.Darwin}
+\alias{file.sep}
 \alias{choose.dir.darwin}
 \alias{choose.dir.linux}
 \alias{choose.dir.windows}
 \title{Choose a Folder Interactively}
 \usage{
+is.Windows()
+
+is.Linux()
+
+is.Darwin()
+
+file.sep()
+
 choose.dir(default = NA, caption = NA, useNew = TRUE)
 
 choose.dir.darwin(default = NA, caption = NA)

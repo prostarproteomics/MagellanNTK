@@ -21,7 +21,7 @@ load_package(funcs)
 \arguments{
 \item{id}{shiny id}
 
-\item{funcs}{xxx}
+\item{funcs}{A list}
 }
 \description{
 This module allows to change the default functions
@@ -37,6 +37,7 @@ open_dataset = "MagellanNTK::open_dataset",
 open_demoDataset = "MagellanNTK::open_demoDataset",
 view_dataset = "omXplore::view_dataset",
 infos_dataset = "MagellanNTK::infos_dataset",
+download_dataset = "MagellanNTK::download_dataset",
 addDatasets = "MagellanNTK::addDatasets",
 keepDatasets = "MagellanNTK::keepDatasets"
 )

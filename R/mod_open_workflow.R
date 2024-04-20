@@ -63,7 +63,9 @@ open_workflow_server <- function(id){
     })
     
     observeEvent(input$directory, ignoreNULL = TRUE,
+      
       handlerExpr = {
+        
         if (input$directory > 0) {
           # condition prevents handler execution on initial app launch
           rv.wf$path = choose.dir(default = readDirectoryInput(session, 'directory'),
@@ -81,7 +83,9 @@ open_workflow_server <- function(id){
     
     output$chooseWF_UI <- renderUI({
       req(rv.wf$path)
-      ll.files <- list.files(file.path(rv.wf$path, 'R'), full.names = FALSE)
+
+      tmp <- file.path(rv.wf$path, 'R', fsep = file.sep())
+      ll.files <- list.files(tmp, full.names = FALSE)
       
       ll <- unlist(lapply(ll.files, function(x)
         if (is.substr(basename(rv.wf$path), x))
@@ -105,7 +109,7 @@ open_workflow_server <- function(id){
 
       rv.wf$dataOut$path <- rv.wf$path
       rv.wf$dataOut$wf_name <- input$chooseWF
-      
+
       # Load customizable functions if config.txt file exists
       rv.wf$dataOut$funcs  <- readCustomizableFuncs(rv.wf$path)
 

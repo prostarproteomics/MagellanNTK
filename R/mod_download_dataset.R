@@ -12,21 +12,21 @@
 #'
 #' @return NA
 #'
-#' @name dl
+#' @name mod_download_dataset
 #' @examplesIf interactive()
 #' data(sub_R25)
-#' shiny::runApp(mod_downloadLink(sub_R25))
+#' shiny::runApp(mod_download_dataset(sub_R25))
 #'
 NULL
 
 
 #' @import shiny
 #'
-#' @rdname dl
+#' @rdname mod_download_dataset
 #'
 #' @export
 #'
-dl_ui <- function(id) {
+mod_download_dataset_ui <- function(id) {
   ns <- NS(id)
   tagList(
     shinyjs::useShinyjs(),
@@ -36,11 +36,11 @@ dl_ui <- function(id) {
   )
 }
 
-#' @rdname dl
+#' @rdname mod_download_dataset
 #'
 #' @export
 #'
-dl_server <- function(id,
+mod_download_dataset_server <- function(id,
                       dataIn = reactive({NULL}),
                       extension = 'csv',
                       widget.type = 'Link',
@@ -50,8 +50,25 @@ dl_server <- function(id,
     ns <- session$ns
     
     rv <- reactiveValues(
-      UI_type = NULL
+      UI_type = NULL,
+      export_file_RData = NULL,
+      export_file_csv = NULL,
+      export_file_xlsx = NULL
     )
+    
+    observeEvent(dataIn(),{
+      out.csv <- tempfile(fileext = ".csv")
+      write.csv(x = dataIn(), file = out.csv)
+      rv$export_file_csv <- out.csv
+      
+      out.xlsx <- tempfile(fileext = ".xlsx")
+      write.excel(obj = dataIn(), filename = out.xlsx)
+      rv$export_file_xlsx <- out.xlsx
+      
+      out.RData <- tempfile(fileext = ".RData")
+      saveRDS(dataIn(), file = out.RData)
+      rv$export_file_RData <- out.RData
+    })
     
     GetType <- reactive({
       if(length(extension) != length(widget.type)){
@@ -105,10 +122,13 @@ dl_server <- function(id,
     
     output$downloadDatacsv <- downloadHandler(
       filename = function() {
-        paste(name, "-", Sys.Date(), ".csv", sep = "")
+        paste("data-", Sys.Date(), ".csv", sep = "")
       },
-      content = function(fname) {
-        utils::write.table(dataIn(), fname, sep = ";", row.names = FALSE)
+      content = function(file) {
+        file.copy(
+          from = rv$export_file_csv,
+          to = file
+        )
       }
     )
     
@@ -116,17 +136,23 @@ dl_server <- function(id,
       filename = function() {
         paste ("data-", Sys.Date(), ".RData", sep = "")
       },
-      content = function(fname) {
-        saveRDS(dataIn(), file=fname)
+      content = function(file) {
+        file.copy(
+          from = rv$export_file_RData,
+          to = file
+        )
       }
     )
     
     output$downloadDataExcel <- downloadHandler(
       filename = function() {
-        paste(name, "-", Sys.Date(), ".xlsx", sep = "")
+        paste("data-", Sys.Date(), ".xlsx", sep = "")
       },
-      content = function(fname) {
-        write.excel(df = dataIn(), style = excel.style, filename = fname)
+      content = function(file) {
+        file.copy(
+          from = rv$export_file_xlsx,
+          to = file
+        )
       }
     )
   }
@@ -136,13 +162,16 @@ dl_server <- function(id,
 
 
 
-
-mod_downloadLink <- function(data){
-  ui <- dl_ui("dl")
+#' @rdname mod_download_dataset
+#'
+#' @export
+#'
+mod_download_dataset <- function(data){
+  ui <- mod_download_dataset_ui("dl")
 
 server <- function(input, output, session) {
   
-  dl_server("dl",
+  mod_download_dataset_server("dl",
     dataIn = reactive({data}),
     extension = c('csv', 'xlsx', 'RData')
   )

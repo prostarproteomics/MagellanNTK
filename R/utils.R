@@ -12,8 +12,7 @@
 #' @export
 #'
 readCustomizableFuncs <- function(path){
-
-  config.file <- normalizePath(file.path(path))
+  config.file <- normalizePath(file.path(path, 'config.txt'))
   if(!file.exists(config.file))
     stop('file does not exist')
   
@@ -33,6 +32,7 @@ readCustomizableFuncs <- function(path){
     open_demoDataset = NULL,
     view_dataset = NULL,
     infos_dataset = NULL,
+    download_dataset = NULL,
     addDatasets = NULL,
     keepDatasets = NULL
   )
@@ -73,8 +73,6 @@ for(f in files){
 # if config.txt exists, update some funcs
 config.file <- normalizePath(file.path(dirpath, 'config.txt'))
 file.exists(config.file)
-#browser()
-
 }
 
 

@@ -14,3 +14,17 @@ vignette: >
 # Introduction to MagellanNTK
 
 [test](http://www.google.fr)
+
+
+# Customizable functions
+
+* convert_dataset(): xxx
+* open_dataset(): xxx
+* open_demoDataset(): xxx
+* view_dataset(): xxx
+* infos_dataset(): xxx
+* download_dataset(): xxx
+* addDatasets(): xxx
+* keepDatasets(): xxx
+
+

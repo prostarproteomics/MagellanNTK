@@ -38,6 +38,7 @@ funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 open_dataset = "DaparToolshed::open_dataset",
 open_demoDataset = "DaparToolshed::open_demoDataset",
 view_dataset = "omXplore::view_dataset",
+download_dataset = "MagellanNTK::download_dataset",
 infos_dataset = "DaparToolshed::infos_dataset",
 addDatasets = "DaparToolshed::addDatasets",
 keepDatasets = "DaparToolshed::keepDatasets" )
@@ -47,6 +48,7 @@ funcs <- list(convert_dataset = "MagellanNTK::convert",
   open_demoDataset = "MagellanNTK::open_demoDataset",
   view_dataset = "MagellanNTK::view_dataset",
   infos_dataset = "MagellanNTK::infos_dataset",
+  download_dataset = "MagellanNTK::download_dataset",
   addDatasets = "MagellanNTK::addDatasets",
   keepDatasets = "MagellanNTK::keepDatasets")
 
