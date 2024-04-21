@@ -58,16 +58,18 @@ mod_download_dataset_server <- function(id,
     
     observeEvent(dataIn(),{
       rv$export_file_csv <- tryCatch({
-        tempfile(fileext = ".csv")
+        out.csv <- tempfile(fileext = ".csv")
         write.csv(x = dataIn(), file = out.csv)
+        out.csv
       },
         warning = function(w) NULL,
         error = function(e) NULL
       )
       
       rv$export_file_xlsx <- tryCatch({
-        tempfile(fileext = ".xlsx")
+        out.xlsx <- tempfile(fileext = ".xlsx")
         write.excel(obj = dataIn(), filename = out.xlsx)
+        out.xlsx
       },
       warning = function(w) NULL,
       error = function(e) NULL
@@ -75,9 +77,10 @@ mod_download_dataset_server <- function(id,
     
       
       rv$export_file_RData <- tryCatch({
-        tempfile(fileext = ".RData")
-      saveRDS(dataIn(), file = out.RData)
-      },
+        out.RData <- tempfile(fileext = ".RData")
+        saveRDS(dataIn(), file = out.RData)
+        out.RData
+        },
       warning = function(w) NULL,
       error = function(e) NULL
     )
