@@ -57,17 +57,31 @@ mod_download_dataset_server <- function(id,
     )
     
     observeEvent(dataIn(),{
-      out.csv <- tempfile(fileext = ".csv")
-      write.csv(x = dataIn(), file = out.csv)
-      rv$export_file_csv <- out.csv
+      rv$export_file_csv <- tryCatch({
+        tempfile(fileext = ".csv")
+        write.csv(x = dataIn(), file = out.csv)
+      },
+        warning = function(w) NULL,
+        error = function(e) NULL
+      )
       
-      out.xlsx <- tempfile(fileext = ".xlsx")
-      write.excel(obj = dataIn(), filename = out.xlsx)
-      rv$export_file_xlsx <- out.xlsx
+      rv$export_file_xlsx <- tryCatch({
+        tempfile(fileext = ".xlsx")
+        write.excel(obj = dataIn(), filename = out.xlsx)
+      },
+      warning = function(w) NULL,
+      error = function(e) NULL
+    )
+    
       
-      out.RData <- tempfile(fileext = ".RData")
+      rv$export_file_RData <- tryCatch({
+        tempfile(fileext = ".RData")
       saveRDS(dataIn(), file = out.RData)
-      rv$export_file_RData <- out.RData
+      },
+      warning = function(w) NULL,
+      error = function(e) NULL
+    )
+  
     })
     
     GetType <- reactive({
@@ -84,6 +98,7 @@ mod_download_dataset_server <- function(id,
     
     output$dl_csv <- renderUI({
       req('csv' %in% extension)
+      req(rv$export_file_csv)
       type <- GetType()[which(extension == 'csv')]
       
       do.call(paste0('download', type),
@@ -98,6 +113,7 @@ mod_download_dataset_server <- function(id,
     
     output$dl_xl <- renderUI({
       req('xlsx' %in% extension)
+      req(rv$export_file_xlsx)
       type <- GetType()[which(extension == 'xlsx')]
       do.call(paste0('download', type),
               list(
@@ -110,6 +126,7 @@ mod_download_dataset_server <- function(id,
     
     output$dl_raw <- renderUI({
       req('RData' %in% extension)
+      req(rv$export_file_RData)
       type <- GetType()[which(extension == 'RData')]
       do.call(paste0('download', type),
               list(
