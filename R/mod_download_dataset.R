@@ -29,7 +29,7 @@ NULL
 mod_download_dataset_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    shinyjs::useShinyjs(),
+    h3('--- Default donwload dataset tool ---'),
     uiOutput(ns('dl_xl')),
     uiOutput(ns('dl_csv')),
     uiOutput(ns('dl_raw'))
@@ -42,7 +42,7 @@ mod_download_dataset_ui <- function(id) {
 #'
 mod_download_dataset_server <- function(id,
                       dataIn = reactive({NULL}),
-                      extension = 'csv',
+                      extension = c('csv', 'xlsx', 'RData'),
                       widget.type = 'Link',
                       name = 'foo', 
                       excel.style = NULL) {
@@ -56,7 +56,7 @@ mod_download_dataset_server <- function(id,
       export_file_xlsx = NULL
     )
     
-    observeEvent(dataIn(),{
+    observeEvent(dataIn(), ignoreNULL = TRUE,{
       rv$export_file_csv <- tryCatch({
         out.csv <- tempfile(fileext = ".csv")
         write.csv(x = dataIn(), file = out.csv)
@@ -85,6 +85,10 @@ mod_download_dataset_server <- function(id,
       error = function(e) NULL
     )
   
+      
+      print(rv$export_file_xlsx)
+      print(rv$export_file_RData)
+      print(rv$export_file_csv)
     })
     
     GetType <- reactive({
