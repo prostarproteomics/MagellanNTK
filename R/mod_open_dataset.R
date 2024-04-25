@@ -80,19 +80,35 @@ open_dataset_server <- function(id){
     
     output$choosePkg <- renderUI({
       req(input$chooseSource == 'packageDataset')
-      selectInput(ns("pkg"),
-        "Choose package",
-        choices = GetPackagesWithDatasets()[, "Package"],
-        selected = character(0),
+      selectizeInput(ns("pkg"), "Choose package",
+        choices = NULL,
+        #selected = 'MagellanNTK',
         width='200px')
     })
     
+    # GetPackagesWithDatasets <- reactive({
+    #   x <- data(package = .packages(all.available = TRUE))$results
+    #   dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
+    #   unique(dat)
+    # })
     
-    GetPackagesWithDatasets <- reactive({
-      x <- data(package = .packages(all.available = TRUE))$results
-      dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
-      dat
-    })
+    observeEvent(input$pkg, {
+
+      withProgress(message = "", detail = "", value = 0, {
+        incProgress(0.5, detail = "Building package list...")
+        x <- data(package = .packages(all.available = TRUE))$results
+        dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
+      })
+      
+      
+    updateSelectizeInput(session, 'pkg', 
+      choices = c('MagellanNTK', unique(dat)[, "Package"]), 
+      selected = 'MagellanNTK',
+      server = TRUE)
+
+    }, once = TRUE)
+    
+    
     
     ## function for demo mode
     output$chooseDemoDataset <- renderUI({

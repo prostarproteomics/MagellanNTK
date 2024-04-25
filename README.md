@@ -12,6 +12,11 @@ For example, if a process is composed of three steps, then it is very easy to ru
 Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e. a pipeline) in which each step is a whole process containing itself several steps.
 
 
+## Install
+
+devtools::install_github('prostarproteomics/MagellanNTK')
+
+
 # List of articles
 
 * In the menu 'Get started', xxxx

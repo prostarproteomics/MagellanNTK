@@ -18,7 +18,14 @@ vignette: >
 
 # Customizable functions
 
-* convert_dataset(): xxx
+
+The package `MagellanNTK` uses a collection of functions that come with default
+definition but can also be customizable by other devs. All these funtions are 
+Shiny modules so as to facilitate their use in a standalone mode or embeded in 
+`MagellanNTK` interface. These are the following:
+
+* convert_dataset(): A Shiny module to convert any dataset to a format suitable
+for the pipeline used.
 * open_dataset(): xxx
 * open_demoDataset(): xxx
 * view_dataset(): xxx
@@ -26,5 +33,10 @@ vignette: >
 * download_dataset(): xxx
 * addDatasets(): xxx
 * keepDatasets(): xxx
+
+
+in the package `MagellanNTK`, a shiny module called `mod_load_packages` is used
+to configure the functions to use (i.e. from which package they are loaded 
+from).
 
 

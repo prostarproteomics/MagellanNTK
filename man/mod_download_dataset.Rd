@@ -13,7 +13,7 @@ mod_download_dataset_server(
   dataIn = reactive({
      NULL
  }),
-  extension = "csv",
+  extension = c("csv", "xlsx", "RData"),
   widget.type = "Link",
   name = "foo",
   excel.style = NULL
