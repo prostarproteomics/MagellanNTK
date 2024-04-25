@@ -348,7 +348,8 @@ mainapp_server <- function(id,
 
     
     observeEvent(id, {
-      rv.core$funcs <- funcs
+      if (!is.null(funcs))
+        rv.core$funcs <- funcs
     }, priority = 1000)
     
     

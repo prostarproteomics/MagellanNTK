@@ -84,10 +84,10 @@ mod_load_package_server <- function(id,
     
     
     rv <- reactiveValues(
-      list.funcs = NULL
+      list.funcs = default.funcs
     )
 
-    observeEvent(funcs(), {
+    observeEvent(req(funcs()), {
       rv$list.funcs <- funcs()
     }, once = TRUE)
     
@@ -99,19 +99,25 @@ mod_load_package_server <- function(id,
           find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
           find_server_func <- find_funs(paste0(x, '_server'))$package_name
 
+          .tmp <- unique(find_ui_func, find_server_func)
+          .tmp <- .tmp[-grep('MagellanNTK', .tmp)]
+          .choices <- c('MagellanNTK', .tmp)
+          
           fluidRow(
             div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
               p(x)),
             div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
               selectInput(ns(paste0(x, '_ui')), 
             NULL,
-            choices = unique(find_ui_func, find_server_func))
+            choices = .choices
+          )
           )
           )
         })
       })
 
     observeEvent(lapply(names(rv$list.funcs), function(x) input[[paste0(x, '_ui')]]), {
+      #req(rv$list.funcs)
       ll <- list()
       for (c in names(rv$list.funcs))
         ll[[c]] <- paste0(input[[paste0(c, '_ui')]], '::', c)
@@ -129,12 +135,13 @@ mod_load_package_server <- function(id,
 #' @import shiny
 #' @rdname mod_load_package
 #' 
-load_package <- function(funcs){
+load_package <- function(funcs = NULL){
   ui <- mod_load_package_ui("mod_pkg")
 
 server <- function(input, output, session) {
   
-  done <- mod_load_package_server("mod_pkg", funcs = reactive({funcs}))
+  done <- mod_load_package_server("mod_pkg", 
+    funcs = reactive({funcs}))
   
   observeEvent(done(), {
     print(done())
