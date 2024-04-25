@@ -52,6 +52,7 @@ default.funcs <- list(
   open_dataset = "MagellanNTK::open_dataset",
   open_demoDataset = "MagellanNTK::open_demoDataset",
   view_dataset = "MagellanNTK::view_dataset",
+  download_dataset = "MagellanNTK::download_dataset",
   infos_dataset = "MagellanNTK::infos_dataset",
   addDatasets = "MagellanNTK::addDatasets",
   keepDatasets = "MagellanNTK::keepDatasets")
