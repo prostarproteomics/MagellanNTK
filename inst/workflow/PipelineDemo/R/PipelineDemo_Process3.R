@@ -165,7 +165,7 @@ PipelineDemo_Process3_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
     
@@ -270,15 +270,15 @@ PipelineDemo_Process3_server <- function(id,
     
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('temp_',id))
+      # new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      # rv$dataIn <- addDatasets(object = rv$dataIn,
+      #                          dataset = new.dataset,
+      #                          name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step1'] <- global$VALIDATED
+      dataOut$value <- NULL
+      rv$steps.status['Step1'] <- stepStatus$VALIDATED
       
     })
     
@@ -331,15 +331,15 @@ PipelineDemo_Process3_server <- function(id,
     
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('temp_',id))
+      # new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
+      # rv$dataIn <- addDatasets(object = rv$dataIn,
+      #                          dataset = new.dataset,
+      #                          name = paste0('temp_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
-      rv$steps.status['Step2'] <- global$VALIDATED
+      dataOut$value <- NULL
+      rv$steps.status['Step2'] <- stepStatus$VALIDATED
     })
     
     # <<< END ------------- Code for step 2 UI---------------
@@ -357,8 +357,8 @@ PipelineDemo_Process3_server <- function(id,
     
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
-      req(rv$steps.status['Save'] == global$VALIDATED)
-      dl_ui(ns('createQuickLink'))
+      req(rv$steps.status['Save'] == stepStatus$VALIDATED)
+      mod_download_dataset_ui(ns('createQuickLink'))
     })
     
     output$Save_btn_validate_ui <- renderUI({
@@ -378,8 +378,9 @@ PipelineDemo_Process3_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- global$VALIDATED
-      dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      rv$steps.status['Save'] <- stepStatus$VALIDATED
+      mod_download_dataset_server('createQuickLink', 
+        dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

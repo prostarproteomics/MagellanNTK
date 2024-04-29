@@ -21,6 +21,8 @@
 #' keepDatasets = "MagellanNTK::keepDatasets"
 #' )
 #' shiny::runApp(load_package(funcs))
+#' 
+#' shiny::runApp(load_package())
 #'
 #' 
 #' @name mod_load_package
@@ -56,6 +58,7 @@ idleTimer();", timeoutSeconds*1000, timeoutSeconds, timeoutSeconds*1000)
 mod_load_package_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    h3('Load package tool'),
     uiOutput(ns('update_func_ui')),
     uiOutput(ns('select_pkg_ui')),
     #actionButton(ns('update_btn'), 'Update value'),

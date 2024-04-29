@@ -170,16 +170,15 @@ nav_server <- function(id = NULL,
             {
               # When the server starts, the default position is 1
                 # Not necessary ?
-                rv$current.pos <- 1
-
-
+              #rv$current.pos <- 1
+                
                 ### Call the server module of the process/pipeline which name is 
                 ### the parameter 'id'. 
                 ### The name of the server function is prefixed by 'mod_' and 
                 ### suffixed by '_server'. This will give access to its config
                 if(mode() == 'dev')
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
-                
+
                 rv$proc <- do.call(
                     paste0(id, "_server"),
                     list(
@@ -442,6 +441,7 @@ nav_server <- function(id = NULL,
                          
                          observeEvent(req(!is.null(rv$position)), ignoreInit = TRUE, {
                            pos <- strsplit(rv$position, "_")[[1]][1]
+
                            if (pos == "last") {
                              rv$current.pos <- length(rv$config@steps)
                            } else if (is.numeric(pos)) {
@@ -708,7 +708,8 @@ nav_server <- function(id = NULL,
                 #isolate({
                   # A new value on dataIn() means a new dataset sent to the 
                   # process
-                  rv$current.pos <- 1
+                  #browser()
+                  #rv$current.pos <- 1
 
                   # Get the new dataset in a temporary variable
                   rv$temp.dataIn <- dataIn()

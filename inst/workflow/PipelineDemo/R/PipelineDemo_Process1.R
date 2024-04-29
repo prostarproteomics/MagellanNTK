@@ -69,12 +69,12 @@ PipelineDemo_Process1_ui <- function(id){
 #' @export
 #' 
 PipelineDemo_Process1_server <- function(id,
-                                      dataIn = reactive({NULL}),
-                                      steps.enabled = reactive({NULL}),
-                                      remoteReset = reactive({FALSE}),
-                                      steps.status = reactive({NULL}),
-                                      current.pos = reactive({1})
-                                      ){
+  dataIn = reactive({NULL}),
+  steps.enabled = reactive({NULL}),
+  remoteReset = reactive({FALSE}),
+  steps.status = reactive({NULL}),
+  current.pos = reactive({1})
+  ){
  
   #source(paste0(path, '/foo.R'), local=TRUE)$value
   
@@ -276,15 +276,15 @@ PipelineDemo_Process1_server <- function(id,
     observeEvent(input$Step1_btn_validate, {
       # Do some stuff
 #browser()
-      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
-      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
-                               name = paste0('Step1_',id))
+      # new.dataset <- rv$dataIn[[length(rv$dataIn)]]
+      # SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
+      # rv$dataIn <- addDatasets(object = rv$dataIn,
+      #                          dataset = new.dataset,
+      #                          name = paste0('Step1_',id))
 
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      #dataOut$value <- rv$dataIn
+      dataOut$value <- NULL
       rv$steps.status['Step1'] <- stepStatus$VALIDATED
 
     })
@@ -338,15 +338,15 @@ PipelineDemo_Process1_server <- function(id,
     
     observeEvent(input$Step2_btn_validate, {
       # Do some stuff
-      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
-      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-        dataset = new.dataset,
-        name = paste0('Step2_',id))
+      # new.dataset <- rv$dataIn[[length(rv$dataIn)]]
+      # SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
+      # rv$dataIn <- addDatasets(object = rv$dataIn,
+      #   dataset = new.dataset,
+      #   name = paste0('Step2_',id))
 
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
-      #dataOut$value <- rv$dataIn
+      dataOut$value <- NULL
       rv$steps.status['Step2'] <- stepStatus$VALIDATED
     })
     
@@ -366,7 +366,7 @@ PipelineDemo_Process1_server <- function(id,
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
       req(rv$steps.status['Save'] == stepStatus$VALIDATED)
-      dl_ui(ns('createQuickLink'))
+      mod_download_dataset_ui(ns('createQuickLink'))
     })
     
     output$Save_btn_validate_ui <- renderUI({
@@ -378,12 +378,18 @@ PipelineDemo_Process1_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
+      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
+      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
+      rv$dataIn <- addDatasets(object = rv$dataIn,
+        dataset = new.dataset,
+        name = paste0('Step1_',id))
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- stepStatus$VALIDATED
-      dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
+      mod_download_dataset_server('createQuickLink', 
+        dataIn = reactive({rv$dataIn}))
       
     })
     # <<< END ------------- Code for step 3 UI---------------

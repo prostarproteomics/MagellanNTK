@@ -448,12 +448,7 @@ mainapp_server <- function(id,
           pkg.name <- gsub(paste0('::',x), '', tmp.funcs()[[x]])
           require(pkg.name, character.only = TRUE)
           })
-      
-      
       rv.core$funcs <- tmp.funcs()
-      
-     
-      
     })
     
     
@@ -556,6 +551,7 @@ mainapp_server <- function(id,
       })
 
     observe({
+
       rv.core$result_run_workflow <- nav_server(
         id = rv.core$workflow.name,
         dataIn = reactive({rv.core$current.obj})

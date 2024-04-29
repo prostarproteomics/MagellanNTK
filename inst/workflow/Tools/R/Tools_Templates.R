@@ -171,7 +171,7 @@ Tools_Templates_server <- function(id,
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Description'] <- global$VALIDATED
+      rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
     
@@ -331,7 +331,7 @@ Tools_Templates_server <- function(id,
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Createtemplate'] <- global$VALIDATED
+      rv$steps.status['Createtemplate'] <- stepStatus$VALIDATED
       
     })
     
@@ -403,7 +403,7 @@ Tools_Templates_server <- function(id,
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Customdatasetfunctions'] <- global$VALIDATED
+      rv$steps.status['Customdatasetfunctions'] <- stepStatus$VALIDATED
     })
     
     # <<< END ------------- Code for Step: Custom dataset functions UI---------------
@@ -489,7 +489,7 @@ Tools_Templates_server <- function(id,
       # !!! DO NOT MODIFY THE THREE FOLLOWINF LINES !!!
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Configuresteps'] <- global$VALIDATED
+      rv$steps.status['Configuresteps'] <- stepStatus$VALIDATED
     })
     
     # <<< END ------------- Code for step 3 UI---------------
@@ -511,7 +511,7 @@ Tools_Templates_server <- function(id,
     
     # output$dl_ui <- renderUI({
     #   req(config@mode == 'process')
-    #   req(rv$steps.status['Save'] == global$VALIDATED)
+    #   req(rv$steps.status['Save'] == stepStatus$VALIDATED)
     #   dl_ui(ns('createQuickLink'))
     # })
     
@@ -590,7 +590,7 @@ Tools_Templates_server <- function(id,
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
-      rv$steps.status['Save'] <- global$VALIDATED
+      rv$steps.status['Save'] <- stepStatus$VALIDATED
      # dl_server('createQuickLink', dataIn = reactive({rv$dataIn}))
       
     })

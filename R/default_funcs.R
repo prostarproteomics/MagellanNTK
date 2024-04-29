@@ -56,6 +56,7 @@ NULL
 #' 
 #' @export
 addDatasets <- function(object, dataset, name) {
+
   stopifnot(is.Magellan.compliant(object))
   if (is.null(object))
     setNames(list(dataset), nm = name)
