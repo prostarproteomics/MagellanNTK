@@ -39,7 +39,7 @@
 #' 
 NULL
 
-#' @rdname example_module_process1
+#' @rdname example_module_process3
 #' @export
 #' 
 PipelineDemo_Process3_conf <- function(){
@@ -52,7 +52,7 @@ PipelineDemo_Process3_conf <- function(){
 }
 
 
-#' @rdname example_module_process1
+#' @rdname example_module_process3
 #' 
 #' @export
 #'
@@ -62,7 +62,7 @@ PipelineDemo_Process3_ui <- function(id){
 
 
 
-#' @rdname example_module_process1
+#' @rdname example_module_process3
 #' 
 #' @importFrom stats setNames rnorm
 #' 
@@ -121,9 +121,8 @@ PipelineDemo_Process3_server <- function(id,
     
     
     output$Description <- renderUI({
-      md.file <- paste0(id, '.md')
-      path <- system.file('workflow/PipelineDemo/md', package='MagellanNTK')
-      file <- file.path(path, md.file)
+      file <- normalizePath(file.path(session$userData$workflow.path, 
+        'md', paste0(id, '.md')))
       
       tagList(
         ### In this example, the md file is found in the extdata/module_examples 
@@ -370,9 +369,8 @@ PipelineDemo_Process3_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
       rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
+                               dataset = 10*rv$dataIn[[length(rv$dataIn)]],
                                name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES

@@ -178,7 +178,7 @@ nav_server <- function(id = NULL,
                 ### suffixed by '_server'. This will give access to its config
                 if(mode() == 'dev')
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
-
+print(paste0('IN observeEvent(req(',id, '))'))
                 rv$proc <- do.call(
                     paste0(id, "_server"),
                     list(
@@ -207,7 +207,8 @@ nav_server <- function(id = NULL,
                 rv$steps.skipped <- setNames(rep(FALSE, n), nm = stepsnames)
                 rv$resetChildren <- setNames(rep(0, n), nm = stepsnames)
 
-                rv$child.data2send <- setNames(lapply(as.list(stepsnames),function(x) NULL),
+                rv$child.data2send <- setNames(
+                  lapply(as.list(stepsnames),function(x) NULL),
                     nm = stepsnames
                     )
 
@@ -388,7 +389,7 @@ nav_server <- function(id = NULL,
                          # The parameter 'enabled' is used to modify the bullets 
                          # whether the corresponding step is enabled or disabled
                          # mod_timeline_h_server(id = 'timeline',
-                         # config =  rv$config,
+                         # config = rv$config,
                          # status = reactive({rv$steps.status}),
                          # position = reactive({rv$current.pos}),
                          # enabled = reactive({rv$steps.enabled})
@@ -396,49 +397,47 @@ nav_server <- function(id = NULL,
                          
                          
                          observeEvent(rv$proc$dataOut()$trigger,
-                                      ignoreNULL = TRUE, ignoreInit = TRUE,
-                                      {
-                                        # If a value is returned, this is because the 
-                                        # current step has been validated
-                                        rv$steps.status[rv$current.pos] <- stepStatus$VALIDATED
-                                        
-                                        # Look for new skipped steps
-                                        rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)
-                                        
-                                        
-                                        # If it is the first step (description step), then
-                                        # load the dataset in work variable 'dataIn'
-                                        if (rv$current.pos == 1) {
-                                          rv$dataIn <- rv$temp.dataIn
-                                        } # View intermediate datasets
-                                        else if (rv$current.pos > 1 && rv$current.pos < length(rv$config@steps)) {
-                                          rv$dataIn <- rv$proc$dataOut()$value
-                                        } 
-                                        # Manage the last dataset which is the real one 
-                                        # returned by the process
-                                        else if (rv$current.pos == length(rv$config@steps)) {
-                                          # Update the work variable of the nav_process 
-                                          # with the dataset returned by the process
-                                          # Thus, the variable rv$temp.dataIn keeps 
-                                          # trace of the original dataset sent to
-                                          # this  workflow and will be used in case of 
-                                          # reset
-                                          rv$dataIn <- rv$proc$dataOut()$value
-                                          
-                                          # Update the 'dataOut' reactive value to return
-                                          #  this dataset to the caller. this nav_process 
-                                          #  is only a bridge between the process and  the
-                                          #  caller
-                                          # For a pipeline, the output is updated each 
-                                          # time a process has been validated
-                                          dataOut$trigger <- Timestamp()
-                                          dataOut$value <- rv$dataIn
-                                        }
-                                      }
+                           ignoreNULL = TRUE, ignoreInit = TRUE, {
+                             # If a value is returned, this is because the 
+                             # # current step has been validated
+                             rv$steps.status[rv$current.pos] <- stepStatus$VALIDATED
+
+                             # Look for new skipped steps
+                             rv$steps.status <- Discover_Skipped_Steps(rv$steps.status)
+                             #print('In observeEvent(rv$proc$dataOut()$trigger')
+                             #browser()
+                             # If it is the first step (description step), then
+                             # load the dataset in work variable 'dataIn'
+                             if (rv$current.pos == 1) {
+                               rv$dataIn <- rv$temp.dataIn
+                             } # View intermediate datasets
+                             else if (rv$current.pos > 1 && rv$current.pos < length(rv$config@steps)) {
+                               rv$dataIn <- rv$proc$dataOut()$value
+                             } 
+                             # Manage the last dataset which is the real one 
+                             # returned by the process
+                             else if (rv$current.pos == length(rv$config@steps)) {
+                               # Update the work variable of the nav_process 
+                               # with the dataset returned by the process
+                               # Thus, the variable rv$temp.dataIn keeps 
+                               # trace of the original dataset sent to
+                               # this  workflow and will be used in case of 
+                               # reset
+                               rv$dataIn <- rv$proc$dataOut()$value
+                               
+                               # Update the 'dataOut' reactive value to return
+                               #  this dataset to the caller. this `nav_process` 
+                               #  is only a bridge between the process and  the
+                               #  caller
+                               # For a pipeline, the output is updated each 
+                               # time a process has been validated
+                               dataOut$trigger <- Timestamp()
+                               dataOut$value <- rv$dataIn
+                             }
+                           }
                          )
                          
-                         
-                         
+
                          observeEvent(req(!is.null(rv$position)), ignoreInit = TRUE, {
                            pos <- strsplit(rv$position, "_")[[1]][1]
 
@@ -717,6 +716,7 @@ nav_server <- function(id = NULL,
                   # The mode pipeline is a node and has to send
                   # datasets to its children
                   if (rv$config@mode == "pipeline") {
+
                       if (is.null(rv$dataIn)) {
                           res <- PrepareData2Send(rv = rv, 
                                                   pos = rv$current.pos,
@@ -760,7 +760,7 @@ nav_server <- function(id = NULL,
                     # Update the initial length of the dataset with the length
                     # of the one that has been received
                     rv$original.length <- length(dataIn())
-                    
+                    print(paste0('original length = ', length(dataIn())))
                     #})
                 })
 
@@ -775,6 +775,7 @@ nav_server <- function(id = NULL,
 
             if (rv$config@mode == "pipeline") {
                 # Specific to pipeline code
+              #browser()
                 res <- PrepareData2Send(rv = rv, pos = NULL, mode=mode())
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled

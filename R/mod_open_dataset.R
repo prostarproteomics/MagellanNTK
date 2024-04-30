@@ -118,7 +118,7 @@ open_dataset_server <- function(id){
       
       selectInput(ns("demoDataset"),
         "Demo dataset",
-        choices = c('None', utils::data(package=input$pkg)$results[,"Item"]),
+        choices = utils::data(package=input$pkg)$results[,"Item"],
         selected = character(0),
         width='200px')
     })

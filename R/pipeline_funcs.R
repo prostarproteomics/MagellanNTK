@@ -172,13 +172,14 @@ Update_Data2send_Vector <- function(rv) {
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent
     ind.last.validated <- GetMaxValidated_BeforePos(rv = rv)
-    if (is.null(ind.last.validated)) {
+    name.last.validated <- names(rv$steps.status)[ind.last.validated]
+    if (is.null(ind.last.validated) || ind.last.validated == 1) {
         data <- rv$temp.dataIn
     } else {
-        data <- keepDatasets(object = rv$dataIn,
-                             range = seq_len(ind.last.validated + rv$original.length - 1)
-        )
-    }
+      .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
+
+        data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
+      }
     return(data)
 }
 

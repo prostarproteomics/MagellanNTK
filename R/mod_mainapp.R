@@ -560,6 +560,8 @@ mainapp_server <- function(id,
     
     observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger), 
       ignoreInit = TRUE, {
+        #print('In observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger')
+        #browser()
       rv.core$current.obj <- rv.core$result_run_workflow$dataOut()$value
     })
 

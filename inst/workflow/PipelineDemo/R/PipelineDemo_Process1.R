@@ -378,12 +378,11 @@ PipelineDemo_Process1_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      new.dataset <- rv$dataIn[[length(rv$dataIn)]]
-      SummarizedExperiment::assay(new.dataset) <- 10 * SummarizedExperiment::assay(rv$dataIn[[length(rv$dataIn)]])
-      rv$dataIn <- addDatasets(object = rv$dataIn,
-        dataset = new.dataset,
-        name = paste0('Step1_',id))
-      
+      rv$dataIn <- addDatasets(
+        object = rv$dataIn,
+        dataset = 10*rv$dataIn[[length(rv$dataIn)]],
+        name = id)
+
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn

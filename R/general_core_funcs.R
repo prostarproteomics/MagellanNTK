@@ -98,7 +98,8 @@ Build_SkippedInfoPanel <- function(steps.status, current.pos, config) {
 #' 
 #' @export
 #'
-GetMaxValidated_BeforePos <- function(pos = NULL,
+GetMaxValidated_BeforePos <- function(
+    pos = NULL,
     rv) {
     if (is.null(pos)) {
         pos <- rv$current.pos

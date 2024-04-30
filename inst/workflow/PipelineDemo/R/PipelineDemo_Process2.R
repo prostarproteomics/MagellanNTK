@@ -164,6 +164,7 @@ PipelineDemo_Process2_server <- function(
     
     
     observeEvent(input$Description_btn_validate, {
+
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
@@ -427,9 +428,8 @@ PipelineDemo_Process2_server <- function(
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      new.dataset <- 10*rv$dataIn[[length(rv$dataIn)]]
       rv$dataIn <- addDatasets(object = rv$dataIn,
-                               dataset = new.dataset,
+                               dataset = 10*rv$dataIn[[length(rv$dataIn)]],
                                name = id)
       
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
