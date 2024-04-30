@@ -204,8 +204,8 @@ init.RootPipeline <- function(.Object){
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
   
-  .Object@steps <- c('Description', .Object@steps)
-  .Object@mandatory <- c(TRUE, .Object@mandatory)
+  .Object@steps <- c('Description', .Object@steps, 'Save')
+  .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
   # .Object@steps <- setNames(.Object@steps,
   #                           nm = paste0(.Object@fullname, '_',
@@ -233,8 +233,8 @@ init.GenericPipeline <- function(.Object){
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
   
-  .Object@steps <- c('Description', .Object@steps)
-  .Object@mandatory <- c(TRUE, .Object@mandatory)
+  .Object@steps <- c('Description', .Object@steps, 'Save')
+  .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
   # .Object@steps <- setNames(.Object@steps,
   #                           nm = paste0(.Object@fullname, '_',

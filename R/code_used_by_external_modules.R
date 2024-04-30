@@ -46,8 +46,6 @@ Get_Code_Update_Config_Variable <- function() {
     code <- "
     config@steps <- setNames(config@steps,
         nm = gsub(' ', '', config@steps, fixed = TRUE))
-
-
     "
 
     code

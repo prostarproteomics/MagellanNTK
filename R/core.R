@@ -178,7 +178,7 @@ nav_server <- function(id = NULL,
                 ### suffixed by '_server'. This will give access to its config
                 if(mode() == 'dev')
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
-print(paste0('IN observeEvent(req(',id, '))'))
+
                 rv$proc <- do.call(
                     paste0(id, "_server"),
                     list(
@@ -759,8 +759,7 @@ print(paste0('IN observeEvent(req(',id, '))'))
 
                     # Update the initial length of the dataset with the length
                     # of the one that has been received
-                    rv$original.length <- length(dataIn())
-                    print(paste0('original length = ', length(dataIn())))
+                    #rv$original.length <- length(dataIn())
                     #})
                 })
 
