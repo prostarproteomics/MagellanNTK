@@ -44,7 +44,7 @@ NULL
 #' 
 PipelineDemo_Process2_conf <- function(){
   Config(
-    fullname = 'PipelineDemo_Process1',
+    fullname = 'PipelineDemo_Process2',
     mode = 'process',
     steps = c('Step 1', 'Step 2', 'Step 3'),
     mandatory = c(FALSE, TRUE, FALSE)

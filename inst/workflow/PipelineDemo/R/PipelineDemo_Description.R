@@ -58,9 +58,8 @@ PipelineDemo_Description_server <- function(id,
     
     ###### ------------------- Code for Description (step 0) -------------------------    #####
     output$Description <- renderUI({
-      md.file <- paste0(id, '.md')
-      path <- system.file('workflow/PipelineDemo/md', package='DaparToolshed')
-      file <- file.path(path, md.file)
+      file <- normalizePath(file.path(session$userData$workflow.path, 
+        'md', paste0(id, '.md')))
       tagList(
         if (file.exists(file))
           includeMarkdown(file)
@@ -77,7 +76,7 @@ PipelineDemo_Description_server <- function(id,
     
     
     output$datasetDescription_ui <- renderUI({
-      # Insert your own code to vizualise some information
+      # Insert your own code to visualize some information
       # about your dataset. It will appear once the 'Start' button
       # has been clicked
       

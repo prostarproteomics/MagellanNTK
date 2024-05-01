@@ -8,7 +8,7 @@
 
 
 
-#' @rdname example_module_PiplelineA
+#' @rdname example_pipelineDemo
 #' @export
 #' 
 PipelineDemo_conf <- function(){
@@ -24,7 +24,7 @@ Config(
 
 #' @param id xxx
 #'
-#' @rdname example_pipelineA
+#' @rdname example_pipelineDemo
 #'
 #' @author Samuel Wieczorek
 #' 
@@ -54,7 +54,7 @@ PipelineDemo_ui <- function(id){
 #' 
 #' @param current.pos xxx
 #' 
-#' @rdname example_pipelineA
+#' @rdname example_pipelineDemo
 #'
 #' @import shiny
 #' @importFrom stats setNames

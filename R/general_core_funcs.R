@@ -106,7 +106,7 @@ GetMaxValidated_BeforePos <- function(
     }
 
     ind.max <- NULL
-    indices.validated <- which(rv$steps.status == stepStatus$VALIDATED)
+    indices.validated <- match(rv$steps.status, stepStatus$VALIDATED)
     if (length(indices.validated) > 0) {
         ind <- which(indices.validated < pos)
         if (length(ind) > 0) {
@@ -310,21 +310,24 @@ All_Skipped_tag <- function(steps.status, tag) {
 #' @export
 #'
 GetFirstMandatoryNotValidated <- function(range,rv) {
-    res <- NULL
+  .ind <- NULL
     first <- NULL
+    
+    print(rv$config)
+    print(range)
+    #browser()
     first <- unlist((lapply(
         range,
         function(x) {
             rv$config@mandatory[x] && !rv$steps.status[x]
         }
     )))
-    res <- if (sum(first) > 0) {
-        min(which(first == TRUE))
-    } else {
-        NULL
+    
+    if (sum(first) > 0){
+      .ind <- min(which(first))
     }
 
-    return(res)
+    return(.ind)
 }
 
 

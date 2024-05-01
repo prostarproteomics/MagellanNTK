@@ -41,8 +41,8 @@ Config <- setClass("Config",
       name = "character",
       parent = "character",
       mode = "character",
-      steps = "vector",
-      mandatory = "vector",
+      steps = "ANY",
+      mandatory = "ANY",
       ll.UI = "list",
       steps.source.file = 'vector'
       #,dirpath_to_md_file = 'vector'
@@ -50,6 +50,7 @@ Config <- setClass("Config",
 
     validity <- function(.Object) {
         passed <- TRUE
+        
         nSteps <- length(.Object@steps)
         #
         # General conditions
@@ -112,7 +113,9 @@ is.GenericProcess <- function(.Object){
   
   passed <- passed && (.Object@mode == 'process')
   passed <- passed && (length(.Object@parent) >= 1)
-  passed <- passed && (length(.Object@steps) >= 1 && .Object@name != 'Description')
+  length.cond <- (length(.Object@steps) >= 1 && .Object@name != 'Description') ||
+    is.null(.Object@steps)
+  passed <- passed && length.cond
   
   return(passed)
 }
@@ -130,7 +133,9 @@ is.RootProcess <- function(.Object){
 is.GenericPipeline <- function(.Object){
   passed <- validity(.Object)
   passed <- passed && (.Object@mode == 'pipeline')
-  passed <- passed && (length(.Object@steps) >= 1 && .Object@name != 'Description')
+  length.cond <- (length(.Object@steps) >= 1 && .Object@name != 'Description') ||
+    is.null(.Object@steps)
+  passed <- passed && length.cond
   
   return(passed)
 }
@@ -142,6 +147,17 @@ is.RootPipeline <- function(.Object){
   
   return(passed)
 }
+
+# is.SavePipeline <- function(.Object){
+#   passed <- validity(.Object)
+#   passed <- passed && (.Object@mode == 'pipeline')
+#   #passed <- passed && (length(.Object@parent) >= 1 && .Object@parent != '')
+#   passed <- passed && all(.Object@steps == '')
+#   passed <- passed && all(.Object@mandatory == '')
+#   passed <- passed && grepl('Save', .Object@name)
+#   
+#   return(passed)
+# }
 
 
 is.DescriptionProcess <- function(.Object){
@@ -204,6 +220,9 @@ init.RootPipeline <- function(.Object){
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
   
+  #.Object@steps <- c('Description', .Object@steps)
+  #.Object@mandatory <- c(TRUE, .Object@mandatory)
+  
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
@@ -232,6 +251,9 @@ init.GenericPipeline <- function(.Object){
   
   # A pipeline may have a parent or not (in this case, it is the first node 
   # level of the whole workflow
+  
+  #.Object@steps <- c('Description', .Object@steps)
+  #.Object@mandatory <- c(TRUE, .Object@mandatory)
   
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
@@ -274,6 +296,28 @@ init.DescriptionProcess <- function(.Object){
   
   return(.Object)
 }
+
+
+
+# init.SavePipeline <- function(.Object){
+#   # A process has a parent
+#   .Object@steps <- c('Save')
+#   .Object@mandatory <- c(TRUE)
+#   # .Object@steps <- setNames(.Object@steps,
+#   #                           nm = paste0(.Object@fullname, '_',
+#   #                                       gsub(' ', '',.Object@steps, fixed=TRUE))
+#   # )
+#   .Object@steps <- setNames(.Object@steps, nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+#   
+#   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
+#   
+#   # This line comes after the other ones because in the case of a pipeline, 
+#   # the description step is a module itself and must be loaded in memory
+#   # as well as the other steps
+#   .Object@steps.source.file <- paste0(names(.Object@steps), '.R')
+#   
+#   return(.Object)
+# }
 
 
 #' @title xxx
@@ -321,26 +365,19 @@ setMethod("show", 'Config',
 #' 
 #' @rdname Config-class
 #' 
-setMethod("initialize" ,
-    "Config" ,
-    function(.Object,
-             fullname,
-             mode,
-             steps,
-             mandatory,
-             steps.source.file
-      #,dirpath_to_md_file
-      ){
-        
-        # Basic init of slots
+setMethod("initialize" , "Config" , function(.Object,
+  fullname,
+  mode,
+  steps,
+  mandatory,
+  steps.source.file
+  ){
+  # Basic init of slots
+   .Object@fullname <- fullname
+  
+  if (!is.null(steps.source.file))
+    .Object@steps.source.file <- steps.source.file
 
-
-      .Object@fullname <- fullname
-      
-      if (!is.null(steps.source.file))
-        .Object@steps.source.file <- steps.source.file
-      
-      
         tmp <- unlist(strsplit(fullname, '_'))
         if (length(tmp) == 2){
           .Object@name <- tmp[2]
@@ -349,12 +386,12 @@ setMethod("initialize" ,
           .Object@name <- tmp[1]
           .Object@parent <- ''
         }
-         
+
         .Object@mode <- mode
-        .Object@steps <- steps
-        .Object@mandatory <- mandatory 
+        .Object@steps <- if (length(steps) == 0) NULL else steps
+        .Object@mandatory <- if (length(mandatory) == 0) NULL else mandatory 
         
-        
+       
         if (is.GenericProcess(.Object))
           .Object <- init.GenericProcess(.Object)
         else if (is.RootProcess(.Object))
@@ -365,6 +402,8 @@ setMethod("initialize" ,
           .Object <- init.DescriptionProcess(.Object)
         else if (is.RootPipeline(.Object))
           .Object <- init.RootPipeline(.Object)
+        else if (is.SavePipeline(.Object))
+          .Object <- init.SavePipeline(.Object)
         else 
           .Object <- NULL
 
@@ -392,8 +431,8 @@ setMethod("initialize" ,
 #' 
 Config <- function(fullname = '', 
   mode = '',
-  steps = '', 
-  mandatory = '',
+  steps = NULL, 
+  mandatory = NULL,
   steps.source.file = NULL
   #,dirpath_to_md_file = NULL
   ){
