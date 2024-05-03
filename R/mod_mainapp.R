@@ -630,18 +630,6 @@ mainapp <- function(){
     )
 
 server <- function(input, output, session) {
-  # funcs <- list(convert_dataset = "DaparToolshed::convert",
-  #               open_dataset = "DaparToolshed::open_dataset",
-  #               open_demoDataset = "DaparToolshed::open_demoDataset",
-  #               view_dataset = "DaparViz::view_dataset",
-  #               infos_dataset = "DaparToolshed::infos_dataset")
-  # 
-  # funcs <- list(convert = "MagellanNTK::convert",
-  #   open_dataset = "MagellanNTK::open_dataset",
-  #   open_demoDataset = "MagellanNTK::open_demoDataset",
-  #   view_dataset = "MagellanNTK::view_dataset",
-  #   infos_dataset = "MagellanNTK::infos_dataset")
-  #   
   
   #mainapp_server("main", funcs = funcs)
   mainapp_server("main")

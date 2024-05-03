@@ -4,7 +4,6 @@
 \alias{mod_loading_page}
 \alias{loadapp_ui}
 \alias{loadapp_server}
-\alias{find_funs}
 \alias{loadApp}
 \title{Load customizable functions}
 \usage{
@@ -12,21 +11,15 @@ loadapp_ui(id)
 
 loadapp_server(id)
 
-find_funs(f)
-
 loadApp()
 }
 \arguments{
 \item{id}{shiny id}
-
-\item{f}{name of function for which the package(s) are to be identified.}
 }
 \value{
 A list where each slot is named with the customizable functions. Each slot
 contains the code to call this function from the package the user have
 chosen.
-
-A dataframe with two columns:
 }
 \description{
 A shiny Module.which allow to choose whether to use the default
@@ -44,8 +37,6 @@ one or more of these functions. If so,
 For each of these functions, the shiny app lists all the packages that export
 it. Once the user has make its choices, the module returns a list containing 
 the infos.
-
-This code is extracted from https://sebastiansauer.github.io/finds_funs/
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -53,6 +44,4 @@ app <- loadApp()
 shiny::runApp(app)
 
 \dontshow{\}) # examplesIf}
-find_funs('filter')
-
 }

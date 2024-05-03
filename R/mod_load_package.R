@@ -17,6 +17,7 @@
 #' view_dataset = "omXplore::view_dataset",
 #' infos_dataset = "MagellanNTK::infos_dataset",
 #' download_dataset = "MagellanNTK::download_dataset",
+#' export_dataset = "MagellanNTK::export_dataset",
 #' addDatasets = "MagellanNTK::addDatasets",
 #' keepDatasets = "MagellanNTK::keepDatasets"
 #' )

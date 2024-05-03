@@ -102,6 +102,7 @@ Collate:
     mod_bsmodal2.R
     mod_view_dataset.R
     mod_convert_dataset.R
+    mod_export_dataset.R
     mod_error_modal.R
     mod_bug_report.R
     mod_load_package.R

@@ -91,9 +91,13 @@ PipelineDemo_Save_server <- function(id,
     
     
     observeEvent(input$Save_btn_validate, {
+      # In this process, there is no dataset resend to the server
+      # This is why the dataOut$value is set to NULL. This triggers the 
+      # validation of the step but without rebuilds the vector of datasets 
+      # to send
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
-      dataOut$value <- rv$dataIn
+      dataOut$value <- NULL
       rv$steps.status['Save'] <- stepStatus$VALIDATED
     })
     

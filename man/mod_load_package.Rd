@@ -16,7 +16,7 @@ mod_load_package_server(
  })
 )
 
-load_package(funcs)
+load_package(funcs = NULL)
 }
 \arguments{
 \item{id}{shiny id}
@@ -38,10 +38,13 @@ open_demoDataset = "MagellanNTK::open_demoDataset",
 view_dataset = "omXplore::view_dataset",
 infos_dataset = "MagellanNTK::infos_dataset",
 download_dataset = "MagellanNTK::download_dataset",
+export_dataset = "MagellanNTK::export_dataset",
 addDatasets = "MagellanNTK::addDatasets",
 keepDatasets = "MagellanNTK::keepDatasets"
 )
 shiny::runApp(load_package(funcs))
+
+shiny::runApp(load_package())
 
 \dontshow{\}) # examplesIf}
 }

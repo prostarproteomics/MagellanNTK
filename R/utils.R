@@ -94,6 +94,7 @@ readCustomizableFuncs <- function(path){
     view_dataset = NULL,
     infos_dataset = NULL,
     download_dataset = NULL,
+    export_dataset = NULL,
     addDatasets = NULL,
     keepDatasets = NULL
   )

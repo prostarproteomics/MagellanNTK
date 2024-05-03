@@ -12,21 +12,21 @@
 #'
 #' @return NA
 #'
-#' @name mod_download_dataset
+#' @name download_dataset
 #' @examplesIf interactive()
 #' data(sub_R25)
-#' shiny::runApp(mod_download_dataset(sub_R25))
+#' shiny::runApp(download_dataset(sub_R25))
 #'
 NULL
 
 
 #' @import shiny
 #'
-#' @rdname mod_download_dataset
+#' @rdname download_dataset
 #'
 #' @export
 #'
-mod_download_dataset_ui <- function(id) {
+download_dataset_ui <- function(id) {
   ns <- NS(id)
   tagList(
     h3('--- Default donwload dataset tool ---'),
@@ -36,11 +36,11 @@ mod_download_dataset_ui <- function(id) {
   )
 }
 
-#' @rdname mod_download_dataset
+#' @rdname download_dataset
 #'
 #' @export
 #'
-mod_download_dataset_server <- function(id,
+download_dataset_server <- function(id,
                       dataIn = reactive({NULL}),
                       extension = c('csv', 'xlsx', 'RData'),
                       widget.type = 'Link',
@@ -57,6 +57,7 @@ mod_download_dataset_server <- function(id,
     )
     
     observeEvent(dataIn(), ignoreNULL = TRUE,{
+      browser()
       rv$export_file_csv <- tryCatch({
         out.csv <- tempfile(fileext = ".csv")
         write.csv(x = dataIn(), file = out.csv)
@@ -186,16 +187,16 @@ mod_download_dataset_server <- function(id,
 
 
 
-#' @rdname mod_download_dataset
+#' @rdname download_dataset
 #'
 #' @export
 #'
-mod_download_dataset <- function(data){
-  ui <- mod_download_dataset_ui("dl")
+download_dataset <- function(data){
+  ui <- download_dataset_ui("dl")
 
 server <- function(input, output, session) {
   
-  mod_download_dataset_server("dl",
+  download_dataset_server("dl",
     dataIn = reactive({data}),
     extension = c('csv', 'xlsx', 'RData')
   )

@@ -102,6 +102,7 @@ funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 open_dataset = "MagellanNTK::open_dataset",
 open_demoDataset = "MagellanNTK::open_demoDataset",
 infos_dataset = "MagellanNTK::infos_dataset",
+export_dataset = "MagellanNTK::export_dataset",
 addDatasets = "MagellanNTK::addDatasets",
 keepDatasets = "MagellanNTK::keepDatasets"
 )

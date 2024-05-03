@@ -9,8 +9,8 @@
 Config(
   fullname = "",
   mode = "",
-  steps = "",
-  mandatory = "",
+  steps = NULL,
+  mandatory = NULL,
   steps.source.file = NULL
 )
 
@@ -19,8 +19,8 @@ Config(
 Config(
   fullname = "",
   mode = "",
-  steps = "",
-  mandatory = "",
+  steps = NULL,
+  mandatory = NULL,
   steps.source.file = NULL
 )
 }

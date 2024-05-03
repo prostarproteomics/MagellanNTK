@@ -60,7 +60,8 @@ loadapp_server <- function(id){
       'open_demoDataset',
       'view_dataset',
       'download_dataset',
-      'infos_dataset')
+      'infos_dataset',
+      'export_dataset')
     
     
     dataOut <- reactiveValues(
