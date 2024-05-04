@@ -282,8 +282,13 @@ mainapp_ui <- function(id){
               
               tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
+              
               tabItem(tabName = "eda", 
                 uiOutput(ns('EDA_UI'))),
+              
+              tabItem(tabName = "tools", 
+                uiOutput(ns('tools_UI'))),
+              
               tabItem(tabName = "export", 
                 h3("Export")), # export module not yet
               
@@ -567,6 +572,10 @@ mainapp_server <- function(id,
 
        
 
+    
+    output$tools_UI <- renderUI({
+      h3('tools')
+    })
     
 
     output$EDA_UI <- renderUI({

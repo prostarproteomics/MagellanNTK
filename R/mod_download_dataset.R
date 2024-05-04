@@ -57,7 +57,7 @@ download_dataset_server <- function(id,
     )
     
     observeEvent(dataIn(), ignoreNULL = TRUE,{
-      browser()
+
       rv$export_file_csv <- tryCatch({
         out.csv <- tempfile(fileext = ".csv")
         write.csv(x = dataIn(), file = out.csv)
