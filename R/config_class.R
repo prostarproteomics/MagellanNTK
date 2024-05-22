@@ -216,9 +216,11 @@ init.GenericProcess <- function(.Object){
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
-  .Object@steps <- setNames(.Object@steps, 
-    nm = gsub(' ', '',.Object@steps, fixed=TRUE))
-  
+  .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
+  names(.Object@steps) <- gsub(' ', '',names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('-', '',names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('_', '',names(.Object@steps), fixed=TRUE)
+
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
   return(.Object)
