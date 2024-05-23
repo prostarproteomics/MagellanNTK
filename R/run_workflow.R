@@ -11,6 +11,7 @@
 #' @param dataIn xxx
 #' @param tl.layout Additional parameters for nav
 #' @param mode xxx
+#' @param ... xxx
 #'
 #' @name workflow
 #' 
@@ -70,7 +71,8 @@ workflow_server <- function(id,
   path = NULL,
   dataIn = reactive({NULL}),
   tl.layout = NULL,
-  mode = "user"){
+  mode = "user",
+  ...){
   
   
   source_shinyApp_files()
@@ -133,7 +135,8 @@ workflowApp <- function(id,
   path = NULL,
   dataIn = NULL,
   tl.layout = NULL,
-  mode = 'user') {
+  mode = 'user',
+  ...) {
 
   ui <- workflow_ui(id)
   server <- function(input, output, session) {
@@ -141,7 +144,8 @@ workflowApp <- function(id,
     
       res <- workflow_server(id, 
         path = path,
-        dataIn = dataIn
+        dataIn = dataIn,
+        ...
       )
 
       observeEvent(req(res()$dataOut()$trigger), {

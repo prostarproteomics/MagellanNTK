@@ -16,10 +16,18 @@ workflow_server(
      NULL
  }),
   tl.layout = NULL,
-  mode = "user"
+  mode = "user",
+  ...
 )
 
-workflowApp(id, path = NULL, dataIn = NULL, tl.layout = NULL, mode = "user")
+workflowApp(
+  id,
+  path = NULL,
+  dataIn = NULL,
+  tl.layout = NULL,
+  mode = "user",
+  ...
+)
 }
 \arguments{
 \item{id}{xxx}
@@ -31,6 +39,8 @@ workflowApp(id, path = NULL, dataIn = NULL, tl.layout = NULL, mode = "user")
 \item{tl.layout}{Additional parameters for nav}
 
 \item{mode}{xxx}
+
+\item{...}{xxx}
 }
 \value{
 NA
