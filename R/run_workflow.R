@@ -116,7 +116,8 @@ workflow_server <- function(id,
       dataOut(
         nav_server(id = id,
           dataIn = reactive({dataIn}),
-          tl.layout = tl.layout
+          tl.layout = tl.layout, 
+          ...
         )
       )
     })

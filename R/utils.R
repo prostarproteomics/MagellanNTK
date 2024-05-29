@@ -1,4 +1,17 @@
 
+#' @title xxx
+#' @description xxx
+#' 
+#' 
+#' @examples
+#' NULL
+#' 
+#' 
+#' @export
+#' 
+is.validated <- function(test){
+  return (test == stepStatus$VALIDATED)
+}
 
 #' @title Find the packages of a function
 #' 

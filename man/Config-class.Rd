@@ -4,7 +4,7 @@
 \alias{Config-class}
 \alias{Config}
 \alias{initialize,Config-method}
-\title{Config class definition}
+\title{Initialization method for the class `Config`}
 \usage{
 Config(
   fullname = "",
@@ -38,83 +38,5 @@ Config(
 \item{.Object}{xxx}
 }
 \description{
-This class is used to store the configuration of any process
-used with MagellanNTK It contains a validity function to ensure
-that the format is correct.
-
-Validity:
-* The first step must be called 'Description', it is a mandatory step. Thus, 
-the first item of the mandatory vector is TRUE.
-To be continued...
-
-## Initialization
- ### Generic process
- 
- A generic process
- * Generic pipeline : xxxx
- * Description pipeline: This case is for a process called 'Description' which is 
- the first process module of a pipeline
-
 Wrapper function to the constructor of the class
-}
-\section{Slots}{
-
-\describe{
-\item{\code{fullname}}{xxxx}
-
-\item{\code{name}}{xxx}
-
-\item{\code{parent}}{xxx}
-
-\item{\code{mode}}{xxx}
-
-\item{\code{steps}}{xxx}
-
-\item{\code{mandatory}}{xxx}
-
-\item{\code{ll.UI}}{xxx}
-
-\item{\code{steps.source.file}}{xxx}
-}}
-
-\examples{
-# Example of a generic process
-generic.proc <- Config(
-  fullname = 'PipelineDemo_Process1',
-  mode = 'process',
-  steps = c('Step 1', 'Step 2'),
-  mandatory = c(TRUE, FALSE)
-  )
-
-
-# Example of a generic pipeline
-generic.pipe <- Config(
-  fullname = 'Pipe1_PipelineDemo',
-  mode = 'pipeline',
-  steps = c('Process 1', 'Process 2'),
-  mandatory = c(TRUE, FALSE)
-  )
-
-# Example of a root pipeline (process has no parent)
-root.pipe <- Config(
-  mode = 'pipeline',
-  fullname = 'PipelineDemo',
-  steps = c('Process1', 'Process2', 'Process3'),
-  mandatory = c(FALSE, FALSE, TRUE)
-)
-
-
-# Example of a description module (process has no steps)
-description.process <- Config(
-  fullname = 'PipelineDemo_Description',
-  mode = 'process',
-  steps = '',
-  mandatory = ''
-)
-
-
-generic.proc
-generic.pipe
-root.pipe
-description.process
 }

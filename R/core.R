@@ -80,7 +80,8 @@ nav_server <- function(id = NULL,
     remoteReset = reactive({FALSE}),
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
-    mode = reactive({'user'})
+    mode = reactive({'user'}), 
+  ...
     ) {
 
     

@@ -29,7 +29,50 @@
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
 #' 
-#' @example inst/extdata/funcs_examples/example_config_class.R
+#' @example
+#' # Example of a generic process
+#' generic.proc <- Config(
+#'   fullname = 'PipelineDemo_Process1',
+#'   mode = 'process',
+#'   steps = c('Step 1', 'Step 2'),
+#'   mandatory = c(TRUE, FALSE)
+#' )
+#' 
+#' 
+#' # Example of a generic pipeline
+#' generic.pipe <- Config(
+#'   fullname = 'Pipe1_PipelineDemo',
+#'   mode = 'pipeline',
+#'   steps = c('Process 1', 'Process 2'),
+#'   mandatory = c(TRUE, FALSE)
+#' )
+#' 
+#' # Example of a root pipeline (process has no parent)
+#' root.pipe <- Config(
+#'   mode = 'pipeline',
+#'   fullname = 'PipelineDemo',
+#'   steps = c('Process1', 'P-rocess2 bis', 'Process3'),
+#'   mandatory = c(FALSE, FALSE, TRUE)
+#' )
+#' 
+#' 
+#' # Example of a description module (process has no steps)
+#' description.process <- Config(
+#'   fullname = 'PipelineDemo_Description',
+#'   mode = 'process',
+#'   steps = '',
+#'   mandatory = ''
+#' )
+#' 
+#' 
+#' generic.proc
+#' generic.pipe
+#' root.pipe
+#' description.process
+#' 
+NULL
+
+
 #'
 #' @name Config-class
 #' @rdname Config-class
@@ -217,9 +260,9 @@ init.GenericProcess <- function(.Object){
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
   .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
-  names(.Object@steps) <- gsub(' ', '',names(.Object@steps), fixed=TRUE)
-  names(.Object@steps) <- gsub('-', '',names(.Object@steps), fixed=TRUE)
-  names(.Object@steps) <- gsub('_', '',names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('_', '', names(.Object@steps), fixed=TRUE)
 
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
@@ -232,8 +275,11 @@ init.GenericNode  <- function(.Object){
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
   
-  .Object@steps <- setNames(.Object@steps, 
-    nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
+  names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('_', '', names(.Object@steps), fixed=TRUE)
+  
   
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
@@ -287,8 +333,11 @@ init.GenericPipeline <- function(.Object){
   
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
-  .Object@steps <- setNames(.Object@steps, 
-    nm = gsub(' ', '',.Object@steps, fixed=TRUE))
+  .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
+  names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)
+  names(.Object@steps) <- gsub('_', '', names(.Object@steps), fixed=TRUE)
+    
   
   .Object@mandatory <- setNames(.Object@mandatory, nm = names(.Object@steps))
   
@@ -305,6 +354,7 @@ init.DescriptionProcess <- function(.Object){
   # A process has a parent
   .stepname <- 'Description'
   .Object@steps <- setNames(.stepname, nm = .stepname)
+  
   .Object@mandatory <- setNames(TRUE, nm = names(.Object@steps))
   
   # This line comes after the other ones because in the case of a pipeline, 
