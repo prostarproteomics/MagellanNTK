@@ -6,6 +6,7 @@
 \alias{timelines}
 \alias{timeline_v_ui}
 \alias{timeline_v_server}
+\alias{timeline}
 \title{Timelines for the processes manager}
 \usage{
 timeline_h_ui(id)
@@ -15,6 +16,8 @@ timeline_h_server(id, config, status, position, enabled)
 timeline_v_ui(id)
 
 timeline_v_server(id, config, status, position, enabled)
+
+timeline(config = NULL, layout = "h")
 }
 \arguments{
 \item{id}{The `id` of the server}
@@ -39,6 +42,26 @@ A Shiny module
 }
 \description{
 xxxx
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(shinyWidgets)
+library(shinyjs)
+
+options(shiny.fullstacktrace = TRUE)
+
+
+config <- MagellanNTK::Config(
+fullname = 'PipelineDemo_test',
+mode = 'process',
+steps = c('Step 1', 'Step 2', 'Step 3'),
+mandatory = c(TRUE, FALSE, FALSE)
+)
+
+shiny::runApp(timeline(config, layout = 'h'))
+
+shiny::runApp(timeline(config, layout = 'v'))
+\dontshow{\}) # examplesIf}
 }
 \author{
 Samuel Wieczorek

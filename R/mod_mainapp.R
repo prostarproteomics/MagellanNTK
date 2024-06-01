@@ -31,7 +31,15 @@ NULL
 #' 
 mainapp_ui <- function(id){
   ns <- NS(id)
-  
+  tags$head(tags$style(".sidebar {
+    background: #F4F4F4;
+      height: 100vh;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: clip;
+    position: absolute;
+    top: 0;
+    width: 360px;"))
   div(id = "header",
     
       shinydashboardPlus::dashboardPage(
@@ -138,7 +146,7 @@ mainapp_ui <- function(id){
         ## Sidebar
         ## 
         sidebar = shinydashboardPlus::dashboardSidebar(
-          #fixed = TRUE,
+
           shinydashboard::sidebarMenu(id = "sb",
                       #style = "position: fixed; overflow: visible;",
             # inactiveClass for import menus inactivation 
@@ -268,16 +276,13 @@ mainapp_ui <- function(id){
               
               
               tabItem(tabName = "Home", class="active", 
-                wellPanel(style="background-color: lightgrey",
-                  h3('New to MagellanNTK? do not wait and launch demo'),
-                  actionLink(ns('launch_demo'), 'Let\'s go!')
-                ),
+                  actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
               #uiOutput(ns('dataManager_UI'))),
               tabItem(tabName = "openDataset", 
-                box(uiOutput(ns('open_dataset_UI')), width = '200px' ),
-                box(uiOutput(ns('infos_dataset_UI')), width = '200px' )
+                uiOutput(ns('open_dataset_UI')), width = '200px' ,
+                uiOutput(ns('infos_dataset_UI')), width = '200px' 
                 ),
               
               tabItem(tabName = "convertDataset", 
@@ -580,7 +585,7 @@ mainapp_server <- function(id,
 
     output$EDA_UI <- renderUI({
       req(rv.core$funcs)
-      
+
       call.func(
         fname = paste0(rv.core$funcs$view_dataset, '_server'),
         args = list(id = 'view_dataset',

@@ -156,7 +156,7 @@ mod_modalDialog_server <- function(id,
               do.call(paste0(external_mod, '_ui'), list(id = ns('test'))),
             footer = tagList(
               modalButton("Cancel"),
-              actionButton(ns("ok"), "OK2") # wrapped in ns()
+              actionButton(ns("ok"), "Ok") # wrapped in ns()
               )
             )
           )

@@ -20,9 +20,23 @@
 #' 
 #' @author Samuel Wieczorek
 #' 
-# #' @example examples/test_both_timelines.R
-# #' @example examples/test_timeline_H.R
-# #' @example examples/test_timeline_v.R
+#' @examplesIf interactive()
+#' library(shinyWidgets)
+#' library(shinyjs)
+#' 
+#' options(shiny.fullstacktrace = TRUE)
+#' 
+#' 
+#' config <- MagellanNTK::Config(
+#' fullname = 'PipelineDemo_test',
+#' mode = 'process',
+#' steps = c('Step 1', 'Step 2', 'Step 3'),
+#' mandatory = c(TRUE, FALSE, FALSE)
+#' )
+#' 
+#' shiny::runApp(timeline(config, layout = 'h'))
+#' 
+#' shiny::runApp(timeline(config, layout = 'v'))
 #' 
 NULL
 
@@ -207,9 +221,10 @@ timeline_v_server <- function(id,
                     tags$p(
                         style = paste0(
                             "font-weight: 100;
-                            border: 3px solid lightgrey;
+                            border: 3px solid white;
                             border-radius: 10px;
-                            display: block;color: #000;
+                            display: block;
+                            color: #000;
                             padding: 8px 10px;margin: 10px;
                             text-align: center;",
                             GetStyle()[x]
@@ -222,3 +237,69 @@ timeline_v_server <- function(id,
     })
 }
 
+
+
+
+#' @export
+#' @rdname timelines
+#' 
+timeline <- function(config = NULL, layout = 'h'){
+ui <- fluidPage(
+  actionButton("prevpos", shiny::icon('arrow-left')),
+  actionButton("nextpos", shiny::icon('arrow-right')),
+  uiOutput('timeline_UI')
+
+)
+
+
+
+server <- function(input, output){
+  
+  rv <- reactiveValues(
+    direction = 0,
+    status = c(0, 1, 0, 0),
+    current.pos = 1,
+    tl.tags.enabled = c(1, 1, 1, 1),
+    position = NULL
+  )
+  
+  
+  output$timeline_UI <- renderUI({
+    if (layout == 'h')
+      timeline_h_ui('TLv')
+    else if (layout == 'v')
+      timeline_v_ui('TLv')
+  })
+
+  observe({
+    req(config)
+    if (layout == 'h')
+      timeline_h_server(id = 'TLv',
+        config = config,
+        status = reactive({rv$status}),
+        position = reactive({rv$current.pos}),
+        enabled = reactive({rv$tl.tags.enabled})
+      )
+    else if (layout == 'v')
+      timeline_v_server(id = 'TLv',
+    config = config,
+    status = reactive({rv$status}),
+    position = reactive({rv$current.pos}),
+    enabled = reactive({rv$tl.tags.enabled})
+  )
+  })
+  
+  observeEvent(input$nextpos,{
+    if (rv$current.pos != length(config@steps))
+      rv$current.pos <- rv$current.pos + 1
+  })
+  
+  observeEvent(input$prevpos,{
+    if (rv$current.pos != 1)
+      rv$current.pos <- rv$current.pos - 1
+  })
+}
+
+
+app <- shiny::shinyApp(ui, server)
+}

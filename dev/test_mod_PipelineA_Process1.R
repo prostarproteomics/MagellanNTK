@@ -23,13 +23,13 @@ mod_test_navigation_process_ui <- function(id){
     fluidRow(
       column(width=2, actionButton(ns('simReset'), 
                                    'Remote reset', 
-                                   style='background-color: lightgrey;')),
+                                   style='background-color: white;')),
       column(width=2, actionButton(ns('simEnabled'), 
                                    'Remote enable/disable', 
-                                   style='background-color: lightgrey;')),
+                                   style='background-color: white;')),
       column(width=2, actionButton(ns('simSkipped'), 
                                    'Remote is.skipped', 
-                                   style='background-color: lightgrey;'))
+                                   style='background-color: white;'))
     ),
     hr(),
     uiOutput(ns('UI')),

@@ -38,7 +38,7 @@ Build_nav_v_ui <- function(ns) {
     tagList(
         fluidRow(
             column(width = 2,
-                wellPanel(
+                #wellPanel(
                     div(
                         style = "padding: 10px",
                         div(
@@ -64,18 +64,18 @@ Build_nav_v_ui <- function(ns) {
                             )
                         ),
                         uiOutput(ns("show_TL"))
-                    )
+                   # )
                 )
             ),
             column(width = 10,
                 style = " padding-left: 20px;",
-                wellPanel(
+                #wellPanel(
                     div(
                         id = ns("Screens"),
                         uiOutput(ns("SkippedInfoPanel")),
                         uiOutput(ns("EncapsulateScreens_ui"))
                     )
-                )
+               # )
             )
         )
     )

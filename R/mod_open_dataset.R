@@ -32,9 +32,8 @@ open_dataset_ui <- function(id){
             'package dataset' = 'packageDataset'),
           width = '200px'),
 
-          box(uiOutput(ns('customDataset_UI'))),
-
-          box(uiOutput(ns('packageDataset_UI')))
+          uiOutput(ns('customDataset_UI')),
+          uiOutput(ns('packageDataset_UI'))
       )
     )
 }

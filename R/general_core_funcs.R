@@ -312,10 +312,6 @@ All_Skipped_tag <- function(steps.status, tag) {
 GetFirstMandatoryNotValidated <- function(range,rv) {
   .ind <- NULL
     first <- NULL
-    
-    print(rv$config)
-    print(range)
-    #browser()
     first <- unlist((lapply(
         range,
         function(x) {
