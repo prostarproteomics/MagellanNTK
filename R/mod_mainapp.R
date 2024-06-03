@@ -31,21 +31,34 @@ NULL
 #' 
 mainapp_ui <- function(id){
   ns <- NS(id)
-  tags$head(tags$style(".sidebar {
-    background: #F4F4F4;
-      height: 100vh;
-    left: 0;
-    overflow-x: hidden;
-    overflow-y: clip;
-    position: absolute;
-    top: 0;
-    width: 360px;"))
+  
+  
+  # tags$head(tags$style(".sidebar {
+  #   background: #F4F4F4;
+  #     height: 100vh;
+  #   left: 0;
+  #   overflow-x: hidden;
+  #   overflow-y: clip;
+  #   position: absolute;
+  #   top: 0;
+  #   width: 360px;"))
   div(id = "header",
     
       shinydashboardPlus::dashboardPage(
         md = FALSE,
         skin = "blue",
         
+        # 
+        # tags$head(
+        #   .path <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'prostar.css'),
+        #   includeCSS(.path),
+        #   .path_sass <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'sass-size.scss'),
+        #   tags$head(tags$style(sass::sass(
+        #     sass::sass_file(.path_sass),
+        #     sass::sass_options(output_style = "expanded")
+        #   )))
+        #   ),
+          
         #skin = shinythemes::shinytheme("cerulean"),
         
         # https://stackoverflow.com/questions/31711307/how-to-change-color-in-shiny-dashboard
@@ -243,14 +256,24 @@ mainapp_ui <- function(id){
         body = shinydashboard::dashboardBody(
           # some styling
           tags$head(
-            tags$style(
-              rel = "stylesheet",
-              type = "text/css",
-              href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/qtcreator_dark.min.css"
-            ),
-            tags$script(
-              src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
-            ),
+            tags$style(".content-wrapper {background-color: white;}"),
+            
+            # .path <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'prostar.css'),
+            # includeCSS(.path),
+            # .path_sass <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'sass-size.scss'),
+            # tags$style(sass::sass(
+            #   sass::sass_file(.path_sass),
+            #   sass::sass_options(output_style = "expanded")
+            # )),
+            
+            # tags$style(
+            #   rel = "stylesheet",
+            #   type = "text/css",
+            #   href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/qtcreator_dark.min.css"
+            # ),
+            # tags$script(
+            #   src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+            # ),
             tags$script(
               "$(function() {
             $('.sidebar-toggle').on('click', function() {
@@ -335,6 +358,8 @@ mainapp_server <- function(id,
    
   moduleServer(id, function(input, output, session){
     ns <- session$ns
+    
+    
     
     rv.core <- reactiveValues(
       pipeline = NULL,

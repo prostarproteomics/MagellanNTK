@@ -35,14 +35,14 @@ DisplayWholeUI <- function(ns, layout='h'){
 #' @export
 #'
 Build_nav_v_ui <- function(ns) {
+  btn_style <- "display:inline-block; vertical-align: middle; padding: 7px"
     tagList(
         fluidRow(
             column(width = 2,
                 #wellPanel(
                     div(
                         style = "padding: 10px",
-                        div(
-                            style = btn_style,
+                        div(style = btn_style,
                             shinyjs::disabled(
                                 actionButton(ns("prevBtn"),
                                     tl_v_prev_icon,
@@ -55,8 +55,7 @@ Build_nav_v_ui <- function(ns) {
                                 style = "padding:4px; font-size:80%"
                             )
                         ),
-                        div(
-                            style = btn_style,
+                        div(style = btn_style,
                             actionButton(ns("nextBtn"), 
                                 tl_v_next_icon,
                                 class = PrevNextBtnClass,

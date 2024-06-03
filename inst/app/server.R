@@ -18,6 +18,9 @@ server_MagellanNTK <- shiny::shinyServer(
   
     function(input, output, session ) {
       
+      #addResourcePath(prefix = "www", directoryPath = "./www")
+      addResourcePath('www', system.file('app/www', package='MagellanNTK'))
+      
       shiny::observeEvent(funcs, {
         for(i in names(funcs))
           requireNamespace(unlist(strsplit(funcs[[i]], split='::'))[1])

@@ -21,29 +21,26 @@ $lineWidth: 3px
   display: flex
   align-items: center
   justify-content: center
-  
-  &:before
-      content: ''
 
-//.li
-//  transition: all 200ms ease-in
+.li
+  transition: all 200ms ease-in
 
 .timestamp
   margin-bottom: 0px
   margin-top: 30px
   /*padding: 0px 40px*/
-  //display: flex
-  //flex-direction: column
+  display: flex
+  flex-direction: column
   align-items: center
   font-weight: 100
 
 .status 
-  padding: 0px 20px
+  padding: 0px 40px
   display: flex
   justify-content: center
   border-top: $lineWidth solid $colUndone
   position: relative
-  //transition: all 200ms ease-in
+  transition: all 200ms ease-in
   h4
     font-weight: 600
     border-bottom: 3px solid white
@@ -58,8 +55,8 @@ $lineWidth: 3px
     border: $lineWidth solid $colUndone
     position: absolute
     top: -12px
-    //left: 50%
-    //transition: all 200ms ease-in
+    left: 50%
+    transition: all 200ms ease-in
   
 
 
@@ -67,10 +64,9 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth solid $colUndone
-      //transition: all 200ms ease-in
+      transition: all 200ms ease-in
     
     h4
       color: $colUndone
@@ -83,10 +79,9 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth solid $colUndoneDisabled
-      //transition: all 200ms ease-in
+      transition: all 200ms ease-in
     
     h4
       color: $colUndoneDisabled
@@ -100,7 +95,6 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: $colCompleted
       border: $lineWidth solid $colCompleted
       transition: all 200ms ease-in
@@ -116,7 +110,6 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: $colCompletedDisabled
       border: $lineWidth solid $colCompletedDisabled
       transition: all 200ms ease-in
@@ -124,13 +117,15 @@ $lineWidth: 3px
     h4
       color: $colCompletedDisabled
       border-bottom: 3px solid white
+    
+  
+
 
 
 .li.skipped
   .status
     border-top: $lineWidth dashed  $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth dashed  $colSkipped
       transition: all 200ms ease-in
@@ -146,7 +141,6 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth dashed  $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth dashed  $colSkippedDisabled
       transition: all 200ms ease-in
@@ -163,10 +157,9 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth solid $colMandatory
-      //transition: all 200ms ease-in
+      transition: all 200ms ease-in
     
     h4
       color: $colMandatory
@@ -179,7 +172,6 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
-      content: ''
       background-color: white
       border: $lineWidth solid $colMandatoryDisabled
       transition: all 200ms ease-in

@@ -81,7 +81,7 @@ nav_server <- function(id = NULL,
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
     mode = reactive({'user'}), 
-  ...
+    ...
     ) {
 
     
@@ -195,7 +195,7 @@ nav_server <- function(id = NULL,
                 # Update the reactive value config with the config of the 
                 # pipeline
                 rv$config <- rv$proc$config()
-#browser()
+
                 if(mode() == 'dev'){
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_conf()"), '\n')))
                   rv$config

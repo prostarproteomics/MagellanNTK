@@ -15,10 +15,10 @@ timeline_h_ui <- function(id) {
     )
     tagList(
         shinyjs::useShinyjs(),
-        tags$div(
+        #tags$div(
             shinyjs::inlineCSS(sass::sass(sass::sass_file(fpath))),
             uiOutput(ns("show_h_TL"))
-        )
+        #)
     )
 }
 
@@ -59,8 +59,7 @@ timeline_h_server <- function(id,
             tags$div(
                 class = "timeline",
                 id = "timeline",
-                lapply(
-                    seq_len(length(config@steps)),
+                lapply(seq_len(length(config@steps)),
                     function(x) {
                         tags$li(
                             class = paste0("li ", UpdateTags()[x]),
