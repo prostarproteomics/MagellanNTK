@@ -14,7 +14,7 @@ ui <- shiny::shinyUI(fluidPage(
       
       # Application title
       titlePanel("Directory Input Demo"),
-      directoryInput('directory', label = 'selected directory', value = '~'),
+      directoryInput('directory', label = 'Select directory', value = '~', width='600px'),
       tags$h5('Files'),
       dataTableOutput('files')
     ),
@@ -44,7 +44,7 @@ server <- shinyServer(function(input, output, session) {
     handlerExpr = {
       if (input$directory > 0) {
         # condition prevents handler execution on initial app launch
-        path = choose.dir(default = readDirectoryInput(session, 'directory'),
+        path = choose.dir(default = readDirectoryInput(session, 'directory', width='600px'),
                           caption="Choose a directory...")
         updateDirectoryInput(session, 'directory', value = path)
       }

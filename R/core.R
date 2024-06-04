@@ -58,8 +58,7 @@ nav_ui <- function(id) {
         # Contains the UI for the timeline, the direction buttons
         # and the workflows modules
         
-          uiOutput(ns("nav_mod_ui"))
-          ,
+          uiOutput(ns("nav_mod_ui")),
         
         # Contains the UI for the debug module
         uiOutput(ns("debug_infos_ui"))
@@ -280,7 +279,8 @@ nav_server <- function(id = NULL,
                            GetStepsNames(),
                            function(x) {
                              if(mode() == 'dev')
-                               cat(paste0(id, ": Launch: ", 'nav_ui(', ns(paste0(id, '_', x)), ')\n'))
+                               cat(paste0(id, ": Launch: ", 'nav_ui(', 
+                                 ns(paste0(id, '_', x)), ')\n'))
                              
                              nav_ui(ns(paste0(id, '_', x)))
                            }
@@ -690,7 +690,6 @@ nav_server <- function(id = NULL,
           if(mode() == 'dev')
             cat(crayon::blue(paste0(id, ': Entering output$nav_mod_ui <- renderUI({...})\n')))
           
-            #do.call(paste0("Build_nav_", rv$tl.layout[1], "_ui"), list(ns))
             DisplayWholeUI(ns, rv$tl.layout[1])
         })
 

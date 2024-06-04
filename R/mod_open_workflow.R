@@ -24,7 +24,10 @@ open_workflow_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3(style="color: blue;", '-- Default open workflow module --'),
-    uiOutput(ns('dirInput_UI')),
+    div(
+      width = '600px',
+      uiOutput(ns('dirInput_UI'))
+      ),
     uiOutput(ns('chooseWF_UI')),
     actionButton(ns('load_btn'), 'Load'),
     #infos_workflow_ui(ns("infos")),
@@ -57,7 +60,7 @@ open_workflow_server <- function(id){
     
     output$dirInput_UI <- renderUI({
       directoryInput(ns('directory'), 
-        label = 'selected directory', 
+        label = 'Select directory', 
         value = rv.wf$path)
       
     })

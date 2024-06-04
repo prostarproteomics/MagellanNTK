@@ -6,6 +6,10 @@ ui = dashboardPage(
   dashboardHeader(),
   dashboardSidebar(),
   dashboardBody(
+    tags$head(
+      #tags$style(".content-wrapper {background-color: white;}")
+      #tags$style(".box-body {background-color: lightgrey;}")
+    ),
     workflow_ui("PipelineDemo_Process1")
   )
 )

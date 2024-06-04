@@ -72,7 +72,7 @@ open_dataset_server <- function(id){
     output$customDataset_UI <- renderUI({
       req(input$chooseSource == 'customDataset')
       wellPanel(
-        fileInput(ns("file"), "Open file", multiple = FALSE),
+        fileInput(ns("file"), "Open file", multiple = FALSE, width = "400px"),
         actionButton(ns('load_btn'), 'Load file')
       )
     })

@@ -24,7 +24,7 @@ NULL
 #' 
 #' @export
 #'
-DisplayWholeUI <- function(ns, layout='h'){
+DisplayWholeUI <- function(ns, layout = 'h'){
   
   do.call(paste0("Build_nav_", layout, "_ui"), list(ns))
 

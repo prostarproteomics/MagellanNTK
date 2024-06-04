@@ -362,7 +362,10 @@ runDirinputExample <- function() {
           
           # Application title
           titlePanel("Directory Input Demo"),
-          directoryInput('directory', label = 'selected directory', value = '~'),
+          directoryInput('directory', 
+            label = 'Select directory', 
+            value = '~',
+            width = '600px'),
           tags$h5('Files'),
           dataTableOutput('files')
         ),
