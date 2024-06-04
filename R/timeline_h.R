@@ -58,11 +58,12 @@ timeline_h_server <- function(id,
           
             tags$div(
                 class = "timeline",
-                id = "timeline",
+                #id = "timeline",
                 lapply(seq_len(length(config@steps)),
                     function(x) {
-                        tags$li(
-                            class = paste0("li ", UpdateTags()[x]),
+                      #print(class = paste0("li ", UpdateTags()[x]))
+                      tags$li(style = 'border: 0px none;',
+                        class = paste0("li ", UpdateTags()[x]),
                             tags$div(
                                 class = "timestamp status",
                                 tags$h4(config@steps[x])

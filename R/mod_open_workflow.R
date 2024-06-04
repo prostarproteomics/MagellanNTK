@@ -24,11 +24,15 @@ open_workflow_ui <- function(id){
   ns <- NS(id)
   tagList(
     h3(style="color: blue;", '-- Default open workflow module --'),
-    div(
-      width = '600px',
-      uiOutput(ns('dirInput_UI'))
-      ),
-    uiOutput(ns('chooseWF_UI')),
+    # div(
+    #   width = '600px',
+    #   uiOutput(ns('dirInput_UI'))
+    #   ),
+    fluidRow(
+      column(width = 3, uiOutput(ns('choosePackage_UI'))),
+      column(width = 3, uiOutput(ns('chooseWF1_UI'))),
+      column(width = 3, uiOutput(ns('chooseWF2_UI')))
+        ),
     actionButton(ns('load_btn'), 'Load'),
     #infos_workflow_ui(ns("infos")),
     #tags$h3('Files'),
@@ -58,61 +62,78 @@ open_workflow_server <- function(id){
     })
     
     
-    output$dirInput_UI <- renderUI({
-      directoryInput(ns('directory'), 
-        label = 'Select directory', 
-        value = rv.wf$path)
+    
+    FindPkg2MagellanNTK <- reactive({
+      x <- data(package = .packages(all.available = TRUE))$results
+      rnames <- rownames(installed.packages())
+      ll <- lapply(rnames, function(x){
+        dir.exists(system.file('workflow', package = as.character(x)))
+      })
+      
+      rnames[which(ll == TRUE)]
       
     })
     
-    observeEvent(input$directory, ignoreNULL = TRUE,
-      
-      handlerExpr = {
-        
-        if (input$directory > 0) {
-          # condition prevents handler execution on initial app launch
-          rv.wf$path = choose.dir(default = readDirectoryInput(session, 'directory'),
-            caption="Choose a directory...")
-          updateDirectoryInput(session, 'directory', value = rv.wf$path)
-        }
-      }
-    )
     
-    output$directory = renderText({
-      readDirectoryInput(session, 'directory')
+    output$choosePackage_UI <- renderUI({
+      selectInput(ns('choosePkg'), 'Package',
+        choices = FindPkg2MagellanNTK())
     })
-    
-    
-    
-    output$chooseWF_UI <- renderUI({
-      req(rv.wf$path)
 
-      tmp <- file.path(rv.wf$path, 'R', fsep = file.sep())
+
+    
+    Find_WF <- reactive({
+      req(input$choosePkg)
+    
+    path <- system.file('workflow', package = as.character(input$choosePkg))
+    ll.workflows <- list.dirs(path, full.names = FALSE, recursive = FALSE)
+    
+    ll.workflows
+    })
+    
+    
+    output$chooseWF1_UI <- renderUI({
+      req(Find_WF())
+        selectInput(ns('chooseWF1'), 'Choose workflow',
+        choices = Find_WF()
+        )
+    })
+    
+    
+    
+    output$chooseWF2_UI <- renderUI({
+      req(input$chooseWF1)
+
+      rv.wf$path <- system.file(file.path('workflow', input$chooseWF1), 
+        package = as.character(input$choosePkg))
+      
+      tmp <- normalizePath(file.path(rv.wf$path, 'R', fsep = file.sep()))
       ll.files <- list.files(tmp, full.names = FALSE)
       
       ll <- unlist(lapply(ll.files, function(x)
-        if (is.substr(basename(rv.wf$path), x))
+        if (is.substr(basename(input$chooseWF1), x))
           x
-        ))
+      ))
       
-
-      if (length(ll) > 0){
-        radioButtons(ns('chooseWF'), 'Choose workflow',
-        choices = gsub('.R', '', ll)
+      ll <- ll[-c(grep('_Description', ll), grep('_Save', ll))]
+      
+      # Remove Description and Save process
+      ll <- ll[-c(grep('_Description', ll), grep('_Save', ll))]
+      
+      
+        selectInput(ns('chooseWF2'), 'Choose workflow',
+          choices = gsub('.R', '', ll)
         )
-      } else {
-        
-      }
-      
     })
+    
+    
     
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       rv.wf$path
 
       rv.wf$dataOut$path <- rv.wf$path
-      rv.wf$dataOut$wf_name <- input$chooseWF
-
+      rv.wf$dataOut$wf_name <- input$chooseWF2
 
       # Load customizable functions if config.txt file exists
       rv.wf$dataOut$funcs  <- readCustomizableFuncs(rv.wf$path)

@@ -256,7 +256,7 @@ mainapp_ui <- function(id){
         body = shinydashboard::dashboardBody(
           # some styling
           tags$head(
-            tags$style(".content-wrapper {background-color: white;}"),
+            #tags$style(".content-wrapper {background-color: white;}"),
             
             # .path <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'prostar.css'),
             # includeCSS(.path),
@@ -625,13 +625,14 @@ mainapp_server <- function(id,
     
 
     observe({
-      filepath <- NULL
-      if (!is.null(rv.core$workflow.path))
-        filepath <- file.path(rv.core$workflow.path, 'md', 
-          paste0(rv.core$workflow.name, '_Description.md'))
-      else
-        filepath <- file.path(system.file('app/md', 
-          package = 'MagellanNTK'),'Presentation.Rmd')
+      filepath <- file.path(system.file('app/md', 
+        package = 'MagellanNTK'),'Presentation.Rmd')
+      # if (!is.null(rv.core$workflow.path))
+      #   filepath <- file.path(rv.core$workflow.path, 'md', 
+      #     paste0(rv.core$workflow.name, '_Description.md'))
+      # else
+      #   filepath <- file.path(system.file('app/md', 
+      #     package = 'MagellanNTK'),'Presentation.Rmd')
           
           
       mod_homepage_server('home', filepath)
