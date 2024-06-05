@@ -34,7 +34,8 @@ open_dataset_ui <- function(id){
 
           uiOutput(ns('customDataset_UI')),
           uiOutput(ns('packageDataset_UI'))
-      )
+      ),
+    uiOutput(ns('datasetInfos_UI'))
     )
 }
 
@@ -194,6 +195,14 @@ open_dataset_server <- function(id){
       #   shinyjs::info("Dataset not compatible with MagellanNTK")
       # }
     })
+    
+    
+    
+    output$datasetInfos_UI <- renderUI({
+      req(rv.open$dataOut)
+        print(paste0('Dataset loaded'))
+      })
+
     reactive({rv.open$dataOut })
   })
   

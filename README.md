@@ -14,7 +14,20 @@ Moreover, this navigation system, which is at the core of Magellan, can by used 
 
 ## Install
 
+```
 devtools::install_github('prostarproteomics/MagellanNTK')
+```
+
+## Launch MagellanNTK
+
+
+MagellanNTK can ben launched in two different modes: a 'user' mode and a 'dev' mode. 
+The 'user' mode is the default mode.
+
+```
+library(MagellanNTK)
+MagellanNTK()
+```
 
 
 # List of articles

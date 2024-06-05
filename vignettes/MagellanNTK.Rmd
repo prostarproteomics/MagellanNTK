@@ -65,6 +65,68 @@ To go further in technical details, please refer to:
 
 -   Inside MagellanNTK
 
+
+
+# Installing and launching MagellanNTK
+
+This is described in the README.
+
+
+# Discovering MagellanNTK
+
+The package MagellanNTK is based on the `shinydashboard` package. In that sense, 
+the user interface is composed of four parts:
+
+* Sidebar
+* Control bar
+* Header panel
+* Main part
+
+
+
+## User interface
+
+
+::: bordered
+```{r 'basic_ui', results='markup', fig.cap="A single task composed of data analysis functions and user interface.", out.extra='style="border-style: solid;"', echo=FALSE, out.width='50%', fig.align='center', fig.wide = TRUE}
+knitr::include_graphics("./figs/MagellanNTK_annote.png", error = FALSE)
+```
+:::
+
+## Sidebar
+
+## Control bar
+
+The control bar contains features to control the global behaviour of the interface.
+
+Console: A clikc on that link open the browser() in the R console which
+
+## Header panel
+
+## Main part
+
+
+## Builtin functions
+
+The package `MagellanNTK` comes with a series of generic functions, used to do some
+basic tasks. These functions are the following:
+
+* convert_dataset(): A Shiny module to convert any dataset to a format suitable for the pipeline used.
+* open_dataset(): xxx
+* open_demoDataset(): xxx
+* view_dataset(): xxx
+* infos_dataset(): xxx
+* download_dataset(): xxx
+* addDatasets(): xxx
+* keepDatasets():
+
+Each of these functions are Shiny modules and are loaded by default when MagellanNTK
+is run.
+
+These functions can be overridden by similar functions int third party packages which contains workflows
+to be run with MagellanNTK.Learn more on customizing these functions in xxx
+
+
 # Workflow overview
 
 As a workflow manager, the aim of `MagellanNTK` is to execute a series

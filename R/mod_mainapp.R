@@ -219,9 +219,6 @@ mainapp_ui <- function(id){
                      menuSubItem("Useful Links", tabName = "usefulLinks"),
                      menuSubItem("FAQ", tabName = "faq"),
                      menuSubItem("Bug Report", tabName = "bugReport"),
-                     menuSubItem("Global Settings", 
-                                 tabName = "globalSettings", 
-                                 icon = icon("cogs")),
                      menuSubItem("Release Notes", 
                                  tabName = "releaseNotes", 
                                  icon = icon("clipboard"))

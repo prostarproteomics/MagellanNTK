@@ -33,7 +33,9 @@ open_workflow_ui <- function(id){
       column(width = 3, uiOutput(ns('chooseWF1_UI'))),
       column(width = 3, uiOutput(ns('chooseWF2_UI')))
         ),
+    uiOutput(ns('wf_preview_ui')),
     actionButton(ns('load_btn'), 'Load'),
+    uiOutput(ns('infos_wf_UI'))
     #infos_workflow_ui(ns("infos")),
     #tags$h3('Files'),
     #dataTableOutput(ns('files'))
@@ -62,6 +64,9 @@ open_workflow_server <- function(id){
     })
     
     
+    output$wf_preview_ui <- renderUI({
+      p('Preview')
+    })
     
     FindPkg2MagellanNTK <- reactive({
       x <- data(package = .packages(all.available = TRUE))$results
@@ -109,13 +114,12 @@ open_workflow_server <- function(id){
       
       tmp <- normalizePath(file.path(rv.wf$path, 'R', fsep = file.sep()))
       ll.files <- list.files(tmp, full.names = FALSE)
-      
+  
       ll <- unlist(lapply(ll.files, function(x)
         if (is.substr(basename(input$chooseWF1), x))
           x
       ))
       
-      ll <- ll[-c(grep('_Description', ll), grep('_Save', ll))]
       
       # Remove Description and Save process
       ll <- ll[-c(grep('_Description', ll), grep('_Save', ll))]
@@ -144,6 +148,12 @@ open_workflow_server <- function(id){
     #   files = list.files(rv.wf$path, full.names = TRUE)
     #   data.frame(name = basename(files), file.info(files))
     # })
+    
+    
+    output$infos_wf_UI <- renderUI({
+      req(rv.wf$dataOut$wf_name)
+      print(paste0('Worflow ', rv.wf$dataOut$wf_name, ' loaded'))
+    })
     
     reactive({rv.wf$dataOut})
   })

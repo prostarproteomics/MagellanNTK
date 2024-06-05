@@ -13,9 +13,6 @@ vignette: >
 
 # Introduction to MagellanNTK
 
-[test](http://www.google.fr)
-
-
 # Customizable functions
 
 

@@ -21,29 +21,38 @@ $lineWidth: 3px
   display: flex
   align-items: center
   justify-content: center
+  
+  &:before
+    content: ''
+    border-left: 2px solid red
+    opacity: 0%
+    position: absolute
 
 .li
-  transition: all 200ms ease-in
-
+  border: $lineWidth none
+  
+  
 .timestamp
   margin-bottom: 0px
-  margin-top: 30px
+  margin-top: 15px
   /*padding: 0px 40px*/
-  display: flex
-  flex-direction: column
+  //display: flex
+  //flex-direction: column
   align-items: center
   font-weight: 100
+  
 
+  
 .status 
-  padding: 0px 40px
+  padding: 0px 20px
   display: flex
   justify-content: center
-  border-top: $lineWidth solid $colUndone
+  //border-top: $lineWidth solid $colUndone
   position: relative
-  transition: all 200ms ease-in
+  //transition: all 200ms ease-in
   h4
     font-weight: 600
-    border-bottom: 3px solid white
+    //border-bottom: 3px solid white
   
   
   &:before
@@ -52,11 +61,11 @@ $lineWidth: 3px
     height: $radius
     background-color: white
     border-radius: 55px
-    border: $lineWidth solid $colUndone
+    //border: $lineWidth solid blue
     position: absolute
     top: -12px
-    left: 50%
-    transition: all 200ms ease-in
+    //left: 50%
+    //transition: all 200ms ease-in
   
 
 
@@ -64,13 +73,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth solid $colUndone
-      transition: all 200ms ease-in
+      //transition: all 200ms ease-in
     
     h4
       color: $colUndone
-      border-bottom: 3px solid white
+      border-bottom: 3px none white
     
   
 
@@ -79,13 +89,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth solid $colUndoneDisabled
-      transition: all 200ms ease-in
+      //transition: all 200ms ease-in
     
     h4
       color: $colUndoneDisabled
-      border-bottom: 3px solid white
+      border-bottom: 0px none blue
     
   
 
@@ -95,13 +106,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: $colCompleted
       border: $lineWidth solid $colCompleted
       transition: all 200ms ease-in
     
     h4
       color: $colCompleted
-      border-bottom: 3px solid white
+      border-bottom: 3px none white
     
   
 
@@ -110,29 +122,28 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: $colCompletedDisabled
       border: $lineWidth solid $colCompletedDisabled
       transition: all 200ms ease-in
     
     h4
       color: $colCompletedDisabled
-      border-bottom: 3px solid white
-    
-  
-
+      border-bottom: 3px none white
 
 
 .li.skipped
   .status
     border-top: $lineWidth dashed  $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth dashed  $colSkipped
       transition: all 200ms ease-in
     
     h4
       color: $colSkipped
-      border-bottom: 3px dashed  white
+      border-bottom: 3px none  white
     
   
 
@@ -141,13 +152,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth dashed  $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth dashed  $colSkippedDisabled
       transition: all 200ms ease-in
     
     h4
       color: $colSkippedDisabled
-      border-bottom: 3px dashed  white
+      border-bottom: 3px none  white
     
   
 
@@ -157,13 +169,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth solid $colMandatory
-      transition: all 200ms ease-in
+      //transition: all 200ms ease-in
     
     h4
       color: $colMandatory
-      border-bottom: 3px solid white
+      border-bottom: 3px none white
     
   
 
@@ -172,13 +185,14 @@ $lineWidth: 3px
   .status
     border-top: $lineWidth solid $colLine
     &:before
+      content: ''
       background-color: white
       border: $lineWidth solid $colMandatoryDisabled
       transition: all 200ms ease-in
     
     h4
       color: $colMandatoryDisabled
-      border-bottom: 3px solid white
+      border-bottom: 3px none white
     
   
 
