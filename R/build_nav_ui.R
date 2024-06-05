@@ -89,26 +89,26 @@ Build_nav_v_ui <- function(ns) {
 Build_nav_h_ui <- function(ns) {
     tagList(
         fluidRow(
-            style = "display: flex; align-items: center;
+            style = "display: flex; align-items: top;
             justify-content: center;",
             column(width = 1, shinyjs::disabled(
                 actionButton(ns("prevBtn"),
                     tl_h_prev_icon,
                     class = PrevNextBtnClass,
-                    style = "font-size:80%"
+                  style = "font-size:60%"
                 )
             )),
             column(width = 1, 
                    actionButton(ns("rstBtn"), "Reset",
                                 class = redBtnClass,
-                                style = "font-size:80%")
+                                style = "font-size:60%")
                    ),
             column(width = 9, uiOutput(ns("show_TL"))),
             column(width = 1,
                 actionButton(ns("nextBtn"),
                     tl_h_next_icon,
                     class = PrevNextBtnClass,
-                    style = "font-size:80%"
+                    style = "font-size:60%"
                 )
             )
         ),
