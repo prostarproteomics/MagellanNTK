@@ -379,10 +379,10 @@ mainapp_server <- function(id,
     )
 
     
-    observeEvent(id, {
-      if (!is.null(funcs))
-        rv.core$funcs <- funcs
-    }, priority = 1000)
+    # observeEvent(id, {
+    #   if (!is.null(funcs))
+    #     rv.core$funcs <- funcs
+    # }, priority = 1000)
     
     
     
@@ -391,39 +391,6 @@ mainapp_server <- function(id,
       req(rv.core$workflow.name)
       h4(rv.core$workflow.name)
       })
-    
-    
-    # observeEvent(rv.core$current.obj, {
-    #   print('base_URL')
-    #   obj <- convert_to_mae(rv.core$current.obj)
-    #   print(colnames(SummarizedExperiment::rowData(obj[[1]])))
-    # }, priority = 1000)
-    
-    
-    # delay(ms = 3500, show("app_title"))
-    # delay(ms = 3800, show("app_slider_plot"))
-
-    
-    # output$user <- shinydashboardPlus::renderUser({
-    #   shinydashboardPlus::dashboardUser(
-    #     name = "Prostar proteomics", 
-    #     image = 'https://raw.githubusercontent.com/prostarproteomics/Prostar_website/master/docs/favicon.ico', 
-    #     #title = "Prostar-proteomics",
-    #     #subtitle = "Author", 
-    #     footer = fluidRow(
-    #       column(width = 6, 
-    #         shinydashboardPlus::socialButton(href = "https://github.com/prostarproteomics/MagellanNTK",
-    #                           icon = icon("github")
-    #                           )),
-    #     column(width = 6,
-    #       shinydashboardPlus::socialButton(href = "https://prostar-proteomics.org",
-    #                         icon = icon("dropbox")
-    #                         )
-    #            )
-    #     ),
-    #     p('TODO: Describe the web site')
-    #   )
-    # })
     
     
     observeEvent(input$browser,{browser()})
@@ -439,7 +406,7 @@ mainapp_server <- function(id,
         session$userData$workflow.path <- 
         system.file('workflow/PipelineDemo', package='MagellanNTK')
       
-      funcs <- rv.core$funcs <- default.funcs
+      funcs <- session$userData$funcs <- rv.core$funcs <- default.funcs
       
       
       # Fix NULL values
@@ -480,7 +447,7 @@ mainapp_server <- function(id,
           pkg.name <- gsub(paste0('::',x), '', tmp.funcs()[[x]])
           require(pkg.name, character.only = TRUE)
           })
-      rv.core$funcs <- tmp.funcs()
+      rv.core$funcs <- session$userData$funcs <- tmp.funcs()
     })
     
     
@@ -552,23 +519,24 @@ mainapp_server <- function(id,
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
-      browser()
+     
       rv.core$workflow.name <- 
         session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
       
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
       
-      funcs <- rv.core$funcs <- rv.core$result_open_workflow()$funcs
+      funcs <- session$userData$funcs <- rv.core$funcs <- rv.core$result_open_workflow()$funcs
       
       
       # Fix NULL values
-      # #browser()
-      lapply(names(rv.core$funcs), function(x)
-        if(is.null(rv.core$funcs[[x]]))
-          rv.core$funcs[[x]] <- default.funcs[[x]]
-      )
-
+      #browser()
+      
+      for (f in names(rv.core$funcs)){
+        if(is.null(rv.core$funcs[[f]]))
+          rv.core$funcs[[f]] <- default.funcs[[f]]
+      }
+      session$userData$funcs <- rv.core$funcs
       source_wf_files(session$userData$workflow.path)
     })
     

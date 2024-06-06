@@ -71,8 +71,14 @@ ActionOn_Child_Changed <- function(temp.dataIn,
         } else {
             name.last.validated <- steps[ind.last.validated]
             dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
-            dataIn <- keepDatasets(object = dataIn,
-                                   range = seq_len(dataIn.ind.last.validated)
+            # dataIn <- keepDatasets(object = dataIn,
+            #                        range = seq_len(dataIn.ind.last.validated)
+            # )
+            
+            dataIn <- call.func(
+              fname = session$userData$funcs$keepDatasets,
+              args = list(object = dataIn,
+                range = seq_len(dataIn.ind.last.validated))
             )
         }
     } else {
@@ -168,7 +174,7 @@ ResetChildren <- function(range, resetChildren) {
 #' @return NA
 #'
 #'
-Update_Data2send_Vector <- function(rv) {
+Update_Data2send_Vector <- function(rv, keepdataset_func) {
     # One only update the current position because the vector has been entirely
     # initialized to NULL so the other processes are already ready to be sent
     ind.last.validated <- GetMaxValidated_BeforePos(rv = rv)
@@ -176,9 +182,15 @@ Update_Data2send_Vector <- function(rv) {
     if (is.null(ind.last.validated) || ind.last.validated == 1) {
         data <- rv$temp.dataIn
     } else {
-      browser()
+      #browser()
       .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
-      data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
+      #data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
+      
+      data <- call.func(
+        fname = keepdataset_func,
+        args = list(object = rv$dataIn, range = seq_len(.ind))
+      )
+      
       }
     return(data)
 }
@@ -197,7 +209,7 @@ Update_Data2send_Vector <- function(rv) {
 #'
 #' @return NA
 #'
-PrepareData2Send <- function(rv, pos, mode) {
+PrepareData2Send <- function(rv, pos, mode, keepdataset_func) {
     # Returns NULL to all modules except the one pointed by the current position
     # Initialization of the pipeline : one send dataIn() to the
     # first module
@@ -220,7 +232,7 @@ PrepareData2Send <- function(rv, pos, mode) {
         lapply(seq_len(nsteps), function(x) {rv$steps.enabled[x] <- x == 1})
     } else {
         current.step.name <- stepsnames[rv$current.pos]
-        data2send[[current.step.name]] <- Update_Data2send_Vector(rv)
+        data2send[[current.step.name]] <- Update_Data2send_Vector(rv, keepdataset_func)
     }
 
     if (mode == 'dev') {

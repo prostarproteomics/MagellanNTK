@@ -171,7 +171,7 @@ nav_server <- function(id = NULL,
               # When the server starts, the default position is 1
                 # Not necessary ?
               #rv$current.pos <- 1
-                
+                #browser()
                 ### Call the server module of the process/pipeline which name is 
                 ### the parameter 'id'. 
                 ### The name of the server function is prefixed by 'mod_' and 
@@ -708,6 +708,8 @@ nav_server <- function(id = NULL,
         # 2 - if the variable contains a dataset. xxx
         observeEvent(dataIn(),  ignoreNULL = FALSE, ignoreInit = FALSE, {
                 req(rv$config)
+          
+         
                 #isolate({
                   # A new value on dataIn() means a new dataset sent to the 
                   # process
@@ -724,8 +726,8 @@ nav_server <- function(id = NULL,
                       if (is.null(rv$dataIn)) {
                           res <- PrepareData2Send(rv = rv, 
                                                   pos = rv$current.pos,
-                                                  mode = mode()
-                                                  )
+                                                  mode = mode(),
+                            keepdataset_func = session$userData$funcs$keepDatasets)
                           rv$child.data2send <- res$data2send
                           rv$steps.enabled <- res$steps.enabled
                           }
@@ -779,7 +781,10 @@ nav_server <- function(id = NULL,
             if (rv$config@mode == "pipeline") {
                 # Specific to pipeline code
               #browser()
-                res <- PrepareData2Send(rv = rv, pos = NULL, mode=mode())
+                res <- PrepareData2Send(rv = rv, 
+                  pos = NULL, 
+                  mode=mode(),
+                  keepdataset_func = session$userData$funcs$keepDatasets)
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled
 
