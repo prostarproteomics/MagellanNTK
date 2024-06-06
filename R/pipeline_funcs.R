@@ -178,8 +178,7 @@ Update_Data2send_Vector <- function(rv) {
     } else {
       browser()
       .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
-
-        data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
+      data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
       }
     return(data)
 }

@@ -42,7 +42,7 @@ find_funs <- function(f) {
   
   
   # search for help in list of installed packages
-  help_installed <- help.search(paste0("^",f,"$"), agrep = FALSE)
+  help_installed <- help.search(f, agrep = TRUE)
   
   # extract package name from help file
   pckg_hits <- help_installed$matches[,"Package"]

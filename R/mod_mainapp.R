@@ -552,6 +552,7 @@ mainapp_server <- function(id,
     rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
+      browser()
       rv.core$workflow.name <- 
         session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
       
