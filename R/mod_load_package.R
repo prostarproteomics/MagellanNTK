@@ -102,18 +102,29 @@ mod_load_package_server <- function(id,
         lapply(names(rv$list.funcs), function(x){
           find_ui_func <- find_funs(paste0(x, '_ui'))$package_name
           find_server_func <- find_funs(paste0(x, '_server'))$package_name
-  
-          .tmp <- unique(find_ui_func, find_server_func)
-          .tmp <- .tmp[-grep('MagellanNTK', .tmp)]
-          .choices <- c('MagellanNTK', .tmp)
+  #browser()
+          .choices <- unique(unique(find_ui_func, find_server_func))
+          #.tmp <- .tmp[-grep('MagellanNTK', .tmp)]
+          #.choices <- c(.tmp, 'MagellanNTK')
           
+          .selected <- 'MagellanNTK'
+          .found <- sum(unlist(lapply(.choices, function(y) is.substr(y, rv$list.funcs[[x]]))))
+          if (.found == 1){
+            .pkg <- unlist(strsplit(rv$list.funcs[[x]], split = '::'))[1]
+            .choices <- c(.pkg, .choices[-grep(.pkg, .choices)])
+            .selected <- .pkg
+          }
+            
+            
+          # reordering list to put the target
           fluidRow(
             div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
               p(x)),
             div(style = "align: center;display:inline-block; vertical-align: middle;padding-right: 10px;",
               selectInput(ns(paste0(x, '_ui')), 
             NULL,
-            choices = .choices
+            choices = .choices,
+            selected = .selected
           )
           )
           )
