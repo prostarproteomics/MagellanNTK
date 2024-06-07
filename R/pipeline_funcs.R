@@ -179,12 +179,13 @@ Update_Data2send_Vector <- function(rv, keepdataset_func) {
     # initialized to NULL so the other processes are already ready to be sent
     ind.last.validated <- GetMaxValidated_BeforePos(rv = rv)
     name.last.validated <- names(rv$steps.status)[ind.last.validated]
-    if (is.null(ind.last.validated) || ind.last.validated == 1) {
+    if (is.null(ind.last.validated) || 
+        ind.last.validated == 1 ||
+        name.last.validated == 'Save') {
         data <- rv$temp.dataIn
     } else {
       #browser()
       .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
-      #data <- keepDatasets(object = rv$dataIn, range = seq_len(.ind))
       
       data <- call.func(
         fname = keepdataset_func,
