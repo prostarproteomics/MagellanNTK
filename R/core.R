@@ -358,7 +358,8 @@ nav_server <- function(id = NULL,
                                steps.enabled = rv$steps.enabled,
                                steps.skipped = rv$steps.skipped,
                                processHasChanged = processHasChanged,
-                               newValue = newValue
+                               newValue = newValue,
+                               keepdataset_func = session$userData$funcs$keepDatasets
                              )
                              
                              

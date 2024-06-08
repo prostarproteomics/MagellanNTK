@@ -59,6 +59,7 @@ Suggests:
     rmarkdown, BiocStyle, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer
 Collate: 
+    MagellanNTK.R
     app.R
     settings.R
     default_funcs.R

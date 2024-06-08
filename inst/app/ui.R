@@ -7,10 +7,10 @@ library(shinyjs)
 #' 
 #' @param request Internal parameter for `{shiny}`. 
 #'     DO NOT REMOVE.
-#' @import shiny shinyUI tagList 
+#' @importFrom shiny shinyUI tagList 
 #' @import shinydashboardPlus
 #' @import shinydashboard
-#' @import shinyjs useShinyjs extendShinyjs
+#' @importFrom shinyjs useShinyjs extendShinyjs
 #' @noRd
 #' @export
 #' 

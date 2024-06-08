@@ -9,16 +9,16 @@
 \usage{
 mainapp_ui(id)
 
-mainapp_server(id, funcs = NULL, verbose = FALSE)
+mainapp_server(id, verbose = FALSE)
 
 mainapp()
 }
 \arguments{
 \item{id}{shiny id}
 
-\item{funcs}{xxx}
-
 \item{verbose}{xxx}
+
+\item{funcs}{xxx}
 }
 \description{
 A shiny Module.

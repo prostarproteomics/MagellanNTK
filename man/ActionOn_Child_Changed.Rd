@@ -12,7 +12,8 @@ ActionOn_Child_Changed(
   steps.enabled,
   steps.skipped,
   processHasChanged,
-  newValue
+  newValue,
+  keepdataset_func
 )
 }
 \arguments{

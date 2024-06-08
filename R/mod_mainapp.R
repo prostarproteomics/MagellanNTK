@@ -350,7 +350,9 @@ mainapp_ui <- function(id){
 #' @export
 #' 
 mainapp_server <- function(id,
-  funcs = NULL,
+  obj = reactive({NULL}),
+  workflow.name = reactive({NULL}),
+  workflow.path = reactive({NULL}),
   verbose = FALSE){
    
   moduleServer(id, function(input, output, session){
@@ -364,9 +366,9 @@ mainapp_server <- function(id,
       dataIn = NULL,
       result_convert = reactive({NULL}),
       #result_openDemoDataset = NULL,
-      result_open_dataset = NULL,
-      result_open_workflow = NULL,
-      result_run_workflow = NULL,
+      result_open_dataset = reactive({NULL}),
+      result_open_workflow = reactive({NULL}),
+      result_run_workflow = reactive({NULL}),
       current.obj = NULL,
       
       # pipeline choosen by the user for its dataset
@@ -375,10 +377,18 @@ mainapp_server <- function(id,
       workflow.name = NULL,
       workflow.path = NULL,
       
-      funcs = default.funcs
+      funcs = default.funcs,
+      tmp.funcs = reactive({NULL})
     )
 
     
+    observeEvent(id, {
+      rv.core$current.obj <- obj()
+      rv.core$workflow.path <- workflow.path()
+      rv.core$workflow.name <- workflow.name()
+    })
+      
+      
     # observeEvent(id, {
     #   if (!is.null(funcs))
     #     rv.core$funcs <- funcs
@@ -387,7 +397,6 @@ mainapp_server <- function(id,
     
     
     output$WF_Name_UI <- renderUI({
-      
       req(rv.core$workflow.name)
       h4(rv.core$workflow.name)
       })
@@ -406,7 +415,7 @@ mainapp_server <- function(id,
         session$userData$workflow.path <- 
         system.file('workflow/PipelineDemo', package='MagellanNTK')
       
-      funcs <- session$userData$funcs <- rv.core$funcs <- default.funcs
+      session$userData$funcs <- rv.core$funcs <- default.funcs
       
       
       # Fix NULL values
@@ -419,12 +428,33 @@ mainapp_server <- function(id,
       source_wf_files(session$userData$workflow.path)
       })
 
-    
-    call.func(
-      fname = paste0(rv.core$funcs$infos_dataset, '_server'),
-      args = list(id = 'infos',
-        obj = reactive({rv.core$current.obj}))
-    )
+    observe({
+      call.func(
+        fname = paste0(rv.core$funcs$infos_dataset, '_server'),
+        args = list(id = 'infos',
+          obj = reactive({rv.core$current.obj}))
+        )
+      
+      rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
+        title = "Default functions",
+        external_mod = 'mod_load_package',
+        external_mod_args = list(funcs = reactive({rv.core$funcs}))
+      )
+      
+      
+      #
+      # Code for open dataset
+      #
+      rv.core$result_open_dataset <- call.func(
+        fname = paste0(rv.core$funcs$open_dataset, '_server'),
+        args = list(id = 'open_dataset'))
+      
+      rv.core$result_run_workflow <- nav_server(
+        id = rv.core$workflow.name,
+        dataIn = reactive({rv.core$current.obj})
+      )
+      
+    })
     
     output$infos_dataset_UI <- renderUI({
       req(rv.core$funcs)
@@ -435,19 +465,15 @@ mainapp_server <- function(id,
     })
     
     
-    tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
-      title = "Default functions",
-      external_mod = 'mod_load_package',
-      external_mod_args = list(funcs = reactive({rv.core$funcs}))
-      )
     
-    observeEvent(req(tmp.funcs()), {
-      lapply(names(tmp.funcs()), 
+    
+    observeEvent(req(rv.core$tmp.funcs()), {
+      lapply(names(rv.core$tmp.funcs()), 
         function(x) {
-          pkg.name <- gsub(paste0('::',x), '', tmp.funcs()[[x]])
+          pkg.name <- gsub(paste0('::',x), '', rv.core$tmp.funcs()[[x]])
           require(pkg.name, character.only = TRUE)
           })
-      rv.core$funcs <- session$userData$funcs <- tmp.funcs()
+      rv.core$funcs <- session$userData$funcs <- rv.core$tmp.funcs()
     })
     
     
@@ -491,12 +517,7 @@ mainapp_server <- function(id,
     #   rv.core$current.obj <- rv.core$result_openDemoDataset()
     # })
     
-    #
-    # Code for open dataset
-    #
-    rv.core$result_open_dataset <- call.func(
-      fname = paste0(rv.core$funcs$open_dataset, '_server'),
-      args = list(id = 'open_dataset'))
+    
     
     output$open_dataset_UI <- renderUI({
       req(rv.core$funcs)
@@ -515,8 +536,6 @@ mainapp_server <- function(id,
     
     
    
-    # Get workflow directory
-    rv.core$result_open_workflow <- open_workflow_server("wf")
     
     observeEvent(req(rv.core$result_open_workflow()),{
      
@@ -526,9 +545,9 @@ mainapp_server <- function(id,
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
       
-      funcs <- session$userData$funcs <- rv.core$funcs <- rv.core$result_open_workflow()$funcs
-      
-      
+      rv.core$funcs <- readCustomizableFuncs(rv.core$workflow.path)
+      session$userData$funcs <- rv.core$funcs
+
       # Fix NULL values
       #browser()
       
@@ -541,6 +560,11 @@ mainapp_server <- function(id,
     })
     
     output$open_workflow_UI <- renderUI({
+      
+      # Get workflow directory
+      rv.core$result_open_workflow <- open_workflow_server("wf")
+      
+      
       open_workflow_ui(ns("wf"))
     })
     
@@ -551,13 +575,6 @@ mainapp_server <- function(id,
       nav_ui(ns(basename(rv.core$workflow.name)))
       })
 
-    observe({
-
-      rv.core$result_run_workflow <- nav_server(
-        id = rv.core$workflow.name,
-        dataIn = reactive({rv.core$current.obj})
-        )
-    })
     
     observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger), 
       ignoreInit = TRUE, {
@@ -606,6 +623,8 @@ mainapp_server <- function(id,
       mod_homepage_server('home3', filepath)
     })
     
+    
+    observe({
     insert_md_server("usermanual", 
       file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     
@@ -618,6 +637,8 @@ mainapp_server <- function(id,
     insert_md_server("FAQ_MD", 
       file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     #mod_bug_report_server("bug_report")
+    #
+    })
   })
   
 }

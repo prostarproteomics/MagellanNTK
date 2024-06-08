@@ -36,7 +36,8 @@ ActionOn_Child_Changed <- function(temp.dataIn,
                                    steps.enabled,
                                    steps.skipped,
                                    processHasChanged,
-                                   newValue) {
+                                   newValue,
+  keepdataset_func) {
     # Indice of the dataset in the object
     # If the original length is not 1, then this indice is different
     # than the above one
@@ -76,7 +77,7 @@ ActionOn_Child_Changed <- function(temp.dataIn,
             # )
             
             dataIn <- call.func(
-              fname = session$userData$funcs$keepDatasets,
+              fname = keepdataset_func,
               args = list(object = dataIn,
                 range = seq_len(dataIn.ind.last.validated))
             )
@@ -184,9 +185,10 @@ Update_Data2send_Vector <- function(rv, keepdataset_func) {
         name.last.validated == 'Save') {
         data <- rv$temp.dataIn
     } else {
-      #browser()
+      browser()
       .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
-      
+      print(rv$dataIn)
+      print(seq_len(.ind))
       data <- call.func(
         fname = keepdataset_func,
         args = list(object = rv$dataIn, range = seq_len(.ind))

@@ -163,18 +163,16 @@ file.exists(config.file)
 #'
 source_shinyApp_files <- function(){
 # Checks if app can be found
-file_path_ui <- system.file("app/ui.R", package = "MagellanNTK")
-file_path_server <- system.file("app/server.R", package = "MagellanNTK")
+#file_path_ui <- system.file("app/ui.R", package = "MagellanNTK")
+#file_path_server <- system.file("app/server.R", package = "MagellanNTK")
 file_path_global <- system.file("app/global.R", package = "MagellanNTK")
-if (!nzchar(file_path_ui) || 
-    !nzchar(file_path_server) || 
-    !nzchar(file_path_global)) 
+if (!nzchar(file_path_global)) 
   stop("Shiny app not found")
 
 # Source add files
 ui <- server <- NULL # avoid NOTE about undefined globals
-source(file_path_ui, local = FALSE)
-source(file_path_server, local = FALSE)
+#source(file_path_ui, local = FALSE)
+#source(file_path_server, local = FALSE)
 source(file_path_global, local = FALSE)
 
 }

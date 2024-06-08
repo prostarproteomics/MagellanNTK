@@ -4,7 +4,7 @@
 \alias{PrepareData2Send}
 \title{xxxx}
 \usage{
-PrepareData2Send(rv, pos, mode)
+PrepareData2Send(rv, pos, mode, keepdataset_func)
 }
 \arguments{
 \item{rv}{xxxx}

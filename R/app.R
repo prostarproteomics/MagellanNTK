@@ -48,7 +48,7 @@
 #' MagellanNTK(funcs)
 #' 
 #' 
-MagellanNTK <- function(
+MagellanNTK2 <- function(
     funcs = default.funcs,
     verbose = FALSE) {
   
