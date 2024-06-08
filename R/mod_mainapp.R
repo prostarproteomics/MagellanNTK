@@ -386,6 +386,12 @@ mainapp_server <- function(id,
       rv.core$current.obj <- obj()
       rv.core$workflow.path <- workflow.path()
       rv.core$workflow.name <- workflow.name()
+      session$userData$workflow.path <- workflow.path()
+      session$userData$workflow.name <- workflow.name()
+      
+      req(rv.core$workflow.path)
+      req(rv.core$workflow.name)
+        LoadWorkflow()
     })
       
       
@@ -535,7 +541,16 @@ mainapp_server <- function(id,
     # })
     
     
-   
+   LoadWorkflow <- reactive({
+     rv.core$funcs <- readCustomizableFuncs(rv.core$workflow.path)
+     session$userData$funcs <- rv.core$funcs
+     for (f in names(rv.core$funcs)){
+       if(is.null(rv.core$funcs[[f]]))
+         rv.core$funcs[[f]] <- default.funcs[[f]]
+     }
+     session$userData$funcs <- rv.core$funcs
+     source_wf_files(session$userData$workflow.path)
+   })
     
     observeEvent(req(rv.core$result_open_workflow()),{
      
@@ -545,18 +560,7 @@ mainapp_server <- function(id,
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
       
-      rv.core$funcs <- readCustomizableFuncs(rv.core$workflow.path)
-      session$userData$funcs <- rv.core$funcs
-
-      # Fix NULL values
-      #browser()
-      
-      for (f in names(rv.core$funcs)){
-        if(is.null(rv.core$funcs[[f]]))
-          rv.core$funcs[[f]] <- default.funcs[[f]]
-      }
-      session$userData$funcs <- rv.core$funcs
-      source_wf_files(session$userData$workflow.path)
+      LoadWorkflow()
     })
     
     output$open_workflow_UI <- renderUI({
