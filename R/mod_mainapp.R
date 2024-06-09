@@ -14,17 +14,16 @@
 #' @examplesIf interactive()
 #' shiny::runApp(mainapp())
 #' 
-#' @import shiny
-#' @import shinyjs
-#' @import shinydashboard
-#' @importFrom shinydashboardPlus userOutput dashboardPage dashboardHeader 
-#' dashboardBadge dashboardControlbar skinSelector dashboardSidebar renderUser
-#' socialButton
-#' @import shinyEffects
 #' 
 NULL
 
 
+#' @import shiny
+#' @import shinyjs
+#' @import shinydashboard
+#' @import shinydashboardPlus
+#' @import shinyEffects
+#' 
 #' @rdname mod_main_page
 #'
 #' @export 
@@ -346,6 +345,13 @@ mainapp_ui <- function(id){
 
 
 
+
+#' @import shiny
+#' @import shinyjs
+#' @import shinydashboard
+#' @import shinydashboardPlus
+#' @import shinyEffects
+#' 
 #' @rdname mod_main_page
 #' @export
 #' 
@@ -535,11 +541,6 @@ mainapp_server <- function(id,
       cat('new dataset loaded\n')
       rv.core$current.obj <- rv.core$result_open_dataset()
     })
-    
-    # observeEvent(rv.core$funcs, {
-    #   browser()
-    # })
-    
     
    LoadWorkflow <- reactive({
      rv.core$funcs <- readCustomizableFuncs(rv.core$workflow.path)

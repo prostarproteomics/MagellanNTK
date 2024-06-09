@@ -64,7 +64,7 @@ tagList(
 #' 
 NAME_server <- function(id,
     obj,
-    reset = reactive({NULL}),
+    remoteReset = reactive({NULL}),
     is.enabled = reactive({TRUE})
     ) {
   

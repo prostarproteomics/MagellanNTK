@@ -4,14 +4,19 @@
 \alias{MagellanNTK}
 \title{Main Shiny application}
 \usage{
-MagellanNTK(funcs = default.funcs, verbose = FALSE)
+MagellanNTK(
+  obj = NULL,
+  workflow.path = NULL,
+  workflow.name = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
+\item{verbose}{A `boolean(1)`}
+
 \item{funcs}{An list containing th following items:
 * title: xxx
 * base_URL: xxx}
-
-\item{verbose}{A `boolean(1)`}
 }
 \description{
 xxx
@@ -33,26 +38,6 @@ The list of customizable funcs (param `funcs`) contains the following items:
 # launch without initial config
 shiny::runApp(MagellanNTK())
 
-# launch with config
-funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
-open_dataset = "DaparToolshed::open_dataset",
-open_demoDataset = "DaparToolshed::open_demoDataset",
-view_dataset = "omXplore::view_dataset",
-download_dataset = "MagellanNTK::download_dataset",
-export_dataset = "MagellanNTK::export_dataset",
-infos_dataset = "DaparToolshed::infos_dataset",
-addDatasets = "DaparToolshed::addDatasets",
-keepDatasets = "DaparToolshed::keepDatasets" )
-
-funcs <- list(convert_dataset = "MagellanNTK::convert",
-  open_dataset = "MagellanNTK::open_dataset",
-  open_demoDataset = "MagellanNTK::open_demoDataset",
-  view_dataset = "MagellanNTK::view_dataset",
-  export_dataset = "MagellanNTK::export_dataset",
-  infos_dataset = "MagellanNTK::infos_dataset",
-  download_dataset = "MagellanNTK::download_dataset",
-  addDatasets = "MagellanNTK::addDatasets",
-  keepDatasets = "MagellanNTK::keepDatasets")
 
 MagellanNTK(funcs)
 \dontshow{\}) # examplesIf}

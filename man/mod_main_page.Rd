@@ -9,7 +9,19 @@
 \usage{
 mainapp_ui(id)
 
-mainapp_server(id, verbose = FALSE)
+mainapp_server(
+  id,
+  obj = reactive({
+     NULL
+ }),
+  workflow.name = reactive({
+     NULL
+ }),
+  workflow.path = reactive({
+     NULL
+ }),
+  verbose = FALSE
+)
 
 mainapp()
 }
@@ -26,5 +38,6 @@ A shiny Module.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 shiny::runApp(mainapp())
+
 \dontshow{\}) # examplesIf}
 }

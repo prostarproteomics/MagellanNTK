@@ -400,7 +400,7 @@ Get_AdditionalModule_Core_Code <- function(
 Get_Code_for_AddMod_observeEvents <- function() {
     code <- "
 
-observeEvent(reset(), {
+observeEvent(remoteReset(), {
     lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
     })
