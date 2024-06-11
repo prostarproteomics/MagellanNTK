@@ -248,6 +248,10 @@ observeEvent(remoteReset(), {
       lapply(names(rv.widgets), function(x){
           rv.widgets[[x]] <- widgets.default.values[[x]]
         })
+        
+            lapply(names(rv.custom), function(x){
+        rv.custom[[x]] <- rv.custom.default.values[[x]]
+    })
 })
 
 
@@ -403,6 +407,10 @@ Get_Code_for_AddMod_observeEvents <- function() {
 observeEvent(remoteReset(), {
     lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
+    })
+    
+    lapply(names(rv.custom), function(x){
+        rv.custom[[x]] <- rv.custom.default.values[[x]]
     })
 })
 
