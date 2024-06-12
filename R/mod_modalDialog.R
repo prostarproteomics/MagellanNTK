@@ -112,24 +112,37 @@ mod_modalDialog_ui <- function(id){
 #' @import shinyjqui
 #'
 mod_modalDialog_server <- function(id,
-                           title = NULL,
-                           width = NULL,
-                           uiContent = NULL,
-                           external_mod = NULL,
-                           external_mod_args = list()){ #height auto
+  title = NULL,
+  typeWidget = 'button',
+  width = NULL,
+  uiContent = NULL,
+  external_mod = NULL,
+  external_mod_args = list()){ #height auto
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
+    
     # reactiveValues object for storing current data set.
-    dataOut <- reactiveVal(NULL)
-    tmp <- reactiveVal(NULL)
+    rv <- reactiveValues(
+      dataOut = NULL,
+      tmp = NULL
+      )
     
     output$dialog_UI <- renderUI({
       if (!is.null(uiContent) && !is.null(external_mod)){
         warning('uiContent and external_mod cannot be both instantiated at the same time.')
-      } else
-       actionLink(ns("show"), title,
+        return(NULL)
+      } 
+      
+      
+      if (typeWidget == 'button')
+        actionButton(ns("show"), title
+          #icon("chart-bar", lib = "font-awesome"),
+          #class = "btn-success"
+        )
+      else if (typeWidget == 'link')
+       actionLink(ns("show"), title
                    #icon("chart-bar", lib = "font-awesome"),
                    #class = "btn-success"
                    )
@@ -170,15 +183,19 @@ mod_modalDialog_server <- function(id,
       if (length(external_mod_args))
         args <- append(args, external_mod_args)
         
-      tmp(do.call(paste0(external_mod, '_server'), args))
+      rv$tmp <- do.call(paste0(external_mod, '_server'), args)
     })
     
     # When OK button is pressed, attempt to load the data set. If successful,
     # remove the modal. If not show another modal, but this time with a failure
     # message.
     observeEvent(input$ok, {
+
       if (!is.null(external_mod))
-        dataOut(tmp()())
+        rv$dataOut <- rv$tmp()
+      else
+        rv$dataOut <- Timestamp()
+      
       
       removeModal()
       RemoveModule()
@@ -199,7 +216,7 @@ mod_modalDialog_server <- function(id,
       session$userData$clicks_observer$destroy()
     })
     
-    return(reactive({dataOut()}))
+    return(reactive({rv$dataOut}))
   })
 }
 
@@ -215,6 +232,7 @@ mod_modalDialog_server <- function(id,
 #' @rdname mod_modalDialog
 #' 
 mod_modalDialog <- function(title,
+  typeWidget = 'button',
   uiContent = NULL,
   external_mod = NULL,
   external_mod_args = list()
@@ -226,11 +244,14 @@ mod_modalDialog <- function(title,
 
 server <- function(input, output) {
   
-  dataOut <- reactiveVal(NULL)
+  rv <- reactiveValues(
+    dataOut = NULL
+    )
   
    res <- mod_modalDialog_server(
      id = "tbl",
      title = title,
+     typeWidget = typeWidget,
      uiContent = uiContent,
      external_mod = external_mod,
      external_mod_args = external_mod_args
@@ -239,12 +260,13 @@ server <- function(input, output) {
 
   
   observeEvent(req(res()), {
-    dataOut(res())
+    rv$dataOut <- res()
+    print(rv$dataOut)
   })
   
-  return(reactive({dataOut()}))
+  return(reactive({rv$dataOut}))
 }
 
-app <- shinyApp(ui = ui, server = server)
+#shiny::runApp(shinyApp(ui = ui, server = server))
 
 }

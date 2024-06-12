@@ -50,10 +50,11 @@ Build_nav_v_ui <- function(ns) {
                                     style = "padding:4px; font-size:80%"
                                 )
                             ),
-                            actionButton(ns("rstBtn"), "Reset",
-                                class = redBtnClass,
-                                style = "padding:4px; font-size:80%"
-                            )
+                            # actionButton(ns("rstBtn"), "Reset",
+                            #     class = redBtnClass,
+                            #     style = "padding:4px; font-size:80%"
+                            # )
+                          mod_modalDialog_ui(id = ns("rstBtn"))
                         ),
                         div(style = btn_style,
                             actionButton(ns("nextBtn"), 
@@ -99,9 +100,10 @@ Build_nav_h_ui <- function(ns) {
                 )
             )),
             column(width = 1, 
-                   actionButton(ns("rstBtn"), "Reset",
-                                class = redBtnClass,
-                                style = "font-size:60%")
+              mod_modalDialog_ui(id = ns("rstBtn"))
+              # actionButton(ns("rstBtn"), "Reset",
+              #                   class = redBtnClass,
+              #                   style = "font-size:60%")
                    ),
             column(width = 9, uiOutput(ns("show_TL"))),
             column(width = 1,

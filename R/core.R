@@ -157,7 +157,9 @@ nav_server <- function(id = NULL,
             child.position = NULL,
 
             # xxxx
-            child.data2send = NULL
+            child.data2send = NULL,
+          
+          rstBtn = reactive({0})
         )
 
 
@@ -185,7 +187,7 @@ nav_server <- function(id = NULL,
                         id = id,
                         dataIn = reactive({rv$temp.dataIn}),
                         steps.enabled = reactive({rv$steps.enabled}),
-                        remoteReset = reactive({input$rstBtn + remoteReset()}),
+                        remoteReset = reactive({rv$rstBtn() + remoteReset()}),
                         steps.status = reactive({rv$steps.status}),
                         current.pos = reactive({rv$current.pos})
                         )
@@ -579,10 +581,22 @@ nav_server <- function(id = NULL,
         }
         )
 
+        
+        
+        rv$rstBtn <- mod_modalDialog_server(
+          id = "rstBtn",
+          title = 'Reset',
+          uiContent = p("This action will reset the current process and
+        all its children. The input
+    dataset will be the output of the last previous validated process and all
+    further datasets will be removed")
+        )
+        
+        
         # Catch a click of a the button 'Ok' of a reset modal. This can be in 
         # the local module or in the module parent UI (in this case,
         # it is called a 'remoteReset')
-        observeEvent(req(input$modal_ok), ignoreInit = FALSE, ignoreNULL = TRUE,{
+        observeEvent(req(rv$rstBtn()), ignoreInit = FALSE, ignoreNULL = TRUE,{
                 rv$dataIn <- NULL
                 # The cursor is set to the first step
                 rv$current.pos <- 1
@@ -611,15 +625,6 @@ nav_server <- function(id = NULL,
                 removeModal()
             }
         )
-
-
-        # Catch a click on the 'Reset' button. Then, open the modal for info on
-        # resetting.
-        observeEvent(input$rstBtn, ignoreInit = TRUE, {
-            showModal(
-                dataModal(ns, rv$config@mode)
-            )
-        })
 
 
         # Show the info panel of a skipped module
@@ -698,8 +703,21 @@ nav_server <- function(id = NULL,
             cat(crayon::blue(paste0(id, ': Entering output$nav_mod_ui <- renderUI({...})\n')))
           
             DisplayWholeUI(ns, rv$tl.layout[1])
+            
+            
         })
 
+        
+        template_reset_modal_txt <- "This action will reset this mode. The input 
+    dataset will be the output of the last previous validated process and all 
+    further datasets will be removed"
+        
+        txt <- span(gsub("mode", 'mode_Test', template_reset_modal_txt))
+        
+        rv$rstBtn  <- mod_modalDialog_server(
+          id = "rstBtn",
+          title = 'Reset',
+          uiContent = p(txt))
 
         # Catch a new value on the parameter 'dataIn()' variable, sent by the
         # caller. This value may be NULL or contain a dataset.
