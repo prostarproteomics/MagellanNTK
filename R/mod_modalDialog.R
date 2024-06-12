@@ -114,6 +114,8 @@ mod_modalDialog_ui <- function(id){
 mod_modalDialog_server <- function(id,
   title = NULL,
   typeWidget = 'button',
+  styleWidget = NULL,
+  classWidget = NULL,
   width = NULL,
   uiContent = NULL,
   external_mod = NULL,
@@ -137,15 +139,12 @@ mod_modalDialog_server <- function(id,
       
       
       if (typeWidget == 'button')
-        actionButton(ns("show"), title
-          #icon("chart-bar", lib = "font-awesome"),
-          #class = "btn-success"
+        actionButton(ns("show"), title,
+          class = 'btn-danger',
+          style = "font-size:60%"
         )
       else if (typeWidget == 'link')
-       actionLink(ns("show"), title
-                   #icon("chart-bar", lib = "font-awesome"),
-                   #class = "btn-success"
-                   )
+       actionLink(ns("show"), title)
     })
     
 
