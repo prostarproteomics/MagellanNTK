@@ -577,7 +577,7 @@ nav_server <- function(id = NULL,
           dataOut$value <- rv$dataIn
 
           #Finally, close the modal
-          removeModal()
+          #removeModal()
         }
         )
 
@@ -622,7 +622,7 @@ nav_server <- function(id = NULL,
                 dataOut$value <- rv$dataIn
 
                 #Finally, close the modal
-                removeModal()
+                #removeModal()
             }
         )
 
@@ -743,10 +743,12 @@ nav_server <- function(id = NULL,
                   if (rv$config@mode == "pipeline") {
 
                       if (is.null(rv$dataIn)) {
-                          res <- PrepareData2Send(rv = rv, 
-                                                  pos = rv$current.pos,
-                                                  mode = mode(),
+                          res <- PrepareData2Send(
+                            rv = rv, 
+                            pos = rv$current.pos,
+                            mode = mode(),
                             keepdataset_func = session$userData$funcs$keepDatasets)
+                          
                           rv$child.data2send <- res$data2send
                           rv$steps.enabled <- res$steps.enabled
                           }

@@ -452,9 +452,6 @@ NULL
 #'     return()
 #'     }
 #'   
-#'   if (is.numeric(range))
-#'     range <- names(object)[range]
-#'   
 #'   object[range]
 #'   }
 

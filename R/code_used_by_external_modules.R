@@ -244,7 +244,7 @@ observeEvent(steps.status(), ignoreNULL = TRUE, {
         rv$steps.status <- steps.status()
 })
 
-observeEvent(remoteReset(), {
+observeEvent(remoteReset(), ignoreInit = FALSE, ignoreNULL = TRUE,{
       lapply(names(rv.widgets), function(x){
           rv.widgets[[x]] <- widgets.default.values[[x]]
         })
@@ -252,6 +252,8 @@ observeEvent(remoteReset(), {
             lapply(names(rv.custom), function(x){
         rv.custom[[x]] <- rv.custom.default.values[[x]]
     })
+    
+    rv$dataIn <- NULL
 })
 
 
@@ -404,7 +406,7 @@ Get_AdditionalModule_Core_Code <- function(
 Get_Code_for_AddMod_observeEvents <- function() {
     code <- "
 
-observeEvent(remoteReset(), {
+observeEvent(remoteReset(), ignoreInit = FALSE, ignoreNULL = TRUE, {
     lapply(names(rv.widgets), function(x){
         rv.widgets[[x]] <- widgets.default.values[[x]]
     })

@@ -85,8 +85,6 @@ keepDatasets <- function(object, range = seq(length(object))) {
     return()
   }
   
-  if (is.numeric(range))
-    range <- names(object)[range]
   
   object[range]
 }

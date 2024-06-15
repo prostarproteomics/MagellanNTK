@@ -26,7 +26,7 @@
 #' 
 #' @examplesIf interactive()
 #' data(sub_R25)
-#' 
+#' data(lldata)
 #' path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
 #' 
 #' # Nothing happens when dataIn is NULL
@@ -38,7 +38,7 @@
 #' dataIn = data.frame(), 
 #' tl.layout = "v"))
 #' 
-#' shiny::runApp(workflowApp("PipelineDemo", path, dataIn = sub_R25, 
+#' shiny::runApp(workflowApp("PipelineDemo", path, dataIn = lldata))
 #' tl.layout = c("v", "h")))
 #' 
 #' shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
@@ -112,6 +112,7 @@ workflow_server <- function(id,
     
     observeEvent(dataIn, {
       session$userData$workflow.path <- path
+      session$userData$funcs <- default.funcs
       
       dataOut(
         nav_server(id = id,

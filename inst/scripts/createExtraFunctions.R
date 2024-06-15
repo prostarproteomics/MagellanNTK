@@ -59,10 +59,7 @@ default_keep_func <- function() {
   if (is.null(object)) {
     return()
     }
-  
-  if (is.numeric(range))
-    range <- names(object)[range]
-  
+
   object[range]
   }
   "

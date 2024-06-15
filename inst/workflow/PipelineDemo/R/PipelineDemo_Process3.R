@@ -357,7 +357,7 @@ PipelineDemo_Process3_server <- function(id,
     output$dl_ui <- renderUI({
       req(config@mode == 'process')
       req(rv$steps.status['Save'] == stepStatus$VALIDATED)
-      mod_download_dataset_ui(ns('createQuickLink'))
+      download_dataset_ui(ns('createQuickLink'))
     })
     
     output$Save_btn_validate_ui <- renderUI({
@@ -369,7 +369,7 @@ PipelineDemo_Process3_server <- function(id,
     })
     observeEvent(input$Save_btn_validate, {
       # Do some stuff
-      rv$dataIn <- addDatasets(object = rv$dataIn,
+      rv$dataIn <- MagellanNTK::addDatasets(object = rv$dataIn,
                                dataset = 10*rv$dataIn[[length(rv$dataIn)]],
                                name = id)
       
@@ -377,7 +377,7 @@ PipelineDemo_Process3_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Save'] <- stepStatus$VALIDATED
-      mod_download_dataset_server('createQuickLink', 
+      download_dataset_server('createQuickLink', 
         dataIn = reactive({rv$dataIn}))
       
     })
