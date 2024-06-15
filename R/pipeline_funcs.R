@@ -71,9 +71,12 @@ ActionOn_Child_Changed <- function(temp.dataIn,
             dataIn <- temp.dataIn
         } else {
             name.last.validated <- steps[ind.last.validated]
-            dataIn.ind.last.validated <- which(names(dataIn) == name.last.validated)
-            
-            browser()
+            dataIn.ind.last.validated <- which(names(dataIn) == names(name.last.validated))
+            if (mode == 'dev') {
+              print(name.last.validated)
+              print(names(dataIn))
+            }
+            #browser()
             dataIn <- call.func(
               fname = keepdataset_func,
               args = list(object = dataIn,
@@ -183,7 +186,7 @@ Update_Data2send_Vector <- function(rv, keepdataset_func) {
         name.last.validated == 'Save') {
         data <- rv$temp.dataIn
     } else {
-    
+    #browser()
       .ind <- which(grepl(name.last.validated, names(rv$dataIn)))
       data <- call.func(
         fname = keepdataset_func,

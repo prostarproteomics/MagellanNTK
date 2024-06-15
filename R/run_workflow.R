@@ -25,14 +25,13 @@
 #' @return NA
 #' 
 #' @examplesIf interactive()
-#' data(sub_R25)
 #' data(lldata)
 #' path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
 #' 
 #' # Nothing happens when dataIn is NULL
 #' shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = NULL))
 #' 
-#' shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = sub_R25))
+#' shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = lldata))
 #' 
 #' shiny::runApp(workflowApp("PipelineDemo_Process1", 
 #' dataIn = data.frame(), 

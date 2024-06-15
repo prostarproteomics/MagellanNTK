@@ -382,7 +382,7 @@ PipelineDemo_Process1_server <- function(id,
       rv$dataIn <- MagellanNTK::addDatasets(
         object = rv$dataIn,
         dataset = 10*rv$dataIn[[length(rv$dataIn)]],
-        name = id)
+        name = 'Process1')
 
       # DO NOT MODIFY THE THREE FOLLOWINF LINES
       dataOut$trigger <- Timestamp()
