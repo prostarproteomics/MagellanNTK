@@ -109,9 +109,16 @@ workflow_server <- function(id,
       )
     })
     
-    observeEvent(dataIn, {
+    
+    observeEvent(path, {
       session$userData$workflow.path <- path
-      session$userData$funcs <- default.funcs
+      
+      session$userData$funcs <- readCustomizableFuncs(path)
+      
+    })
+    
+    
+    observeEvent(dataIn, {
       
       dataOut(
         nav_server(id = id,

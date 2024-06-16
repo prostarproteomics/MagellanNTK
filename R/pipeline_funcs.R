@@ -70,12 +70,9 @@ ActionOn_Child_Changed <- function(temp.dataIn,
         if (ind.last.validated %in% c(0, 1)) {
             dataIn <- temp.dataIn
         } else {
-            name.last.validated <- steps[ind.last.validated]
+           # browser()
+          name.last.validated <- steps[ind.last.validated]
             dataIn.ind.last.validated <- which(names(dataIn) == names(name.last.validated))
-            if (mode == 'dev') {
-              print(name.last.validated)
-              print(names(dataIn))
-            }
             #browser()
             dataIn <- call.func(
               fname = keepdataset_func,
@@ -233,6 +230,7 @@ PrepareData2Send <- function(rv, pos, mode, keepdataset_func) {
         # If they have to be enabled, they will be by another function later
         lapply(seq_len(nsteps), function(x) {rv$steps.enabled[x] <- x == 1})
     } else {
+      
         current.step.name <- stepsnames[rv$current.pos]
         data2send[[current.step.name]] <- Update_Data2send_Vector(rv, keepdataset_func)
     }
