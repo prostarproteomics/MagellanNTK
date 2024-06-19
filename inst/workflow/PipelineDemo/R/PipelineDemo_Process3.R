@@ -167,7 +167,13 @@ PipelineDemo_Process3_server <- function(id,
       rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
-    
+    # observe({
+    #   req(dataIn())
+    #   rv$dataIn <- dataIn()
+    #   dataOut$trigger <- Timestamp()
+    #   dataOut$value <- rv$dataIn
+    #   rv$steps.status['Description'] <- stepStatus$VALIDATED
+    # })
     
     # >>>
     # >>> START ------------- Code for step 1 UI---------------

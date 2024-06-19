@@ -137,7 +137,7 @@ nav_server <- function(id = NULL,
 
             # current.pos Stores the current cursor position in the 
             # timeline and indicates which of the process' steps is active
-            current.pos = 1,
+            current.pos = 2,
             
             
             length = NULL,
@@ -168,11 +168,11 @@ nav_server <- function(id = NULL,
         # and is attached to the server, this function can be view as the 
         # initialization of the server module. This code is generic to both 
         # process and pipeline modules
-        observeEvent(req(id),
+        observeEvent(id, ignoreInit = FALSE, ignoreNULL = TRUE,
             {
               # When the server starts, the default position is 1
                 # Not necessary ?
-              #rv$current.pos <- 1
+             # rv$current.pos <- 2
                 #browser()
                 ### Call the server module of the process/pipeline which name is 
                 ### the parameter 'id'. 
@@ -188,15 +188,21 @@ nav_server <- function(id = NULL,
                         dataIn = reactive({rv$temp.dataIn}),
                         steps.enabled = reactive({rv$steps.enabled}),
                         remoteReset = reactive({rv$rstBtn() + remoteReset()}),
-                        steps.status = reactive({rv$steps.status}),
-                        current.pos = reactive({rv$current.pos})
+                        steps.status = reactive({rv$steps.status})
+                        #current.pos = reactive({1})
                         )
                     )
-
+               
                 # Update the reactive value config with the config of the 
                 # pipeline
                 rv$config <- rv$proc$config()
-
+                
+                #rv$config <- RemoveDescriptionStep(rv$config)
+                
+                # Remove the step 'Description'
+                
+                
+                
                 if(mode() == 'dev'){
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_conf()"), '\n')))
                   rv$config
@@ -206,6 +212,7 @@ nav_server <- function(id = NULL,
                 stepsnames <- names(rv$config@steps)
                 rv$steps.status <- setNames(rep(stepStatus$UNDONE, n), nm = stepsnames)
                 rv$steps.enabled <- setNames(rep(FALSE, n), nm = stepsnames)
+                
                 rv$steps.skipped <- setNames(rep(FALSE, n), nm = stepsnames)
                 rv$resetChildren <- setNames(rep(0, n), nm = stepsnames)
 
@@ -242,21 +249,13 @@ nav_server <- function(id = NULL,
                 # Launch the UI of the timeline
                 output$show_TL <- renderUI({
                  
-                  
-                  # do.call(
-                  #   paste0("timeline_h_ui"),
-                  #   list(ns(paste0("timelineh")))
-                  # )
-                      do.call(
+                  do.call(
                         paste0("timeline_", rv$tl.layout[1], "_ui"),
                         list(ns(paste0("timeline", rv$tl.layout[1])))
                     )
                 })
                 
-                
-                
-                
-                
+
                 
                 #######################################################
                 if(mode() == 'dev')
@@ -766,7 +765,8 @@ nav_server <- function(id = NULL,
                       
                       
                       } else {
-                          # A new dataset has been loaded
+                    
+                        # A new dataset has been loaded
                           # # Update the different screens in the process
                           rv$steps.enabled <- Update_State_Screens(
                               is.skipped = is.skipped(),

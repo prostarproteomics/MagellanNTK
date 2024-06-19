@@ -164,20 +164,25 @@ PipelineDemo_Process2_server <- function(
     
     
     observeEvent(input$Description_btn_validate, {
-
       rv$dataIn <- dataIn()
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- stepStatus$VALIDATED
     })
     
-    
+    # observe({
+    #   req(dataIn())
+    #   rv$dataIn <- dataIn()
+    #   dataOut$trigger <- Timestamp()
+    #   dataOut$value <- rv$dataIn
+    #   rv$steps.status['Description'] <- stepStatus$VALIDATED
+    # })
     
     # >>>
     # >>> START ------------- Code for step 1 UI---------------
     # >>> 
     
-    # >>>> -------------------- STEP 1 : Global UI ------------------------------------
+    # >>>> -------------------- STEP 1 : Global UI ----------------------
     output$Step1 <- renderUI({
       wellPanel(
         # uiOutput for all widgets in this UI

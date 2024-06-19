@@ -28,13 +28,17 @@ timeline_h_ui <- function(id) {
 #' @export
 #'
 timeline_h_server <- function(id,
-                              config,
-                              status,
-                              position,
-                              enabled) {
+  config,
+  status,
+  position,
+  enabled) {
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
+        
+        observe({
+          print(position())
+        })
         
         UpdateTags <- reactive({
           req(config@steps != '')
@@ -72,6 +76,9 @@ timeline_h_server <- function(id,
                     }
                 )
             )
+            
+            
+            
         })
     })
 }

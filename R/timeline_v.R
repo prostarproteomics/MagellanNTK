@@ -66,10 +66,10 @@ timeline_v_ui <- function(id) {
 #' @export
 #'
 timeline_v_server <- function(id,
-                              config,
-                              status,
-                              position,
-                              enabled) {
+  config,
+  status,
+  position,
+  enabled) {
 
     # Define colors for the different status of steps
     colCompletedDisabled <- "#ABDBAC"
@@ -243,7 +243,9 @@ timeline_v_server <- function(id,
 #' @export
 #' @rdname timelines
 #' 
-timeline <- function(config = NULL, layout = 'h'){
+timeline <- function(config = NULL, 
+  layout = 'h',
+  position = 1){
 ui <- fluidPage(
   actionButton("prevpos", shiny::icon('arrow-left')),
   actionButton("nextpos", shiny::icon('arrow-right')),
@@ -258,12 +260,13 @@ server <- function(input, output){
   rv <- reactiveValues(
     direction = 0,
     status = c(0, 1, 0, 0),
-    current.pos = 1,
     tl.tags.enabled = c(1, 1, 1, 1),
-    position = NULL
+    position = position
   )
   
-  
+  observe({
+    print(paste0('position = ', position))
+  })
   output$timeline_UI <- renderUI({
     if (layout == 'h')
       timeline_h_ui('TLv')
@@ -277,26 +280,26 @@ server <- function(input, output){
       timeline_h_server(id = 'TLv',
         config = config,
         status = reactive({rv$status}),
-        position = reactive({rv$current.pos}),
+        position = reactive({rv$position}),
         enabled = reactive({rv$tl.tags.enabled})
       )
     else if (layout == 'v')
       timeline_v_server(id = 'TLv',
     config = config,
     status = reactive({rv$status}),
-    position = reactive({rv$current.pos}),
+    position = reactive({rv$position}),
     enabled = reactive({rv$tl.tags.enabled})
   )
   })
   
   observeEvent(input$nextpos,{
-    if (rv$current.pos != length(config@steps))
-      rv$current.pos <- rv$current.pos + 1
+    if (rv$position != length(config@steps))
+      rv$position <- rv$position + 1
   })
   
   observeEvent(input$prevpos,{
-    if (rv$current.pos != 1)
-      rv$current.pos <- rv$current.pos - 1
+    if (rv$position != 1)
+      rv$position <- rv$position - 1
   })
 }
 

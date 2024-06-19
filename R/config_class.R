@@ -146,6 +146,13 @@ Config <- setClass("Config",
 )
 
 
+RemoveDescriptionStep <- function(obj){
+
+  obj@ll.UI <- obj@ll.UI[-1]
+  obj@mandatory <- obj@mandatory[-1]
+  obj@steps <- obj@steps[-1]
+  obj
+}
 
 is.process <- function(obj)
   obj@mode == 'process'
@@ -256,9 +263,11 @@ is.SpecialProcess <- function(obj, nameOfProcess){
 # this function
 init.GenericProcess <- function(.Object){
 
+  # .Object@steps <- c(.Object@steps, 'Save')
+  # .Object@mandatory <- c(.Object@mandatory, TRUE)
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
-  
+
   .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
   names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
   names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)
@@ -272,9 +281,11 @@ init.GenericProcess <- function(.Object){
 
 init.GenericNode  <- function(.Object){
   
+  # .Object@steps <- c(.Object@steps, 'Save')
+  # .Object@mandatory <- c(.Object@mandatory, TRUE)
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
-  
+
   .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
   names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
   names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)
@@ -331,8 +342,13 @@ init.GenericPipeline <- function(.Object){
   #.Object@steps <- c('Description', .Object@steps)
   #.Object@mandatory <- c(TRUE, .Object@mandatory)
   
+  # .Object@steps <- c(.Object@steps, 'Save')
+  # .Object@mandatory <- c(.Object@mandatory, TRUE)
   .Object@steps <- c('Description', .Object@steps, 'Save')
   .Object@mandatory <- c(TRUE, .Object@mandatory, TRUE)
+
+  
+  
   .Object@steps <- setNames(.Object@steps, nm = .Object@steps)
   names(.Object@steps) <- gsub(' ', '', names(.Object@steps), fixed=TRUE)
   names(.Object@steps) <- gsub('-', '', names(.Object@steps), fixed=TRUE)

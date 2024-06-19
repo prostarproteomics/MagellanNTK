@@ -120,6 +120,7 @@ PipelineDemo_Process1_server <- function(id,
     # >>> 
     
     
+    
     output$Description <- renderUI({
       file <- normalizePath(file.path(session$userData$workflow.path, 
         'md', paste0(id, '.md')))
@@ -165,9 +166,16 @@ PipelineDemo_Process1_server <- function(id,
       dataOut$trigger <- Timestamp()
       dataOut$value <- rv$dataIn
       rv$steps.status['Description'] <- stepStatus$VALIDATED
+      
     })
     
-    
+    # observe({
+    #   req(dataIn())
+    #   rv$dataIn <- dataIn()
+    #   dataOut$trigger <- Timestamp()
+    #   dataOut$value <- rv$dataIn
+    #   rv$steps.status['Description'] <- stepStatus$VALIDATED
+    # })
     
     # >>>
     # >>> START ------------- Code for step 1 UI---------------
@@ -221,6 +229,7 @@ PipelineDemo_Process1_server <- function(id,
       widget <- actionButton(ns('Step1_btn1'), 'Button',
         class = btn_success_color)
       toggleWidget(widget, rv$steps.enabled['Step1'] )
+      #toggleWidget(widget, TRUE )
     })
     
     # This part must be customized by the developer of a new module

@@ -33,12 +33,9 @@
 #' 
 #' shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = lldata))
 #' 
-#' shiny::runApp(workflowApp("PipelineDemo_Process1", 
-#' dataIn = data.frame(), 
-#' tl.layout = "v"))
+#' shiny::runApp(workflowApp("PipelineDemo_Process1", dataIn = data.frame())
 #' 
 #' shiny::runApp(workflowApp("PipelineDemo", path, dataIn = lldata))
-#' tl.layout = c("v", "h")))
 #' 
 #' shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
 #' 

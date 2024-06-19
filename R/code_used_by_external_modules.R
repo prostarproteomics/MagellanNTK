@@ -350,6 +350,7 @@ Insert_Call_to_Config <- function(name){
   code <- "
 
 config <- #name#_conf()
+
 config@ll.UI <- setNames(
       lapply(
         names(config@steps),

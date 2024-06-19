@@ -164,7 +164,7 @@ ToggleState_Screens <- function(cond,
         #rv$steps.enabled[range] <- rep(cond, length(range)) && 
         #    !(rv$steps.status[range] == SKIPPED)
         rv$steps.enabled[range] <- unlist(
-            lapply(range,function(x) 
+            lapply(range, function(x) 
                     cond && !(rv$steps.status[x] == stepStatus$SKIPPED)
                 )
             )
