@@ -78,14 +78,16 @@ find_funs <- function(f) {
 #' @description xxx
 #' 
 #' @param path xxx
+#' @param usermod xxxxx
 #' 
 #' @examples
 #' path <- system.file("workflow/PipelineDemo", package = 'MagellanNTK')
-#' readCustomizableFuncs(file.path(path, 'config.txt'))
+#' readConfigFile(path)
 #' 
 #' @export
 #'
-readCustomizableFuncs <- function(path){
+readConfigFile <- function(path,
+  usermod = 'dev'){
   config.file <- normalizePath(file.path(path, 'config.txt'))
   if(!file.exists(config.file))
     stop('file does not exist')
@@ -116,8 +118,34 @@ readCustomizableFuncs <- function(path){
   tmp <- lapply(names(funcs), 
     function(x) prepare_data(lines, x))
   names(tmp) <- names(funcs)
+
   
-  return(funcs = tmp)
+  
+  if (usermod == 'dev')
+    value <- list(
+      funcs = tmp,
+      debugger = FALSE,
+      verbose = TRUE,
+      Open_pipeline = FALSE,
+      convert_dataset = TRUE,
+      change_Look_Feel = TRUE,
+      change_core_funcs = FALSE
+    )
+  else 
+    value <- list(
+      funcs = tmp,
+      debugger = prepare_data(lines, 'debugger') == 'disabled',
+      verbose = prepare_data(lines, 'verbose') == 'enabled',
+      Open_pipeline = prepare_data(lines, 'Open_pipeline') == 'disabled',
+      convert_dataset = prepare_data(lines, 'convert_dataset') == 'enabled',
+      change_Look_Feel = prepare_data(lines, 'change_Look_Feel') == 'enabled',
+      change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled'
+    )
+    
+    
+    
+  return(
+  )
 }
 
 

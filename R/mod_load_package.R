@@ -88,7 +88,7 @@ mod_load_package_server <- function(id,
     
     
     rv <- reactiveValues(
-      list.funcs = default.funcs
+      list.funcs = default.funcs()
     )
 
     observeEvent(req(funcs()), {

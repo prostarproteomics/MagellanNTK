@@ -1,7 +1,32 @@
-library(shinydashboard)
-library(shinyjs)
-
-
+#' @title Main Shiny application
+#' @description xxx
+#' 
+#' @param obj xxx
+#' @param workflow.path xxx
+#' @param workflow.path xxxx
+#' @param verbose A `boolean(1)` 
+#' @param usermode xxx
+#' 
+#' 
+#' 
+#' @details
+#' The list of customizable funcs (param `funcs`) contains the following items:
+#' 
+#'  These are the default values where each item points to a default fucntion
+#'  implemented into MagellanNTK.
+#'  
+#'  The user can modify these values by two means:
+#'  * setting the values in the parameter to pass to the function 
+#'  `MagellanNTK()`,
+#'  * inside the UI of MagellanNTK, in the settings panels
+#'  
+#' @name magellanNTK
+#' 
+#' @examplesIf interactive()
+#' # example code
+#' 
+#' 
+NULL
 
 #' The application User-Interface
 #' 
@@ -11,6 +36,8 @@ library(shinyjs)
 #' @import shinydashboardPlus
 #' @import shinydashboard
 #' @importFrom shinyjs useShinyjs extendShinyjs
+#' 
+#' @rdname magellanNTK
 #' 
 #' @export
 #' 
@@ -44,16 +71,20 @@ enableJIT(3)
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
-#' @importFrom  shiny shinyServer observeEvent toggle
+#' @import  shiny
 #' @import shinyjs
 #' 
 #' @export
 #' 
-#' @noRd
+#' 
+#' @rdname magellanNTK
+#' 
 MagellanNTK_server <- function(id,
   obj = reactive({NULL}),
   workflow.path = reactive({NULL}),
-  workflow.name = reactive({NULL})){
+  workflow.name = reactive({NULL}),
+  verbose = FALSE,
+  usermod = 'dev'){
   
   moduleServer(id, function(input, output, session){
     ns <- session$ns 
@@ -68,7 +99,9 @@ MagellanNTK_server <- function(id,
       mainapp_server('mainapp_module',
         obj = obj,
         workflow.path = reactive({workflow.path()}),
-        workflow.name = reactive({workflow.name()})
+        workflow.name = reactive({workflow.name()}),
+        verbose = verbose,
+        usermod = usermod
         )
     })
   }
@@ -76,25 +109,7 @@ MagellanNTK_server <- function(id,
 #}
 
 
-#' @title Main Shiny application
-#' @description xxx
-#' 
-#' @param funcs An list containing th following items:
-#' * title: xxx
-#' * base_URL: xxx
-#' @param verbose A `boolean(1)` 
-#' 
-#' @details
-#' The list of customizable funcs (param `funcs`) contains the following items:
-#' 
-#'  These are the default values where each item points to a default fucntion
-#'  implemented into MagellanNTK.
-#'  
-#'  The user can modify these values by two means:
-#'  * setting the values in the parameter to pass to the function 
-#'  `MagellanNTK()`,
-#'  * inside the UI of MagellanNTK, in the settings panels
-#'  
+
 #'  
 #' @export
 #' @examplesIf interactive()
@@ -102,16 +117,16 @@ MagellanNTK_server <- function(id,
 #' # launch without initial config
 #' shiny::runApp(MagellanNTK())
 #' 
-#' 
-#' MagellanNTK(funcs)
-#' 
 #' @export
+#' 
+#' @rdname magellanNTK
 #' 
 MagellanNTK <- function(
     obj = NULL,
     workflow.path = NULL,
     workflow.name = NULL,
-    verbose = FALSE) {
+    verbose = FALSE,
+    usermod = 'dev') {
   
   source_shinyApp_files()
   
@@ -131,7 +146,9 @@ MagellanNTK <- function(
     MagellanNTK_server("infos",
       obj = reactive({obj}),
       workflow.path = reactive({workflow.path}),
-      workflow.name = reactive({workflow.name})
+      workflow.name = reactive({workflow.name}),
+      verbose = verbose,
+      usermod = usermod
       )
 }
   

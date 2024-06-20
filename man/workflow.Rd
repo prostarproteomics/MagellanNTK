@@ -16,7 +16,7 @@ workflow_server(
      NULL
  }),
   tl.layout = NULL,
-  mode = "user",
+  usermod = "dev",
   ...
 )
 
@@ -25,7 +25,7 @@ workflowApp(
   path = NULL,
   dataIn = NULL,
   tl.layout = NULL,
-  mode = "user",
+  usermod = "dev",
   ...
 )
 }
@@ -38,7 +38,7 @@ workflowApp(
 
 \item{tl.layout}{Additional parameters for nav}
 
-\item{mode}{xxx}
+\item{usermod}{Available values are 'superdev', 'dev', 'superuser', 'user'}
 
 \item{...}{xxx}
 }
@@ -74,21 +74,17 @@ if (interactive()) {
 
 
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(sub_R25)
-
+data(lldata)
 path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
 
 # Nothing happens when dataIn is NULL
 shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = NULL))
 
-shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = sub_R25))
+shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = lldata))
 
-shiny::runApp(workflowApp("PipelineDemo_Process1", 
-dataIn = data.frame(), 
-tl.layout = "v"))
+shiny::runApp(workflowApp("PipelineDemo_Process1", dataIn = data.frame())
 
-shiny::runApp(workflowApp("PipelineDemo", path, dataIn = sub_R25, 
-tl.layout = c("v", "h")))
+shiny::runApp(workflowApp("PipelineDemo", path, dataIn = lldata))
 
 shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
 

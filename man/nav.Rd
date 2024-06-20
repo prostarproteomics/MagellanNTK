@@ -23,7 +23,7 @@ nav_server(
      FALSE
  }),
   tl.layout = NULL,
-  mode = reactive({
+  usermod = reactive({
      "user"
  }),
   ...

@@ -139,7 +139,7 @@ open_workflow_server <- function(id){
       rv.wf$dataOut$path <- rv.wf$path
       rv.wf$dataOut$wf_name <- input$chooseWF2
       # Load customizable functions if config.txt file exists
-      rv.wf$dataOut$funcs  <- readCustomizableFuncs(rv.wf$path)
+      rv.wf$dataOut$funcs  <- readConfigFile(rv.wf$path)$funcs
 
     })
     

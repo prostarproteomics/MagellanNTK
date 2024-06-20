@@ -17,7 +17,7 @@ timeline_v_ui(id)
 
 timeline_v_server(id, config, status, position, enabled)
 
-timeline(config = NULL, layout = "h")
+timeline(config = NULL, layout = "h", position = 1)
 }
 \arguments{
 \item{id}{The `id` of the server}

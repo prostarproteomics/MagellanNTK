@@ -79,7 +79,7 @@ nav_server <- function(id = NULL,
     remoteReset = reactive({FALSE}),
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
-    mode = reactive({'user'}), 
+    usermod = reactive({'user'}), 
     ...
     ) {
 
@@ -178,7 +178,7 @@ nav_server <- function(id = NULL,
                 ### the parameter 'id'. 
                 ### The name of the server function is prefixed by 'mod_' and 
                 ### suffixed by '_server'. This will give access to its config
-                if(mode() == 'dev')
+                if(verbose)
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
 
                 rv$proc <- do.call(
@@ -203,7 +203,7 @@ nav_server <- function(id = NULL,
                 
                 
                 
-                if(mode() == 'dev'){
+                if(verbose){
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_conf()"), '\n')))
                   rv$config
                 }
@@ -258,7 +258,7 @@ nav_server <- function(id = NULL,
 
                 
                 #######################################################
-                if(mode() == 'dev')
+                if(verbose)
                   cat(crayon::yellow(paste0(id, ': Entering observeEvent(req(rv$config), {...})\n')))
                 
                 switch(rv$config@mode,
@@ -285,7 +285,7 @@ nav_server <- function(id = NULL,
                          rv$config@ll.UI <- setNames(lapply(
                            GetStepsNames(),
                            function(x) {
-                             if(mode() == 'dev')
+                             if(verbose)
                                cat(paste0(id, ": Launch: ", 'nav_ui(', 
                                  ns(paste0(id, '_', x)), ')\n'))
                              
@@ -298,7 +298,7 @@ nav_server <- function(id = NULL,
                          ### Launch the server for each step of the pipeline
                          ### 
                          lapply(GetStepsNames(), function(x) {
-                           if(mode() == 'dev')
+                           if(verbose)
                              cat(paste0(id, ": Launch nav_server(", id, "_", x, ")\n"))
                            
                            tmp.return[[x]] <- nav_server(
@@ -324,7 +324,7 @@ nav_server <- function(id = NULL,
                            triggerValues <- values.children$triggers
                            return.values <- values.children$values
                            
-                           if (mode() == 'dev') {
+                           if (verbose) {
                              cat(crayon::blue("---------- Data received from children ---\n"))
                              print(return.values)
                              cat(crayon::blue("------------------------------------------\n"))
@@ -344,7 +344,7 @@ nav_server <- function(id = NULL,
                              newValue <- tmp.return[[processHasChanged]]$dataOut()$value
                              
                              
-                             if (mode() == 'dev') {
+                             if (verbose) {
                                cat(crayon::blue("---------- New children data status ---\n"))
                                print(newValue)
                                cat(crayon::blue("------------------------------------------\n"))
@@ -638,7 +638,7 @@ nav_server <- function(id = NULL,
         # This function is not directly implemented in the main UI of nav_ui
         # because it is hide/show w.r.t. the value of dev_mode
         output$debug_infos_ui <- renderUI({
-            req(mode() == 'dev')
+            req(verbose)
           
           Debug_Infos_server(
             id = "debug_infos",
@@ -698,7 +698,7 @@ nav_server <- function(id = NULL,
         # function 'Build..'
         output$nav_mod_ui <- renderUI({
           req(rv$tl.layout)
-          if(mode() == 'dev')
+          if(verbose)
             cat(crayon::blue(paste0(id, ': Entering output$nav_mod_ui <- renderUI({...})\n')))
           
             DisplayWholeUI(ns, rv$tl.layout[1])

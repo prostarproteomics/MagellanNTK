@@ -11,6 +11,9 @@ mod_modalDialog_ui(id)
 mod_modalDialog_server(
   id,
   title = NULL,
+  typeWidget = "button",
+  styleWidget = NULL,
+  classWidget = NULL,
   width = NULL,
   uiContent = NULL,
   external_mod = NULL,
@@ -19,6 +22,7 @@ mod_modalDialog_server(
 
 mod_modalDialog(
   title,
+  typeWidget = "button",
   uiContent = NULL,
   external_mod = NULL,
   external_mod_args = list()

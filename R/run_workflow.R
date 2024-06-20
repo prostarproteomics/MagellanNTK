@@ -10,7 +10,7 @@
 #' @param path xxx
 #' @param dataIn xxx
 #' @param tl.layout Additional parameters for nav
-#' @param mode xxx
+#' @param usermod Available values are 'superdev', 'dev', 'superuser', 'user'
 #' @param ... xxx
 #'
 #' @name workflow
@@ -67,7 +67,7 @@ workflow_server <- function(id,
   path = NULL,
   dataIn = reactive({NULL}),
   tl.layout = NULL,
-  mode = "user",
+  usermod = "dev",
   ...){
   
   
@@ -87,7 +87,7 @@ workflow_server <- function(id,
     dataOut <- reactiveVal()
     
     output$debugInfos_ui <- renderUI({
-      req(mode == 'dev')
+      req(usermod == 'dev')
       Debug_Infos_server(id = 'debug_infos',
         title = 'Infos from shiny app',
         rv.dataIn = reactive({dataIn}),
@@ -110,7 +110,7 @@ workflow_server <- function(id,
     observeEvent(path, {
       session$userData$workflow.path <- path
       
-      session$userData$funcs <- readCustomizableFuncs(path)
+      session$userData$funcs <- readConfigFile(path)$funcs
       
     })
     
@@ -140,7 +140,7 @@ workflowApp <- function(id,
   path = NULL,
   dataIn = NULL,
   tl.layout = NULL,
-  mode = 'user',
+  usermod = 'dev',
   ...) {
 
   ui <- workflow_ui(id)

@@ -4,14 +4,14 @@
 \alias{PrepareData2Send}
 \title{xxxx}
 \usage{
-PrepareData2Send(rv, pos, mode, keepdataset_func)
+PrepareData2Send(rv, pos, verbose = FALSE, keepdataset_func)
 }
 \arguments{
 \item{rv}{xxxx}
 
 \item{pos}{xxx}
 
-\item{mode}{xxx}
+\item{verbose}{xxx}
 }
 \value{
 NA

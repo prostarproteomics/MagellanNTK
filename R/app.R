@@ -49,7 +49,7 @@
 #' 
 #' 
 MagellanNTK2 <- function(
-    funcs = default.funcs,
+    funcs = default.funcs(),
     verbose = FALSE) {
   
   source_shinyApp_files()

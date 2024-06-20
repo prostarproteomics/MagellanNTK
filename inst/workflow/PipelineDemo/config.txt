@@ -1,7 +1,7 @@
 # Configuration file to be used with MagellanNTK
 
 
-# Customizable functions
+# Customizable core functions
 
 convert_dataset: MagellanNTK
 open_dataset: MagellanNTK
@@ -13,4 +13,11 @@ addDatasets: MagellanNTK
 keepDatasets: MagellanNTK
 
 # Other
+
+debugger: disabled
+verbose: enabled
+Open_pipeline: disabled
+convert_dataset: enabled
+change_Look_Feel: enabled
+change_core_funcs: disabled
 

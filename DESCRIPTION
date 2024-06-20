@@ -73,6 +73,7 @@ Collate:
     catch2List.R
     mod_errorModal.R
     rclip.R
+    default_variables.R
     write_excel.R
     mod_download_dataset.R
     mod_bsModal.R
@@ -80,6 +81,10 @@ Collate:
     mod_dyn_widgets.R
     config_class.R
     doc-data.R
+    sidebar.R
+    controlbar.R
+    header.R
+    body.R
     mod_load_workflow.R
     load_code.R
     utils.R

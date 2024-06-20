@@ -7,7 +7,7 @@
 \alias{mainapp}
 \title{mod_main_page_ui and mod_loading_page_server}
 \usage{
-mainapp_ui(id)
+mainapp_ui(id, session)
 
 mainapp_server(
   id,
@@ -20,10 +20,11 @@ mainapp_server(
   workflow.path = reactive({
      NULL
  }),
-  verbose = FALSE
+  verbose = FALSE,
+  usermod = "dev"
 )
 
-mainapp()
+mainapp(usermod = "dev")
 }
 \arguments{
 \item{id}{shiny id}

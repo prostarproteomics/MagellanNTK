@@ -1,0 +1,60 @@
+---
+title: "User modes"
+author: "Samuel Wieczorek"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+
+* Super developer
+
+  Lance MagellanNTK ou un pipeline quelle que soit la manière
+  Open pipeline : X
+  open dataset (custom and packages) : V
+  convert dataset : V
+  change settings : X
+  launch browser(): X
+  Option default functions : X
+  
+  
+  
+  
+  
+* Developer
+
+
+  Open pipeline : V
+  open dataset (custom and packages) : V
+  convert dataset : V
+  change settings : V
+  launch browser(): V
+  Option default functions : V
+  
+  
+  
+  
+
+
+* Super user
+  - 
+  Open pipeline : disabled
+  open dataset (custom and packages) : enabled
+  convert dataset : enabled
+  change settings : disabled
+  launch browser(): disabled
+  Option default functions : V
+  
+  
+  
+
+* User
+  Lance un pipeline directement sans passer par MagellanNTK
+  a 'liuvertyre, splashscreen directment sur aide du pipeline et pas de magellan
+  
+  Open pipeline : disabled
+  open dataset (custom and packages) : enabled
+  convert dataset : enabled
+  change Look & Feel : V
+  change core funcs: X
+  launch browser(): disabled
