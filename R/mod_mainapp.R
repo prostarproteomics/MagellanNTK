@@ -322,14 +322,13 @@ mainapp_server <- function(id,
       session$userData$usermod <- usermod
       session$userData$verbose <- verbose
       
-
-      
+      session$userData$funcs <- rv.core$funcs
+      browser()
     }, priority = 1000)
       
     
     observeEvent(rv.core$workflow.path, {
       rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
-      session$userData$funcs <- rv.core$funcs
       for (f in names(rv.core$funcs)){
         if(is.null(rv.core$funcs[[f]]))
           rv.core$funcs[[f]] <- default.funcs()[[f]]
@@ -342,6 +341,7 @@ mainapp_server <- function(id,
       
     output$sidebar <- renderUI({
       req(session$userData$usermod)
+      
       shinydashboardPlus::dashboardSidebar(
       InsertSidebar(session$userData$usermod)
     )
@@ -407,14 +407,6 @@ mainapp_server <- function(id,
       #
       # Code for open dataset
       #
-    observe({
-      req(rv.core$funcs$infos_dataset)
-      
-      rv.core$result_open_dataset <- call.func(
-        fname = paste0(rv.core$funcs$open_dataset, '_server'),
-        args = list(id = 'open_dataset'))
-      
-    })
     
     
       
@@ -481,6 +473,15 @@ mainapp_server <- function(id,
     #   rv.core$current.obj <- rv.core$result_openDemoDataset()
     # })
     
+    
+    observe({
+      req(rv.core$funcs$open_dataset)
+      print('titi')
+      rv.core$result_open_dataset <- call.func(
+        fname = paste0(rv.core$funcs$open_dataset, '_server'),
+        args = list(id = 'open_dataset'))
+      
+    })
     
     
     output$open_dataset_UI <- renderUI({
