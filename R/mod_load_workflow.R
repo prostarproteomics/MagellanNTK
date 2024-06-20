@@ -64,8 +64,9 @@ mod_load_workflow_ui <- function(id) {
 #' @export
 #'
 mod_load_workflow_server <- function(id, 
-                                     path = reactive({NULL}),
-                                     mode = reactive({'user'})) {
+  path = reactive({NULL}),
+  usermod = 'user') {
+  
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -86,8 +87,8 @@ mod_load_workflow_server <- function(id,
     
     
     output$chooseLoadUI <- renderUI({
-      mode()
-      .choices <- switch(mode(),
+
+      .choices <- switch(usermod,
                          dev = c('directory', 'plugin'),
                          user = c('plugin')
                          )

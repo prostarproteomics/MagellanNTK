@@ -82,9 +82,6 @@ Collate:
     config_class.R
     doc-data.R
     sidebar.R
-    controlbar.R
-    header.R
-    body.R
     mod_load_workflow.R
     load_code.R
     utils.R

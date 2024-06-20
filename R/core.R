@@ -80,7 +80,7 @@ nav_server <- function(id = NULL,
     is.skipped = reactive({FALSE}),
     tl.layout = NULL,
     verbose = FALSE,
-    usermod = reactive({'user'})) {
+    usermod = 'user') {
 
     
 
@@ -306,7 +306,9 @@ nav_server <- function(id = NULL,
                              is.enabled = reactive({isTRUE(rv$steps.enabled[x])}),
                              remoteReset = reactive({rv$resetChildren[x]}),
                              is.skipped = reactive({isTRUE(rv$steps.skipped[x])}),
-                             tl.layout = rv$tl.layout[-1]
+                             tl.layout = rv$tl.layout[-1],
+                             verbose = verbose,
+                             usermod = usermod
                              )
                          })
                          
@@ -744,7 +746,7 @@ nav_server <- function(id = NULL,
                           res <- PrepareData2Send(
                             rv = rv, 
                             pos = rv$current.pos,
-                            mode = mode(),
+                            verbose = verbose,
                             keepdataset_func = session$userData$funcs$keepDatasets)
                           
                           rv$child.data2send <- res$data2send
@@ -803,7 +805,7 @@ nav_server <- function(id = NULL,
               #browser()
                 res <- PrepareData2Send(rv = rv, 
                   pos = NULL, 
-                  mode=mode(),
+                  verbose = verbose,
                   keepdataset_func = session$userData$funcs$keepDatasets)
                 rv$child.data2send <- res$data2send
                 rv$steps.enabled <- res$steps.enabled

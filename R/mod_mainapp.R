@@ -133,14 +133,135 @@ mainapp_ui <- function(id, session){
             uiOutput(ns('WF_Name_UI'))
             
           ),
-          uiOutput(ns('dropdownmenu'))
+          shinydashboard::dropdownMenu(
+            type = "tasks",
+            badgeStatus = "danger"
+            # taskItem(value = 20, color = "aqua", "Refactor code"),
+            # taskItem(value = 40, color = "green", "Design new layout"),
+            # taskItem(value = 60, color = "yellow", "Another task"),
+            # taskItem(value = 80, color = "red", "Write documentation")
+            ,shinydashboard::menuItem("Home 2", 
+              tabName = "Home2", 
+              icon = icon("home"),
+              selected = TRUE)
+            ,shinydashboard::menuItem("User manual", 
+              tabName = "usermanual", 
+              icon = icon("home"),
+              selected = TRUE)
+          )
         ),
         sidebar = uiOutput(ns('sidebar')),
         controlbar = shinydashboardPlus::dashboardControlbar(
           skin = "dark",
-          uiOutput(ns('controlmenu'))
+          shinydashboardPlus::controlbarMenu(
+            shinydashboardPlus::controlbarItem(
+              title = "Configure",
+              icon = icon("desktop"),
+              active = TRUE,
+              actionLink(ns('browser'), 'Console'),
+              mod_modalDialog_ui(ns('loadPkg_modal'))
+            ),
+            shinydashboardPlus::controlbarItem(
+              icon = icon("paint-brush"),
+              title = "Settings",
+              mod_settings_ui(ns('global_settings'))
+            )
+            # ,shinydashboardPlus::controlbarItem(
+            #   icon = icon("paint-brush"),
+            #   title = "Skin",
+            #   shinydashboardPlus::skinSelector()
+            # )
+          )
         ),
-        body = uiOutput(ns('body'))
+        body = shinydashboard::dashboardBody(
+          # some styling
+          tags$head(
+            #tags$style(".content-wrapper {background-color: white;}"),
+            
+            # .path <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'prostar.css'),
+            # includeCSS(.path),
+            # .path_sass <- file.path(system.file('app/www/css', package = 'MagellanNTK'),'sass-size.scss'),
+            # tags$style(sass::sass(
+            #   sass::sass_file(.path_sass),
+            #   sass::sass_options(output_style = "expanded")
+            # )),
+            
+            # tags$style(
+            #   rel = "stylesheet",
+            #   type = "text/css",
+            #   href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/qtcreator_dark.min.css"
+            # ),
+            # tags$script(
+            #   src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+            # ),
+            tags$script(
+              "$(function() {
+            $('.sidebar-toggle').on('click', function() {
+              $('.skinSelector-widget').toggle();
+            });
+          });
+          "
+            )
+          ),
+          
+          #tags$head(
+          #  tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+          #),
+          
+          div(style="margin-top: 40px;", 
+            # body content
+            shinydashboard::tabItems(
+              
+              shinydashboard::tabItem(tabName = "Home2", class="active",
+                mod_homepage_ui(ns('home2'))),
+              shinydashboard::tabItem(tabName = "usermanual", class="active",
+                insert_md_ui(ns('usermanual'))),
+              
+              
+              shinydashboard::tabItem(tabName = "Home", class="active", 
+                actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
+                mod_homepage_ui(ns('home'))),
+              #tabItem(tabName = "dataManager", 
+              #uiOutput(ns('dataManager_UI'))),
+              shinydashboard::tabItem(tabName = "openDataset", 
+                uiOutput(ns('open_dataset_UI')), width = '200px' ,
+                uiOutput(ns('infos_dataset_UI')), width = '200px' 
+              ),
+              
+              shinydashboard::tabItem(tabName = "convertDataset", 
+                uiOutput(ns('open_convert_dataset_UI'))),
+              
+              shinydashboard::tabItem(tabName = "eda", 
+                uiOutput(ns('EDA_UI'))),
+              
+              shinydashboard::tabItem(tabName = "tools", 
+                uiOutput(ns('tools_UI'))),
+              
+              shinydashboard::tabItem(tabName = "export", 
+                h3("Export")), # export module not yet
+              
+              shinydashboard::tabItem(tabName = "openWorkflow", 
+                uiOutput(ns('open_workflow_UI'))),
+              shinydashboard::tabItem(tabName = "workflow", 
+                uiOutput(ns('workflow_UI'))),
+              
+              
+              #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
+              shinydashboard::tabItem(tabName = "releaseNotes", 
+                mod_release_notes_ui(ns('rl'))),
+              # tabItem(tabName = "checkUpdates", 
+              #   mod_check_updates_ui(ns('check_updates'))),
+              shinydashboard::tabItem(tabName = "usefulLinks", 
+                insert_md_ui(ns('links_MD'))),
+              shinydashboard::tabItem(tabName = "faq", 
+                insert_md_ui(ns('FAQ_MD'))),
+              shinydashboard::tabItem(tabName = "bugReport", 
+                mod_bug_report_ui(ns("bug_report"))),
+              shinydashboard::tabItem(tabName = "pipeline", 
+                uiOutput(ns('show_pipeline')))
+            )
+            
+          ))
 
     )
 )
@@ -175,7 +296,7 @@ mainapp_server <- function(id,
       pipeline.name = NULL,
       dataIn = NULL,
       result_convert = reactive({NULL}),
-      #result_openDemoDataset = NULL,
+      
       result_open_dataset = reactive({NULL}),
       result_open_workflow = reactive({NULL}),
       result_run_workflow = reactive({NULL}),
@@ -199,13 +320,25 @@ mainapp_server <- function(id,
       session$userData$workflow.path <- workflow.path()
       session$userData$workflow.name <- workflow.name()
       session$userData$usermod <- usermod
-      session$userData$verbose <- usermod
+      session$userData$verbose <- verbose
       
-      req(rv.core$workflow.path)
-      req(rv.core$workflow.name)
-        LoadWorkflow()
+
+      
+    }, priority = 1000)
+      
+    
+    observeEvent(rv.core$workflow.path, {
+      rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
+      session$userData$funcs <- rv.core$funcs
+      for (f in names(rv.core$funcs)){
+        if(is.null(rv.core$funcs[[f]]))
+          rv.core$funcs[[f]] <- default.funcs()[[f]]
+      }
+      session$userData$funcs <- rv.core$funcs
+      source_wf_files(session$userData$workflow.path)
     })
-      
+    
+    
       
     output$sidebar <- renderUI({
       req(session$userData$usermod)
@@ -213,37 +346,7 @@ mainapp_server <- function(id,
       InsertSidebar(session$userData$usermod)
     )
     })
-    
-    output$controlmenu <- renderUI({
-      shinydashboardPlus::controlbarMenu(
-        shinydashboardPlus::controlbarItem(
-          title = "Configure",
-          icon = icon("desktop"),
-          active = TRUE,
-          actionLink(ns('browser'), 'Console'),
-          mod_modalDialog_ui(ns('loadPkg_modal'))
-        ),
-        shinydashboardPlus::controlbarItem(
-          icon = icon("paint-brush"),
-          title = "Settings",
-          mod_settings_ui(ns('global_settings'))
-        )
-        # ,shinydashboardPlus::controlbarItem(
-        #   icon = icon("paint-brush"),
-        #   title = "Skin",
-        #   shinydashboardPlus::skinSelector()
-        # )
-      )
-    })
-    
-    output$dropdownmenu <- renderUI({
-      InsertDropdownMenu()
-    })
-    
-    output$body <- renderUI({
-      InsertBody(id, session)
-    })
-    
+
     
     output$WF_Name_UI <- renderUI({
       req(rv.core$workflow.name)
@@ -252,19 +355,16 @@ mainapp_server <- function(id,
     
     
     
-    output$open_workflow_menu <- renderUI({
-      #req(isTRUE(readConfigFile(rv.core$workflow.path, usermod)$open_pipeline))
-      
-      menuItem("Open", 
-         tabName = "openWorkflow", 
-        icon = icon("cogs"))
-    })
     observeEvent(input$browser,{browser()})
+    
     observeEvent(input$ReloadProstar, { js$reset()})
+    
+    
+    # Launching a demo consist in launching a workflow and a dataset
     observeEvent(input$launch_demo, {
       data(lldata)
       rv.core$current.obj <- lldata
-      
+
       rv.core$workflow.name <- 
         session$userData$workflow.name <- 'PipelineDemo'
       
@@ -276,7 +376,6 @@ mainapp_server <- function(id,
       
       
       # Fix NULL values
-      # #browser()
       lapply(names(rv.core$funcs), function(x)
         if(is.null(rv.core$funcs[[x]]))
           rv.core$funcs[[x]] <- default.funcs()[[x]]
@@ -284,15 +383,21 @@ mainapp_server <- function(id,
       
       source_wf_files(session$userData$workflow.path)
       })
+    
+    
+    
 
     observe({
+      req(rv.core$funcs$infos_dataset)
       call.func(
         fname = paste0(rv.core$funcs$infos_dataset, '_server'),
         args = list(id = 'infos',
           obj = reactive({rv.core$current.obj}))
         )
-      
-      rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
+    })
+    
+    
+    rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
         title = "Default functions",
         external_mod = 'mod_load_package',
         external_mod_args = list(funcs = reactive({rv.core$funcs}))
@@ -302,16 +407,18 @@ mainapp_server <- function(id,
       #
       # Code for open dataset
       #
+    observe({
+      req(rv.core$funcs$infos_dataset)
+      
       rv.core$result_open_dataset <- call.func(
         fname = paste0(rv.core$funcs$open_dataset, '_server'),
         args = list(id = 'open_dataset'))
       
-      rv.core$result_run_workflow <- nav_server(
-        id = rv.core$workflow.name,
-        dataIn = reactive({rv.core$current.obj})
-      )
-      
     })
+    
+    
+      
+
     
     output$infos_dataset_UI <- renderUI({
       req(rv.core$funcs)
@@ -388,16 +495,8 @@ mainapp_server <- function(id,
       rv.core$current.obj <- rv.core$result_open_dataset()
     })
     
-   LoadWorkflow <- reactive({
-     rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
-     session$userData$funcs <- rv.core$funcs
-     for (f in names(rv.core$funcs)){
-       if(is.null(rv.core$funcs[[f]]))
-         rv.core$funcs[[f]] <- default.funcs()[[f]]
-     }
-     session$userData$funcs <- rv.core$funcs
-     source_wf_files(session$userData$workflow.path)
-   })
+   
+   
     
     observeEvent(req(rv.core$result_open_workflow()),{
      
@@ -406,8 +505,6 @@ mainapp_server <- function(id,
       
       rv.core$workflow.path <- 
         session$userData$workflow.path <- rv.core$result_open_workflow()$path
-      
-      LoadWorkflow()
     })
     
     output$open_workflow_UI <- renderUI({
@@ -423,15 +520,21 @@ mainapp_server <- function(id,
     # Workflow code
     output$workflow_UI <- renderUI({
       req(rv.core$workflow.name)
+      
+      rv.core$result_run_workflow <- nav_server(
+        id = rv.core$workflow.name,
+        dataIn = reactive({rv.core$current.obj}),
+        verbose = verbose,
+        usermod = usermod
+      )
+      
       nav_ui(ns(basename(rv.core$workflow.name)))
       })
 
     
-    observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger), 
+    observeEvent(req(rv.core$result_run_workflow), 
       ignoreInit = TRUE, {
-        #print('In observeEvent(req(rv.core$result_run_workflow$dataOut()$trigger')
-        #browser()
-      rv.core$current.obj <- rv.core$result_run_workflow$dataOut()$value
+        rv.core$current.obj <- rv.core$result_run_workflow$dataOut()$value
     })
 
        

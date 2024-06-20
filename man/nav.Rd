@@ -23,10 +23,10 @@ nav_server(
      FALSE
  }),
   tl.layout = NULL,
+  verbose = FALSE,
   usermod = reactive({
      "user"
- }),
-  ...
+ })
 )
 }
 \arguments{

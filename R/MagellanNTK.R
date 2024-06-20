@@ -24,7 +24,7 @@
 #' 
 #' @examplesIf interactive()
 #' # example code
-#' 
+#' MagellanNTK()
 #' 
 NULL
 
@@ -95,6 +95,15 @@ MagellanNTK_server <- function(id,
     #  for(i in names(funcs))
     #    requireNamespace(unlist(strsplit(funcs[[i]], split='::'))[1])
       
+    
+    # observeEvent(path, {
+    #   session$userData$workflow.path <- path
+    #   
+    #   session$userData$funcs <- readConfigFile(path)$funcs
+    #   
+    # })
+    # 
+    
       #shinyjs::toggle('mainapp_module', condition = !is.null(funcs))
       mainapp_server('mainapp_module',
         obj = obj,

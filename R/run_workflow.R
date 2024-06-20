@@ -68,7 +68,7 @@ workflow_server <- function(id,
   dataIn = reactive({NULL}),
   tl.layout = NULL,
   usermod = "dev",
-  ...){
+  verbose = FALSE){
   
   
   source_shinyApp_files()
@@ -121,7 +121,8 @@ workflow_server <- function(id,
         nav_server(id = id,
           dataIn = reactive({dataIn}),
           tl.layout = tl.layout, 
-          ...
+          verbose = verbose,
+          usermod = usermod
         )
       )
     })
@@ -141,7 +142,7 @@ workflowApp <- function(id,
   dataIn = NULL,
   tl.layout = NULL,
   usermod = 'dev',
-  ...) {
+  verbose = FALSE) {
 
   ui <- workflow_ui(id)
   server <- function(input, output, session) {
