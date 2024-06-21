@@ -144,8 +144,7 @@ readConfigFile <- function(path,
     
     
     
-  return(
-  )
+  return(value)
 }
 
 

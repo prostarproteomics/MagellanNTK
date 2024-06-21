@@ -133,23 +133,23 @@ mainapp_ui <- function(id, session){
             uiOutput(ns('WF_Name_UI')),
             uiOutput(ns('Dataset_Name_UI'))
             
-          ),
-          shinydashboard::dropdownMenu(
-            type = "tasks",
-            badgeStatus = "danger"
-            # taskItem(value = 20, color = "aqua", "Refactor code"),
-            # taskItem(value = 40, color = "green", "Design new layout"),
-            # taskItem(value = 60, color = "yellow", "Another task"),
-            # taskItem(value = 80, color = "red", "Write documentation")
-            ,shinydashboard::menuItem("Home 2", 
-              tabName = "Home2", 
-              icon = icon("home"),
-              selected = TRUE)
-            ,shinydashboard::menuItem("User manual", 
-              tabName = "usermanual", 
-              icon = icon("home"),
-              selected = TRUE)
           )
+          # shinydashboard::dropdownMenu(
+          #   type = "tasks",
+          #   badgeStatus = "danger"
+          #   # taskItem(value = 20, color = "aqua", "Refactor code"),
+          #   # taskItem(value = 40, color = "green", "Design new layout"),
+          #   # taskItem(value = 60, color = "yellow", "Another task"),
+          #   # taskItem(value = 80, color = "red", "Write documentation")
+          #   ,shinydashboard::menuItem("Home 2", 
+          #     tabName = "Home2", 
+          #     icon = icon("home"),
+          #     selected = TRUE)
+          #   ,shinydashboard::menuItem("User manual", 
+          #     tabName = "usermanual", 
+          #     icon = icon("home"),
+          #     selected = TRUE)
+          # )
         ),
         sidebar = uiOutput(ns('sidebar')),
         controlbar = shinydashboardPlus::dashboardControlbar(
@@ -213,21 +213,13 @@ mainapp_ui <- function(id, session){
             # body content
             shinydashboard::tabItems(
               
-              shinydashboard::tabItem(tabName = "Home2", class="active",
-                mod_homepage_ui(ns('home2'))),
-              shinydashboard::tabItem(tabName = "usermanual", class="active",
-                insert_md_ui(ns('usermanual'))),
-              
-              
               shinydashboard::tabItem(tabName = "Home", class="active", 
                 actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
               #uiOutput(ns('dataManager_UI'))),
               shinydashboard::tabItem(tabName = "openDataset", 
-                uiOutput(ns('open_dataset_UI')), width = '200px' ,
-                uiOutput(ns('infos_dataset_UI')), width = '200px' 
-              ),
+                uiOutput(ns('open_dataset_UI'))),
               
               shinydashboard::tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
@@ -314,7 +306,10 @@ mainapp_server <- function(id,
       workflow.path = NULL,
       
       funcs = default.funcs(),
-      tmp.funcs = reactive({NULL})
+      tmp.funcs = reactive({NULL}),
+      
+      filepath = file.path(system.file('app/md', 
+        package = 'MagellanNTK'),'Presentation.Rmd')
     )
 
     
@@ -324,11 +319,28 @@ mainapp_server <- function(id,
       rv.core$workflow.name <- workflow.name()
       session$userData$workflow.path <- workflow.path()
       session$userData$workflow.name <- workflow.name()
+      
+      
+      
       session$userData$usermod <- usermod
       session$userData$verbose <- verbose
       
       session$userData$funcs <- rv.core$funcs
    
+      
+      req(session$userData$workflow.path)
+      req(session$userData$workflow.name)
+      
+       rv.core$filepath <- file.path(session$userData$workflow.path, 'md',
+         paste0(session$userData$workflow.name, '.md'))
+      
+       rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
+       for (f in names(rv.core$funcs)){
+         if(is.null(rv.core$funcs[[f]]))
+           rv.core$funcs[[f]] <- default.funcs()[[f]]
+       }
+       session$userData$funcs <- rv.core$funcs
+
     }, priority = 1000)
       
     
@@ -345,11 +357,84 @@ mainapp_server <- function(id,
     
       
     output$sidebar <- renderUI({
-      req(session$userData$usermod)
+      req(usermod)
       
       shinydashboardPlus::dashboardSidebar(
-      InsertSidebar(session$userData$usermod)
-    )
+        shinydashboard::sidebarMenu(id = "sb_dev",
+          #style = "position: fixed; overflow: visible;",
+          # inactiveClass for import menus inactivation 
+          # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
+          
+          # Menus and submenus in sidebar
+          #br(),
+          shinydashboard::menuItem("Home", 
+            tabName = "Home", 
+            icon = icon("home"),
+            selected = TRUE),
+          hr(),
+          # shinydashboard::menuItem("Data Manager",
+          #          tabName = "dataManager",
+          #          icon = icon("folder"),
+          #          badgeLabel = "new", 
+          #          badgeColor = "green"),
+          h4('Dataset', style="color: green;"),
+          shinydashboard::menuItem("Open",
+            tabName = "openDataset",
+            icon = icon("folder")
+            # ,badgeLabel = "new"
+            # ,badgeColor = "green"
+          )
+          # ,shinydashboard::menuItem("Demo dataset",
+          #   tabName = "demoDataset",
+          #   icon = icon("folder")
+          #   # ,badgeLabel = "new"
+          #   # ,badgeColor = "green"
+          #   )
+          ,shinydashboard::menuItem("Convert",
+            tabName = "convertDataset",
+            icon = icon("folder")
+            # ,badgeLabel = "new"
+            # ,badgeColor = "green"
+          ),
+          hr(),
+          h4('Workflow', style="color: green;"),
+          shinydashboard::menuItem("Open",
+            tabName = "openWorkflow",
+            icon = icon("cogs")),
+          shinydashboard::menuItem("Run", 
+            tabName = "workflow", 
+            icon = icon("cogs")),
+          hr(),
+          shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
+            shinydashboard::menuSubItem("Infos", 
+              tabName = "infosDataset", 
+              icon = icon("cogs")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+            ),
+            shinydashboard::menuSubItem("EDA", 
+              tabName = "eda", 
+              icon = icon("cogs")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+            )
+          ),
+          hr(),
+          shinydashboard::menuItem(h4('Help', style="color: green;"),
+            
+            #icon = icon("question-circle"),
+            shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
+            shinydashboard::menuSubItem("FAQ", tabName = "faq"),
+            shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
+            shinydashboard::menuSubItem("Release Notes", 
+              tabName = "releaseNotes", 
+              icon = icon("clipboard"))
+            # ,shinydashboard::menuSubItem("Check for Updates", 
+            #             tabName = "checkUpdates", 
+            #             icon = icon("wrench"))
+          )
+        )
+      )
     })
 
     
@@ -373,14 +458,14 @@ mainapp_server <- function(id,
       data(lldata)
       rv.core$current.obj <- lldata
 
-      rv.core$workflow.name <- 
-        session$userData$workflow.name <- 'PipelineDemo'
+      rv.core$workflow.name <- 'PipelineDemo'
+      session$userData$workflow.name <- 'PipelineDemo'
       
-      rv.core$workflow.path <- 
-        session$userData$workflow.path <- 
-        system.file('workflow/PipelineDemo', package='MagellanNTK')
+      rv.core$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
+      session$userData$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
       
-      session$userData$funcs <- rv.core$funcs <- default.funcs()
+      session$userData$funcs <- default.funcs()
+      rv.core$funcs <- default.funcs()
       
       
       # Fix NULL values
@@ -388,78 +473,54 @@ mainapp_server <- function(id,
         if(is.null(rv.core$funcs[[x]]))
           rv.core$funcs[[x]] <- default.funcs()[[x]]
       )
+      session$userData$funcs <- default.funcs()
+      
       
       source_wf_files(session$userData$workflow.path)
       })
     
-    
-    
 
-    # observe({
-    #   req(rv.core$funcs$infos_dataset)
-    #   call.func(
-    #     fname = paste0(rv.core$funcs$infos_dataset, '_server'),
-    #     args = list(id = 'infos',
-    #       obj = reactive({rv.core$current.obj}))
-    #     )
-    # })
-    # 
-    
     rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
         title = "Default core functions",
         external_mod = 'mod_load_package',
         external_mod_args = list(funcs = reactive({rv.core$funcs}))
       )
       
-      
-      #
-      # Code for open dataset
-      #
-    
-    
-      
 
-# 
-#     output$infos_dataset_UI <- renderUI({
-#       req(rv.core$funcs)
-#       req(rv.core$current.obj)
-#       call.func(
-#         fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
-#         args = list(id = ns('infos')))
-#     })
-
-
-
-    
     observeEvent(req(rv.core$tmp.funcs()), {
       lapply(names(rv.core$tmp.funcs()), 
         function(x) {
           pkg.name <- gsub(paste0('::',x), '', rv.core$tmp.funcs()[[x]])
           require(pkg.name, character.only = TRUE)
           })
-      rv.core$funcs <- session$userData$funcs <- rv.core$tmp.funcs()
+      rv.core$funcs <- rv.core$tmp.funcs()
+      session$userData$funcs <- rv.core$tmp.funcs()
     })
     
     
     #
     # Code for convert tool
     #
-    
-    
-    output$open_convert_dataset_UI <- renderUI({
-      req(rv.core$funcs)
-
+    observe({
+      req(rv.core$funcs$convert_dataset)
       rv.core$result_convert <- call.func(
-        fname = paste0(rv.core$funcs$convert_dataset, '_server'),
-        args = list(id = 'Convert'))
-      
+      fname = paste0(rv.core$funcs$convert_dataset, '_server'),
+      args = list(id = 'Convert'))
+    
+    })
+    output$open_convert_dataset_UI <- renderUI({
+      req(rv.core$funcs$convert_dataset)
       call.func(
         fname = paste0(rv.core$funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
     })
     
-    observeEvent(req(rv.core$result_convert()),{
-      rv.core$current.obj <- rv.core$result_convert()
+    observeEvent(req(rv.core$result_convert()$dataOut()$trigger),{
+      if(verbose)
+        cat('Data converted')
+      
+      rv.core$current.obj <- rv.core$result_convert()$dataOut()$value$data
+      rv.core$current.obj.name <- rv.core$result_convert()$dataOut()$value$name
     })
     
     
@@ -482,18 +543,23 @@ mainapp_server <- function(id,
     # })
     
     
-    observe({
+    # observe({
+    #   req(rv.core$funcs$open_dataset)
+    #   print('titi')
+    #   rv.core$result_open_dataset <- call.func(
+    #     fname = paste0(rv.core$funcs$open_dataset, '_server'),
+    #     args = list(id = 'open_dataset'))
+    #   
+    # })
+    
+    
+    output$open_dataset_UI <- renderUI({
       req(rv.core$funcs$open_dataset)
-      print('titi')
+
       rv.core$result_open_dataset <- call.func(
         fname = paste0(rv.core$funcs$open_dataset, '_server'),
         args = list(id = 'open_dataset'))
       
-    })
-    
-    
-    output$open_dataset_UI <- renderUI({
-      req(rv.core$funcs)
       call.func(fname = paste0(rv.core$funcs$open_dataset, '_ui'),
         args = list(id = ns('open_dataset')))
     })
@@ -510,19 +576,17 @@ mainapp_server <- function(id,
     
     observeEvent(req(rv.core$result_open_workflow()),{
      
-      rv.core$workflow.name <- 
-        session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
+      rv.core$workflow.name <- rv.core$result_open_workflow()$wf_name
+      session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
       
-      rv.core$workflow.path <- 
-        session$userData$workflow.path <- rv.core$result_open_workflow()$path
+      rv.core$workflow.path <- rv.core$result_open_workflow()$path
+      session$userData$workflow.path <- rv.core$result_open_workflow()$path
     })
     
     output$open_workflow_UI <- renderUI({
       
       # Get workflow directory
       rv.core$result_open_workflow <- open_workflow_server("wf")
-      
-      
       open_workflow_ui(ns("wf"))
     })
     
@@ -587,19 +651,8 @@ mainapp_server <- function(id,
     
 
     observe({
-      filepath <- file.path(system.file('app/md', 
-        package = 'MagellanNTK'),'Presentation.Rmd')
-      # if (!is.null(rv.core$workflow.path))
-      #   filepath <- file.path(rv.core$workflow.path, 'md', 
-      #     paste0(rv.core$workflow.name, '_Description.md'))
-      # else
-      #   filepath <- file.path(system.file('app/md', 
-      #     package = 'MagellanNTK'),'Presentation.Rmd')
-          
-          
-      mod_homepage_server('home', filepath)
-      mod_homepage_server('home2', filepath)
-      mod_homepage_server('home3', filepath)
+      req(rv.core$filepath)
+      mod_homepage_server('home', rv.core$filepath)
     })
     
     

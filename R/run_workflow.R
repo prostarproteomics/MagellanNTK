@@ -150,9 +150,7 @@ workflowApp <- function(id,
     
       res <- workflow_server(id, 
         path = path,
-        dataIn = dataIn,
-        ...
-      )
+        dataIn = dataIn)
 
       observeEvent(req(res()$dataOut()$trigger), {
         print(res()$dataOut()$value)

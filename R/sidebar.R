@@ -8,7 +8,8 @@ InsertSidebar <- function(usermod = 'dev'){
 
 
 InsertSidebar_dev <- function(){
-  shinydashboard::sidebarMenu(id = "sb",
+  shinydashboardPlus::dashboardSidebar(
+    shinydashboard::sidebarMenu(id = "sb",
     #style = "position: fixed; overflow: visible;",
     # inactiveClass for import menus inactivation 
     # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -82,13 +83,15 @@ InsertSidebar_dev <- function(){
       #             icon = icon("wrench"))
     )
   )
+  )
 }
 
 
 
 
 InsertSidebar_user <- function(){
-  shinydashboard::sidebarMenu(id = "sb",
+  shinydashboardPlus::dashboardSidebar(
+    shinydashboard::sidebarMenu(id = "sb_user",
     #style = "position: fixed; overflow: visible;",
     # inactiveClass for import menus inactivation 
     # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -161,5 +164,6 @@ InsertSidebar_user <- function(){
       #             tabName = "checkUpdates", 
       #             icon = icon("wrench"))
     )
+  )
   )
 }
