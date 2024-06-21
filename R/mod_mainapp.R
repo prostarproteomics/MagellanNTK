@@ -130,7 +130,8 @@ mainapp_ui <- function(id, session){
             shinydashboardPlus::dashboardBadge(
               GetPackageVersion('MagellanNTK'),
               color = "green"),
-            uiOutput(ns('WF_Name_UI'))
+            uiOutput(ns('WF_Name_UI')),
+            uiOutput(ns('Dataset_Name_UI'))
             
           ),
           shinydashboard::dropdownMenu(
@@ -304,6 +305,7 @@ mainapp_server <- function(id,
       result_open_workflow = reactive({NULL}),
       result_run_workflow = reactive({NULL}),
       current.obj = NULL,
+      current.obj.name = NULL,
       
       # pipeline choosen by the user for its dataset
       current.pipeline = NULL,
@@ -353,10 +355,13 @@ mainapp_server <- function(id,
     
     output$WF_Name_UI <- renderUI({
       req(rv.core$workflow.name)
-      h4(rv.core$workflow.name)
+      h4(paste0('Workflow: ', rv.core$workflow.name), style = 'background-color: lightgrey;')
       })
     
-    
+    output$Dataset_Name_UI <- renderUI({
+      req(rv.core$current.obj.name)
+      h4(paste0('Dataset: ', rv.core$current.obj.name), style = 'background-color: lightgrey;')
+    })
     
     observeEvent(input$browser,{browser()})
     
@@ -401,7 +406,7 @@ mainapp_server <- function(id,
     # 
     
     rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
-        title = "Default functions",
+        title = "Default core functions",
         external_mod = 'mod_load_package',
         external_mod_args = list(funcs = reactive({rv.core$funcs}))
       )
@@ -496,7 +501,8 @@ mainapp_server <- function(id,
     observeEvent(req(rv.core$result_open_dataset()),{
       if (verbose)
         cat('new dataset loaded\n')
-      rv.core$current.obj <- rv.core$result_open_dataset()
+      rv.core$current.obj <- rv.core$result_open_dataset()$data
+      rv.core$current.obj.name <- rv.core$result_open_dataset()$name
     })
     
    

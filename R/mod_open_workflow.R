@@ -23,7 +23,7 @@ NULL
 open_workflow_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open workflow --'),
+    h3(style="color: blue;", 'Open workflow (default)'),
     # div(
     #   width = '600px',
     #   uiOutput(ns('dirInput_UI'))

@@ -25,7 +25,7 @@ NULL
 infos_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", 'Default info dataset'),
+    h3(style="color: blue;", 'Info dataset (default)'),
     uiOutput(ns('title')),
     uiOutput(ns('choose_SE_ui')),
     uiOutput(ns('show_SE_ui'))

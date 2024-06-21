@@ -24,7 +24,7 @@ NULL
 convert_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default convert dataset --')
+    h3(style="color: blue;", 'Convert dataset (default)')
   )
 }
 

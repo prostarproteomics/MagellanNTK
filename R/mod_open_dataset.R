@@ -24,7 +24,7 @@ NULL
 open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open dataset --'),
+    h3(style="color: blue;", 'Open dataset (default)'),
       shinyjs::useShinyjs(),
       tagList(
         selectInput(ns('chooseSource'), 'Dataset source',
@@ -54,7 +54,8 @@ open_dataset_server <- function(id){
     
     rv.open <- reactiveValues(
       dataRead = NULL,
-      dataOut = NULL
+      dataOut = NULL,
+      name = 'default.name'
     )
 
     output$packageDataset_UI <- renderUI({
@@ -130,6 +131,7 @@ open_dataset_server <- function(id){
       withProgress(message = '',detail = '', value = 0, {
         incProgress(1/nSteps, detail = 'Loading dataset')
         utils::data(list = input$demoDataset, package = input$pkg)
+        rv.open$name <- input$demoDataset
         rv.open$dataRead <- BiocGenerics::get(input$demoDataset)
         # if (!inherits(rv.open$dataRead, "QFeatures")) {
         #   shinyjs::info("Warning : this file is not a QFeatures file ! 
@@ -142,6 +144,7 @@ open_dataset_server <- function(id){
     
     
     observeEvent(input$load_dataset_btn, {
+      
       rv.open$dataOut <- rv.open$dataRead
     })
     
@@ -159,6 +162,7 @@ open_dataset_server <- function(id){
       rv.open$dataRead <- NULL
       tryCatch({
         # Try with readRDS()
+        rv.open$name <- input$file$name
         rv.open$dataRead <- readRDS(input$file$datapath)
       },
         warning = function(w) {
@@ -203,7 +207,10 @@ open_dataset_server <- function(id){
         print(paste0('Dataset loaded'))
       })
 
-    reactive({rv.open$dataOut })
+    reactive({
+      list(data = rv.open$dataOut,
+      name = rv.open$name)
+      })
   })
   
   
@@ -226,6 +233,11 @@ server <- function(input, output, session) {
   )
   
   rv$obj <- open_dataset_server("demo")
+  
+  observeEvent(rv$obj(), {
+    print(rv$obj()$name)
+    print(rv$obj()$data)
+  })
 
 }
 

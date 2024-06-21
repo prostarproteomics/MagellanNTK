@@ -24,7 +24,7 @@ NULL
 export_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default export dataset --'),
+    h3(style="color: blue;", 'Export dataset (default)'),
     actionButton(ns('export_btn'), 'Export')
   )
 }

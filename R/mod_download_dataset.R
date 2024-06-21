@@ -29,7 +29,7 @@ NULL
 download_dataset_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    h3('--- Default donwload dataset tool ---'),
+    h3('Donwload dataset tool (default)'),
     uiOutput(ns('dl_xl')),
     uiOutput(ns('dl_csv')),
     uiOutput(ns('dl_raw'))
