@@ -7,7 +7,7 @@
 
 Magellan is a R package which proposes a framework to navigate between steps of a complex data processing tool when the succession of processes is mostly chronological.
 
-For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finaly the last one. It is like a dataflow manager.
+For example, if a process is composed of three steps, then it is very easy to run the first steps, then the second and finally the last one. It is like a dataflow manager.
 
 Moreover, this navigation system, which is at the core of Magellan, can by used at several levels. It can then be possible to define, for example, a super-process (i.e. a pipeline) in which each step is a whole process containing itself several steps.
 
@@ -18,15 +18,32 @@ Moreover, this navigation system, which is at the core of Magellan, can by used 
 devtools::install_github('prostarproteomics/MagellanNTK')
 ```
 
-## Launch MagellanNTK
+## Using MagellanNTK
 
 
-MagellanNTK can ben launched in two different modes: a 'user' mode and a 'dev' mode. 
+MagellanNTK can be launched in two different modes: a 'user' mode and a 'dev' mode. 
 The 'user' mode is the default mode.
 
 ```
 library(MagellanNTK)
 MagellanNTK()
+
+data(Exp1_R25_prot, package = 'DaparToolshedData')
+wf.name <- 'PipelineProtein_Normalization'
+wf.path <- system.file('workflow/PipelineProtein', package = 'Prostar2')
+
+MagellanNTK(Exp1_R25_prot, wf.path, wf.name)
+```
+
+
+# Launching one workflow
+
+```
+library(MagellanNTK)
+data(lldata)
+path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
+shiny::runApp(workflowApp("PipelineDemo_Process1", path, dataIn = lldata))
+
 ```
 
 

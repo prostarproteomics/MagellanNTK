@@ -53,13 +53,20 @@ InsertSidebar_dev <- function(){
       tabName = "workflow", 
       icon = icon("cogs")),
     hr(),
-    h4('Vizualize data', style="color: green;"),
-    shinydashboard::menuItem("EDA", 
+    shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
+      shinydashboard::menuSubItem("Infos", 
+        tabName = "infosDataset", 
+        icon = icon("cogs")
+        # ,badgeLabel = "new"
+        # ,badgeColor = "green"
+      ),
+      shinydashboard::menuSubItem("EDA", 
       tabName = "eda", 
       icon = icon("cogs")
       # ,badgeLabel = "new"
       # ,badgeColor = "green"
-    ),
+    )
+      ),
     hr(),
     shinydashboard::menuItem(h4('Help', style="color: green;"),
       
@@ -126,12 +133,19 @@ InsertSidebar_user <- function(){
       tabName = "workflow", 
       icon = icon("cogs")),
     hr(),
-    h4('Vizualize data', style="color: green;"),
-    shinydashboard::menuItem("EDA", 
-      tabName = "eda", 
-      icon = icon("cogs")
-      # ,badgeLabel = "new"
-      # ,badgeColor = "green"
+    shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
+      shinydashboard::menuSubItem("Infos", 
+        tabName = "infosDataset", 
+        icon = icon("cogs")
+        # ,badgeLabel = "new"
+        # ,badgeColor = "green"
+      ),
+      shinydashboard::menuSubItem("EDA", 
+        tabName = "eda", 
+        icon = icon("cogs")
+        # ,badgeLabel = "new"
+        # ,badgeColor = "green"
+      )
     ),
     hr(),
     shinydashboard::menuItem(h4('Help', style="color: green;"),

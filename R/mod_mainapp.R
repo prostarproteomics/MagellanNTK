@@ -122,7 +122,7 @@ mainapp_ui <- function(id, session){
           title = 
             tagList(
               span(class = "logo-lg", 
-                absolutePanel(fixed = TRUE, "Menu workflow"))
+                absolutePanel(fixed = TRUE, ""))
               #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
             ),
           leftUi = tagList(
@@ -231,6 +231,9 @@ mainapp_ui <- function(id, session){
               shinydashboard::tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
               
+              shinydashboard::tabItem(tabName = "infosDataset", 
+                uiOutput(ns('InfosDataset_UI'))),
+              
               shinydashboard::tabItem(tabName = "eda", 
                 uiOutput(ns('EDA_UI'))),
               
@@ -323,7 +326,7 @@ mainapp_server <- function(id,
       session$userData$verbose <- verbose
       
       session$userData$funcs <- rv.core$funcs
-      browser()
+   
     }, priority = 1000)
       
     
@@ -387,15 +390,15 @@ mainapp_server <- function(id,
     
     
 
-    observe({
-      req(rv.core$funcs$infos_dataset)
-      call.func(
-        fname = paste0(rv.core$funcs$infos_dataset, '_server'),
-        args = list(id = 'infos',
-          obj = reactive({rv.core$current.obj}))
-        )
-    })
-    
+    # observe({
+    #   req(rv.core$funcs$infos_dataset)
+    #   call.func(
+    #     fname = paste0(rv.core$funcs$infos_dataset, '_server'),
+    #     args = list(id = 'infos',
+    #       obj = reactive({rv.core$current.obj}))
+    #     )
+    # })
+    # 
     
     rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
         title = "Default functions",
@@ -411,17 +414,17 @@ mainapp_server <- function(id,
     
       
 
-    
-    output$infos_dataset_UI <- renderUI({
-      req(rv.core$funcs)
-      req(rv.core$current.obj)
-      call.func(
-        fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
-        args = list(id = ns('infos')))
-    })
-    
-    
-    
+# 
+#     output$infos_dataset_UI <- renderUI({
+#       req(rv.core$funcs)
+#       req(rv.core$current.obj)
+#       call.func(
+#         fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
+#         args = list(id = ns('infos')))
+#     })
+
+
+
     
     observeEvent(req(rv.core$tmp.funcs()), {
       lapply(names(rv.core$tmp.funcs()), 
@@ -546,6 +549,21 @@ mainapp_server <- function(id,
     })
     
 
+    
+    output$InfosDataset_UI <- renderUI({
+      req(rv.core$funcs)
+      
+      call.func(
+        fname = paste0(rv.core$funcs$infos_dataset, '_server'),
+        args = list(id = 'infos_dataset',
+          obj = reactive({rv.core$current.obj})))
+      
+      call.func(
+        fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
+        args = list(id = ns('infos_dataset')))
+    })
+    
+    
     output$EDA_UI <- renderUI({
       req(rv.core$funcs)
 

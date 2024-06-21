@@ -24,7 +24,7 @@ NULL
 open_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", '-- Default open dataset module --'),
+    h3(style="color: blue;", '-- Default open dataset --'),
       shinyjs::useShinyjs(),
       tagList(
         selectInput(ns('chooseSource'), 'Dataset source',

@@ -27,7 +27,7 @@ NULL
 view_dataset_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h3(style="color: blue;", 'Default view_dataset module'),
+    h3(style="color: blue;", 'Default dataset viewer'),
     uiOutput(ns('chooseAssay_UI')),
     plotOutput(ns('plot'))
   )
