@@ -214,7 +214,7 @@ mainapp_ui <- function(id, session){
             shinydashboard::tabItems(
               
               shinydashboard::tabItem(tabName = "Home", class="active", 
-                actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
+                #actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
               #uiOutput(ns('dataManager_UI'))),
@@ -453,31 +453,31 @@ mainapp_server <- function(id,
     observeEvent(input$ReloadProstar, { js$reset()})
     
     
-    # Launching a demo consist in launching a workflow and a dataset
-    observeEvent(input$launch_demo, {
-      data(lldata)
-      rv.core$current.obj <- lldata
-
-      rv.core$workflow.name <- 'PipelineDemo'
-      session$userData$workflow.name <- 'PipelineDemo'
-      
-      rv.core$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
-      session$userData$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
-      
-      session$userData$funcs <- default.funcs()
-      rv.core$funcs <- default.funcs()
-      
-      
-      # Fix NULL values
-      lapply(names(rv.core$funcs), function(x)
-        if(is.null(rv.core$funcs[[x]]))
-          rv.core$funcs[[x]] <- default.funcs()[[x]]
-      )
-      session$userData$funcs <- default.funcs()
-      
-      
-      source_wf_files(session$userData$workflow.path)
-      })
+    # # Launching a demo consist in launching a workflow and a dataset
+    # observeEvent(input$launch_demo, {
+    #   data(lldata)
+    #   rv.core$current.obj <- lldata
+    # 
+    #   rv.core$workflow.name <- 'PipelineDemo'
+    #   session$userData$workflow.name <- 'PipelineDemo'
+    #   
+    #   rv.core$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
+    #   session$userData$workflow.path <- system.file('workflow/PipelineDemo', package='MagellanNTK')
+    #   
+    #   session$userData$funcs <- default.funcs()
+    #   rv.core$funcs <- default.funcs()
+    #   
+    #   
+    #   # Fix NULL values
+    #   lapply(names(rv.core$funcs), function(x)
+    #     if(is.null(rv.core$funcs[[x]]))
+    #       rv.core$funcs[[x]] <- default.funcs()[[x]]
+    #   )
+    #   session$userData$funcs <- default.funcs()
+    #   
+    #   
+    #   source_wf_files(session$userData$workflow.path)
+    #   })
     
 
     rv.core$tmp.funcs <- mod_modalDialog_server('loadPkg_modal', 
@@ -591,16 +591,21 @@ mainapp_server <- function(id,
     })
     
     
+    observe({
+      
+      rv.core$result_run_workflow <- nav_server(
+      id = rv.core$workflow.name,
+      dataIn = reactive({rv.core$current.obj}),
+      verbose = verbose,
+      usermod = usermod
+    )})
+    
+    
     # Workflow code
     output$workflow_UI <- renderUI({
       req(rv.core$workflow.name)
       
-      rv.core$result_run_workflow <- nav_server(
-        id = rv.core$workflow.name,
-        dataIn = reactive({rv.core$current.obj}),
-        verbose = verbose,
-        usermod = usermod
-      )
+      
       
       nav_ui(ns(basename(rv.core$workflow.name)))
       })
