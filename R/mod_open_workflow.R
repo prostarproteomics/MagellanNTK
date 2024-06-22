@@ -31,7 +31,7 @@ open_workflow_ui <- function(id){
     fluidRow(
       column(width = 3, uiOutput(ns('choosePackage_UI'))),
       column(width = 3, uiOutput(ns('chooseWF1_UI'))),
-      column(width = 3, uiOutput(ns('chooseWF2_UI')))
+      column(width = 3, uiOutput(ns('chooseProcess_UI')))
         ),
     uiOutput(ns('wf_preview_ui')),
     actionButton(ns('load_btn'), 'Load'),
@@ -106,7 +106,7 @@ open_workflow_server <- function(id){
     
     
     
-    output$chooseWF2_UI <- renderUI({
+    output$chooseProcess_UI <- renderUI({
       req(input$chooseWF1)
 
       rv.wf$path <- system.file(file.path('workflow', input$chooseWF1), 
@@ -125,7 +125,7 @@ open_workflow_server <- function(id){
       ll <- ll[-c(grep('_Description', ll), grep('_Save', ll))]
       
       
-        selectInput(ns('chooseWF2'), 'Choose workflow',
+        selectInput(ns('chooseProcess'), 'Choose process',
           choices = gsub('.R', '', ll)
         )
     })
@@ -137,7 +137,7 @@ open_workflow_server <- function(id){
       rv.wf$path
 
       rv.wf$dataOut$path <- rv.wf$path
-      rv.wf$dataOut$wf_name <- input$chooseWF2
+      rv.wf$dataOut$wf_name <- input$chooseProcess
       # Load customizable functions if config.txt file exists
       rv.wf$dataOut$funcs  <- readConfigFile(rv.wf$path)$funcs
 

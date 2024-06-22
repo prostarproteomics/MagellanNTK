@@ -224,6 +224,13 @@ mainapp_ui <- function(id, session){
               shinydashboard::tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
               
+              shinydashboard::tabItem(tabName = "ExportQF", 
+                uiOutput(ns('ExportQF_UI'))),
+              
+              shinydashboard::tabItem(tabName = "SaveAsQf", 
+                uiOutput(ns('SaveAsQf_UI'))),
+              
+              
               shinydashboard::tabItem(tabName = "infosDataset", 
                 uiOutput(ns('InfosDataset_UI'))),
               
@@ -251,6 +258,8 @@ mainapp_ui <- function(id, session){
                 insert_md_ui(ns('links_MD'))),
               shinydashboard::tabItem(tabName = "faq", 
                 insert_md_ui(ns('FAQ_MD'))),
+              shinydashboard::tabItem(tabName = "faq", 
+                uiOutput(ns('manual_UI'))),
               shinydashboard::tabItem(tabName = "bugReport", 
                 mod_bug_report_ui(ns("bug_report"))),
               shinydashboard::tabItem(tabName = "pipeline", 
@@ -377,8 +386,8 @@ mainapp_server <- function(id,
           #          icon = icon("folder"),
           #          badgeLabel = "new", 
           #          badgeColor = "green"),
-          h4('Dataset', style="color: green;"),
-          shinydashboard::menuItem("Open",
+          shinydashboard::menuItem(h4('Dataset', style="color: green;"),
+          shinydashboard::menuSubItem("Open (qf)",
             tabName = "openDataset",
             icon = icon("folder")
             # ,badgeLabel = "new"
@@ -390,23 +399,37 @@ mainapp_server <- function(id,
           #   # ,badgeLabel = "new"
           #   # ,badgeColor = "green"
           #   )
-          ,shinydashboard::menuItem("Convert",
+          ,shinydashboard::menuSubItem("Import (xlsx -> QF)",
             tabName = "convertDataset",
             icon = icon("folder")
             # ,badgeLabel = "new"
             # ,badgeColor = "green"
           ),
+            shinydashboard::menuSubItem("Save As (QF)",
+              tabName = "SaveAsQf",
+              icon = icon("folder")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+            ),
+            shinydashboard::menuSubItem("Export(QF -> xlsx)",
+              tabName = "ExportQF",
+              icon = icon("folder")
+              # ,badgeLabel = "new"
+              # ,badgeColor = "green"
+            )
+            ),
           hr(),
-          h4('Workflow', style="color: green;"),
-          shinydashboard::menuItem("Open",
+            shinydashboard::menuItem(h4('Workflow', style="color: green;"),
+          shinydashboard::menuItem("Load",
             tabName = "openWorkflow",
             icon = icon("cogs")),
           shinydashboard::menuItem("Run", 
             tabName = "workflow", 
-            icon = icon("cogs")),
+            icon = icon("cogs"))
+              ),
           hr(),
           shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
-            shinydashboard::menuSubItem("Infos", 
+            shinydashboard::menuSubItem("Info", 
               tabName = "infosDataset", 
               icon = icon("cogs")
               # ,badgeLabel = "new"
@@ -423,6 +446,7 @@ mainapp_server <- function(id,
           shinydashboard::menuItem(h4('Help', style="color: green;"),
             
             #icon = icon("question-circle"),
+            shinydashboard::menuSubItem("Manual", tabName = "Manual"),
             shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
             shinydashboard::menuSubItem("FAQ", tabName = "faq"),
             shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
@@ -552,6 +576,17 @@ mainapp_server <- function(id,
     #   
     # })
     
+    
+    
+    output$SaveAsQf_UI<- renderUI({
+      
+      p('ddqsdqs')
+    })
+    
+    output$ExportQF_UI <- renderUI({
+      
+      p('tete')
+    })
     
     output$open_dataset_UI <- renderUI({
       req(rv.core$funcs$open_dataset)
