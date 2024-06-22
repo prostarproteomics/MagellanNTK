@@ -71,12 +71,7 @@ format_DT_ui <- function(id) {
   ns <- NS(id)
   tagList(
     useShinyjs(),
-    h3(style="color: blue;", 'Format DT (default)'),
-    fluidRow(
-      column( width = 12,
-        DT::dataTableOutput(ns("StaticDataTable"))
-      )
-    )
+    DT::dataTableOutput(ns("StaticDataTable"))
   )
 }
 
