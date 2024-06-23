@@ -111,42 +111,25 @@ Insert_User_Sidebar <- function(){
         icon = icon("home"),
         selected = TRUE),
       hr(),
-      # shinydashboard::menuItem("Data Manager",
-      #          tabName = "dataManager",
-      #          icon = icon("folder"),
-      #          badgeLabel = "new", 
-      #          badgeColor = "green"),
+      
+      
       shinydashboard::menuItem(h4('Dataset', style="color: green;"),
         shinydashboard::menuSubItem("Open (qf)",
           tabName = "openDataset",
           icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        )
-        # ,shinydashboard::menuItem("Demo dataset",
-        #   tabName = "demoDataset",
-        #   icon = icon("folder")
-        #   # ,badgeLabel = "new"
-        #   # ,badgeColor = "green"
-        #   )
+          )
         ,shinydashboard::menuSubItem("Import (xlsx -> QF)",
           tabName = "convertDataset",
           icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        ),
+          ),
         shinydashboard::menuSubItem("Save As (QF)",
           tabName = "SaveAsQf",
           icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        ),
+          ),
         shinydashboard::menuSubItem("Export(QF -> xlsx)",
           tabName = "ExportQF",
           icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        )
+          )
       ),
       hr(),
       shinydashboard::menuItem(h4('Workflow', style="color: green;"),
@@ -162,15 +145,11 @@ Insert_User_Sidebar <- function(){
         shinydashboard::menuSubItem("Info", 
           tabName = "infosDataset", 
           icon = icon("cogs")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        ),
+          ),
         shinydashboard::menuSubItem("EDA", 
           tabName = "eda", 
           icon = icon("cogs")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        )
+          )
       ),
       hr(),
       shinydashboard::menuItem(h4('Help', style="color: green;"),
@@ -183,10 +162,7 @@ Insert_User_Sidebar <- function(){
         shinydashboard::menuSubItem("Release Notes", 
           tabName = "releaseNotes", 
           icon = icon("clipboard"))
-        # ,shinydashboard::menuSubItem("Check for Updates", 
-        #             tabName = "checkUpdates", 
-        #             icon = icon("wrench"))
-      )
+        )
     )
   )
 }

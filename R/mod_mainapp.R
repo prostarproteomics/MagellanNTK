@@ -155,13 +155,13 @@ mainapp_ui <- function(id, session){
         controlbar = shinydashboardPlus::dashboardControlbar(
           skin = "dark",
           shinydashboardPlus::controlbarMenu(
-            shinydashboardPlus::controlbarItem(
-              title = "Configure",
-              icon = icon("desktop"),
-              active = TRUE,
-              actionLink(ns('browser'), 'Console'),
-              mod_modalDialog_ui(ns('loadPkg_modal'))
-            ),
+            # shinydashboardPlus::controlbarItem(
+            #   title = "Configure",
+            #   icon = icon("desktop"),
+            #   active = TRUE,
+            #   actionLink(ns('browser'), 'Console'),
+            #   mod_modalDialog_ui(ns('loadPkg_modal'))
+            # ),
             shinydashboardPlus::controlbarItem(
               icon = icon("paint-brush"),
               title = "Settings",
@@ -173,7 +173,7 @@ mainapp_ui <- function(id, session){
             #   shinydashboardPlus::skinSelector()
             # )
           )
-        ),
+          ),
         body = shinydashboard::dashboardBody(
           # some styling
           tags$head(
@@ -453,7 +453,8 @@ mainapp_server <- function(id,
         args = list(id = ns('Convert')))
     })
     
-    observeEvent(req(rv.core$result_convert()$dataOut()$trigger),{
+    observeEvent(req(rv.core$result_convert()),{
+      req(rv.core$result_convert()$dataOut()$trigger)
       if(verbose)
         cat('Data converted')
       
