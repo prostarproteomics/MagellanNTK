@@ -241,7 +241,7 @@ mainapp_ui <- function(id, session){
                 uiOutput(ns('tools_UI'))),
               
               shinydashboard::tabItem(tabName = "export", 
-                h3("Export")), # export module not yet
+                h3("Export")),
               
               shinydashboard::tabItem(tabName = "openWorkflow", 
                 uiOutput(ns('open_workflow_UI'))),
@@ -254,16 +254,15 @@ mainapp_ui <- function(id, session){
                 mod_release_notes_ui(ns('rl'))),
               # tabItem(tabName = "checkUpdates", 
               #   mod_check_updates_ui(ns('check_updates'))),
-              shinydashboard::tabItem(tabName = "usefulLinks", 
-                insert_md_ui(ns('links_MD'))),
+              # shinydashboard::tabItem(tabName = "usefulLinks", 
+              #   insert_md_ui(ns('links_MD'))),
               shinydashboard::tabItem(tabName = "faq", 
                 insert_md_ui(ns('FAQ_MD'))),
-              shinydashboard::tabItem(tabName = "faq", 
+              shinydashboard::tabItem(tabName = "Manual", 
                 uiOutput(ns('manual_UI'))),
-              shinydashboard::tabItem(tabName = "bugReport", 
-                mod_bug_report_ui(ns("bug_report"))),
-              shinydashboard::tabItem(tabName = "pipeline", 
-                uiOutput(ns('show_pipeline')))
+              # shinydashboard::tabItem(tabName = "bugReport", 
+              #   mod_bug_report_ui(ns("bug_report"))),
+
             )
             
           ))
@@ -297,8 +296,6 @@ mainapp_server <- function(id,
     
     
     rv.core <- reactiveValues(
-      pipeline = NULL,
-      pipeline.name = NULL,
       dataIn = NULL,
       result_convert = reactive({NULL}),
       
@@ -307,9 +304,7 @@ mainapp_server <- function(id,
       result_run_workflow = reactive({NULL}),
       current.obj = NULL,
       current.obj.name = NULL,
-      
-      # pipeline choosen by the user for its dataset
-      current.pipeline = NULL,
+
       
       workflow.name = NULL,
       workflow.path = NULL,

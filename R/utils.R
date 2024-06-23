@@ -102,17 +102,7 @@ readConfigFile <- function(path,
   
   lines <- readLines(config.file)
   
-  funcs <- list(
-    convert_dataset = NULL,
-    open_dataset = NULL,
-    open_demoDataset = NULL,
-    view_dataset = NULL,
-    infos_dataset = NULL,
-    download_dataset = NULL,
-    export_dataset = NULL,
-    addDatasets = NULL,
-    keepDatasets = NULL
-  )
+  funcs <- lapply(default.funcs(), function(x) NULL)
   
   
   tmp <- lapply(names(funcs), 
@@ -129,7 +119,8 @@ readConfigFile <- function(path,
       Open_pipeline = FALSE,
       convert_dataset = TRUE,
       change_Look_Feel = TRUE,
-      change_core_funcs = FALSE
+      change_core_funcs = FALSE,
+      class = prepare_data(lines, 'class')
     )
   else 
     value <- list(
@@ -139,7 +130,8 @@ readConfigFile <- function(path,
       Open_pipeline = prepare_data(lines, 'Open_pipeline') == 'disabled',
       convert_dataset = prepare_data(lines, 'convert_dataset') == 'enabled',
       change_Look_Feel = prepare_data(lines, 'change_Look_Feel') == 'enabled',
-      change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled'
+      change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled',
+      class = prepare_data(lines, 'class')
     )
     
     

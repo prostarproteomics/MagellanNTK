@@ -55,13 +55,7 @@ loadapp_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-    funcs <- c('convert_dataset', 
-      'open_dataset', 
-      'open_demoDataset',
-      'view_dataset',
-      'download_dataset',
-      'infos_dataset',
-      'export_dataset')
+    funcs <- names(default.funcs())
     
     
     dataOut <- reactiveValues(
