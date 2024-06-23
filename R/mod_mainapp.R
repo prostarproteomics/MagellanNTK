@@ -167,11 +167,11 @@ mainapp_ui <- function(id, session){
               title = "Settings",
               mod_settings_ui(ns('global_settings'))
             )
-            # ,shinydashboardPlus::controlbarItem(
-            #   icon = icon("paint-brush"),
-            #   title = "Skin",
-            #   shinydashboardPlus::skinSelector()
-            # )
+            ,shinydashboardPlus::controlbarItem(
+              icon = icon("paint-brush"),
+              title = "Skin",
+              shinydashboardPlus::skinSelector()
+            )
           )
           ),
         body = shinydashboard::dashboardBody(
@@ -214,7 +214,6 @@ mainapp_ui <- function(id, session){
             shinydashboard::tabItems(
               
               shinydashboard::tabItem(tabName = "Home", class="active", 
-                #actionLink(ns('launch_demo'), 'New to MagellanNTK? Launch demo' ),
                 mod_homepage_ui(ns('home'))),
               #tabItem(tabName = "dataManager", 
               #uiOutput(ns('dataManager_UI'))),
@@ -259,7 +258,7 @@ mainapp_ui <- function(id, session){
               shinydashboard::tabItem(tabName = "faq", 
                 insert_md_ui(ns('FAQ_MD'))),
               shinydashboard::tabItem(tabName = "Manual", 
-                uiOutput(ns('manual_UI'))),
+                uiOutput(ns('manual_UI')))
               # shinydashboard::tabItem(tabName = "bugReport", 
               #   mod_bug_report_ui(ns("bug_report"))),
 
@@ -495,7 +494,14 @@ mainapp_server <- function(id,
     
     output$ExportQF_UI <- renderUI({
       
-      p('tete')
+      req(rv.core$funcs$export_dataset)
+      
+      call.func(
+        fname = paste0(rv.core$funcs$export_dataset, '_server'),
+        args = list(id = 'export_dataset'))
+      
+      call.func(fname = paste0(rv.core$funcs$export_dataset, '_ui'),
+        args = list(id = ns('export_dataset')))
     })
     
     output$open_dataset_UI <- renderUI({
