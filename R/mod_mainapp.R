@@ -223,13 +223,9 @@ mainapp_ui <- function(id, session){
               shinydashboard::tabItem(tabName = "convertDataset", 
                 uiOutput(ns('open_convert_dataset_UI'))),
               
-              shinydashboard::tabItem(tabName = "ExportQF", 
-                uiOutput(ns('ExportQF_UI'))),
-              
-              shinydashboard::tabItem(tabName = "SaveAsQf", 
-                uiOutput(ns('SaveAsQf_UI'))),
-              
-              
+              shinydashboard::tabItem(tabName = "SaveAs", 
+                uiOutput(ns('SaveAs_UI'))),
+
               shinydashboard::tabItem(tabName = "infosDataset", 
                 uiOutput(ns('InfosDataset_UI'))),
               
@@ -239,8 +235,8 @@ mainapp_ui <- function(id, session){
               shinydashboard::tabItem(tabName = "tools", 
                 uiOutput(ns('tools_UI'))),
               
-              shinydashboard::tabItem(tabName = "export", 
-                h3("Export")),
+              shinydashboard::tabItem(tabName = "BuildReport", 
+                uiOutput(ns('BuildReport_UI'))),
               
               shinydashboard::tabItem(tabName = "openWorkflow", 
                 uiOutput(ns('open_workflow_UI'))),
@@ -489,13 +485,24 @@ mainapp_server <- function(id,
     # })
     
     
-    
-    output$SaveAsQf_UI<- renderUI({
+    output$BuildReport_UI <- renderUI({
       
-      p('ddqsdqs')
+      req(rv.core$funcs$build_report)
+      
+      call.func(
+        fname = paste0(rv.core$funcs$build_report, '_server'),
+        args = list(
+          id = 'build_report',
+          dataIn = reactive({rv.core$current.obj}))
+      )
+      
+      call.func(fname = paste0(rv.core$funcs$build_report, '_ui'),
+        args = list(id = ns('build_report')))
     })
     
-    output$ExportQF_UI <- renderUI({
+    
+    
+    output$SaveAs_UI <- renderUI({
       
       req(rv.core$funcs$download_dataset)
 

@@ -66,6 +66,7 @@ Collate:
     mod_sweetAlert.R
     mod_open_workflow.R
     directoryInput.R
+    mod_build_report.R
     mod_chooseDir.R
     mod_launch_magellan.R
     mod_observe_dynamic_colourPicker_input.R

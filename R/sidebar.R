@@ -38,14 +38,14 @@ Insert_Dev_Sidebar <- function(){
           # ,badgeLabel = "new"
           # ,badgeColor = "green"
         ),
-        shinydashboard::menuSubItem("Save As (QF)",
-          tabName = "SaveAsQf",
+        shinydashboard::menuSubItem("Save As",
+          tabName = "SaveAs",
           icon = icon("folder")
           # ,badgeLabel = "new"
           # ,badgeColor = "green"
         ),
-        shinydashboard::menuSubItem("Export(QF -> xlsx)",
-          tabName = "ExportQF",
+        shinydashboard::menuSubItem("Build report",
+          tabName = "BuildReport",
           icon = icon("folder")
           # ,badgeLabel = "new"
           # ,badgeColor = "green"
@@ -122,12 +122,12 @@ Insert_User_Sidebar <- function(){
           tabName = "convertDataset",
           icon = icon("folder")
           ),
-        shinydashboard::menuSubItem("Save As (QF)",
-          tabName = "SaveAsQf",
+        shinydashboard::menuSubItem("Save As",
+          tabName = "SaveAs",
           icon = icon("folder")
           ),
-        shinydashboard::menuSubItem("Export(QF -> xlsx)",
-          tabName = "ExportQF",
+        shinydashboard::menuSubItem("Build report",
+          tabName = "BuildReport",
           icon = icon("folder")
           )
       ),
