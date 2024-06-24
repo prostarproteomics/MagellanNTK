@@ -336,7 +336,8 @@ mainapp_server <- function(id,
        rv.core$filepath <- file.path(session$userData$workflow.path, 'md',
          paste0(session$userData$workflow.name, '.md'))
       
-       rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
+       rv.core$funcs <- readConfigFile(rv.core$workflow.path)
+
        for (f in names(rv.core$funcs)){
          if(is.null(rv.core$funcs[[f]]))
            rv.core$funcs[[f]] <- default.funcs()[[f]]
@@ -347,7 +348,8 @@ mainapp_server <- function(id,
       
     
     observeEvent(rv.core$workflow.path, {
-      rv.core$funcs <- readConfigFile(rv.core$workflow.path)$funcs
+      rv.core$funcs <- readConfigFile(rv.core$workflow.path)
+
       for (f in names(rv.core$funcs)){
         if(is.null(rv.core$funcs[[f]]))
           rv.core$funcs[[f]] <- default.funcs()[[f]]
@@ -625,16 +627,31 @@ mainapp_server <- function(id,
     })
     
     
-    observe({
-    insert_md_server("usermanual", 
-      file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     
+    output$manual_UI <- renderUI({
+      req(rv.core$funcs$URL_manual)
+      wellPanel(
+        helpText(
+          a("Click Here to Download Survey",     
+          href = rv.core$funcs$URL_manual),
+          target="_blank"
+        )
+      )
+    })
+    
+    
+    
+    observe({
+    # insert_md_server("usermanual", 
+    #   file.path(rv.core$workflow.path, 'md', "FAQ.md"))
+    # 
     
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     mod_release_notes_server("rl")
     #mod_check_updates_server("check_updates")
-    insert_md_server("links_MD", 
-      file.path(rv.core$workflow.path, 'md', "links.md"))
+    # insert_md_server("links_MD", 
+    #   file.path(rv.core$workflow.path, 'md', "links.md"))
+    # 
     insert_md_server("FAQ_MD", 
       file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     #mod_bug_report_server("bug_report")

@@ -100,6 +100,18 @@ readConfigFile <- function(path,
     else NULL
   }
   
+  
+  get_data <- function(lines, pattern){
+    record <- lines[grepl(paste0(pattern, ":"), lines)]
+    if(length(record) == 1){
+      ll <- unlist(strsplit(record, split = ': ', fixed = TRUE))
+      as.character(ll[2])
+      }
+    else NULL
+  }
+  
+  
+  
   lines <- readLines(config.file)
   
   funcs <- lapply(default.funcs(), function(x) NULL)
@@ -123,25 +135,27 @@ readConfigFile <- function(path,
       UI_view_change_Look_Feel = TRUE,
       UI_view_change_core_funcs = FALSE,
       
-      class = prepare_data(lines, 'class')
+      class = get_data(lines, 'class'),
+      
+      URL_manual = get_data(lines, 'URL_manual')
     )
   else 
     value <- list(
       funcs = tmp,
       
-      verbose = prepare_data(lines, 'verbose') == 'enabled',
+      verbose = get_data(lines, 'verbose') == 'enabled',
       
-      UI_view_debugger = prepare_data(lines, 'debugger') == 'disabled',
-      UI_view_open_pipeline = prepare_data(lines, 'Open_pipeline') == 'disabled',
-      UI_view_convert_dataset = prepare_data(lines, 'convert_dataset') == 'enabled',
-      UI_view_change_Look_Feel = prepare_data(lines, 'change_Look_Feel') == 'enabled',
-      UI_view_change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled',
+      UI_view_debugger = get_data(lines, 'debugger') == 'disabled',
+      UI_view_open_pipeline = get_data(lines, 'Open_pipeline') == 'disabled',
+      UI_view_convert_dataset = get_data(lines, 'convert_dataset') == 'enabled',
+      UI_view_change_Look_Feel = get_data(lines, 'change_Look_Feel') == 'enabled',
+      UI_view_change_core_funcs = get_data(lines, 'change_core_funcs') == 'disabled',
       
-      class = prepare_data(lines, 'class')
+      class = get_data(lines, 'class'),
+      
+      URL_manual = get_data(lines, 'URL_manual')
     )
-    
-    
-    
+
   return(value)
 }
 

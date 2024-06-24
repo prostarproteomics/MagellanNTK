@@ -32,36 +32,20 @@ Insert_Dev_Sidebar <- function(){
         #   # ,badgeLabel = "new"
         #   # ,badgeColor = "green"
         #   )
-        ,shinydashboard::menuSubItem("Import (xlsx -> QF)",
-          tabName = "convertDataset",
-          icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        ),
-        shinydashboard::menuSubItem("Save As",
-          tabName = "SaveAs",
-          icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        ),
-        shinydashboard::menuSubItem("Build report",
-          tabName = "BuildReport",
-          icon = icon("folder")
-          # ,badgeLabel = "new"
-          # ,badgeColor = "green"
-        )
+        ,shinydashboard::menuSubItem("Import (xlsx -> QF)", tabName = "convertDataset"),
+        shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
+        shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
       ),
       hr(),
-      shinydashboard::menuItem(h4('Workflow', style="color: green;"),
-        shinydashboard::menuItem("Load",
-          tabName = "openWorkflow",
-          icon = icon("cogs")),
-        shinydashboard::menuItem("Run", 
-          tabName = "workflow", 
-          icon = icon("cogs"))
+      shinydashboard::menuItem(h4('Workflow', style = "color: green;"),
+        shinydashboard::menuSubItem("Load", tabName = "openWorkflow"),
+        shinydashboard::menuSubItem("Run", tabName = "workflow"),
+        shinydashboard::menuSubItem("Manual", tabName = "Manual"),
+        shinydashboard::menuSubItem("FAQ", tabName = "faq"),
+        shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes")
       ),
       hr(),
-      shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
+      shinydashboard::menuItem(h4('Vizualize data', style = "color: green;"),
         shinydashboard::menuSubItem("Info", 
           tabName = "infosDataset", 
           icon = icon("cogs")
@@ -76,16 +60,11 @@ Insert_Dev_Sidebar <- function(){
         )
       ),
       hr(),
-      shinydashboard::menuItem(h4('Help', style="color: green;"),
+      shinydashboard::menuItem(
+        h4('Help', style = "color: green;")
         
-        #icon = icon("question-circle"),
-        shinydashboard::menuSubItem("Manual", tabName = "Manual"),
-        shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
-        shinydashboard::menuSubItem("FAQ", tabName = "faq"),
-        shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
-        shinydashboard::menuSubItem("Release Notes", 
-          tabName = "releaseNotes", 
-          icon = icon("clipboard"))
+        #shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks")
+        #shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
         # ,shinydashboard::menuSubItem("Check for Updates", 
         #             tabName = "checkUpdates", 
         #             icon = icon("wrench"))
@@ -114,16 +93,16 @@ Insert_User_Sidebar <- function(){
       
       
       shinydashboard::menuItem(h4('Dataset', style="color: green;"),
-        shinydashboard::menuSubItem("Open (qf)",
+        shinydashboard::menuSubItem("Open file",
           tabName = "openDataset",
-          icon = icon("folder")
-          )
-        ,shinydashboard::menuSubItem("Import (xlsx -> QF)",
-          tabName = "convertDataset",
           icon = icon("folder")
           ),
         shinydashboard::menuSubItem("Save As",
           tabName = "SaveAs",
+          icon = icon("folder")
+        ),
+        shinydashboard::menuSubItem("Import data",
+          tabName = "convertDataset",
           icon = icon("folder")
           ),
         shinydashboard::menuSubItem("Build report",
@@ -136,9 +115,12 @@ Insert_User_Sidebar <- function(){
         # shinydashboard::menuItem("Load",
         #   tabName = "openWorkflow",
         #   icon = icon("cogs")),
-        shinydashboard::menuItem("Run", 
+        shinydashboard::menuSubItem("Run", 
           tabName = "workflow", 
-          icon = icon("cogs"))
+          icon = icon("cogs")),
+        shinydashboard::menuSubItem("Manual", tabName = "Manual"),
+        shinydashboard::menuSubItem("FAQ", tabName = "faq"),
+        shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes")
       ),
       hr(),
       shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
@@ -155,13 +137,8 @@ Insert_User_Sidebar <- function(){
       shinydashboard::menuItem(h4('Help', style="color: green;"),
         
         #icon = icon("question-circle"),
-        shinydashboard::menuSubItem("Manual", tabName = "Manual"),
         shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
-        shinydashboard::menuSubItem("FAQ", tabName = "faq"),
-        shinydashboard::menuSubItem("Bug Report", tabName = "bugReport"),
-        shinydashboard::menuSubItem("Release Notes", 
-          tabName = "releaseNotes", 
-          icon = icon("clipboard"))
+        shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
         )
     )
   )
