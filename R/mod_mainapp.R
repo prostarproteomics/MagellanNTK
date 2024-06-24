@@ -318,7 +318,9 @@ mainapp_server <- function(id,
     
     observeEvent(id, {
       rv.core$current.obj <- obj()
-      rv.core$current.obj.name <- 'myDataset'
+      if (!is.null(obj()))
+        rv.core$current.obj.name <- 'myDataset'
+        
       rv.core$workflow.path <- workflow.path()
       rv.core$workflow.name <- workflow.name()
       session$userData$workflow.path <- workflow.path()
