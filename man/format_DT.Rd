@@ -8,9 +8,38 @@
 \usage{
 format_DT_ui(id)
 
-format_DT_server(id, obj)
+format_DT_server(
+  id,
+  obj = reactive({
+     NULL
+ }),
+  hidden = reactive({
+     NULL
+ }),
+  withDLBtns = FALSE,
+  showRownames = FALSE,
+  dom = "Bt",
+  hc_style = reactive({
+     NULL
+ }),
+  remoteReset = reactive({
+     NULL
+ }),
+  is.enabled = reactive({
+     TRUE
+ })
+)
 
-format_DT(obj)
+format_DT(
+  obj,
+  hidden = NULL,
+  withDLBtns = FALSE,
+  showRownames = FALSE,
+  dom = "Bt",
+  hc_style = NULL,
+  remoteReset = NULL,
+  is.enabled = TRUE
+)
 }
 \arguments{
 \item{id}{shiny id}
@@ -26,7 +55,44 @@ A shiny Module.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(lldata)
-shiny::runApp(format_DT(assay(lldata[[1]])))
+obj <- assay(lldata[[1]])
+shiny::runApp(format_DT(obj))
+
+
+#
+# Compute style from within main tab
+#
+data(Exp1_R25_prot, package = 'DaparToolshedData')
+obj <- data.frame(colData(Exp1_R25_prot))
+
+style <- list(
+  cols = colnames(obj),
+  vals = colnames(obj)[2],
+  unique = unique(obj$Condition),
+  pal = RColorBrewer::brewer.pal(3,'Dark2')[1:2])
+shiny::runApp(format_DT(obj, hc_style = style))
+
+
+
+#
+# Compute style from within third party tab
+#
+obj <- as.data.frame(matrix(1:30, byrow=TRUE, nrow=6))
+colnames(obj) <- paste0('col', 1:5)
+
+mask <- as.data.frame(matrix(rep(LETTERS[1:5], 6), byrow=TRUE, nrow=6))
+
+
+style <- list(
+  cols = colnames(obj),
+  vals = colnames(mask),
+  unique = unique(mask),
+  pal = RColorBrewer::brewer.pal(5,'Dark2')[1:5]
+)
+
+shiny::runApp(format_DT(obj, 
+  hidden = mask,
+  hc_style = style))
 
 \dontshow{\}) # examplesIf}
 }

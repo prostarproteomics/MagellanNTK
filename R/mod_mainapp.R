@@ -318,6 +318,7 @@ mainapp_server <- function(id,
     
     observeEvent(id, {
       rv.core$current.obj <- obj()
+      rv.core$current.obj.name <- 'myDataset'
       rv.core$workflow.path <- workflow.path()
       rv.core$workflow.name <- workflow.name()
       session$userData$workflow.path <- workflow.path()
@@ -494,14 +495,17 @@ mainapp_server <- function(id,
     
     output$ExportQF_UI <- renderUI({
       
-      req(rv.core$funcs$export_dataset)
-      
+      req(rv.core$funcs$download_dataset)
+
       call.func(
-        fname = paste0(rv.core$funcs$export_dataset, '_server'),
-        args = list(id = 'export_dataset'))
+        fname = paste0(rv.core$funcs$download_dataset, '_server'),
+        args = list(
+          id = 'download_dataset',
+        dataIn = reactive({rv.core$current.obj}))
+      )
       
-      call.func(fname = paste0(rv.core$funcs$export_dataset, '_ui'),
-        args = list(id = ns('export_dataset')))
+      call.func(fname = paste0(rv.core$funcs$download_dataset, '_ui'),
+        args = list(id = ns('download_dataset')))
     })
     
     output$open_dataset_UI <- renderUI({

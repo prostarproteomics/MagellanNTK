@@ -8,8 +8,8 @@ default.funcs <- function()
   open_demoDataset = "MagellanNTK::open_demoDataset",
   view_dataset = "MagellanNTK::view_dataset",
   download_dataset = "MagellanNTK::download_dataset",
-    export_dataset = "MagellanNTK::export_dataset",
-    infos_dataset = "MagellanNTK::infos_dataset",
+  export_dataset = "MagellanNTK::export_dataset",
+  infos_dataset = "MagellanNTK::infos_dataset",
   addDatasets = "MagellanNTK::addDatasets",
   keepDatasets = "MagellanNTK::keepDatasets")
 

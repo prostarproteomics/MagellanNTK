@@ -13,26 +13,22 @@ download_dataset_server(
   dataIn = reactive({
      NULL
  }),
-  extension = c("csv", "xlsx", "RData"),
   widget.type = "Link",
-  name = "foo",
-  excel.style = NULL
+  filename = "myDataset"
 )
 
-download_dataset(data)
+download_dataset(data, filename = "myDataset")
 }
 \arguments{
 \item{id}{internal}
 
 \item{dataIn}{internal}
 
-\item{extension}{Available values are `csv` (default), `RData` and `Excel`.}
-
 \item{widget.type}{Available values are `Button` and `Link` (default).}
 
-\item{name}{internal}
+\item{filename}{xxx}
 
-\item{excel.style}{xxx}
+\item{name}{internal}
 }
 \value{
 NA
@@ -44,5 +40,7 @@ A shiny Module.
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sub_R25)
 shiny::runApp(download_dataset(sub_R25))
+
+shiny::runApp(download_dataset(sub_R25, filename = 'myDataset'))
 \dontshow{\}) # examplesIf}
 }

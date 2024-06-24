@@ -13,9 +13,7 @@ mod_load_workflow_server(
   path = reactive({
      NULL
  }),
-  mode = reactive({
-     "user"
- })
+  usermod = "user"
 )
 }
 \arguments{

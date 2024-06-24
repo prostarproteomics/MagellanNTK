@@ -114,23 +114,29 @@ readConfigFile <- function(path,
   if (usermod == 'dev')
     value <- list(
       funcs = tmp,
-      debugger = FALSE,
+      
       verbose = TRUE,
-      Open_pipeline = FALSE,
-      convert_dataset = TRUE,
-      change_Look_Feel = TRUE,
-      change_core_funcs = FALSE,
+      
+      UI_view_debugger = FALSE,
+      UI_view_open_pipeline = FALSE,
+      UI_view_convert_dataset = TRUE,
+      UI_view_change_Look_Feel = TRUE,
+      UI_view_change_core_funcs = FALSE,
+      
       class = prepare_data(lines, 'class')
     )
   else 
     value <- list(
       funcs = tmp,
-      debugger = prepare_data(lines, 'debugger') == 'disabled',
+      
       verbose = prepare_data(lines, 'verbose') == 'enabled',
-      Open_pipeline = prepare_data(lines, 'Open_pipeline') == 'disabled',
-      convert_dataset = prepare_data(lines, 'convert_dataset') == 'enabled',
-      change_Look_Feel = prepare_data(lines, 'change_Look_Feel') == 'enabled',
-      change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled',
+      
+      UI_view_debugger = prepare_data(lines, 'debugger') == 'disabled',
+      UI_view_open_pipeline = prepare_data(lines, 'Open_pipeline') == 'disabled',
+      UI_view_convert_dataset = prepare_data(lines, 'convert_dataset') == 'enabled',
+      UI_view_change_Look_Feel = prepare_data(lines, 'change_Look_Feel') == 'enabled',
+      UI_view_change_core_funcs = prepare_data(lines, 'change_core_funcs') == 'disabled',
+      
       class = prepare_data(lines, 'class')
     )
     

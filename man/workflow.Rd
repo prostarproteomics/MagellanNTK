@@ -17,7 +17,7 @@ workflow_server(
  }),
   tl.layout = NULL,
   usermod = "dev",
-  ...
+  verbose = FALSE
 )
 
 workflowApp(
@@ -26,7 +26,7 @@ workflowApp(
   dataIn = NULL,
   tl.layout = NULL,
   usermod = "dev",
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
