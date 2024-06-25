@@ -304,7 +304,7 @@ mainapp_server <- function(id,
       workflow.name = NULL,
       workflow.path = NULL,
       
-      funcs = default.funcs(),
+      funcs = list(funcs = default.funcs()),
       tmp.funcs = reactive({NULL}),
       
       filepath = file.path(system.file('app/md', 
@@ -338,11 +338,11 @@ mainapp_server <- function(id,
       
        rv.core$funcs <- readConfigFile(rv.core$workflow.path)
 
-       for (f in names(rv.core$funcs)){
-         if(is.null(rv.core$funcs[[f]]))
-           rv.core$funcs[[f]] <- default.funcs()[[f]]
+       for (f in names(rv.core$funcs$funcs)){
+         if(is.null(rv.core$funcs$funcs[[f]]))
+           rv.core$funcs$funcs[[f]] <- default.funcs()[[f]]
        }
-       session$userData$funcs <- rv.core$funcs
+       session$userData$funcs <- rv.core$funcs$funcs
 
     }, priority = 1000)
       
@@ -350,11 +350,11 @@ mainapp_server <- function(id,
     observeEvent(rv.core$workflow.path, {
       rv.core$funcs <- readConfigFile(rv.core$workflow.path)
 
-      for (f in names(rv.core$funcs)){
-        if(is.null(rv.core$funcs[[f]]))
-          rv.core$funcs[[f]] <- default.funcs()[[f]]
+      for (f in names(rv.core$funcs$funcs)){
+        if(is.null(rv.core$funcs$funcs[[f]]))
+          rv.core$funcs$funcs[[f]] <- default.funcs()[[f]]
       }
-      session$userData$funcs <- rv.core$funcs
+      session$userData$funcs <- rv.core$funcs$funcs
       source_wf_files(session$userData$workflow.path)
     })
     
@@ -426,7 +426,7 @@ mainapp_server <- function(id,
           pkg.name <- gsub(paste0('::',x), '', rv.core$tmp.funcs()[[x]])
           require(pkg.name, character.only = TRUE)
           })
-      rv.core$funcs <- rv.core$tmp.funcs()
+      rv.core$funcs$funcs <- rv.core$tmp.funcs()
       session$userData$funcs <- rv.core$tmp.funcs()
     })
     
@@ -435,16 +435,16 @@ mainapp_server <- function(id,
     # Code for convert tool
     #
     observe({
-      req(rv.core$funcs$convert_dataset)
+      req(rv.core$funcs$funcs$convert_dataset)
       rv.core$result_convert <- call.func(
-      fname = paste0(rv.core$funcs$convert_dataset, '_server'),
+      fname = paste0(rv.core$funcs$funcs$convert_dataset, '_server'),
       args = list(id = 'Convert'))
     
     })
     output$open_convert_dataset_UI <- renderUI({
-      req(rv.core$funcs$convert_dataset)
+      req(rv.core$funcs$funcs$convert_dataset)
       call.func(
-        fname = paste0(rv.core$funcs$convert_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
     })
     
@@ -489,16 +489,16 @@ mainapp_server <- function(id,
     
     output$BuildReport_UI <- renderUI({
       
-      req(rv.core$funcs$build_report)
+      req(rv.core$funcs$funcs$build_report)
       
       call.func(
-        fname = paste0(rv.core$funcs$build_report, '_server'),
+        fname = paste0(rv.core$funcs$funcs$build_report, '_server'),
         args = list(
           id = 'build_report',
           dataIn = reactive({rv.core$current.obj}))
       )
       
-      call.func(fname = paste0(rv.core$funcs$build_report, '_ui'),
+      call.func(fname = paste0(rv.core$funcs$funcs$build_report, '_ui'),
         args = list(id = ns('build_report')))
     })
     
@@ -509,24 +509,24 @@ mainapp_server <- function(id,
       req(rv.core$funcs$download_dataset)
 
       call.func(
-        fname = paste0(rv.core$funcs$download_dataset, '_server'),
+        fname = paste0(rv.core$funcs$funcs$download_dataset, '_server'),
         args = list(
           id = 'download_dataset',
         dataIn = reactive({rv.core$current.obj}))
       )
       
-      call.func(fname = paste0(rv.core$funcs$download_dataset, '_ui'),
+      call.func(fname = paste0(rv.core$funcs$funcs$download_dataset, '_ui'),
         args = list(id = ns('download_dataset')))
     })
     
     output$open_dataset_UI <- renderUI({
-      req(rv.core$funcs$open_dataset)
+      req(rv.core$funcs$funcs$open_dataset)
 
       rv.core$result_open_dataset <- call.func(
-        fname = paste0(rv.core$funcs$open_dataset, '_server'),
+        fname = paste0(rv.core$funcs$funcs$open_dataset, '_server'),
         args = list(id = 'open_dataset'))
       
-      call.func(fname = paste0(rv.core$funcs$open_dataset, '_ui'),
+      call.func(fname = paste0(rv.core$funcs$funcs$open_dataset, '_ui'),
         args = list(id = ns('open_dataset')))
     })
     
@@ -592,31 +592,31 @@ mainapp_server <- function(id,
 
     
     output$InfosDataset_UI <- renderUI({
-      req(rv.core$funcs)
+      req(rv.core$funcs$funcs)
       
       call.func(
-        fname = paste0(rv.core$funcs$infos_dataset, '_server'),
+        fname = paste0(rv.core$funcs$funcs$infos_dataset, '_server'),
         args = list(id = 'infos_dataset',
           obj = reactive({rv.core$current.obj})))
       
       call.func(
-        fname = paste0(rv.core$funcs$infos_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$funcs$infos_dataset, '_ui'),
         args = list(id = ns('infos_dataset')))
     })
     
     
     output$EDA_UI <- renderUI({
-      req(rv.core$funcs)
+      req(rv.core$funcs$funcs)
 
       call.func(
-        fname = paste0(rv.core$funcs$view_dataset, '_server'),
+        fname = paste0(rv.core$funcs$funcs$view_dataset, '_server'),
         args = list(id = 'view_dataset',
           obj = reactive({rv.core$current.obj}),
           useModal = FALSE,
           verbose = TRUE))
       
       call.func(
-        fname = paste0(rv.core$funcs$view_dataset, '_ui'),
+        fname = paste0(rv.core$funcs$funcs$view_dataset, '_ui'),
         args = list(id = ns('view_dataset')))
     })
     
