@@ -77,10 +77,10 @@ mod_bsmodal_server <- function(id,
                               options = list(revert = TRUE)
     )
 
-    observeEvent(req(dataOut()()), {
-      print(paste0('dataOut = ', dataOut()()))
-      
-    })
+    # observeEvent(req(dataOut()()), {
+    #   print(paste0('dataOut = ', dataOut()()))
+    #   
+    # })
     
     
     GetUI <- reactive({

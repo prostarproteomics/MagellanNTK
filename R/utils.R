@@ -137,7 +137,9 @@ readConfigFile <- function(path,
       
       class = get_data(lines, 'class'),
       
-      URL_manual = get_data(lines, 'URL_manual')
+      URL_manual = get_data(lines, 'URL_manual'),
+      
+      URL_ReleaseNotes = get_data(lines, 'URL_ReleaseNotes')
     )
   else 
     value <- list(
@@ -153,7 +155,8 @@ readConfigFile <- function(path,
       
       class = get_data(lines, 'class'),
       
-      URL_manual = get_data(lines, 'URL_manual')
+      URL_manual = get_data(lines, 'URL_manual'),
+      URL_ReleaseNotes = get_data(lines, 'URL_ReleaseNotes')
     )
 
   return(value)

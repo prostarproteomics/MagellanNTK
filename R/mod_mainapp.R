@@ -152,28 +152,28 @@ mainapp_ui <- function(id, session){
           # )
         ),
         sidebar = uiOutput(ns('sidebar')),
-        controlbar = shinydashboardPlus::dashboardControlbar(
-          skin = "dark",
-          shinydashboardPlus::controlbarMenu(
-            # shinydashboardPlus::controlbarItem(
-            #   title = "Configure",
-            #   icon = icon("desktop"),
-            #   active = TRUE,
-            #   actionLink(ns('browser'), 'Console'),
-            #   mod_modalDialog_ui(ns('loadPkg_modal'))
-            # ),
-            shinydashboardPlus::controlbarItem(
-              icon = icon("paint-brush"),
-              title = "Settings",
-              mod_settings_ui(ns('global_settings'))
-            )
-            ,shinydashboardPlus::controlbarItem(
-              icon = icon("paint-brush"),
-              title = "Skin",
-              shinydashboardPlus::skinSelector()
-            )
-          )
-          ),
+        # controlbar = shinydashboardPlus::dashboardControlbar(
+        #   skin = "dark",
+        #   shinydashboardPlus::controlbarMenu(
+        #     # shinydashboardPlus::controlbarItem(
+        #     #   title = "Configure",
+        #     #   icon = icon("desktop"),
+        #     #   active = TRUE,
+        #     #   actionLink(ns('browser'), 'Console'),
+        #     #   mod_modalDialog_ui(ns('loadPkg_modal'))
+        #     # ),
+        #     shinydashboardPlus::controlbarItem(
+        #       icon = icon("paint-brush"),
+        #       title = "Settings",
+        #       mod_settings_ui(ns('global_settings'))
+        #     )
+        #     ,shinydashboardPlus::controlbarItem(
+        #       icon = icon("paint-brush"),
+        #       title = "Skin",
+        #       shinydashboardPlus::skinSelector()
+        #     )
+        #   )
+        #   ),
         body = shinydashboard::dashboardBody(
           # some styling
           tags$head(
@@ -246,7 +246,7 @@ mainapp_ui <- function(id, session){
               
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               shinydashboard::tabItem(tabName = "releaseNotes", 
-                mod_release_notes_ui(ns('rl'))),
+                mod_release_notes_ui(ns('ReleaseNotes_UI'))),
               # tabItem(tabName = "checkUpdates", 
               #   mod_check_updates_ui(ns('check_updates'))),
               # shinydashboard::tabItem(tabName = "usefulLinks", 
@@ -639,6 +639,17 @@ mainapp_server <- function(id,
       )
     })
     
+    
+    output$ReleaseNotes_UI <- renderUI({
+      req(rv.core$funcs$URL_ReleaseNotes)
+      wellPanel(
+        helpText(
+          a("Click Here to Download Survey",     
+            href = rv.core$funcs$URL_ReleaseNotes),
+          target="_blank"
+        )
+      )
+    })
     
     
     observe({

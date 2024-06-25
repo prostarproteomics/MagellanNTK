@@ -35,11 +35,6 @@ timeline_h_server <- function(id,
     moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-        
-        observe({
-          print(position())
-        })
-        
         UpdateTags <- reactive({
           req(config@steps != '')
 
