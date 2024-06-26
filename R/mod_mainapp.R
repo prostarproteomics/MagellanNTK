@@ -243,7 +243,7 @@ mainapp_ui <- function(id, session){
               
               #tabItem(tabName = "globalSettings", mod_settings_ui(ns('global_settings'))),
               shinydashboard::tabItem(tabName = "releaseNotes", 
-                mod_release_notes_ui(ns('ReleaseNotes_UI'))),
+                uiOutput(ns('ReleaseNotes_UI'))),
               # tabItem(tabName = "checkUpdates", 
               #   mod_check_updates_ui(ns('check_updates'))),
               # shinydashboard::tabItem(tabName = "usefulLinks", 
@@ -654,10 +654,11 @@ mainapp_server <- function(id,
     
     output$ReleaseNotes_UI <- renderUI({
       req(rv.core$funcs$URL_ReleaseNotes)
-      browser()
-      mod_release_notes_server("rl", rv.core$funcs$URL_ReleaseNotes)
+      print(rv.core$funcs$URL_ReleaseNotes)
       
-      mod_release_notes_ui(ns("rl"))
+      MagellanNTK::mod_release_notes_server("rl", rv.core$funcs$URL_ReleaseNotes)
+      
+      MagellanNTK::mod_release_notes_ui(ns("rl"))
       
     })
     
@@ -666,7 +667,7 @@ mainapp_server <- function(id,
     # insert_md_server("usermanual", 
     #   file.path(rv.core$workflow.path, 'md', "FAQ.md"))
     # 
-    
+      
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
     
     #mod_check_updates_server("check_updates")
