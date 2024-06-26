@@ -654,13 +654,11 @@ mainapp_server <- function(id,
     
     output$ReleaseNotes_UI <- renderUI({
       req(rv.core$funcs$URL_ReleaseNotes)
-      wellPanel(
-        helpText(
-          a("Click Here to Download Survey",     
-            href = rv.core$funcs$URL_ReleaseNotes),
-          target="_blank"
-        )
-      )
+      browser()
+      mod_release_notes_server("rl", rv.core$funcs$URL_ReleaseNotes)
+      
+      mod_release_notes_ui(ns("rl"))
+      
     })
     
     
@@ -670,7 +668,7 @@ mainapp_server <- function(id,
     # 
     
     #mod_settings_server("global_settings", obj = reactive({Exp1_R25_prot}))
-    mod_release_notes_server("rl")
+    
     #mod_check_updates_server("check_updates")
     # insert_md_server("links_MD", 
     #   file.path(rv.core$workflow.path, 'md', "links.md"))
