@@ -654,8 +654,7 @@ mainapp_server <- function(id,
     
     output$ReleaseNotes_UI <- renderUI({
       req(rv.core$funcs$URL_ReleaseNotes)
-      print(rv.core$funcs$URL_ReleaseNotes)
-      
+       
       MagellanNTK::mod_release_notes_server("rl", rv.core$funcs$URL_ReleaseNotes)
       
       MagellanNTK::mod_release_notes_ui(ns("rl"))

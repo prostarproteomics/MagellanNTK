@@ -121,7 +121,6 @@ readConfigFile <- function(path,
     function(x) prepare_data(lines, x))
   names(tmp) <- names(funcs)
 
-  #browser()
   
   if (usermod == 'dev')
     value <- list(
