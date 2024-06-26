@@ -122,14 +122,11 @@ mainapp_ui <- function(id, session){
           title = 
             tagList(
               span(class = "logo-lg", 
-                absolutePanel(fixed = TRUE, ""))
+                absolutePanel(fixed = TRUE, uiOutput(ns('left_UI')))),
               #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
             ),
           leftUi = tagList(
-            h4(style = "font-weight: bold;", "MagellanNTK"), 
-            shinydashboardPlus::dashboardBadge(
-              GetPackageVersion('MagellanNTK'),
-              color = "green"),
+            #uiOutput(ns('left_UI')),
             uiOutput(ns('WF_Name_UI')),
             uiOutput(ns('Dataset_Name_UI'))
             
@@ -370,6 +367,20 @@ mainapp_server <- function(id,
       }
     })
 
+    output$left_UI <- renderUI({
+      
+      .txt <- if (is.null(rv.core$funcs$package)){
+        "MagellanNTK"
+      } else
+        rv.core$funcs$package
+        
+      tagList(
+        h4(style = "font-weight: bold;",
+          paste0(.txt, ' ', GetPackageVersion(.txt)) 
+        )
+      )
+    })
+    
     
     output$WF_Name_UI <- renderUI({
       req(rv.core$workflow.name)
@@ -443,6 +454,7 @@ mainapp_server <- function(id,
     })
     output$open_convert_dataset_UI <- renderUI({
       req(rv.core$funcs$funcs$convert_dataset)
+      #browser()
       call.func(
         fname = paste0(rv.core$funcs$funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
@@ -506,7 +518,7 @@ mainapp_server <- function(id,
     
     output$SaveAs_UI <- renderUI({
       
-      req(rv.core$funcs$download_dataset)
+      req(rv.core$funcs$funcs$download_dataset)
 
       call.func(
         fname = paste0(rv.core$funcs$funcs$download_dataset, '_server'),

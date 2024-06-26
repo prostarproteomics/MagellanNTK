@@ -121,7 +121,7 @@ readConfigFile <- function(path,
     function(x) prepare_data(lines, x))
   names(tmp) <- names(funcs)
 
-  
+  #browser()
   
   if (usermod == 'dev')
     value <- list(
@@ -136,6 +136,7 @@ readConfigFile <- function(path,
       UI_view_change_core_funcs = FALSE,
       
       class = get_data(lines, 'class'),
+      package = get_data(lines, 'package'),
       
       URL_manual = get_data(lines, 'URL_manual'),
       
@@ -154,6 +155,7 @@ readConfigFile <- function(path,
       UI_view_change_core_funcs = get_data(lines, 'change_core_funcs') == 'disabled',
       
       class = get_data(lines, 'class'),
+      package = get_data(lines, 'package'),
       
       URL_manual = get_data(lines, 'URL_manual'),
       URL_ReleaseNotes = get_data(lines, 'URL_ReleaseNotes')

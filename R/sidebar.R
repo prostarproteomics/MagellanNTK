@@ -94,21 +94,13 @@ Insert_User_Sidebar <- function(){
       
       shinydashboard::menuItem(h4('Dataset', style="color: green;"),
         shinydashboard::menuSubItem("Open file",
-          tabName = "openDataset",
-          icon = icon("folder")
-          ),
-        shinydashboard::menuSubItem("Save As",
-          tabName = "SaveAs",
-          icon = icon("folder")
-        ),
+          tabName = "openDataset"),
+        shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
         shinydashboard::menuSubItem("Import data",
           tabName = "convertDataset",
           icon = icon("folder")
           ),
-        shinydashboard::menuSubItem("Build report",
-          tabName = "BuildReport",
-          icon = icon("folder")
-          )
+        shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
       ),
       hr(),
       shinydashboard::menuItem(h4('Workflow', style="color: green;"),
@@ -128,10 +120,7 @@ Insert_User_Sidebar <- function(){
           tabName = "infosDataset", 
           icon = icon("cogs")
           ),
-        shinydashboard::menuSubItem("EDA", 
-          tabName = "eda", 
-          icon = icon("cogs")
-          )
+        shinydashboard::menuSubItem("EDA", tabName = "eda")
       ),
       hr(),
       shinydashboard::menuItem(h4('Help', style="color: green;"),
