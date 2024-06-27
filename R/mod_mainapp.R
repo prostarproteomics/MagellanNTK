@@ -340,6 +340,11 @@ mainapp_server <- function(id,
            rv.core$funcs$funcs[[f]] <- default.funcs()[[f]]
        }
        session$userData$funcs <- rv.core$funcs$funcs
+       
+       if(usermod == 'dev')
+         options(shiny.fullstacktrace = TRUE)
+       
+       options(shiny.maxRequestSize = 1024^3)
 
     }, priority = 1000)
       

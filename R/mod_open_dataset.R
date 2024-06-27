@@ -66,7 +66,7 @@ open_dataset_server <- function(id){
           uiOutput(ns("linktoDemoPdf")),
           shinyjs::disabled(
             actionButton(ns('load_dataset_btn'), 'Load dataset', 
-              class= actionBtnClass))
+              class= 'btn-info'))
         )
     })
     
@@ -97,8 +97,7 @@ open_dataset_server <- function(id){
 
       withProgress(message = "", detail = "", value = 0, {
         incProgress(0.5, detail = "Building package list...")
-        x <- data(package = .packages(all.available = TRUE))$results
-        dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
+         dat <- GetListDatasets(filtered = FALSE)
       })
       
       

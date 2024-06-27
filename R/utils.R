@@ -164,6 +164,48 @@ readConfigFile <- function(path,
 }
 
 
+
+
+#' @title Get filtered datasets
+#' 
+#' @export
+#' @examples
+#' 
+#' 
+GetListDatasets <- function(class, filtered = FALSE){
+
+  ll.datasets <- NULL
+  
+  x <- data(package = .packages(all.available = TRUE))$results
+  dat <- x[which(x[,'Item'] != ''), c('Package', 'Item')]
+  ll.datasets <- dat
+  
+  if (filtered){
+  df <- data.frame()
+
+  for(i in seq(nrow(dat))){
+    pkg <- dat[i, 'Package']
+    dataset <- dat[i, 'Item']
+    tryCatch({
+      do.call(data, list(dataset, package = pkg))
+      is.qf <- inherits(eval(str2expression(dataset)), class)
+      if(is.qf)
+        df <- rbind(df, dat[i, ])
+      do.call(rm, args=list(dataset))
+    },
+      warning = function(w) NULL,
+      error = function(e) NULL
+    )
+  }
+  colnames(df) <- c('Package', 'Item')
+
+  ll.datasets <- df
+  }
+  
+  return(ll.datasets)
+}
+
+
 #' @title Source workflow files
 #' 
 #' @description xxx
