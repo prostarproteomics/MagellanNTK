@@ -170,6 +170,9 @@ readConfigFile <- function(path,
 #' 
 #' @export
 #' @examples
+#' foo1 <- GetListDatasets()
+#' 
+#' foo2 <- GetListDatasets(class='QFeatures', filtered = TRUE)
 #' 
 #' 
 GetListDatasets <- function(class, filtered = FALSE){
@@ -187,11 +190,11 @@ GetListDatasets <- function(class, filtered = FALSE){
     pkg <- dat[i, 'Package']
     dataset <- dat[i, 'Item']
     tryCatch({
-      do.call(data, list(dataset, package = pkg))
+      do.call(data, list(dataset, package = pkg, envir = environment()))
       is.qf <- inherits(eval(str2expression(dataset)), class)
       if(is.qf)
         df <- rbind(df, dat[i, ])
-      do.call(rm, args=list(dataset))
+      do.call(rm, args=list(list = dataset, envir = environment()))
     },
       warning = function(w) NULL,
       error = function(e) NULL

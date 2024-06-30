@@ -2,7 +2,11 @@
 
 Insert_Dev_Sidebar <- function(){
   shinydashboardPlus::dashboardSidebar(
+    tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+    
     shinydashboard::sidebarMenu(id = "sb_dev",
+      tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+      
       #style = "position: fixed; overflow: visible;",
       # inactiveClass for import menus inactivation 
       # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -13,13 +17,14 @@ Insert_Dev_Sidebar <- function(){
         tabName = "Home", 
         icon = icon("home"),
         selected = TRUE),
-      hr(),
+      #hr(),
       # shinydashboard::menuItem("Data Manager",
       #          tabName = "dataManager",
       #          icon = icon("folder"),
       #          badgeLabel = "new", 
       #          badgeColor = "green"),
-      shinydashboard::menuItem(h4('Dataset', style="color: green;"),
+      shinydashboard::menuItem(
+        h4('Dataset', style="color: lightgrey;"),
         shinydashboard::menuSubItem("Open (qf)",
           tabName = "openDataset",
           icon = icon("folder")
@@ -36,16 +41,16 @@ Insert_Dev_Sidebar <- function(){
         shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
         shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
       ),
-      hr(),
-      shinydashboard::menuItem(h4('Workflow', style = "color: green;"),
+      #hr(),
+      shinydashboard::menuItem(h4('Workflow', style = "color: lightgrey;"),
         shinydashboard::menuSubItem("Load", tabName = "openWorkflow"),
         shinydashboard::menuSubItem("Run", tabName = "workflow"),
         shinydashboard::menuSubItem("Manual", tabName = "Manual"),
         shinydashboard::menuSubItem("FAQ", tabName = "faq"),
         shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes")
       ),
-      hr(),
-      shinydashboard::menuItem(h4('Vizualize data', style = "color: green;"),
+      #hr(),
+      shinydashboard::menuItem(h4('Vizualize data', style = "color: lightgrey;"),
         shinydashboard::menuSubItem("Info", 
           tabName = "infosDataset", 
           icon = icon("cogs")
@@ -59,9 +64,9 @@ Insert_Dev_Sidebar <- function(){
           # ,badgeColor = "green"
         )
       ),
-      hr(),
+      #hr(),
       shinydashboard::menuItem(
-        h4('Help', style = "color: green;")
+        h4('Help', style = "color: lightgrey;")
         
         #shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks")
         #shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
@@ -78,7 +83,11 @@ Insert_Dev_Sidebar <- function(){
 
 Insert_User_Sidebar <- function(){
   shinydashboardPlus::dashboardSidebar(
-    shinydashboard::sidebarMenu(id = "sb_dev",
+    tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+    
+    shinydashboard::sidebarMenu(id = "sb_user",
+      tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+      
       #style = "position: fixed; overflow: visible;",
       # inactiveClass for import menus inactivation 
       # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -89,10 +98,11 @@ Insert_User_Sidebar <- function(){
         tabName = "Home", 
         icon = icon("home"),
         selected = TRUE),
-      hr(),
+      #hr(),
       
       
-      shinydashboard::menuItem(h4('Dataset', style="color: green;"),
+      shinydashboard::menuItem(
+        h4('Dataset', style="color: lightgrey;"),
         shinydashboard::menuSubItem("Open file",
           tabName = "openDataset"),
         shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
@@ -102,8 +112,8 @@ Insert_User_Sidebar <- function(){
           ),
         shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
       ),
-      hr(),
-      shinydashboard::menuItem(h4('Workflow', style="color: green;"),
+      #hr(),
+      shinydashboard::menuItem(h4('Workflow', style="color: lightgrey;"),
         # shinydashboard::menuItem("Load",
         #   tabName = "openWorkflow",
         #   icon = icon("cogs")),
@@ -114,16 +124,16 @@ Insert_User_Sidebar <- function(){
         shinydashboard::menuSubItem("FAQ", tabName = "faq"),
         shinydashboard::menuSubItem("Release Notes", tabName = "releaseNotes")
       ),
-      hr(),
-      shinydashboard::menuItem(h4('Vizualize data', style="color: green;"),
+      #hr(),
+      shinydashboard::menuItem(h4('Vizualize data', style="color: lightgrey;"),
         shinydashboard::menuSubItem("Info", 
           tabName = "infosDataset", 
           icon = icon("cogs")
           ),
         shinydashboard::menuSubItem("EDA", tabName = "eda")
       ),
-      hr(),
-      shinydashboard::menuItem(h4('Help', style="color: green;"),
+      #hr(),
+      shinydashboard::menuItem(h4('Help', style="color: lightgrey;"),
         
         #icon = icon("question-circle"),
         shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
