@@ -108,7 +108,8 @@ mod_load_package_server <- function(id,
           #.choices <- c(.tmp, 'MagellanNTK')
           
           .selected <- 'MagellanNTK'
-          .found <- sum(unlist(lapply(.choices, function(y) is.substr(y, rv$list.funcs[[x]]))))
+          .found <- sum(unlist(lapply(.choices, function(y) 
+            MagellanNTK::is.substr(y, rv$list.funcs[[x]]))))
           if (.found == 1){
             .pkg <- unlist(strsplit(rv$list.funcs[[x]], split = '::'))[1]
             .choices <- c(.pkg, .choices[-grep(.pkg, .choices)])

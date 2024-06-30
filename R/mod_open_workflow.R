@@ -112,11 +112,11 @@ open_workflow_server <- function(id){
       rv.wf$path <- system.file(file.path('workflow', input$chooseWF1), 
         package = as.character(input$choosePkg))
       
-      tmp <- normalizePath(file.path(rv.wf$path, 'R', fsep = file.sep()))
+      tmp <- normalizePath(file.path(rv.wf$path, 'R', fsep = MagellanNTK::file.sep()))
       ll.files <- list.files(tmp, full.names = FALSE)
   
       ll <- unlist(lapply(ll.files, function(x)
-        if (is.substr(basename(input$chooseWF1), x))
+        if (MagellanNTK::is.substr(basename(input$chooseWF1), x))
           x
       ))
       
@@ -135,11 +135,12 @@ open_workflow_server <- function(id){
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       rv.wf$path
-
+      
+      call.func('require', list(input$choosePkg))
       rv.wf$dataOut$path <- rv.wf$path
       rv.wf$dataOut$wf_name <- input$chooseProcess
       # Load customizable functions if config.txt file exists
-      rv.wf$dataOut$funcs  <- readConfigFile(rv.wf$path)$funcs
+      rv.wf$dataOut$funcs  <- MagellanNTK::readConfigFile(rv.wf$path)$funcs
 
     })
     
