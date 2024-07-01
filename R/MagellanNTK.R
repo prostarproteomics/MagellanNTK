@@ -163,6 +163,11 @@ MagellanNTK <- function(
   
   # Launch app
   app <- shiny::shinyApp(ui, server)
-  shiny::runApp(app)
   
+  if (usermod == "dev"){
+    shiny::runApp(app)
+  } else if (usermod == 'user') {
+    shiny::runApp(app, host = "127.0.0.1", port = 3838, launch.browser=TRUE)
+  }
+
 }

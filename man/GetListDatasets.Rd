@@ -9,3 +9,10 @@ GetListDatasets(class, filtered = FALSE)
 \description{
 Get filtered datasets
 }
+\examples{
+foo1 <- GetListDatasets()
+
+foo2 <- GetListDatasets(class='QFeatures', filtered = TRUE)
+
+
+}

@@ -1,5 +1,5 @@
 
-
+#' @export
 Insert_Dev_Sidebar <- function(){
   shinydashboardPlus::dashboardSidebar(
     tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
@@ -80,7 +80,7 @@ Insert_Dev_Sidebar <- function(){
 
 
 
-
+#' @export
 Insert_User_Sidebar <- function(){
   shinydashboardPlus::dashboardSidebar(
     tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
