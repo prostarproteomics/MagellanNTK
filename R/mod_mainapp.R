@@ -121,32 +121,14 @@ mainapp_ui <- function(id, session){
           # )
           title = 
             tagList(
-              span(class = "logo-lg", 
-                absolutePanel(fixed = TRUE, uiOutput(ns('left_UI')))),
-              #absolutePanel(fixed = TRUE,  img(src = "ShinyDashboardPlus_FINAL.svg"))
+              absolutePanel(fixed = TRUE, uiOutput(ns('left_UI')))
             ),
           leftUi = tagList(
-            #uiOutput(ns('left_UI')),
             uiOutput(ns('WF_Name_UI')),
             uiOutput(ns('Dataset_Name_UI'))
             
           )
-          # shinydashboard::dropdownMenu(
-          #   type = "tasks",
-          #   badgeStatus = "danger"
-          #   # taskItem(value = 20, color = "aqua", "Refactor code"),
-          #   # taskItem(value = 40, color = "green", "Design new layout"),
-          #   # taskItem(value = 60, color = "yellow", "Another task"),
-          #   # taskItem(value = 80, color = "red", "Write documentation")
-          #   ,shinydashboard::menuItem("Home 2", 
-          #     tabName = "Home2", 
-          #     icon = icon("home"),
-          #     selected = TRUE)
-          #   ,shinydashboard::menuItem("User manual", 
-          #     tabName = "usermanual", 
-          #     icon = icon("home"),
-          #     selected = TRUE)
-          # )
+          
         ),
         sidebar = uiOutput(ns('sidebar')),
         controlbar = shinydashboardPlus::dashboardControlbar(
@@ -201,11 +183,7 @@ mainapp_ui <- function(id, session){
           "
             )
           ),
-          
-          #tags$head(
-          #  tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
-          #),
-          
+
           div(style="margin-top: 40px;", 
             # body content
             shinydashboard::tabItems(
@@ -563,6 +541,10 @@ mainapp_server <- function(id,
       
       rv.core$workflow.path <- rv.core$result_open_workflow()$path
       session$userData$workflow.path <- rv.core$result_open_workflow()$path
+      
+      # Load the package which contains the workflow
+      call.func('library', list(rv.core$result_open_workflow()$pkg))
+      source_wf_files(session$userData$workflow.path)
     })
     
     output$open_workflow_UI <- renderUI({
@@ -574,13 +556,13 @@ mainapp_server <- function(id,
     
     
     observe({
-      
       rv.core$result_run_workflow <- nav_server(
       id = rv.core$workflow.name,
       dataIn = reactive({rv.core$current.obj}),
       verbose = verbose,
       usermod = usermod
-    )})
+    )
+      })
     
     
     # Workflow code

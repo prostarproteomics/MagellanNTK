@@ -135,8 +135,8 @@ open_workflow_server <- function(id){
     ## -- Open a MSnset File --------------------------------------------
     observeEvent(input$load_btn, ignoreInit = TRUE, {
       rv.wf$path
-      
-      call.func('require', list(input$choosePkg))
+
+      rv.wf$dataOut$pkg <- input$choosePkg
       rv.wf$dataOut$path <- rv.wf$path
       rv.wf$dataOut$wf_name <- input$chooseProcess
       # Load customizable functions if config.txt file exists
