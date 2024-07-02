@@ -41,9 +41,11 @@ mainapp_ui <- function(id, session){
   #   position: absolute;
   #   top: 0;
   #   width: 360px;"))
-  div(id = "header",
+  #div(id = "header",
     
-      shinydashboardPlus::dashboardPage(
+      dashboardPage(
+        options = list(sidebarExpandOnHover = TRUE),
+        
         md = FALSE,
         skin = "blue",
         
@@ -96,7 +98,7 @@ mainapp_ui <- function(id, session){
         #       title="GitHub")
         #   )
         # ),
-        header = shinydashboardPlus::dashboardHeader(
+        header = dashboardHeader(
           fixed = TRUE,
           # titleWidth = "245px",
           # title = absolutePanel(
@@ -121,7 +123,9 @@ mainapp_ui <- function(id, session){
           # )
           title = 
             tagList(
-              absolutePanel(fixed = TRUE, uiOutput(ns('left_UI')))
+              span(class = "logo-lg", 
+                uiOutput(ns('left_UI')))
+              
             ),
           leftUi = tagList(
             uiOutput(ns('WF_Name_UI')),
@@ -130,7 +134,10 @@ mainapp_ui <- function(id, session){
           )
           
         ),
-        sidebar = uiOutput(ns('sidebar')),
+        sidebar = dashboardSidebar(
+          uiOutput(ns('sidebar'))
+        ),
+        #uiOutput(ns('sidebar')),
         # controlbar = shinydashboardPlus::dashboardControlbar(
         #   skin = "dark",
         #   shinydashboardPlus::controlbarMenu(
@@ -153,7 +160,7 @@ mainapp_ui <- function(id, session){
         #     )
         #   )
         #   ),
-        body = shinydashboard::dashboardBody(
+        body = dashboardBody(
           # some styling
           tags$head(
             #tags$style(".content-wrapper {background-color: white;}"),
@@ -237,7 +244,7 @@ mainapp_ui <- function(id, session){
             
           ))
 
-    )
+   # )
 )
 }
 

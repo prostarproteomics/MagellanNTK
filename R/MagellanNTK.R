@@ -23,7 +23,6 @@
 #' @name magellanNTK
 #' 
 #' @examplesIf interactive()
-#' # example code
 #' MagellanNTK()
 #' 
 NULL
@@ -164,7 +163,9 @@ MagellanNTK <- function(
   # Launch app
   app <- shiny::shinyApp(ui, server)
   
-  
-    shiny::runApp(app,launch.browser=usermod == 'user')
+  if (usermod == 'dev')
+    shiny::runApp(app)
+  else if (usermod == 'user')
+    shiny::runApp(app,launch.browser = TRUE)
 
 }

@@ -1,12 +1,12 @@
 
 #' @export
 Insert_Dev_Sidebar <- function(){
-  shinydashboardPlus::dashboardSidebar(
-    tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+ # dashboardSidebar(
+    #tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
     
     shinydashboard::sidebarMenu(id = "sb_dev",
-      tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
-      
+      #tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+      minified = TRUE, collapsed = TRUE,
       #style = "position: fixed; overflow: visible;",
       # inactiveClass for import menus inactivation 
       # tags$head(tags$style(".inactiveLink {pointer-events: none; background-color: grey;}")),
@@ -75,18 +75,18 @@ Insert_Dev_Sidebar <- function(){
         #             icon = icon("wrench"))
       )
     )
-  )
+  #)
 }
 
 
 
 #' @export
 Insert_User_Sidebar <- function(){
-  shinydashboardPlus::dashboardSidebar(
-    tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
-    
+  #dashboardSidebar(
+    #tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+    #minified = TRUE, collapsed = TRUE,
     shinydashboard::sidebarMenu(id = "sb_user",
-      tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
+      #tags$style(".sidebar-menu li a { height: 40px; color: grey;}"), 
       
       #style = "position: fixed; overflow: visible;",
       # inactiveClass for import menus inactivation 
@@ -140,5 +140,5 @@ Insert_User_Sidebar <- function(){
         shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
         )
     )
-  )
+ # )
 }
