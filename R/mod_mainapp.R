@@ -450,8 +450,7 @@ mainapp_server <- function(id,
         args = list(id = ns('Convert')))
     })
     
-    observeEvent(req(rv.core$result_convert()),{
-      req(rv.core$result_convert()$dataOut()$trigger)
+    observeEvent(req(rv.core$result_convert()$dataOut()$trigger),{
       if(verbose)
         cat('Data converted')
       
