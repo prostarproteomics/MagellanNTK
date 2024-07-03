@@ -630,8 +630,8 @@ mainapp_server <- function(id,
       wellPanel(
         helpText(
           a("Click Here to Download Survey",     
-          href = rv.core$funcs$URL_manual),
-          target="_blank"
+          href = rv.core$funcs$URL_manual,
+          target="_blank")
         )
       )
     })
