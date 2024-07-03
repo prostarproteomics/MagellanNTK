@@ -37,7 +37,7 @@ Insert_Dev_Sidebar <- function(){
         #   # ,badgeLabel = "new"
         #   # ,badgeColor = "green"
         #   )
-        ,shinydashboard::menuSubItem("Import (xlsx -> QF)", tabName = "convertDataset"),
+        ,shinydashboard::menuSubItem("Import", tabName = "convertDataset"),
         shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
         shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
       ),

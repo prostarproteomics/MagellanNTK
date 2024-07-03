@@ -281,6 +281,8 @@ mainapp_server <- function(id,
       result_run_workflow = reactive({NULL}),
       current.obj = NULL,
       current.obj.name = NULL,
+      
+      resetWF = 0,
 
       
       workflow.name = NULL,
@@ -442,6 +444,9 @@ mainapp_server <- function(id,
       args = list(id = 'Convert'))
     
     })
+    
+    
+    
     output$open_convert_dataset_UI <- renderUI({
       req(rv.core$funcs$funcs$convert_dataset)
       #browser()
@@ -456,6 +461,7 @@ mainapp_server <- function(id,
       
       rv.core$current.obj <- rv.core$result_convert()$dataOut()$value$data
       rv.core$current.obj.name <- rv.core$result_convert()$dataOut()$value$name
+      rv.core$resetWF <- rv.core$resetWF + 1
     })
     
     
@@ -535,6 +541,7 @@ mainapp_server <- function(id,
         cat('new dataset loaded\n')
       rv.core$current.obj <- rv.core$result_open_dataset()$data
       rv.core$current.obj.name <- rv.core$result_open_dataset()$name
+      rv.core$resetWF <- rv.core$resetWF + 1
     })
     
    
@@ -562,20 +569,25 @@ mainapp_server <- function(id,
     
     
     observe({
+      
       rv.core$result_run_workflow <- nav_server(
-      id = rv.core$workflow.name,
-      dataIn = reactive({rv.core$current.obj}),
-      verbose = verbose,
-      usermod = usermod
-    )
+        id = rv.core$workflow.name,
+        dataIn = reactive({rv.core$current.obj}),
+        verbose = verbose,
+        usermod = usermod,
+        remoteReset = reactive({rv.core$resetWF})
+        )
       })
     
     
     # Workflow code
     output$workflow_UI <- renderUI({
       req(rv.core$workflow.name)
-
+     # tagList(
+      #  actionButton(ns('resetWF'), 'Reset whole Workflow'),
+        
       nav_ui(ns(basename(rv.core$workflow.name)))
+     # )
       })
 
     observeEvent(rv.core$result_run_workflow$dataOut()$value, {
