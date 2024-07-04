@@ -70,7 +70,7 @@ format_DT_ui <- function(id) {
   
   ns <- NS(id)
   tagList(
-    useShinyjs(),
+    shinyjs::useShinyjs(),
     DT::dataTableOutput(ns("StaticDataTable"))
   )
 }
@@ -122,36 +122,50 @@ format_DT_server <- function(id,
     
     
     GetColumnDefs <- reactive({
-      .jscode <- DT::JS("$.fn.dataTable.render.ellipsis( 30 )")
+      #.jscode <- DT::JS("$.fn.dataTable.render.ellipsis( 60 )")
+      
+      # if (!is.null(hidden())) {
+      #    tgt.seq <- seq.int(from = ncol(obj()), to = ncol(obj()) + ncol(hidden()) -1)
+      #   list(
+      #     list(targets = '_all', className = "dt-center", render = .jscode)
+      #     ,list(targets = tgt.seq, visible = FALSE)
+      #   ) 
+      # } else { 
+      #   list(list(targets = '_all', className = "dt-center", render = .jscode))
+      # }
       
       if (!is.null(hidden())) {
-         tgt.seq <- seq.int(from = ncol(obj()), to = ncol(obj()) + ncol(hidden()) -1)
+        tgt.seq <- seq.int(from = ncol(obj()), to = ncol(obj()) + ncol(hidden()) -1)
         list(
-          list(targets = '_all', className = "dt-center", render = .jscode)
+          list(targets = '_all', className = "dt-center")
           ,list(targets = tgt.seq, visible = FALSE)
         ) 
       } else { 
-        list(list(targets = '_all', className = "dt-center", render = .jscode))
+        list(list(targets = '_all', className = "dt-center"))
       }
+      
     })
     
     
     output$StaticDataTable <- DT::renderDataTable(server=TRUE,{
       
       req(length(rv.infos$obj) > 0)
-      .jscode <- DT::JS("$.fn.dataTable.render.ellipsis( 30 )")
-      
+      #.jscode <- DT::JS("$.fn.dataTable.render.ellipsis( 30 )")
+
       dt <- DT::datatable(
         rv.infos$obj, 
         escape = FALSE,
+        extensions = c("Scroller"),
         rownames= showRownames,
         plugins = "ellipsis",
         options = list(
-          #initComplete = initComplete(),
+          initComplete = initComplete(),
           dom = dom,
           autoWidth = TRUE,
-          columnDefs = GetColumnDefs()
-          #ordering = FALSE
+          columnDefs = GetColumnDefs(),
+          deferRender = TRUE,
+          bLengthChange = FALSE,
+          lengthChange = FALSE
         )
       )
       

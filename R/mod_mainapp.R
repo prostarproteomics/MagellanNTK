@@ -541,7 +541,7 @@ mainapp_server <- function(id,
         cat('new dataset loaded\n')
       rv.core$current.obj <- rv.core$result_open_dataset()$data
       rv.core$current.obj.name <- rv.core$result_open_dataset()$name
-      rv.core$resetWF <- rv.core$resetWF + 1
+      rv.core$resetWF <- MagellanNTK::Timestamp()
     })
     
    
@@ -574,20 +574,22 @@ mainapp_server <- function(id,
         id = rv.core$workflow.name,
         dataIn = reactive({rv.core$current.obj}),
         verbose = verbose,
-        usermod = usermod,
-        remoteReset = reactive({rv.core$resetWF})
-        )
+        usermod = usermod
+        # wholeReset = reactive({
+        #   !is.null(rv.core$result_open_dataset()$name)
+        #   + !is.null(rv.core$result_convert()$dataOut()$value$name) })
+         )
       })
     
-    
+
     # Workflow code
     output$workflow_UI <- renderUI({
       req(rv.core$workflow.name)
-     # tagList(
-      #  actionButton(ns('resetWF'), 'Reset whole Workflow'),
+      tagList(
+        actionButton(ns('resetWF'), 'Reset whole Workflow'),
         
       nav_ui(ns(basename(rv.core$workflow.name)))
-     # )
+      )
       })
 
     observeEvent(rv.core$result_run_workflow$dataOut()$value, {
