@@ -39,7 +39,7 @@ Insert_Dev_Sidebar <- function(){
         #   )
         ,shinydashboard::menuSubItem("Import", tabName = "convertDataset"),
         shinydashboard::menuSubItem("Save As", tabName = "SaveAs"),
-        shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
+        shinydashboard::menuSubItem("Build report (Bêta)", tabName = "BuildReport")
       ),
       #hr(),
       shinydashboard::menuItem(h4('Workflow', style = "color: lightgrey;"),
@@ -110,7 +110,7 @@ Insert_User_Sidebar <- function(){
           tabName = "convertDataset",
           icon = icon("folder")
           ),
-        shinydashboard::menuSubItem("Build report", tabName = "BuildReport")
+        shinydashboard::menuSubItem("Build report (Bêta)", tabName = "BuildReport")
       ),
       #hr(),
       shinydashboard::menuItem(h4('Workflow', style="color: lightgrey;"),
