@@ -555,7 +555,6 @@ nav_server <- function(id = NULL,
         
         
         observeEvent(wholeReset(), ignoreInit = FALSE, ignoreNULL = TRUE,{
-          print('tutu')
           req(rv$config)
           rv$dataIn <- NULL
           # The cursor is set to the first step
