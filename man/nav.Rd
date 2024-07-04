@@ -17,7 +17,10 @@ nav_server(
      TRUE
  }),
   remoteReset = reactive({
-     FALSE
+     0
+ }),
+  wholeReset = reactive({
+     0
  }),
   is.skipped = reactive({
      FALSE

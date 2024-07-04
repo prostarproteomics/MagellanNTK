@@ -4,18 +4,17 @@
 #' @param id shiny id
 #'
 #' @name mod_release_notes
-#' url <- "http://www.prostar-proteomics.org/md/versionNotes.md"
-#' shiny::runApp(release_notes(url))
 #'
 #'@examples
-#'
+#'url <- "http://www.prostar-proteomics.org/md/versionNotes.md"
+#' shiny::runApp(release_notes(url))
 #'
 NULL
 
 
 
 #' @rdname mod_release_notes
-#'  @export 
+#' @export 
 #' @importFrom shiny NS tagList 
 #' @importFrom shinyBS bsCollapse bsCollapsePanel
 mod_release_notes_ui <- function(id){

@@ -131,14 +131,14 @@ Insert_User_Sidebar <- function(){
           icon = icon("cogs")
           ),
         shinydashboard::menuSubItem("EDA", tabName = "eda")
-      ),
+      )
       #hr(),
-      shinydashboard::menuItem(h4('Help', style="color: lightgrey;"),
-        
-        #icon = icon("question-circle"),
-        shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
-        shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
-        )
+      # ,shinydashboard::menuItem(h4('Help', style="color: lightgrey;"),
+      #   
+      #   #icon = icon("question-circle"),
+      #   shinydashboard::menuSubItem("Useful Links", tabName = "usefulLinks"),
+      #   shinydashboard::menuSubItem("Bug Report", tabName = "bugReport")
+      #   )
     )
  # )
 }
