@@ -301,6 +301,8 @@ mainapp_server <- function(id,
       if (!is.null(obj()))
         rv.core$current.obj.name <- 'myDataset'
         
+      
+      
       rv.core$workflow.path <- workflow.path()
       rv.core$workflow.name <- workflow.name()
       session$userData$workflow.path <- workflow.path()
@@ -449,7 +451,7 @@ mainapp_server <- function(id,
     
     output$open_convert_dataset_UI <- renderUI({
       req(rv.core$funcs$funcs$convert_dataset)
-      #browser()
+    
       call.func(
         fname = paste0(rv.core$funcs$funcs$convert_dataset, '_ui'),
         args = list(id = ns('Convert')))
@@ -548,12 +550,16 @@ mainapp_server <- function(id,
    
     
     observeEvent(req(rv.core$result_open_workflow()),{
-     
+   
       rv.core$workflow.name <- rv.core$result_open_workflow()$wf_name
       session$userData$workflow.name <- rv.core$result_open_workflow()$wf_name
       
       rv.core$workflow.path <- rv.core$result_open_workflow()$path
       session$userData$workflow.path <- rv.core$result_open_workflow()$path
+      
+      
+      print('toto')
+      print(session$userData$workflow.path)
       
       # Load the package which contains the workflow
       call.func('library', list(rv.core$result_open_workflow()$pkg))

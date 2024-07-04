@@ -180,7 +180,7 @@ nav_server <- function(id = NULL,
                 ### suffixed by '_server'. This will give access to its config
                 if(verbose)
                   cat(crayon::blue(paste0(id, ': call ', paste0(id, "_server()"), '\n')))
-     
+
                 rv$proc <- do.call(
                     paste0(id, "_server"),
                     list(
