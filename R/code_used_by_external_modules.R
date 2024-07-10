@@ -302,6 +302,53 @@ dataOut = reactive({dataOut})
 #'
 #' @return NA
 #'
+AdditionnalCodeForExternalModules <- function(
+    w.names = NULL,
+    rv.custom.names = NULL) {
+  
+  core <- paste0(
+    Get_Code_Declare_widgets(w.names),
+    Get_Code_for_ObserveEvent_widgets(w.names),
+    Get_Code_for_rv_reactiveValues(),
+    Get_Code_Declare_rv_custom(rv.custom.names),
+    Get_Code_for_dataOut(),
+    sep = "\n"
+  )
+  
+  # 
+  # core <- Insert_Call_to_Config(name)
+  # core <- paste0(core, Get_Code_Declare_widgets(w.names))
+  # 
+  # if (mode == 'process'){
+  #     core <- paste0(core,
+  #       Get_Code_for_ObserveEvent_widgets(w.names),
+  #       sep = '\n')
+  # }
+  # 
+  # core <- paste0(core,
+  #                Get_Code_Declare_rv_custom(rv.custom.names),
+  #                Get_Code_for_rv_reactiveValues(),
+  #                Get_Code_for_dataOut(),
+  #                Get_Code_for_General_observeEvents(),
+  #                sep = "\n"
+  #                )
+  
+  core
+}
+
+
+#' @title Code for declaring xxx
+#'
+#' @description This function xxx
+#' # Generate dynamically the observeEvent function for each widget
+#'
+#' 
+#' @export
+#' 
+#' @rdname insertCodeForExternalModules
+#'
+#' @return NA
+#'
 Get_Workflow_Core_Code <- function(
     mode = NULL,
     name = NULL,

@@ -10,6 +10,7 @@
 \alias{Get_Code_for_dataOut}
 \alias{Get_Code_for_General_observeEvents}
 \alias{Module_Return_Func}
+\alias{AdditionnalCodeForExternalModules}
 \alias{Get_Workflow_Core_Code}
 \alias{Get_AdditionalModule_Core_Code}
 \alias{Get_Code_for_AddMod_observeEvents}
@@ -31,6 +32,8 @@ Get_Code_for_General_observeEvents()
 
 Module_Return_Func()
 
+AdditionnalCodeForExternalModules(w.names = NULL, rv.custom.names = NULL)
+
 Get_Workflow_Core_Code(
   mode = NULL,
   name = NULL,
@@ -48,11 +51,11 @@ steps of the module.}
 
 \item{rv.custom.names}{xxx}
 
+\item{w.names}{xxx}
+
 \item{mode}{xxx}
 
 \item{name}{xxx}
-
-\item{w.names}{xxx}
 }
 \value{
 A `string` containing some R code
@@ -64,6 +67,8 @@ NA
 NA
 
 A `string` containing some R code
+
+NA
 
 NA
 
@@ -111,6 +116,9 @@ This function createxxx
 Returned value of the process
 
 xxx
+
+This function xxx
+# Generate dynamically the observeEvent function for each widget
 
 This function xxx
 # Generate dynamically the observeEvent function for each widget
