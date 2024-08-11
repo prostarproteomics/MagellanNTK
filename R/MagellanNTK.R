@@ -58,7 +58,7 @@ MagellanNTK_ui <- function(id){
 
 
 
-options(shiny.maxRequestSize=300*1024^2,
+options(shiny.maxRequestSize=3000*1024^2,
   encoding = "UTF-8",
   shiny.fullstacktrace = TRUE
 )
