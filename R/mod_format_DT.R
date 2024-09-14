@@ -87,7 +87,7 @@ format_DT_server <- function(id,
   showRownames = FALSE,
   dom = 'Bt',
   hc_style = reactive({NULL}),
-  remoteReset = reactive({NULL}),
+  remoteReset = reactive({0}),
   is.enabled = reactive({TRUE})
 ){
   

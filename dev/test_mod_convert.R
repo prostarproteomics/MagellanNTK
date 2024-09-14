@@ -29,7 +29,7 @@ mod_test_process_server <- function(id){
     rv <- reactiveValues(
       dataIn = MagellanNTK::data1,
       dataOut = NULL,
-      remoteReset = FALSE,
+      remoteReset = 0,
       remoteSkipped = FALSE,
       remoteEnabled = TRUE
     )

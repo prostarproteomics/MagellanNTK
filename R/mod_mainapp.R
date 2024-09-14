@@ -580,7 +580,8 @@ mainapp_server <- function(id,
         id = rv.core$workflow.name,
         dataIn = reactive({rv.core$current.obj}),
         verbose = verbose,
-        usermod = usermod
+        usermod = usermod,
+        remoteReset = reactive({rv.core$resetWF})
         # wholeReset = reactive({
         #   !is.null(rv.core$result_open_dataset()$name)
         #   + !is.null(rv.core$result_convert()$dataOut()$value$name) })
@@ -598,6 +599,10 @@ mainapp_server <- function(id,
       )
       })
 
+    
+    observeEvent(req(input$resetWF), { rv.core$resetWF <- input$resetWF})
+    
+    
     observeEvent(rv.core$result_run_workflow$dataOut()$value, {
         rv.core$current.obj <- rv.core$result_run_workflow$dataOut()$value
     })

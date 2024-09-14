@@ -47,7 +47,7 @@ mod_test_pipeline_server <- function(id){
       rv$dataOut <- mod_nav_pipeline_server(id = 'PipelineDemo',
                                             dataIn = reactive({rv$dataIn}),
                                             is.enabled = reactive({TRUE}),
-                                            remoteReset = reactive({FALSE})
+                                            remoteReset = reactive({0})
                                             )
       output$UI <- renderUI({
         mod_nav_pipeline_ui(ns('PipelineDemo'))
