@@ -543,7 +543,7 @@ mainapp_server <- function(id,
         cat('new dataset loaded\n')
       rv.core$current.obj <- rv.core$result_open_dataset()$data
       rv.core$current.obj.name <- rv.core$result_open_dataset()$name
-      rv.core$resetWF <- MagellanNTK::Timestamp()
+      rv.core$resetWF <- rv.core$resetWF + 1
     })
     
    
@@ -600,7 +600,8 @@ mainapp_server <- function(id,
       })
 
     
-    observeEvent(req(input$resetWF), { rv.core$resetWF <- input$resetWF})
+    observeEvent(req(input$resetWF), {
+      rv.core$resetWF <- input$resetWF})
     
     
     observeEvent(rv.core$result_run_workflow$dataOut()$value, {
