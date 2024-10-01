@@ -586,8 +586,7 @@ nav_server <- function(id = NULL,
         )
         
         
-        observeEvent(remoteReset(), ignoreInit = FALSE, ignoreNULL = TRUE,{
-          
+        observeEvent(remoteReset(), ignoreInit = TRUE, ignoreNULL = TRUE,{
           req(rv$config)
           rv$dataIn <- NULL
           # The cursor is set to the first step

@@ -86,6 +86,7 @@ format_DT_server <- function(id,
   withDLBtns = FALSE,
   showRownames = FALSE,
   dom = 'Bt',
+  max.rows = 20,
   hc_style = reactive({NULL}),
   remoteReset = reactive({0}),
   is.enabled = reactive({TRUE})
@@ -151,7 +152,6 @@ format_DT_server <- function(id,
       
       req(length(rv.infos$obj) > 0)
       #.jscode <- DT::JS("$.fn.dataTable.render.ellipsis( 30 )")
-
       dt <- DT::datatable(
         rv.infos$obj, 
         escape = FALSE,
@@ -164,8 +164,10 @@ format_DT_server <- function(id,
           autoWidth = TRUE,
           columnDefs = GetColumnDefs(),
           deferRender = TRUE,
-          bLengthChange = FALSE,
-          lengthChange = FALSE
+          bLengthChange = TRUE,
+          lengthChange = TRUE,
+          paging = TRUE,
+          pageLength = max.rows 
         )
       )
       
