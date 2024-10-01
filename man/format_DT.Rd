@@ -19,11 +19,12 @@ format_DT_server(
   withDLBtns = FALSE,
   showRownames = FALSE,
   dom = "Bt",
+  max.rows = 20,
   hc_style = reactive({
      NULL
  }),
   remoteReset = reactive({
-     NULL
+     0
  }),
   is.enabled = reactive({
      TRUE

@@ -1,13 +1,13 @@
-pandoc: 3.1.1
-pkgdown: 2.0.7
+pandoc: '3.2'
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   Build-a-pipeline-module: Build-a-pipeline-module.html
   Create-a-new-pipeline-tutorial: Create-a-new-pipeline-tutorial.html
   insideMagellanNTK: insideMagellanNTK.html
   MagellanNTK: MagellanNTK.html
-last_built: 2024-04-09T06:27Z
+  user_modes: user_modes.html
+last_built: 2024-10-01T13:46Z
 urls:
   reference: http://docs.ropensci.org/MODIStsp/reference
   article: http://docs.ropensci.org/MODIStsp/articles
-
