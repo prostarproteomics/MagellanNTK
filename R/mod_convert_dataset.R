@@ -7,8 +7,10 @@
 #' @name mod_convert_dataset
 #'
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(convert_dataset())
+#' }
 #' 
 #' @return A list
 #' 

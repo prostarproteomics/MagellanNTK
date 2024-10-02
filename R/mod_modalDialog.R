@@ -18,7 +18,8 @@
 #' 
 #' @return A Shiny modal-dialog
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' 
 #' ########################################################
 #' ##
@@ -85,7 +86,8 @@
 #' title = "test modalDialog",
 #' external_mod = 'mod_load_package',
 #' external_mod_args = list(funcs = funcs)))
-#'
+#' }
+#' 
 NULL
 
 #'

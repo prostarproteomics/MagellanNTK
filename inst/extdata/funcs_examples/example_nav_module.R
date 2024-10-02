@@ -1,4 +1,4 @@
-if(interactive()){
+\dontrun{
   library(shiny)
   server_env <- environment() # will see all dtwclust functions
   server_env$dev_mode <- FALSE
@@ -26,9 +26,7 @@ if(interactive()){
     fluidRow(
       column(width=2, actionButton('simReset', 'Remote reset',  class='info')),
       column(width=2, actionButton('simEnabled', 'Remote enable/disable', class='info')),
-      column(width=2, actionButton('simSkipped', 'Remote is.skipped', class='info')),
-      column(width=2, selectInput('chooseDataset', 'Choose dataset', 
-                                  choices = c('None', 'data1', 'data_na')))
+      column(width=2, actionButton('simSkipped', 'Remote is.skipped', class='info'))
     ),
     hr(),
     uiOutput('UI'),
@@ -38,20 +36,14 @@ if(interactive()){
 
 server <- function(input, output){
   
-  data(data1)
-  data(data_na)
+  data(sub_R25)
   
   rv <- reactiveValues(
-    dataIn = NULL,
+    dataIn = sub_R25,
     dataOut = NULL
   )
   
   
-  observeEvent(input$chooseDataset, { 
-    if (input$chooseDataset == 'None') rv$dataIn <- NULL
-    else if (input$chooseDataset == 'data1') rv$dataIn <- data1
-    else if (input$chooseDataset == 'data_na') rv$dataIn <- data_na
-  })
   
   output$UI <- renderUI({nav_ui(name)})
   

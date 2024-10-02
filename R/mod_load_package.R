@@ -10,7 +10,8 @@
 #' @param id shiny id
 #' @param funcs A list
 #' 
-#' @examplesIf interactive()
+#' @examples\dontrun{
+#' 
 #' funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 #' open_dataset = "MagellanNTK::open_dataset",
 #' open_demoDataset = "MagellanNTK::open_demoDataset",
@@ -24,7 +25,7 @@
 #' shiny::runApp(load_package(funcs))
 #' 
 #' shiny::runApp(load_package())
-#'
+#' }
 #' 
 #' @name mod_load_package
 #' @author Samuel Wieczorek

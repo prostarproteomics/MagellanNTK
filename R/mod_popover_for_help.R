@@ -7,8 +7,10 @@
 #'
 #' @name mod_popover_for_help
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(popover_for_help('myTitle', 'myContent'))
+#' }
 #' 
 NULL
 

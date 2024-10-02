@@ -9,9 +9,11 @@
 #' @name view_dataset
 #'
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(lldata)
 #' shiny::runApp(view_dataset(lldata))
+#' }
 #' 
 #' 
 NULL

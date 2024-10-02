@@ -19,8 +19,10 @@
 #'
 #' @return A Shiny modal-dialog
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mod_bsmodal())
+#' }
 #'
 #' @name mod_bsmodal
 #'

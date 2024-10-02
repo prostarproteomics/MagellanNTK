@@ -8,9 +8,10 @@
 #' @name mdEditor
 #' 
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mdEditor())
-#' 
+#' }
 #' 
 NULL
 

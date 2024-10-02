@@ -1,4 +1,5 @@
-library(MagellanNTK)
+if (interactive()){
+  library(MagellanNTK)
 
   ### 
   ### Full example for a process workflow
@@ -90,3 +91,4 @@ run_workflow("PipeA", dataIn = data_na, path = path)
 
 unlink(c(files.proc1, files.proc2, files.proc3, files.pipeA))
 
+}

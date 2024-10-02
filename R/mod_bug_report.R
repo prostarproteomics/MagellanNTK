@@ -6,8 +6,10 @@
 #'
 #' @name mod_bug_report
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(bug_report())
+#' }
 #' 
 #' 
 NULL

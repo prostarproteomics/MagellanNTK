@@ -12,11 +12,13 @@
 #' @return NA
 #'
 #' @name build_report
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(sub_R25)
 #' shiny::runApp(build_report(sub_R25))
 #' 
 #' shiny::runApp(build_report(sub_R25, filename = 'myDataset'))
+#' }
 #'
 NULL
 

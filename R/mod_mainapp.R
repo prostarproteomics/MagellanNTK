@@ -11,8 +11,10 @@
 #'
 #' 
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mainapp())
+#' }
 #' 
 #' 
 NULL

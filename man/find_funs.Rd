@@ -16,6 +16,9 @@ A dataframe with two columns:
 This code is extracted from https://sebastiansauer.github.io/finds_funs/
 }
 \examples{
+\dontrun{
 find_funs('filter')
+}
+
 
 }

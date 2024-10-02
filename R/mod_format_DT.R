@@ -10,7 +10,8 @@
 #'
 #' @name format_DT
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(lldata)
 #' obj <- assay(lldata[[1]])
 #' shiny::runApp(format_DT(obj))
@@ -51,6 +52,7 @@
 #'   hidden = mask,
 #'   hc_style = style))
 #' 
+#' }
 #' 
 #' @return NA
 #' 

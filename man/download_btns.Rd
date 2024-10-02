@@ -44,8 +44,9 @@ NA
 A shiny module that shows download buttons in different formats.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 data(lldata)
 shiny::runApp(download_btns(lldata))
-\dontshow{\}) # examplesIf}
+}
+
 }

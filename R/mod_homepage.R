@@ -6,8 +6,10 @@
 #' 
 #' @name mod_homepage
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mod_homepage())
+#' }
 #' 
 #' 
 NULL

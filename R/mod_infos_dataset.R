@@ -7,10 +7,11 @@
 #' 
 #' @name infos_dataset
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #'   data(lldata)
 #'   shiny::runApp(infos_dataset(lldata))
-#' 
+#' }
 #' 
 NULL
 

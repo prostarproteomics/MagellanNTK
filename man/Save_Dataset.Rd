@@ -26,9 +26,9 @@ xxxxx
 A shiny Module to load a dataset.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 data(sub_R25)
 shiny::runApp(Save_Dataset(sub_R25))
+}
 
-\dontshow{\}) # examplesIf}
 }

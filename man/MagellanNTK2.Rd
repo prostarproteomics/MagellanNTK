@@ -28,7 +28,7 @@ The list of customizable funcs (param `funcs`) contains the following items:
  * inside the UI of MagellanNTK, in the settings panels
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 
 # launch without initial config
 shiny::runApp(MagellanNTK())
@@ -55,6 +55,6 @@ funcs <- list(convert_dataset = "MagellanNTK::convert",
   keepDatasets = "MagellanNTK::keepDatasets")
 
 MagellanNTK(funcs)
+}
 
-\dontshow{\}) # examplesIf}
 }

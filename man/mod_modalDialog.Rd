@@ -50,7 +50,7 @@ Displays of formatted modal-dialog with 'Cancel' and
 'Ok' buttons.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 
 ########################################################
 ##
@@ -117,5 +117,6 @@ mod_modalDialog(
 title = "test modalDialog",
 external_mod = 'mod_load_package',
 external_mod_args = list(funcs = funcs)))
-\dontshow{\}) # examplesIf}
+}
+
 }

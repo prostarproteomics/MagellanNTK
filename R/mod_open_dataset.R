@@ -6,9 +6,10 @@
 #' 
 #' @name generic_mod_open_dataset
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(open_dataset())
-#' 
+#' }
 #' 
 #' 
 NULL

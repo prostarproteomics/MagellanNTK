@@ -7,8 +7,10 @@
 #' 
 #' @name mod_settings
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mod_setting(sub_R25))
+#' }
 #' 
 NULL
 

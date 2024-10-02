@@ -24,7 +24,8 @@ popover_for_help(title, content)
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(popover_for_help('myTitle', 'myContent'))
-\dontshow{\}) # examplesIf}
+}
+
 }

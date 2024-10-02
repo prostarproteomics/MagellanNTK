@@ -77,9 +77,10 @@ A shiny Module which shows the values of the datasets variables
 along the different processes of a process nor pipeline.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(Debug_Infos(sub_R25))
-\dontshow{\}) # examplesIf}
+}
+
 }
 \author{
 Samuel Wieczorek

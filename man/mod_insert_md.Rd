@@ -24,10 +24,10 @@ insert_md(url)
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 base <- system.file('app/md', package = 'MagellanNTK')
 url <- file.path(base, "presentation.Rmd")
 shiny::runApp(insert_md(url))
+}
 
-\dontshow{\}) # examplesIf}
 }

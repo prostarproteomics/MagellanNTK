@@ -4,6 +4,8 @@
 # http://shiny.rstudio.com
 #
 
+if (interactive()){
+  
 library(shiny)
 
 ui <- shiny::shinyUI(fluidPage(
@@ -65,3 +67,4 @@ server <- shinyServer(function(input, output, session) {
 
 if(interactive())
   app <- shinyApp(ui, server)
+}

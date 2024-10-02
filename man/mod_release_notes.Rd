@@ -20,7 +20,9 @@ release_notes(URL_releaseNotes)
 A shiny Module.
 }
 \examples{
+\dontrun{
 url <- "http://www.prostar-proteomics.org/md/versionNotes.md"
 shiny::runApp(release_notes(url))
+}
 
 }

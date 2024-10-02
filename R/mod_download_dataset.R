@@ -12,11 +12,13 @@
 #' @return NA
 #'
 #' @name download_dataset
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(sub_R25)
 #' shiny::runApp(download_dataset(sub_R25))
 #' 
 #' shiny::runApp(download_dataset(sub_R25, filename = 'myDataset'))
+#' }
 #'
 NULL
 

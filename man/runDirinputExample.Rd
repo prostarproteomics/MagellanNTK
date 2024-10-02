@@ -14,8 +14,8 @@ Runs a demo app with the code. See the code in the example_application folder fo
 how this is accomplished.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(runDirinputExample())
+}
 
-\dontshow{\}) # examplesIf}
 }

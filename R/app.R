@@ -19,7 +19,8 @@
 #'  
 #'  
 #' @export
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' 
 #' # launch without initial config
 #' shiny::runApp(MagellanNTK())
@@ -46,7 +47,7 @@
 #'   keepDatasets = "MagellanNTK::keepDatasets")
 #' 
 #' MagellanNTK(funcs)
-#' 
+#' }
 #' 
 MagellanNTK2 <- function(
     funcs = default.funcs(),

@@ -20,7 +20,8 @@
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' library(shinyWidgets)
 #' library(shinyjs)
 #' 
@@ -37,6 +38,7 @@
 #' shiny::runApp(timeline(config, layout = 'h'))
 #' 
 #' shiny::runApp(timeline(config, layout = 'v'))
+#' }
 #' 
 NULL
 

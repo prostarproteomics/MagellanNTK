@@ -29,7 +29,10 @@
 #' @slot ll.UI xxx
 #' @slot steps.source.file xxx
 #' 
-#' @example
+#' @name Config-class
+#' 
+#' @examples
+#' 
 #' # Example of a generic process
 #' generic.proc <- Config(
 #'   fullname = 'PipelineDemo_Process1',
@@ -74,7 +77,6 @@ NULL
 
 
 #'
-#' @name Config-class
 #' @rdname Config-class
 #' @export Config
 #' 

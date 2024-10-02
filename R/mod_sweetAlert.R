@@ -7,8 +7,10 @@
 #' @param showClipBtn xxx
 #' @param type xxx
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mod_SweetAlert('my title', 'my message'))
+#' }
 #' 
 #' @name mod_sweetAlert
 #' 

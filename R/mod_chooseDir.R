@@ -9,7 +9,8 @@
 #' @param is.enabled xxx
 #' @param show.details xxx
 #'
-#' @examplesIf interactive()
+#' @examples
+#' 
 #' NULL
 #' 
 #' @author Samuel Wieczorek

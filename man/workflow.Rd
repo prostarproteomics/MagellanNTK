@@ -52,28 +52,27 @@ This documentation is for developers who want to create their own
 pipelines nor processes to be managed with `MagellanNTK`.
 }
 \examples{
-if (interactive()) {
-  data(sub_R25)
-  
-  path <- system.file("workflow/PipelineDemo", package = "MagellanNTK")
-  files <- list.files(file.path(path, 'R'), full.names = TRUE)
-  for(f in files)
-    source(f, local = FALSE, chdir = TRUE)
+\dontrun{
+data(sub_R25)
 
-  # Nothing happens when dataIn is NULL
-    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = NULL))
-  
-    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = sub_R25))
+path <- system.file("workflow/PipelineDemo", package = "MagellanNTK")
+files <- list.files(file.path(path, 'R'), full.names = TRUE)
+for(f in files)
+  source(f, local = FALSE, chdir = TRUE)
 
-    shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = data.frame(), tl.layout = "v"))
-  
-    shiny::runApp(run_workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
+# Nothing happens when dataIn is NULL
+shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = NULL))
 
-    shiny::runApp(workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
+shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = sub_R25))
+
+shiny::runApp(run_workflow("PipelineDemo_Process1", dataIn = data.frame(), tl.layout = "v"))
+
+shiny::runApp(run_workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
+
+shiny::runApp(workflow("PipelineDemo", dataIn = sub_R25, tl.layout = c("v", "h")))
 }
 
-
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 data(lldata)
 path <- system.file('workflow/PipelineDemo', package = 'MagellanNTK')
 
@@ -90,8 +89,8 @@ shiny::runApp(workflowApp("PipelineB", path, tl.layout = c("v", "h")))
 
 shiny::runApp(workflowApp("PipelineDemo", path, dataIn = sub_R25, 
 tl.layout = c("v", "h")))
+}
 
-\dontshow{\}) # examplesIf}
 }
 \author{
 Samuel Wieczorek

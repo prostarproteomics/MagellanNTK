@@ -44,7 +44,7 @@ A Shiny module
 xxxx
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 library(shinyWidgets)
 library(shinyjs)
 
@@ -61,7 +61,8 @@ mandatory = c(TRUE, FALSE, FALSE)
 shiny::runApp(timeline(config, layout = 'h'))
 
 shiny::runApp(timeline(config, layout = 'v'))
-\dontshow{\}) # examplesIf}
+}
+
 }
 \author{
 Samuel Wieczorek

@@ -39,9 +39,9 @@ it. Once the user has make its choices, the module returns a list containing
 the infos.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 app <- loadApp()
 shiny::runApp(app)
+}
 
-\dontshow{\}) # examplesIf}
 }

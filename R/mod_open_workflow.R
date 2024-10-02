@@ -6,8 +6,10 @@
 #' 
 #' @name mod_open_workflow
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(open_workflow())
+#' }
 #' 
 #' @return A list
 #' 

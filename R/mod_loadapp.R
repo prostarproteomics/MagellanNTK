@@ -25,10 +25,11 @@
 #' contains the code to call this function from the package the user have
 #' chosen.
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' app <- loadApp()
 #' shiny::runApp(app)
-#' 
+#' }
 #' 
 NULL
 

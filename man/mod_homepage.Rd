@@ -24,8 +24,9 @@ mod_homepage()
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(mod_homepage())
+}
 
-\dontshow{\}) # examplesIf}
+
 }

@@ -22,8 +22,10 @@
 #'  
 #' @name magellanNTK
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' MagellanNTK()
+#' }
 #' 
 NULL
 
@@ -120,10 +122,11 @@ MagellanNTK_server <- function(id,
 
 #'  
 #' @export
-#' @examplesIf interactive()
-#' 
+#' @examples
+#' \dontrun{
 #' # launch without initial config
 #' shiny::runApp(MagellanNTK())
+#' }
 #' 
 #' @export
 #' 

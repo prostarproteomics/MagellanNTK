@@ -8,7 +8,8 @@
 #' @name extra_module
 #'
 #'
-#' @examplesIf interactive() 
+#' @examples
+#' \dontrun{
 #' data(ft_na)
 #' ui <- foo_ui('query')
 #' 
@@ -32,6 +33,9 @@
 #' 
 #' shinyApp(ui=ui, server=server)
 #' }
+#' }
+#' 
+#' 
 NULL
 
 

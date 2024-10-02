@@ -6,10 +6,11 @@
 #' @param id xxx
 #' @param data xxx
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(sub_R25)
 #' shiny::runApp(Save_Dataset(sub_R25))
-#' 
+#' }
 #' 
 NULL
 

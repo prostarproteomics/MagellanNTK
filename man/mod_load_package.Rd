@@ -31,7 +31,8 @@ embedded in the package `MagellanNTK`. These fucntions are the following:
 * infos_dataset: xxx
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+
 funcs <- list(convert_dataset = "DaparToolshed::convert_dataset",
 open_dataset = "MagellanNTK::open_dataset",
 open_demoDataset = "MagellanNTK::open_demoDataset",
@@ -45,8 +46,8 @@ keepDatasets = "MagellanNTK::keepDatasets"
 shiny::runApp(load_package(funcs))
 
 shiny::runApp(load_package())
+}
 
-\dontshow{\}) # examplesIf}
 }
 \author{
 Samuel Wieczorek

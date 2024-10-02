@@ -54,7 +54,7 @@ NA
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 data(lldata)
 obj <- assay(lldata[[1]])
 shiny::runApp(format_DT(obj))
@@ -95,5 +95,6 @@ shiny::runApp(format_DT(obj,
   hidden = mask,
   hc_style = style))
 
-\dontshow{\}) # examplesIf}
+}
+
 }

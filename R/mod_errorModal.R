@@ -1,8 +1,10 @@
 #' @title xxx
 #' @name mod_err_modal
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(mod_errorModal('myTitle', 'myContent'))
+#' }
 #' 
 NULL
 

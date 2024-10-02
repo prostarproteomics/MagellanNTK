@@ -20,14 +20,18 @@ is.validated <- function(test){
 #' 
 #' @param f name of function for which the package(s) are to be identified.
 #' 
-#' @examples 
+#' @examples
+#' \dontrun{
 #' find_funs('filter')
+#' }
+#' 
 #' 
 #' @return 
 #' A dataframe with two columns:
 # `package_name`: packages(s) which the function is part of (chr)
 # `builtin_package`:  whether the package comes with standard R 
 #  (a 'builtin'  package)
+#  
 #' 
 #' @export
 #' 
@@ -81,8 +85,10 @@ find_funs <- function(f) {
 #' @param usermod xxxxx
 #' 
 #' @examples
+#' \dontrun{
 #' path <- system.file("workflow/PipelineDemo", package = 'MagellanNTK')
 #' readConfigFile(path)
+#' }
 #' 
 #' @export
 #'

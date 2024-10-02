@@ -7,8 +7,10 @@
 #'
 #' @name errorModal
 #' 
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' shiny::runApp(errorModal("my error text"))
+#' }
 #'
 NULL
 

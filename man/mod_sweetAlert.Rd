@@ -34,7 +34,8 @@ mod_SweetAlert(title, text, type = "warning")
 xxxxx
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(mod_SweetAlert('my title', 'my message'))
-\dontshow{\}) # examplesIf}
+}
+
 }

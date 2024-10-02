@@ -20,9 +20,9 @@ open_dataset()
 This module allows to change
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(open_dataset())
+}
 
 
-\dontshow{\}) # examplesIf}
 }

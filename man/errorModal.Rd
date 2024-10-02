@@ -24,7 +24,8 @@ NA
 A shiny module that shows messages in modal.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(errorModal("my error text"))
-\dontshow{\}) # examplesIf}
+}
+
 }

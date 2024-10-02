@@ -11,9 +11,11 @@
 #'
 #'
 #' @name download_btns
-#' @examplesIf interactive()
+#' @examples
+#' \dontrun{
 #' data(lldata)
 #' shiny::runApp(download_btns(lldata))
+#' }
 #'
 NULL
 

@@ -26,9 +26,9 @@ infos_dataset(obj)
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
   data(lldata)
   shiny::runApp(infos_dataset(lldata))
+}
 
-\dontshow{\}) # examplesIf}
 }

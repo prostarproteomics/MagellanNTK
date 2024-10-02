@@ -21,7 +21,8 @@ mod_settings(obj)
 A shiny Module.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 shiny::runApp(mod_setting(sub_R25))
-\dontshow{\}) # examplesIf}
+}
+
 }
