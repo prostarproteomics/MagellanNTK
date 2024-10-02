@@ -6,8 +6,7 @@ articles:
   Create-a-new-pipeline-tutorial: Create-a-new-pipeline-tutorial.html
   insideMagellanNTK: insideMagellanNTK.html
   MagellanNTK: MagellanNTK.html
-  user_modes: user_modes.html
-last_built: 2024-10-01T13:46Z
+last_built: 2024-10-02T10:17Z
 urls:
   reference: http://docs.ropensci.org/MODIStsp/reference
   article: http://docs.ropensci.org/MODIStsp/articles
