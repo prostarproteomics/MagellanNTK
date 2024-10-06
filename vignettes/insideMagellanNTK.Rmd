@@ -169,7 +169,7 @@ To install this package, start R (version "4.3") and enter:
 
 ```
 library(devtools)
-install_github('prostarproteomics/MagellanNTK')
+install_github('edyp-lab/MagellanNTK')
 
 ```
 

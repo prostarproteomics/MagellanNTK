@@ -48,7 +48,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/prostarproteomics/MagellanNTK/" class="external-link">
+  <a href="https://github.com/edyp-lab/MagellanNTK/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -63,7 +63,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get filtered datasets</h1>
-    <small class="dont-index">Source: <a href="https://github.com/prostarproteomics/MagellanNTK/blob/HEAD/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/edyp-lab/MagellanNTK/blob/HEAD/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>GetListDatasets.Rd</code></div>
     </div>
 
@@ -81,8 +81,174 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">foo1</span> <span class="op">&lt;-</span> <span class="fu">GetListDatasets</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">foo2</span> <span class="op">&lt;-</span> <span class="fu">GetListDatasets</span><span class="op">(</span>class<span class="op">=</span><span class="st">'QFeatures'</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MultiAssayExperiment</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: SummarizedExperiment</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MatrixGenerics</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: matrixStats</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘MatrixGenerics’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colWeightedMeans, colWeightedMedians, colWeightedSds,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowWeightedSds, rowWeightedVars</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: GenomicRanges</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: stats4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: BiocGenerics</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘BiocGenerics’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     IQR, mad, sd, var, xtabs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     as.data.frame, basename, cbind, colnames, dirname, do.call,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     pmin.int, rank, rbind, rownames, sapply, setdiff, table, tapply,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     union, unique, unsplit, which.max, which.min</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: S4Vectors</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘S4Vectors’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:utils’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     findMatches</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     I, expand.grid, unname</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: IRanges</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘IRanges’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:grDevices’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     windows</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: GenomeInfoDb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Biobase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Welcome to Bioconductor</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Vignettes contain introductory material; view with</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     'browseVignettes()'. To cite Bioconductor, see</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     'citation("Biobase")', and for packages 'citation("pkgname")'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘Biobase’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:MatrixGenerics’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowMedians</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     anyMissing, rowMedians</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: limma</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘limma’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:BiocGenerics’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     plotMA</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Biostrings</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: XVector</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘Biostrings’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     strsplit</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Rcpp</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: GOSemSim</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> GOSemSim v2.30.2  For help: https://yulab-smu.top/biomedical-knowledge-mining-book/</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> If you use GOSemSim in published research, please cite:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">-</span> Guangchuang Yu. Gene Ontology Semantic Similarity Analysis Using GOSemSim. In: Kidder B. (eds) Stem Cell Transcriptional Networks. Methods in Molecular Biology, 2020, 2117:207-215. Humana, New York, NY. doi:10.1007/978-1-0716-0301-7_11</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">-</span> Guangchuang Yu, Fei Li, Yide Qin, Xiaochen Bo, Yibo Wu, Shengqi Wang. GOSemSim: an R package for measuring semantic similarity among GO terms and gene products Bioinformatics 2010, 26(7):976-978. doi:10.1093/bioinformatics/btq064</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: QFeatures</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘QFeatures’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:MultiAssayExperiment’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     longFormat</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     sweep</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MSnbase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mzR</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: SparseM</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'exHartigan' data is identical to 'statfaculty' and hence deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  Use the 'statfaculty' instead</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: graph</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘graph’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:QFeatures’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     adjacencyMatrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:Biostrings’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     complement</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

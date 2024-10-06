@@ -124,7 +124,7 @@ Collate:
 biocViews: Software, WorkflowStep, Proteomics, GUI
 Encoding: UTF-8
 RoxygenNote: 7.3.2
-URL: https://github.com/prostarproteomics/MagellanNTK
-BugReports: https://github.com/prostarproteomics/MagellanNTK/issues
+URL: https://github.com/edyp-lab/MagellanNTK
+BugReports: https://github.com/edyp-lab/MagellanNTK/issues
 VignetteBuilder: knitr
 StagedInstall: no

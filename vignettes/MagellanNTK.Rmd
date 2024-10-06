@@ -42,7 +42,7 @@ of tasks. It builds graphical workflow based on third party tasks,
 developed as Shiny modules. As a Shiny application itself, MagellanNTK
 runs standalone or embebbed in another Shiny application, as it is the
 case with the package [Prostar
-2.0](https://github.com/prostarproteomics/Prostar.2.0).
+2.0](https://github.com/edyp-lab/Prostar.2.0).
 
 This document covers the description and the use of the user interface
 provided by MagellanNTK. It starts with a general overview of workflows

@@ -3,7 +3,7 @@
 This pipeline is a tpy example to demonstrate the behaviour and features of
 MagellanNTK.
 
-for more details, please view prostarproteomics.github.io/MagellanNTK
+for more details, please view edyp-lab.github.io/MagellanNTK
 
 
 In this example, all basic functions are set to their default values:

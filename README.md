@@ -1,7 +1,7 @@
 <!-- badges: start -->
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R-CMD-check](https://github.com/prostarproteomics/MagellanNTK/workflows/R-CMD-check/badge.svg)](https://github.com/prostarproteomics/MagellanNTK/actions)
-[![R-CMD-check](https://github.com/prostarproteomics/MagellanNTK/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/prostarproteomics/MagellanNTK/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/edyp-lab/MagellanNTK/workflows/R-CMD-check/badge.svg)](https://github.com/prostarproteomics/MagellanNTK/actions)
+[![R-CMD-check](https://github.com/edyp-lab/MagellanNTK/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/prostarproteomics/MagellanNTK/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
   
 # Magellan
@@ -16,7 +16,7 @@ Moreover, this navigation system, which is at the core of Magellan, can by used 
 ## Install
 
 ```
-devtools::install_github('prostarproteomics/MagellanNTK')
+devtools::install_github('edyp-lab/MagellanNTK')
 ```
 
 ## Using MagellanNTK

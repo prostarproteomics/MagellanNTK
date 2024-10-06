@@ -95,7 +95,7 @@ mainapp_ui <- function(id, session){
         #       #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
         #       #   mime="image/png"))
         #       ),
-        #    a(href="https://github.com/samWieczorek/Prostar2",
+        #    a(href="https://github.com/edyp-lab/Prostar2",
         #       icon("github"),
         #       title="GitHub")
         #   )
@@ -118,7 +118,7 @@ mainapp_ui <- function(id, session){
           #     #       #   file=system.file('ProstarApp/www/images', 'LogoProstarComplet.png', package='ProstarDev'), 
           #     #       #   mime="image/png"))
           #            ),
-          #   a(href="https://github.com/prostarproteomics/Prostar.2.0",
+          #   a(href="https://github.com/edyp-lab/Prostar2",
           #     icon("github"),
           #     title="GitHub")
           # 
