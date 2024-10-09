@@ -47,7 +47,16 @@ convert_dataset_server <- function(id){
       dataOut = NULL
     )
     
-    reactive({rv.open$dataOut})
+    
+    dataOut <- reactiveValues(
+      trigger = MagellanNTK::Timestamp(),
+    value = NULL
+    )
+    
+    
+    return(
+      reactive({list(dataOut = reactive({dataOut}) )})
+    )
   })
   
 }
@@ -74,14 +83,15 @@ convert_dataset <- function(){
   server <- function(input, output, session) {
     rv <- reactiveValues(
       obj = NULL,
-      result = NULL
+      result = reactive({NULL})
     )
     
     
     rv$result <- convert_dataset_server("qf_file")
     
-    observeEvent(req(rv$result()), {
-      rv$obj <- rv$result()
+    observeEvent(req(rv$result()$dataOut()$trigger), {
+      
+      rv$obj <- rv$result()$dataOut()$trigger
       print(rv$obj)
     })
     

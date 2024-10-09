@@ -169,6 +169,6 @@ MagellanNTK <- function(
   if (usermod == 'dev')
     shiny::runApp(app)
   else if (usermod == 'user')
-    shiny::runApp(app,launch.browser = TRUE)
+    shiny::runApp(app, launch.browser = TRUE)
 
 }
