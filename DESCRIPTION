@@ -51,10 +51,10 @@ Imports:
     markdown,
     shinyAce,
     BiocGenerics, DAPAR, DAPARdata,
-    DaparToolshedData, QFeatures, data.table, future,
+    QFeatures, data.table, future,
     ggplot2, gplots, highcharter, later, promises,
     rhandsontable, shinycssloaders, shinythemes, tibble,
-    vioplot, webshot, omXplore, rclipboard, BiocManager
+    vioplot, webshot, rclipboard, BiocManager
 Remotes:
     edyp-lab/DaparToolshedData
     edyp-lab/omXplore
