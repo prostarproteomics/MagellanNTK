@@ -55,6 +55,9 @@ Imports:
     ggplot2, gplots, highcharter, later, promises,
     rhandsontable, shinycssloaders, shinythemes, tibble,
     vioplot, webshot, omXplore, rclipboard, BiocManager
+Remotes:
+    edyp-lab/DaparToolshedData
+    edyp-lab/omXplore
 Suggests: 
     rmarkdown, BiocStyle, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer
