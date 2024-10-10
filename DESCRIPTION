@@ -56,8 +56,8 @@ Imports:
     rhandsontable, shinycssloaders, shinythemes, tibble,
     vioplot, webshot, rclipboard, BiocManager
 Remotes:
-    edyp-lab/DaparToolshedData
-    edyp-lab/omXplore
+    git::git@bitbucket.org:edyp-lab/DaparToolshedData.git
+    git::git@bitbucket.org:edyp-lab/omXplore.git
 Suggests: 
     rmarkdown, BiocStyle, testthat, shinyTree, knitr, colourpicker, 
     gtools, XML, R.utils, RColorBrewer
